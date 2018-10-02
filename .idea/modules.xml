@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/tournamentsystem.iml" filepath="$PROJECT_DIR$/tournamentsystem.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/tournamentsystem_main.iml" filepath="$PROJECT_DIR$/.idea/modules/tournamentsystem_main.iml" group="tournamentsystem" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/tournamentsystem_test.iml" filepath="$PROJECT_DIR$/.idea/modules/tournamentsystem_test.iml" group="tournamentsystem" />
+    </modules>
+  </component>
+</project>
