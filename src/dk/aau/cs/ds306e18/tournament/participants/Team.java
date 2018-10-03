@@ -5,14 +5,14 @@ import java.util.ArrayList;
 
 public class Team implements Participant {
 
-    String teamName;
-    int wins;
-    int losses;
-    int matchesPlayed;
-    double ranking;
-    ArrayList<Player> members;
+    private String teamName;
+    private int wins;
+    private int losses;
+    private int matchesPlayed;
+    private double ranking;
+    private ArrayList<Player> members;
 
-    public Team(String teamName, int wins, int losses, int matchesPlayed, double ranking, ArrayList<Player> members) {
+    Team(String teamName, int wins, int losses, int matchesPlayed, double ranking, ArrayList<Player> members) {
         this.teamName = teamName;
         this.wins = wins;
         this.losses = losses;
