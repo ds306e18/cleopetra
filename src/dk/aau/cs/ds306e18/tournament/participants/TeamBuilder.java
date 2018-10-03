@@ -2,7 +2,7 @@ package dk.aau.cs.ds306e18.tournament.participants;
 
 import java.util.ArrayList;
 
-public class TeamBuilder {
+class TeamBuilder {
 
     private String teamName;
     private int wins = 0;

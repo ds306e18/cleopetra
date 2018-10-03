@@ -3,7 +3,7 @@ package dk.aau.cs.ds306e18.tournament.participants;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
-public interface Participant {
+interface Participant {
 
     String getName();
     int getWins();
