@@ -2,72 +2,82 @@ package dk.aau.cs.ds306e18.tournament;
 
 import dk.aau.cs.ds306e18.tournament.participants.Participant;
 
+/** <p>A Match consists of two Slots, which holds the Participants participating in the Match, and a Result,
+ * which is initially null. A Slot might contain a Participant, which is temporarily unknown (e.g. when the
+ * Participant is the winner of another Match). The method {@code isReadyToPlay()} returns true, when both Slots'
+ * Participant is known and ready.</p>
+ * <p>When the Result is set to a non-null value, {@code hasBeenPlayed()} returns true, and it is possible to retrieve
+ * the winner and the loser of the match.</p> */
 public class Match {
 
     private MatchResult result;
-    private Participant blueTeam;
-    private Participant orangeTeam;
-    private Match bluePriorMatch;
-    private Match orangePriorMatch;
+    private Slot blueSlot;
+    private Slot orangeSlot;
 
-    public boolean isReadyToPlay() {
-        return (bluePriorMatch != null && bluePriorMatch.hasBeenPlayed()
-                && orangePriorMatch != null && orangePriorMatch.hasBeenPlayed());
+    /** <p>A Match consists of two Slots, which holds the Participants participating in the Match, and a Result,
+     * which is initially null. A Slot might contain a Participant, which is temporarily unknown (e.g. when the
+     * Participant is the winner of another Match). The method {@code isReadyToPlay()} returns true, when both Slots'
+     * Participant is known and ready.</p>
+     * <p>When the Result is set to a non-null value, {@code hasBeenPlayed()} returns true, and it is possible to retrieve
+     * the winner and the loser of the match.</p> */
+    public Match(Slot blueSlot, Slot orangeSlot) {
+        this.blueSlot = blueSlot;
+        this.orangeSlot = orangeSlot;
     }
 
+    /** Returns true when both Slots' Participant is known and ready, even if the Match has already been played. */
+    public boolean isReadyToPlay() {
+        return (blueSlot.isReady() && orangeSlot.isReady());
+    }
+
+    /** Returns true if the result of the Match is known. */
     public boolean hasBeenPlayed() {
         return result != null;
+    }
+
+    /** Returns the winner of the Match. Throws a NullPointerException if the Match Result is unknown. */
+    public Participant getWinner() {
+        if (result.getConclusion() == Conclusion.BLUE_WINS)
+            return blueSlot.getTeam();
+        return orangeSlot.getTeam();
+    }
+
+    /** Returns the loser of the Match. Throws a NullPointerException if the Match Result is unknown. */
+    public Participant getLoser() {
+        if (result.getConclusion() == Conclusion.BLUE_WINS)
+            return orangeSlot.getTeam();
+        return blueSlot.getTeam();
+    }
+
+    public Participant getBlueTeam() {
+        return blueSlot.getTeam();
+    }
+
+    public Participant getOrangeTeam() {
+        return orangeSlot.getTeam();
+    }
+
+    public MatchResult getResult() {
+        return result;
     }
 
     public void setResult(MatchResult result) {
         this.result = result;
     }
 
-    public Participant getWinner() {
-        switch (result.getConclusion()) {
-            case BLUE_WINS: return blueTeam;
-            case ORANGE_WINS: return orangeTeam;
-            default: return blueTeam; // TODO Add TieBreaker
-        }
+    public Slot getBlueSlot() {
+        return blueSlot;
     }
 
-    public Participant getLoser() {
-        switch (result.getConclusion()) {
-            case BLUE_WINS: return orangeTeam;
-            case ORANGE_WINS: return blueTeam;
-            default: return orangeTeam; // TODO Add TieBreaker
-        }
+    public void setBlueSlot(Slot blueSlot) {
+        this.blueSlot = blueSlot;
     }
 
-    public Participant getBlueTeam() {
-        return blueTeam;
+    public Slot getOrangeSlot() {
+        return orangeSlot;
     }
 
-    public void setBlueTeam(Participant blueTeam) {
-        this.blueTeam = blueTeam;
-    }
-
-    public Participant getOrangeTeam() {
-        return orangeTeam;
-    }
-
-    public void setOrangeTeam(Participant orangeTeam) {
-        this.orangeTeam = orangeTeam;
-    }
-
-    public Match getBluePriorMatch() {
-        return bluePriorMatch;
-    }
-
-    public void setBluePriorMatch(Match bluePriorMatch) {
-        this.bluePriorMatch = bluePriorMatch;
-    }
-
-    public Match getOrangePriorMatch() {
-        return orangePriorMatch;
-    }
-
-    public void setOrangePriorMatch(Match orangePriorMatch) {
-        this.orangePriorMatch = orangePriorMatch;
+    public void setOrangeSlot(Slot orangeSlot) {
+        this.orangeSlot = orangeSlot;
     }
 }

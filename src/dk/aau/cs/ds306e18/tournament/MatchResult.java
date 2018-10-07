@@ -5,6 +5,11 @@ public class MatchResult {
     private int blueScore = 0;
     private int orangeScore = 0;
 
+    public MatchResult(int blueScore, int orangeScore) {
+        this.blueScore = blueScore;
+        this.orangeScore = orangeScore;
+    }
+
     public Conclusion getConclusion() {
         if (blueScore == orangeScore) return Conclusion.DRAW;
         if (blueScore > orangeScore) return Conclusion.BLUE_WINS;
