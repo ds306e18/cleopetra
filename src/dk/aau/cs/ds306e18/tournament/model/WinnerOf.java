@@ -21,4 +21,9 @@ public class WinnerOf implements Slot {
     public Team getTeam() {
         return match.getWinner();
     }
+
+    @Override
+    public Match getRequiredMatch() {
+        return match;
+    }
 }

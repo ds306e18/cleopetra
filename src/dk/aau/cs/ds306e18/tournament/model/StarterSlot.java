@@ -19,4 +19,9 @@ public class StarterSlot implements Slot {
     public Team getTeam() {
         return team;
     }
+
+    @Override
+    public Match getRequiredMatch() {
+        return null;
+    }
 }

@@ -21,4 +21,9 @@ public class LoserOf implements Slot {
     public Team getTeam() {
         return match.getLoser();
     }
+
+    @Override
+    public Match getRequiredMatch() {
+        return match;
+    }
 }

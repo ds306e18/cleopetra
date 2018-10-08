@@ -1,5 +1,7 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
+import java.util.*;
+
 /** <p>A Match consists of two Slots, which holds the Teams participating in the Match, and each Team's
  * score. A Slot might contain a Team, which is temporarily unknown (e.g. when the
  * Team is the winner of another Match). The method {@code isReadyToPlay()} returns true, when both Slots'
@@ -56,6 +58,29 @@ public class Match {
         } else {
             return MatchStatus.ORANGE_WINS;
         }
+    }
+
+    /** Returns a list of all Matches that must be finished before this Match is playable. The matches will be ordered
+     * after breadth-first-search approach. */
+    public ArrayList<Match> getChildMatchesBFS() {
+        // Breadth-first-search can be performed using a queue
+        LinkedList<Match> queue = new LinkedList<>();
+        ArrayList<Match> matches = new ArrayList<>();
+        queue.add(this);
+
+        // Matches are polled from the queue until it is empty
+        while (!queue.isEmpty()) {
+            Match match = queue.poll();
+            matches.add(match);
+
+            // Enqueue child matches, if any
+            Match blueMatch = blueSlot.getRequiredMatch();
+            if (blueMatch != null) queue.add(blueMatch);
+            Match orangeMatch = orangeSlot.getRequiredMatch();
+            if (orangeMatch != null) queue.add(orangeMatch);
+        }
+
+        return matches;
     }
 
     public boolean hasBeenPlayed() {

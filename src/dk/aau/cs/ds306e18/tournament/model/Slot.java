@@ -7,4 +7,6 @@ public interface Slot {
 
     boolean isReady();
     Team getTeam();
+    /** The match, that the Team of the Slot is dependent on */
+    Match getRequiredMatch();
 }
