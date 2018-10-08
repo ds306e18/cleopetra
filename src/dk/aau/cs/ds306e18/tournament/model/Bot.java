@@ -1,4 +1,4 @@
-package dk.aau.cs.ds306e18.tournament.participants;
+package dk.aau.cs.ds306e18.tournament.model;
 
 import java.nio.file.Path;
 import java.util.ArrayList;

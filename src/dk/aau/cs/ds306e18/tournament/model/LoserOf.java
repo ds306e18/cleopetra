@@ -1,4 +1,4 @@
-package dk.aau.cs.ds306e18.tournament;
+package dk.aau.cs.ds306e18.tournament.model;
 
 /** The WinnerOf is a Slot for a Match, where the Participant is unknown until another Match has been played.
  * The Participant in this Slot will be the loser of that Match. */

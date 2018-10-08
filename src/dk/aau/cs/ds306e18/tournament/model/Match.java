@@ -1,4 +1,4 @@
-package dk.aau.cs.ds306e18.tournament;
+package dk.aau.cs.ds306e18.tournament.model;
 
 import dk.aau.cs.ds306e18.tournament.participants.Team;
 
