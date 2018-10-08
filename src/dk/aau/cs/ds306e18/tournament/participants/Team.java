@@ -3,57 +3,80 @@ package dk.aau.cs.ds306e18.tournament.participants;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
-public class Team implements Participant {
+public class Team {
+
+    public static final int MAX_SIZE = 5;
 
     private String teamName;
-    private int wins;
-    private int losses;
-    private int matchesPlayed;
-    private double ranking;
-    private ArrayList<Player> members;
+    private ArrayList<Bot> bots;
+    private int seedValue;
+    private String description;
 
-    Team(String teamName, int wins, int losses, int matchesPlayed, double ranking, ArrayList<Player> members) {
+    public Team(String teamName, ArrayList<Bot> bots, int seedValue, String description) {
         this.teamName = teamName;
-        this.wins = wins;
-        this.losses = losses;
-        this.matchesPlayed = matchesPlayed;
-        this.ranking = ranking;
-        this.members = members;
+        this.bots = bots;
+        this.seedValue = seedValue;
+        this.description = description;
     }
 
-    @Override
-    public String getName() {
-        return this.teamName;
+    public String getTeamName() {
+        return teamName;
     }
 
-    @Override
-    public int getWins() {
-        return this.wins;
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
     }
 
-    @Override
-    public int getLosses() {
-        return this.losses;
+    public int getSeedValue() {
+        return seedValue;
     }
 
-    @Override
-    public int getMatchesPlayed() {
-        return this.matchesPlayed;
+    public void setSeedValue(int seedValue) {
+        this.seedValue = seedValue;
     }
 
-    @Override
-    public double getRanking() {
-        return this.ranking;
+    public String getDescription() {
+        return description;
     }
 
-    @Override
-    public ArrayList<Path> getConfigPath() {
-        ArrayList<Path> configPaths = new ArrayList<>();
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-        for(Player player : members) {
-            configPaths.add(player.getConfigPath().get(0));
+    public int size() {
+        return bots.size();
+    }
+
+    public boolean addBot(Bot bot) {
+        if (bots.size() < MAX_SIZE) {
+            return bots.add(bot);
         }
+        return false;
+    }
 
-        return configPaths;
+    public boolean removeBot(Bot bot) {
+        if (bots.size() > 1) {
+            return bots.remove(bot);
+        }
+        throw new IllegalStateException("Can't remove the last bot from a team.");
+    }
+
+    public Bot removeBot(int index) {
+        if (bots.size() > 1) {
+            return bots.remove(index);
+        }
+        throw new IllegalStateException("Can't remove the last bot from a team.");
+    }
+
+    public ArrayList<Bot> getBots() {
+        return new ArrayList<>(bots);
+    }
+
+    public ArrayList<Path> getConfigPaths() {
+        ArrayList<Path> paths = new ArrayList<>();
+        for (Bot bot : bots) {
+            paths.add(bot.getConfigPath());
+        }
+        return paths;
     }
 }

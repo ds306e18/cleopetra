@@ -1,11 +1,11 @@
 package dk.aau.cs.ds306e18.tournament;
 
-import dk.aau.cs.ds306e18.tournament.participants.Participant;
+import dk.aau.cs.ds306e18.tournament.participants.Team;
 
-/** <p>A Match consists of two Slots, which holds the Participants participating in the Match, and each participant's
- * score. A Slot might contain a Participant, which is temporarily unknown (e.g. when the
- * Participant is the winner of another Match). The method {@code isReadyToPlay()} returns true, when both Slots'
- * Participant is known and ready.</p>
+/** <p>A Match consists of two Slots, which holds the Teams participating in the Match, and each Team's
+ * score. A Slot might contain a Team, which is temporarily unknown (e.g. when the
+ * Team is the winner of another Match). The method {@code isReadyToPlay()} returns true, when both Slots'
+ * Team is known and ready.</p>
  * <p>When the Match get marked as has been played, and it is possible to retrieve
  * the winner and the loser of the match.</p> */
 public class Match {
@@ -16,10 +16,10 @@ public class Match {
     private Slot blueSlot;
     private Slot orangeSlot;
 
-    /** <p>A Match consists of two Slots, which holds the Participants participating in the Match, and each participant's
-     * score. A Slot might contain a Participant, which is temporarily unknown (e.g. when the
-     * Participant is the winner of another Match). The method {@code isReadyToPlay()} returns true, when both Slots'
-     * Participant is known and ready.</p>
+    /** <p>A Match consists of two Slots, which holds the Teams participating in the Match, and each Team's
+     * score. A Slot might contain a Team, which is temporarily unknown (e.g. when the
+     * Team is the winner of another Match). The method {@code isReadyToPlay()} returns true, when both Slots'
+     * Team is known and ready.</p>
      * <p>When the Match get marked as has been played, and it is possible to retrieve
      * the winner and the loser of the match.</p> */
     public Match(Slot blueSlot, Slot orangeSlot) {
@@ -27,19 +27,19 @@ public class Match {
         this.orangeSlot = orangeSlot;
     }
 
-    /** Returns true when both Slots' Participant is known and ready, even if the Match has already been played. */
+    /** Returns true when both Slots' Team is known and ready, even if the Match has already been played. */
     public boolean isReadyToPlay() {
         return (blueSlot.isReady() && orangeSlot.isReady());
     }
 
-    public Participant getWinner() {
+    public Team getWinner() {
         if (!played) throw new IllegalStateException("Match has not been played.");
         if (blueScore > orangeScore)
             return blueSlot.getTeam();
         return orangeSlot.getTeam();
     }
 
-    public Participant getLoser() {
+    public Team getLoser() {
         if (!played) throw new IllegalStateException("Match has not been played.");
         if (blueScore > orangeScore)
             return orangeSlot.getTeam();
@@ -68,11 +68,11 @@ public class Match {
         this.played = played;
     }
 
-    public Participant getBlueTeam() {
+    public Team getBlueTeam() {
         return blueSlot.getTeam();
     }
 
-    public Participant getOrangeTeam() {
+    public Team getOrangeTeam() {
         return orangeSlot.getTeam();
     }
 

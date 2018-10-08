@@ -1,16 +1,16 @@
 package dk.aau.cs.ds306e18.tournament;
 
+import dk.aau.cs.ds306e18.tournament.participants.Team;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import dk.aau.cs.ds306e18.tournament.participants.Participant;
 
 public class SingleEliminationBracket implements Bracket {
 
     private Match finalMatch;
 
-    public SingleEliminationBracket(List<Participant> participants) {
-        int rounds = (int) Math.ceil(Math.log(participants.size())/Math.log(2));
+    public SingleEliminationBracket(List<Team> teams) {
+        int rounds = (int) Math.ceil(Math.log(teams.size())/Math.log(2));
     }
 
     @Override

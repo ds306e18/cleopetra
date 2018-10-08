@@ -1,14 +1,14 @@
 package dk.aau.cs.ds306e18.tournament;
 
-import dk.aau.cs.ds306e18.tournament.participants.Participant;
+import dk.aau.cs.ds306e18.tournament.participants.Team;
 
-/** The StarterSlot is a Slot for a Match. The Participant in this slot is known at the start of the Stage. */
+/** The StarterSlot is a Slot for a Match. The Team in this slot is known at the start of the Stage. */
 public class StarterSlot implements Slot {
 
-    private Participant team;
+    private Team team;
 
     /** The StarterSlot is a Slot for a Match. The Participant in this slot is known at the start of the Stage. */
-    public StarterSlot(Participant team) {
+    public StarterSlot(Team team) {
         this.team = team;
     }
 
@@ -18,7 +18,7 @@ public class StarterSlot implements Slot {
     }
 
     @Override
-    public Participant getTeam() {
+    public Team getTeam() {
         return team;
     }
 }
