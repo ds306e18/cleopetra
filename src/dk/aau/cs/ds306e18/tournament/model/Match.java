@@ -1,7 +1,5 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
-import dk.aau.cs.ds306e18.tournament.participants.Team;
-
 /** <p>A Match consists of two Slots, which holds the Teams participating in the Match, and each Team's
  * score. A Slot might contain a Team, which is temporarily unknown (e.g. when the
  * Team is the winner of another Match). The method {@code isReadyToPlay()} returns true, when both Slots'

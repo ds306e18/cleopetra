@@ -1,6 +1,6 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
-import dk.aau.cs.ds306e18.tournament.participants.Team;
+import dk.aau.cs.ds306e18.tournament.model.Team;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,7 +1,5 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
-import dk.aau.cs.ds306e18.tournament.participants.Team;
-
 /** The WinnerOf is a Slot for a Match, where the Team is unknown until another Match has been played.
  * The Team in this Slot will be the winner of that Match. */
 public class WinnerOf implements Slot {
