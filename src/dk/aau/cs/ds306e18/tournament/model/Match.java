@@ -60,9 +60,10 @@ public class Match {
         }
     }
 
-    /** Returns a list of all Matches that must be finished before this Match is playable. The matches will be ordered
-     * after breadth-first search approach. */
-    public ArrayList<Match> getChildMatchesBFS() {
+    /** Returns a list of all Matches that must be finished before this Match is playable, including itself.
+     * The matches will be ordered after breadth-first search approach. If the order is reversed, the order will be
+     * the logical order of playing the Matches, with the root as the last Match. */
+    public ArrayList<Match> getTreeAsListBFS() {
         // Breadth-first search can be performed using a queue
         LinkedList<Match> queue = new LinkedList<>();
         ArrayList<Match> matches = new ArrayList<>();
@@ -74,18 +75,20 @@ public class Match {
             matches.add(match);
 
             // Enqueue child matches, if any
-            Match blueMatch = blueSlot.getRequiredMatch();
-            if (blueMatch != null) queue.add(blueMatch);
+            // Orange is added first - this means the final order will be the reverse of the logical
+            // order of playing matches
             Match orangeMatch = orangeSlot.getRequiredMatch();
             if (orangeMatch != null) queue.add(orangeMatch);
+            Match blueMatch = blueSlot.getRequiredMatch();
+            if (blueMatch != null) queue.add(blueMatch);
         }
 
         return matches;
     }
 
-    /** Returns a list of all Matches that must be finished before this Match is playable. The Matches will be ordered
-     * after depth-first search approach. */
-    public ArrayList<Match> getChildMatchesDFS() {
+    /** Returns a list of all Matches that must be finished before this Match is playable, including itself.
+     * The Matches will be ordered after depth-first search approach. */
+    public ArrayList<Match> getTreeAsListDFS() {
         // Depth-first search can be performed using a stack
         LinkedList<Match> stack = new LinkedList<>();
         ArrayList<Match> matches = new ArrayList<>();
