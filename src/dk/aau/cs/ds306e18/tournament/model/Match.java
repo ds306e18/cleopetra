@@ -61,9 +61,9 @@ public class Match {
     }
 
     /** Returns a list of all Matches that must be finished before this Match is playable. The matches will be ordered
-     * after breadth-first-search approach. */
+     * after breadth-first search approach. */
     public ArrayList<Match> getChildMatchesBFS() {
-        // Breadth-first-search can be performed using a queue
+        // Breadth-first search can be performed using a queue
         LinkedList<Match> queue = new LinkedList<>();
         ArrayList<Match> matches = new ArrayList<>();
         queue.add(this);
@@ -78,6 +78,29 @@ public class Match {
             if (blueMatch != null) queue.add(blueMatch);
             Match orangeMatch = orangeSlot.getRequiredMatch();
             if (orangeMatch != null) queue.add(orangeMatch);
+        }
+
+        return matches;
+    }
+
+    /** Returns a list of all Matches that must be finished before this Match is playable. The Matches will be ordered
+     * after depth-first search approach. */
+    public ArrayList<Match> getChildMatchesDFS() {
+        // Depth-first search can be performed using a stack
+        LinkedList<Match> stack = new LinkedList<>();
+        ArrayList<Match> matches = new ArrayList<>();
+        stack.push(this);
+
+        // Matches are popped from the stack until it is empty
+        while (!stack.isEmpty()) {
+            Match match = stack.pop();
+            matches.add(match);
+
+            // Push child matches, if any
+            Match blueMatch = blueSlot.getRequiredMatch();
+            if (blueMatch != null) stack.push(blueMatch);
+            Match orangeMatch = orangeSlot.getRequiredMatch();
+            if (orangeMatch != null) stack.push(orangeMatch);
         }
 
         return matches;
