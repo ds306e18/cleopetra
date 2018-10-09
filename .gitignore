@@ -107,3 +107,5 @@ hs_err_pid*
 
 # macOS-specific
 .DS_Store
+
+local.properties
