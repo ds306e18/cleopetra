@@ -161,4 +161,10 @@ public class Match {
         this.blueScore = blueScore;
         this.orangeScore = orangeScore;
     }
+
+    public void setScores(int blueScore, int orangeScore, boolean hasBeenPlayed) {
+        this.blueScore = blueScore;
+        this.orangeScore = orangeScore;
+        this.played = hasBeenPlayed;
+    }
 }
