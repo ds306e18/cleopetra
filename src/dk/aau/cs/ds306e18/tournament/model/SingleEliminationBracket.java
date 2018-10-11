@@ -42,7 +42,7 @@ public class SingleEliminationBracket implements Bracket {
 
         // The iterator wil generate the bracket from the fst round to the final, only with StarterSlots.
         for (int roundsLeft = rounds; roundsLeft > 0; roundsLeft--) {
-            matchesInCurrentRound = (int) Math.pow(roundsLeft, 2);
+            matchesInCurrentRound = (int) Math.pow(2, roundsLeft);
 
             //Fst round, fills matches with StarterSlots
             if (roundsLeft == rounds) {
