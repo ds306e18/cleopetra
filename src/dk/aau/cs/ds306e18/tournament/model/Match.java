@@ -13,37 +13,42 @@ public class Match {
     private int blueScore = 0;
     private int orangeScore = 0;
     private boolean played = false;
-    private Slot blueSlot;
-    private Slot orangeSlot;
+    private Team predefinedBlue, predefinedOrange; // teams are only stored, when they start in this match, and is not the winner/loser of a previous match
+    private Match winnerDestination, loserDestination, blueFrom, orangeFrom;
+    private boolean blueIsPrevWinner, orangeIsPrevWinner;
 
-    /** <p>A Match consists of two Slots, which holds the Teams participating in the Match, and each Team's
-     * score. A Slot might contain a Team, which is temporarily unknown (e.g. when the
-     * Team is the winner of another Match). The method {@code isReadyToPlay()} returns true, when both Slots'
-     * Team is known and ready.</p>
-     * <p>When the Match get marked as has been played, and it is possible to retrieve
-     * the winner and the loser of the match.</p> */
-    public Match(Slot blueSlot, Slot orangeSlot) {
-        this.blueSlot = blueSlot;
-        this.orangeSlot = orangeSlot;
+    public Match() { }
+
+    public Match(Team predefinedBlue, Team predefinedOrange) {
+        this.predefinedBlue = predefinedBlue;
+        this.predefinedOrange = predefinedOrange;
     }
 
-    /** Returns true when both Slots' Team is known and ready, even if the Match has already been played. */
+    public void setWinnerDestination(Match match, boolean blueInWinner) {
+        // TODO
+    }
+
+    public void setLoserDestination(Match match, boolean blueInWinner) {
+        // TODO
+    }
+
+    /** Returns true when both Teams are known and ready, even if the Match has already been played. */
     public boolean isReadyToPlay() {
-        return (blueSlot.isReady() && orangeSlot.isReady());
+        return getBlueTeam() != null && getOrangeTeam() != null;
     }
 
     public Team getWinner() {
         if (!played) throw new IllegalStateException("Match has not been played.");
         if (blueScore > orangeScore)
-            return blueSlot.getTeam();
-        return orangeSlot.getTeam();
+            return getBlueTeam();
+        return getOrangeTeam();
     }
 
     public Team getLoser() {
         if (!played) throw new IllegalStateException("Match has not been played.");
         if (blueScore > orangeScore)
-            return orangeSlot.getTeam();
-        return blueSlot.getTeam();
+            return getOrangeTeam();
+        return getBlueTeam();
     }
 
     public MatchStatus getStatus() {
@@ -77,10 +82,8 @@ public class Match {
             // Enqueue child matches, if any
             // Orange is added first - this means the final order will be the reverse of the logical
             // order of playing matches
-            Match orangeMatch = orangeSlot.getRequiredMatch();
-            if (orangeMatch != null) queue.add(orangeMatch);
-            Match blueMatch = blueSlot.getRequiredMatch();
-            if (blueMatch != null) queue.add(blueMatch);
+            if (orangeFrom != null) queue.add(orangeFrom);
+            if (blueFrom != null) queue.add(blueFrom);
         }
 
         return matches;
@@ -100,10 +103,8 @@ public class Match {
             matches.add(match);
 
             // Push child matches, if any
-            Match blueMatch = blueSlot.getRequiredMatch();
-            if (blueMatch != null) stack.push(blueMatch);
-            Match orangeMatch = orangeSlot.getRequiredMatch();
-            if (orangeMatch != null) stack.push(orangeMatch);
+            if (blueFrom != null) stack.push(blueFrom);
+            if (orangeFrom != null) stack.push(orangeFrom);
         }
 
         return matches;
@@ -128,28 +129,28 @@ public class Match {
         this.played = played;
     }
 
+    public boolean blueIsPredefined() {
+        return predefinedBlue != null;
+    }
+
+    public boolean orangeIsPredefined() {
+        return predefinedOrange != null;
+    }
+
     public Team getBlueTeam() {
-        return blueSlot.getTeam();
+        if (predefinedBlue != null) return predefinedBlue;
+        if (blueFrom == null) return null;
+        if (!blueFrom.hasBeenPlayed()) return null;
+        if (blueIsPrevWinner) return blueFrom.getWinner();
+        else return blueFrom.getLoser();
     }
 
     public Team getOrangeTeam() {
-        return orangeSlot.getTeam();
-    }
-
-    public Slot getBlueSlot() {
-        return blueSlot;
-    }
-
-    public void setBlueSlot(Slot blueSlot) {
-        this.blueSlot = blueSlot;
-    }
-
-    public Slot getOrangeSlot() {
-        return orangeSlot;
-    }
-
-    public void setOrangeSlot(Slot orangeSlot) {
-        this.orangeSlot = orangeSlot;
+        if (predefinedOrange != null) return predefinedOrange;
+        if (orangeFrom == null) return null;
+        if (!orangeFrom.hasBeenPlayed()) return null;
+        if (orangeIsPrevWinner) return orangeFrom.getWinner();
+        else return orangeFrom.getLoser();
     }
 
     public int getBlueScore() {
