@@ -44,7 +44,19 @@ public class MatchTest {
         assertSame(match.getLoser(), expectedLoser);
     }
 
-    // TODO Add test getWinnerAndLoser were match has not been played
+    @Test(expected = IllegalStateException.class)
+    public void getWinnerAndLoser03() {
+        Match match = new Match(new StarterSlot(new Team("A", null, 0, "a")), new StarterSlot(new Team("B", null, 0, "b")));
+        match.setScores(3, 5); // note: match is not finished
+        match.getWinner();
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void getWinnerAndLoser04() {
+        Match match = new Match(new StarterSlot(new Team("A", null, 0, "a")), new StarterSlot(new Team("B", null, 0, "b")));
+        match.setScores(3, 5); // note: match is not finished
+        match.getLoser();
+    }
 
     @Test
     public void getStatus01() {
@@ -68,5 +80,17 @@ public class MatchTest {
         assertSame(match.getStatus(), MatchStatus.DRAW);
     }
 
-    // TODO Add tests getStatus that expects BLUE_WINS and ORANGE_WINS
+    @Test
+    public void getStatus04() {
+        Match match = new Match(new StarterSlot(new Team("A", null, 0, "a")), new StarterSlot(new Team("B", null, 0, "b")));
+        match.setScores(2, 0, true);
+        assertSame(match.getStatus(), MatchStatus.BLUE_WINS);
+    }
+
+    @Test
+    public void getStatus05() {
+        Match match = new Match(new StarterSlot(new Team("A", null, 0, "a")), new StarterSlot(new Team("B", null, 0, "b")));
+        match.setScores(0, 2, true);
+        assertSame(match.getStatus(), MatchStatus.ORANGE_WINS);
+    }
 }

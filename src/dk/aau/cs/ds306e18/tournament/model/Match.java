@@ -109,6 +109,17 @@ public class Match {
         return matches;
     }
 
+    /** Returns true if the other Match must be concluded before this match is playable. */
+    public boolean dependsOn(Match otherMatch) {
+        if (this == otherMatch) return false;
+        return getTreeAsListBFS().contains(otherMatch);
+    }
+
+    /** Sets both team scores to 0 and marks match as not played yet. */
+    public void reset() {
+        setScores(0, 0, false);
+    }
+
     public boolean hasBeenPlayed() {
         return played;
     }
