@@ -11,7 +11,7 @@ public class SingleEliminationBracket implements Bracket {
     private Match finalMatch;
 
     public SingleEliminationBracket(List<Team> teams) {
-        int rounds = (int) Math.ceil(Math.log(teams.size())/Math.log(2));
+        int rounds = (int) Math.ceil(Math.log(teams.size()) / Math.log(2));
         generateBracket(rounds);
 
     }
@@ -41,11 +41,11 @@ public class SingleEliminationBracket implements Bracket {
         ArrayList<Match> bracketList = new ArrayList<>();
 
         // The iterator wil generate the bracket from the fst round to the final, only with StarterSlots.
-        for(int roundsLeft = rounds; roundsLeft > 0; roundsLeft--) {
-            matchesInCurrentRound = (int) Math.pow(roundsLeft, 2);
+        for (int roundsLeft = rounds; roundsLeft > 0; roundsLeft--) {
+            matchesInCurrentRound = (int) Math.pow(2, roundsLeft);
 
             //Fst round, fills matches with StarterSlots
-            if(roundsLeft == rounds) {
+            if (roundsLeft == rounds) {
                 for (matchNumberInRound = 1; matchNumberInRound <= matchesInCurrentRound; matchNumberInRound++) {
                     bracketList.add(new Match(new StarterSlot(null), new StarterSlot(null)));
                     matchNumberInRound++;
@@ -53,9 +53,9 @@ public class SingleEliminationBracket implements Bracket {
             }
 
             //Fills all the remaining matches with winnerOf from earlier rounds.
-            if(roundsLeft > 1 && roundsLeft <= rounds-1) {
-                for(matchNumberInRound = 1; matchNumberInRound <= matchesInCurrentRound; matchNumberInRound++) {
-                    bracketList.add(new Match(new WinnerOf(bracketList.get(matchIndex)), new WinnerOf(bracketList.get(matchIndex+1))));
+            if (roundsLeft > 1 && roundsLeft <= rounds - 1) {
+                for (matchNumberInRound = 1; matchNumberInRound <= matchesInCurrentRound; matchNumberInRound++) {
+                    bracketList.add(new Match(new WinnerOf(bracketList.get(matchIndex)), new WinnerOf(bracketList.get(matchIndex + 1))));
                     matchIndex = matchIndex + 2;
                 }
             }
@@ -67,20 +67,37 @@ public class SingleEliminationBracket implements Bracket {
         }
     }
 
-    public void seedBracket(int amountOfTeams, ArrayList<Team> teamList) {
+    public ArrayList<Team> seedBracket(ArrayList<Team> seedList) {
 
         //Sorts teams compared to seeding
-        teamList.sort(new Comparator<Team>() {
+        seedList.sort(new Comparator<Team>() {
             @Override
             public int compare(Team o1, Team o2) {
                 return Integer.compare(o1.getSeedValue(), o2.getSeedValue());
             }
         });
 
-        //TODO place seeded teams in bracket matches.
-        for(int j = 0; j < amountOfTeams; j++) {
+        ArrayList<Team> temp = new ArrayList<>();
 
+        int slice = 1;
+        int interactions = seedList.size() / 2;
+
+        while (slice < interactions) {
+            temp = (ArrayList<Team>) seedList.clone();
+            seedList.clear();
+
+            while (temp.size() > 0) {
+                int lastIndex = temp.size();
+                seedList.addAll(temp.subList(0, slice));
+                seedList.addAll(temp.subList(lastIndex - slice, lastIndex));
+                temp.removeAll(temp.subList(lastIndex - slice, lastIndex));
+                temp.removeAll(temp.subList(0, slice));
+            }
+
+            slice *= 2;
         }
+
+        return seedList;
     }
 
 }
