@@ -2,106 +2,71 @@ package dk.aau.cs.ds306e18.tournament.model;
 
 import java.util.*;
 
-/** <p>A Match consists of two Teams and a result. A Team can be a winner or loser from another Match and thus
- * temporarily unknown. If team is a winner or loser of another Match use the {@code useWinnerFrom()} and
- * {@code useLoserFrom} methods.</p>
- * <p>The method {@code isReadyToPlay()} returns true, when both Teams are known and ready.</p>
- * <p>When the Match get marked as has been played, it is possible to retrieve
+/** <p>A Match consists of two Slots, which holds the Teams participating in the Match, and each Team's
+ * score. A Slot might contain a Team, which is temporarily unknown (e.g. when the
+ * Team is the winner of another Match). The method {@code isReadyToPlay()} returns true, when both Slots'
+ * Team is known and ready.</p>
+ * <p>When the Match get marked as has been played, and it is possible to retrieve
  * the winner and the loser of the match.</p> */
 public class Match {
 
     private int blueScore = 0;
     private int orangeScore = 0;
     private boolean played = false;
-
-    // teams are only stored, when they start in this match, and is not the winner/loser of a previous match
-    private Team predefinedBlue, predefinedOrange;
-
+    private Slot blueSlot, orangeSlot;
     // Where do winner/loser go? (They can only go to one destination)
     private Match winnerDestination, loserDestination;
 
-    // Where did blue and orange come from?
-    private Match blueFrom, orangeFrom;
-    private boolean blueIsPrevWinner, orangeIsPrevWinner;
-
-    /** <p>A Match consists of two Teams and a result. A Team can be a winner or loser from another Match and thus
-     * temporarily unknown. If team is a winner or loser of another Match use the {@code useWinnerFrom()} and
-     * {@code useLoserFrom} methods.</p>
-     * <p>The method {@code isReadyToPlay()} returns true, when both Teams are known and ready.</p>
-     * <p>When the Match get marked as has been played, it is possible to retrieve
-     * the winner and the loser of the match.</p> */
-    public Match() { }
-
-    /** <p>A Match consists of two Teams and a result. A Team can be a winner or loser from another Match and thus
-     * temporarily unknown. If team is a winner or loser of another Match use the {@code useWinnerFrom()} and
-     * {@code useLoserFrom} methods.</p>
-     * <p>The method {@code isReadyToPlay()} returns true, when both Teams are known and ready.</p>
-     * <p>When the Match get marked as has been played, it is possible to retrieve
-     * the winner and the loser of the match.</p>
-     * @param blue the blue Team. Can be null or set later.
-     * @param orange the orange Team. Can be null or set later. */
+    /** Construct a Match where both Teams are known from the start. */
     public Match(Team blue, Team orange) {
-        predefinedBlue = blue;
-        predefinedOrange = orange;
+        setBlue(new StarterSlot(blue));
+        setOrange(new StarterSlot(orange));
     }
 
-    /** Set the blue Team of this Match. If the blue was previously marked as being the winner or loser of another
-     * match that connection is automatically removed. */
-    public void setBlue(Team blue) {
-        predefinedBlue = blue;
-        if (blueFrom != null) {
-            if (blueIsPrevWinner) blueFrom.winnerDestination = null;
-            else blueFrom.loserDestination = null;
-            blueFrom = null;
+    /** Construct a Match, given the Slots defining the Teams */
+    public Match(Slot blue, Slot orange) {
+        if (blue == null || orange == null) throw new IllegalArgumentException("A Match cannot that null as a Slot.");
+        setBlue(blue);
+        setOrange(orange);
+    }
+
+    /** Set the blue Team Slot of this Match. */
+    public void setBlue(Slot blue) {
+        if (blue == null) throw new IllegalArgumentException("A Match cannot that null as a Slot.");
+        unlinkSlot(blueSlot);
+        blueSlot = blue;
+        linkSlot(blueSlot, this);
+    }
+
+    /** Set the orange Team Slot of this Match. */
+    public void setOrange(Slot orange) {
+        if (orange == null) throw new IllegalArgumentException("A Match cannot that null as a Slot.");
+        unlinkSlot(orangeSlot);
+        orangeSlot = orange;
+        linkSlot(orangeSlot, this);
+    }
+
+    /** Adds the correct link between two Matches using the Slot from the parent Match */
+    private static void linkSlot(Slot slot, Match parentMatch) {
+        if (slot instanceof WinnerOf) {
+            slot.getRequiredMatch().winnerDestination = parentMatch;
+        } else if (slot instanceof LoserOf) {
+            slot.getRequiredMatch().loserDestination = parentMatch;
         }
     }
 
-    /** Set the orange Team of this Match. If the orange was previously marked as being the winner or loser of another
-     * match that connection is automatically removed. */
-    public void setOrange(Team orange) {
-        predefinedOrange = orange;
-        if (orangeFrom != null) {
-            if (orangeIsPrevWinner) orangeFrom.winnerDestination = null;
-            else orangeFrom.loserDestination = null;
-            orangeFrom = null;
+    /** Removes the link between two Matches describe in Slot. The Slot should be discarded afterwards */
+    private static void unlinkSlot(Slot slot) {
+        if (slot instanceof WinnerOf) {
+            slot.getRequiredMatch().winnerDestination = null;
+        } else if (slot instanceof LoserOf) {
+            slot.getRequiredMatch().loserDestination = null;
         }
-    }
-
-    /** Set a winner of another Match to participate in this Match.
-     * @param match the Match where the winner is taken from.
-     * @param winnerBecomesBlue if true, the winner will be blue in this Match, otherwise orange. */
-    public void useWinnerFrom(Match match, boolean winnerBecomesBlue) {
-        if (winnerBecomesBlue) {
-            blueFrom = match;
-            blueIsPrevWinner = true;
-            predefinedBlue = null;
-        } else {
-            orangeFrom = match;
-            orangeIsPrevWinner = true;
-            predefinedOrange = null;
-        }
-        match.winnerDestination = this;
-    }
-
-    /** Set a loser of another Match to participate in this Match.
-     * @param match the Match where the winner is taken from.
-     * @param loserBecomesOrange if true, the loser will be orange in this Match, otherwise blue. */
-    public void useLoserFrom(Match match, boolean loserBecomesOrange) {
-        if (loserBecomesOrange) {
-            orangeFrom = match;
-            orangeIsPrevWinner = false;
-            predefinedOrange = null;
-        } else {
-            blueFrom = match;
-            blueIsPrevWinner = false;
-            predefinedBlue = null;
-        }
-        match.loserDestination = this;
     }
 
     /** Returns true when both Teams are known and ready, even if the Match has already been played. */
     public boolean isReadyToPlay() {
-        return getBlueTeam() != null && getOrangeTeam() != null;
+        return blueSlot.isReady() && orangeSlot.isReady();
     }
 
     public Team getWinner() {
@@ -149,8 +114,10 @@ public class Match {
             // Enqueue child matches, if any
             // Orange is added first - this means the final order will be the reverse of the logical
             // order of playing matches
-            if (match.orangeFrom != null) queue.add(match.orangeFrom);
-            if (match.blueFrom != null) queue.add(match.blueFrom);
+            Match blueReqMatch = blueSlot.getRequiredMatch();
+            if (blueReqMatch != null) queue.add(blueReqMatch);
+            Match orangeReqMatch = orangeSlot.getRequiredMatch();
+            if (orangeReqMatch != null) queue.add(orangeReqMatch);
         }
 
         return list;
@@ -170,8 +137,10 @@ public class Match {
             matches.add(match);
 
             // Push child matches, if any
-            if (match.blueFrom != null) stack.push(match.blueFrom);
-            if (match.orangeFrom != null) stack.push(match.orangeFrom);
+            Match blueReqMatch = blueSlot.getRequiredMatch();
+            if (blueReqMatch != null) stack.push(blueReqMatch);
+            Match orangeReqMatch = orangeSlot.getRequiredMatch();
+            if (orangeReqMatch != null) stack.push(orangeReqMatch);
         }
 
         return matches;
@@ -215,30 +184,14 @@ public class Match {
         this.played = played;
     }
 
-    public boolean blueIsPredefined() {
-        return predefinedBlue != null;
-    }
-
-    public boolean orangeIsPredefined() {
-        return predefinedOrange != null;
-    }
-
-    /** Returns the blue team or null if blue is unknown or unset. */
+    /** Returns the blue team or null if blue is unknown. */
     public Team getBlueTeam() {
-        if (predefinedBlue != null) return predefinedBlue;
-        if (blueFrom == null) return null; // Blue is completely unknown if this is true
-        if (!blueFrom.hasBeenPlayed()) return null;
-        if (blueIsPrevWinner) return blueFrom.getWinner();
-        else return blueFrom.getLoser();
+        return blueSlot.getTeam();
     }
 
-    /** Returns the orange team or null if orange is unknown or unset. */
+    /** Returns the orange team or null if orange is unknown. */
     public Team getOrangeTeam() {
-        if (predefinedOrange != null) return predefinedOrange;
-        if (orangeFrom == null) return null;  // Orange is completely unknown if this is true
-        if (!orangeFrom.hasBeenPlayed()) return null;
-        if (orangeIsPrevWinner) return orangeFrom.getWinner();
-        else return orangeFrom.getLoser();
+        return orangeSlot.getTeam();
     }
 
     public int getBlueScore() {

@@ -48,14 +48,12 @@ public class SingleEliminationBracket implements Bracket {
             if (roundsLeft == rounds) {
                 // First round, all matches are empty
                 for (matchNumberInRound = 1; matchNumberInRound <= matchesInCurrentRound; matchNumberInRound++) {
-                    bracketList.add(new Match());
+                    bracketList.add(new Match(new StarterSlot(null), new StarterSlot(null)));
                 }
             } else {
                 // Fills all the remaining matches with winners from earlier rounds.
                 for (matchNumberInRound = 1; matchNumberInRound <= matchesInCurrentRound; matchNumberInRound++) {
-                    Match match = new Match();
-                    match.useWinnerFrom(bracketList.get(matchIndex), true);
-                    match.useWinnerFrom(bracketList.get(matchIndex + 1), false);
+                    Match match = new Match(new WinnerOf(bracketList.get(matchIndex)), new WinnerOf(bracketList.get(matchIndex + 1)));
                     bracketList.add(match);
                     matchIndex = matchIndex + 2;
                 }

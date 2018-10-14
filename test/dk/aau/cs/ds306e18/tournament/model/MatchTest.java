@@ -15,8 +15,7 @@ public class MatchTest {
     @Test
     public void isReadyToPlay02() {
         Match firstMatch = new Match(new Team("A", null, 0, "a"), new Team("B", null, 0, "b"));
-        Match secondMatch = new Match(new Team("C", null, 0, "c"), null);
-        secondMatch.useWinnerFrom(firstMatch, false);
+        Match secondMatch = new Match(new StarterSlot(new Team("C", null, 0, "c")), new WinnerOf(firstMatch));
         assertFalse(secondMatch.isReadyToPlay());
 
         firstMatch.setScores(4, 2, true);
@@ -62,16 +61,14 @@ public class MatchTest {
     @Test
     public void getStatus01() {
         Match firstMatch = new Match(new Team("A", null, 0, "a"), new Team("B", null, 0, "b"));
-        Match secondMatch = new Match(new Team("C", null, 0, "c"), null);
-        secondMatch.useWinnerFrom(firstMatch, false);
+        Match secondMatch = new Match(new StarterSlot(new Team("C", null, 0, "c")), new WinnerOf(firstMatch));
         assertSame(secondMatch.getStatus(), MatchStatus.NOT_PLAYABLE);
     }
 
     @Test
     public void getStatus02() {
         Match firstMatch = new Match(new Team("A", null, 0, "a"), new Team("B", null, 0, "b"));
-        Match secondMatch = new Match(new Team("C", null, 0, "c"), null);
-        secondMatch.useWinnerFrom(firstMatch, false);
+        Match secondMatch = new Match(new StarterSlot(new Team("C", null, 0, "c")), new WinnerOf(firstMatch));
         firstMatch.setScores(0, 2, true);
         assertSame(secondMatch.getStatus(), MatchStatus.READY_TO_BE_PLAYED);
     }
@@ -82,6 +79,7 @@ public class MatchTest {
         match.setScores(0, 0, true);
         assertSame(match.getStatus(), MatchStatus.DRAW);
     }
+
 
     @Test
     public void getStatus04() {
@@ -100,32 +98,28 @@ public class MatchTest {
     @Test
     public void dependsOn01() {
         Match firstMatch = new Match(new Team("A", null, 0, "a"), new Team("B", null, 0, "b"));
-        Match secondMatch = new Match(new Team("C", null, 0, "c"), null);
-        secondMatch.useWinnerFrom(firstMatch, false);
+        Match secondMatch = new Match(new StarterSlot(new Team("C", null, 0, "c")), new WinnerOf(firstMatch));
         assertTrue(secondMatch.dependsOn(firstMatch));
     }
 
     @Test
     public void dependsOn02() {
         Match firstMatch = new Match(new Team("A", null, 0, "a"), new Team("B", null, 0, "b"));
-        Match secondMatch = new Match(new Team("C", null, 0, "c"), null);
-        secondMatch.useLoserFrom(firstMatch, true);
+        Match secondMatch = new Match(new StarterSlot(new Team("C", null, 0, "c")), new LoserOf(firstMatch));
         assertTrue(secondMatch.dependsOn(firstMatch));
     }
 
     @Test
     public void dependsOn03() {
         Match firstMatch = new Match(new Team("A", null, 0, "a"), new Team("B", null, 0, "b"));
-        Match secondMatch = new Match(new Team("C", null, 0, "c"), null);
-        secondMatch.useWinnerFrom(firstMatch, false);
+        Match secondMatch = new Match(new StarterSlot(new Team("C", null, 0, "c")), new WinnerOf(firstMatch));
         assertFalse(firstMatch.dependsOn(secondMatch));
     }
 
     @Test
     public void dependsOn04() {
         Match firstMatch = new Match(new Team("A", null, 0, "a"), new Team("B", null, 0, "b"));
-        Match secondMatch = new Match(new Team("C", null, 0, "c"), null);
-        secondMatch.useLoserFrom(firstMatch, true);
+        Match secondMatch = new Match(new StarterSlot(new Team("C", null, 0, "c")), new LoserOf(firstMatch));
         assertFalse(firstMatch.dependsOn(secondMatch));
     }
 
@@ -133,9 +127,7 @@ public class MatchTest {
     public void dependsOn05() {
         Match firstMatch = new Match(new Team("A", null, 0, "a"), new Team("B", null, 0, "b"));
         Match secondMatch = new Match(new Team("C", null, 0, "c"), new Team("D", null, 0, "d"));
-        Match thirdMatch = new Match();
-        thirdMatch.useWinnerFrom(firstMatch, true);
-        thirdMatch.useLoserFrom(secondMatch, true);
+        Match thirdMatch = new Match(new WinnerOf(firstMatch), new LoserOf(secondMatch));
 
         assertFalse(firstMatch.dependsOn(secondMatch));
         assertFalse(secondMatch.dependsOn(firstMatch));
