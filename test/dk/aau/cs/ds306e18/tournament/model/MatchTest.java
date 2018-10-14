@@ -96,4 +96,51 @@ public class MatchTest {
         match.setScores(0, 2, true);
         assertSame(match.getStatus(), MatchStatus.ORANGE_WINS);
     }
+
+    @Test
+    public void dependsOn01() {
+        Match firstMatch = new Match(new Team("A", null, 0, "a"), new Team("B", null, 0, "b"));
+        Match secondMatch = new Match(new Team("C", null, 0, "c"), null);
+        secondMatch.useWinnerFrom(firstMatch, false);
+        assertTrue(secondMatch.dependsOn(firstMatch));
+    }
+
+    @Test
+    public void dependsOn02() {
+        Match firstMatch = new Match(new Team("A", null, 0, "a"), new Team("B", null, 0, "b"));
+        Match secondMatch = new Match(new Team("C", null, 0, "c"), null);
+        secondMatch.useLoserFrom(firstMatch, true);
+        assertTrue(secondMatch.dependsOn(firstMatch));
+    }
+
+    @Test
+    public void dependsOn03() {
+        Match firstMatch = new Match(new Team("A", null, 0, "a"), new Team("B", null, 0, "b"));
+        Match secondMatch = new Match(new Team("C", null, 0, "c"), null);
+        secondMatch.useWinnerFrom(firstMatch, false);
+        assertFalse(firstMatch.dependsOn(secondMatch));
+    }
+
+    @Test
+    public void dependsOn04() {
+        Match firstMatch = new Match(new Team("A", null, 0, "a"), new Team("B", null, 0, "b"));
+        Match secondMatch = new Match(new Team("C", null, 0, "c"), null);
+        secondMatch.useLoserFrom(firstMatch, true);
+        assertFalse(firstMatch.dependsOn(secondMatch));
+    }
+
+    @Test
+    public void dependsOn05() {
+        Match firstMatch = new Match(new Team("A", null, 0, "a"), new Team("B", null, 0, "b"));
+        Match secondMatch = new Match(new Team("C", null, 0, "c"), new Team("D", null, 0, "d"));
+        Match thirdMatch = new Match();
+        thirdMatch.useWinnerFrom(firstMatch, true);
+        thirdMatch.useLoserFrom(secondMatch, true);
+
+        assertFalse(firstMatch.dependsOn(secondMatch));
+        assertFalse(secondMatch.dependsOn(firstMatch));
+
+        assertTrue(thirdMatch.dependsOn(firstMatch));
+        assertTrue(thirdMatch.dependsOn(secondMatch));
+    }
 }

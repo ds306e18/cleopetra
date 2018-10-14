@@ -86,7 +86,7 @@ public class Match {
     /** Set a loser of another Match to participate in this Match.
      * @param match the Match where the winner is taken from.
      * @param loserBecomesOrange if true, the loser will be orange in this Match, otherwise blue. */
-    public void setLoserDestination(Match match, boolean loserBecomesOrange) {
+    public void useLoserFrom(Match match, boolean loserBecomesOrange) {
         if (loserBecomesOrange) {
             orangeFrom = match;
             orangeIsPrevWinner = false;
@@ -180,7 +180,26 @@ public class Match {
     /** Returns true if the other Match must be concluded before this match is playable. */
     public boolean dependsOn(Match otherMatch) {
         if (this == otherMatch) return false;
-        return getTreeAsListBFS().contains(otherMatch);
+
+        // If this match depends on the other match, this match must be a parent (or parent of a parent of a
+        // parent ... ect) of the other match.
+        // A queue contain all unchecked parent matches.
+        LinkedList<Match> queue = new LinkedList<>();
+        queue.push(otherMatch);
+
+        // Matches are polled from the queue until it is empty.
+        // Depending on bracket structure some matches might be checked multiple times.
+        while (!queue.isEmpty()) {
+            Match match = queue.poll();
+            if (this == match)
+                return true;
+
+            // Enqueue parent matches, if any
+            if (match.winnerDestination != null) queue.push(match.winnerDestination);
+            if (match.loserDestination != null) queue.push(match.loserDestination);
+        }
+
+        return false;
     }
 
     /** Sets both team scores to 0 and marks match as not played yet. */
