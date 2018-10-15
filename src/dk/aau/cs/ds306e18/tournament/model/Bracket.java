@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public interface Bracket {
 
     ArrayList<Match> getAllMatches();
-    ArrayList<Match> getUpcommingMatches();
-    ArrayList<Match> getUnplayableMatches();
+    ArrayList<Match> getUpcomingMatches();
+    ArrayList<Match> getPendingMatches();
     ArrayList<Match> getCompletedMatches();
 }

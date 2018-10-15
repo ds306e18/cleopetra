@@ -27,3 +27,4 @@ public class WinnerOf implements Slot {
         return match;
     }
 }
+

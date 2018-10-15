@@ -5,7 +5,9 @@ package dk.aau.cs.ds306e18.tournament.model;
  * The method {@code isReady()} will mark when the Team is known. */
 public interface Slot {
 
+    /** Returns true when are required Matches has been player. */
     boolean isReady();
+    /** Get the Team contained in this Slot. Can be null if required Matches has not been played. */
     Team getTeam();
     /** The match, that the Team of the Slot is dependent on */
     Match getRequiredMatch();
