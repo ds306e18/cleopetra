@@ -47,7 +47,7 @@ public class SwissBracket implements Bracket{
 
         if(rounds.size() == MAX_ROUNDS) //Is it legal to create another round?
             return false;
-        else if(getUpcommingMatches().size() != 0) //Has all matches been played?
+        else if(getUpcomingMatches().size() != 0) //Has all matches been played?
             return false;
         else if(rounds.size() != 0) { //Assign points for played matches
             assignPoints();
@@ -104,7 +104,7 @@ public class SwissBracket implements Bracket{
     /** Creates the matches for the next round. This is done so that no team will play the same opponents twice,
      * and with the teams with the closest amount of points.
      * Credit for algorithm: Amanda.*/
-    public void createRound(){
+    private void createRound(){
 
         // Create ordered list of team, based on points.
         ArrayList<Team> orderedTeamList = orderTeamsListFromPoints(teams, teamPoints);
@@ -174,7 +174,7 @@ public class SwissBracket implements Bracket{
     }
 
     @Override
-    public ArrayList<Match> getUpcommingMatches() {
+    public ArrayList<Match> getUpcomingMatches() {
 
         ArrayList<Match> allMatches = getAllMatches();
         ArrayList<Match> upComingMatches = new ArrayList<>();
@@ -189,7 +189,7 @@ public class SwissBracket implements Bracket{
     /** All created matches can be played in swiss.
      * @return an empty ArrayList<Match>*/
     @Override
-    public ArrayList<Match> getUnplayableMatches() {
+    public ArrayList<Match> getPendingMatches() {
 
         return new ArrayList<Match>();
     }

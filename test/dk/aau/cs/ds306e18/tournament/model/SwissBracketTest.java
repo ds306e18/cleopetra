@@ -9,8 +9,6 @@ import static org.junit.Assert.*;
 
 public class SwissBracketTest {
 
-
-
     //Even number of teams
     @Test
     public void calculateMaxRounds01(){
@@ -99,34 +97,34 @@ public class SwissBracketTest {
     }
 
     @Test
-    public void getUnplayableMatches01(){
+    public void getPendingMatches01(){
 
         int numberOfTeams = 4;
         int teamSize = 2;
 
         SwissBracket bracket = new SwissBracket(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
-        ArrayList<Match> unplayedMatches = bracket.getUnplayableMatches();
+        ArrayList<Match> unplayedMatches = bracket.getPendingMatches();
 
         assertEquals(0, unplayedMatches.size());
     }
 
     //0 matches
     @Test
-    public void getUnplayableMatches02(){
+    public void getPendingMatches02(){
 
         int numberOfTeams = 0;
         int teamSize = 0;
 
         SwissBracket bracket = new SwissBracket(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
-        ArrayList<Match> unplayedMatches = bracket.getUnplayableMatches();
+        ArrayList<Match> unplayedMatches = bracket.getPendingMatches();
 
         assertEquals(0, unplayedMatches.size());
     }
 
     @Test
-    public void getUnplayableMatches03(){
+    public void getPendingMatches03(){
 
         int numberOfTeams = 4;
         int teamSize = 2;
@@ -134,45 +132,45 @@ public class SwissBracketTest {
         SwissBracket bracket = new SwissBracket(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
         //All has to be played
-        ArrayList<Match> matches = bracket.getUnplayableMatches();
+        ArrayList<Match> matches = bracket.getPendingMatches();
 
         for(Match match : matches)
             match.setHasBeenPlayed(true);
 
-        assertEquals(0 , bracket.getUnplayableMatches().size());
+        assertEquals(0 , bracket.getPendingMatches().size());
     }
 
     @Test
-    public void getUpcommingMatches01(){
+    public void getUpcomingMatches01(){
 
         int numberOfTeams = 4;
         int teamSize = 2;
 
         SwissBracket bracket = new SwissBracket(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
-        assertEquals(numberOfTeams/2 , bracket.getUpcommingMatches().size());
+        assertEquals(numberOfTeams/2 , bracket.getUpcomingMatches().size());
     }
 
     @Test
-    public void getUpcommingMatches02(){
+    public void getUpcomingMatches02(){
 
         int numberOfTeams = 16;
         int teamSize = 2;
 
         SwissBracket bracket = new SwissBracket(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
-        assertEquals(numberOfTeams/2 , bracket.getUpcommingMatches().size());
+        assertEquals(numberOfTeams/2 , bracket.getUpcomingMatches().size());
     }
 
     @Test
-    public void getUpcommingMatches03(){
+    public void getUpcomingMatches03(){
 
         int numberOfTeams = 1;
         int teamSize = 2;
 
         SwissBracket bracket = new SwissBracket(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
-        assertEquals(0 , bracket.getUpcommingMatches().size());
+        assertEquals(0 , bracket.getUpcomingMatches().size());
     }
 
     @Test
@@ -210,7 +208,7 @@ public class SwissBracketTest {
         SwissBracket bracket = new SwissBracket(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
         //All has to be played
-        ArrayList<Match> matches = bracket.getUpcommingMatches();
+        ArrayList<Match> matches = bracket.getUpcomingMatches();
 
         for(Match match : matches)
             match.setHasBeenPlayed(true);
@@ -228,7 +226,7 @@ public class SwissBracketTest {
         SwissBracket bracket = new SwissBracket(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
         //All has to be played
-        ArrayList<Match> matches = bracket.getUnplayableMatches();
+        ArrayList<Match> matches = bracket.getPendingMatches();
         for(Match match : matches)
             match.setHasBeenPlayed(true);
 
@@ -247,7 +245,7 @@ public class SwissBracketTest {
         assertFalse(bracket.createNewRound());
     }
 
-    //No team can play each other more than once //TODO Create this one where it fails
+    //No team can play each other more than once
     @Test
     public void createNewRound04(){
 
@@ -256,12 +254,12 @@ public class SwissBracketTest {
         for(int i = 0; i < 7; i++)
             teams.add(new Team(String.valueOf(i), TestUtilities.generateBots(2), 0, "Hello"));
 
-        //Creat the bracket with the teams
+        //Create the bracket with the teams
         SwissBracket bracket = new SwissBracket(teams);
 
         //Generate all rounds and fill result
         do{
-            ArrayList<Match> matches = bracket.getUpcommingMatches();
+            ArrayList<Match> matches = bracket.getUpcomingMatches();
             for(Match match : matches)
                 match.setHasBeenPlayed(true);
 
@@ -299,7 +297,7 @@ public class SwissBracketTest {
         SwissBracket bracket = new SwissBracket(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
         //All has to be played
-        ArrayList<Match> matches = bracket.getUnplayableMatches();
+        ArrayList<Match> matches = bracket.getPendingMatches();
         for(Match match : matches)
             match.setHasBeenPlayed(true);
 

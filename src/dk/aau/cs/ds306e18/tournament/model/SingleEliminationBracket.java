@@ -22,12 +22,12 @@ public class SingleEliminationBracket implements Bracket {
     }
 
     @Override
-    public ArrayList<Match> getUpcommingMatches() {
+    public ArrayList<Match> getUpcomingMatches() {
         return null;
     }
 
     @Override
-    public ArrayList<Match> getUnplayableMatches() {
+    public ArrayList<Match> getPendingMatches() {
         return null;
     }
 
