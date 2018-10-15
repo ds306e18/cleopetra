@@ -18,7 +18,7 @@ public class SingleEliminationBracket implements Bracket {
 
     @Override
     public ArrayList<Match> getAllMatches() {
-        return null;
+        return finalMatch.getTreeAsListBFS();
     }
 
     @Override
@@ -43,7 +43,7 @@ public class SingleEliminationBracket implements Bracket {
         // Generate the bracket from the first round to the final. All matches except those in
         // the first uses the winners of previous matches.
         for (int roundsLeft = rounds; roundsLeft > 0; roundsLeft--) {
-            matchesInCurrentRound = (int) Math.pow(2, roundsLeft);
+            matchesInCurrentRound = (int) Math.pow(2, roundsLeft-1);
 
             if (roundsLeft == rounds) {
                 // First round, all matches are empty
@@ -62,6 +62,7 @@ public class SingleEliminationBracket implements Bracket {
 
         // The final is the last match in the list
         finalMatch = bracketList.get(bracketList.size() - 1);
+
     }
 
     public ArrayList<Team> seedBracket(ArrayList<Team> seedList) {
