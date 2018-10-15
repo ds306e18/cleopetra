@@ -40,36 +40,33 @@ public class SingleEliminationBracket implements Bracket {
         int matchesInCurrentRound, matchNumberInRound, matchIndex = 0;
         ArrayList<Match> bracketList = new ArrayList<>();
 
-        // The iterator wil generate the bracket from the fst round to the final, only with StarterSlots.
+        // Generate the bracket from the first round to the final. All matches except those in
+        // the first uses the winners of previous matches.
         for (int roundsLeft = rounds; roundsLeft > 0; roundsLeft--) {
             matchesInCurrentRound = (int) Math.pow(2, roundsLeft);
 
-            //Fst round, fills matches with StarterSlots
             if (roundsLeft == rounds) {
+                // First round, all matches are empty
                 for (matchNumberInRound = 1; matchNumberInRound <= matchesInCurrentRound; matchNumberInRound++) {
                     bracketList.add(new Match(new StarterSlot(null), new StarterSlot(null)));
-                    matchNumberInRound++;
                 }
-            }
-
-            //Fills all the remaining matches with winnerOf from earlier rounds.
-            if (roundsLeft > 1 && roundsLeft <= rounds - 1) {
+            } else {
+                // Fills all the remaining matches with winners from earlier rounds.
                 for (matchNumberInRound = 1; matchNumberInRound <= matchesInCurrentRound; matchNumberInRound++) {
-                    bracketList.add(new Match(new WinnerOf(bracketList.get(matchIndex)), new WinnerOf(bracketList.get(matchIndex + 1))));
+                    Match match = new Match(new WinnerOf(bracketList.get(matchIndex)), new WinnerOf(bracketList.get(matchIndex + 1)));
+                    bracketList.add(match);
                     matchIndex = matchIndex + 2;
                 }
             }
-
-            //the final will be a match between the winners of the semi-final.
-            else {
-                finalMatch = new Match(new WinnerOf(bracketList.get(matchIndex)), new WinnerOf(bracketList.get(matchIndex)));
-            }
         }
+
+        // The final is the last match in the list
+        finalMatch = bracketList.get(bracketList.size() - 1);
     }
 
     public ArrayList<Team> seedBracket(ArrayList<Team> seedList) {
 
-        //Sorts teams compared to seeding
+        // Sorts teams compared to seeding
         seedList.sort(new Comparator<Team>() {
             @Override
             public int compare(Team o1, Team o2) {
