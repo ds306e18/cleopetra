@@ -47,7 +47,7 @@ public class SwissBracketTest {
         assertEquals(numberOfTeams, bracket.getMAX_ROUNDS());
     }
 
-    //more than 0 matches
+    //more than 0 matches // one round
     @Test
     public void getAllMatches01(){
 
@@ -61,7 +61,7 @@ public class SwissBracketTest {
         assertEquals(numberOfTeams/2, allMatches.size());
     }
 
-    //0 matches
+    //0 matches // one round
     @Test
     public void getAllMatches02(){
 
@@ -73,6 +73,29 @@ public class SwissBracketTest {
         ArrayList<Match> allMatches = bracket.getAllMatches();
 
         assertEquals(0, allMatches.size());
+    }
+
+    //more than 0 matches // more round
+    @Test
+    public void getAllMatches03(){
+
+        int numberOfTeams = 12;
+        int teamSize = 2;
+
+        SwissBracket bracket = new SwissBracket(TestUtilities.generateTeams(numberOfTeams, teamSize));
+
+        //The first round.
+        assertEquals(numberOfTeams/2, bracket.getAllMatches().size());
+
+        //Fill in scores
+        ArrayList<Match> matches = bracket.getRawMatches();
+        for(Match match : matches){
+            match.setScores(5, 2, true);
+        }
+
+        bracket.createNewRound();
+
+        assertEquals((numberOfTeams/2) * 2, bracket.getAllMatches().size());
     }
 
     @Test
@@ -228,11 +251,15 @@ public class SwissBracketTest {
     @Test
     public void createNewRound04(){
 
-        int numberOfTeams = 16;
-        int teamSize = 2;
+        //Create a list of unique teams.
+        ArrayList<Team> teams = new ArrayList<>();
+        for(int i = 0; i < 7; i++)
+            teams.add(new Team(String.valueOf(i), TestUtilities.generateBots(2), 0, "Hello"));
 
-        SwissBracket bracket = new SwissBracket(TestUtilities.generateTeams(numberOfTeams, teamSize));
+        //Creat the bracket with the teams
+        SwissBracket bracket = new SwissBracket(teams);
 
+        //Generate all rounds and fill result
         do{
             ArrayList<Match> matches = bracket.getUpcommingMatches();
             for(Match match : matches)
@@ -241,22 +268,42 @@ public class SwissBracketTest {
             bracket.createNewRound();
         }while(!bracket.hasMaxNumberOfRounds());
 
-        //Check all teams has only played each other once
         ArrayList<Match> allMatches = bracket.getAllMatches();
 
+        //Check if no teams has played each other more than once
         for(int i = 0; i < allMatches.size(); i++){
-            for(int j = i+1; j < allMatches.size(); j++){
 
-                Team blue = allMatches.get(i).getBlueTeam();
-                Team oragne = allMatches.get(j).getOrangeTeam();
-                if(blue == oragne)
-                    assert false;
+            for(int j = i + 1; j < allMatches.size(); j++){
 
+                Match match1 = allMatches.get(i);
+                Match match2 = allMatches.get(j);
+
+                //System.out.println("Match Comp 1: Match1B: " + match1.getBlueTeam().getTeamName() + " Match1O " + match1.getOrangeTeam().getTeamName()
+                // + " Match2B " + match2.getBlueTeam().getTeamName() + " Match2O " + match2.getOrangeTeam().getTeamName());
+
+                assertFalse(match1.getBlueTeam().getTeamName().equals(match2.getBlueTeam().getTeamName()) &&
+                        match1.getOrangeTeam().getTeamName().equals(match2.getOrangeTeam().getTeamName()));
+                assertFalse(match1.getBlueTeam().getTeamName().equals(match2.getOrangeTeam().getTeamName()) &&
+                        match1.getOrangeTeam().getTeamName().equals(match2.getBlueTeam().getTeamName()));
             }
-
         }
+    }
 
-        assert true;
+    //Create round is illegal: only one team.
+    @Test
+    public void createNewRound05(){
+
+        int numberOfTeams = 1;
+        int teamSize = 2;
+
+        SwissBracket bracket = new SwissBracket(TestUtilities.generateTeams(numberOfTeams, teamSize));
+
+        //All has to be played
+        ArrayList<Match> matches = bracket.getUnplayableMatches();
+        for(Match match : matches)
+            match.setHasBeenPlayed(true);
+
+        assertFalse(bracket.createNewRound());
     }
 
     @Test
@@ -280,74 +327,4 @@ public class SwissBracketTest {
 
         assertFalse(bracket.hasMaxNumberOfRounds());
     }
-
-
-    //TODO Below should be reworked
-
-    @Test
-    public void checkAndGenerateMatches01(){
-
-        ArrayList<Team> premadeTeams = TestUtilities.generateTeams(3,2);
-        SwissBracket bracket = new SwissBracket(premadeTeams);
-
-        SwissBracket.RecursionHelper recursionHelper = new SwissBracket.RecursionHelper();
-
-        recursionHelper.teams = new ArrayList<>(new ArrayList<>(premadeTeams));
-
-        recursionHelper = bracket.checkAndGenerateMatches(recursionHelper);
-
-        System.out.println("Teams");
-        int i = 0;
-        for(Team team : premadeTeams){
-            //System.out.println("Bot1: " + team.getBots().get(0).getName() + " Bot2:" + team.getBots().get(1).getName());
-            System.out.println("Team " + i + ": " + team.getTeamName());
-        }
-
-        /*
-        System.out.println("Matches:");
-        for(Team team : recursionHelper.teams){
-            System.out.println("Bot1: " + team.getBots().get(0).getName() + " Bot2:" + team.getBots().get(1).getName() );
-        }*/
-
-        System.out.println("Created matches:");
-        i = 0;
-        for(Match match : recursionHelper.createdMatches){
-            System.out.println("Match " + i + ": teamBlue: " + match.getBlueTeam().getTeamName() +
-                    " teamOrange: " + match.getOrangeTeam().getTeamName());
-        }
-    }
-
-    @Test
-    public void checkAndGenerateMatches02(){
-
-        ArrayList<Team> premadeTeams = TestUtilities.generateTeams(4,2);
-        SwissBracket bracket = new SwissBracket(premadeTeams);
-
-        SwissBracket.RecursionHelper recursionHelper = new SwissBracket.RecursionHelper();
-
-        recursionHelper.teams = new ArrayList<>(new ArrayList<>(premadeTeams));
-
-        recursionHelper = bracket.checkAndGenerateMatches(recursionHelper);
-
-        System.out.println("Teams");
-        int i = 0;
-        for(Team team : premadeTeams){
-            //System.out.println("Bot1: " + team.getBots().get(0).getName() + " Bot2:" + team.getBots().get(1).getName());
-            System.out.println("Team " + i + ": " + team.getTeamName());
-        }
-
-        /*
-        System.out.println("Matches:");
-        for(Team team : recursionHelper.teams){
-            System.out.println("Bot1: " + team.getBots().get(0).getName() + " Bot2:" + team.getBots().get(1).getName() );
-        }*/
-
-        System.out.println("Created matches:");
-        i = 0;
-        for(Match match : recursionHelper.createdMatches){
-            System.out.println("Match " + i + ": teamBlue: " + match.getBlueTeam().getTeamName() +
-                    " teamOrange: " + match.getOrangeTeam().getTeamName());
-        }
-    }
-
 }
