@@ -16,19 +16,27 @@ public class RoundRobinBracketTest {
         int teamSize = 1;
 
         RoundRobinBracket bracket = new RoundRobinBracket(generateTeams(numberOfTeams, teamSize));
+
     }
 
 
-    /*@Test
-    public void testrunCheck(int cutoff){
+    @Test
+    public void testrunCheck(){
 
-        int numberOfTeams = 4;
+        int numberOfTeams = 20;
         int teamSize = 1;
 
         RoundRobinBracket bracket = new RoundRobinBracket(generateTeams(numberOfTeams, teamSize));
 
-        assertEquals(RoundRobinBracket.runCheck(5), 12);
-    }*/
+        assertEquals((bracket.runCheck(3)), 13);
+        assertEquals((bracket.runCheck(1)), 11);
 
-
+        for (int i = 1; i <= numberOfTeams; i++) {
+            assertTrue(bracket.runCheck(i) < numberOfTeams);
+            assertTrue(bracket.runCheck(i) > 0);
+            if (i >= (numberOfTeams/2)) {
+                assertTrue(bracket.runCheck(i) < i);
+            } else assertTrue(bracket.runCheck(i) > i);
+        }
+    }
 }
