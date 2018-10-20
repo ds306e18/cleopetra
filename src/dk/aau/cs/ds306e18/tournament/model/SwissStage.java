@@ -2,14 +2,14 @@ package dk.aau.cs.ds306e18.tournament.model;
 
 import java.util.*;
 
-public class SwissBracket implements Bracket{
+public class SwissStage implements Stage {
 
     private ArrayList<ArrayList<Match>> rounds;
     private final int MAX_ROUNDS;
     private final ArrayList<Team> teams;
     private HashMap<Team, Integer> teamPoints;
 
-    public SwissBracket(ArrayList<Team> teams) {
+    public SwissStage(ArrayList<Team> teams) {
 
         rounds = new ArrayList<>();
         MAX_ROUNDS = calculateMaxRounds(teams.size());

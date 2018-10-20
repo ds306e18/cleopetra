@@ -6,7 +6,7 @@ import static dk.aau.cs.ds306e18.tournament.TestUtilities.*;
 import static org.junit.Assert.*;
 
 
-public class RoundRobinBracketTest {
+public class RoundRobinStageTest {
 
 
     @Test
@@ -15,7 +15,7 @@ public class RoundRobinBracketTest {
         int numberOfTeams = 4;
         int teamSize = 1;
 
-        RoundRobinBracket bracket = new RoundRobinBracket(generateTeams(numberOfTeams, teamSize));
+        RoundRobinStage bracket = new RoundRobinStage(generateTeams(numberOfTeams, teamSize));
 
     }
 
@@ -26,7 +26,7 @@ public class RoundRobinBracketTest {
         int numberOfTeams = 20;
         int teamSize = 1;
 
-        RoundRobinBracket bracket = new RoundRobinBracket(generateTeams(numberOfTeams, teamSize));
+        RoundRobinStage bracket = new RoundRobinStage(generateTeams(numberOfTeams, teamSize));
 
         assertEquals((bracket.runCheck(3)), 13);
         assertEquals((bracket.runCheck(1)), 11);

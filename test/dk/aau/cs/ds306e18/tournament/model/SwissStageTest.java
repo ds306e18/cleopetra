@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
-public class SwissBracketTest {
+public class SwissStageTest {
 
     //Even number of teams
     @Test
@@ -16,7 +16,7 @@ public class SwissBracketTest {
         int numberOfTeams = 4;
         int teamSize = 2;
 
-        SwissBracket bracket = new SwissBracket(TestUtilities.generateTeams(numberOfTeams, teamSize));
+        SwissStage bracket = new SwissStage(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
         assertEquals(numberOfTeams - 1, bracket.getMAX_ROUNDS());
     }
@@ -28,7 +28,7 @@ public class SwissBracketTest {
         int numberOfTeams = 5;
         int teamSize = 2;
 
-        SwissBracket bracket = new SwissBracket(TestUtilities.generateTeams(numberOfTeams, teamSize));
+        SwissStage bracket = new SwissStage(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
         assertEquals(numberOfTeams, bracket.getMAX_ROUNDS());
     }
@@ -40,7 +40,7 @@ public class SwissBracketTest {
         int numberOfTeams = 0;
         int teamSize = 2;
 
-        SwissBracket bracket = new SwissBracket(TestUtilities.generateTeams(numberOfTeams, teamSize));
+        SwissStage bracket = new SwissStage(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
         assertEquals(numberOfTeams, bracket.getMAX_ROUNDS());
     }
@@ -52,7 +52,7 @@ public class SwissBracketTest {
         int numberOfTeams = 4;
         int teamSize = 2;
 
-        SwissBracket bracket = new SwissBracket(TestUtilities.generateTeams(numberOfTeams, teamSize));
+        SwissStage bracket = new SwissStage(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
         ArrayList<Match> allMatches = bracket.getAllMatches();
 
@@ -66,7 +66,7 @@ public class SwissBracketTest {
         int numberOfTeams = 0;
         int teamSize = 0;
 
-        SwissBracket bracket = new SwissBracket(TestUtilities.generateTeams(numberOfTeams, teamSize));
+        SwissStage bracket = new SwissStage(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
         ArrayList<Match> allMatches = bracket.getAllMatches();
 
@@ -80,7 +80,7 @@ public class SwissBracketTest {
         int numberOfTeams = 12;
         int teamSize = 2;
 
-        SwissBracket bracket = new SwissBracket(TestUtilities.generateTeams(numberOfTeams, teamSize));
+        SwissStage bracket = new SwissStage(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
         //The first round.
         assertEquals(numberOfTeams/2, bracket.getAllMatches().size());
@@ -102,7 +102,7 @@ public class SwissBracketTest {
         int numberOfTeams = 4;
         int teamSize = 2;
 
-        SwissBracket bracket = new SwissBracket(TestUtilities.generateTeams(numberOfTeams, teamSize));
+        SwissStage bracket = new SwissStage(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
         ArrayList<Match> unplayedMatches = bracket.getPendingMatches();
 
@@ -116,7 +116,7 @@ public class SwissBracketTest {
         int numberOfTeams = 0;
         int teamSize = 0;
 
-        SwissBracket bracket = new SwissBracket(TestUtilities.generateTeams(numberOfTeams, teamSize));
+        SwissStage bracket = new SwissStage(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
         ArrayList<Match> unplayedMatches = bracket.getPendingMatches();
 
@@ -129,7 +129,7 @@ public class SwissBracketTest {
         int numberOfTeams = 4;
         int teamSize = 2;
 
-        SwissBracket bracket = new SwissBracket(TestUtilities.generateTeams(numberOfTeams, teamSize));
+        SwissStage bracket = new SwissStage(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
         //All has to be played
         ArrayList<Match> matches = bracket.getPendingMatches();
@@ -146,7 +146,7 @@ public class SwissBracketTest {
         int numberOfTeams = 4;
         int teamSize = 2;
 
-        SwissBracket bracket = new SwissBracket(TestUtilities.generateTeams(numberOfTeams, teamSize));
+        SwissStage bracket = new SwissStage(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
         assertEquals(numberOfTeams/2 , bracket.getUpcomingMatches().size());
     }
@@ -157,7 +157,7 @@ public class SwissBracketTest {
         int numberOfTeams = 16;
         int teamSize = 2;
 
-        SwissBracket bracket = new SwissBracket(TestUtilities.generateTeams(numberOfTeams, teamSize));
+        SwissStage bracket = new SwissStage(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
         assertEquals(numberOfTeams/2 , bracket.getUpcomingMatches().size());
     }
@@ -168,7 +168,7 @@ public class SwissBracketTest {
         int numberOfTeams = 1;
         int teamSize = 2;
 
-        SwissBracket bracket = new SwissBracket(TestUtilities.generateTeams(numberOfTeams, teamSize));
+        SwissStage bracket = new SwissStage(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
         assertEquals(0 , bracket.getUpcomingMatches().size());
     }
@@ -178,7 +178,7 @@ public class SwissBracketTest {
         int numberOfTeams = 4;
         int teamSize = 2;
 
-        SwissBracket bracket = new SwissBracket(TestUtilities.generateTeams(numberOfTeams, teamSize));
+        SwissStage bracket = new SwissStage(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
         assertEquals(0 , bracket.getCompletedMatches().size());
     }
@@ -188,7 +188,7 @@ public class SwissBracketTest {
         int numberOfTeams = 4;
         int teamSize = 2;
 
-        SwissBracket bracket = new SwissBracket(TestUtilities.generateTeams(numberOfTeams, teamSize));
+        SwissStage bracket = new SwissStage(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
         ArrayList<Match> allMatches = bracket.getAllMatches();
 
@@ -205,7 +205,7 @@ public class SwissBracketTest {
         int numberOfTeams = 4;
         int teamSize = 2;
 
-        SwissBracket bracket = new SwissBracket(TestUtilities.generateTeams(numberOfTeams, teamSize));
+        SwissStage bracket = new SwissStage(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
         //All has to be played
         ArrayList<Match> matches = bracket.getUpcomingMatches();
@@ -223,7 +223,7 @@ public class SwissBracketTest {
         int numberOfTeams = 2;
         int teamSize = 2;
 
-        SwissBracket bracket = new SwissBracket(TestUtilities.generateTeams(numberOfTeams, teamSize));
+        SwissStage bracket = new SwissStage(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
         //All has to be played
         ArrayList<Match> matches = bracket.getPendingMatches();
@@ -240,7 +240,7 @@ public class SwissBracketTest {
         int numberOfTeams = 4;
         int teamSize = 2;
 
-        SwissBracket bracket = new SwissBracket(TestUtilities.generateTeams(numberOfTeams, teamSize));
+        SwissStage bracket = new SwissStage(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
         assertFalse(bracket.createNewRound());
     }
@@ -255,7 +255,7 @@ public class SwissBracketTest {
             teams.add(new Team(String.valueOf(i), TestUtilities.generateBots(2), 0, "Hello"));
 
         //Create the bracket with the teams
-        SwissBracket bracket = new SwissBracket(teams);
+        SwissStage bracket = new SwissStage(teams);
 
         //Generate all rounds and fill result
         do{
@@ -294,7 +294,7 @@ public class SwissBracketTest {
         int numberOfTeams = 1;
         int teamSize = 2;
 
-        SwissBracket bracket = new SwissBracket(TestUtilities.generateTeams(numberOfTeams, teamSize));
+        SwissStage bracket = new SwissStage(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
         //All has to be played
         ArrayList<Match> matches = bracket.getPendingMatches();
@@ -310,7 +310,7 @@ public class SwissBracketTest {
         int numberOfTeams = 2;
         int teamSize = 2;
 
-        SwissBracket bracket = new SwissBracket(TestUtilities.generateTeams(numberOfTeams, teamSize));
+        SwissStage bracket = new SwissStage(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
         assertTrue(bracket.hasMaxNumberOfRounds());
     }
@@ -321,7 +321,7 @@ public class SwissBracketTest {
         int numberOfTeams = 4;
         int teamSize = 2;
 
-        SwissBracket bracket = new SwissBracket(TestUtilities.generateTeams(numberOfTeams, teamSize));
+        SwissStage bracket = new SwissStage(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
         assertFalse(bracket.hasMaxNumberOfRounds());
     }

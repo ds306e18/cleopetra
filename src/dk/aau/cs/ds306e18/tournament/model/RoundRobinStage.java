@@ -3,7 +3,7 @@ package dk.aau.cs.ds306e18.tournament.model;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class RoundRobinBracket implements Bracket {
+public class RoundRobinStage implements Stage {
 
     private static final Team DUMMY_TEAM = new Team("Dummy", null, 0, null);
 
@@ -15,7 +15,7 @@ public class RoundRobinBracket implements Bracket {
      *
      * @param teams arraylist of all the teams in the bracket
      */
-    public RoundRobinBracket(ArrayList<Team> teams) {
+    public RoundRobinStage(ArrayList<Team> teams) {
         //if there is an uneven amount of teams, add a dummy team and later remove matches that include the dummy team
         if (teams.size() % 2 != 0) {
             teams.add(DUMMY_TEAM);
