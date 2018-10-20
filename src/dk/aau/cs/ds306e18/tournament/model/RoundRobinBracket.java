@@ -5,6 +5,8 @@ import java.util.HashMap;
 
 public class RoundRobinBracket implements Bracket {
 
+    private static final Team DUMMY_TEAM = new Team("Dummy", null, 0, null);
+
     private int numberOfTeams;
     private ArrayList<Match> matches;
 
@@ -14,9 +16,9 @@ public class RoundRobinBracket implements Bracket {
      * @param teams arraylist of all the teams in the bracket
      */
     public RoundRobinBracket(ArrayList<Team> teams) {
-        //if there is an uneven amount of teams, add a dummy team and later remove matches with these
+        //if there is an uneven amount of teams, add a dummy team and later remove matches that include the dummy team
         if (teams.size() % 2 != 0) {
-            teams.add(new Team("Dummy", null, 0, null));
+            teams.add(DUMMY_TEAM);
         }
         this.numberOfTeams = teams.size();
         this.matches = generateMatches(teams);
@@ -100,8 +102,8 @@ public class RoundRobinBracket implements Bracket {
         ArrayList<Match> matches = new ArrayList<>();
         for (int i = 0; i < tempMatches.length; i++) {
             for (int j = 0; j < tempMatches[i].length; j++) {
-                if (tempMatches[i][j].getOrangeTeam().getTeamName().equals("Dummy") ||
-                        tempMatches[i][j].getBlueTeam().getTeamName().equals("Dummy")) {
+                if (tempMatches[i][j].getOrangeTeam().equals(DUMMY_TEAM) ||
+                        tempMatches[i][j].getBlueTeam().equals(DUMMY_TEAM)) {
                     continue;
                 } else {
                     matches.add(tempMatches[i][j]);
