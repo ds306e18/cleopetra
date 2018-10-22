@@ -5,13 +5,13 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class SingleEliminationBracketTest {
+public class SingleEliminationStageTest {
 
 
     //Error when running bracket.getAllMatches().size()
     /*@Test
     public void amountOfMatchesTest01(){
-        SingleEliminationBracket bracket = new SingleEliminationBracket(TestUtilities.generateTeams(8,1));
+        SingleEliminationStage bracket = new SingleEliminationStage(TestUtilities.generateTeams(8,1));
         assertEquals(7, bracket.getAllMatches().size());
     }
     */
