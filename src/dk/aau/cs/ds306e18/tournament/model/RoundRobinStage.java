@@ -2,26 +2,45 @@ package dk.aau.cs.ds306e18.tournament.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class RoundRobinStage implements Stage {
 
     private static final Team DUMMY_TEAM = new Team("Dummy", null, 0, null);
 
+    private String name = "Round Robin";
+    private StageStatus status = StageStatus.PENDING;
     private int numberOfTeams;
     private ArrayList<Match> matches;
 
     /**
      * constructor that automatically creates an arraylist of matches made on the principles of berger tables
      *
-     * @param teams arraylist of all the teams in the bracket
+     * @param seededTeams arraylist of all the teams in the bracket
      */
-    public RoundRobinStage(ArrayList<Team> teams) {
+    public void start(List<Team> seededTeams) {
+        ArrayList<Team> teams = new ArrayList<>(seededTeams); // TODO: Add support for multiple groups
         //if there is an uneven amount of teams, add a dummy team and later remove matches that include the dummy team
         if (teams.size() % 2 != 0) {
             teams.add(DUMMY_TEAM);
         }
         this.numberOfTeams = teams.size();
         this.matches = generateMatches(teams);
+        status = StageStatus.RUNNING;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public StageStatus getStatus() {
+        return status; // TODO: Determine when the stage is over
     }
 
     /**
@@ -81,7 +100,7 @@ public class RoundRobinStage implements Stage {
         return removeDummyMatches(tempMatches);
     }
 
-    /**
+    /** TODO: Find a better name for method
      * Find new team, by adding n/2 to the team in the same place in previous round, if this exceeds n-1,
      * instead subtract n/2 - 1.
      *

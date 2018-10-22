@@ -15,8 +15,8 @@ public class RoundRobinStageTest {
         int numberOfTeams = 4;
         int teamSize = 1;
 
-        RoundRobinStage bracket = new RoundRobinStage(generateTeams(numberOfTeams, teamSize));
-
+        RoundRobinStage bracket = new RoundRobinStage();
+        bracket.start(generateTeams(numberOfTeams, teamSize));
     }
 
 
@@ -26,7 +26,8 @@ public class RoundRobinStageTest {
         int numberOfTeams = 20;
         int teamSize = 1;
 
-        RoundRobinStage bracket = new RoundRobinStage(generateTeams(numberOfTeams, teamSize));
+        RoundRobinStage bracket = new RoundRobinStage();
+        bracket.start(generateTeams(numberOfTeams, teamSize));
 
         assertEquals((bracket.runCheck(3)), 13);
         assertEquals((bracket.runCheck(1)), 11);
