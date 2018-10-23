@@ -3,7 +3,7 @@ package dk.aau.cs.ds306e18.tournament.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SingleEliminationStage implements Stage {
+public class SingleEliminationStage implements Stage, MatchListener {
 
     private String name = "Single Elimination";
     private StageStatus status = StageStatus.PENDING;
@@ -107,7 +107,10 @@ public class SingleEliminationStage implements Stage {
         // TODO: Use the seedList to something
     }
 
-    void onMatchPlayed(Match match) {
+    @Override
+    public void onMatchPlayed(Match match) {
+        // TODO: Register stage as listener to all relevant matches
+        // TODO: Add tests
         if (finalMatch.hasBeenPlayed()) {
             status = StageStatus.CONCLUDED;
         } else {

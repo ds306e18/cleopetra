@@ -17,6 +17,8 @@ public class Match {
     // Where do winner/loser go? (They can only go to one destination)
     private Match winnerDestination, loserDestination;
 
+    private List<MatchListener> listeners = new LinkedList<>();
+
     /** Construct a Match where both Teams are known from the start. */
     public Match(Team blue, Team orange) {
         setBlue(new StarterSlot(blue));
@@ -182,6 +184,7 @@ public class Match {
 
     public void setHasBeenPlayed(boolean played) {
         this.played = played;
+        if (played) notifyListeners();
     }
 
     /** Returns the blue team or null if blue is unknown. */
@@ -219,5 +222,20 @@ public class Match {
         this.blueScore = blueScore;
         this.orangeScore = orangeScore;
         this.played = hasBeenPlayed;
+        notifyListeners();
+    }
+
+    public void registerListener(MatchListener listener) {
+        listeners.add(listener);
+    }
+
+    public void unregisterListener(MatchListener listener) {
+        listeners.remove(listener);
+    }
+
+    public void notifyListeners() {
+        for (MatchListener listener : listeners) {
+            listener.onMatchPlayed(this);
+        }
     }
 }
