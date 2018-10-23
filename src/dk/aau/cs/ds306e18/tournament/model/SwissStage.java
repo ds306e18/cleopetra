@@ -4,7 +4,7 @@ import jdk.jshell.spi.ExecutionControl;
 
 import java.util.*;
 
-public class SwissStage implements Stage {
+public class SwissStage implements Stage, MatchListener {
 
     private String name = "Swiss";
     private StageStatus status = StageStatus.PENDING;
@@ -239,5 +239,11 @@ public class SwissStage implements Stage {
     //TODO DELETE currently used for testing as a workaround.
     public ArrayList<Match> getRawMatches(){
         return rounds.get(rounds.size() - 1);
+    }
+
+    @Override
+    public void onMatchPlayed(Match match) {
+        // TODO: Register stage as listener to all relevant matches
+        // TODO: Evaluate if last match, if it is then status = CONCLUDED. Also add tests
     }
 }
