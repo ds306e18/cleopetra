@@ -246,4 +246,9 @@ public class SwissStage implements Stage, MatchListener {
         // TODO: Register stage as listener to all relevant matches
         // TODO: Evaluate if last match, if it is then status = CONCLUDED. Also add tests
     }
+
+    @Override
+    public List<Team> getTopTeams(int count) {
+        return null; // TODO: Returns a list of the teams that performed best this stage. They should be sorted after performance, with best team first.
+    }
 }

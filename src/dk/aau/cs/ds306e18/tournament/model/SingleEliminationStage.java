@@ -117,4 +117,9 @@ public class SingleEliminationStage implements Stage, MatchListener {
             status = StageStatus.RUNNING;
         }
     }
+
+    @Override
+    public List<Team> getTopTeams(int count) {
+        return null; // TODO: Returns a list of the teams that performed best this stage. They should be sorted after performance, with best team first.
+    }
 }
