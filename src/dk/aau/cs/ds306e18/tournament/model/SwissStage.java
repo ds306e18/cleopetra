@@ -1,7 +1,5 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
-import jdk.jshell.spi.ExecutionControl;
-
 import java.util.*;
 
 public class SwissStage implements Stage {
@@ -51,9 +49,13 @@ public class SwissStage implements Stage {
      * @return true if a round was generated and false if a new round could not be generated. */
     public boolean createNewRound() {
 
-        if(rounds.size() == MAX_ROUNDS) //Is it legal to create another round?
+        if(status == StageStatus.PENDING){
+            return false; //TODO Could be an exception
+        } else if(status == StageStatus.CONCLUDED){
+            return false; //TODO Could be an exception
+        } else if(rounds.size() == MAX_ROUNDS){ //Is it legal to create another round?
             return false;
-        else if(getUpcomingMatches().size() != 0) //Has all matches been played?
+        } else if(getUpcomingMatches().size() != 0) //Has all matches been played?
             return false;
         else if(rounds.size() != 0) { //Assign points for played matches
             assignPoints();
