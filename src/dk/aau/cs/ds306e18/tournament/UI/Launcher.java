@@ -22,10 +22,17 @@ public class Launcher extends Application{
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
         primaryStage.setTitle("TournamentSystem Launcher " + version);
         Button newButton = new Button();
         newButton.setText("Create new Tournament");
-        newButton.setOnAction(e->createNewTournament(primaryStage));
+        newButton.setOnAction(e-> {
+            try {
+                createNewTournament(primaryStage);
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        });
 
         Button openButton = new Button();
         openButton.setText("Open Local tournament");
@@ -70,11 +77,13 @@ public class Launcher extends Application{
         System.out.println("Not implemented");
     }
 
-    private void createNewTournament(Stage primaryStage){
-
+    private void createNewTournament(Stage primaryStage) throws Exception {
+        //Closes the launcher opens the tournamentsettings
         primaryStage.close();
+        TournamentSettings ts = new TournamentSettings();
+        ts.startWindow(primaryStage);
 
-      //launchNewTournament();
+
 
     }
 
