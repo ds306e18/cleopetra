@@ -64,9 +64,6 @@ public class Launcher extends Application{
           Image image = new Image("https://i.imgur.com/KE6nXem.png");
         ImageView imageView = new ImageView(image);
 
-
-
-
         //Changes the sizes of the elements in the HBox
         imageView.setFitHeight(200);
         imageView.setFitWidth(200);
@@ -75,19 +72,13 @@ public class Launcher extends Application{
         btn3.setPrefSize(200,20);
         btn4.setPrefSize(100,20);
 
-
         StackPane root = new StackPane();
 
         VBox menu = new VBox();
-        menu.getChildren().addAll(imageView, btn1,btn2,btn3);
+        menu.getChildren().addAll(imageView, btn1,btn2,btn3,btn4);
         menu.setAlignment(Pos.CENTER);
 
-        VBox exit = new VBox();
-        exit.getChildren().add(btn4);
-        exit.setAlignment(Pos.BOTTOM_RIGHT);
-
         root.getChildren().add(menu);
-        root.getChildren().add(exit);
 
         primaryStage.setScene(new Scene(root, 650, 400));
         primaryStage.show();
