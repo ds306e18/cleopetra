@@ -26,40 +26,19 @@ public class Launcher extends Application{
         primaryStage.setTitle("TournamentSystem Launcher " + version);
         Button btn1 = new Button();
         btn1.setText("Create new Tournament");
-        btn1.setOnAction(new EventHandler<ActionEvent>() {
+        btn1.setOnAction(e->createNewTournament());
 
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println("Hello World!");
-            }
-        });
         Button btn2 = new Button();
         btn2.setText("Open Local tournament");
-        btn2.setOnAction(new EventHandler<ActionEvent>() {
+        btn2.setOnAction(e->openLocalTournament());
 
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println("Hello World!");
-            }
-        });
         Button btn3 = new Button();
         btn3.setText("Import from ...");
-        btn3.setOnAction(new EventHandler<ActionEvent>() {
+        btn3.setOnAction(e->importTournament());
 
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println("Hello World!");
-            }
-        });
         Button btn4 = new Button();
         btn4.setText("Exit");
-        btn4.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println("Hello World!");
-            }
-        });
+        btn4.setOnAction(e->exitLauncher());
 
           Image image = new Image("https://i.imgur.com/KE6nXem.png");
         ImageView imageView = new ImageView(image);
@@ -83,5 +62,21 @@ public class Launcher extends Application{
         primaryStage.setScene(new Scene(root, 650, 400));
         primaryStage.show();
     }
+
+    private void importTournament() {
+    }
+
+    private void openLocalTournament() {
+
+    }
+
+    private void createNewTournament(){
+
+    }
+    
+    private void exitLauncher(){
+        System.exit(0);
+    }
+
 
 }
