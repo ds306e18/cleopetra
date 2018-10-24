@@ -1,19 +1,37 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
-import dk.aau.cs.ds306e18.tournament.model.Team;
-
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
-public class SingleEliminationBracket implements Bracket {
+public class SingleEliminationStage implements Stage {
 
+    private String name = "Single Elimination";
+    private StageStatus status = StageStatus.PENDING;
+    private ArrayList<Team> seededTeams;
     private Match finalMatch;
+    private int rounds;
 
-    public SingleEliminationBracket(List<Team> teams) {
-        int rounds = (int) Math.ceil(Math.log(teams.size()) / Math.log(2));
+    @Override
+    public void start(List<Team> seededTeams) {
+        this.seededTeams = new ArrayList<>(seededTeams);
+        rounds = (int) Math.ceil(Math.log(seededTeams.size()) / Math.log(2));
         generateBracket(rounds);
+        seedBracket(seededTeams);
+        status = StageStatus.RUNNING;
+    }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String getName() {
+        return null;
+    }
+
+    @Override
+    public StageStatus getStatus() {
+        return status;
     }
 
     @Override
@@ -36,7 +54,7 @@ public class SingleEliminationBracket implements Bracket {
         return null;
     }
 
-    public void generateBracket(int rounds) {
+    private void generateBracket(int rounds) {
         int matchesInCurrentRound, matchNumberInRound, matchIndex = 0;
         ArrayList<Match> bracketList = new ArrayList<>();
 
@@ -62,26 +80,17 @@ public class SingleEliminationBracket implements Bracket {
 
         // The final is the last match in the list
         finalMatch = bracketList.get(bracketList.size() - 1);
-
     }
 
-    public ArrayList<Team> seedBracket(ArrayList<Team> seedList) {
+    private void seedBracket(List<Team> seededTeams) {
 
-        // Sorts teams compared to seeding
-        seedList.sort(new Comparator<Team>() {
-            @Override
-            public int compare(Team o1, Team o2) {
-                return Integer.compare(o1.getSeedValue(), o2.getSeedValue());
-            }
-        });
-
-        ArrayList<Team> temp = new ArrayList<>();
+        ArrayList<Team> seedList = new ArrayList<>(seededTeams);
 
         int slice = 1;
         int interactions = seedList.size() / 2;
 
         while (slice < interactions) {
-            temp = (ArrayList<Team>) seedList.clone();
+            ArrayList<Team> temp = new ArrayList<>(seedList);
             seedList.clear();
 
             while (temp.size() > 0) {
@@ -95,7 +104,14 @@ public class SingleEliminationBracket implements Bracket {
             slice *= 2;
         }
 
-        return seedList;
+        // TODO: Use the seedList to something
     }
 
+    void onMatchPlayed(Match match) {
+        if (finalMatch.hasBeenPlayed()) {
+            status = StageStatus.CONCLUDED;
+        } else {
+            status = StageStatus.RUNNING;
+        }
+    }
 }

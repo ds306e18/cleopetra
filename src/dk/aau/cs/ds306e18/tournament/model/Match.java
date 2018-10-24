@@ -25,14 +25,14 @@ public class Match {
 
     /** Construct a Match, given the Slots defining the Teams */
     public Match(Slot blue, Slot orange) {
-        if (blue == null || orange == null) throw new IllegalArgumentException("A Match cannot that null as a Slot.");
+        if (blue == null || orange == null) throw new IllegalArgumentException("A Match cannot have null as a Slot.");
         setBlue(blue);
         setOrange(orange);
     }
 
     /** Set the blue Team Slot of this Match. */
     public void setBlue(Slot blue) {
-        if (blue == null) throw new IllegalArgumentException("A Match cannot that null as a Slot.");
+        if (blue == null) throw new IllegalArgumentException("A Match cannot have null as a Slot.");
         unlinkSlot(blueSlot);
         blueSlot = blue;
         linkSlot(blueSlot, this);
@@ -40,7 +40,7 @@ public class Match {
 
     /** Set the orange Team Slot of this Match. */
     public void setOrange(Slot orange) {
-        if (orange == null) throw new IllegalArgumentException("A Match cannot that null as a Slot.");
+        if (orange == null) throw new IllegalArgumentException("A Match cannot have null as a Slot.");
         unlinkSlot(orangeSlot);
         orangeSlot = orange;
         linkSlot(orangeSlot, this);

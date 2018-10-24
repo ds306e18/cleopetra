@@ -2,25 +2,29 @@ package dk.aau.cs.ds306e18.tournament.model;
 
 import java.util.*;
 
-public class SwissBracket implements Bracket{
+public class SwissStage implements Stage {
 
+    private String name = "Swiss";
+    private StageStatus status = StageStatus.PENDING;
     private ArrayList<ArrayList<Match>> rounds;
-    private final int MAX_ROUNDS;
-    private final ArrayList<Team> teams;
+    private int MAX_ROUNDS;
+    private ArrayList<Team> teams;
     private HashMap<Team, Integer> teamPoints;
 
-    public SwissBracket(ArrayList<Team> teams) {
+    @Override
+    public void start(List<Team> teams) {
 
         rounds = new ArrayList<>();
-        MAX_ROUNDS = calculateMaxRounds(teams.size());
+        MAX_ROUNDS = calculateMaxRounds(teams.size()); // TODO: Add the ability to end Swiss after X rounds
         teamPoints = createPointsHashMap(teams);
         this.teams = new ArrayList<>(teams);
+        status = StageStatus.RUNNING;
 
         createNewRound(); //generate the first round
     }
 
     /** Creates the hashMap that stores the "swiss" points for the teams. */
-    private HashMap<Team, Integer> createPointsHashMap(List<Team> teams){
+    private HashMap<Team, Integer> createPointsHashMap(List<Team> teams) {
 
         HashMap<Team, Integer> pointsMap = new HashMap<>();
 
@@ -33,21 +37,25 @@ public class SwissBracket implements Bracket{
     /** Calculates the max number of rounds that can be played with the given number of teams.
      * @param numberOfTeams the number of teams participating.
      * @return max number of rounds possible with the given number of teams.*/
-    private int calculateMaxRounds(int numberOfTeams){
+    public static int calculateMaxRounds(int numberOfTeams) {
 
-        if(numberOfTeams == 0)
+        if (numberOfTeams == 0)
             return 0;
         else
             return (numberOfTeams % 2 == 0) ? numberOfTeams - 1 : numberOfTeams;
     }
 
-    /*** Creates a new round of swiss, with the current teams.
+    /** Creates a new round of swiss, with the current teams.
      * @return true if a round was generated and false if a new round could not be generated. */
-    public boolean createNewRound(){
+    public boolean createNewRound() {
 
-        if(rounds.size() == MAX_ROUNDS) //Is it legal to create another round?
+        if(status == StageStatus.PENDING){
+            return false; //TODO Could be an exception
+        } else if(status == StageStatus.CONCLUDED){
+            return false; //TODO Could be an exception
+        } else if(rounds.size() == MAX_ROUNDS){ //Is it legal to create another round?
             return false;
-        else if(getUpcomingMatches().size() != 0) //Has all matches been played?
+        } else if(getUpcomingMatches().size() != 0) //Has all matches been played?
             return false;
         else if(rounds.size() != 0) { //Assign points for played matches
             assignPoints();
@@ -61,11 +69,11 @@ public class SwissBracket implements Bracket{
 
     /** Used when a round has been played to assign points to the teams based on the played matches.
      * Teams will get 2 points for winning and -2 for loosing. */
-    private void assignPoints(){
+    private void assignPoints() {
 
         ArrayList<Match> finishedRoundMatches = rounds.get(rounds.size() - 1);
 
-        for(Match match : finishedRoundMatches){
+        for (Match match : finishedRoundMatches){
             Team winnerTeam = match.getWinner();
             Team loserTeam = match.getLoser();
 
@@ -78,7 +86,7 @@ public class SwissBracket implements Bracket{
      * @param teamList a list of teams.
      * @param teamPoints a hashMap containing teams as key and their points as value.
      * @return the given list sorted based on the given points. */
-    private ArrayList<Team> orderTeamsListFromPoints(ArrayList<Team> teamList, HashMap<Team, Integer> teamPoints){
+    private ArrayList<Team> orderTeamsListFromPoints(ArrayList<Team> teamList, HashMap<Team, Integer> teamPoints) {
         ArrayList<Team> tempTeams = new ArrayList<>(teamList);
         ArrayList<Team> orderedTeams = new ArrayList<>();
 
@@ -104,7 +112,7 @@ public class SwissBracket implements Bracket{
     /** Creates the matches for the next round. This is done so that no team will play the same opponents twice,
      * and with the teams with the closest amount of points.
      * Credit for algorithm: Amanda.*/
-    private void createRound(){
+    private void createRound() {
 
         // Create ordered list of team, based on points.
         ArrayList<Team> orderedTeamList = orderTeamsListFromPoints(teams, teamPoints);
@@ -142,7 +150,7 @@ public class SwissBracket implements Bracket{
      * @param team1 one of the two teams for the check.
      * @param team2 one of the two teams for the check.
      * @return true if the two given teams has played before, and false if that is not the case. */
-    private boolean hasTheseTeamsPlayedBefore(Team team1, Team team2){
+    private boolean hasTheseTeamsPlayedBefore(Team team1, Team team2) {
 
         ArrayList<Match> matches = getCompletedMatches();
 
@@ -211,9 +219,23 @@ public class SwissBracket implements Bracket{
         return MAX_ROUNDS;
     }
 
-    public boolean hasMaxNumberOfRounds(){
+    public boolean hasMaxNumberOfRounds() {
 
         return rounds.size() == getMAX_ROUNDS();
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public StageStatus getStatus() {
+        return status; // TODO: Determine when the stage is over
     }
 
     //TODO DELETE currently used for testing as a workaround.
