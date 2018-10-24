@@ -1,8 +1,6 @@
 package dk.aau.cs.ds306e18.tournament.UI;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -11,6 +9,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
 
 public class Launcher extends Application{
 
@@ -24,21 +23,21 @@ public class Launcher extends Application{
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("TournamentSystem Launcher " + version);
-        Button btn1 = new Button();
-        btn1.setText("Create new Tournament");
-        btn1.setOnAction(e->createNewTournament());
+        Button newButton = new Button();
+        newButton.setText("Create new Tournament");
+        newButton.setOnAction(e->createNewTournament(primaryStage));
 
-        Button btn2 = new Button();
-        btn2.setText("Open Local tournament");
-        btn2.setOnAction(e->openLocalTournament());
+        Button openButton = new Button();
+        openButton.setText("Open Local tournament");
+        openButton.setOnAction(e->openLocalTournament());
 
-        Button btn3 = new Button();
-        btn3.setText("Import from ...");
-        btn3.setOnAction(e->importTournament());
+        Button importButton = new Button();
+        importButton.setText("Import from ...");
+        importButton.setOnAction(e->importTournament());
 
-        Button btn4 = new Button();
-        btn4.setText("Exit");
-        btn4.setOnAction(e->exitLauncher());
+        Button exitButton = new Button();
+        exitButton.setText("Exit");
+        exitButton.setOnAction(e->exitLauncher());
 
           Image image = new Image("https://i.imgur.com/KE6nXem.png");
         ImageView imageView = new ImageView(image);
@@ -46,15 +45,15 @@ public class Launcher extends Application{
         //Changes the sizes of the elements in the HBox
         imageView.setFitHeight(200);
         imageView.setFitWidth(200);
-        btn1.setPrefSize(200,20);
-        btn2.setPrefSize(200,20);
-        btn3.setPrefSize(200,20);
-        btn4.setPrefSize(100,20);
+        newButton.setPrefSize(200,20);
+        openButton.setPrefSize(200,20);
+        importButton.setPrefSize(200,20);
+        exitButton.setPrefSize(100,20);
 
         StackPane root = new StackPane();
 
         VBox menu = new VBox();
-        menu.getChildren().addAll(imageView, btn1,btn2,btn3,btn4);
+        menu.getChildren().addAll(imageView, newButton,openButton,importButton,exitButton);
         menu.setAlignment(Pos.CENTER);
 
         root.getChildren().add(menu);
@@ -64,16 +63,21 @@ public class Launcher extends Application{
     }
 
     private void importTournament() {
+        System.out.println("Not implemented");
     }
 
     private void openLocalTournament() {
+        System.out.println("Not implemented");
+    }
+
+    private void createNewTournament(Stage primaryStage){
+
+        primaryStage.close();
+
+      //launchNewTournament();
 
     }
 
-    private void createNewTournament(){
-
-    }
-    
     private void exitLauncher(){
         System.exit(0);
     }
