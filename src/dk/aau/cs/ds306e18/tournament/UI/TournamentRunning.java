@@ -12,7 +12,7 @@ import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 
-public class TempVisuals2 extends NavigationFrame{
+public class TournamentRunning extends NavigationFrame{
 
     //TODO Should be deleted and the other match status' should be used.
     private enum MatchStatus {

@@ -77,7 +77,7 @@ public class Launcher extends Application{
 
     private void importTournament(Stage primaryStage) throws Exception {
         primaryStage.close();
-        TempVisuals2 tv2 = new TempVisuals2();
+        TournamentRunning tv2 = new TournamentRunning();
         tv2.startWindow(primaryStage);    }
 
     private void openLocalTournament() {
