@@ -346,4 +346,22 @@ public class SwissStageTest {
 
         assertFalse(bracket.hasMaxNumberOfRounds());
     }
+
+    @Test
+    public void getStatus01(){ //Pending
+
+        SwissStage bracket = new SwissStage();
+
+        assertEquals(StageStatus.PENDING, bracket.getStatus());
+    }
+
+    @Test
+    public void getStatus02(){ //Running
+
+        SwissStage bracket = new SwissStage();
+        bracket.start(TestUtilities.generateTeams(4, 2));
+        bracket.createNewRound();
+
+        assertEquals(StageStatus.RUNNING, bracket.getStatus());
+    }
 }
