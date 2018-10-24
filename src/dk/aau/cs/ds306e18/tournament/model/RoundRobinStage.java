@@ -159,7 +159,7 @@ public class RoundRobinStage implements Stage, MatchListener {
     }
 
     @Override
-    public List<Team> getTopTeams(int count) {
+    public List<Team> getTopTeams(int count, TieBreaker tieBreaker) {
         return null; // TODO: Returns a list of the teams that performed best this stage. They should be sorted after performance, with best team first.
     }
 }

@@ -23,5 +23,5 @@ public interface Stage {
     List<Match> getCompletedMatches();
 
     /** Returns a list of the teams that performed best this stage. They are sorted after performance, with best team first. */
-    List<Team> getTopTeams(int count);
+    List<Team> getTopTeams(int count, TieBreaker tieBreaker);
 }
