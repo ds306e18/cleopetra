@@ -23,7 +23,6 @@ public abstract class NavigationFrame extends Application {
         primaryStage.show();
     }
 
-    /** Calls addContent, and adds all the given tabs to the navigation bar. */
     private void addTabsToPane(){
 
         ArrayList<Tab> tabs = addContent();
@@ -33,9 +32,7 @@ public abstract class NavigationFrame extends Application {
         }
     }
 
-    /** This is where the content of the window goes.
-     * Create tabs with the desired content and return them in an arrayList
-     * @return an arrayList of tabs with content for the window. */
+    /***/
     abstract ArrayList<Tab> addContent();
 
 }
