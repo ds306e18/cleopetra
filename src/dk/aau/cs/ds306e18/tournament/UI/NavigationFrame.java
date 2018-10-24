@@ -1,9 +1,14 @@
 package dk.aau.cs.ds306e18.tournament.UI;
 
 import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -18,7 +23,12 @@ public abstract class NavigationFrame  {
         navigationTabs.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
         addTabsToPane(); //Calls the addContent and fills in tabs.
 
-        primaryStage.setScene(new Scene(navigationTabs));
+        VBox mainContent = new VBox();
+        HBox bottomNav = bottomNav();
+
+        mainContent.getChildren().addAll(navigationTabs, bottomNav);
+
+        primaryStage.setScene(new Scene(mainContent));
         primaryStage.setResizable(false);
         primaryStage.show();
     }
@@ -31,6 +41,24 @@ public abstract class NavigationFrame  {
         for(Tab tab : tabs){
             this.navigationTabs.getTabs().add(tab);
         }
+    }
+
+    private HBox bottomNav(){
+        HBox bottomNavigation = new HBox();
+
+        Button prevBtn = new Button("< Prev");
+        Button nextBtn = new Button("Next >");
+
+        bottomNavigation.setAlignment(Pos.BASELINE_RIGHT);
+        bottomNavigation.setSpacing(15);
+        bottomNavigation.setPadding(new Insets(5));
+        bottomNavigation.setBorder(new Border(new BorderStroke(Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK,
+                BorderStrokeStyle.SOLID, BorderStrokeStyle.NONE, BorderStrokeStyle.NONE, BorderStrokeStyle.NONE,
+                null, null, null)));
+
+        bottomNavigation.getChildren().addAll(prevBtn, nextBtn);
+
+        return bottomNavigation;
     }
 
     /** This is where the content of the window goes.
