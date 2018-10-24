@@ -9,12 +9,15 @@ public class NavigationFrameTest extends NavigationFrame {
     @Override
     ArrayList<Tab> addContent() {
 
+        //Create the tabs
         Tab tab1 = new Tab();
         Tab tab2 = new Tab();
 
+        //Add content and set attributes for tabs
         tab1.setText("Test 1");
         tab2.setText("Test 2");
 
+        //Add the tabs to an arrayList and return it
         ArrayList<Tab> tabs = new ArrayList<>();
         tabs.add(tab1);
         tabs.add(tab2);

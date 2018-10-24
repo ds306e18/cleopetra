@@ -6,4 +6,9 @@
       <module name="tournamentsystem_test" target="1.10" />
     </bytecodeTargetLevel>
   </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="tournamentsystem_main" options="--add-modules=javafx.graphics,javafx.controls,javafx.base" />
+    </option>
+  </component>
 </project>
