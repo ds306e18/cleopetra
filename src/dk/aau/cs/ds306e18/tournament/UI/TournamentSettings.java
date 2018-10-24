@@ -1,43 +1,37 @@
 package dk.aau.cs.ds306e18.tournament.UI;
 
-import javafx.application.Application;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-import javafx.stage.Stage;
 
-public class tournamentSettings extends Application {
+import java.util.ArrayList;
+
+public class TournamentSettings extends NavigationFrame {
 
     private Insets standardPaddingInsets = new Insets(5, 8, 8, 8);
     private int id = 1;
 
-    public static void main(String[] args) {
-        launch(args);
-    }
-
     @Override
-    public void start(Stage primaryStage) throws Exception {
-        addContent(primaryStage);
-        primaryStage.setHeight(550);
-        primaryStage.setResizable(false);
+    ArrayList<Tab> addContent() {
 
-        primaryStage.show();
-    }
+        Tab tournamentSettings = new Tab();
+        tournamentSettings.setText("Tournament Settings");
 
-    private void addContent(Stage stage) {
         HBox contentAll = new HBox();
-
         VBox mainContent = mainSettings();
         VBox secondContent = stageSettings();
 
         contentAll.getChildren().addAll(mainContent, secondContent);
 
-        stage.setScene(new Scene(contentAll));
+        tournamentSettings.setContent(contentAll);
+
+        ArrayList<Tab> tabs = new ArrayList<>();
+        tabs.add(tournamentSettings);
+
+        return tabs;
     }
 
     private VBox mainSettings(){
