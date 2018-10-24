@@ -39,8 +39,14 @@ public class Launcher extends Application{
         openButton.setOnAction(e->openLocalTournament());
 
         Button importButton = new Button();
-        importButton.setText("Import from ...");
-        importButton.setOnAction(e->importTournament());
+        importButton.setText("Tournament Running");
+        importButton.setOnAction(e-> {
+            try {
+                importTournament(primaryStage);
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        });
 
         Button exitButton = new Button();
         exitButton.setText("Exit");
@@ -69,9 +75,10 @@ public class Launcher extends Application{
         primaryStage.show();
     }
 
-    private void importTournament() {
-        System.out.println("Not implemented");
-    }
+    private void importTournament(Stage primaryStage) throws Exception {
+        primaryStage.close();
+        TempVisuals2 tv2 = new TempVisuals2();
+        tv2.startWindow(primaryStage);    }
 
     private void openLocalTournament() {
         System.out.println("Not implemented");
