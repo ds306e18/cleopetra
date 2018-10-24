@@ -8,12 +8,11 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 
-public abstract class NavigationFrame extends Application {
+public abstract class NavigationFrame  {
 
     private TabPane navigationTabs;
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void startWindow(Stage primaryStage) throws Exception {
 
         navigationTabs = new TabPane();
         navigationTabs.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);

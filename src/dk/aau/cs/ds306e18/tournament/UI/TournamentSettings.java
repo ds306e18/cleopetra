@@ -134,11 +134,8 @@ public class TournamentSettings extends NavigationFrame {
         Label participants = new Label("Participants");
         participants.setFont(new Font("Arial", 15));
 
-
-
         settings.setPadding(standardPaddingInsets);
         settings.getChildren().addAll(stageName);
-
 
         content.getChildren().addAll(header, settings);
 
