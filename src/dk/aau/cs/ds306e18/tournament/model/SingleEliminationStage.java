@@ -9,6 +9,7 @@ public class SingleEliminationStage implements Stage {
     private StageStatus status = StageStatus.PENDING;
     private ArrayList<Team> seededTeams;
     private Match finalMatch;
+    private Match[] matches;
     private int rounds;
 
     @Override
@@ -16,7 +17,7 @@ public class SingleEliminationStage implements Stage {
         this.seededTeams = new ArrayList<>(seededTeams);
         rounds = (int) Math.ceil(Math.log(seededTeams.size()) / Math.log(2));
         generateBracket(rounds);
-        seedBracket(seededTeams);
+        seedBracket(seededTeams, rounds);
         status = StageStatus.RUNNING;
     }
 
@@ -80,15 +81,24 @@ public class SingleEliminationStage implements Stage {
 
         // The final is the last match in the list
         finalMatch = bracketList.get(bracketList.size() - 1);
+        matches = new Match[bracketList.size()];
+        matches = finalMatch.getTreeAsListBFS().toArray(matches);
     }
 
-    private void seedBracket(List<Team> seededTeams) {
+    private void seedBracket(List<Team> seededTeams, int rounds) {
 
         ArrayList<Team> seedList = new ArrayList<>(seededTeams);
+        ArrayList<Team> byeList = new ArrayList<>();
+        int amountOfByes = (int) Math.pow(2, rounds) - seedList.size();
+        while(byeList.size() < amountOfByes) {
+            byeList.add(new Team("bye", null, 999, ""));
+        }
+        seedList.addAll(byeList);
 
         int slice = 1;
         int interactions = seedList.size() / 2;
 
+        //TODO allow the seeds to sort with every number
         while (slice < interactions) {
             ArrayList<Team> temp = new ArrayList<>(seedList);
             seedList.clear();
@@ -105,6 +115,22 @@ public class SingleEliminationStage implements Stage {
         }
 
         // TODO: Use the seedList to something
+        int seedMatchIndex = finalMatch.getTreeAsListBFS().size()-1;
+        for(int playerIndex = 0; playerIndex < seedList.size();){
+            if(byeList.contains(seedList.get(playerIndex)) || byeList.contains(seedList.get(playerIndex+1))) {
+                matches[getParent(seedMatchIndex)].setBlue(new StarterSlot(seedList.get(playerIndex)));
+                matches[seedMatchIndex] = null;
+                seedMatchIndex--;
+                playerIndex = playerIndex + 2;
+            }
+            else {
+                matches[seedMatchIndex].setBlue(new StarterSlot(seedList.get(playerIndex)));
+                playerIndex++;
+                matches[seedMatchIndex].setOrange(new StarterSlot(seedList.get(seedMatchIndex)));
+                seedMatchIndex--;
+                playerIndex++;
+            }
+        }
     }
 
     void onMatchPlayed(Match match) {
@@ -113,5 +139,24 @@ public class SingleEliminationStage implements Stage {
         } else {
             status = StageStatus.RUNNING;
         }
+    }
+
+    private int getParent(int i) {
+        i = i + 1;
+        if (i == 1) {
+            return -1;
+        } else {
+            return Math.floorDiv(i,2)-1;
+        }
+    }
+
+    public Match getLeftSide(int i){
+        i = i + 1;
+        return matches[2*i];
+    }
+
+    public Match getRightSide(int i){
+        i = 1 + 1;
+        return matches[2*i-1];
     }
 }
