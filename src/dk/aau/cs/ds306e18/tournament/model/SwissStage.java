@@ -2,7 +2,7 @@ package dk.aau.cs.ds306e18.tournament.model;
 
 import java.util.*;
 
-public class SwissStage implements Stage {
+public class SwissStage implements Stage, MatchListener {
 
     private String name = "Swiss";
     private StageStatus status = StageStatus.PENDING;
@@ -241,5 +241,16 @@ public class SwissStage implements Stage {
     //TODO DELETE currently used for testing as a workaround.
     public ArrayList<Match> getRawMatches(){
         return rounds.get(rounds.size() - 1);
+    }
+
+    @Override
+    public void onMatchPlayed(Match match) {
+        // TODO: Register stage as listener to all relevant matches
+        // TODO: Evaluate if last match, if it is then status = CONCLUDED. Also add tests
+    }
+
+    @Override
+    public List<Team> getTopTeams(int count, TieBreaker tieBreaker) {
+        return null; // TODO: Returns a list of the teams that performed best this stage. They should be sorted after performance, with best team first.
     }
 }

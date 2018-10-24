@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class RoundRobinStage implements Stage {
+public class RoundRobinStage implements Stage, MatchListener {
 
     private static final Team DUMMY_TEAM = new Team("Dummy", null, 0, null);
 
@@ -167,5 +167,16 @@ public class RoundRobinStage implements Stage {
     @Override
     public ArrayList<Match> getAllMatches() {
         return matches;
+    }
+
+    @Override
+    public void onMatchPlayed(Match match) {
+        // TODO: Register stage as listener to all relevant matches
+        // TODO: Evaluate if last match, if it is then status = CONCLUDED. Also add tests
+    }
+
+    @Override
+    public List<Team> getTopTeams(int count, TieBreaker tieBreaker) {
+        return null; // TODO: Returns a list of the teams that performed best this stage. They should be sorted after performance, with best team first.
     }
 }

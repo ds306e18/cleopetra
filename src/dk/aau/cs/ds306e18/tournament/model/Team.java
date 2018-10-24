@@ -9,13 +9,13 @@ public class Team {
 
     private String teamName;
     private ArrayList<Bot> bots;
-    private int seedValue;
+    private int initialSeedValue;
     private String description;
 
-    public Team(String teamName, ArrayList<Bot> bots, int seedValue, String description) {
+    public Team(String teamName, ArrayList<Bot> bots, int initialSeedValue, String description) {
         this.teamName = teamName;
         this.bots = bots;
-        this.seedValue = seedValue;
+        this.initialSeedValue = initialSeedValue;
         this.description = description;
     }
 
@@ -27,12 +27,12 @@ public class Team {
         this.teamName = teamName;
     }
 
-    public int getSeedValue() {
-        return seedValue;
+    public int getInitialSeedValue() {
+        return initialSeedValue;
     }
 
-    public void setSeedValue(int seedValue) {
-        this.seedValue = seedValue;
+    public void setInitialSeedValue(int initialSeedValue) {
+        this.initialSeedValue = initialSeedValue;
     }
 
     public String getDescription() {
