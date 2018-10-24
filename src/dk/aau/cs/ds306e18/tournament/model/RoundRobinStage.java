@@ -75,23 +75,23 @@ public class RoundRobinStage implements Stage, MatchListener {
                     tempMatches[round][match] = new Match(teams.get(match), teams.get(numberOfTeams - (match + 1)));
                 }
                 //hardcoding team with highest id (numberOfTeams - 1 ) to first match each round
-                //the other team is found by berger tables rules (runCheck) on the id of the team in the same match,
+                //the other team is found by berger tables rules (findIdOfNextPlayer) on the id of the team in the same match,
                 //but previous round
                 else if (match == 0) {
                     //if uneven round, player with highest id becomes blue player
                     if ((round % 2) != 0) {
-                        nextOrange = runCheck(map.get(tempMatches[round - 1][match].getBlueTeam()));
+                        nextOrange = findIdOfNextPlayer(map.get(tempMatches[round - 1][match].getBlueTeam()));
                         tempMatches[round][match] = new Match((teams.get(numberOfTeams - 1)), teams.get(nextOrange - 1));
                         //else become orange team
                     } else {
-                        nextBlue = runCheck(map.get(tempMatches[round - 1][match].getOrangeTeam()));
+                        nextBlue = findIdOfNextPlayer(map.get(tempMatches[round - 1][match].getOrangeTeam()));
                         tempMatches[round][match] = new Match(teams.get(nextBlue - 1), (teams.get(numberOfTeams - 1)));
                     }
                 } else {
-                    //if not the first round, or first match, find both players by runCheck according to berger tables,
+                    //if not the first round, or first match, find both players by findIdOfNextPlayer according to berger tables,
                     //on previous teams
-                    nextBlue = runCheck(map.get(tempMatches[round - 1][match].getBlueTeam()));
-                    nextOrange = runCheck(map.get(tempMatches[round - 1][match].getOrangeTeam()));
+                    nextBlue = findIdOfNextPlayer(map.get(tempMatches[round - 1][match].getBlueTeam()));
+                    nextOrange = findIdOfNextPlayer(map.get(tempMatches[round - 1][match].getOrangeTeam()));
                     tempMatches[round][match] = new Match(teams.get(nextBlue - 1), (teams.get(nextOrange - 1)));
                 }
             }
@@ -99,14 +99,14 @@ public class RoundRobinStage implements Stage, MatchListener {
         return removeDummyMatches(tempMatches);
     }
 
-    /** TODO: Find a better name for method
+    /**
      * Find new team, by adding n/2 to the team in the same place in previous round, if this exceeds n-1,
      * instead subtract n/2 - 1.
      *
      * @param id of the teamin the match in the previous round
      * @return the id of the team that should be in this match, according to last
      */
-    public int runCheck(int id) {
+    private int findIdOfNextPlayer(int id) {
         if ((id + (numberOfTeams / 2)) > (numberOfTeams - 1)) {
             return id - ((numberOfTeams / 2) - 1);
         } else return id + (numberOfTeams / 2);
