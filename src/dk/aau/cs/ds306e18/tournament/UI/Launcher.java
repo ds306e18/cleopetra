@@ -1,14 +1,18 @@
 package dk.aau.cs.ds306e18.tournament.UI;
 
+import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Tab;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import java.util.ArrayList;
 
 
 public class Launcher extends Application{
@@ -36,7 +40,13 @@ public class Launcher extends Application{
 
         Button openButton = new Button();
         openButton.setText("Open Local tournament");
-        openButton.setOnAction(e->openLocalTournament());
+        openButton.setOnAction(e-> {
+            try {
+                openLocalTournament(primaryStage);
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        });
 
         Button importButton = new Button();
         importButton.setText("Tournament Running");
@@ -54,6 +64,9 @@ public class Launcher extends Application{
 
           Image image = new Image("https://i.imgur.com/KE6nXem.png");
         ImageView imageView = new ImageView(image);
+
+
+
 
         //Changes the sizes of the elements in the HBox
         imageView.setFitHeight(200);
@@ -80,8 +93,12 @@ public class Launcher extends Application{
         TournamentRunning tv2 = new TournamentRunning();
         tv2.startWindow(primaryStage);    }
 
-    private void openLocalTournament() {
-        System.out.println("Not implemented");
+    private void openLocalTournament(Stage primaryStage) throws Exception {
+        primaryStage.close();
+        ParticipantSettings ps = new ParticipantSettings();
+        ps.startWindow(primaryStage);
+
+
     }
 
     private void createNewTournament(Stage primaryStage) throws Exception {
@@ -89,8 +106,6 @@ public class Launcher extends Application{
         primaryStage.close();
         TournamentSettings ts = new TournamentSettings();
         ts.startWindow(primaryStage);
-
-
 
     }
 

@@ -25,12 +25,14 @@ public class TournamentSettings extends NavigationFrame {
         VBox filler = fillerBox();
         VBox secondContent = stageSettings();
 
+        //Content all is the key point
         contentAll.getChildren().addAll(mainContent, filler, secondContent);
 
         tournamentSettings.setContent(contentAll);
 
         ArrayList<Tab> tabs = new ArrayList<>();
         tabs.add(tournamentSettings);
+        tabs.addAll(new ParticipantSettings().addContent());
 
         return tabs;
     }

@@ -33,8 +33,19 @@ public abstract class NavigationFrame  {
         primaryStage.show();
     }
 
+    public void startWindow(Stage primaryStage, ArrayList<Tab> tabs) throws Exception {
+
+        navigationTabs = new TabPane();
+        navigationTabs.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+
+        primaryStage.setScene(new Scene(navigationTabs));
+        primaryStage.setResizable(false);
+        primaryStage.show();
+    }
+
+
     /** Calls addContent, and adds all the given tabs to the navigation bar. */
-    private void addTabsToPane(){
+    public void addTabsToPane(){
 
         ArrayList<Tab> tabs = addContent();
 
