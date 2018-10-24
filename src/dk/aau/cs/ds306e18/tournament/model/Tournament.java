@@ -82,7 +82,7 @@ public class Tournament {
             bestTeams = new ArrayList<>(teams);
         } else {
             int wantedTeamCount = pendingStages.get(0).getNumberOfTeamsWanted();
-            bestTeams = getCurrentStage().getTopTeams(wantedTeamCount);
+            bestTeams = getCurrentStage().getTopTeams(wantedTeamCount, null); // TODO Add TieBreaker
         }
 
         // Proceed to next stage

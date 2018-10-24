@@ -1,7 +1,5 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
-import jdk.jshell.spi.ExecutionControl;
-
 import java.util.*;
 
 public class SwissStage implements Stage, MatchListener {
