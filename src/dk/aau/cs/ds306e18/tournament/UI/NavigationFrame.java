@@ -20,6 +20,7 @@ public abstract class NavigationFrame extends Application {
         addTabsToPane(); //Calls the addContent and fills in tabs.
 
         primaryStage.setScene(new Scene(navigationTabs));
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 
