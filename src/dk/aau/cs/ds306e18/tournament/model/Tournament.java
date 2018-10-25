@@ -10,6 +10,7 @@ public class Tournament {
     private ArrayList<Team> teams = new ArrayList<>();
     private ArrayList<PendingStage> pendingStages = new ArrayList<>();
     private ArrayList<Stage> startedStages = new ArrayList<>();
+    private TieBreaker tieBreaker = new TieBreakerBySeed();
 
     public String getName() {
         return name;
@@ -82,12 +83,20 @@ public class Tournament {
             bestTeams = new ArrayList<>(teams);
         } else {
             int wantedTeamCount = pendingStages.get(0).getNumberOfTeamsWanted();
-            bestTeams = getCurrentStage().getTopTeams(wantedTeamCount, null); // TODO Add TieBreaker
+            bestTeams = getCurrentStage().getTopTeams(wantedTeamCount, tieBreaker);
         }
 
         // Proceed to next stage
         Stage newStage = pendingStages.get(0).start(bestTeams);
         pendingStages.remove(0);
         startedStages.add(newStage);
+    }
+
+    public TieBreaker getTieBreaker() {
+        return tieBreaker;
+    }
+
+    public void setTieBreaker(TieBreaker tieBreaker) {
+        this.tieBreaker = tieBreaker;
     }
 }
