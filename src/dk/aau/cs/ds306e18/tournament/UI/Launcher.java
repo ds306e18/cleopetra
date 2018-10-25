@@ -49,7 +49,7 @@ public class Launcher extends Application{
         });
 
         Button importButton = new Button();
-        importButton.setText("Tournament Running");
+        importButton.setText("Import from...");
         importButton.setOnAction(e-> {
             try {
                 importTournament(primaryStage);
@@ -89,23 +89,18 @@ public class Launcher extends Application{
     }
 
     private void importTournament(Stage primaryStage) throws Exception {
-        primaryStage.close();
-        TournamentRunning tv2 = new TournamentRunning();
-        tv2.startWindow(primaryStage);    }
-
+        System.out.println("Not Implemented yet");
+    }
     private void openLocalTournament(Stage primaryStage) throws Exception {
-        primaryStage.close();
-        ParticipantSettings ps = new ParticipantSettings();
-        ps.startWindow(primaryStage);
-
+        System.out.println("Not implemented yet");
 
     }
 
     private void createNewTournament(Stage primaryStage) throws Exception {
         //Closes the launcher opens the tournamentsettings
-        primaryStage.close();
-        TournamentSettings ts = new TournamentSettings();
-        ts.startWindow(primaryStage);
+            primaryStage.close();
+            TournamentRunning tv2 = new TournamentRunning();
+            tv2.startWindow(primaryStage);
 
     }
 
