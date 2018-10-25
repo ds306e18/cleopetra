@@ -56,21 +56,20 @@ public class ParticipantSettings  extends NavigationFrame{
         TextField namefield = new TextField();
         Label devName = new Label("Developer:");
         TextField devfield = new TextField();
-        Label cofigPath = new Label("Config path:");
+        Label configPath = new Label("Config path:");
         TextField configField = new TextField();
 
         Label description = new Label("Description");
-        TextField descField = new TextField();
-        descField.prefWidth(200);
+        TextArea descField = new TextArea();
 
-        botBox.getChildren().addAll(botName,namefield,devName,devfield,cofigPath,configField,description,descField);
+
+        botBox.getChildren().addAll(botName,namefield,devName,devfield,configPath,configField,description,descField);
 
         return botBox;
     }
 
     private VBox participantBox(){
         VBox content = new VBox();
-        content.setMinWidth(200);
 
         // Header
         VBox header = new VBox();
