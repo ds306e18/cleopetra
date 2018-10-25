@@ -7,18 +7,15 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
-import java.util.ArrayList;
 
-public class TournamentSettings extends NavigationFrame {
+public class TournamentSettings extends Tab {
 
     private Insets standardPaddingInsets = new Insets(5, 8, 8, 8);
     private int id = 1;
 
-    @Override
-    ArrayList<Tab> addContent() {
+    TournamentSettings() {
 
-        Tab tournamentSettings = new Tab();
-        tournamentSettings.setText("Tournament Settings");
+        this.setText("Tournament Settings");
 
         HBox contentAll = new HBox();
         VBox mainContent = mainSettings();
@@ -27,14 +24,12 @@ public class TournamentSettings extends NavigationFrame {
 
         //Content all is the key point
         contentAll.getChildren().addAll(mainContent, filler, secondContent);
+        this.setContent(contentAll);
 
-        tournamentSettings.setContent(contentAll);
+        //ArrayList<Tab> tabs = new ArrayList<>();
+        //tabs.add(tournamentSettings);
+        //tabs.addAll(new ParticipantSettings().addContent());
 
-        ArrayList<Tab> tabs = new ArrayList<>();
-        tabs.add(tournamentSettings);
-        tabs.addAll(new ParticipantSettings().addContent());
-
-        return tabs;
     }
 
     private VBox fillerBox(){

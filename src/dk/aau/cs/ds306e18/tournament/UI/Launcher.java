@@ -97,10 +97,16 @@ public class Launcher extends Application{
 
     private void createNewTournament(Stage primaryStage) throws Exception {
         //Closes the launcher opens the tournamentsettings
-            primaryStage.close();
-            TournamentRunning tv2 = new TournamentRunning();
-            tv2.startWindow(primaryStage,"Tournament Runner "+ version);
+        primaryStage.close();
 
+        NavigationFrame navigationFrame = new NavigationFrame();
+        navigationFrame.setStage(primaryStage);
+
+        primaryStage.setResizable(false);
+        primaryStage.setWidth(800);
+        primaryStage.setHeight(600);
+        primaryStage.setTitle("New Tournament");
+        primaryStage.show();
     }
 
     private void exitLauncher(){

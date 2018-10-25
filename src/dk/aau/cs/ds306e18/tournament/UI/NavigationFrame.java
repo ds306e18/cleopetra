@@ -13,48 +13,40 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 
-public abstract class NavigationFrame  {
+public class NavigationFrame  {
 
     private TabPane navigationTabs;
+    private VBox mainContect;
 
-    public void startWindow(Stage primaryStage, String title) throws Exception {
+    NavigationFrame() throws Exception {
 
         navigationTabs = new TabPane();
         navigationTabs.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
         addTabsToPane(); //Calls the addContent and fills in tabs.
 
-        VBox mainContent = new VBox();
+        mainContect = new VBox();
         HBox bottomNav = bottomNav();
 
-        mainContent.getChildren().addAll(navigationTabs, bottomNav);
+        mainContect.getChildren().addAll(navigationTabs, bottomNav);
 
-        primaryStage.setScene(new Scene(mainContent));
-        primaryStage.setResizable(false);
-        primaryStage.setWidth(800);
-        primaryStage.setHeight(600);
-        primaryStage.setTitle(title);
-        primaryStage.show();
+
     }
 
-    public void startWindow(Stage primaryStage, ArrayList<Tab> tabs) throws Exception {
+    public void  setStage(Stage primaryStage){
 
-        navigationTabs = new TabPane();
-        navigationTabs.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+        primaryStage.setScene(new Scene(mainContect));
 
-        primaryStage.setScene(new Scene(navigationTabs));
-        primaryStage.setResizable(false);
-        primaryStage.show();
     }
-
 
     /** Calls addContent, and adds all the given tabs to the navigation bar. */
     public void addTabsToPane(){
 
-        ArrayList<Tab> tabs = addContent();
+        this.navigationTabs.getTabs().addAll(new TournamentSettings(), new ParticipantSettings(), new TournamentRunning());
+        //  ArrayList<Tab> tabs = addContent();
 
-        for(Tab tab : tabs){
-            this.navigationTabs.getTabs().add(tab);
-        }
+        //for(Tab tab : tabs){
+         //   this.navigationTabs.getTabs().add(tab);
+       // }
     }
 
     private HBox bottomNav(){
@@ -78,6 +70,6 @@ public abstract class NavigationFrame  {
     /** This is where the content of the window goes.
      * Create tabs with the desired content and return them in an arrayList
      * @return an arrayList of tabs with content for the window. */
-    abstract ArrayList<Tab> addContent();
+    // ArrayList<Tab> addContent();
 
 }

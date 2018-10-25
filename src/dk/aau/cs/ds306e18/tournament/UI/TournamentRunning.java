@@ -12,7 +12,7 @@ import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 
-public class TournamentRunning extends NavigationFrame{
+public class TournamentRunning extends Tab{
 
     //TODO Should be deleted and the other match status' should be used.
     private enum MatchStatus {
@@ -22,9 +22,8 @@ public class TournamentRunning extends NavigationFrame{
     }
 
     private Insets standardPaddingInsets = new Insets(5, 5, 5, 5);
-
-    @Override
-    ArrayList<Tab> addContent() {
+/**
+     TournamentRunning(){
 
         Tab bracketTab = bracketTab();
         Tab rankingsTab = rankingsTab();
@@ -41,12 +40,11 @@ public class TournamentRunning extends NavigationFrame{
         tabs.add(rankingsTab);
         tabs.add(overlayControl);
 //        tabs.add(settings);
-        tabs.addAll(new TournamentSettings().addContent());
+//        tabs.addAll(new TournamentSettings().addContent());
 
-        return tabs;
     }
-
-    private Tab bracketTab(){
+*/
+    TournamentRunning(){
 
         Tab tab = new Tab();
         HBox content = new HBox();
@@ -58,9 +56,8 @@ public class TournamentRunning extends NavigationFrame{
         VBox controlpanel = bracketControlpanel();
 
         content.getChildren().addAll(bracketOverview, controlpanel);
-        tab.setContent(content);
+        this.setContent(content);
 
-        return tab;
     }
 
     private HBox bracketOverview(){
