@@ -29,18 +29,19 @@ public class TournamentRunning extends NavigationFrame{
         Tab bracketTab = bracketTab();
         Tab rankingsTab = rankingsTab();
         Tab overlayControl = overlayControlTab();
-        Tab settings = settingsTab();
+//        Tab settings = settingsTab();
 
         bracketTab.setText("Bracket Overview");
         rankingsTab.setText("Ranking");
         overlayControl.setText("Overlay Control");
-        settings.setText("Settings");
+//        settings.setText("Settings");
 
         ArrayList<Tab> tabs = new ArrayList<>();
         tabs.add(bracketTab);
         tabs.add(rankingsTab);
         tabs.add(overlayControl);
-        tabs.add(settings);
+//        tabs.add(settings);
+        tabs.addAll(new TournamentSettings().addContent());
 
         return tabs;
     }
