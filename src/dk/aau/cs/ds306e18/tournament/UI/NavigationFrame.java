@@ -12,10 +12,9 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-public class NavigationFrame  {
+public class NavigationFrame  extends VBox{
 
     private TabPane navigationTabs;
-    private VBox mainContect;
 
     NavigationFrame() throws Exception {
 
@@ -23,19 +22,12 @@ public class NavigationFrame  {
         navigationTabs.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
         addTabsToPane(); //Calls the addContent and fills in tabs.
 
-        mainContect = new VBox();
         HBox bottomNav = bottomNav();
 
-        mainContect.getChildren().addAll(navigationTabs, bottomNav);
-
-
-    }
-
-    public void  setStage(Stage primaryStage){
-
-        primaryStage.setScene(new Scene(mainContect));
+        this.getChildren().addAll(navigationTabs, bottomNav);
 
     }
+
 
     /** Calls Creates new tabs and adds them to the pane. */
     public void addTabsToPane(){

@@ -99,8 +99,7 @@ public class Launcher extends Application{
         //Closes the launcher opens the tournamentsettings
         primaryStage.close();
 
-        NavigationFrame navigationFrame = new NavigationFrame();
-        navigationFrame.setStage(primaryStage);
+        primaryStage.setScene(new Scene(new NavigationFrame()));
 
         primaryStage.setResizable(false);
         primaryStage.setWidth(800);
