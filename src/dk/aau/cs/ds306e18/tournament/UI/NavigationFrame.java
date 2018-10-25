@@ -17,7 +17,7 @@ public abstract class NavigationFrame  {
 
     private TabPane navigationTabs;
 
-    public void startWindow(Stage primaryStage) throws Exception {
+    public void startWindow(Stage primaryStage, String title) throws Exception {
 
         navigationTabs = new TabPane();
         navigationTabs.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
@@ -30,6 +30,9 @@ public abstract class NavigationFrame  {
 
         primaryStage.setScene(new Scene(mainContent));
         primaryStage.setResizable(false);
+        primaryStage.setWidth(800);
+        primaryStage.setHeight(600);
+        primaryStage.setTitle(title);
         primaryStage.show();
     }
 

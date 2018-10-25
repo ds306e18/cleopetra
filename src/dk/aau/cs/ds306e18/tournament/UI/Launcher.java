@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 public class Launcher extends Application{
 
-    String version = "v 0.1";
+    String version = "v 0.1.1";
 
     public Launcher startLauncher(String[] args){
         launch(args);
@@ -93,14 +93,13 @@ public class Launcher extends Application{
     }
     private void openLocalTournament(Stage primaryStage) throws Exception {
         System.out.println("Not implemented yet");
-
     }
 
     private void createNewTournament(Stage primaryStage) throws Exception {
         //Closes the launcher opens the tournamentsettings
             primaryStage.close();
             TournamentRunning tv2 = new TournamentRunning();
-            tv2.startWindow(primaryStage);
+            tv2.startWindow(primaryStage,"Tournament Runner "+ version);
 
     }
 
