@@ -1,5 +1,11 @@
 package dk.aau.cs.ds306e18.tournament.UI;
 
+import dk.aau.cs.ds306e18.tournament.model.TieBreaker;
+import dk.aau.cs.ds306e18.tournament.model.TieBreakerBySeed;
+import dk.aau.cs.ds306e18.tournament.model.Tournament;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -64,13 +70,13 @@ public class TournamentSettings extends NavigationFrame {
         settings.getChildren().addAll(tournamentName, textField);
 
         // Tiebreaker
-        HBox tieBreak = new HBox();
-        Label text2 = new Label("Tiebreaker rule: ");
-        MenuButton menuButton = new MenuButton("Choose rule");
-        menuButton.getItems().addAll(new MenuItem("Setting 1"), new MenuItem("Setting 2"));
-
-        tieBreak.setPadding(standardPaddingInsets);
-        tieBreak.getChildren().addAll(text2, menuButton);
+        HBox tieBreaker = new HBox();
+        Label tieBreakerLabel = new Label("Tiebreak by: ");
+        ChoiceBox<TieBreaker> tieBreakerChoiceBox = new ChoiceBox<>(FXCollections.observableArrayList(new TieBreakerBySeed()));
+        tieBreakerChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> Tournament.get().setTieBreaker(newValue));
+        tieBreakerChoiceBox.getSelectionModel().select(0);
+        tieBreaker.setPadding(standardPaddingInsets);
+        tieBreaker.getChildren().addAll(tieBreakerLabel, tieBreakerChoiceBox);
 
         // Stage overview table
         Label stageHeader = new Label("Stages");
@@ -83,7 +89,7 @@ public class TournamentSettings extends NavigationFrame {
         stageIdCol.setResizable(false);
         stageIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
 
-        TableColumn stageNameCol = new TableColumn("Stage name");
+        TableColumn stageNameCol = new TableColumn("Name");
         stageNameCol.setResizable(false);
         stageNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         table.getColumns().addAll(stageIdCol, stageNameCol);
@@ -117,7 +123,7 @@ public class TournamentSettings extends NavigationFrame {
 
 
 
-        content.getChildren().addAll(header, settings, tieBreak, stageBox);
+        content.getChildren().addAll(header, settings, tieBreaker, stageBox);
 
         return content;
     }
