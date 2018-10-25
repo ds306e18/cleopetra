@@ -1,5 +1,6 @@
-package dk.aau.cs.ds306e18.tournament.UI;
+package dk.aau.cs.ds306e18.tournament.UI.Tabs;
 
+import dk.aau.cs.ds306e18.tournament.UI.TextField;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -13,7 +14,7 @@ public class ParticipantSettings  extends Tab{
     private Insets standardPaddingInsets = new Insets(5, 8, 8, 8);
     private int id = 1;
 
-    ParticipantSettings() {
+    public ParticipantSettings() {
 
         this.setText("Participant Settings");
 
@@ -38,7 +39,7 @@ public class ParticipantSettings  extends Tab{
 
         VBox teamBox = new VBox();
         Label tournamentName = new Label("Team name:");
-        TextField textField = new TextField();
+        dk.aau.cs.ds306e18.tournament.UI.TextField textField = new dk.aau.cs.ds306e18.tournament.UI.TextField();
 
         TableView table = new TableView();
         table.setEditable(true);
@@ -90,11 +91,11 @@ public class ParticipantSettings  extends Tab{
 
         VBox botBox = new VBox();
         Label botName = new Label("Bot name:");
-        TextField namefield = new TextField();
+        dk.aau.cs.ds306e18.tournament.UI.TextField namefield = new dk.aau.cs.ds306e18.tournament.UI.TextField();
         Label devName = new Label("Developer:");
-        TextField devfield = new TextField();
+        dk.aau.cs.ds306e18.tournament.UI.TextField devfield = new dk.aau.cs.ds306e18.tournament.UI.TextField();
         Label configPath = new Label("Config path:");
-        TextField configField = new TextField();
+        dk.aau.cs.ds306e18.tournament.UI.TextField configField = new TextField();
 
         Label description = new Label("Description");
         TextArea descField = new TextArea();

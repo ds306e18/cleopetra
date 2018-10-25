@@ -1,5 +1,6 @@
-package dk.aau.cs.ds306e18.tournament.UI;
+package dk.aau.cs.ds306e18.tournament.UI.Tabs;
 
+import dk.aau.cs.ds306e18.tournament.UI.TextField;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -13,7 +14,7 @@ public class TournamentSettings extends Tab {
     private Insets standardPaddingInsets = new Insets(5, 8, 8, 8);
     private int id = 1;
 
-    TournamentSettings() {
+    public TournamentSettings() {
 
         this.setText("Tournament Settings");
 
@@ -53,7 +54,7 @@ public class TournamentSettings extends Tab {
         // Tournament general settings
         VBox settings = new VBox();
         Label tournamentName = new Label("Tournament name:");
-        TextField textField = new TextField();
+        dk.aau.cs.ds306e18.tournament.UI.TextField textField = new dk.aau.cs.ds306e18.tournament.UI.TextField();
 
         settings.setPadding(standardPaddingInsets);
         settings.getChildren().addAll(tournamentName, textField);
@@ -131,7 +132,7 @@ public class TournamentSettings extends Tab {
         // Stage settings
         VBox settings = new VBox();
         Label stageName = new Label("Stage name:");
-        TextField stageNameTf = new TextField();
+        dk.aau.cs.ds306e18.tournament.UI.TextField stageNameTf = new TextField();
         stageNameTf.setMaxWidth(250);
         Label format = new Label("Format:");
         MenuButton formatMenu = new MenuButton("Choose format");

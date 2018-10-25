@@ -1,4 +1,4 @@
-package dk.aau.cs.ds306e18.tournament.UI;
+package dk.aau.cs.ds306e18.tournament.UI.Tabs;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -12,7 +12,7 @@ import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 
-public class TournamentRunning extends Tab{
+public class BracketOverview extends Tab{
 
     //TODO Should be deleted and the other match status' should be used.
     private enum MatchStatus {
@@ -44,17 +44,16 @@ public class TournamentRunning extends Tab{
 
     }
 */
-    TournamentRunning(){
+public BracketOverview(){
 
-        Tab tab = new Tab();
-        HBox content = new HBox();
+         this.setText("Bracket Overview");
+         HBox content = new HBox();
 
         //Bracket overview
         HBox bracketOverview = bracketOverview();
 
         //Control panel
         VBox controlpanel = bracketControlpanel();
-
         content.getChildren().addAll(bracketOverview, controlpanel);
         this.setContent(content);
 
@@ -210,40 +209,8 @@ public class TournamentRunning extends Tab{
         mid2.getChildren().addAll(tempHBox);
     }
 
-    private Tab rankingsTab(){
 
-        Tab tab = new Tab();
 
-        Label tempLabel = new Label("PLACEHOLDER RANKING");
-
-        tab.setContent(tempLabel);
-
-        return tab;
-    }
-
-    private Tab overlayControlTab(){
-
-        Tab tab = new Tab();
-
-        tab.setText("Overlay Control");
-        Image imageOverlay = new Image("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqX6L7Qpa62YOBrRlINaqBMDrUi5sHuWmwEsQU1lDkRMTqzG8K");
-        ImageView imageViewOverlay = new ImageView(imageOverlay);
-        tab.setContent(imageViewOverlay);
-
-        return tab;
-    }
-
-    private Tab settingsTab(){
-
-        Tab tab = new Tab();
-
-        tab.setText("Settings");
-        Image imageSettings = new Image("https://training.bitrix24.com/images/framework_en/agent_form.png");
-        ImageView imageViewSettings = new ImageView(imageSettings);
-        tab.setContent(imageViewSettings);
-
-        return tab;
-    }
 
     /** TODO This function is a placeholder for buttons. */
     private void tempHello(MatchStatus matchStatus){

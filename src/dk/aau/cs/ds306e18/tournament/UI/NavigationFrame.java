@@ -1,17 +1,16 @@
 package dk.aau.cs.ds306e18.tournament.UI;
 
-import javafx.application.Application;
+import dk.aau.cs.ds306e18.tournament.UI.Tabs.BracketOverview;
+import dk.aau.cs.ds306e18.tournament.UI.Tabs.ParticipantSettings;
+import dk.aau.cs.ds306e18.tournament.UI.Tabs.TournamentSettings;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-
-import java.util.ArrayList;
 
 public class NavigationFrame  {
 
@@ -38,15 +37,9 @@ public class NavigationFrame  {
 
     }
 
-    /** Calls addContent, and adds all the given tabs to the navigation bar. */
+    /** Calls Creates new tabs and adds them to the pane. */
     public void addTabsToPane(){
-
-        this.navigationTabs.getTabs().addAll(new TournamentSettings(), new ParticipantSettings(), new TournamentRunning());
-        //  ArrayList<Tab> tabs = addContent();
-
-        //for(Tab tab : tabs){
-         //   this.navigationTabs.getTabs().add(tab);
-       // }
+        this.navigationTabs.getTabs().addAll(new TournamentSettings(), new ParticipantSettings(), new BracketOverview());
     }
 
     private HBox bottomNav(){
