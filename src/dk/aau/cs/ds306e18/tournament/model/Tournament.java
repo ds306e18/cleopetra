@@ -6,11 +6,19 @@ import java.util.List;
 
 public class Tournament {
 
+    private static Tournament instance;
+    public static Tournament get() {
+        if (instance == null)
+            instance = new Tournament();
+        return instance;
+    }
+
     private String name = "Unnamed Tournament";
     private ArrayList<Team> teams = new ArrayList<>();
     private ArrayList<PendingStage> pendingStages = new ArrayList<>();
     private ArrayList<Stage> startedStages = new ArrayList<>();
     private TieBreaker tieBreaker = new TieBreakerBySeed();
+    private boolean started = false;
 
     public String getName() {
         return name;
@@ -21,15 +29,18 @@ public class Tournament {
     }
 
     public void addTeam(Team team) {
+        if (started) throw new IllegalStateException("Tournament has already started.");
         teams.add(team);
         sortTeamsAfterInitialSeed();
     }
 
     public void removeTeam(Team team) {
+        if (started) throw new IllegalStateException("Tournament has already started.");
         teams.remove(team);
     }
 
     public void removeTeam(int index) {
+        if (started) throw new IllegalStateException("Tournament has already started.");
         teams.remove(index);
     }
 
@@ -38,19 +49,23 @@ public class Tournament {
     }
 
     public void sortTeamsAfterInitialSeed() {
+        if (started) throw new IllegalStateException("Tournament has already started.");
         // Sort teams by comparator and not data structure, since seed value is not final
         teams.sort(Comparator.comparingInt(Team::getInitialSeedValue));
     }
 
     public void addStage(PendingStage stage) {
+        if (started) throw new IllegalStateException("Tournament has already started.");
         pendingStages.add(stage);
     }
 
     public void removeStage(PendingStage stage) {
+        if (started) throw new IllegalStateException("Tournament has already started.");
         pendingStages.remove(stage);
     }
 
     public void removeStage(int index) {
+        if (started) throw new IllegalStateException("Tournament has already started.");
         pendingStages.remove(index);
     }
 
@@ -92,11 +107,28 @@ public class Tournament {
         startedStages.add(newStage);
     }
 
+    public boolean hasStarted() {
+        return started;
+    }
+
+    public boolean canStart() {
+        return teams.size() < 2 && !pendingStages.isEmpty();
+    }
+
+    public void start() {
+        if (started) throw new IllegalStateException("Tournament has already started.");
+        if (teams.size() < 2) throw new IllegalStateException("There must be at least two teams in the tournament.");
+        if (pendingStages.isEmpty()) throw new IllegalStateException("There must be at least one stage in the tournament.");
+        started = true;
+        startNextStage();
+    }
+
     public TieBreaker getTieBreaker() {
         return tieBreaker;
     }
 
     public void setTieBreaker(TieBreaker tieBreaker) {
+        if (started) throw new IllegalStateException("Tournament has already started.");
         this.tieBreaker = tieBreaker;
     }
 }
