@@ -9,6 +9,7 @@ import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -62,21 +63,26 @@ public class TournamentSettings extends NavigationFrame {
         header.setPadding(standardPaddingInsets);
 
         // Tournament general settings
-        VBox settings = new VBox();
-        Label tournamentName = new Label("Tournament name:");
-        TextField textField = new TextField();
-
-        settings.setPadding(standardPaddingInsets);
-        settings.getChildren().addAll(tournamentName, textField);
+        VBox tournamentNameBox = new VBox();
+        Label tournamentNameLabel = new Label("Tournament name:");
+        TextField tournamentNameTextField = new TextField();
+        tournamentNameTextField.setText(Tournament.get().getName());
+        tournamentNameTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            // Update model when focus is lost
+            if (!newValue) Tournament.get().setName(tournamentNameTextField.getText());
+        });
+        tournamentNameBox.setPadding(standardPaddingInsets);
+        tournamentNameBox.getChildren().addAll(tournamentNameLabel, tournamentNameTextField);
 
         // Tiebreaker
-        HBox tieBreaker = new HBox();
+        BorderPane tieBreaker = new BorderPane();
         Label tieBreakerLabel = new Label("Tiebreak by: ");
         ChoiceBox<TieBreaker> tieBreakerChoiceBox = new ChoiceBox<>(FXCollections.observableArrayList(new TieBreakerBySeed()));
         tieBreakerChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> Tournament.get().setTieBreaker(newValue));
         tieBreakerChoiceBox.getSelectionModel().select(0);
         tieBreaker.setPadding(standardPaddingInsets);
-        tieBreaker.getChildren().addAll(tieBreakerLabel, tieBreakerChoiceBox);
+        tieBreaker.setLeft(tieBreakerLabel);
+        tieBreaker.setRight(tieBreakerChoiceBox);
 
         // Stage overview table
         Label stageHeader = new Label("Stages");
@@ -123,7 +129,7 @@ public class TournamentSettings extends NavigationFrame {
 
 
 
-        content.getChildren().addAll(header, settings, tieBreaker, stageBox);
+        content.getChildren().addAll(header, tournamentNameBox, tieBreaker, stageBox);
 
         return content;
     }
