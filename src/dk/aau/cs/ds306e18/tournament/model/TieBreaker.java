@@ -4,6 +4,8 @@ public interface TieBreaker {
 
     String getName();
 
-    /** Returns true if teamA wins over teamB in a tie breaker. */
+    /**
+     * Returns true if teamA wins over teamB in a tie breaker.
+     */
     boolean compare(Team teamA, Team teamB);
 }

@@ -1,10 +1,12 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
+import java.util.Objects;
 import java.util.Random;
 
 public class TieBreakerBySeed implements TieBreaker {
 
     private Random rand = new Random();
+    private String name = "TieBreaker by seed";
 
     @Override
     public boolean compare(Team teamA, Team teamB) {
@@ -15,6 +17,20 @@ public class TieBreakerBySeed implements TieBreaker {
 
     @Override
     public String getName() {
-        return "TieBreaker by seed.";
+        return this.name;
+    }
+
+    // equals- and hashCode-methods could be implemented better, however, a simple namecheck suffices
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TieBreakerBySeed that = (TieBreakerBySeed) o;
+        return Objects.equals(getName(), that.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName());
     }
 }

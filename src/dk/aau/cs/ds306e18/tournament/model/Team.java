@@ -2,6 +2,7 @@ package dk.aau.cs.ds306e18.tournament.model;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Team {
 
@@ -78,5 +79,21 @@ public class Team {
             paths.add(bot.getConfigPath());
         }
         return paths;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Team team = (Team) o;
+        return getInitialSeedValue() == team.getInitialSeedValue() &&
+                Objects.equals(getTeamName(), team.getTeamName()) &&
+                Objects.equals(getBots(), team.getBots()) &&
+                Objects.equals(getDescription(), team.getDescription());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getTeamName(), getBots(), getInitialSeedValue(), getDescription());
     }
 }

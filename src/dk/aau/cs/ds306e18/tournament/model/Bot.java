@@ -2,6 +2,7 @@ package dk.aau.cs.ds306e18.tournament.model;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Bot {
 
@@ -37,5 +38,20 @@ public class Bot {
 
     public void setConfigPath(Path configPath) {
         this.configPath = configPath;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Bot bot = (Bot) o;
+        return Objects.equals(getName(), bot.getName()) &&
+                Objects.equals(getDeveloper(), bot.getDeveloper()) &&
+                Objects.equals(getConfigPath(), bot.getConfigPath());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName(), getDeveloper(), getConfigPath());
     }
 }
