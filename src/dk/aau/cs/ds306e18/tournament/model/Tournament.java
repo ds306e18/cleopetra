@@ -3,6 +3,7 @@ package dk.aau.cs.ds306e18.tournament.model;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 public class Tournament {
 
@@ -130,5 +131,23 @@ public class Tournament {
     public void setTieBreaker(TieBreaker tieBreaker) {
         if (started) throw new IllegalStateException("Tournament has already started.");
         this.tieBreaker = tieBreaker;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Tournament that = (Tournament) o;
+        return started == that.started &&
+                Objects.equals(getName(), that.getName()) &&
+                Objects.equals(getTeams(), that.getTeams()) &&
+                Objects.equals(getPendingStages(), that.getPendingStages()) &&
+                Objects.equals(startedStages, that.startedStages) &&
+                Objects.equals(getTieBreaker(), that.getTieBreaker());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName(), getTeams(), getPendingStages(), startedStages, getTieBreaker(), started);
     }
 }
