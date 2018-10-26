@@ -364,4 +364,30 @@ public class SwissStageTest {
 
         assertEquals(StageStatus.RUNNING, bracket.getStatus());
     }
+
+    @Test
+    public void getStatus03(){ //Concluded // max number of rounds and all played
+
+        SwissStage bracket = new SwissStage();
+        bracket.start(TestUtilities.generateTeams(2,2));
+        bracket.createNewRound();
+
+        //Set all matches to played
+        ArrayList<Match> matches = bracket.getUpcomingMatches();
+        for(Match match : matches){
+            match.setHasBeenPlayed(true);
+        }
+
+        assertEquals(StageStatus.CONCLUDED, bracket.getStatus());
+    }
+
+    @Test
+    public void getStatus04(){ //Concluded //max number of round but not played
+
+        SwissStage bracket = new SwissStage();
+        bracket.start(TestUtilities.generateTeams(2,2));
+        bracket.createNewRound();
+
+        assertNotEquals(StageStatus.CONCLUDED, bracket.getStatus());
+    }
 }
