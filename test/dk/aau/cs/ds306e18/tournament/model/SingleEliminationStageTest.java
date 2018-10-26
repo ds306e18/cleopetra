@@ -54,14 +54,14 @@ public class SingleEliminationStageTest {
         ArrayList<Team> teamList = TestUtilities.generateSeededTeams(8,1);
         SingleEliminationStage bracket = new SingleEliminationStage();
         bracket.start(teamList);
-        assertEquals(1, bracket.getAllMatches().get(bracket.getAllMatches().size()-1).getBlueTeam().getSeedValue());
-        assertEquals(8, bracket.getAllMatches().get(bracket.getAllMatches().size()-1).getOrangeTeam().getSeedValue());
-        assertEquals(4, bracket.getAllMatches().get(bracket.getAllMatches().size()-2).getBlueTeam().getSeedValue());
-        assertEquals(5, bracket.getAllMatches().get(bracket.getAllMatches().size()-2).getOrangeTeam().getSeedValue());
-        assertEquals(2, bracket.getAllMatches().get(bracket.getAllMatches().size()-3).getBlueTeam().getSeedValue());
-        assertEquals(7, bracket.getAllMatches().get(bracket.getAllMatches().size()-3).getOrangeTeam().getSeedValue());
-        assertEquals(3, bracket.getAllMatches().get(bracket.getAllMatches().size()-4).getBlueTeam().getSeedValue());
-        assertEquals(6, bracket.getAllMatches().get(bracket.getAllMatches().size()-4).getOrangeTeam().getSeedValue());
+        assertEquals(1, bracket.getAllMatches().get(bracket.getAllMatches().size()-1).getBlueTeam().getInitialSeedValue());
+        assertEquals(8, bracket.getAllMatches().get(bracket.getAllMatches().size()-1).getOrangeTeam().getInitialSeedValue());
+        assertEquals(4, bracket.getAllMatches().get(bracket.getAllMatches().size()-2).getBlueTeam().getInitialSeedValue());
+        assertEquals(5, bracket.getAllMatches().get(bracket.getAllMatches().size()-2).getOrangeTeam().getInitialSeedValue());
+        assertEquals(2, bracket.getAllMatches().get(bracket.getAllMatches().size()-3).getBlueTeam().getInitialSeedValue());
+        assertEquals(7, bracket.getAllMatches().get(bracket.getAllMatches().size()-3).getOrangeTeam().getInitialSeedValue());
+        assertEquals(3, bracket.getAllMatches().get(bracket.getAllMatches().size()-4).getBlueTeam().getInitialSeedValue());
+        assertEquals(6, bracket.getAllMatches().get(bracket.getAllMatches().size()-4).getOrangeTeam().getInitialSeedValue());
     }
 
     //first match should be null, and best seeded team should be placed in next round
@@ -70,7 +70,7 @@ public class SingleEliminationStageTest {
         SingleEliminationStage bracket = new SingleEliminationStage();
         bracket.start(TestUtilities.generateSeededTeams(7,1));
         assertNull(bracket.getMatchesAsArray()[6]);
-        assertEquals(1,bracket.getMatchesAsArray()[bracket.getParent(6)].getBlueTeam().getSeedValue());
+        assertEquals(1,bracket.getMatchesAsArray()[bracket.getParent(6)].getBlueTeam().getInitialSeedValue());
     }
 
     //match 3 should be null and snd seed should be placed in next round
@@ -79,7 +79,7 @@ public class SingleEliminationStageTest {
         SingleEliminationStage bracket = new SingleEliminationStage();
         bracket.start(TestUtilities.generateSeededTeams(6,1));
         assertNull(bracket.getMatchesAsArray()[4]);
-        assertEquals(2,bracket.getMatchesAsArray()[bracket.getParent(4)].getBlueTeam().getSeedValue());
+        assertEquals(2,bracket.getMatchesAsArray()[bracket.getParent(4)].getBlueTeam().getInitialSeedValue());
     }
 
     //There should only be one match in first around, this should be the worst seeded teams.
@@ -91,8 +91,8 @@ public class SingleEliminationStageTest {
         assertNull(bracket.getMatchesAsArray()[6]);
         assertNull(bracket.getMatchesAsArray()[4]);
         assertNull(bracket.getMatchesAsArray()[3]);
-        assertEquals(4,bracket.getMatchesAsArray()[5].getBlueTeam().getSeedValue());
-        assertEquals(5,bracket.getMatchesAsArray()[5].getOrangeTeam().getSeedValue());
+        assertEquals(4,bracket.getMatchesAsArray()[5].getBlueTeam().getInitialSeedValue());
+        assertEquals(5,bracket.getMatchesAsArray()[5].getOrangeTeam().getInitialSeedValue());
     }
 
     //Should return the correct amount of playable matches

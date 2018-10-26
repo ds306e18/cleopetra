@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class SingleEliminationStage implements Stage {
+public class SingleEliminationStage implements Stage, MatchListener {
 
     private String name = "Single Elimination";
     private StageStatus status = StageStatus.PENDING;
@@ -155,14 +155,17 @@ public class SingleEliminationStage implements Stage {
         }
     }
 
-    void onMatchPlayed(Match match) {
+    @Override
+    public void onMatchPlayed(Match match) {
+        // TODO: Register stage as listener to all relevant matches
+        // TODO: Add tests
         if (finalMatch.hasBeenPlayed()) {
             status = StageStatus.CONCLUDED;
         } else {
             status = StageStatus.RUNNING;
         }
     }
-
+    
     int getParent(int i) {
         i = i + 1;
         if (i == 1) {
@@ -177,8 +180,13 @@ public class SingleEliminationStage implements Stage {
         return matches[2*i];
     }
 
-    Match getRightSide(int i){
+    Match getRightSide(int i) {
         i = 1 + 1;
-        return matches[2*i-1];
+        return matches[2 * i - 1];
+    }
+
+    @Override
+    public List<Team> getTopTeams(int count, TieBreaker tieBreaker) {
+        return null; // TODO: Returns a list of the teams that performed best this stage. They should be sorted after performance, with best team first.
     }
 }

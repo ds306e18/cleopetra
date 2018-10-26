@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class RoundRobinStage implements Stage {
+public class RoundRobinStage implements Stage, MatchListener {
 
     private static final Team DUMMY_TEAM = new Team("Dummy", null, 0, null);
 
@@ -66,7 +66,6 @@ public class RoundRobinStage implements Stage {
 
         HashMap<Team, Integer> map = createIdHashMap(teams);
 
-
         //number of rounds needed
         for (int round = 0; round < numberOfTeams - 1; round++) {
             //number of matches per round
@@ -118,7 +117,9 @@ public class RoundRobinStage implements Stage {
      * Dummy teams are removed from the array of matches
      */
     private ArrayList<Match> removeDummyMatches(Match[][] tempMatches) {
+
         ArrayList<Match> matches = new ArrayList<>();
+
         for (int i = 0; i < tempMatches.length; i++) {
             for (int j = 0; j < tempMatches[i].length; j++) {
                 if (tempMatches[i][j].getOrangeTeam().equals(DUMMY_TEAM) ||
@@ -133,13 +134,29 @@ public class RoundRobinStage implements Stage {
     }
 
     @Override
-    public ArrayList<Match> getAllMatches() {
-        return matches;
+    public ArrayList<Match> getUpcomingMatches() {
+
+        ArrayList<Match> allMatches = getAllMatches();
+        ArrayList<Match> upComingMatches = new ArrayList<>();
+
+        for (Match match : allMatches)
+            if (!match.hasBeenPlayed())
+                upComingMatches.add(match);
+
+        return upComingMatches;
     }
 
     @Override
-    public ArrayList<Match> getUpcomingMatches() {
-        return null;
+    public ArrayList<Match> getCompletedMatches() {
+
+        ArrayList<Match> allMatches = getAllMatches();
+        ArrayList<Match> playedMatches = new ArrayList<>();
+
+        for (Match match : allMatches)
+            if (match.hasBeenPlayed())
+                playedMatches.add(match);
+
+        return playedMatches;
     }
 
     @Override
@@ -148,7 +165,18 @@ public class RoundRobinStage implements Stage {
     }
 
     @Override
-    public ArrayList<Match> getCompletedMatches() {
-        return null;
+    public ArrayList<Match> getAllMatches() {
+        return matches;
+    }
+
+    @Override
+    public void onMatchPlayed(Match match) {
+        // TODO: Register stage as listener to all relevant matches
+        // TODO: Evaluate if last match, if it is then status = CONCLUDED. Also add tests
+    }
+
+    @Override
+    public List<Team> getTopTeams(int count, TieBreaker tieBreaker) {
+        return null; // TODO: Returns a list of the teams that performed best this stage. They should be sorted after performance, with best team first.
     }
 }
