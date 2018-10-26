@@ -3,19 +3,17 @@ package dk.aau.cs.ds306e18.tournament.UI.Tabs;
 import dk.aau.cs.ds306e18.tournament.model.Bot;
 import dk.aau.cs.ds306e18.tournament.model.SwissStage;
 import dk.aau.cs.ds306e18.tournament.model.Team;
-import javafx.css.Match;
+import dk.aau.cs.ds306e18.tournament.model.Match;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class BracketOverview extends Tab{
 
@@ -32,21 +30,36 @@ public class BracketOverview extends Tab{
 
     private Match selectedMatch = null;
 
+    private HBox bracketOverview;
+    private VBox controlpanel;
+    private HBox content;
+
 public BracketOverview(){
 
         this.tempSwissStage = createTempSwiss(); //TODO temp
 
         this.setText("Bracket Overview");
-        HBox content = new HBox();
+        this.content = new HBox();
 
         //Bracket overview
-        HBox bracketOverview = bracketOverview();
+        this.bracketOverview = bracketOverview();
 
         //Control panel
-        VBox controlpanel = bracketControlpanel();
+        this.controlpanel = bracketControlpanel();
         content.getChildren().addAll(bracketOverview, controlpanel);
         this.setContent(content);
 
+    }
+
+    private void updateControlPanel(){
+        VBox newControlpanel = bracketControlpanel();
+
+        this.controlpanel = newControlpanel;
+
+        this.content.getChildren().clear();
+        this.content.getChildren().addAll(bracketOverview, controlpanel);
+
+        this.setContent(content);
     }
 
     //TODO TEMP
@@ -77,7 +90,7 @@ public BracketOverview(){
         //Image imageBracket = new Image("http://i.imgur.com/dcRQBS7.png");
         //ImageView imageViewBracket = new ImageView(imageBracket);
 
-        content.getChildren().add(tempSwissStage.getJavaFxNode());
+        content.getChildren().add(tempSwissStage.getJavaFxNode(this));
 
         return content;
     }
@@ -86,7 +99,6 @@ public BracketOverview(){
 
         VBox content = new VBox();
         content.setMinWidth(200);
-        //content.setStyle("-fx-border-style: solid solid none solid; -fx-border-color: none none none black;");
         content.setBorder(new Border(new BorderStroke(Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK,
                 BorderStrokeStyle.NONE, BorderStrokeStyle.NONE, BorderStrokeStyle.NONE, BorderStrokeStyle.SOLID,
                 null, null, null)));
@@ -94,7 +106,6 @@ public BracketOverview(){
         //Top
         VBox topBox = new VBox();
         Label topLabel = new Label("Selected Match");
-        //topBox.setStyle("-fx-border-color: white white black white;");
         topBox.setBorder(new Border(new BorderStroke(Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK,
                 BorderStrokeStyle.NONE, BorderStrokeStyle.NONE, BorderStrokeStyle.SOLID, BorderStrokeStyle.NONE,
                 null, null, null)));
@@ -106,7 +117,8 @@ public BracketOverview(){
         //midSection 1 //midSection 2
         HBox mid1 = new HBox(10);
         VBox mid2 = new VBox(10);
-        bracketControlpanelChange(MatchStatus.PLAYING, mid1, mid2);
+        if(selectedMatch != null)
+            bracketControlpanelChange(MatchStatus.PLAYING, mid1, mid2);
 
         //midSections3 SPACE
         VBox mid3 = new VBox();
@@ -140,9 +152,9 @@ public BracketOverview(){
         mid2.getChildren().clear();
 
         //mid1
-        Label player1 = new Label((matchStatus == matchStatus.TBD) ? "Blue Team: TBD" : "Blue Team: Ajani");
+        Label player1 = new Label((matchStatus == matchStatus.TBD) ? "Blue Team: TBD" : "Blue Team: " + selectedMatch.getBlueTeam().getTeamName());
         player1.setTextFill(Color.BLUE);
-        Label player2 = new Label((matchStatus == matchStatus.TBD) ? "Orange Team: TBD" : "Orange Team: Brutus");
+        Label player2 = new Label((matchStatus == matchStatus.TBD) ? "Orange Team: TBD" : "Orange Team: " + selectedMatch.getOrangeTeam().getTeamName());
         player2.setTextFill(new javafx.scene.paint.Color(1.0, 0.4, 0, 1));
         mid1.getChildren().addAll(player1, player2);
         mid1.setPadding(standardPaddingInsets);
@@ -225,7 +237,9 @@ public BracketOverview(){
         System.out.println("Hello");
     }
 
-    private void setSelectedMatch(Match match){
+    public void setSelectedMatch(Match match){
         this.selectedMatch = match;
+        //TODO should update controlPanel
+        updateControlPanel();
     }
 }

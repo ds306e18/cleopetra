@@ -1,7 +1,9 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
+import dk.aau.cs.ds306e18.tournament.UI.Tabs.BracketOverview;
 import dk.aau.cs.ds306e18.tournament.UI.bracketObjects.SwissNode;
 import javafx.scene.Node;
+
 import java.util.*;
 
 public class SwissStage implements Stage, MatchListener {
@@ -258,9 +260,9 @@ public class SwissStage implements Stage, MatchListener {
     }
 
     @Override
-    public Node getJavaFxNode() {
+    public Node getJavaFxNode(BracketOverview bracketOverview) {
 
-        return new SwissNode(this);
+        return new SwissNode(this, bracketOverview);
     }
 
     /** @return an arraylist of the current created rounds. */

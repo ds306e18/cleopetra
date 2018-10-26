@@ -1,5 +1,6 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
+import dk.aau.cs.ds306e18.tournament.UI.Tabs.BracketOverview;
 import javafx.scene.Node;
 
 import java.util.ArrayList;
@@ -126,7 +127,7 @@ public class SingleEliminationStage implements Stage, MatchListener {
     }
 
     @Override
-    public Node getJavaFxNode() {
+    public Node getJavaFxNode(BracketOverview bracketOverview) {
         return null; //TODO
     }
 }
