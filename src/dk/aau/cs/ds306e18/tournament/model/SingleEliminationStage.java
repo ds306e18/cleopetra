@@ -134,13 +134,17 @@ public class SingleEliminationStage implements Stage {
         // Using the seeded list to place the teams into the correct matches
         // If there are byes, the best seeded teams will be placed in their slots parents
         int seedMatchIndex = finalMatch.getTreeAsListBFS().size()-1;
-        for(int playerIndex = 0; playerIndex < seedList.size();){
+        int playerIndex = 0, playerCount = seedList.size();
+        while(playerIndex < playerCount){
+            // If the player matchup would be between a team and a bye, the team will be placed at its parent match as a startSlot
+            // The match in the first round will be deleted(null)
             if(byeList.contains(seedList.get(playerIndex)) || byeList.contains(seedList.get(playerIndex+1))) {
                 matches[getParent(seedMatchIndex)].setBlue(new StarterSlot(seedList.get(playerIndex)));
                 matches[seedMatchIndex] = null;
                 seedMatchIndex--;
                 playerIndex = playerIndex + 2;
             }
+            // If there are no byes in the matchup, place the teams vs each other as intended
             else {
                 matches[seedMatchIndex].setBlue(new StarterSlot(seedList.get(playerIndex)));
                 playerIndex++;
@@ -159,7 +163,7 @@ public class SingleEliminationStage implements Stage {
         }
     }
 
-    public int getParent(int i) {
+    int getParent(int i) {
         i = i + 1;
         if (i == 1) {
             return -1;
@@ -168,12 +172,12 @@ public class SingleEliminationStage implements Stage {
         }
     }
 
-    public Match getLeftSide(int i){
+    Match getLeftSide(int i){
         i = i + 1;
         return matches[2*i];
     }
 
-    public Match getRightSide(int i){
+    Match getRightSide(int i){
         i = 1 + 1;
         return matches[2*i-1];
     }
