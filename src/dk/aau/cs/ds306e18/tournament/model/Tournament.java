@@ -73,12 +73,14 @@ public class Tournament {
         return new ArrayList<>(stages);
     }
 
-    public int getUpcommingStagesCount() {
+    /** Returns the number of stages that has not started yet. */
+    public int getUpcomingStagesCount() {
         return stages.size() - currentStageIndex - 1;
     }
 
-    public boolean hasUpcommingStages() {
-        return getUpcommingStagesCount() > 0;
+    /** Returns true there stages that has not started yet. */
+    public boolean hasUpcomingStages() {
+        return getUpcomingStagesCount() > 0;
     }
 
     public Stage getCurrentStage() {
@@ -90,7 +92,7 @@ public class Tournament {
         if (!started)
             throw new IllegalStateException("The first stage should be started through the start() method.");
 
-        if (!hasUpcommingStages())
+        if (!hasUpcomingStages())
             throw new IllegalStateException("There are no more pending stages.");
 
         if (currentStageIndex != -1 && getCurrentStage().getFormat().getStatus() != StageStatus.CONCLUDED)
