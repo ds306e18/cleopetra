@@ -1,11 +1,10 @@
-package dk.aau.cs.ds306e18.tournament.UI;
+package dk.aau.cs.ds306e18.tournament.UI.Tabs;
 
 import dk.aau.cs.ds306e18.tournament.model.TieBreaker;
 import dk.aau.cs.ds306e18.tournament.model.TieBreakerBySeed;
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import dk.aau.cs.ds306e18.tournament.UI.FixedTextField;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -14,18 +13,17 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
-import java.util.ArrayList;
 
-public class TournamentSettings extends NavigationFrame {
+public class TournamentSettings extends Tab {
 
+    //Fields
     private Insets standardPaddingInsets = new Insets(5, 8, 8, 8);
     private int id = 1;
 
-    @Override
-    ArrayList<Tab> addContent() {
+    /** TournamentSettings extends Tab and creates a tab with a specific layout*/
+    public TournamentSettings() {
 
-        Tab tournamentSettings = new Tab();
-        tournamentSettings.setText("Tournament Settings");
+        this.setText("Tournament Settings");
 
         HBox contentAll = new HBox();
         VBox mainContent = mainSettings();
@@ -34,22 +32,26 @@ public class TournamentSettings extends NavigationFrame {
 
         //Content all is the key point
         contentAll.getChildren().addAll(mainContent, filler, secondContent);
+        this.setContent(contentAll);
 
-        tournamentSettings.setContent(contentAll);
+        //ArrayList<Tab> tabs = new ArrayList<>();
+        //tabs.add(tournamentSettings);
+        //tabs.addAll(new ParticipantSettings().addContent());
 
-        ArrayList<Tab> tabs = new ArrayList<>();
-        tabs.add(tournamentSettings);
-        tabs.addAll(new ParticipantSettings().addContent());
-
-        return tabs;
     }
 
+    /** Creates an empty box to create space on the tab
+     * @return a blank VBox     */
     private VBox fillerBox(){
         VBox content = new VBox();
         content.setMinWidth(100);
 
         return content;
     }
+
+    /**
+     * Creates the main settings VBox, it contains a table with functioning buttons, a header and a dropdown menu
+     * @return a specific VBox*/
 
     private VBox mainSettings(){
         VBox content = new VBox();
@@ -65,7 +67,7 @@ public class TournamentSettings extends NavigationFrame {
         // Tournament general settings
         VBox tournamentNameBox = new VBox();
         Label tournamentNameLabel = new Label("Tournament name:");
-        TextField tournamentNameTextField = new TextField();
+        FixedTextField tournamentNameTextField = new FixedTextField();
         tournamentNameTextField.setText(Tournament.get().getName());
         tournamentNameTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
             // Update model when focus is lost
@@ -134,6 +136,10 @@ public class TournamentSettings extends NavigationFrame {
         return content;
     }
 
+    /**
+     * Creates a StageSettings VBox, that contains a header, textfield, checkbox and menufield.
+     * @return a specific VBOx with a header, textfield, checkbox
+     */
     private VBox stageSettings (){
         VBox content = new VBox();
         content.setMinWidth(300);
@@ -148,7 +154,7 @@ public class TournamentSettings extends NavigationFrame {
         // Stage settings
         VBox settings = new VBox();
         Label stageName = new Label("Stage name:");
-        TextField stageNameTf = new TextField();
+        FixedTextField stageNameTf = new FixedTextField();
         stageNameTf.setMaxWidth(250);
         Label format = new Label("Format:");
         MenuButton formatMenu = new MenuButton("Choose format");

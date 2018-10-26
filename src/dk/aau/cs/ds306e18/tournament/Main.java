@@ -11,7 +11,7 @@ public class Main  {
 
 
     }
-
+    //Creates and starts a new launcher
     private static void startLauncher(String[] args) {
         Launcher launcher = new Launcher().startLauncher(args);
     }
