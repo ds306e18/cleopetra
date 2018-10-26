@@ -2,12 +2,17 @@ package dk.aau.cs.ds306e18.tournament.UI;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
+import javafx.stage.Stage;
+
 import java.util.ArrayList;
 
 public class NavigationFrameTest extends NavigationFrame {
 
 
-    @Override
+    NavigationFrameTest(Stage primaryStage) throws Exception {
+        super();
+    }
+
     ArrayList<Tab> addContent() {
 
         //Create the tabs

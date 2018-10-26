@@ -1,5 +1,6 @@
-package dk.aau.cs.ds306e18.tournament.UI;
+package dk.aau.cs.ds306e18.tournament.UI.Tabs;
 
+import dk.aau.cs.ds306e18.tournament.UI.FixedTextField;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -7,18 +8,15 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
-import java.util.ArrayList;
 
-public class ParticipantSettings  extends NavigationFrame{
+public class ParticipantSettings  extends Tab{
 
     private Insets standardPaddingInsets = new Insets(5, 8, 8, 8);
     private int id = 1;
 
-    @Override
-    ArrayList<Tab> addContent() {
+    public ParticipantSettings() {
 
-        Tab participantSettings = new Tab();
-        participantSettings.setText("Participant Settings");
+        this.setText("Participant Settings");
 
         HBox contentAll = new HBox();
         VBox participantBox = participantBox();
@@ -28,12 +26,11 @@ public class ParticipantSettings  extends NavigationFrame{
         //Content all is the key point
         contentAll.getChildren().addAll(participantBox, teamBox, botInfo);
 
-        participantSettings.setContent(contentAll);
+        this.setContent(contentAll);
 
-        ArrayList<Tab> tabs = new ArrayList<>();
-        tabs.add(participantSettings);
+        //ArrayList<Tab> tabs = new ArrayList<>();
+        //tabs.add(participantSettings);
 
-        return tabs;
     }
 
     private VBox teamsBox(){
@@ -42,7 +39,7 @@ public class ParticipantSettings  extends NavigationFrame{
 
         VBox teamBox = new VBox();
         Label tournamentName = new Label("Team name:");
-        TextField textField = new TextField();
+        FixedTextField textField = new FixedTextField();
 
         TableView table = new TableView();
         table.setEditable(true);
@@ -94,11 +91,11 @@ public class ParticipantSettings  extends NavigationFrame{
 
         VBox botBox = new VBox();
         Label botName = new Label("Bot name:");
-        TextField namefield = new TextField();
+        FixedTextField namefield = new FixedTextField();
         Label devName = new Label("Developer:");
-        TextField devfield = new TextField();
+        FixedTextField devfield = new FixedTextField();
         Label configPath = new Label("Config path:");
-        TextField configField = new TextField();
+        FixedTextField configField = new FixedTextField();
 
         Label description = new Label("Description");
         TextArea descField = new TextArea();
@@ -174,5 +171,4 @@ public class ParticipantSettings  extends NavigationFrame{
 
         return header;
     }
-
 }

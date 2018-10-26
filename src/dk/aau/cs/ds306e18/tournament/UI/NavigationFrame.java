@@ -1,62 +1,40 @@
 package dk.aau.cs.ds306e18.tournament.UI;
 
-import javafx.application.Application;
+import dk.aau.cs.ds306e18.tournament.UI.Tabs.BracketOverview;
+import dk.aau.cs.ds306e18.tournament.UI.Tabs.ParticipantSettings;
+import dk.aau.cs.ds306e18.tournament.UI.Tabs.TournamentSettings;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 
-import java.util.ArrayList;
-
-public abstract class NavigationFrame  {
+public class NavigationFrame  extends VBox{
 
     private TabPane navigationTabs;
 
-    public void startWindow(Stage primaryStage, String title) throws Exception {
+    /** NavigationFrame extends VBox and is the primary VBox shown in the application
+     *  Navigationframe adds the tabs to a tabPane and adds a smaller buttom row on buttons.*/
+    NavigationFrame() {
 
         navigationTabs = new TabPane();
         navigationTabs.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
         addTabsToPane(); //Calls the addContent and fills in tabs.
 
-        VBox mainContent = new VBox();
         HBox bottomNav = bottomNav();
 
-        mainContent.getChildren().addAll(navigationTabs, bottomNav);
+        this.getChildren().addAll(navigationTabs, bottomNav);
 
-        primaryStage.setScene(new Scene(mainContent));
-        primaryStage.setResizable(false);
-        primaryStage.setWidth(800);
-        primaryStage.setHeight(600);
-        primaryStage.setTitle(title);
-        primaryStage.show();
-    }
-
-    public void startWindow(Stage primaryStage, ArrayList<Tab> tabs) throws Exception {
-
-        navigationTabs = new TabPane();
-        navigationTabs.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
-
-        primaryStage.setScene(new Scene(navigationTabs));
-        primaryStage.setResizable(false);
-        primaryStage.show();
     }
 
 
-    /** Calls addContent, and adds all the given tabs to the navigation bar. */
+    /** Calls Creates new tabs and adds them to the pane. */
     public void addTabsToPane(){
-
-        ArrayList<Tab> tabs = addContent();
-
-        for(Tab tab : tabs){
-            this.navigationTabs.getTabs().add(tab);
-        }
+        this.navigationTabs.getTabs().addAll(new TournamentSettings(), new ParticipantSettings(), new BracketOverview());
     }
 
+    /** Returns a HBox with two buttons aligned at the bottom of the scene*/
     private HBox bottomNav(){
         HBox bottomNavigation = new HBox();
 
@@ -74,10 +52,4 @@ public abstract class NavigationFrame  {
 
         return bottomNavigation;
     }
-
-    /** This is where the content of the window goes.
-     * Create tabs with the desired content and return them in an arrayList
-     * @return an arrayList of tabs with content for the window. */
-    abstract ArrayList<Tab> addContent();
-
 }
