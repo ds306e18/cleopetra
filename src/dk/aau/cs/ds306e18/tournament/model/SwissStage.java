@@ -15,7 +15,7 @@ public class SwissStage implements Stage, MatchListener {
     public void start(List<Team> teams) {
 
         rounds = new ArrayList<>();
-        MAX_ROUNDS = calculateMaxRounds(teams.size()); // TODO: Add the ability to end Swiss after X rounds
+        MAX_ROUNDS = calculateMaxRounds(teams.size());
         teamPoints = createPointsHashMap(teams);
         this.teams = new ArrayList<>(teams);
         status = StageStatus.RUNNING;
@@ -50,9 +50,9 @@ public class SwissStage implements Stage, MatchListener {
     public boolean createNewRound() {
 
         if(status == StageStatus.PENDING){
-            return false; //TODO Could be an exception
+            return false;
         } else if(status == StageStatus.CONCLUDED){
-            return false; //TODO Could be an exception
+            return false;
         } else if(rounds.size() == MAX_ROUNDS){ //Is it legal to create another round?
             return false;
         } else if(getUpcomingMatches().size() != 0) //Has all matches been played?
@@ -235,10 +235,10 @@ public class SwissStage implements Stage, MatchListener {
 
     @Override
     public StageStatus getStatus() {
-        return status; // TODO: Determine when the stage is over
+        return status;
     }
 
-    //TODO DELETE currently used for testing as a workaround.
+    /** Used for tests. This should not be used to anything else. */
     public ArrayList<Match> getRawMatches(){
         return rounds.get(rounds.size() - 1);
     }
@@ -252,5 +252,8 @@ public class SwissStage implements Stage, MatchListener {
     @Override
     public List<Team> getTopTeams(int count, TieBreaker tieBreaker) {
         return null; // TODO: Returns a list of the teams that performed best this stage. They should be sorted after performance, with best team first.
+
+
+
     }
 }
