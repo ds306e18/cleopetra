@@ -1,5 +1,9 @@
 package dk.aau.cs.ds306e18.tournament.UI.Tabs;
 
+import dk.aau.cs.ds306e18.tournament.model.Bot;
+import dk.aau.cs.ds306e18.tournament.model.SwissStage;
+import dk.aau.cs.ds306e18.tournament.model.Team;
+import javafx.css.Match;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -11,6 +15,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class BracketOverview extends Tab{
 
@@ -23,10 +28,16 @@ public class BracketOverview extends Tab{
 
     private Insets standardPaddingInsets = new Insets(5, 5, 5, 5);
 
+    private SwissStage tempSwissStage;
+
+    private Match selectedMatch = null;
+
 public BracketOverview(){
 
-         this.setText("Bracket Overview");
-         HBox content = new HBox();
+        this.tempSwissStage = createTempSwiss(); //TODO temp
+
+        this.setText("Bracket Overview");
+        HBox content = new HBox();
 
         //Bracket overview
         HBox bracketOverview = bracketOverview();
@@ -38,14 +49,35 @@ public BracketOverview(){
 
     }
 
+    //TODO TEMP
+    private SwissStage createTempSwiss(){
+
+        SwissStage swissStage = new SwissStage();
+
+        ArrayList<Team> teams = new ArrayList<Team>();
+
+        for(int i = 0; i < 6; i++){
+
+            ArrayList<Bot> bots = new ArrayList<>();
+            bots.add(new Bot("1","1",null));
+            bots.add(new Bot("2","2",null));
+
+            teams.add(new Team("Team " + i, bots, 1, "2"));
+        }
+
+        swissStage.start(teams);
+
+        return swissStage;
+    }
+
     private HBox bracketOverview(){
 
         HBox content = new HBox();
 
-        Image imageBracket = new Image("http://i.imgur.com/dcRQBS7.png");
-        ImageView imageViewBracket = new ImageView(imageBracket);
+        //Image imageBracket = new Image("http://i.imgur.com/dcRQBS7.png");
+        //ImageView imageViewBracket = new ImageView(imageBracket);
 
-        content.getChildren().add(imageViewBracket);
+        content.getChildren().add(tempSwissStage.getJavaFxNode());
 
         return content;
     }
@@ -191,5 +223,9 @@ public BracketOverview(){
     /** TODO This function is a placeholder for buttons. */
     private void tempHello(MatchStatus matchStatus){
         System.out.println("Hello");
+    }
+
+    private void setSelectedMatch(Match match){
+        this.selectedMatch = match;
     }
 }
