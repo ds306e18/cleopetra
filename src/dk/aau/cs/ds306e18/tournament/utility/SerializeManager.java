@@ -11,6 +11,9 @@ import dk.aau.cs.ds306e18.tournament.utility.instanceCreators.TieBreakerInstance
  */
 public class SerializeManager {
 
+    // Initialize a GSON-object where the TieBreaker InstanceCreator has been registered
+    private static Gson gson = new GsonBuilder()
+            .registerTypeAdapter(TieBreaker.class, new TieBreakerInstanceCreator()).create();
     private final static String filename = "tournamentState.obj";
 
     /**
@@ -20,7 +23,6 @@ public class SerializeManager {
      * @return JSON-string representation of given tournament parameter
      */
     public static String serialize(Tournament tournament) {
-        Gson gson = new GsonBuilder().registerTypeAdapter(TieBreaker.class, new TieBreakerInstanceCreator()).create();
         return gson.toJson(tournament);
     }
 
@@ -31,7 +33,6 @@ public class SerializeManager {
      * @return the reserialized Tournament object
      */
     public static Tournament deserialise(String json) {
-        Gson gson = new GsonBuilder().registerTypeAdapter(TieBreaker.class, new TieBreakerInstanceCreator()).create();
         return gson.fromJson(json, Tournament.class);
     }
 }
