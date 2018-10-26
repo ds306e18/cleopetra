@@ -1,5 +1,7 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
+import dk.aau.cs.ds306e18.tournament.UI.bracketObjects.SwissNode;
+import javafx.scene.Node;
 import java.util.*;
 
 public class SwissStage implements Stage, MatchListener {
@@ -132,7 +134,9 @@ public class SwissStage implements Stage, MatchListener {
 
                 //Has the two selected teams played each other before?
                 if(!hasTheseTeamsPlayedBefore(team1, team2)){
-                    createdMatches.add(new Match(new StarterSlot(team1), new StarterSlot(team2)));
+                    Match match = new Match(new StarterSlot(team1), new StarterSlot(team2));
+                    match.registerListener(this);
+                    createdMatches.add(match);
                     break; //Two valid teams has been found, and match has been created. BREAK.
                 }
             }
@@ -245,12 +249,22 @@ public class SwissStage implements Stage, MatchListener {
 
     @Override
     public void onMatchPlayed(Match match) {
-        // TODO: Register stage as listener to all relevant matches
         // TODO: Evaluate if last match, if it is then status = CONCLUDED. Also add tests
     }
 
     @Override
     public List<Team> getTopTeams(int count, TieBreaker tieBreaker) {
         return null; // TODO: Returns a list of the teams that performed best this stage. They should be sorted after performance, with best team first.
+    }
+
+    @Override
+    public Node getJavaFxNode() {
+
+        return new SwissNode(this);
+    }
+
+    /** @return an arraylist of the current created rounds. */
+    public ArrayList<ArrayList<Match>> getRounds(){
+        return new ArrayList<>(this.rounds);
     }
 }
