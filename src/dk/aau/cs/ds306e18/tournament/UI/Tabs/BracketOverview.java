@@ -22,28 +22,7 @@ public class BracketOverview extends Tab{
     }
 
     private Insets standardPaddingInsets = new Insets(5, 5, 5, 5);
-/**
-     TournamentRunning(){
 
-        Tab bracketTab = bracketTab();
-        Tab rankingsTab = rankingsTab();
-        Tab overlayControl = overlayControlTab();
-//        Tab settings = settingsTab();
-
-        bracketTab.setText("Bracket Overview");
-        rankingsTab.setText("Ranking");
-        overlayControl.setText("Overlay Control");
-//        settings.setText("Settings");
-
-        ArrayList<Tab> tabs = new ArrayList<>();
-        tabs.add(bracketTab);
-        tabs.add(rankingsTab);
-        tabs.add(overlayControl);
-//        tabs.add(settings);
-//        tabs.addAll(new TournamentSettings().addContent());
-
-    }
-*/
 public BracketOverview(){
 
          this.setText("Bracket Overview");
@@ -208,9 +187,6 @@ public BracketOverview(){
         tempHBox.setSpacing(10);
         mid2.getChildren().addAll(tempHBox);
     }
-
-
-
 
     /** TODO This function is a placeholder for buttons. */
     private void tempHello(MatchStatus matchStatus){
