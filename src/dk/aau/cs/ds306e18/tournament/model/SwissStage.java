@@ -256,7 +256,38 @@ public class SwissStage implements Stage, MatchListener {
 
     @Override
     public List<Team> getTopTeams(int count, TieBreaker tieBreaker) {
-        return null; // TODO: Returns a list of the teams that performed best this stage. They should be sorted after performance, with best team first.
 
+        //Create points ordered team list
+        ArrayList<Team> teamPointsOrderList = new ArrayList<>();
+        ArrayList<Team> tempTeamsList = new ArrayList<>(teams);
+        while(tempTeamsList.size() != 0){
+            Team teamWithMostPoints = tempTeamsList.get(0);
+
+            //Find the team with the most points
+            for(Team team : tempTeamsList){
+                if(teamPoints.get(team) > teamPoints.get(teamWithMostPoints))
+                    teamWithMostPoints = team;
+            }
+
+            teamPointsOrderList.add(teamWithMostPoints);
+            tempTeamsList.remove(teamWithMostPoints);
+        }
+
+        if(teams.size() <= count) //Is the requested count larger then the count of teams?
+            return new ArrayList<>(teamPointsOrderList);
+        else {
+            if (teamPoints.get(teamPointsOrderList.get(count - 1)).equals(teamPoints.get(teamPointsOrderList.get(count)))) {
+
+                
+                return null; //TODO Tiebreaker
+
+            }
+            //Get the desired number of teams
+            ArrayList<Team> desiredNumberOfTeam = new ArrayList<>();
+            for (int i = 0; i < count; i++)
+                desiredNumberOfTeam.add(teamPointsOrderList.get(i));
+
+            return desiredNumberOfTeam;
+        }
     }
 }
