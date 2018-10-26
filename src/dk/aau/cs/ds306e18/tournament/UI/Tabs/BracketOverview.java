@@ -46,15 +46,17 @@ public BracketOverview(){
 
         //Control panel
         this.controlpanel = bracketControlpanel();
-        content.getChildren().addAll(bracketOverview, controlpanel);
+
+        this.content.getChildren().addAll(bracketOverview, controlpanel);
         this.setContent(content);
 
     }
 
+    /** Used to update the control panel.*/
     private void updateControlPanel(){
-        VBox newControlpanel = bracketControlpanel();
+        VBox newControlPanel = bracketControlpanel();
 
-        this.controlpanel = newControlpanel;
+        this.controlpanel = newControlPanel;
 
         this.content.getChildren().clear();
         this.content.getChildren().addAll(bracketOverview, controlpanel);
@@ -237,9 +239,10 @@ public BracketOverview(){
         System.out.println("Hello");
     }
 
+    /** Is called when a match is selected.
+     * @param match the selected match. (Used for the information.)*/
     public void setSelectedMatch(Match match){
         this.selectedMatch = match;
-        //TODO should update controlPanel
         updateControlPanel();
     }
 }
