@@ -3,9 +3,8 @@ package dk.aau.cs.ds306e18.tournament.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SingleEliminationStage implements Stage, MatchListener {
+public class SingleEliminationStage implements Format, MatchListener {
 
-    private String name = "Single Elimination";
     private StageStatus status = StageStatus.PENDING;
     private ArrayList<Team> seededTeams;
     private Match finalMatch;
@@ -18,15 +17,6 @@ public class SingleEliminationStage implements Stage, MatchListener {
         generateBracket(rounds);
         seedBracket(seededTeams);
         status = StageStatus.RUNNING;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String getName() {
-        return null;
     }
 
     @Override
