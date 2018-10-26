@@ -7,7 +7,7 @@ public class TextField extends javafx.scene.control.TextField {
     private final double minWidth = 100;
     private final double minHeight = 20;
 
-
+    /** A simple class with specific settings, replaces all other textField objects*/
     public TextField(){
         this.setMaxSize(maxWidth,maxHeight);
         this.setMinSize(minWidth,minHeight);

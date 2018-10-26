@@ -11,9 +11,11 @@ import javafx.scene.text.Font;
 
 public class TournamentSettings extends Tab {
 
+    //Fields
     private Insets standardPaddingInsets = new Insets(5, 8, 8, 8);
     private int id = 1;
 
+    /** TournamentSettings extends Tab and creates a tab with a specific layout*/
     public TournamentSettings() {
 
         this.setText("Tournament Settings");
@@ -33,12 +35,18 @@ public class TournamentSettings extends Tab {
 
     }
 
+    /** Creates an empty box to create space on the tab
+     * @return a blank VBox     */
     private VBox fillerBox(){
         VBox content = new VBox();
         content.setMinWidth(100);
 
         return content;
     }
+
+    /**
+     * Creates the main settings VBox, it contains a table with functioning buttons, a header and a dropdown menu
+     * @return a specific VBox*/
 
     private VBox mainSettings(){
         VBox content = new VBox();
@@ -118,6 +126,10 @@ public class TournamentSettings extends Tab {
         return content;
     }
 
+    /**
+     * Creates a StageSettings VBox, that contains a header, textfield, checkbox and menufield.
+     * @return a specific VBOx with a header, textfield, checkbox
+     */
     private VBox stageSettings (){
         VBox content = new VBox();
         content.setMinWidth(300);
