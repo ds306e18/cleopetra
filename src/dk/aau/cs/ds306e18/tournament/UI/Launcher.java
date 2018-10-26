@@ -12,18 +12,22 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
 
 
 public class Launcher extends Application{
 
+    /*Fields*/
+    /** Version of the current program - no real function*/
     String version = "v 0.1.1";
 
+    /** The start launcher starts this launcher. This may only happen once as the launch command can only be called once*/
     public Launcher startLauncher(String[] args){
         launch(args);
         return null;
     }
 
+
+    /** Starts the launcher and creates the first primary scene with buttons and a logo*/
     @Override
     public void start(Stage primaryStage) throws Exception {
 
@@ -62,7 +66,7 @@ public class Launcher extends Application{
         exitButton.setText("Exit");
         exitButton.setOnAction(e->exitLauncher());
 
-          Image image = new Image("https://i.imgur.com/KE6nXem.png");
+        Image image = new Image("https://i.imgur.com/KE6nXem.png");
         ImageView imageView = new ImageView(image);
 
 
@@ -76,25 +80,29 @@ public class Launcher extends Application{
         importButton.setPrefSize(200,20);
         exitButton.setPrefSize(100,20);
 
-        StackPane root = new StackPane();
 
+        StackPane root = new StackPane();
         VBox menu = new VBox();
         menu.getChildren().addAll(imageView, newButton,openButton,importButton,exitButton);
         menu.setAlignment(Pos.CENTER);
 
         root.getChildren().add(menu);
 
+        //Sets scene and shows the stage (window)
         primaryStage.setScene(new Scene(root, 650, 400));
         primaryStage.show();
     }
 
+    /** Button method, not implemented yet     */
     private void importTournament(Stage primaryStage) throws Exception {
         System.out.println("Not Implemented yet");
     }
+    /** Button method, not implemented yet     */
     private void openLocalTournament(Stage primaryStage) throws Exception {
         System.out.println("Not implemented yet");
     }
 
+    /** Button method,  sets a navigationframe object on the scene then resizes the window and shows the stage    */
     private void createNewTournament(Stage primaryStage) throws Exception {
         //Closes the launcher opens the tournamentsettings
         primaryStage.close();
@@ -107,7 +115,7 @@ public class Launcher extends Application{
         primaryStage.setTitle("New Tournament");
         primaryStage.show();
     }
-
+    /** Button method, shuts down the program    */
     private void exitLauncher(){
         System.exit(0);
     }
