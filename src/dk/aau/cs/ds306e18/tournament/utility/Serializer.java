@@ -9,12 +9,11 @@ import dk.aau.cs.ds306e18.tournament.utility.instanceCreators.TieBreakerInstance
 /**
  * SerializeManager handles all methods associated with serializing and deserializing a Tournament object
  */
-public class SerializeManager {
+public class Serializer {
 
     // Initialize a GSON-object where the TieBreaker InstanceCreator has been registered
     private static Gson gson = new GsonBuilder()
             .registerTypeAdapter(TieBreaker.class, new TieBreakerInstanceCreator()).create();
-    private final static String filename = "tournamentState.obj";
 
     /**
      * Takes a tournament and returns the serialized object as a String
