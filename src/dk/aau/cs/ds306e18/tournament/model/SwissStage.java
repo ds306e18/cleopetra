@@ -7,7 +7,7 @@ public class SwissStage implements Stage, MatchListener {
     private String name = "Swiss";
     private StageStatus status = StageStatus.PENDING;
     private ArrayList<ArrayList<Match>> rounds;
-    private int MAX_ROUNDS;
+    private int maxRounds;
     private ArrayList<Team> teams;
     private HashMap<Team, Integer> teamPoints;
 
@@ -15,7 +15,7 @@ public class SwissStage implements Stage, MatchListener {
     public void start(List<Team> teams) {
 
         rounds = new ArrayList<>();
-        MAX_ROUNDS = calculateMaxRounds(teams.size());
+        maxRounds = calculateMaxRounds(teams.size());
         teamPoints = createPointsHashMap(teams);
         this.teams = new ArrayList<>(teams);
         status = StageStatus.RUNNING;
@@ -53,7 +53,7 @@ public class SwissStage implements Stage, MatchListener {
             return false;
         } else if(status == StageStatus.CONCLUDED){
             return false;
-        } else if(rounds.size() == MAX_ROUNDS){ //Is it legal to create another round?
+        } else if(rounds.size() == maxRounds){ //Is it legal to create another round?
             return false;
         } else if(getUpcomingMatches().size() != 0) //Has all matches been played?
             return false;
@@ -217,13 +217,13 @@ public class SwissStage implements Stage, MatchListener {
         return playedMatches;
     }
 
-    public int getMAX_ROUNDS() {
-        return MAX_ROUNDS;
+    public int getMaxRounds() {
+        return maxRounds;
     }
 
     public boolean hasMaxNumberOfRounds() {
 
-        return rounds.size() == getMAX_ROUNDS();
+        return rounds.size() == getMaxRounds();
     }
 
     public void setName(String name) {
@@ -247,14 +247,14 @@ public class SwissStage implements Stage, MatchListener {
 
     @Override
     public void onMatchPlayed(Match match) {
+
         // TODO: Evaluate if last match, if it is then status = CONCLUDED. Also add tests
+        
     }
 
     @Override
     public List<Team> getTopTeams(int count, TieBreaker tieBreaker) {
         return null; // TODO: Returns a list of the teams that performed best this stage. They should be sorted after performance, with best team first.
-
-
 
     }
 }

@@ -19,7 +19,7 @@ public class SwissStageTest {
         SwissStage bracket = new SwissStage();
         bracket.start(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
-        assertEquals(numberOfTeams - 1, bracket.getMAX_ROUNDS());
+        assertEquals(numberOfTeams - 1, bracket.getMaxRounds());
     }
 
     //Odd number of teams
@@ -32,7 +32,7 @@ public class SwissStageTest {
         SwissStage bracket = new SwissStage();
         bracket.start(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
-        assertEquals(numberOfTeams, bracket.getMAX_ROUNDS());
+        assertEquals(numberOfTeams, bracket.getMaxRounds());
     }
 
     //No teams
@@ -45,7 +45,7 @@ public class SwissStageTest {
         SwissStage bracket = new SwissStage();
         bracket.start(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
-        assertEquals(numberOfTeams, bracket.getMAX_ROUNDS());
+        assertEquals(numberOfTeams, bracket.getMaxRounds());
     }
 
     //more than 0 matches // one round
