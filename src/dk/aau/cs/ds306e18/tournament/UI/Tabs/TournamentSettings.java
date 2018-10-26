@@ -1,9 +1,14 @@
 package dk.aau.cs.ds306e18.tournament.UI.Tabs;
 
-import dk.aau.cs.ds306e18.tournament.UI.TextField;
+import dk.aau.cs.ds306e18.tournament.model.TieBreaker;
+import dk.aau.cs.ds306e18.tournament.model.TieBreakerBySeed;
+import dk.aau.cs.ds306e18.tournament.model.Tournament;
+import javafx.collections.FXCollections;
+import dk.aau.cs.ds306e18.tournament.UI.FixedTextField;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -60,21 +65,26 @@ public class TournamentSettings extends Tab {
         header.setPadding(standardPaddingInsets);
 
         // Tournament general settings
-        VBox settings = new VBox();
-        Label tournamentName = new Label("Tournament name:");
-        dk.aau.cs.ds306e18.tournament.UI.TextField textField = new dk.aau.cs.ds306e18.tournament.UI.TextField();
-
-        settings.setPadding(standardPaddingInsets);
-        settings.getChildren().addAll(tournamentName, textField);
+        VBox tournamentNameBox = new VBox();
+        Label tournamentNameLabel = new Label("Tournament name:");
+        FixedTextField tournamentNameTextField = new FixedTextField();
+        tournamentNameTextField.setText(Tournament.get().getName());
+        tournamentNameTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            // Update model when focus is lost
+            if (!newValue) Tournament.get().setName(tournamentNameTextField.getText());
+        });
+        tournamentNameBox.setPadding(standardPaddingInsets);
+        tournamentNameBox.getChildren().addAll(tournamentNameLabel, tournamentNameTextField);
 
         // Tiebreaker
-        HBox tieBreak = new HBox();
-        Label text2 = new Label("Tiebreaker rule: ");
-        MenuButton menuButton = new MenuButton("Choose rule");
-        menuButton.getItems().addAll(new MenuItem("Setting 1"), new MenuItem("Setting 2"));
-
-        tieBreak.setPadding(standardPaddingInsets);
-        tieBreak.getChildren().addAll(text2, menuButton);
+        BorderPane tieBreaker = new BorderPane();
+        Label tieBreakerLabel = new Label("Tiebreak by: ");
+        ChoiceBox<TieBreaker> tieBreakerChoiceBox = new ChoiceBox<>(FXCollections.observableArrayList(new TieBreakerBySeed()));
+        tieBreakerChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> Tournament.get().setTieBreaker(newValue));
+        tieBreakerChoiceBox.getSelectionModel().select(0);
+        tieBreaker.setPadding(standardPaddingInsets);
+        tieBreaker.setLeft(tieBreakerLabel);
+        tieBreaker.setRight(tieBreakerChoiceBox);
 
         // Stage overview table
         Label stageHeader = new Label("Stages");
@@ -87,7 +97,7 @@ public class TournamentSettings extends Tab {
         stageIdCol.setResizable(false);
         stageIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
 
-        TableColumn stageNameCol = new TableColumn("Stage name");
+        TableColumn stageNameCol = new TableColumn("Name");
         stageNameCol.setResizable(false);
         stageNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         table.getColumns().addAll(stageIdCol, stageNameCol);
@@ -121,7 +131,7 @@ public class TournamentSettings extends Tab {
 
 
 
-        content.getChildren().addAll(header, settings, tieBreak, stageBox);
+        content.getChildren().addAll(header, tournamentNameBox, tieBreaker, stageBox);
 
         return content;
     }
@@ -144,7 +154,7 @@ public class TournamentSettings extends Tab {
         // Stage settings
         VBox settings = new VBox();
         Label stageName = new Label("Stage name:");
-        dk.aau.cs.ds306e18.tournament.UI.TextField stageNameTf = new TextField();
+        FixedTextField stageNameTf = new FixedTextField();
         stageNameTf.setMaxWidth(250);
         Label format = new Label("Format:");
         MenuButton formatMenu = new MenuButton("Choose format");

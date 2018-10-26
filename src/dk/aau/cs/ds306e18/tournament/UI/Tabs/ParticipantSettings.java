@@ -1,6 +1,6 @@
 package dk.aau.cs.ds306e18.tournament.UI.Tabs;
 
-import dk.aau.cs.ds306e18.tournament.UI.TextField;
+import dk.aau.cs.ds306e18.tournament.UI.FixedTextField;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -39,7 +39,7 @@ public class ParticipantSettings  extends Tab{
 
         VBox teamBox = new VBox();
         Label tournamentName = new Label("Team name:");
-        dk.aau.cs.ds306e18.tournament.UI.TextField textField = new dk.aau.cs.ds306e18.tournament.UI.TextField();
+        FixedTextField textField = new FixedTextField();
 
         TableView table = new TableView();
         table.setEditable(true);
@@ -91,11 +91,11 @@ public class ParticipantSettings  extends Tab{
 
         VBox botBox = new VBox();
         Label botName = new Label("Bot name:");
-        dk.aau.cs.ds306e18.tournament.UI.TextField namefield = new dk.aau.cs.ds306e18.tournament.UI.TextField();
+        FixedTextField namefield = new FixedTextField();
         Label devName = new Label("Developer:");
-        dk.aau.cs.ds306e18.tournament.UI.TextField devfield = new dk.aau.cs.ds306e18.tournament.UI.TextField();
+        FixedTextField devfield = new FixedTextField();
         Label configPath = new Label("Config path:");
-        dk.aau.cs.ds306e18.tournament.UI.TextField configField = new TextField();
+        FixedTextField configField = new FixedTextField();
 
         Label description = new Label("Description");
         TextArea descField = new TextArea();
