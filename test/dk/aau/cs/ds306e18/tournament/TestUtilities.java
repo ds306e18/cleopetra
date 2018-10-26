@@ -1,13 +1,25 @@
 package dk.aau.cs.ds306e18.tournament;
 
-import dk.aau.cs.ds306e18.tournament.model.Bot;
-import dk.aau.cs.ds306e18.tournament.model.Team;
+import dk.aau.cs.ds306e18.tournament.model.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
+import static java.time.Instant.now;
+
 public class TestUtilities {
+
+    /**
+     * Returns a random int between lower and upper
+     * @param lower limit, inclusive of limit
+     * @param upper limit, inclusive of limit
+     * @return random int
+     */
+    private static int randomIntInRange(int lower, int upper) {
+        //seed java.util random function for greater resolution when called in rapid succession
+        return new Random(now().getNano()).nextInt(upper - lower) + lower;
+    }
 
     private static final ArrayList<String> botNames = new ArrayList<String>(Arrays.asList(
             "Boten Anna", "JoeyBot", "MightyBot", "2DayHackBot", "AdversityBot", "Air Bud",
@@ -49,7 +61,7 @@ public class TestUtilities {
     }
 
     /** Generates a team with the given team size.
-     * @param teamSize the requested team size.
+     * @param teamSize the requested number of players on the team.
      * @return a team with the requested number of members. */
     public static Team generateTeam(int teamSize){
 
@@ -77,5 +89,28 @@ public class TestUtilities {
         }
 
         return teams;
+    }
+
+    /**
+     * Generates a random tournament with four teams
+     * @return random Tournament object
+     */
+    public static Tournament generateTournament() {
+        int minNumPlayers = 2;
+        int maxNumPlayers = 10;
+
+        Tournament tournament = new Tournament();
+        tournament.setName("DatTournament");
+
+        // add between 2 to 20 teams, with between minNumPlayers
+        for (int i = 0; i < randomIntInRange(2, 20); i++) {
+            tournament.addTeam(generateTeam(randomIntInRange(minNumPlayers, maxNumPlayers)));
+        }
+
+        //TODO; add stage
+        SingleEliminationStage singleEliminationStage = new SingleEliminationStage();
+        //tournament.addStage();
+
+        return tournament;
     }
 }
