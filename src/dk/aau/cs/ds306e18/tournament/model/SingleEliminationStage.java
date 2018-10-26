@@ -1,7 +1,9 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class SingleEliminationStage implements Stage {
 
@@ -36,25 +38,32 @@ public class SingleEliminationStage implements Stage {
     }
 
     @Override
-    public ArrayList<Match> getAllMatches() {
+    public List<Match> getAllMatches() {
         return finalMatch.getTreeAsListBFS();
     }
 
     @Override
-    public ArrayList<Match> getUpcomingMatches() {
-        return null;
+    public List<Match> getUpcomingMatches() {
+         return finalMatch.getTreeAsListBFS().stream().filter(c -> c.getStatus().equals(MatchStatus.READY_TO_BE_PLAYED) && !c.hasBeenPlayed()).collect(Collectors.toList());
     }
 
     @Override
-    public ArrayList<Match> getPendingMatches() {
-        return null;
+    public List<Match> getPendingMatches() {
+        return finalMatch.getTreeAsListBFS().stream().filter(c -> c.getStatus().equals(MatchStatus.NOT_PLAYABLE)).collect(Collectors.toList());
     }
 
     @Override
-    public ArrayList<Match> getCompletedMatches() {
-        return null;
+    public List<Match> getCompletedMatches() {
+        return finalMatch.getTreeAsListBFS().stream().filter(c -> c.hasBeenPlayed()).collect(Collectors.toList());
     }
 
+    public Match[] getMatchesAsArray() {
+        return this.matches;
+    }
+
+    /** Generates a single-elimination bracket structure. References between the empty matches are made by winnerOf and starterSlots.
+     * Matches are accessed through finalMatch (the root).
+     * @param rounds the amount of rounds in the bracket*/
     private void generateBracket(int rounds) {
         int matchesInCurrentRound, matchNumberInRound, matchIndex = 0;
         ArrayList<Match> bracketList = new ArrayList<>();
@@ -85,9 +94,16 @@ public class SingleEliminationStage implements Stage {
         matches = finalMatch.getTreeAsListBFS().toArray(matches);
     }
 
+    /** Seeds the single-elimination bracket with teams to give better placements.
+     * If there are an insufficient amount of teams, the team(s) with the best seeding(s) will be placed in the next round instead.
+     * @param seededTeams a list containing the teams in the tournament
+     * @param rounds the amount of rounds in the bracket
+     */
     private void seedBracket(List<Team> seededTeams, int rounds) {
 
         ArrayList<Team> seedList = new ArrayList<>(seededTeams);
+
+        //Create needed amount of byes to match with the slots
         ArrayList<Team> byeList = new ArrayList<>();
         int amountOfByes = (int) Math.pow(2, rounds) - seedList.size();
         while(byeList.size() < amountOfByes) {
@@ -95,10 +111,11 @@ public class SingleEliminationStage implements Stage {
         }
         seedList.addAll(byeList);
 
+        //Variables used for seeding
         int slice = 1;
         int interactions = seedList.size() / 2;
 
-        //TODO allow the seeds to sort with every number
+        //Order the teams in a seeded list
         while (slice < interactions) {
             ArrayList<Team> temp = new ArrayList<>(seedList);
             seedList.clear();
@@ -114,7 +131,8 @@ public class SingleEliminationStage implements Stage {
             slice *= 2;
         }
 
-        // TODO: Use the seedList to something
+        // Using the seeded list to place the teams into the correct matches
+        // If there are byes, the best seeded teams will be placed in their slots parents
         int seedMatchIndex = finalMatch.getTreeAsListBFS().size()-1;
         for(int playerIndex = 0; playerIndex < seedList.size();){
             if(byeList.contains(seedList.get(playerIndex)) || byeList.contains(seedList.get(playerIndex+1))) {
@@ -126,7 +144,7 @@ public class SingleEliminationStage implements Stage {
             else {
                 matches[seedMatchIndex].setBlue(new StarterSlot(seedList.get(playerIndex)));
                 playerIndex++;
-                matches[seedMatchIndex].setOrange(new StarterSlot(seedList.get(seedMatchIndex)));
+                matches[seedMatchIndex].setOrange(new StarterSlot(seedList.get(playerIndex)));
                 seedMatchIndex--;
                 playerIndex++;
             }
@@ -141,7 +159,7 @@ public class SingleEliminationStage implements Stage {
         }
     }
 
-    private int getParent(int i) {
+    public int getParent(int i) {
         i = i + 1;
         if (i == 1) {
             return -1;
