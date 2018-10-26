@@ -134,4 +134,21 @@ public class SingleEliminationStageTest {
         bracket.getAllMatches().get(bracket.getAllMatches().size()-2).setHasBeenPlayed(true);
         assertEquals(2, bracket.getCompletedMatches().size());
     }
+
+    @Test
+    public void getTopTeamsTest01(){
+        SingleEliminationStage bracket = new SingleEliminationStage();
+        bracket.start(TestUtilities.generateSeededTeams(8,1));
+        for(int matchIndex = 6; matchIndex >= 0; matchIndex--){
+            if(bracket.getAllMatches().get(matchIndex).getBlueTeam().getInitialSeedValue() < bracket.getAllMatches().get(matchIndex).getOrangeTeam().getInitialSeedValue()) {
+                bracket.getAllMatches().get(matchIndex).setBlueScore(1);
+                bracket.getAllMatches().get(matchIndex).setHasBeenPlayed(true);
+            }
+            else{
+                bracket.getAllMatches().get(matchIndex).setOrangeScore(1);
+                bracket.getAllMatches().get(matchIndex).setHasBeenPlayed(true);
+            }
+        }
+        bracket.getTopTeams(4, new TieBreakerBySeed());
+    }
 }
