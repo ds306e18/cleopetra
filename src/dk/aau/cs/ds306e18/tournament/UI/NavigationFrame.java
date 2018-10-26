@@ -5,18 +5,18 @@ import dk.aau.cs.ds306e18.tournament.UI.Tabs.ParticipantSettings;
 import dk.aau.cs.ds306e18.tournament.UI.Tabs.TournamentSettings;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 
 public class NavigationFrame  extends VBox{
 
     private TabPane navigationTabs;
 
-    NavigationFrame() throws Exception {
+    /** NavigationFrame extends VBox and is the primary VBox shown in the application
+     *  Navigationframe adds the tabs to a tabPane and adds a smaller buttom row on buttons.*/
+    NavigationFrame() {
 
         navigationTabs = new TabPane();
         navigationTabs.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
@@ -34,6 +34,7 @@ public class NavigationFrame  extends VBox{
         this.navigationTabs.getTabs().addAll(new TournamentSettings(), new ParticipantSettings(), new BracketOverview());
     }
 
+    /** Returns a HBox with two buttons aligned at the bottom of the scene*/
     private HBox bottomNav(){
         HBox bottomNavigation = new HBox();
 
@@ -51,10 +52,4 @@ public class NavigationFrame  extends VBox{
 
         return bottomNavigation;
     }
-
-    /** This is where the content of the window goes.
-     * Create tabs with the desired content and return them in an arrayList
-     * @return an arrayList of tabs with content for the window. */
-    // ArrayList<Tab> addContent();
-
 }
