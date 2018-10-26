@@ -248,8 +248,10 @@ public class SwissStage implements Stage, MatchListener {
     @Override
     public void onMatchPlayed(Match match) {
 
-        // TODO: Evaluate if last match, if it is then status = CONCLUDED. Also add tests
-        
+        //Evaluate: has last possible match been played?
+        if(hasMaxNumberOfRounds() && getUpcomingMatches().size() == 0){
+            status = StageStatus.CONCLUDED;
+        }
     }
 
     @Override
