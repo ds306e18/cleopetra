@@ -1,27 +1,39 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
-import java.util.List;
+public class Stage {
 
-public interface Stage {
+    private String name;
+    private Format format;
+    private int numberOfTeamsWanted = 16;
 
-    /** Starts the stage with the given list of teams. The teams are seeded after the order in the list. */
-    void start(List<Team> seededTeams);
+    public Stage(String name, Format format) {
+        this.name = name;
+        this.format = format;
+    }
 
-    String getName();
-    StageStatus getStatus();
+    public String getName() {
+        return name;
+    }
 
-    /** Returns a list of all the matches in this stage. */
-    List<Match> getAllMatches();
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    /** Returns a list of all the matches that are ready to be played, but haven't played yet. */
-    List<Match> getUpcomingMatches();
+    public Format getFormat() {
+        return format;
+    }
 
-    /** Returns a list of all planned matches, that can't be played yet. */
-    List<Match> getPendingMatches();
+    public void setFormat(Format format) {
+        if (this.format.getStatus() != StageStatus.PENDING) throw new IllegalStateException("Stage has already started.");
+        this.format = format;
+    }
 
-    /** Returns a list of all the matches that have been played. */
-    List<Match> getCompletedMatches();
+    public int getNumberOfTeamsWanted() {
+        return numberOfTeamsWanted;
+    }
 
-    /** Returns a list of the teams that performed best this stage. They are sorted after performance, with best team first. */
-    List<Team> getTopTeams(int count, TieBreaker tieBreaker);
+    public void setNumberOfTeamsWanted(int numberOfTeamsWanted) {
+        if (this.format.getStatus() != StageStatus.PENDING) throw new IllegalStateException("Stage has already started.");
+        this.numberOfTeamsWanted = numberOfTeamsWanted;
+    }
 }
