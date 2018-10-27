@@ -64,10 +64,12 @@ public class GeneralSettings extends VBox {
             stageListView.refresh();
         });
         stageDeleteBtn.setOnAction(e -> {
-            int selectedIndex = stageListView.getFocusModel().focusedIndexProperty().intValue();
-            Tournament.get().removeStage(selectedIndex);
-            stageListView.setItems(FXCollections.observableArrayList(Tournament.get().getStages()));
-            stageListView.refresh();
+            int selectedIndex = stageListView.getSelectionModel().getSelectedIndex();
+            if (selectedIndex != -1) {
+                Tournament.get().removeStage(selectedIndex);
+                stageListView.setItems(FXCollections.observableArrayList(Tournament.get().getStages()));
+                stageListView.refresh();
+            }
         });
         VBox stageBox = new VBox();
         stageBox.setSpacing(5);

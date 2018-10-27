@@ -19,8 +19,9 @@ public class GeneralSettingsTab extends Tab {
         HBox content = new HBox();
 
         GeneralSettings generalSettings = new GeneralSettings();
+        StageSettings stageSettings = new StageSettings(null);
+        generalSettings.setOnStageSelected(stage -> stageSettings.setStage(stage));
         VBox filler = fillerBox();
-        StageSettings stageSettings = new StageSettings();
 
         content.getChildren().addAll(generalSettings, filler, stageSettings);
         this.setContent(content);

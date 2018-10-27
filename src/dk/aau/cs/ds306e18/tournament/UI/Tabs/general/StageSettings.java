@@ -1,15 +1,13 @@
 package dk.aau.cs.ds306e18.tournament.UI.Tabs.general;
 
-import dk.aau.cs.ds306e18.tournament.UI.FixedTextField;
 import dk.aau.cs.ds306e18.tournament.model.Format;
-import dk.aau.cs.ds306e18.tournament.model.TieBreaker;
-import dk.aau.cs.ds306e18.tournament.model.TieBreakerBySeed;
-import dk.aau.cs.ds306e18.tournament.model.Tournament;
+import dk.aau.cs.ds306e18.tournament.model.Stage;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
-import javafx.scene.control.*;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
@@ -19,7 +17,9 @@ public class StageSettings extends VBox {
     private final ChoiceBox<Format> formatChoiceBox;
     private Insets standardPaddingInsets = new Insets(8, 8, 8, 8);
 
-    public StageSettings() {
+    private Stage stage;
+
+    public StageSettings(Stage stage) {
         setMinWidth(260);
 
         // Header
@@ -33,6 +33,7 @@ public class StageSettings extends VBox {
         VBox nameBox = new VBox();
         Label nameLabel = new Label("Stage name:");
         nameTextField = new TextField();
+        nameTextField.setOnKeyReleased(e -> this.stage.setName(nameTextField.getText()));
         nameBox.getChildren().addAll(nameLabel, nameTextField);
         nameBox.setPadding(standardPaddingInsets);
 
@@ -48,5 +49,17 @@ public class StageSettings extends VBox {
 
 
         getChildren().addAll(header, nameBox, formatLayout);
+
+        setStage(stage);
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+        if (stage == null) {
+            setVisible(false);
+        } else {
+            setVisible(true);
+            nameTextField.setText(stage.getName());
+        }
     }
 }
