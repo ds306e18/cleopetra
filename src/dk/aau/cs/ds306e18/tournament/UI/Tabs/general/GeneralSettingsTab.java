@@ -20,9 +20,9 @@ public class GeneralSettingsTab extends Tab {
 
         GeneralSettings generalSettings = new GeneralSettings();
         VBox filler = fillerBox();
-        VBox secondContent = stageSettings();
+        StageSettings stageSettings = new StageSettings();
 
-        content.getChildren().addAll(generalSettings, filler, secondContent);
+        content.getChildren().addAll(generalSettings, filler, stageSettings);
         this.setContent(content);
     }
 
@@ -30,54 +30,6 @@ public class GeneralSettingsTab extends Tab {
     private VBox fillerBox(){
         VBox content = new VBox();
         content.setMinWidth(100);
-
-        return content;
-    }
-
-    /**
-     * Creates a StageSettings VBox, that contains a header, textfield, checkbox and menufield.
-     * @return a specific VBOx with a header, textfield, checkbox
-     */
-    private VBox stageSettings (){
-        VBox content = new VBox();
-        content.setMinWidth(300);
-
-        // Header
-        VBox header = new VBox();
-        Label headerText = new Label("Stage settings");
-        headerText.setFont(new Font("Arial", 20));
-        header.getChildren().addAll(headerText);
-        header.setPadding(standardPaddingInsets);
-
-        // Stage settings
-        VBox settings = new VBox();
-        Label stageName = new Label("Stage name:");
-        FixedTextField stageNameTf = new FixedTextField();
-        stageNameTf.setMaxWidth(250);
-        Label format = new Label("Format:");
-        MenuButton formatMenu = new MenuButton("Choose format");
-        Label seedingMethod = new Label("Seeding method:");
-        MenuButton seedingMenu = new MenuButton("Choose method");
-
-        Label participants = new Label("Participants");
-        participants.setFont(new Font("Arial", 15));
-        participants.setPadding(new Insets(25, 0 ,5, 0));
-
-        CheckBox checkBox = new CheckBox("Use top 3 participants from previous stage?");
-
-        HBox buttons = new HBox();
-        Button addBtn = new Button("Apply changes");
-        Button deleteBtn = new Button("Revert");
-        buttons.setSpacing(10);
-
-        buttons.setPadding(new Insets(25, 0, 0 , 0));
-        buttons.getChildren().addAll(addBtn, deleteBtn);
-
-        settings.setPadding(standardPaddingInsets);
-        settings.getChildren().addAll(stageName, stageNameTf, format, formatMenu,seedingMethod, seedingMenu,participants, checkBox, buttons);
-
-
-        content.getChildren().addAll(header, settings);
 
         return content;
     }

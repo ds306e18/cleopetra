@@ -17,6 +17,8 @@ public class GeneralSettings extends VBox {
     private Consumer<Stage> onStageSelected;
 
     public GeneralSettings() {
+        setMinWidth(260);
+
         // Header
         VBox header = new VBox();
         Label headerText = new Label("Tournament settings");
@@ -27,8 +29,7 @@ public class GeneralSettings extends VBox {
         // Tournament name
         VBox tournamentNameBox = new VBox();
         Label tournamentNameLabel = new Label("Tournament name:");
-        TextField tournamentNameTextField = new TextField();
-        tournamentNameTextField.setText(Tournament.get().getName());
+        TextField tournamentNameTextField = new TextField(Tournament.get().getName());
         tournamentNameTextField.setOnKeyReleased(e -> Tournament.get().setName(tournamentNameTextField.getText()));
         tournamentNameBox.setPadding(standardPaddingInsets);
         tournamentNameBox.getChildren().addAll(tournamentNameLabel, tournamentNameTextField);
