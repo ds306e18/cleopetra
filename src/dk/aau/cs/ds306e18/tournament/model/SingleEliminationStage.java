@@ -5,9 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class SingleEliminationStage implements Stage, MatchListener {
+public class SingleEliminationStage implements Format, MatchListener {
 
-    private String name = "Single Elimination";
     private StageStatus status = StageStatus.PENDING;
     private ArrayList<Team> seededTeams;
     private Match finalMatch;
@@ -21,15 +20,6 @@ public class SingleEliminationStage implements Stage, MatchListener {
         generateBracket(rounds);
         seedBracket(seededTeams, rounds);
         status = StageStatus.RUNNING;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String getName() {
-        return null;
     }
 
     @Override

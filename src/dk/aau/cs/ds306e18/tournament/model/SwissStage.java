@@ -2,9 +2,8 @@ package dk.aau.cs.ds306e18.tournament.model;
 
 import java.util.*;
 
-public class SwissStage implements Stage, MatchListener {
+public class SwissStage implements Format, MatchListener {
 
-    private String name = "Swiss";
     private StageStatus status = StageStatus.PENDING;
     private ArrayList<ArrayList<Match>> rounds;
     private int MAX_ROUNDS;
@@ -152,7 +151,7 @@ public class SwissStage implements Stage, MatchListener {
      * @return true if the two given teams has played before, and false if that is not the case. */
     private boolean hasTheseTeamsPlayedBefore(Team team1, Team team2) {
 
-        ArrayList<Match> matches = getCompletedMatches();
+        List<Match> matches = getCompletedMatches();
 
         for(Match match : matches){
 
@@ -168,7 +167,7 @@ public class SwissStage implements Stage, MatchListener {
     }
 
     @Override
-    public ArrayList<Match> getAllMatches() {
+    public List<Match> getAllMatches() {
 
         ArrayList<Match> matches = new ArrayList<>();
 
@@ -182,9 +181,9 @@ public class SwissStage implements Stage, MatchListener {
     }
 
     @Override
-    public ArrayList<Match> getUpcomingMatches() {
+    public List<Match> getUpcomingMatches() {
 
-        ArrayList<Match> allMatches = getAllMatches();
+        List<Match> allMatches = getAllMatches();
         ArrayList<Match> upComingMatches = new ArrayList<>();
 
         for(Match match : allMatches)
@@ -197,15 +196,15 @@ public class SwissStage implements Stage, MatchListener {
     /** All created matches can be played in swiss.
      * @return an empty ArrayList<Match>*/
     @Override
-    public ArrayList<Match> getPendingMatches() {
+    public List<Match> getPendingMatches() {
 
-        return new ArrayList<Match>();
+        return new ArrayList<>();
     }
 
     @Override
-    public ArrayList<Match> getCompletedMatches() {
+    public List<Match> getCompletedMatches() {
 
-        ArrayList<Match> allMatches = getAllMatches();
+        List<Match> allMatches = getAllMatches();
         ArrayList<Match> playedMatches = new ArrayList<>();
 
         for(Match match : allMatches)
@@ -222,15 +221,6 @@ public class SwissStage implements Stage, MatchListener {
     public boolean hasMaxNumberOfRounds() {
 
         return rounds.size() == getMAX_ROUNDS();
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String getName() {
-        return name;
     }
 
     @Override
