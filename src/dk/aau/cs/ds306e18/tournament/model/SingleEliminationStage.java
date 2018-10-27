@@ -4,14 +4,16 @@ import dk.aau.cs.ds306e18.tournament.UI.Tabs.BracketOverview;
 import javafx.scene.Node;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class SingleEliminationStage implements Stage, MatchListener {
+public class SingleEliminationStage implements Format, MatchListener {
 
-    private String name = "Single Elimination";
     private StageStatus status = StageStatus.PENDING;
     private ArrayList<Team> seededTeams;
     private Match finalMatch;
+    private Match[] matches;
     private int rounds;
 
     @Override
@@ -19,17 +21,8 @@ public class SingleEliminationStage implements Stage, MatchListener {
         this.seededTeams = new ArrayList<>(seededTeams);
         rounds = (int) Math.ceil(Math.log(seededTeams.size()) / Math.log(2));
         generateBracket(rounds);
-        seedBracket(seededTeams);
+        seedBracket(seededTeams, rounds);
         status = StageStatus.RUNNING;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String getName() {
-        return null;
     }
 
     @Override
@@ -38,25 +31,32 @@ public class SingleEliminationStage implements Stage, MatchListener {
     }
 
     @Override
-    public ArrayList<Match> getAllMatches() {
+    public List<Match> getAllMatches() {
         return finalMatch.getTreeAsListBFS();
     }
 
     @Override
-    public ArrayList<Match> getUpcomingMatches() {
-        return null;
+    public List<Match> getUpcomingMatches() {
+         return finalMatch.getTreeAsListBFS().stream().filter(c -> c.getStatus().equals(MatchStatus.READY_TO_BE_PLAYED) && !c.hasBeenPlayed()).collect(Collectors.toList());
     }
 
     @Override
-    public ArrayList<Match> getPendingMatches() {
-        return null;
+    public List<Match> getPendingMatches() {
+        return finalMatch.getTreeAsListBFS().stream().filter(c -> c.getStatus().equals(MatchStatus.NOT_PLAYABLE)).collect(Collectors.toList());
     }
 
     @Override
-    public ArrayList<Match> getCompletedMatches() {
-        return null;
+    public List<Match> getCompletedMatches() {
+        return finalMatch.getTreeAsListBFS().stream().filter(c -> c.hasBeenPlayed()).collect(Collectors.toList());
     }
 
+    public Match[] getMatchesAsArray() {
+        return this.matches;
+    }
+
+    /** Generates a single-elimination bracket structure. References between the empty matches are made by winnerOf and starterSlots.
+     * Matches are accessed through finalMatch (the root).
+     * @param rounds the amount of rounds in the bracket*/
     private void generateBracket(int rounds) {
         int matchesInCurrentRound, matchNumberInRound, matchIndex = 0;
         ArrayList<Match> bracketList = new ArrayList<>();
@@ -83,15 +83,32 @@ public class SingleEliminationStage implements Stage, MatchListener {
 
         // The final is the last match in the list
         finalMatch = bracketList.get(bracketList.size() - 1);
+        matches = new Match[bracketList.size()];
+        matches = finalMatch.getTreeAsListBFS().toArray(matches);
     }
 
-    private void seedBracket(List<Team> seededTeams) {
+    /** Seeds the single-elimination bracket with teams to give better placements.
+     * If there are an insufficient amount of teams, the team(s) with the best seeding(s) will be placed in the next round instead.
+     * @param seededTeams a list containing the teams in the tournament
+     * @param rounds the amount of rounds in the bracket
+     */
+    private void seedBracket(List<Team> seededTeams, int rounds) {
 
         ArrayList<Team> seedList = new ArrayList<>(seededTeams);
 
+        //Create needed amount of byes to match with the slots
+        ArrayList<Team> byeList = new ArrayList<>();
+        int amountOfByes = (int) Math.pow(2, rounds) - seedList.size();
+        while(byeList.size() < amountOfByes) {
+            byeList.add(new Team("bye", null, 999, ""));
+        }
+        seedList.addAll(byeList);
+
+        //Variables used for seeding
         int slice = 1;
         int interactions = seedList.size() / 2;
 
+        //Order the teams in a seeded list
         while (slice < interactions) {
             ArrayList<Team> temp = new ArrayList<>(seedList);
             seedList.clear();
@@ -107,7 +124,28 @@ public class SingleEliminationStage implements Stage, MatchListener {
             slice *= 2;
         }
 
-        // TODO: Use the seedList to something
+        // Using the seeded list to place the teams into the correct matches
+        // If there are byes, the best seeded teams will be placed in their slots parents
+        int seedMatchIndex = finalMatch.getTreeAsListBFS().size()-1;
+        int playerIndex = 0, playerCount = seedList.size();
+        while(playerIndex < playerCount){
+            // If the player matchup would be between a team and a bye, the team will be placed at its parent match as a startSlot
+            // The match in the first round will be deleted(null)
+            if(byeList.contains(seedList.get(playerIndex)) || byeList.contains(seedList.get(playerIndex+1))) {
+                matches[getParent(seedMatchIndex)].setBlue(new StarterSlot(seedList.get(playerIndex)));
+                matches[seedMatchIndex] = null;
+                seedMatchIndex--;
+                playerIndex = playerIndex + 2;
+            }
+            // If there are no byes in the matchup, place the teams vs each other as intended
+            else {
+                matches[seedMatchIndex].setBlue(new StarterSlot(seedList.get(playerIndex)));
+                playerIndex++;
+                matches[seedMatchIndex].setOrange(new StarterSlot(seedList.get(playerIndex)));
+                seedMatchIndex--;
+                playerIndex++;
+            }
+        }
     }
 
     @Override
@@ -119,6 +157,25 @@ public class SingleEliminationStage implements Stage, MatchListener {
         } else {
             status = StageStatus.RUNNING;
         }
+    }
+    
+    int getParent(int i) {
+        i = i + 1;
+        if (i == 1) {
+            return -1;
+        } else {
+            return Math.floorDiv(i,2)-1;
+        }
+    }
+
+    Match getLeftSide(int i){
+        i = i + 1;
+        return matches[2*i];
+    }
+
+    Match getRightSide(int i) {
+        i = 1 + 1;
+        return matches[2 * i - 1];
     }
 
     @Override
