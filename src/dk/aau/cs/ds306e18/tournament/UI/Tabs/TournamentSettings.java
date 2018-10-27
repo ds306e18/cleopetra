@@ -17,32 +17,23 @@ import java.util.Random;
 
 public class TournamentSettings extends Tab {
 
-    //Fields
-    private Insets standardPaddingInsets = new Insets(5, 8, 8, 8);
-    private int id = 1;
+    private Insets standardPaddingInsets = new Insets(8, 8, 8, 8);
 
     /** TournamentSettings extends Tab and creates a tab with a specific layout*/
     public TournamentSettings() {
 
         this.setText("Tournament Settings");
 
-        HBox contentAll = new HBox();
+        HBox content = new HBox();
         VBox mainContent = mainSettings();
         VBox filler = fillerBox();
         VBox secondContent = stageSettings();
 
-        //Content all is the key point
-        contentAll.getChildren().addAll(mainContent, filler, secondContent);
-        this.setContent(contentAll);
-
-        //ArrayList<Tab> tabs = new ArrayList<>();
-        //tabs.add(tournamentSettings);
-        //tabs.addAll(new ParticipantSettings().addContent());
-
+        content.getChildren().addAll(mainContent, filler, secondContent);
+        this.setContent(content);
     }
 
-    /** Creates an empty box to create space on the tab
-     * @return a blank VBox     */
+    /** Creates an empty box */
     private VBox fillerBox(){
         VBox content = new VBox();
         content.setMinWidth(100);
@@ -50,10 +41,7 @@ public class TournamentSettings extends Tab {
         return content;
     }
 
-    /**
-     * Creates the main settings VBox, it contains a table with functioning buttons, a header and a dropdown menu
-     * @return a specific VBox*/
-
+    /** Creates the main settings */
     private VBox mainSettings(){
         VBox content = new VBox();
         content.setMinWidth(200);
@@ -65,15 +53,12 @@ public class TournamentSettings extends Tab {
         header.getChildren().addAll(headerText);
         header.setPadding(standardPaddingInsets);
 
-        // Tournament general settings
+        // Tournament name
         VBox tournamentNameBox = new VBox();
         Label tournamentNameLabel = new Label("Tournament name:");
-        FixedTextField tournamentNameTextField = new FixedTextField();
+        TextField tournamentNameTextField = new TextField();
         tournamentNameTextField.setText(Tournament.get().getName());
-        tournamentNameTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            // Update model when focus is lost
-            if (!newValue) Tournament.get().setName(tournamentNameTextField.getText());
-        });
+        tournamentNameTextField.setOnKeyReleased(e -> Tournament.get().setName(tournamentNameTextField.getText()));
         tournamentNameBox.setPadding(standardPaddingInsets);
         tournamentNameBox.getChildren().addAll(tournamentNameLabel, tournamentNameTextField);
 
@@ -112,10 +97,7 @@ public class TournamentSettings extends Tab {
         stageBox.setPadding(standardPaddingInsets);
         stageBox.getChildren().addAll(stageHeader, stageListView, stageButtons);
 
-
-
         content.getChildren().addAll(header, tournamentNameBox, tieBreaker, stageBox);
-
         return content;
     }
 
