@@ -1,8 +1,8 @@
 package dk.aau.cs.ds306e18.tournament.UI;
 
 import dk.aau.cs.ds306e18.tournament.UI.Tabs.BracketOverview;
+import dk.aau.cs.ds306e18.tournament.UI.Tabs.general.GeneralSettingsTab;
 import dk.aau.cs.ds306e18.tournament.UI.Tabs.ParticipantSettings;
-import dk.aau.cs.ds306e18.tournament.UI.Tabs.TournamentSettings;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -31,7 +31,7 @@ public class NavigationFrame  extends VBox{
 
     /** Calls Creates new tabs and adds them to the pane. */
     public void addTabsToPane(){
-        this.navigationTabs.getTabs().addAll(new TournamentSettings(), new ParticipantSettings(), new BracketOverview());
+        this.navigationTabs.getTabs().addAll(new GeneralSettingsTab(), new ParticipantSettings(), new BracketOverview());
     }
 
     /** Returns a HBox with two buttons aligned at the bottom of the scene*/
