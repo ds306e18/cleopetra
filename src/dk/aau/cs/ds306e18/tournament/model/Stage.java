@@ -36,4 +36,9 @@ public class Stage {
         if (this.format.getStatus() != StageStatus.PENDING) throw new IllegalStateException("Stage has already started.");
         this.numberOfTeamsWanted = numberOfTeamsWanted;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

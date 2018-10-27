@@ -1,8 +1,6 @@
 package dk.aau.cs.ds306e18.tournament.UI.Tabs;
 
-import dk.aau.cs.ds306e18.tournament.model.TieBreaker;
-import dk.aau.cs.ds306e18.tournament.model.TieBreakerBySeed;
-import dk.aau.cs.ds306e18.tournament.model.Tournament;
+import dk.aau.cs.ds306e18.tournament.model.*;
 import javafx.collections.FXCollections;
 import dk.aau.cs.ds306e18.tournament.UI.FixedTextField;
 import javafx.geometry.Insets;
@@ -12,6 +10,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+
+import javax.swing.text.Utilities;
+import java.util.Random;
 
 
 public class TournamentSettings extends Tab {
@@ -86,48 +87,30 @@ public class TournamentSettings extends Tab {
         tieBreaker.setLeft(tieBreakerLabel);
         tieBreaker.setRight(tieBreakerChoiceBox);
 
-        // Stage overview table
+        // Stage list and buttons
         Label stageHeader = new Label("Stages");
         stageHeader.setFont(new Font("Arial", 15));
-
-        TableView table = new TableView();
-        table.setEditable(true);
-
-        TableColumn stageIdCol = new TableColumn("ID");
-        stageIdCol.setResizable(false);
-        stageIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-
-        TableColumn stageNameCol = new TableColumn("Name");
-        stageNameCol.setResizable(false);
-        stageNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-        table.getColumns().addAll(stageIdCol, stageNameCol);
-
-        HBox buttons = new HBox();
-        Button addBtn = new Button("Add stage");
-        Button deleteBtn = new Button("Delete stage");
-        buttons.setSpacing(10);
-
-        addBtn.setOnAction(e -> {
-            dk.aau.cs.ds306e18.tournament.UI.Stage tempStage = new dk.aau.cs.ds306e18.tournament.UI.Stage(id, "Stage " + id);
-            id += 1;
-            table.getItems().add(tempStage);
+        ListView<Stage> stageListView = new ListView<>(FXCollections.observableArrayList(Tournament.get().getStages()));
+        HBox stageButtons = new HBox();
+        Button stageAddBtn = new Button("Add stage");
+        Button stageDeleteBtn = new Button("Remove stage");
+        stageButtons.setSpacing(10);
+        stageButtons.getChildren().addAll(stageAddBtn, stageDeleteBtn);
+        stageAddBtn.setOnAction(e -> {
+            Tournament.get().addStage(new Stage("New Stage" + new Random().nextInt(100), new SwissStage()));
+            stageListView.setItems(FXCollections.observableArrayList(Tournament.get().getStages()));
+            stageListView.refresh();
         });
-
-        deleteBtn.setOnAction(e -> {
-            if (table.getSelectionModel().getSelectedItem() != null) {
-                Object selectedItem = table.getSelectionModel().getSelectedItem();
-                table.getItems().remove(selectedItem);
-                id -= 1;
-            }
+        stageDeleteBtn.setOnAction(e -> {
+            int selectedIndex = stageListView.getFocusModel().focusedIndexProperty().intValue();
+            Tournament.get().removeStage(selectedIndex);
+            stageListView.setItems(FXCollections.observableArrayList(Tournament.get().getStages()));
+            stageListView.refresh();
         });
-
-        buttons.getChildren().addAll(addBtn, deleteBtn);
-
-
         VBox stageBox = new VBox();
         stageBox.setSpacing(5);
         stageBox.setPadding(standardPaddingInsets);
-        stageBox.getChildren().addAll(stageHeader, table, buttons);
+        stageBox.getChildren().addAll(stageHeader, stageListView, stageButtons);
 
 
 
