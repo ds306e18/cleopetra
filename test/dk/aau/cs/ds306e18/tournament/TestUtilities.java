@@ -52,13 +52,23 @@ public class TestUtilities {
      * @param teamSize the requested team size.
      * @return a team with the requested number of members. */
     public static Team generateTeam(int teamSize){
+        Random rand = new Random();
+        int seedValue = rand.nextInt(100);
+        return generateTeam(teamSize,seedValue);
+    }
+
+    /** Generates a team with the given team size and seed.
+     * @param teamSize the requested team size.
+     * @param seedValue the teams seed
+     * @return a team with the requested number of members with the specified seed. */
+    public static Team generateTeam(int teamSize, int seedValue){
 
         if(teamSize < 0)
             throw new IllegalArgumentException();
 
         Random rand = new Random();
 
-        return new Team(teamNames.get(rand.nextInt(teamNames.size())), generateBots(teamSize), rand.nextInt(100), "");
+        return new Team(teamNames.get(rand.nextInt(teamNames.size())), generateBots(teamSize), seedValue, "");
     }
 
     /** Generates an arrayList with the requested number of teams containing the requested number of bots.
@@ -91,12 +101,30 @@ public class TestUtilities {
     }
 
     /** sets all upcoming matches in the given swissStage to have been played.*/
-    public static void setAllMatchesPlayed(Stage stage){
+    public static void setAllMatchesPlayed(Format stage) {
 
         //Set all matches to played
         List<Match> matches = stage.getUpcomingMatches();
-        for(Match match : matches){
+        for (Match match : matches) {
             match.setHasBeenPlayed(true);
         }
+    }
+
+    /** Generates an arrayList with the requested number of teams containing the requested number of bots with ascending seed values.
+     * @param numberOfTeams the requested number of teams.
+     * @param teamSize the requested number of bots on each team.
+     * @return an arrayList containing the requested number of teams ascending seed values. */
+    public static ArrayList<Team> generateSeededTeams(int numberOfTeams, int teamSize){
+
+        if(numberOfTeams < 0)
+            throw new IllegalArgumentException();
+
+        ArrayList<Team> teams = new ArrayList<>();
+
+        for(int i = 1; i <= numberOfTeams; i++){
+            teams.add(generateTeam(teamSize, i));
+        }
+
+        return teams;
     }
 }
