@@ -1,5 +1,6 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
+import com.google.common.math.BigIntegerMath;
 import org.junit.Test;
 
 import static dk.aau.cs.ds306e18.tournament.TestUtilities.*;
@@ -39,5 +40,77 @@ public class RoundRobinStageTest {
                 assertTrue(bracket.findIdOfNextPlayer(i) < i);
             } else assertTrue(bracket.findIdOfNextPlayer(i) > i);
         }
+    }
+
+    @Test
+    public void getUpcomingMatches01(){ //even 4
+
+        int numberOfTeams = 4;
+        int teamSize = 1;
+
+        RoundRobinStage bracket = new RoundRobinStage();
+        bracket.start(generateTeams(numberOfTeams, teamSize));
+
+        assertEquals(factorial(numberOfTeams-1), bracket.getUpcomingMatches().size());
+    }
+
+    @Test
+    public void getUpcomingMatches02(){ //even 4
+
+        int numberOfTeams = 6;
+        int teamSize = 1;
+
+        RoundRobinStage bracket = new RoundRobinStage();
+        bracket.start(generateTeams(numberOfTeams, teamSize));
+
+        assertEquals(factorial(numberOfTeams -1), bracket.getUpcomingMatches().size());
+    }
+
+    @Test
+    public void getUpcomingMatches03(){ //odd 5
+
+        int numberOfTeams = 5;
+        int teamSize = 1;
+
+        RoundRobinStage bracket = new RoundRobinStage();
+        bracket.start(generateTeams(numberOfTeams, teamSize));
+
+        assertEquals(factorial(numberOfTeams -1), bracket.getUpcomingMatches().size());
+    }
+
+    @Test
+    public void getUpcomingMatches04(){ // 0 teams
+
+        int numberOfTeams = 0;
+        int teamSize = 0;
+
+        RoundRobinStage bracket = new RoundRobinStage();
+        bracket.start(generateTeams(numberOfTeams, teamSize));
+
+        assertEquals(0, bracket.getUpcomingMatches().size());
+    }
+
+    @Test
+    public void getCompletedMatches01(){ //non has been played
+
+        int numberOfTeams = 4;
+        int teamSize = 1;
+
+        RoundRobinStage bracket = new RoundRobinStage();
+        bracket.start(generateTeams(numberOfTeams, teamSize));
+
+        assertEquals(0, bracket.getCompletedMatches());
+    }
+
+
+    /** @return the given x factored. x! */
+    private int factorial(int x){
+
+        int result = 0;
+
+        for(int i = x; i > 0; i--)
+            result += i;
+
+        return result;
     }
 }
