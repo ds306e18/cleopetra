@@ -10,15 +10,63 @@ public class RoundRobinStageTest {
 
 
     @Test
-    public void testRoundRobinBracket(){
+    public void testRoundRobinBracket01(){
 
         int numberOfTeams = 4;
         int teamSize = 1;
 
         RoundRobinStage bracket = new RoundRobinStage();
         bracket.start(generateTeams(numberOfTeams, teamSize));
+
+        assertEquals(bracket.getStatus(),StageStatus.RUNNING);
+
     }
 
+    @Test
+    public void testRoundRobinBracket02(){
+
+        int numberOfTeams = 3;
+        int teamSize = 1;
+
+        RoundRobinStage bracket = new RoundRobinStage();
+        bracket.start(generateTeams(numberOfTeams,teamSize));
+
+        assertEquals(bracket.getStatus(),StageStatus.RUNNING);
+    }
+
+    @Test
+    public void testRoundRobinBracket03(){
+
+        int numberOfTeams = 1234;
+        int teamSize = 1;
+
+        RoundRobinStage bracket = new RoundRobinStage();
+        bracket.start(generateTeams(numberOfTeams,teamSize));
+
+        assertEquals(bracket.getStatus(),StageStatus.RUNNING);
+    }
+
+    @Test(expected = NegativeArraySizeException.class)
+    public void testRoundRobinBracket04(){
+
+        int numberOfTeams = 0;
+        int teamSize = 1;
+
+        RoundRobinStage bracket = new RoundRobinStage();
+        bracket.start(generateTeams(numberOfTeams,teamSize));
+
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testRoundRobinBracket05(){
+
+        int numberOfTeams = -12;
+        int teamSize = 1;
+
+        RoundRobinStage bracket = new RoundRobinStage();
+        bracket.start(generateTeams(numberOfTeams,teamSize));
+
+    }
 
     @Test
     public void testFindIdOfNextPlayer(){
