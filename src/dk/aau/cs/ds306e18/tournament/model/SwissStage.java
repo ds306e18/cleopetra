@@ -278,9 +278,35 @@ public class SwissStage implements Stage, MatchListener {
         else {
             if (teamPoints.get(teamPointsOrderList.get(count - 1)).equals(teamPoints.get(teamPointsOrderList.get(count)))) {
 
-                
-                return null; //TODO Tiebreaker
+                //TIE BREAKING!
 
+                ArrayList<Team> topTeamsList = new ArrayList<>();
+
+                //Find the teams that are tied
+                ArrayList<Team> tiedTeams = new ArrayList<>();
+                for(Team team : teamPointsOrderList)
+                    if(teamPoints.get(team) == teamPoints.get(teamPointsOrderList.get(count-1))) //Does the current team has the same points as the for sure tied one.
+                        tiedTeams.add(team);
+
+                //Create list with the topteams down untill and without the tied teams
+                for(Team team : teamPointsOrderList){
+
+                    if(teamPoints.get(team) == teamPoints.get(teamPointsOrderList.get(count-1)))
+                        break;
+                    else
+                        topTeamsList.add(team);
+                }
+
+                //Get list of tie broken teams
+                ArrayList<Team> tieBrokenTeams = new ArrayList<>(tieBreaker.compareAll(tiedTeams, tiedTeams.size()));
+
+                //Fill the topteamsList with the remaining needed count of teams from the tie broken teams
+                while(topTeamsList.size() < count){
+                    topTeamsList.add(tieBrokenTeams.get(0));
+                    tieBrokenTeams.remove(0);
+                }
+
+                return topTeamsList;
             }
             //Get the desired number of teams
             ArrayList<Team> desiredNumberOfTeam = new ArrayList<>();
