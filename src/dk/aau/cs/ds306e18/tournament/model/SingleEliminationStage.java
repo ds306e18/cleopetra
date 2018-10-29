@@ -1,5 +1,8 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
+import dk.aau.cs.ds306e18.tournament.UI.Tabs.BracketOverview;
+import javafx.scene.Node;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -178,5 +181,10 @@ public class SingleEliminationStage implements Format, MatchListener {
     @Override
     public List<Team> getTopTeams(int count, TieBreaker tieBreaker) {
         return null; // TODO: Returns a list of the teams that performed best this stage. They should be sorted after performance, with best team first.
+    }
+
+    @Override
+    public Node getJavaFxNode(BracketOverview bracketOverview) {
+        return null; //TODO
     }
 }

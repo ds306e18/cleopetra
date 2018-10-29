@@ -14,7 +14,7 @@ public class TieBreakerBySeed implements TieBreaker {
     }
 
     @Override
-    public String getName() {
-        return "TieBreaker by seed.";
+    public String toString() {
+        return "seed";
     }
 }
