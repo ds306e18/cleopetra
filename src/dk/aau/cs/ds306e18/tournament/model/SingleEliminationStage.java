@@ -158,7 +158,7 @@ public class SingleEliminationStage implements Format, MatchListener {
             status = StageStatus.RUNNING;
         }
     }
-    
+
     int getParent(int i) {
         i = i + 1;
         if (i == 1) {
@@ -168,19 +168,52 @@ public class SingleEliminationStage implements Format, MatchListener {
         }
     }
 
-    Match getLeftSide(int i){
+    int getLeftSide(int i){
         i = i + 1;
-        return matches[2*i];
+        return 2*i;
     }
 
-    Match getRightSide(int i) {
+    int getRightSide(int i) {
         i = 1 + 1;
-        return matches[2 * i - 1];
+        return 2 * i - 1;
     }
 
     @Override
     public List<Team> getTopTeams(int count, TieBreaker tieBreaker) {
-        return null; // TODO: Returns a list of the teams that performed best this stage. They should be sorted after performance, with best team first.
+        List<Team> topTeams = new ArrayList<>();
+        List<Team> tempWinnerTeams = new ArrayList<>();
+        List<Team> tempLoserTeams = new ArrayList<>();
+        int roundWithTopTeams = (int) Math.floor(Math.log(count) / Math.log(2));
+        int roundUpperBoundIndex = 0;
+
+        //Finds the first match in th
+        roundUpperBoundIndex = 1;
+
+        int currentMatchIndex = 0;
+        while(topTeams.size() < count) {
+            while (currentMatchIndex < roundUpperBoundIndex) {
+                if (!topTeams.contains(finalMatch.getTreeAsListBFS().get(currentMatchIndex).getWinner())) {
+                    tempWinnerTeams.add(finalMatch.getTreeAsListBFS().get(currentMatchIndex).getWinner());
+                }
+                if (!topTeams.contains(finalMatch.getTreeAsListBFS().get(currentMatchIndex).getLoser())) {
+                    tempLoserTeams.add(finalMatch.getTreeAsListBFS().get(currentMatchIndex).getLoser());
+                }
+                currentMatchIndex++;
+            }
+            if (tempWinnerTeams.size() != 1) {
+                tieBreaker.compareAll(tempWinnerTeams, tempWinnerTeams.size());
+            }
+            if (tempLoserTeams.size() != 1) {
+                tieBreaker.compareAll(tempLoserTeams, tempLoserTeams.size());
+            }
+            topTeams.addAll(tempWinnerTeams);
+            tempWinnerTeams.clear();
+            topTeams.addAll(tempLoserTeams);
+            tempLoserTeams.clear();
+            roundUpperBoundIndex = getRightSide(roundUpperBoundIndex);
+        }
+
+        return topTeams; // TODO: Returns a list of the teams that performed best this stage. They should be sorted after performance, with best team first.
     }
 
     @Override
