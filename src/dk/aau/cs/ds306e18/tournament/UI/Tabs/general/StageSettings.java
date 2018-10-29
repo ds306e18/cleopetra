@@ -14,7 +14,7 @@ import javafx.scene.text.Font;
 public class StageSettings extends VBox {
 
     private final TextField nameTextField;
-    private final ChoiceBox<Format> formatChoiceBox;
+    private final ChoiceBox<StageFormatOption> formatChoiceBox;
     private Insets standardPaddingInsets = new Insets(8, 8, 8, 8);
 
     private Stage stage;
@@ -40,8 +40,12 @@ public class StageSettings extends VBox {
         // Format
         BorderPane formatLayout = new BorderPane();
         Label formatLabel = new Label("Format:");
-        formatChoiceBox = new ChoiceBox<>(FXCollections.observableArrayList());
-        formatChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {});
+        formatChoiceBox = new ChoiceBox<>(FXCollections.observableArrayList(StageFormatOption.values()));
+        formatChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (this.stage != null && StageFormatOption.getOption(this.stage.getFormat()) != newValue) {
+                this.stage.setFormat(newValue.getNewInstance());
+            }
+        });
         formatChoiceBox.getSelectionModel().select(0);
         formatLayout.setPadding(standardPaddingInsets);
         formatLayout.setLeft(formatLabel);
@@ -60,6 +64,7 @@ public class StageSettings extends VBox {
         } else {
             setVisible(true);
             nameTextField.setText(stage.getName());
+            formatChoiceBox.getSelectionModel().select(StageFormatOption.getOption(stage.getFormat()));
         }
     }
 }
