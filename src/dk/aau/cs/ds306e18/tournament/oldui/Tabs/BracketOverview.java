@@ -1,4 +1,4 @@
-package dk.aau.cs.ds306e18.tournament.UI.Tabs;
+package dk.aau.cs.ds306e18.tournament.oldui.Tabs;
 
 import dk.aau.cs.ds306e18.tournament.model.Bot;
 import dk.aau.cs.ds306e18.tournament.model.SwissStage;
@@ -6,7 +6,6 @@ import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.Match;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;

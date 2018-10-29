@@ -1,4 +1,4 @@
-package dk.aau.cs.ds306e18.tournament.UI.Tabs;
+package dk.aau.cs.ds306e18.tournament.oldui.Tabs;
 
 import javafx.scene.control.Tab;
 import javafx.scene.image.Image;

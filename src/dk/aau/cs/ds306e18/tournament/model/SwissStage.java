@@ -1,7 +1,7 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
-import dk.aau.cs.ds306e18.tournament.UI.Tabs.BracketOverview;
-import dk.aau.cs.ds306e18.tournament.UI.bracketObjects.SwissNode;
+import dk.aau.cs.ds306e18.tournament.oldui.Tabs.BracketOverview;
+import dk.aau.cs.ds306e18.tournament.oldui.bracketObjects.SwissNode;
 import javafx.scene.Node;
 
 import java.util.*;

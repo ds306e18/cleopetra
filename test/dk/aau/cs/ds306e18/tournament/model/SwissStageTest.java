@@ -4,6 +4,7 @@ import dk.aau.cs.ds306e18.tournament.TestUtilities;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -58,7 +59,7 @@ public class SwissStageTest {
         SwissStage bracket = new SwissStage();
         bracket.start(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
-        ArrayList<Match> allMatches = bracket.getAllMatches();
+        List<Match> allMatches = bracket.getAllMatches();
 
         assertEquals(numberOfTeams/2, allMatches.size());
     }
@@ -73,7 +74,7 @@ public class SwissStageTest {
         SwissStage bracket = new SwissStage();
         bracket.start(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
-        ArrayList<Match> allMatches = bracket.getAllMatches();
+        List<Match> allMatches = bracket.getAllMatches();
 
         assertEquals(0, allMatches.size());
     }
@@ -92,7 +93,7 @@ public class SwissStageTest {
         assertEquals(numberOfTeams/2, bracket.getAllMatches().size());
 
         //Fill in scores
-        ArrayList<Match> matches = bracket.getRawMatches();
+        List<Match> matches = bracket.getRawMatches();
         for(Match match : matches){
             match.setScores(5, 2, true);
         }
@@ -111,7 +112,7 @@ public class SwissStageTest {
         SwissStage bracket = new SwissStage();
         bracket.start(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
-        ArrayList<Match> unplayedMatches = bracket.getPendingMatches();
+        List<Match> unplayedMatches = bracket.getPendingMatches();
 
         assertEquals(0, unplayedMatches.size());
     }
@@ -126,7 +127,7 @@ public class SwissStageTest {
         SwissStage bracket = new SwissStage();
         bracket.start(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
-        ArrayList<Match> unplayedMatches = bracket.getPendingMatches();
+        List<Match> unplayedMatches = bracket.getPendingMatches();
 
         assertEquals(0, unplayedMatches.size());
     }
@@ -141,7 +142,7 @@ public class SwissStageTest {
         bracket.start(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
         //All has to be played
-        ArrayList<Match> matches = bracket.getPendingMatches();
+        List<Match> matches = bracket.getPendingMatches();
 
         for(Match match : matches)
             match.setHasBeenPlayed(true);
@@ -204,7 +205,7 @@ public class SwissStageTest {
         SwissStage bracket = new SwissStage();
         bracket.start(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
-        ArrayList<Match> allMatches = bracket.getAllMatches();
+        List<Match> allMatches = bracket.getAllMatches();
 
         for(Match match : allMatches)
             match.setHasBeenPlayed(true);
@@ -223,7 +224,7 @@ public class SwissStageTest {
         bracket.start(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
         //All has to be played
-        ArrayList<Match> matches = bracket.getUpcomingMatches();
+        List<Match> matches = bracket.getUpcomingMatches();
 
         for(Match match : matches)
             match.setHasBeenPlayed(true);
@@ -242,7 +243,7 @@ public class SwissStageTest {
         bracket.start(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
         //All has to be played
-        ArrayList<Match> matches = bracket.getPendingMatches();
+        List<Match> matches = bracket.getPendingMatches();
         for(Match match : matches)
             match.setHasBeenPlayed(true);
 
@@ -267,7 +268,7 @@ public class SwissStageTest {
     public void createNewRound04(){
 
         //Create a list of unique teams.
-        ArrayList<Team> teams = new ArrayList<>();
+        List<Team> teams = new ArrayList<>();
         for(int i = 0; i < 7; i++)
             teams.add(new Team(String.valueOf(i), TestUtilities.generateBots(2), 0, "Hello"));
 
@@ -277,14 +278,14 @@ public class SwissStageTest {
 
         //Generate all rounds and fill result
         do{
-            ArrayList<Match> matches = bracket.getUpcomingMatches();
+            List<Match> matches = bracket.getUpcomingMatches();
             for(Match match : matches)
                 match.setHasBeenPlayed(true);
 
             bracket.createNewRound();
         }while(!bracket.hasMaxNumberOfRounds());
 
-        ArrayList<Match> allMatches = bracket.getAllMatches();
+        List<Match> allMatches = bracket.getAllMatches();
 
         //Check if no teams has played each other more than once
         for(int i = 0; i < allMatches.size(); i++){
@@ -316,7 +317,7 @@ public class SwissStageTest {
         bracket.start(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
         //All has to be played
-        ArrayList<Match> matches = bracket.getPendingMatches();
+        List<Match> matches = bracket.getPendingMatches();
         for(Match match : matches)
             match.setHasBeenPlayed(true);
 

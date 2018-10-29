@@ -1,12 +1,9 @@
-package dk.aau.cs.ds306e18.tournament.UI.Tabs.general;
+package dk.aau.cs.ds306e18.tournament.oldui.Tabs.general;
 
 import dk.aau.cs.ds306e18.tournament.model.Format;
 import dk.aau.cs.ds306e18.tournament.model.RoundRobinStage;
 import dk.aau.cs.ds306e18.tournament.model.SingleEliminationStage;
 import dk.aau.cs.ds306e18.tournament.model.SwissStage;
-
-import java.lang.reflect.InvocationTargetException;
-import java.util.function.Supplier;
 
 public enum StageFormatOption {
     SINGLE_ELIMINATION("Single Elimination", SingleEliminationStage.class),

@@ -1,4 +1,4 @@
-package dk.aau.cs.ds306e18.tournament.UI;
+package dk.aau.cs.ds306e18.tournament.oldui;
 
 public class Stage {
     private int id;

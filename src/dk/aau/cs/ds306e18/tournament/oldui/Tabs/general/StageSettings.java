@@ -1,6 +1,5 @@
-package dk.aau.cs.ds306e18.tournament.UI.Tabs.general;
+package dk.aau.cs.ds306e18.tournament.oldui.Tabs.general;
 
-import dk.aau.cs.ds306e18.tournament.model.Format;
 import dk.aau.cs.ds306e18.tournament.model.Stage;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;

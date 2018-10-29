@@ -1,0 +1,87 @@
+#TS-leftside .button, #TS-leftside .choice-box, #navigation .button {
+    -fx-background-color: #f8f8f8;
+    -fx-background-radius: 0;
+    -fx-border-color: #c2c2c2;
+}
+
+#TS-leftside .button:hover {
+    -fx-background-color: #ececec;
+}
+
+#TS-leftside .button:pressed{
+    -fx-background-color: #f8f8f8;
+}
+
+#tabPane {
+    -fx-tab-min-height: 4em;
+    -fx-tab-min-width: 12em;
+}
+
+#tabPane .tab .tab-label {
+    -fx-alignment: center;
+    -fx-text-fill: #8e8e8e;
+}
+
+
+#tabPane .tab {
+    -fx-background-color: #f8f8f8;
+    -fx-border-color: #c2c2c2;
+    -fx-border-width: 1 1 1 1;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+#tabPane .tab:selected {
+    -fx-background-color: #FFF;
+    -fx-border-width: 2 1 1 1;
+    -fx-border-color: #34C5E2 #c2c2c2 #c2c2c2 #c2c2c2;
+}
+
+
+
+#TS-rightside .tab {
+    -fx-background-color: transparent;
+    -fx-alignment: center;
+}
+
+#navigation .button:focused{
+    -fx-background-color: #fff;
+    -fx-text-fill: #0fc0e0;
+    -fx-border-color: #34C5E2;
+    -fx-border-width: 1 0 0 0;
+}
+
+#TS-leftside .text-field {
+    -fx-background-radius: 0;
+}
+
+#TS-rightside {
+    -fx-border-width: 0 0 0 1;
+    -fx-border-color: #c2c2c2;
+}
+
+#TS-leftside #stageTable .column-header .label {
+    -fx-text-fill: #fff;
+    -fx-background-color: #34C5E2;
+}
+
+#TS-leftside #stageTable .column-header {
+    -fx-background-color: #34C5E2;
+}
+
+#TS-leftside #stageTable {
+    -fx-border-width: 1;
+}
+
+#TS-leftside .text-field{
+    -fx-max-width: 250;
+}
+
+#TS-leftside .list-view{
+    -fx-max-width: 250;
+}
+
+#TS-leftside .grid {
+    -fx-max-width: 250;
+}

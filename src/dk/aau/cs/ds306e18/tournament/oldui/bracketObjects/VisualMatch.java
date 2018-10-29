@@ -1,6 +1,6 @@
-package dk.aau.cs.ds306e18.tournament.UI.bracketObjects;
+package dk.aau.cs.ds306e18.tournament.oldui.bracketObjects;
 
-import dk.aau.cs.ds306e18.tournament.UI.Tabs.BracketOverview;
+import dk.aau.cs.ds306e18.tournament.oldui.Tabs.BracketOverview;
 import dk.aau.cs.ds306e18.tournament.model.Match;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -8,7 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
-/** Used to represent a match in the UI. */
+/** Used to represent a match in the oldui. */
 public class VisualMatch extends VBox {
 
     private Label team1;
@@ -18,7 +18,7 @@ public class VisualMatch extends VBox {
 
     Match match;
 
-    /** Used to represent a match in the UI. */
+    /** Used to represent a match in the oldui. */
     VisualMatch(Match match, BracketOverview bracketOverview){
 
         this.team1 = new Label();

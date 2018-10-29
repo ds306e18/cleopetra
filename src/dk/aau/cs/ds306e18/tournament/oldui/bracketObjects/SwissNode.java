@@ -1,6 +1,6 @@
-package dk.aau.cs.ds306e18.tournament.UI.bracketObjects;
+package dk.aau.cs.ds306e18.tournament.oldui.bracketObjects;
 
-import dk.aau.cs.ds306e18.tournament.UI.Tabs.BracketOverview;
+import dk.aau.cs.ds306e18.tournament.oldui.Tabs.BracketOverview;
 import dk.aau.cs.ds306e18.tournament.model.Match;
 import dk.aau.cs.ds306e18.tournament.model.SwissStage;
 import javafx.scene.control.Label;
