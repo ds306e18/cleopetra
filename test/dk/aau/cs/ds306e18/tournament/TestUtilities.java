@@ -1,9 +1,6 @@
 package dk.aau.cs.ds306e18.tournament;
 
-import dk.aau.cs.ds306e18.tournament.model.Bot;
-import dk.aau.cs.ds306e18.tournament.model.Match;
-import dk.aau.cs.ds306e18.tournament.model.SwissStage;
-import dk.aau.cs.ds306e18.tournament.model.Team;
+import dk.aau.cs.ds306e18.tournament.model.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -94,10 +91,10 @@ public class TestUtilities {
     }
 
     /** sets all upcoming matches in the given swissStage to have been played.*/
-    public static void setAllMatchesPlayed(SwissStage swissStage){
+    public static void setAllMatchesPlayed(Stage stage){
 
         //Set all matches to played
-        List<Match> matches = swissStage.getUpcomingMatches();
+        List<Match> matches = stage.getUpcomingMatches();
         for(Match match : matches){
             match.setHasBeenPlayed(true);
         }
