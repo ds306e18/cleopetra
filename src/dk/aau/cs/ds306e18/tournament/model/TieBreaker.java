@@ -7,7 +7,7 @@ public abstract class TieBreaker {
 
     public List<Team> compareAll(List<Team> teams, int count) {
         ArrayList<Team> sorted = new ArrayList<>(teams);
-        teams.sort((a, b) -> a == b ? 0 : compare(a, b) ? -1 : 1);
+        sorted.sort((a, b) -> a == b ? 0 : compare(a, b) ? -1 : 1);
         return sorted.subList(0, count);
     }
 
