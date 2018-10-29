@@ -1,6 +1,7 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
 import com.google.common.math.BigIntegerMath;
+import dk.aau.cs.ds306e18.tournament.TestUtilities;
 import org.junit.Test;
 
 import static dk.aau.cs.ds306e18.tournament.TestUtilities.*;
@@ -99,7 +100,7 @@ public class RoundRobinStageTest {
         RoundRobinStage bracket = new RoundRobinStage();
         bracket.start(generateTeams(numberOfTeams, teamSize));
 
-        assertEquals(factorial(numberOfTeams-1), bracket.getUpcomingMatches().size());
+        assertEquals(TestUtilities.factorial(numberOfTeams-1), bracket.getUpcomingMatches().size());
     }
 
     @Test
@@ -111,7 +112,7 @@ public class RoundRobinStageTest {
         RoundRobinStage bracket = new RoundRobinStage();
         bracket.start(generateTeams(numberOfTeams, teamSize));
 
-        assertEquals(factorial(numberOfTeams -1), bracket.getUpcomingMatches().size());
+        assertEquals(TestUtilities.factorial(numberOfTeams -1), bracket.getUpcomingMatches().size());
     }
 
     @Test
@@ -123,7 +124,7 @@ public class RoundRobinStageTest {
         RoundRobinStage bracket = new RoundRobinStage();
         bracket.start(generateTeams(numberOfTeams, teamSize));
 
-        assertEquals(factorial(numberOfTeams -1), bracket.getUpcomingMatches().size());
+        assertEquals(TestUtilities.factorial(numberOfTeams -1), bracket.getUpcomingMatches().size());
     }
 
     @Test
@@ -151,14 +152,5 @@ public class RoundRobinStageTest {
     }
 
 
-    /** @return the given x factored. x! */
-    private int factorial(int x){
 
-        int result = 0;
-
-        for(int i = x; i > 0; i--)
-            result += i;
-
-        return result;
-    }
 }
