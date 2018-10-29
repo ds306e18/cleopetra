@@ -24,9 +24,14 @@ public class RoundRobinStage implements Stage, MatchListener {
         if (teams.size() % 2 != 0) {
             teams.add(DUMMY_TEAM);
         }
-        this.numberOfTeams = teams.size();
-        this.matches = generateMatches(teams);
-        status = StageStatus.RUNNING;
+        numberOfTeams = teams.size();
+        if(seededTeams.size() == 0){
+            matches = new ArrayList<>();
+            status = StageStatus.CONCLUDED;
+        }else{
+            matches = generateMatches(teams);
+            status = StageStatus.RUNNING;
+        }
     }
 
     public void setName(String name) {
