@@ -13,18 +13,17 @@ public class RoundRobinStage implements Stage, MatchListener {
     private int numberOfTeams;
     private ArrayList<Match> matches;
 
-    /**
-     * constructor that automatically creates an arraylist of matches made on the principles of berger tables
-     *
-     * @param seededTeams arraylist of all the teams in the bracket
-     */
+    /** Constructor that automatically creates an arraylist of matches made on the principles of berger tables.
+     * @param seededTeams arraylist of all the teams in the bracket. */
     public void start(List<Team> seededTeams) {
         ArrayList<Team> teams = new ArrayList<>(seededTeams); // TODO: Add support for multiple groups
+
         //if there is an uneven amount of teams, add a dummy team and later remove matches that include the dummy team
-        if (teams.size() % 2 != 0) {
+        if (teams.size() % 2 != 0)
             teams.add(DUMMY_TEAM);
-        }
+
         numberOfTeams = teams.size();
+
         if(seededTeams.size() == 0){
             matches = new ArrayList<>();
             status = StageStatus.CONCLUDED;
@@ -34,23 +33,10 @@ public class RoundRobinStage implements Stage, MatchListener {
         }
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public StageStatus getStatus() {
-        return status; // TODO: Determine when the stage is over
-    }
-
-    /**
-     * generates a hashMap to be able to give id to each team for use in berger tables
-     */
+    /** Generates a hashMap containing the given teams and an unique integer(id).
+     * This will be used in the berger tables.
+     * @param teams a list of all teams in the bracket.
+     * @return a hashMap containing the teams an a unique id. */
     private HashMap<Team, Integer> createIdHashMap(ArrayList<Team> teams) {
         HashMap<Team, Integer> map = new HashMap<>();
         for (int m = 1; m < teams.size() + 1; m++) {
@@ -59,12 +45,9 @@ public class RoundRobinStage implements Stage, MatchListener {
         return map;
     }
 
-    /**
-     * creates a list of matches, with each team changing color between each of their matches
-     *
-     * @param teams arraylist of all teams in the bracket
-     * @return returns a complete arraylist of matches
-     */
+    /** Creates a list of matches, with each team changing color between each of their matches.
+     * @param teams arraylist of all teams in the bracket.
+     * @return returns a complete arraylist of matches. */
     private ArrayList<Match> generateMatches(ArrayList<Team> teams) {
         int nextBlue, nextOrange;
         Match[][] tempMatches = new Match[numberOfTeams - 1][numberOfTeams / 2];
@@ -101,26 +84,21 @@ public class RoundRobinStage implements Stage, MatchListener {
                 }
             }
         }
+
         return removeDummyMatches(tempMatches);
     }
 
-    /**
-     * Find new team, by adding n/2 to the team in the same place in previous round, if this exceeds n-1,
+    /** Find new team, by adding n/2 to the team in the same place in previous round, if this exceeds n-1,
      * instead subtract n/2 - 1.
-     *
-     * @param id of the teamin the match in the previous round
-     * @return the id of the team that should be in this match, according to last
-     */
+     * @param id of the team in the match in the previous round.
+     * @return the id of the team that should be in this match, according to last. */
     public int findIdOfNextPlayer(int id) {
         if ((id + (numberOfTeams / 2)) > (numberOfTeams - 1)) {
             return id - ((numberOfTeams / 2) - 1);
         } else return id + (numberOfTeams / 2);
     }
 
-
-    /**
-     * Dummy teams are removed from the array of matches
-     */
+    /** @return the given array with dummy teams removed. */
     private ArrayList<Match> removeDummyMatches(Match[][] tempMatches) {
 
         ArrayList<Match> matches = new ArrayList<>();
@@ -135,6 +113,7 @@ public class RoundRobinStage implements Stage, MatchListener {
                 }
             }
         }
+
         return matches;
     }
 
@@ -166,7 +145,7 @@ public class RoundRobinStage implements Stage, MatchListener {
 
     @Override
     public ArrayList<Match> getPendingMatches() {
-        return new ArrayList<>();
+        return new ArrayList<>(); //All created matches can be played, so there is no matches pending
     }
 
     @Override
@@ -183,5 +162,19 @@ public class RoundRobinStage implements Stage, MatchListener {
     @Override
     public List<Team> getTopTeams(int count, TieBreaker tieBreaker) {
         return null; // TODO: Returns a list of the teams that performed best this stage. They should be sorted after performance, with best team first.
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public StageStatus getStatus() {
+        return status; // TODO: Determine when the stage is over
     }
 }
