@@ -1,14 +1,14 @@
-#TS-leftside .button, #TS-leftside .choice-box, #navigation .button {
+.button, #TS-leftside .choice-box {
     -fx-background-color: #f8f8f8;
     -fx-background-radius: 0;
     -fx-border-color: #c2c2c2;
 }
 
-#TS-leftside .button:hover {
+.button:hover {
     -fx-background-color: #ececec;
 }
 
-#TS-leftside .button:pressed{
+.button:pressed{
     -fx-background-color: #f8f8f8;
 }
 
@@ -45,14 +45,7 @@
     -fx-alignment: center;
 }
 
-#navigation .button:focused{
-    -fx-background-color: #fff;
-    -fx-text-fill: #0fc0e0;
-    -fx-border-color: #34C5E2;
-    -fx-border-width: 1 0 0 0;
-}
-
-#TS-leftside .text-field {
+.text-field, .text-area {
     -fx-background-radius: 0;
 }
 
@@ -84,4 +77,16 @@
 
 #TS-leftside .grid {
     -fx-max-width: 250;
+}
+
+#PS-leftside, #PS-center, #PS-rightside {
+    -fx-padding: 0 0 0 20;
+    -fx-border-width: 0 0 0 1;
+    -fx-border-color: #c2c2c2;
+}
+
+#globalGrid {
+    -fx-padding: 0 0 0 20;
+    -fx-border-width: 0 0 0 1;
+    -fx-border-color: #c2c2c2;
 }
