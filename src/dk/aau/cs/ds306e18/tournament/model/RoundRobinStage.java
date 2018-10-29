@@ -106,7 +106,7 @@ public class RoundRobinStage implements Stage, MatchListener {
      * @param id of the teamin the match in the previous round
      * @return the id of the team that should be in this match, according to last
      */
-    private int findIdOfNextPlayer(int id) {
+    public int findIdOfNextPlayer(int id) {
         if ((id + (numberOfTeams / 2)) > (numberOfTeams - 1)) {
             return id - ((numberOfTeams / 2) - 1);
         } else return id + (numberOfTeams / 2);

@@ -21,7 +21,7 @@ public class RoundRobinStageTest {
 
 
     @Test
-    public void testrunCheck(){
+    public void testFindIdOfNextPlayer(){
 
         int numberOfTeams = 20;
         int teamSize = 1;
@@ -29,15 +29,15 @@ public class RoundRobinStageTest {
         RoundRobinStage bracket = new RoundRobinStage();
         bracket.start(generateTeams(numberOfTeams, teamSize));
 
-        assertEquals((bracket.runCheck(3)), 13);
-        assertEquals((bracket.runCheck(1)), 11);
+        assertEquals((bracket.findIdOfNextPlayer(3)), 13);
+        assertEquals((bracket.findIdOfNextPlayer(1)), 11);
 
         for (int i = 1; i <= numberOfTeams; i++) {
-            assertTrue(bracket.runCheck(i) < numberOfTeams);
-            assertTrue(bracket.runCheck(i) > 0);
+            assertTrue(bracket.findIdOfNextPlayer(i) < numberOfTeams);
+            assertTrue(bracket.findIdOfNextPlayer(i) > 0);
             if (i >= (numberOfTeams/2)) {
-                assertTrue(bracket.runCheck(i) < i);
-            } else assertTrue(bracket.runCheck(i) > i);
+                assertTrue(bracket.findIdOfNextPlayer(i) < i);
+            } else assertTrue(bracket.findIdOfNextPlayer(i) > i);
         }
     }
 }
