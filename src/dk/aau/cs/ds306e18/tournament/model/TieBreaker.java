@@ -11,7 +11,7 @@ public abstract class TieBreaker {
         return sorted.subList(0, count);
     }
 
-    public abstract String getName();
+    public abstract String toString();
 
     /** Returns true if teamA wins over teamB in a tie breaker. */
     public abstract boolean compare(Team teamA, Team teamB);

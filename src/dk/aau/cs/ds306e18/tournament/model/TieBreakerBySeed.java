@@ -14,7 +14,7 @@ public class TieBreakerBySeed extends TieBreaker {
     }
 
     @Override
-    public String getName() {
-        return "TieBreaker by seed.";
+    public String toString() {
+        return "seed";
     }
 }
