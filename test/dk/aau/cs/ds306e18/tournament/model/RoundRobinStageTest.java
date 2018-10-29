@@ -1,6 +1,5 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
-import com.google.common.math.BigIntegerMath;
 import dk.aau.cs.ds306e18.tournament.TestUtilities;
 import org.junit.Test;
 
@@ -9,7 +8,6 @@ import static org.junit.Assert.*;
 
 
 public class RoundRobinStageTest {
-
 
     @Test
     public void testRoundRobinBracket01(){
@@ -46,17 +44,6 @@ public class RoundRobinStageTest {
         bracket.start(generateTeams(numberOfTeams,teamSize));
 
         assertEquals(bracket.getStatus(),StageStatus.RUNNING);
-    }
-
-    @Test(expected = NegativeArraySizeException.class)
-    public void testRoundRobinBracket04(){
-
-        int numberOfTeams = 0;
-        int teamSize = 1;
-
-        RoundRobinStage bracket = new RoundRobinStage();
-        bracket.start(generateTeams(numberOfTeams,teamSize));
-
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -148,9 +135,56 @@ public class RoundRobinStageTest {
         RoundRobinStage bracket = new RoundRobinStage();
         bracket.start(generateTeams(numberOfTeams, teamSize));
 
-        assertEquals(0, bracket.getCompletedMatches());
+        assertEquals(0, bracket.getCompletedMatches().size());
     }
 
+    @Test
+    public void getCompletedMatches02(){ //all has been played
 
+        int numberOfTeams = 4;
+        int teamSize = 1;
 
+        RoundRobinStage bracket = new RoundRobinStage();
+        bracket.start(generateTeams(numberOfTeams, teamSize));
+
+        TestUtilities.setAllMatchesPlayed(bracket);
+
+        assertEquals(factorial(numberOfTeams-1), bracket.getCompletedMatches().size());
+    }
+
+    @Test //more than 0 matches
+    public void getAllMatches01(){
+
+        int numberOfTeams = 4;
+        int teamSize = 2;
+
+        RoundRobinStage bracket = new RoundRobinStage();
+        bracket.start(TestUtilities.generateTeams(numberOfTeams, teamSize));
+
+        assertEquals(factorial(numberOfTeams-1), bracket.getAllMatches().size());
+    }
+
+    @Test //0 matches
+    public void getAllMatches02(){
+
+        int numberOfTeams = 0;
+        int teamSize = 2;
+
+        RoundRobinStage bracket = new RoundRobinStage();
+        bracket.start(TestUtilities.generateTeams(numberOfTeams, teamSize));
+
+        assertEquals(0, bracket.getAllMatches().size());
+    }
+
+    @Test
+    public void getPendingMatches01(){
+
+        int numberOfTeams = 4;
+        int teamSize = 2;
+
+        RoundRobinStage bracket = new RoundRobinStage();
+        bracket.start(TestUtilities.generateTeams(numberOfTeams, teamSize));
+
+        assertEquals(0, bracket.getPendingMatches().size());
+    }
 }
