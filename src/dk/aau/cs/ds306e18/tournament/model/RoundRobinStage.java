@@ -161,7 +161,7 @@ public class RoundRobinStage implements Stage, MatchListener {
 
     @Override
     public ArrayList<Match> getPendingMatches() {
-        return null;
+        return new ArrayList<>();
     }
 
     @Override
