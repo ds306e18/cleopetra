@@ -194,6 +194,7 @@ public class SingleEliminationStageTest {
         assertEquals(StageStatus.RUNNING, bracket.getStatus());
     }
 
+    //Should throw exception if the match is not playable
     @Test(expected = IllegalStateException.class)
     public void unPlayableMatch() {
         SingleEliminationStage bracket = new SingleEliminationStage();
@@ -201,6 +202,7 @@ public class SingleEliminationStageTest {
         bracket.getAllMatches().get(0).setBlueScore(1);
     }
 
+    //Should throw exception if the match is not playable
     @Test(expected = IllegalStateException.class)
     public void unPlayableMatch02() {
         SingleEliminationStage bracket = new SingleEliminationStage();
