@@ -59,7 +59,7 @@ public class RoundRobinStage extends KnockoutFormat implements Format, MatchList
             for (int match = 0; match < teams.size() / 2; match++) {
                 //create first round, which is not based on previous rounds
                 if (round == 0) {
-                    tempMatches[round][match] = new Match(teams.get(match), teams.get(teams.size() - (match + 1)));
+                    tempMatches[round][match] = createNewMatch(teams.get(match), teams.get(teams.size() - (match + 1)));
                 }
                 //hardcoding team with highest id (numberOfTeams - 1 ) to first match each round
                 //the other team is found by berger tables rules (findIdOfNextPlayer) on the id of the team in the same match,
@@ -68,23 +68,31 @@ public class RoundRobinStage extends KnockoutFormat implements Format, MatchList
                     //if uneven round, player with highest id becomes blue player
                     if ((round % 2) != 0) {
                         nextOrange = findIdOfNextPlayer(map.get(tempMatches[round - 1][match].getBlueTeam()));
-                        tempMatches[round][match] = new Match((teams.get(teams.size() - 1)), teams.get(nextOrange - 1));
+                        tempMatches[round][match] = createNewMatch((teams.get(teams.size() - 1)), teams.get(nextOrange - 1));
                         //else become orange team
                     } else {
                         nextBlue = findIdOfNextPlayer(map.get(tempMatches[round - 1][match].getOrangeTeam()));
-                        tempMatches[round][match] = new Match(teams.get(nextBlue - 1), (teams.get(teams.size() - 1)));
+                        tempMatches[round][match] = createNewMatch(teams.get(nextBlue - 1), (teams.get(teams.size() - 1)));
                     }
                 } else {
                     //if not the first round, or first match, find both players by findIdOfNextPlayer according to berger tables,
                     //on previous teams
                     nextBlue = findIdOfNextPlayer(map.get(tempMatches[round - 1][match].getBlueTeam()));
                     nextOrange = findIdOfNextPlayer(map.get(tempMatches[round - 1][match].getOrangeTeam()));
-                    tempMatches[round][match] = new Match(teams.get(nextBlue - 1), (teams.get(nextOrange - 1)));
+                    tempMatches[round][match] = createNewMatch(teams.get(nextBlue - 1), (teams.get(nextOrange - 1)));
                 }
             }
         }
 
         return removeDummyMatches(tempMatches);
+    }
+
+    /** @return a new match from the given parameters. And adds listener. */
+    private Match createNewMatch(Team team1, Team team2){
+
+        Match match = new Match(team1, team2);
+        match.registerListener(this);
+        return match;
     }
 
     /** Find new team, by adding n/2 to the team in the same place in previous round, if this exceeds n-1,
