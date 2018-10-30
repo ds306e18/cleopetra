@@ -101,11 +101,11 @@
 }
 
 #matchPlayed .team1-triangle {
-    -fx-opacity: 1;
+    visibility: visible;
 }
 
 #matchPlayed .team2-triangle {
-    -fx-opacity: 0;
+    visibility: hidden;
 }
 
 #matchTBD .team1-color, #matchTBD .team2-color {
@@ -118,19 +118,19 @@
 }
 
 #matchTBD .team1-score, #matchTBD .team2-score {
-    -fx-opacity: 0;
+    visibility: hidden;
 }
 
 #matchTBD .team1-triangle, #matchTBD .team2-triangle {
-    -fx-opacity: 0;
+    visibility: hidden;
 }
 
 #matchUpcoming .team1-score, #matchUpcoming .team2-score {
-    -fx-opacity: 0;
+    visibility: hidden;
 }
 
 #matchUpcoming .team1-triangle, #matchUpcoming .team2-triangle {
-    -fx-opacity: 0;
+    visibility: hidden;
 }
 
 .match:hover{
