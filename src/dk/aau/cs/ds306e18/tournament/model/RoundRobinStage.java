@@ -11,8 +11,6 @@ public class RoundRobinStage extends KnockoutFormat implements Format, MatchList
 
     private static final Team DUMMY_TEAM = new Team("Dummy", null, 0, null);
 
-    private StageStatus status = StageStatus.PENDING;
-    private int numberOfTeams;
     private ArrayList<Match> matches;
 
     /** Constructor that automatically creates an arraylist of matches made on the principles of berger tables.
@@ -24,8 +22,6 @@ public class RoundRobinStage extends KnockoutFormat implements Format, MatchList
         //if there is an uneven amount of teams, add a dummy team and later remove matches that include the dummy team
         if (teams.size() % 2 != 0)
             teams.add(DUMMY_TEAM);
-
-        numberOfTeams = teams.size();
 
         if(seededTeams.size() == 0){
             matches = new ArrayList<>();
@@ -53,17 +49,17 @@ public class RoundRobinStage extends KnockoutFormat implements Format, MatchList
      * @return returns a complete arraylist of matches. */
     private ArrayList<Match> generateMatches(ArrayList<Team> teams) {
         int nextBlue, nextOrange;
-        Match[][] tempMatches = new Match[numberOfTeams - 1][numberOfTeams / 2];
+        Match[][] tempMatches = new Match[teams.size() - 1][teams.size() / 2];
 
         HashMap<Team, Integer> map = createIdHashMap(teams);
 
         //number of rounds needed
-        for (int round = 0; round < numberOfTeams - 1; round++) {
+        for (int round = 0; round < teams.size() - 1; round++) {
             //number of matches per round
-            for (int match = 0; match < numberOfTeams / 2; match++) {
+            for (int match = 0; match < teams.size() / 2; match++) {
                 //create first round, which is not based on previous rounds
                 if (round == 0) {
-                    tempMatches[round][match] = new Match(teams.get(match), teams.get(numberOfTeams - (match + 1)));
+                    tempMatches[round][match] = new Match(teams.get(match), teams.get(teams.size() - (match + 1)));
                 }
                 //hardcoding team with highest id (numberOfTeams - 1 ) to first match each round
                 //the other team is found by berger tables rules (findIdOfNextPlayer) on the id of the team in the same match,
@@ -72,11 +68,11 @@ public class RoundRobinStage extends KnockoutFormat implements Format, MatchList
                     //if uneven round, player with highest id becomes blue player
                     if ((round % 2) != 0) {
                         nextOrange = findIdOfNextPlayer(map.get(tempMatches[round - 1][match].getBlueTeam()));
-                        tempMatches[round][match] = new Match((teams.get(numberOfTeams - 1)), teams.get(nextOrange - 1));
+                        tempMatches[round][match] = new Match((teams.get(teams.size() - 1)), teams.get(nextOrange - 1));
                         //else become orange team
                     } else {
                         nextBlue = findIdOfNextPlayer(map.get(tempMatches[round - 1][match].getOrangeTeam()));
-                        tempMatches[round][match] = new Match(teams.get(nextBlue - 1), (teams.get(numberOfTeams - 1)));
+                        tempMatches[round][match] = new Match(teams.get(nextBlue - 1), (teams.get(teams.size() - 1)));
                     }
                 } else {
                     //if not the first round, or first match, find both players by findIdOfNextPlayer according to berger tables,
@@ -96,9 +92,9 @@ public class RoundRobinStage extends KnockoutFormat implements Format, MatchList
      * @param id of the team in the match in the previous round.
      * @return the id of the team that should be in this match, according to last. */
     public int findIdOfNextPlayer(int id) {
-        if ((id + (numberOfTeams / 2)) > (numberOfTeams - 1)) {
-            return id - ((numberOfTeams / 2) - 1);
-        } else return id + (numberOfTeams / 2);
+        if ((id + (teams.size() / 2)) > (teams.size() - 1)) {
+            return id - ((teams.size() / 2) - 1);
+        } else return id + (teams.size() / 2);
     }
 
     /** @return the given array with dummy teams removed. */

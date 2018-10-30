@@ -7,6 +7,7 @@ import java.util.List;
 public abstract class KnockoutFormat implements Format {
 
     public ArrayList<Team> teams;
+    public StageStatus status = StageStatus.PENDING;
 
     /** @return a hashMap containing the teams and their points. */
     abstract HashMap<Team, Integer> getTeamPointsMap();

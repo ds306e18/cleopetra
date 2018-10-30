@@ -8,7 +8,6 @@ import java.util.*;
 
 public class SwissStage extends KnockoutFormat implements Format, MatchListener {
 
-    private StageStatus status = StageStatus.PENDING;
     private ArrayList<ArrayList<Match>> rounds;
     private int maxRounds;
     private HashMap<Team, Integer> teamPoints;
