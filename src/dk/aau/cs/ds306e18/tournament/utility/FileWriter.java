@@ -18,9 +18,10 @@ public class FileWriter {
     private final static String matchFilenamePrefixPattern = "(/";
     private final static String matchFilenamePostfixPattern = ")";
 
+    private final static String matchExtensionDefaultPattern = ".*(\\.obj){1}";
     private final static String matchExtensionPrefixPattern = "[.";
     private final static String matchExtensionPostfixPattern = "]*$";
-    private final static String matchDotPattern = "[.]";
+    private final static String matchDotPattern = "[\\.]";
 
     /**
      * Writes serialised Tournament object to .obj-file with JSON-data
@@ -84,8 +85,8 @@ public class FileWriter {
     /**
      * Reads serialized Tournament object from filesystem, deserializes it, and returns it
      *
-     * @param fqn the Fully Qualified Name for the directory
-     * @param filename the custom filename given
+     * @param fqn       the Fully Qualified Name for the directory
+     * @param filename  the custom filename given
      * @param extension the custom extension given
      * @return a Tournament object if successful, else null
      */
@@ -96,7 +97,7 @@ public class FileWriter {
     /**
      * Reads serialized Tournament object from filesystem, deserializes it, and returns it
      *
-     * @param fqn the Fully Qualified Name for the directory
+     * @param fqn      the Fully Qualified Name for the directory
      * @param filename the custom filename given
      * @return a Tournament object if successful, else null
      */
@@ -121,7 +122,7 @@ public class FileWriter {
      * @param pathFilename the Fully Qualified Name for the location
      * @return deserialized Tournament object if successful, or null if error occurred
      */
-    private static Tournament readSerializedTournament(String pathFilename) {
+    public static Tournament readSerializedTournament(String pathFilename) {
         Path path = Paths.get(pathFilename);
 
         try {
@@ -141,7 +142,7 @@ public class FileWriter {
      * @param fqn the Fully Qualified Name
      * @return returns the string fqn with a trailing slash, if not already in string
      */
-    private static String checkTrailingSlash(String fqn) {
+    public static String checkTrailingSlash(String fqn) {
         // if no dir supplied, just return given argument
         if (fqn.length() == 0) return fqn;
         if (fqn.charAt(fqn.length() - 1) == '/') return fqn;
@@ -149,32 +150,32 @@ public class FileWriter {
     }
 
     /**
-     * Checks filename for correct extension, and appends it if missing
+     * Checks filename for default extension, and appends it if missing
+     *
+     * @param filename the given filename
+     * @return the filename with correct extension
+     */
+    public static String checkFilename(String filename) {
+        if (filename.matches(matchExtensionDefaultPattern)) return filename;
+        return filename + filenameExtension;
+    }
+
+    /**
+     * Checks filename for correctly formed extension, and appends it if missing
      *
      * @param filename  the given filename
      * @param extension the given extension
      * @return the filename with correct extension
      */
-    private static String checkFilename(String filename, String extension) {
-        if (extension.matches(matchDotPattern)) {
-            if (filename.matches(matchExtensionPrefixPattern + extension
-                    + matchExtensionPostfixPattern)) return filename;
-            else return filename + extension;
-        } else {
-            throw new RuntimeException("WARNING: Given extension: " + extension + " does not have a dot!");
-        }
-    }
-
-    /**
-     * Checks filename for correct extension, and appends it if missing
-     *
-     * @param filename the given filename
-     * @return the filename with correct extension
-     */
-    private static String checkFilename(String filename) {
-        if (filename.matches(matchExtensionPrefixPattern + filenameExtension
+    public static String checkFilename(String filename, String extension) {
+        //TODO; handle extensions also given in filename,
+        //TODO; e.g. delete from back to, and including dot, and append extension
+        //if filename matches ". 'extension' EOL", then simply return
+        if (filename.matches(matchExtensionPrefixPattern + extension
                 + matchExtensionPostfixPattern)) return filename;
-        else return filename + filenameExtension;
+            // handle dot delimiter
+        else if (!(filename.matches(matchDotPattern))) return filename + "." + extension;
+        else return filename + extension;
     }
 
     /**
@@ -184,7 +185,7 @@ public class FileWriter {
      * @param filename the filename of the given object
      * @return the path (fqn + filename) corrected if necessary
      */
-    private static String checkFilenameInString(String fqn, String filename) {
+    public static String checkFilenameInString(String fqn, String filename) {
         if (fqn.matches(matchFilenamePrefixPattern + filename
                 + matchFilenamePostfixPattern + matchEndOfLinePattern)) return fqn;
         else return fqn + filename;
