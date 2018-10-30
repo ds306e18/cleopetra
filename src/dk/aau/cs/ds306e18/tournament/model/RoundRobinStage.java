@@ -131,8 +131,9 @@ public class RoundRobinStage extends KnockoutFormat implements Format, MatchList
 
     @Override
     public void onMatchPlayed(Match match) {
-        // TODO: Register stage as listener to all relevant matches
-        // TODO: Evaluate if last match, if it is then status = CONCLUDED. Also add tests
+        //Evaluate: has last possible match been played?
+        if(getUpcomingMatches().size() == 0)
+            status = StageStatus.CONCLUDED;
     }
 
     /** @return a hashMap containing the teams and their points. */
@@ -156,8 +157,6 @@ public class RoundRobinStage extends KnockoutFormat implements Format, MatchList
 
         return teamPoints;
     }
-
-    // TODO: Determine when the stage is over
 
     @Override
     public Node getJavaFxNode(BracketOverview bracketOverview) {
