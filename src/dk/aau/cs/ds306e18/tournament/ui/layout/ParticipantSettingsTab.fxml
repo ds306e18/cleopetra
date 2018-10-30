@@ -5,24 +5,19 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<GridPane id="PS-mainGrid" fx:id="participantSettingsTab" minWidth="-Infinity" prefHeight="532.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.controllers.ParticipantSettingsTabController">
-   <columnConstraints>
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="464.0" minWidth="10.0" prefWidth="290.7777506510417" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="392.0" minWidth="10.0" prefWidth="292.77774047851557" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="392.0" minWidth="10.0" prefWidth="257.2222595214844" />
-   </columnConstraints>
-   <rowConstraints>
-      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-   </rowConstraints>
-   <children>
-      <VBox id="PS-leftside" prefHeight="532.0" prefWidth="259.0" spacing="10.0">
+
+<BorderPane id="PS-mainGrid" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="532.0" prefWidth="800.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <left>
+      <VBox id="PS-leftside" maxWidth="300.0" prefWidth="3000.0" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Participant settings" wrappingWidth="248.80345344543457">
                <font>
@@ -37,7 +32,7 @@
                   <Font name="System Bold" size="16.0" />
                </font>
             </Text>
-            <ListView prefWidth="200.0">
+            <ListView maxWidth="1.7976931348623157E308" minWidth="200.0" prefWidth="3000.0" VBox.vgrow="ALWAYS">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
@@ -45,79 +40,39 @@
                   <Insets right="20.0" />
                </VBox.margin>
             </ListView>
-            <GridPane style="-fx-max-width: 250;">
-               <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-               </rowConstraints>
+            <HBox>
                <children>
-                  <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="109.0" text="Add Team" />
-                  <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="108.0" text="Remove Team" GridPane.columnIndex="1" />
+                  <GridPane maxWidth="0.0" prefHeight="50.0" prefWidth="431.0" style="-fx-max-width: 250;" HBox.hgrow="ALWAYS">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="109.0" text="Add Team">
+                           <GridPane.margin>
+                              <Insets bottom="5.0" left="5.0" right="5.0" />
+                           </GridPane.margin>
+                        </Button>
+                        <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="108.0" text="Remove Team" GridPane.columnIndex="1">
+                           <GridPane.margin>
+                              <Insets bottom="5.0" left="5.0" right="5.0" />
+                           </GridPane.margin>
+                        </Button>
+                     </children>
+                  </GridPane>
                </children>
                <VBox.margin>
-                  <Insets right="20.0" />
+                  <Insets right="20.0" top="-5.0" />
                </VBox.margin>
-            </GridPane>
+            </HBox>
          </children>
       </VBox>
-      <VBox id="PS-center" prefHeight="513.0" prefWidth="279.0" spacing="10.0" GridPane.columnIndex="1">
-         <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Team Settings" wrappingWidth="248.80345344543457">
-               <font>
-                  <Font name="System Bold" size="24.0" />
-               </font>
-               <VBox.margin>
-                  <Insets top="15.0" />
-               </VBox.margin>
-            </Text>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Team name:">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Text>
-            <TextField>
-               <padding>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </padding>
-               <VBox.margin>
-                  <Insets right="20.0" />
-               </VBox.margin>
-            </TextField>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Bots">
-               <font>
-                  <Font name="System Bold" size="16.0" />
-               </font>
-            </Text>
-            <ListView maxHeight="225.0" prefWidth="200.0">
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-               <VBox.margin>
-                  <Insets right="20.0" />
-               </VBox.margin>
-            </ListView>
-            <GridPane style="-fx-max-width: 250;">
-               <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-               </rowConstraints>
-               <children>
-                  <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="109.0" text="Add Team" />
-                  <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="108.0" text="Delete Team" GridPane.columnIndex="1" />
-               </children>
-               <VBox.margin>
-                  <Insets right="20.0" />
-               </VBox.margin>
-            </GridPane>
-         </children>
-      </VBox>
-      <VBox id="PS-rightside" prefHeight="200.0" prefWidth="150.0" spacing="10.0" GridPane.columnIndex="2">
+   </left>
+   <right>
+      <VBox id="PS-rightside" maxWidth="0.0" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Bot Settings" wrappingWidth="208.8034381866455">
                <font>
@@ -171,12 +126,80 @@
                   <Font size="16.0" />
                </font>
             </Text>
-            <TextArea prefHeight="200.0" prefWidth="200.0">
+            <TextArea prefWidth="200.0">
                <VBox.margin>
                   <Insets right="20.0" />
                </VBox.margin>
             </TextArea>
          </children>
       </VBox>
-   </children>
-</GridPane>
+   </right>
+   <center>
+      <VBox id="PS-center" maxWidth="0.0" spacing="10.0" BorderPane.alignment="CENTER">
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Team Settings" wrappingWidth="248.80345344543457">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="15.0" />
+               </VBox.margin>
+            </Text>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Team name:">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Text>
+            <TextField>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+               <VBox.margin>
+                  <Insets right="20.0" />
+               </VBox.margin>
+            </TextField>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Bots">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Text>
+            <ListView maxHeight="225.0">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <VBox.margin>
+                  <Insets right="20.0" />
+               </VBox.margin>
+            </ListView>
+            <HBox alignment="CENTER" prefHeight="50.0">
+               <children>
+                  <GridPane maxWidth="310.0" prefHeight="50.0" style="-fx-max-width: 250;">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="109.0" text="Add Team">
+                           <GridPane.margin>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </GridPane.margin>
+                        </Button>
+                        <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="108.0" text="Delete Team" GridPane.columnIndex="1">
+                           <GridPane.margin>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </GridPane.margin>
+                        </Button>
+                     </children>
+                  </GridPane>
+               </children>
+               <VBox.margin>
+                  <Insets right="20.0" />
+               </VBox.margin>
+            </HBox>
+         </children>
+      </VBox>
+   </center>
+</BorderPane>
