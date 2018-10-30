@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<GridPane id="mainGrid" fx:id="tournamentSettingsTab" minWidth="-Infinity" prefHeight="532.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.controllers.TournamentSettingsTabController">
+<GridPane id="mainGrid" fx:id="tournamentSettingsTab" minWidth="-Infinity" prefHeight="532.0" prefWidth="800.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.controllers.TournamentSettingsTabController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="464.0" minWidth="10.0" prefWidth="436.44451904296875" />
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="392.0" minWidth="10.0" prefWidth="363.55548095703125" />
@@ -40,7 +40,7 @@
                   <Font size="16.0" />
                </font>
             </Text>
-            <TextField VBox.vgrow="NEVER">
+            <TextField fx:id="nameTextField" VBox.vgrow="NEVER">
                <VBox.margin>
                   <Insets left="20.0" />
                </VBox.margin>
@@ -58,7 +58,7 @@
                         <Insets left="20.0" />
                      </HBox.margin>
                   </Text>
-                  <ChoiceBox prefHeight="25.0" prefWidth="111.0">
+                  <ChoiceBox fx:id="tieBreakerBtn" prefHeight="25.0" prefWidth="111.0">
                      <HBox.margin>
                         <Insets left="30.0" />
                      </HBox.margin>
@@ -73,7 +73,7 @@
                   <Insets bottom="-5.0" left="20.0" />
                </VBox.margin>
             </Text>
-            <ListView prefHeight="200.0" prefWidth="200.0">
+            <ListView fx:id="stagesListView" prefHeight="200.0" prefWidth="200.0">
                <VBox.margin>
                   <Insets left="20.0" />
                </VBox.margin>
@@ -87,8 +87,8 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="109.0" text="Add stage" />
-                  <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="108.0" text="Delete stage" GridPane.columnIndex="1" />
+                  <Button fx:id="addStageBtn" mnemonicParsing="false" prefHeight="27.0" prefWidth="109.0" text="Add stage" />
+                  <Button fx:id="deleteStageBtn" mnemonicParsing="false" prefHeight="27.0" prefWidth="108.0" text="Delete stage" GridPane.columnIndex="1" />
                </children>
                <VBox.margin>
                   <Insets left="20.0" right="20.0" />
@@ -99,7 +99,7 @@
             <Insets />
          </GridPane.margin>
       </VBox>
-      <VBox id="TS-rightside" prefHeight="200.0" prefWidth="338.0" spacing="10.0" GridPane.columnIndex="1">
+      <VBox id="TS-rightside" fx:id="stageSettingsVBox" prefHeight="200.0" prefWidth="338.0" spacing="10.0" GridPane.columnIndex="1">
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Stage settings" wrappingWidth="311.91465950012207">
                <font>

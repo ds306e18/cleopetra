@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<GridPane id="mainGrid" fx:id="bracketOverviewTab" minWidth="-Infinity" prefHeight="532.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.controllers.BracketOverviewTabController">
+<GridPane id="mainGrid" fx:id="bracketOverviewTab" minWidth="-Infinity" prefHeight="532.0" prefWidth="800.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.controllers.BracketOverviewTabController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="464.0" minWidth="10.0" prefWidth="279.7777506510417" />
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="669.7777862548828" minWidth="10.0" prefWidth="520.888916015625" />
@@ -29,7 +29,7 @@
                   <Insets top="15.0" />
                </VBox.margin>
             </Text>
-            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="300.0" prefHeight="800.0">
+            <VBox fx:id="overviewVBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="300.0" prefHeight="800.0">
                <VBox.margin>
                   <Insets right="20.0" />
                </VBox.margin>
@@ -46,7 +46,7 @@
                   <Insets top="15.0" />
                </VBox.margin>
             </Text>
-            <VBox prefHeight="100.0">
+            <VBox fx:id="selectedMatchVBox" prefHeight="100.0">
                <VBox.margin>
                   <Insets right="20.0" />
                </VBox.margin>
@@ -63,22 +63,22 @@
                               <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
                            </rowConstraints>
                            <children>
-                              <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="109.0" text="Next match">
+                              <Button fx:id="nextMatchBtn" mnemonicParsing="false" prefHeight="27.0" prefWidth="109.0" text="Next match">
                                  <GridPane.margin>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </GridPane.margin>
                               </Button>
-                              <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="108.0" text="Next Stage" GridPane.columnIndex="1">
+                              <Button fx:id="nextStageBtn" mnemonicParsing="false" prefHeight="27.0" prefWidth="108.0" text="Next Stage" GridPane.columnIndex="1">
                                  <GridPane.margin>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </GridPane.margin>
                               </Button>
-                              <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="108.0" text="Previous Stage" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                              <Button fx:id="prevStageBtn" mnemonicParsing="false" prefHeight="27.0" prefWidth="108.0" text="Previous Stage" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                  <GridPane.margin>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </GridPane.margin>
                               </Button>
-                              <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="108.0" text="Previous match" GridPane.rowIndex="1">
+                              <Button fx:id="prevMatchBtn" mnemonicParsing="false" prefHeight="27.0" prefWidth="108.0" text="Previous match" GridPane.rowIndex="1">
                                  <GridPane.margin>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </GridPane.margin>
