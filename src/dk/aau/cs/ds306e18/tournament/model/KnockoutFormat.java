@@ -3,6 +3,7 @@ package dk.aau.cs.ds306e18.tournament.model;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.spi.AbstractResourceBundleProvider;
 
 public abstract class KnockoutFormat implements Format {
 
@@ -99,5 +100,45 @@ public abstract class KnockoutFormat implements Format {
         }
 
         return teamPointsOrderedList;
+    }
+
+    public abstract List<Match> getAllMatches();
+
+    @Override
+    public ArrayList<Match> getCompletedMatches() {
+
+        ArrayList<Match> allMatches = new ArrayList<>(getAllMatches());
+        ArrayList<Match> playedMatches = new ArrayList<>();
+
+        for (Match match : allMatches)
+            if (match.hasBeenPlayed())
+                playedMatches.add(match);
+
+        return playedMatches;
+    }
+
+    /** All created matches can be played in swiss.
+     * @return an empty ArrayList<Match>*/
+    @Override
+    public List<Match> getPendingMatches() {
+        return new ArrayList<>();
+    }
+
+    @Override
+    public List<Match> getUpcomingMatches() {
+
+        List<Match> allMatches = getAllMatches();
+        ArrayList<Match> upComingMatches = new ArrayList<>();
+
+        for (Match match : allMatches)
+            if (!match.hasBeenPlayed())
+                upComingMatches.add(match);
+
+        return upComingMatches;
+    }
+
+    @Override
+    public StageStatus getStatus() {
+        return status;
     }
 }

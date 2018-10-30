@@ -117,37 +117,6 @@ public class RoundRobinStage extends KnockoutFormat implements Format, MatchList
     }
 
     @Override
-    public ArrayList<Match> getUpcomingMatches() {
-
-        ArrayList<Match> allMatches = getAllMatches();
-        ArrayList<Match> upComingMatches = new ArrayList<>();
-
-        for (Match match : allMatches)
-            if (!match.hasBeenPlayed())
-                upComingMatches.add(match);
-
-        return upComingMatches;
-    }
-
-    @Override
-    public ArrayList<Match> getCompletedMatches() {
-
-        ArrayList<Match> allMatches = getAllMatches();
-        ArrayList<Match> playedMatches = new ArrayList<>();
-
-        for (Match match : allMatches)
-            if (match.hasBeenPlayed())
-                playedMatches.add(match);
-
-        return playedMatches;
-    }
-
-    @Override
-    public ArrayList<Match> getPendingMatches() {
-        return new ArrayList<>(); //All created matches can be played, so there is no matches pending
-    }
-
-    @Override
     public ArrayList<Match> getAllMatches() {
         return matches;
     }
@@ -180,10 +149,7 @@ public class RoundRobinStage extends KnockoutFormat implements Format, MatchList
         return teamPoints;
     }
 
-    @Override
-    public StageStatus getStatus() {
-        return status; // TODO: Determine when the stage is over
-    }
+    // TODO: Determine when the stage is over
 
     @Override
     public Node getJavaFxNode(BracketOverview bracketOverview) {

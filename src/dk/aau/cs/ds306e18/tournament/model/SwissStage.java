@@ -185,40 +185,6 @@ public class SwissStage extends KnockoutFormat implements Format, MatchListener 
         return matches;
     }
 
-    @Override
-    public List<Match> getUpcomingMatches() {
-
-        List<Match> allMatches = getAllMatches();
-        ArrayList<Match> upComingMatches = new ArrayList<>();
-
-        for(Match match : allMatches)
-            if(!match.hasBeenPlayed())
-                upComingMatches.add(match);
-
-        return upComingMatches;
-    }
-
-    /** All created matches can be played in swiss.
-     * @return an empty ArrayList<Match>*/
-    @Override
-    public List<Match> getPendingMatches() {
-
-        return new ArrayList<>();
-    }
-
-    @Override
-    public List<Match> getCompletedMatches() {
-
-        List<Match> allMatches = getAllMatches();
-        ArrayList<Match> playedMatches = new ArrayList<>();
-
-        for(Match match : allMatches)
-            if(match.hasBeenPlayed())
-                playedMatches.add(match);
-
-        return playedMatches;
-    }
-
     public int getMaxRounds() {
         return maxRounds;
     }
@@ -226,11 +192,6 @@ public class SwissStage extends KnockoutFormat implements Format, MatchListener 
     public boolean hasMaxNumberOfRounds() {
 
         return rounds.size() == getMaxRounds();
-    }
-
-    @Override
-    public StageStatus getStatus() {
-        return status;
     }
 
     /** Used for tests. This should not be used to anything else. */
