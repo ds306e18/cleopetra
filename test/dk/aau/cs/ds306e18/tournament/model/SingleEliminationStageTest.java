@@ -48,6 +48,17 @@ public class SingleEliminationStageTest {
         }
     }
 
+    //final match should depend on all matches
+    @Test
+    public void dependsOnFinalMatch03() {
+        SingleEliminationStage bracket = new SingleEliminationStage();
+        bracket.start(TestUtilities.generateSeededTeams(10,1));
+        List<Match> matches = bracket.getAllMatches();
+        for(int n = 1; n < matches.size(); n++) {
+            assertTrue(matches.get(0).dependsOn(matches.get(n)));
+        }
+    }
+
     //The teams should be seeded correctly in first round
     @Test
     public void seedTest01(){
@@ -70,7 +81,7 @@ public class SingleEliminationStageTest {
         SingleEliminationStage bracket = new SingleEliminationStage();
         bracket.start(TestUtilities.generateSeededTeams(7,1));
         assertNull(bracket.getMatchesAsArray()[6]);
-        assertEquals(1,bracket.getMatchesAsArray()[bracket.getParent(6)].getBlueTeam().getInitialSeedValue());
+        assertEquals(1,bracket.getMatchesAsArray()[2].getOrangeTeam().getInitialSeedValue());
     }
 
     //match 3 should be null and snd seed should be placed in next round
@@ -79,7 +90,7 @@ public class SingleEliminationStageTest {
         SingleEliminationStage bracket = new SingleEliminationStage();
         bracket.start(TestUtilities.generateSeededTeams(6,1));
         assertNull(bracket.getMatchesAsArray()[4]);
-        assertEquals(2,bracket.getMatchesAsArray()[bracket.getParent(4)].getBlueTeam().getInitialSeedValue());
+        assertEquals(2,bracket.getMatchesAsArray()[1].getOrangeTeam().getInitialSeedValue());
     }
 
     //There should only be one match in first around, this should be the worst seeded teams.
@@ -135,11 +146,77 @@ public class SingleEliminationStageTest {
         assertEquals(2, bracket.getCompletedMatches().size());
     }
 
+    //Gets top 4 teams
     @Test
     public void getTopTeamsTest01(){
+        SingleEliminationStage bracket = generateBracketsAndWins(8);
+        List <Team> teamList = new ArrayList<>(bracket.getTopTeams(4, new TieBreakerBySeed()));
+        int seedValue = 1;
+        for(int i = 0; i < 4; i++) {
+            assertEquals(seedValue, teamList.get(i).getInitialSeedValue());
+            seedValue++;
+        }
+    }
+
+    //Gets top 6 teams
+    @Test
+    public void getTopTeamTest02() {
+        SingleEliminationStage bracket = generateBracketsAndWins(10);
+        List<Team> teamList = new ArrayList<Team>(bracket.getTopTeams(6, new TieBreakerBySeed()));
+        int seedValue = 1;
+        for(int i = 0; i < 6; i++) {
+            assertEquals(seedValue, teamList.get(i).getInitialSeedValue());
+            seedValue++;
+        }
+    }
+
+    //StageStatus test  pending-running-concluded
+    @Test
+    public void stageStatusTest01() {
         SingleEliminationStage bracket = new SingleEliminationStage();
-        bracket.start(TestUtilities.generateSeededTeams(8,1));
-        for(int matchIndex = 6; matchIndex >= 0; matchIndex--){
+        assertEquals(StageStatus.PENDING, bracket.getStatus());
+        bracket.start(TestUtilities.generateTeams(4, 1));
+        assertEquals(StageStatus.RUNNING, bracket.getStatus());
+        bracket =  generateBracketsAndWins(4);
+        assertEquals(StageStatus.CONCLUDED, bracket.getStatus());
+    }
+
+    //StageStatus should still be running if some matches has been played
+    @Test
+    public void stageStatusTest02() {
+        SingleEliminationStage bracket = new SingleEliminationStage();
+        bracket.start(TestUtilities.generateTeams(8, 1));
+        List<Match> arrayList = bracket.getAllMatches();
+        arrayList.get(arrayList.size()-1).setBlueScore(1);
+        arrayList.get(arrayList.size()-1).setHasBeenPlayed(true);
+        arrayList.get(arrayList.size()-2).setBlueScore(1);
+        arrayList.get(arrayList.size()-2).setHasBeenPlayed(true);
+        assertEquals(StageStatus.RUNNING, bracket.getStatus());
+    }
+
+    //Should throw exception if the match is not playable
+    @Test(expected = IllegalStateException.class)
+    public void unPlayableMatch() {
+        SingleEliminationStage bracket = new SingleEliminationStage();
+        bracket.start(TestUtilities.generateTeams(8, 1));
+        bracket.getAllMatches().get(0).setBlueScore(1);
+    }
+
+    //Should throw exception if the match is not playable
+    @Test(expected = IllegalStateException.class)
+    public void unPlayableMatch02() {
+        SingleEliminationStage bracket = new SingleEliminationStage();
+        bracket.start(TestUtilities.generateTeams(8, 1));
+        bracket.getAllMatches().get(2).setHasBeenPlayed(true);
+    }
+
+    /** Generates a bracket and sets wins according to the best seed
+     * @param amountOfTeams the amount of teams */
+    private SingleEliminationStage generateBracketsAndWins(int amountOfTeams) {
+        SingleEliminationStage bracket = new SingleEliminationStage();
+        bracket.start(TestUtilities.generateSeededTeams(amountOfTeams,1));
+
+        for(int matchIndex = bracket.getAllMatches().size()-1 ; matchIndex >= 0; matchIndex--){
             if(bracket.getAllMatches().get(matchIndex).getBlueTeam().getInitialSeedValue() < bracket.getAllMatches().get(matchIndex).getOrangeTeam().getInitialSeedValue()) {
                 bracket.getAllMatches().get(matchIndex).setBlueScore(1);
                 bracket.getAllMatches().get(matchIndex).setHasBeenPlayed(true);
@@ -149,6 +226,6 @@ public class SingleEliminationStageTest {
                 bracket.getAllMatches().get(matchIndex).setHasBeenPlayed(true);
             }
         }
-        bracket.getTopTeams(4, new TieBreakerBySeed());
+        return bracket;
     }
 }
