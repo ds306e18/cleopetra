@@ -389,7 +389,7 @@ public class SwissStageTest {
     public void getTopTeams02(){
 
         SwissStage bracket = new SwissStage();
-        ArrayList<Team> inputTeams = TestUtilities.generateTeams(4,2);
+        ArrayList<Team> inputTeams = TestUtilities.generateSeededTeams(4,2);
         bracket.start(inputTeams);
 
         setAllMatchesPlayed(bracket);
@@ -414,11 +414,11 @@ public class SwissStageTest {
             assertFalse(team == teamWithHighestSeed);
     }
 
-    /** sets all upcoming matches in the given swissStage to have been played.*/
-    private void setAllMatchesPlayed(SwissStage swissStage){
+    /** sets all upcoming matches in the given format to have been played.*/
+    private void setAllMatchesPlayed(KnockoutFormat format){
 
         //Set all matches to played
-        List<Match> matches = swissStage.getUpcomingMatches();
+        List<Match> matches = format.getUpcomingMatches();
         for(Match match : matches){
             match.setHasBeenPlayed(true);
         }

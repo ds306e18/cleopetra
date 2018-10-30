@@ -3,7 +3,6 @@ package dk.aau.cs.ds306e18.tournament.model;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.spi.AbstractResourceBundleProvider;
 
 public abstract class KnockoutFormat implements Format {
 
