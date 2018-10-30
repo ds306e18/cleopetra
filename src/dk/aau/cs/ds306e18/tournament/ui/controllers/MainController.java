@@ -5,9 +5,9 @@ import javafx.scene.layout.GridPane;
 
 public class MainController {
 
-    public GridPane tournamentSettingsTab;
-    public GridPane participantSettingsTab;
-    public GridPane bracketOverviewTab;
+    public TournamentSettingsTabController tournamentSettingsTabController;
+    public ParticipantSettingsTabController participantSettingsTabController;
+    public BracketOverviewTabController bracketOverviewTabController;
 
     @FXML
     private void initialize() {
