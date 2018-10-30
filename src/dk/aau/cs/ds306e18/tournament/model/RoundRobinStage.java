@@ -1,14 +1,16 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
+import dk.aau.cs.ds306e18.tournament.UI.Tabs.BracketOverview;
+import javafx.scene.Node;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class RoundRobinStage implements Stage, MatchListener {
+public class RoundRobinStage implements Format, MatchListener {
 
     private static final Team DUMMY_TEAM = new Team("Dummy", null, 0, null);
 
-    private String name = "Round Robin";
     private StageStatus status = StageStatus.PENDING;
     private int numberOfTeams;
     private ArrayList<Match> matches;
@@ -27,15 +29,6 @@ public class RoundRobinStage implements Stage, MatchListener {
         this.numberOfTeams = teams.size();
         this.matches = generateMatches(teams);
         status = StageStatus.RUNNING;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String getName() {
-        return name;
     }
 
     @Override
@@ -178,5 +171,10 @@ public class RoundRobinStage implements Stage, MatchListener {
     @Override
     public List<Team> getTopTeams(int count, TieBreaker tieBreaker) {
         return null; // TODO: Returns a list of the teams that performed best this stage. They should be sorted after performance, with best team first.
+    }
+
+    @Override
+    public Node getJavaFxNode(BracketOverview bracketOverview) {
+        return null; //TODO
     }
 }

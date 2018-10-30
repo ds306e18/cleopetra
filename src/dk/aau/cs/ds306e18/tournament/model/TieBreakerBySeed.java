@@ -3,10 +3,14 @@ package dk.aau.cs.ds306e18.tournament.model;
 import java.util.Objects;
 import java.util.Random;
 
-public class TieBreakerBySeed implements TieBreaker {
+public class TieBreakerBySeed extends TieBreaker {
 
     private Random rand = new Random();
     private String name = "TieBreaker by seed";
+
+    public String toString() {
+        return "seed";
+    }
 
     @Override
     public boolean compare(Team teamA, Team teamB) {
@@ -15,7 +19,6 @@ public class TieBreakerBySeed implements TieBreaker {
         return comparison < 0;
     }
 
-    @Override
     public String getName() {
         return this.name;
     }

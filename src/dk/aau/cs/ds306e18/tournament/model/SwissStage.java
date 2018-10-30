@@ -1,13 +1,16 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
+import dk.aau.cs.ds306e18.tournament.UI.Tabs.BracketOverview;
+import dk.aau.cs.ds306e18.tournament.UI.bracketObjects.SwissNode;
+import javafx.scene.Node;
+
 import java.util.*;
 
-public class SwissStage implements Stage, MatchListener {
+public class SwissStage implements Format, MatchListener {
 
-    private String name = "Swiss";
     private StageStatus status = StageStatus.PENDING;
     private ArrayList<ArrayList<Match>> rounds;
-    private int MAX_ROUNDS;
+    private int maxRounds;
     private ArrayList<Team> teams;
     private HashMap<Team, Integer> teamPoints;
 
@@ -15,7 +18,7 @@ public class SwissStage implements Stage, MatchListener {
     public void start(List<Team> teams) {
 
         rounds = new ArrayList<>();
-        MAX_ROUNDS = calculateMaxRounds(teams.size()); // TODO: Add the ability to end Swiss after X rounds
+        maxRounds = calculateMaxRounds(teams.size());
         teamPoints = createPointsHashMap(teams);
         this.teams = new ArrayList<>(teams);
         status = StageStatus.RUNNING;
@@ -50,10 +53,10 @@ public class SwissStage implements Stage, MatchListener {
     public boolean createNewRound() {
 
         if(status == StageStatus.PENDING){
-            return false; //TODO Could be an exception
+            return false;
         } else if(status == StageStatus.CONCLUDED){
-            return false; //TODO Could be an exception
-        } else if(rounds.size() == MAX_ROUNDS){ //Is it legal to create another round?
+            return false;
+        } else if(rounds.size() == maxRounds){ //Is it legal to create another round?
             return false;
         } else if(getUpcomingMatches().size() != 0) //Has all matches been played?
             return false;
@@ -132,7 +135,9 @@ public class SwissStage implements Stage, MatchListener {
 
                 //Has the two selected teams played each other before?
                 if(!hasTheseTeamsPlayedBefore(team1, team2)){
-                    createdMatches.add(new Match(new StarterSlot(team1), new StarterSlot(team2)));
+                    Match match = new Match(new StarterSlot(team1), new StarterSlot(team2));
+                    match.registerListener(this);
+                    createdMatches.add(match);
                     break; //Two valid teams has been found, and match has been created. BREAK.
                 }
             }
@@ -152,7 +157,7 @@ public class SwissStage implements Stage, MatchListener {
      * @return true if the two given teams has played before, and false if that is not the case. */
     private boolean hasTheseTeamsPlayedBefore(Team team1, Team team2) {
 
-        ArrayList<Match> matches = getCompletedMatches();
+        List<Match> matches = getCompletedMatches();
 
         for(Match match : matches){
 
@@ -168,7 +173,7 @@ public class SwissStage implements Stage, MatchListener {
     }
 
     @Override
-    public ArrayList<Match> getAllMatches() {
+    public List<Match> getAllMatches() {
 
         ArrayList<Match> matches = new ArrayList<>();
 
@@ -182,9 +187,9 @@ public class SwissStage implements Stage, MatchListener {
     }
 
     @Override
-    public ArrayList<Match> getUpcomingMatches() {
+    public List<Match> getUpcomingMatches() {
 
-        ArrayList<Match> allMatches = getAllMatches();
+        List<Match> allMatches = getAllMatches();
         ArrayList<Match> upComingMatches = new ArrayList<>();
 
         for(Match match : allMatches)
@@ -197,15 +202,15 @@ public class SwissStage implements Stage, MatchListener {
     /** All created matches can be played in swiss.
      * @return an empty ArrayList<Match>*/
     @Override
-    public ArrayList<Match> getPendingMatches() {
+    public List<Match> getPendingMatches() {
 
-        return new ArrayList<Match>();
+        return new ArrayList<>();
     }
 
     @Override
-    public ArrayList<Match> getCompletedMatches() {
+    public List<Match> getCompletedMatches() {
 
-        ArrayList<Match> allMatches = getAllMatches();
+        List<Match> allMatches = getAllMatches();
         ArrayList<Match> playedMatches = new ArrayList<>();
 
         for(Match match : allMatches)
@@ -215,42 +220,104 @@ public class SwissStage implements Stage, MatchListener {
         return playedMatches;
     }
 
-    public int getMAX_ROUNDS() {
-        return MAX_ROUNDS;
+    public int getMaxRounds() {
+        return maxRounds;
     }
 
     public boolean hasMaxNumberOfRounds() {
 
-        return rounds.size() == getMAX_ROUNDS();
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String getName() {
-        return name;
+        return rounds.size() == getMaxRounds();
     }
 
     @Override
     public StageStatus getStatus() {
-        return status; // TODO: Determine when the stage is over
+        return status;
     }
 
-    //TODO DELETE currently used for testing as a workaround.
+    /** Used for tests. This should not be used to anything else. */
     public ArrayList<Match> getRawMatches(){
         return rounds.get(rounds.size() - 1);
     }
 
     @Override
     public void onMatchPlayed(Match match) {
-        // TODO: Register stage as listener to all relevant matches
-        // TODO: Evaluate if last match, if it is then status = CONCLUDED. Also add tests
+        //Evaluate: has last possible match been played?
+        if(hasMaxNumberOfRounds() && getUpcomingMatches().size() == 0){
+            status = StageStatus.CONCLUDED;
+        }
     }
 
     @Override
     public List<Team> getTopTeams(int count, TieBreaker tieBreaker) {
-        return null; // TODO: Returns a list of the teams that performed best this stage. They should be sorted after performance, with best team first.
+
+        //Create points ordered team list
+        ArrayList<Team> teamPointsOrderList = new ArrayList<>();
+        ArrayList<Team> tempTeamsList = new ArrayList<>(teams);
+        while(tempTeamsList.size() != 0){
+            Team teamWithMostPoints = tempTeamsList.get(0);
+
+            //Find the team with the most points
+            for(Team team : tempTeamsList){
+                if(teamPoints.get(team) > teamPoints.get(teamWithMostPoints))
+                    teamWithMostPoints = team;
+            }
+
+            teamPointsOrderList.add(teamWithMostPoints);
+            tempTeamsList.remove(teamWithMostPoints);
+        }
+
+        if(teams.size() <= count) //Is the requested count larger then the count of teams?
+            return new ArrayList<>(teamPointsOrderList);
+        else {
+            if (teamPoints.get(teamPointsOrderList.get(count - 1)).equals(teamPoints.get(teamPointsOrderList.get(count)))) {
+
+                //TIE BREAKING!
+
+                ArrayList<Team> topTeamsList = new ArrayList<>();
+
+                //Find the teams that are tied
+                ArrayList<Team> tiedTeams = new ArrayList<>();
+                for(Team team : teamPointsOrderList)
+                    if(teamPoints.get(team) == teamPoints.get(teamPointsOrderList.get(count-1))) //Does the current team has the same points as the for sure tied one.
+                        tiedTeams.add(team);
+
+                //Create list with the topteams down untill and without the tied teams
+                for(Team team : teamPointsOrderList){
+
+                    if(teamPoints.get(team) == teamPoints.get(teamPointsOrderList.get(count-1)))
+                        break;
+                    else
+                        topTeamsList.add(team);
+                }
+
+                //Get list of tie broken teams
+                ArrayList<Team> tieBrokenTeams = new ArrayList<>(tieBreaker.compareAll(tiedTeams, tiedTeams.size()));
+
+                //Fill the topteamsList with the remaining needed count of teams from the tie broken teams
+                while(topTeamsList.size() < count){
+                    topTeamsList.add(tieBrokenTeams.get(0));
+                    tieBrokenTeams.remove(0);
+                }
+
+                return topTeamsList;
+            }
+            //Get the desired number of teams
+            ArrayList<Team> desiredNumberOfTeam = new ArrayList<>();
+            for (int i = 0; i < count; i++)
+                desiredNumberOfTeam.add(teamPointsOrderList.get(i));
+
+            return desiredNumberOfTeam;
+        }
+    }
+
+    @Override
+    public Node getJavaFxNode(BracketOverview bracketOverview) {
+
+        return new SwissNode(this, bracketOverview);
+    }
+
+    /** @return an arraylist of the current created rounds. */
+    public ArrayList<ArrayList<Match>> getRounds(){
+        return new ArrayList<>(this.rounds);
     }
 }

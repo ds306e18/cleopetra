@@ -16,10 +16,10 @@ public class Tournament {
 
     private String name = "Unnamed Tournament";
     private ArrayList<Team> teams = new ArrayList<>();
-    private ArrayList<PendingStage> pendingStages = new ArrayList<>();
-    private ArrayList<Stage> startedStages = new ArrayList<>();
+    private ArrayList<Stage> stages = new ArrayList<>();
     private TieBreaker tieBreaker = new TieBreakerBySeed();
     private boolean started = false;
+    private int currentStageIndex = -1;
 
     public String getName() {
         return name;
@@ -55,57 +55,65 @@ public class Tournament {
         teams.sort(Comparator.comparingInt(Team::getInitialSeedValue));
     }
 
-    public void addStage(PendingStage stage) {
+    public void addStage(Stage stage) {
         if (started) throw new IllegalStateException("Tournament has already started.");
-        pendingStages.add(stage);
+        stages.add(stage);
     }
 
-    public void removeStage(PendingStage stage) {
+    public void removeStage(Stage stage) {
         if (started) throw new IllegalStateException("Tournament has already started.");
-        pendingStages.remove(stage);
+        stages.remove(stage);
     }
 
     public void removeStage(int index) {
         if (started) throw new IllegalStateException("Tournament has already started.");
-        pendingStages.remove(index);
+        stages.remove(index);
     }
 
-    public List<PendingStage> getPendingStages() {
-        return new ArrayList<>(pendingStages);
+    public List<Stage> getStages() {
+        return new ArrayList<>(stages);
     }
 
-    public boolean hasMorePendingStages() {
-        return pendingStages.size() == 0;
+    /** Returns the number of stages that has not started yet. */
+    public int getUpcomingStagesCount() {
+        return stages.size() - currentStageIndex - 1;
+    }
+
+    /** Returns true there stages that has not started yet. */
+    public boolean hasUpcomingStages() {
+        return getUpcomingStagesCount() > 0;
     }
 
     public Stage getCurrentStage() {
-        if (startedStages.isEmpty()) return null;
-        return startedStages.get(startedStages.size() - 1);
+        if (stages.isEmpty() || currentStageIndex == -1) return null;
+        return stages.get(currentStageIndex);
     }
 
     public void startNextStage() {
-        if (pendingStages.isEmpty())
+        if (!started)
+            throw new IllegalStateException("The first stage should be started through the start() method.");
+
+        if (!hasUpcomingStages())
             throw new IllegalStateException("There are no more pending stages.");
 
-        if (!startedStages.isEmpty() && getCurrentStage().getStatus() != StageStatus.CONCLUDED)
+        if (currentStageIndex != -1 && getCurrentStage().getFormat().getStatus() != StageStatus.CONCLUDED)
             throw new IllegalStateException("Previous stage has not been concluded.");
 
         // State is ok
 
         // Find best teams
         List<Team> bestTeams;
-        if (startedStages.isEmpty()) {
+        if (currentStageIndex == -1) {
             sortTeamsAfterInitialSeed();
             bestTeams = new ArrayList<>(teams);
         } else {
-            int wantedTeamCount = pendingStages.get(0).getNumberOfTeamsWanted();
-            bestTeams = getCurrentStage().getTopTeams(wantedTeamCount, tieBreaker);
+            int wantedTeamCount = stages.get(currentStageIndex + 1).getNumberOfTeamsWanted();
+            bestTeams = getCurrentStage().getFormat().getTopTeams(wantedTeamCount, tieBreaker);
         }
 
         // Proceed to next stage
-        Stage newStage = pendingStages.get(0).start(bestTeams);
-        pendingStages.remove(0);
-        startedStages.add(newStage);
+        currentStageIndex++;
+        getCurrentStage().getFormat().start(bestTeams);
     }
 
     public boolean hasStarted() {
@@ -113,13 +121,13 @@ public class Tournament {
     }
 
     public boolean canStart() {
-        return teams.size() < 2 && !pendingStages.isEmpty();
+        return teams.size() < 2 && !stages.isEmpty();
     }
 
     public void start() {
         if (started) throw new IllegalStateException("Tournament has already started.");
         if (teams.size() < 2) throw new IllegalStateException("There must be at least two teams in the tournament.");
-        if (pendingStages.isEmpty()) throw new IllegalStateException("There must be at least one stage in the tournament.");
+        if (stages.isEmpty()) throw new IllegalStateException("There must be at least one stage in the tournament.");
         started = true;
         startNextStage();
     }
@@ -139,15 +147,15 @@ public class Tournament {
         if (o == null || getClass() != o.getClass()) return false;
         Tournament that = (Tournament) o;
         return started == that.started &&
+                currentStageIndex == that.currentStageIndex &&
                 Objects.equals(getName(), that.getName()) &&
                 Objects.equals(getTeams(), that.getTeams()) &&
-                Objects.equals(getPendingStages(), that.getPendingStages()) &&
-                Objects.equals(startedStages, that.startedStages) &&
+                Objects.equals(getStages(), that.getStages()) &&
                 Objects.equals(getTieBreaker(), that.getTieBreaker());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getName(), getTeams(), getPendingStages(), startedStages, getTieBreaker(), started);
+        return Objects.hash(getName(), getTeams(), getStages(), getTieBreaker(), started, currentStageIndex);
     }
 }

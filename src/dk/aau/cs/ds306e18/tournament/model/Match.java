@@ -116,9 +116,9 @@ public class Match {
             // Enqueue child matches, if any
             // Orange is added first - this means the final order will be the reverse of the logical
             // order of playing matches
-            Match blueReqMatch = blueSlot.getRequiredMatch();
+            Match blueReqMatch = match.blueSlot.getRequiredMatch();
             if (blueReqMatch != null) queue.add(blueReqMatch);
-            Match orangeReqMatch = orangeSlot.getRequiredMatch();
+            Match orangeReqMatch = match.orangeSlot.getRequiredMatch();
             if (orangeReqMatch != null) queue.add(orangeReqMatch);
         }
 
@@ -139,9 +139,9 @@ public class Match {
             matches.add(match);
 
             // Push child matches, if any
-            Match blueReqMatch = blueSlot.getRequiredMatch();
+            Match blueReqMatch = match.blueSlot.getRequiredMatch();
             if (blueReqMatch != null) stack.push(blueReqMatch);
-            Match orangeReqMatch = orangeSlot.getRequiredMatch();
+            Match orangeReqMatch = match.orangeSlot.getRequiredMatch();
             if (orangeReqMatch != null) stack.push(orangeReqMatch);
         }
 
@@ -183,6 +183,7 @@ public class Match {
     }
 
     public void setHasBeenPlayed(boolean played) {
+        if(!isReadyToPlay()){ throw new IllegalStateException("Match is not playable"); }
         this.played = played;
         if (played) notifyListeners();
     }
@@ -197,11 +198,20 @@ public class Match {
         return orangeSlot.getTeam();
     }
 
+    public Slot getBlueSlot() {
+        return blueSlot;
+    }
+
+    public Slot getOrangeSlot() {
+        return orangeSlot;
+    }
+
     public int getBlueScore() {
         return blueScore;
     }
 
     public void setBlueScore(int blueScore) {
+        if(!isReadyToPlay()){ throw new IllegalStateException("Match is not playable"); }
         this.blueScore = blueScore;
     }
 
@@ -210,15 +220,18 @@ public class Match {
     }
 
     public void setOrangeScore(int orangeScore) {
+        if(!isReadyToPlay()){ throw new IllegalStateException("Match is not playable"); }
         this.orangeScore = orangeScore;
     }
 
     public void setScores(int blueScore, int orangeScore) {
+        if(!isReadyToPlay()){ throw new IllegalStateException("Match is not playable"); }
         this.blueScore = blueScore;
         this.orangeScore = orangeScore;
     }
 
     public void setScores(int blueScore, int orangeScore, boolean hasBeenPlayed) {
+        if(!isReadyToPlay()){ throw new IllegalStateException("Match is not playable"); }
         this.blueScore = blueScore;
         this.orangeScore = orangeScore;
         this.played = hasBeenPlayed;

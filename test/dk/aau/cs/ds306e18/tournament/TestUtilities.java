@@ -1,6 +1,9 @@
 package dk.aau.cs.ds306e18.tournament;
 
-import dk.aau.cs.ds306e18.tournament.model.*;
+import dk.aau.cs.ds306e18.tournament.model.Bot;
+import dk.aau.cs.ds306e18.tournament.model.SingleEliminationStage;
+import dk.aau.cs.ds306e18.tournament.model.Team;
+import dk.aau.cs.ds306e18.tournament.model.Tournament;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,6 +15,7 @@ public class TestUtilities {
 
     /**
      * Returns a random int between lower and upper
+     *
      * @param lower limit, inclusive of limit
      * @param upper limit, inclusive of limit
      * @return random int
@@ -35,56 +39,81 @@ public class TestUtilities {
             "We Dem Girlz", "Allegiance", "Cloud9", "Evil Geniuses", "G2", "Ghost Gaming",
             "NRG", "Rouge"));
 
-    /** Generates a single bot.
-     *  @return a bot. */
-    public static Bot generateBot(){
+    /**
+     * Generates a single bot.
+     *
+     * @return a bot.
+     */
+    public static Bot generateBot() {
         Random rand = new Random();
         return new Bot(botNames.get(rand.nextInt(botNames.size())),
                 devNames.get((rand.nextInt(devNames.size()))), null); //TODO should create path somehow
     }
 
-    /** Generates an arrayList with the requested number of bots.
+    /**
+     * Generates an arrayList with the requested number of bots.
+     *
      * @param numberOfBots the desired number of bots.
-     * @return an arrayList containing the requested number of bots. */
-    public static ArrayList<Bot> generateBots(int numberOfBots){
+     * @return an arrayList containing the requested number of bots.
+     */
+    public static ArrayList<Bot> generateBots(int numberOfBots) {
 
-        if(numberOfBots < 0)
+        if (numberOfBots < 0)
             throw new IllegalArgumentException();
 
         Random rand = new Random();
         ArrayList<Bot> bots = new ArrayList<>();
 
-        for(int i = 0; i < numberOfBots; i++)
+        for (int i = 0; i < numberOfBots; i++)
             bots.add(generateBot());
 
         return bots;
     }
 
-    /** Generates a team with the given team size.
+    /**
+     * Generates a team with the given team size.
+     *
      * @param teamSize the requested number of players on the team.
-     * @return a team with the requested number of members. */
-    public static Team generateTeam(int teamSize){
+     * @return a team with the requested number of members.
+     */
+    public static Team generateTeam(int teamSize) {
+        Random rand = new Random();
+        int seedValue = rand.nextInt(100);
+        return generateTeam(teamSize, seedValue);
+    }
 
-        if(teamSize < 0)
+    /**
+     * Generates a team with the given team size and seed.
+     *
+     * @param teamSize  the requested team size.
+     * @param seedValue the teams seed
+     * @return a team with the requested number of members with the specified seed.
+     */
+    public static Team generateTeam(int teamSize, int seedValue) {
+
+        if (teamSize < 0)
             throw new IllegalArgumentException();
 
         Random rand = new Random();
 
-        return new Team(teamNames.get(rand.nextInt(teamNames.size())), generateBots(teamSize), rand.nextInt(100), "");
+        return new Team(teamNames.get(rand.nextInt(teamNames.size())), generateBots(teamSize), seedValue, "");
     }
 
-    /** Generates an arrayList with the requested number of teams containing the requested number of bots.
+    /**
+     * Generates an arrayList with the requested number of teams containing the requested number of bots.
+     *
      * @param numberOfTeams the requested number of teams.
-     * @param teamSize the requested number of bots on each team.
-     * @return an arrayList containing the requested number of teams. */
-    public static ArrayList<Team> generateTeams(int numberOfTeams, int teamSize){
+     * @param teamSize      the requested number of bots on each team.
+     * @return an arrayList containing the requested number of teams.
+     */
+    public static ArrayList<Team> generateTeams(int numberOfTeams, int teamSize) {
 
-        if(numberOfTeams < 0)
+        if (numberOfTeams < 0)
             throw new IllegalArgumentException();
 
         ArrayList<Team> teams = new ArrayList<>();
 
-        for(int i = 0; i < numberOfTeams; i++){
+        for (int i = 0; i < numberOfTeams; i++) {
             teams.add(generateTeam(teamSize));
         }
 
@@ -93,6 +122,7 @@ public class TestUtilities {
 
     /**
      * Generates a random tournament with four teams
+     *
      * @return random Tournament object
      */
     public static Tournament generateTournament() {
@@ -112,5 +142,27 @@ public class TestUtilities {
         //tournament.addStage();
 
         return tournament;
+
+    }
+
+    /**
+     * Generates an arrayList with the requested number of teams containing the requested number of bots with ascending seed values.
+     *
+     * @param numberOfTeams the requested number of teams.
+     * @param teamSize      the requested number of bots on each team.
+     * @return an arrayList containing the requested number of teams ascending seed values.
+     */
+    public static ArrayList<Team> generateSeededTeams(int numberOfTeams, int teamSize) {
+
+        if (numberOfTeams < 0)
+            throw new IllegalArgumentException();
+
+        ArrayList<Team> teams = new ArrayList<>();
+
+        for (int i = 1; i <= numberOfTeams; i++) {
+            teams.add(generateTeam(teamSize, i));
+        }
+
+        return teams;
     }
 }
