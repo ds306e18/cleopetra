@@ -1,13 +1,14 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
+import dk.aau.cs.ds306e18.tournament.UI.Tabs.BracketOverview;
+import javafx.scene.Node;
+
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class SingleEliminationStage implements Stage, MatchListener {
+public class SingleEliminationStage implements Format, MatchListener {
 
-    private String name = "Single Elimination";
     private StageStatus status = StageStatus.PENDING;
     private ArrayList<Team> seededTeams;
     private Match finalMatch;
@@ -22,15 +23,6 @@ public class SingleEliminationStage implements Stage, MatchListener {
         seedBracket(seededTeams, rounds);
         status = StageStatus.RUNNING;
         finalMatch.registerListener(this);
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String getName() {
-        return name;
     }
 
     @Override
@@ -181,7 +173,7 @@ public class SingleEliminationStage implements Stage, MatchListener {
 
     int getLeftSide(int i){
         i = i + 1;
-        return 2*i;
+        return 2 * i;
     }
 
     int getRightSide(int i) {
@@ -237,5 +229,10 @@ public class SingleEliminationStage implements Stage, MatchListener {
         }
 
         return topTeams;
+    }
+
+    @Override
+    public Node getJavaFxNode(BracketOverview bracketOverview) {
+        return null; //TODO
     }
 }
