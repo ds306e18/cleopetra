@@ -227,7 +227,7 @@ public class SingleEliminationStage implements Stage, MatchListener {
             topTeams.addAll(tempLoserTeams);
             tempLoserTeams.clear();
 
-            //New upperboundindex for the loop to itereate
+            //New round for the loop to iterate
             roundUpperBoundIndex = getRightSide(roundUpperBoundIndex);
         }
 
