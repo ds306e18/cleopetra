@@ -4,6 +4,7 @@
 # Project-specific stuff
 # all serialized objects on disk should have this extension
 *.obj
+*.object
 
 # User-specific stuff
 .idea/**/workspace.xml
