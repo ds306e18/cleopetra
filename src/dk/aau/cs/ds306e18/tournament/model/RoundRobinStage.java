@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class RoundRobinStage implements Format, MatchListener {
+public class RoundRobinStage extends KnockoutFormat implements Format, MatchListener {
 
     private static final Team DUMMY_TEAM = new Team("Dummy", null, 0, null);
 
@@ -18,6 +18,7 @@ public class RoundRobinStage implements Format, MatchListener {
     /** Constructor that automatically creates an arraylist of matches made on the principles of berger tables.
      * @param seededTeams arraylist of all the teams in the bracket. */
     public void start(List<Team> seededTeams) {
+        this.teams = new ArrayList<>(seededTeams);
         ArrayList<Team> teams = new ArrayList<>(seededTeams); // TODO: Add support for multiple groups
 
         //if there is an uneven amount of teams, add a dummy team and later remove matches that include the dummy team
@@ -161,9 +162,25 @@ public class RoundRobinStage implements Format, MatchListener {
         // TODO: Evaluate if last match, if it is then status = CONCLUDED. Also add tests
     }
 
-    @Override
-    public List<Team> getTopTeams(int count, TieBreaker tieBreaker) {
-        return null; // TODO: Returns a list of the teams that performed best this stage. They should be sorted after performance, with best team first.
+    public HashMap<Team, Integer> getTeamPointsMap() {
+
+        //Get list of all completed matches
+        ArrayList<Match> completedMatches = getCompletedMatches();
+
+        //Calculate team wins
+        HashMap<Team, Integer> teamPoints = new HashMap<>();
+        for(Team team : teams)
+            teamPoints.put(team, 0);
+
+        //Run through all matches and give points for win.
+        for(Match match : completedMatches){
+            Team winningTeam = match.getWinner();
+
+            //+1 for winning //TODO Should we do more?
+            teamPoints.put(winningTeam, teamPoints.get(winningTeam) + 1);
+        }
+
+        return teamPoints;
     }
 
     @Override
