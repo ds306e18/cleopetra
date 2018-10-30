@@ -21,6 +21,7 @@ public class SingleEliminationStage implements Stage, MatchListener {
         generateBracket(rounds);
         seedBracket(seededTeams, rounds);
         status = StageStatus.RUNNING;
+        finalMatch.registerListener(this);
     }
 
     public void setName(String name) {
@@ -29,7 +30,7 @@ public class SingleEliminationStage implements Stage, MatchListener {
 
     @Override
     public String getName() {
-        return null;
+        return name;
     }
 
     @Override
@@ -134,23 +135,27 @@ public class SingleEliminationStage implements Stage, MatchListener {
         // Using the seeded list to place the teams into the correct matches
         // If there are byes, the best seeded teams will be placed in their slots parents
         int seedMatchIndex = finalMatch.getTreeAsListBFS().size()-1;
-        int playerIndex = 0, playerCount = seedList.size();
-        while(playerIndex < playerCount){
-            // If the player matchup would be between a team and a bye, the team will be placed at its parent match as a startSlot
+        int teamIndex = 0, teamCount = seedList.size();
+        while(teamIndex < teamCount){
+            // If the matchup would be between a team and a bye, the team will be placed at its parent match as a starterSlot
             // The match in the first round will be deleted(null)
-            if(byeList.contains(seedList.get(playerIndex)) || byeList.contains(seedList.get(playerIndex+1))) {
-                matches[getParent(seedMatchIndex)].setBlue(new StarterSlot(seedList.get(playerIndex)));
+            if(byeList.contains(seedList.get(teamIndex)) || byeList.contains(seedList.get(teamIndex+1))) {
+                int matchCheckIndex = getParent(seedMatchIndex);
+                if(getRightSide(matchCheckIndex) == seedMatchIndex) {
+                    matches[getParent(seedMatchIndex)].setBlue(new StarterSlot(seedList.get(teamIndex)));
+                }
+                else matches[getParent(seedMatchIndex)].setOrange(new StarterSlot(seedList.get(teamIndex)));
                 matches[seedMatchIndex] = null;
                 seedMatchIndex--;
-                playerIndex = playerIndex + 2;
+                teamIndex = teamIndex + 2;
             }
             // If there are no byes in the matchup, place the teams vs each other as intended
             else {
-                matches[seedMatchIndex].setBlue(new StarterSlot(seedList.get(playerIndex)));
-                playerIndex++;
-                matches[seedMatchIndex].setOrange(new StarterSlot(seedList.get(playerIndex)));
+                matches[seedMatchIndex].setBlue(new StarterSlot(seedList.get(teamIndex)));
+                teamIndex++;
+                matches[seedMatchIndex].setOrange(new StarterSlot(seedList.get(teamIndex)));
                 seedMatchIndex--;
-                playerIndex++;
+                teamIndex++;
             }
         }
     }
@@ -158,7 +163,6 @@ public class SingleEliminationStage implements Stage, MatchListener {
     @Override
     public void onMatchPlayed(Match match) {
         // TODO: Register stage as listener to all relevant matches
-        // TODO: Add tests
         if (finalMatch.hasBeenPlayed()) {
             status = StageStatus.CONCLUDED;
         } else {
@@ -181,23 +185,24 @@ public class SingleEliminationStage implements Stage, MatchListener {
     }
 
     int getRightSide(int i) {
-        i = 1 + 1;
+        i = i + 1;
         return 2 * i - 1;
     }
 
+    /** Determines the teams with the best performances in the current stage
+     * @param count amount of teams to return
+     * @param tieBreaker a tiebreaker to decide the best teams if their are placed the same
+     * @return a list containing the best placed teams in the tournament */
     @Override
     public List<Team> getTopTeams(int count, TieBreaker tieBreaker) {
         List<Team> topTeams = new ArrayList<>();
         List<Team> tempWinnerTeams = new ArrayList<>();
         List<Team> tempLoserTeams = new ArrayList<>();
-        int roundWithTopTeams = (int) Math.floor(Math.log(count) / Math.log(2));
-        int roundUpperBoundIndex = 0;
+        int roundUpperBoundIndex = 1, currentMatchIndex = 0;
 
-        //Finds the first match in th
-        roundUpperBoundIndex = 1;
-
-        int currentMatchIndex = 0;
+        //Will run until team size fits the count
         while(topTeams.size() < count) {
+            //places the losers and winners of the round into two different temporary lists
             while (currentMatchIndex < roundUpperBoundIndex) {
                 if (!topTeams.contains(finalMatch.getTreeAsListBFS().get(currentMatchIndex).getWinner())) {
                     tempWinnerTeams.add(finalMatch.getTreeAsListBFS().get(currentMatchIndex).getWinner());
@@ -207,19 +212,30 @@ public class SingleEliminationStage implements Stage, MatchListener {
                 }
                 currentMatchIndex++;
             }
-            if (tempWinnerTeams.size() != 1) {
-                tieBreaker.compareAll(tempWinnerTeams, tempWinnerTeams.size());
+
+            //Sorts the teams accordingly to the tiebreaker
+            if (tempWinnerTeams.size() > 1) {
+                tempWinnerTeams = tieBreaker.compareAll(tempWinnerTeams, tempWinnerTeams.size());
             }
-            if (tempLoserTeams.size() != 1) {
-                tieBreaker.compareAll(tempLoserTeams, tempLoserTeams.size());
+            if (tempLoserTeams.size() > 1) {
+                tempLoserTeams = tieBreaker.compareAll(tempLoserTeams, tempLoserTeams.size());
             }
+
+            //Winners will be placed before the losers, and the lists will be cleared
             topTeams.addAll(tempWinnerTeams);
             tempWinnerTeams.clear();
             topTeams.addAll(tempLoserTeams);
             tempLoserTeams.clear();
+
+            //New upperboundindex for the loop to itereate
             roundUpperBoundIndex = getRightSide(roundUpperBoundIndex);
         }
 
-        return topTeams; // TODO: Returns a list of the teams that performed best this stage. They should be sorted after performance, with best team first.
+        //If there are too many teams, remove teams
+        while(topTeams.size() > count){
+            topTeams.remove(topTeams.size()-1);
+        }
+
+        return topTeams;
     }
 }
