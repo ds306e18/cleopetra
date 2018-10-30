@@ -8,6 +8,7 @@ public abstract class KnockoutFormat implements Format {
 
     public ArrayList<Team> teams;
 
+    /** @return a hashMap containing the teams and their points. */
     abstract HashMap<Team, Integer> getTeamPointsMap();
 
     @Override
@@ -17,14 +18,19 @@ public abstract class KnockoutFormat implements Format {
         HashMap<Team, Integer> teamPoints = getTeamPointsMap();
 
         //Created ordered team list based on wins
-        ArrayList<Team> orderedTeamList = getOrderedTeamList(teams, teamPoints);
+        ArrayList<Team> orderedTeamList = getOrderedTeamList(teamPoints);
 
         //Get the requested count of top teams from that list
         return getTopTeamsFromOrderedList(count, tieBreaker, orderedTeamList, teamPoints);
-
     }
 
-    public ArrayList<Team> getTopTeamsFromOrderedList(int count, TieBreaker tieBreaker, ArrayList<Team> teamPointsOrderList, HashMap<Team, Integer> teamPoints){
+    /** Get a requested about of top players.
+     * @param count the top number of players you request.
+     * @param tieBreaker the tiebreaker to be used by method.
+     * @param teamPointsOrderList a list of the teams.
+     * @param teamPoints hashMap containing the given teams and their points.
+     * @return a list containing the requested amount of top players. */
+    private ArrayList<Team> getTopTeamsFromOrderedList(int count, TieBreaker tieBreaker, ArrayList<Team> teamPointsOrderList, HashMap<Team, Integer> teamPoints){
 
         if(teams.size() <= count) //Is the requested count larger then the count of teams?
             return new ArrayList<>(teamPointsOrderList);
@@ -70,7 +76,10 @@ public abstract class KnockoutFormat implements Format {
         }
     }
 
-    public ArrayList<Team> getOrderedTeamList(ArrayList<Team> teams, HashMap<Team, Integer> teamPoints){
+    /** Creates an ordered list of the teams based on the points.
+     * @param teamPoints
+     * @return an ordered list of the current teams*/
+    private ArrayList<Team> getOrderedTeamList(HashMap<Team, Integer> teamPoints){
 
         ArrayList<Team> teamPointsOrderedList = new ArrayList<>();
         ArrayList<Team> tempTeamsList = new ArrayList<>(teams);

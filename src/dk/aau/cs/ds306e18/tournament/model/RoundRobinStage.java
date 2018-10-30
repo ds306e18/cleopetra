@@ -162,6 +162,7 @@ public class RoundRobinStage extends KnockoutFormat implements Format, MatchList
         // TODO: Evaluate if last match, if it is then status = CONCLUDED. Also add tests
     }
 
+    /** @return a hashMap containing the teams and their points. */
     public HashMap<Team, Integer> getTeamPointsMap() {
 
         //Get list of all completed matches

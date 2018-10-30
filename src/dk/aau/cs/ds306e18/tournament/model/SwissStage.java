@@ -247,6 +247,7 @@ public class SwissStage extends KnockoutFormat implements Format, MatchListener 
         }
     }
 
+    /** @return a hashMap containing the teams and their points. */
     public HashMap<Team, Integer> getTeamPointsMap() {
         return new HashMap<>(teamPoints);
     }
