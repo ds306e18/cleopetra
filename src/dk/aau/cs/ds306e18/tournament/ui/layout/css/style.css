@@ -90,3 +90,51 @@
     -fx-border-width: 0 0 0 1;
     -fx-border-color: #c2c2c2;
 }
+
+/* Matches overview - Matches design */
+#matchPlayed .team1-color {
+    -fx-fill: #4271f9;
+}
+
+#matchPlayed .team2-color {
+    -fx-fill: #f28542;
+}
+
+#matchPlayed .team1-triangle {
+    -fx-opacity: 1;
+}
+
+#matchPlayed .team2-triangle {
+    -fx-opacity: 0;
+}
+
+#matchTBD .team1-color, #matchTBD .team2-color {
+    -fx-fill: #404040;
+}
+
+#matchTBD .team1-name, #matchTBD .team2-name {
+    -fx-font-style: italic;
+    -fx-text-alignment: center;
+}
+
+#matchTBD .team1-score, #matchTBD .team2-score {
+    -fx-opacity: 0;
+}
+
+#matchTBD .team1-triangle, #matchTBD .team2-triangle {
+    -fx-opacity: 0;
+}
+
+#matchUpcoming .team1-score, #matchUpcoming .team2-score {
+    -fx-opacity: 0;
+}
+
+#matchUpcoming .team1-triangle, #matchUpcoming .team2-triangle {
+    -fx-opacity: 0;
+}
+
+.match:hover{
+    -fx-border-width: 1;
+    -fx-border-color: green;
+    -fx-cursor: hand;
+}

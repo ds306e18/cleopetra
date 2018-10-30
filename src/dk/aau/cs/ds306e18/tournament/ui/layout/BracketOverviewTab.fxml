@@ -7,13 +7,15 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Polygon?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 <GridPane id="mainGrid" fx:id="bracketOverviewTab" minWidth="-Infinity" prefHeight="532.0" prefWidth="800.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.controllers.BracketOverviewTabController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="464.0" minWidth="10.0" prefWidth="279.7777506510417" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="669.7777862548828" minWidth="10.0" prefWidth="520.888916015625" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="669.7777862548828" minWidth="10.0" prefWidth="300.0" />
    </columnConstraints>
    <rowConstraints>
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -33,10 +35,114 @@
                <VBox.margin>
                   <Insets right="20.0" />
                </VBox.margin>
+               <children>
+                  <GridPane id="matchPlayed" maxWidth="0.0" styleClass="match">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="5.0" minWidth="5.0" prefWidth="5.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="82.0" minWidth="82.0" prefWidth="82.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="21.0" minWidth="21.0" prefWidth="21.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="16.0" minWidth="16.0" prefWidth="16.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="0.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Polygon fill="#c1c1c1" points="-60.3970947265625, -18.66666603088379, -60.397125244140625, 2.3333332538604736, -44.230499267578125, -7.333332538604736" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="team1-triangle" GridPane.columnIndex="3" />
+                        <Polygon fill="#c1c1c1" points="-60.3970947265625, -18.66666603088379, -60.397125244140625, 2.3333332538604736, -44.230499267578125, -7.333332538604736" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="team2-triangle" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                        <Rectangle fill="#c1c1c1" height="21.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="84.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Rectangle fill="#f28542" height="21.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="team2-color" width="4.0" GridPane.rowIndex="1" />
+                        <Rectangle fill="WHITE" height="21.0" stroke="#c1c1c1" strokeType="INSIDE" width="21.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <Rectangle fill="#4271f9" height="21.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="team1-color" width="4.0" />
+                        <Rectangle fill="#c1c1c1" height="21.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="84.0" GridPane.columnIndex="1" />
+                        <Rectangle fill="WHITE" height="21.0" stroke="#c1c1c1" strokeType="INSIDE" width="21.0" GridPane.columnIndex="2" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="team1-name" text="Team 1" wrappingWidth="72.66659426689148" GridPane.columnIndex="1">
+                           <GridPane.margin>
+                              <Insets left="5.0" />
+                           </GridPane.margin>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="team1-score" text="3" textAlignment="CENTER" wrappingWidth="20.135406494140625" GridPane.columnIndex="2" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="team2-name" text="Team 2" wrappingWidth="72.66659426689148" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                           <GridPane.margin>
+                              <Insets left="5.0" />
+                           </GridPane.margin>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="team2-score" text="1" textAlignment="CENTER" wrappingWidth="20.135406494140625" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                     </children>
+                  </GridPane>
+                  <GridPane id="matchTBD" maxWidth="0.0" styleClass="match">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="5.0" minWidth="5.0" prefWidth="5.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="82.0" minWidth="82.0" prefWidth="82.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="21.0" minWidth="21.0" prefWidth="21.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="16.0" minWidth="16.0" prefWidth="16.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="0.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Polygon fill="#c1c1c1" points="-60.3970947265625, -18.66666603088379, -60.397125244140625, 2.3333332538604736, -44.230499267578125, -7.333332538604736" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="team1-triangle" GridPane.columnIndex="3" />
+                        <Polygon fill="#c1c1c1" points="-60.3970947265625, -18.66666603088379, -60.397125244140625, 2.3333332538604736, -44.230499267578125, -7.333332538604736" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="team2-triangle" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                        <Rectangle fill="#c1c1c1" height="21.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="84.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Rectangle fill="#f28542" height="21.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="team2-color" width="4.0" GridPane.rowIndex="1" />
+                        <Rectangle fill="WHITE" height="21.0" stroke="#c1c1c1" strokeType="INSIDE" width="21.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <Rectangle fill="#4271f9" height="21.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="team1-color" width="4.0" />
+                        <Rectangle fill="#c1c1c1" height="21.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="84.0" GridPane.columnIndex="1" />
+                        <Rectangle fill="WHITE" height="21.0" stroke="#c1c1c1" strokeType="INSIDE" width="21.0" GridPane.columnIndex="2" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="team1-name" text="Team 1" wrappingWidth="72.66659426689148" GridPane.columnIndex="1">
+                           <GridPane.margin>
+                              <Insets left="5.0" />
+                           </GridPane.margin>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="team1-score" text="1" textAlignment="CENTER" wrappingWidth="20.135406494140625" GridPane.columnIndex="2" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="team2-name" text="Team 2" wrappingWidth="72.66659426689148" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                           <GridPane.margin>
+                              <Insets left="5.0" />
+                           </GridPane.margin>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="team2-score" text="1" textAlignment="CENTER" wrappingWidth="20.135406494140625" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                     </children>
+                  </GridPane>
+                  <GridPane id="matchUpcoming" maxWidth="0.0" styleClass="match">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="5.0" minWidth="5.0" prefWidth="5.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="82.0" minWidth="82.0" prefWidth="82.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="21.0" minWidth="21.0" prefWidth="21.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="16.0" minWidth="16.0" prefWidth="16.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="0.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Polygon fill="#c1c1c1" points="-60.3970947265625, -18.66666603088379, -60.397125244140625, 2.3333332538604736, -44.230499267578125, -7.333332538604736" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="team1-triangle" GridPane.columnIndex="3" />
+                        <Polygon fill="#c1c1c1" points="-60.3970947265625, -18.66666603088379, -60.397125244140625, 2.3333332538604736, -44.230499267578125, -7.333332538604736" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="team2-triangle" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                        <Rectangle fill="#c1c1c1" height="21.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="84.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Rectangle fill="#f28542" height="21.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="team2-color" width="4.0" GridPane.rowIndex="1" />
+                        <Rectangle fill="WHITE" height="21.0" stroke="#c1c1c1" strokeType="INSIDE" width="21.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <Rectangle fill="#4271f9" height="21.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="team1-color" width="4.0" />
+                        <Rectangle fill="#c1c1c1" height="21.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="84.0" GridPane.columnIndex="1" />
+                        <Rectangle fill="WHITE" height="21.0" stroke="#c1c1c1" strokeType="INSIDE" width="21.0" GridPane.columnIndex="2" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="team1-name" text="Team 1" wrappingWidth="72.66659426689148" GridPane.columnIndex="1">
+                           <GridPane.margin>
+                              <Insets left="5.0" />
+                           </GridPane.margin>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="team1-score" text="1" textAlignment="CENTER" wrappingWidth="20.135406494140625" GridPane.columnIndex="2" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="team2-name" text="Team 2" wrappingWidth="72.66659426689148" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                           <GridPane.margin>
+                              <Insets left="5.0" />
+                           </GridPane.margin>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="team2-score" text="1" textAlignment="CENTER" wrappingWidth="20.135406494140625" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                     </children>
+                  </GridPane>
+               </children>
             </VBox>
          </children>
       </VBox>
-      <VBox id="globalGrid" prefHeight="541.0" prefWidth="352.0" GridPane.columnIndex="1">
+      <VBox id="globalGrid" prefHeight="541.0" prefWidth="420.0" GridPane.columnIndex="1">
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Selected match" wrappingWidth="188.3590259552002">
                <font>
