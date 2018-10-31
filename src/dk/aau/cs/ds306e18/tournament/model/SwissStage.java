@@ -135,7 +135,7 @@ public class SwissStage implements Format, MatchListener {
 
                 //Has the two selected teams played each other before?
                 if(!hasTheseTeamsPlayedBefore(team1, team2)){
-                    Match match = new Match(new StarterSlot(team1), new StarterSlot(team2));
+                    Match match = new Match(team1, team2);
                     match.registerListener(this);
                     createdMatches.add(match);
                     break; //Two valid teams has been found, and match has been created. BREAK.
