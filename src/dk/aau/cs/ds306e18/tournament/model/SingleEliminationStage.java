@@ -133,7 +133,7 @@ public class SingleEliminationStage implements Format, MatchListener {
             // The match in the first round will be deleted(null)
             if(byeList.contains(seedList.get(teamIndex)) || byeList.contains(seedList.get(teamIndex+1))) {
                 int matchCheckIndex = getParent(seedMatchIndex);
-                if(getRightSide(matchCheckIndex) == seedMatchIndex) {
+                if(getLeftSide(matchCheckIndex) == seedMatchIndex) {
                     matches[getParent(seedMatchIndex)].setBlue(seedList.get(teamIndex));
                 }
                 else matches[getParent(seedMatchIndex)].setOrange(seedList.get(teamIndex));
