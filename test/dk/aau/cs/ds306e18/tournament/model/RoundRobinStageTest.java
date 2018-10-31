@@ -214,20 +214,19 @@ public class RoundRobinStageTest {
         ArrayList<Team> top3Teams = new ArrayList<>(bracket.getTopTeams(3, new TieBreakerBySeed()));
 
         //Get the team not in the top3Teams list
-        Team notInTopTeam = null;
-        for(Team teamInput : inputTeams){
-            for(Team teamTop : top3Teams){
-                if(teamInput != teamTop)
-                    notInTopTeam = teamInput;
-            }
+        ArrayList<Team> teamInputCopy = new ArrayList<>(inputTeams);
+        Team notInTopTeam;
+        for(Team top3Team : top3Teams){
+            teamInputCopy.remove(top3Team);
         }
+        notInTopTeam = teamInputCopy.get(0);
 
         //
         HashMap<Team, Integer> teamPoints = bracket.getTeamPointsMap();
         Team top3Team = top3Teams.get(2);
         Integer top3TeamPoints = teamPoints.get(top3Team);
         Integer notInTopTeamPoints = teamPoints.get(notInTopTeam);
-        assertFalse(top3TeamPoints > notInTopTeamPoints ||
+        assertTrue(top3TeamPoints >= notInTopTeamPoints &&
                 top3Team.getInitialSeedValue() < notInTopTeam.getInitialSeedValue());
     }
 

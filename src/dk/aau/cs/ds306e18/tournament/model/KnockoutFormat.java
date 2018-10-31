@@ -57,7 +57,7 @@ public abstract class KnockoutFormat implements Format {
                         topTeamsList.add(team);
                 }
 
-                //Get list of tie broken teams
+                //Get list of tie broken teams //TODO this returns teams in reverse order than expected, but still works :O
                 ArrayList<Team> tieBrokenTeams = new ArrayList<>(tieBreaker.compareAll(tiedTeams, tiedTeams.size()));
 
                 //Fill the topteamsList with the remaining needed count of teams from the tie broken teams
