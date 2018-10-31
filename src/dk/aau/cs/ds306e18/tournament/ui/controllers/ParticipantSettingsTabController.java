@@ -1,7 +1,6 @@
 package dk.aau.cs.ds306e18.tournament.ui.controllers;
 
 import dk.aau.cs.ds306e18.tournament.model.*;
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -16,7 +15,8 @@ public class ParticipantSettingsTabController {
     @FXML private TextField teamNameTextField;
     @FXML private TextField botNameTextField;
     @FXML private TextField developerTextField;
-    @FXML private FileChooser configPath;
+    @FXML private Button configPathBtn;
+    private FileChooser configPath;
     @FXML private TextArea botDescription;
     @FXML private Button addTeamBtn;
     @FXML private Button addBotBtn;
@@ -55,5 +55,11 @@ public class ParticipantSettingsTabController {
             //Remove bot from list of bots
             //refresh listview
         }
+    }
+
+    @FXML void chooseConfigPath(ActionEvent actionEvent){
+
+        //OPen a file chooser in a popup and let them find the correct path
+
     }
 }
