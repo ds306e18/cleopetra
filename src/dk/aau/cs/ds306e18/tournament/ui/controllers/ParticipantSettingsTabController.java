@@ -5,25 +5,25 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 
 public class ParticipantSettingsTabController {
 
-    @FXML private GridPane participantSettingsTab;
+    @FXML private BorderPane participantSettingsTab;
     @FXML private TextField teamNameTextField;
     @FXML private TextField botNameTextField;
     @FXML private TextField developerTextField;
-    @FXML private Button configPathBtn;
-    private FileChooser configPath;
     @FXML private TextArea botDescription;
+    @FXML private Button configPathBtn;
     @FXML private Button addTeamBtn;
     @FXML private Button addBotBtn;
     @FXML private Button removeTeamBtn;
     @FXML private Button removeBotBtn;
-    @FXML private ListView<Stage> botsListView;
-    @FXML private ListView<Stage> teamsListView;
+    @FXML private ListView<Bot> botsListView;
+    @FXML private ListView<Team> teamsListView;
     @FXML private VBox teamSettingsVbox;
     @FXML private VBox botSettingsVbox;
 
@@ -57,8 +57,7 @@ public class ParticipantSettingsTabController {
         }
     }
 
-    @FXML void chooseConfigPath(ActionEvent actionEvent){
-
+    @FXML void configPathBtnOnAction(ActionEvent actionEvent){
         //OPen a file chooser in a popup and let them find the correct path
 
     }
