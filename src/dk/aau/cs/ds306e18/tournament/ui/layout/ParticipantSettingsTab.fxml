@@ -50,12 +50,12 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <Button fx:id="addTeamBtn" mnemonicParsing="false" prefHeight="27.0" prefWidth="109.0" text="Add Team">
+                        <Button fx:id="addTeamBtn" mnemonicParsing="false" onAction="#addTeamBtnOnAction" prefHeight="27.0" prefWidth="109.0" text="Add Team">
                            <GridPane.margin>
                               <Insets bottom="5.0" left="5.0" right="5.0" />
                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="removeTeamBtn" mnemonicParsing="false" prefHeight="27.0" prefWidth="108.0" text="Remove Team" GridPane.columnIndex="1">
+                        <Button fx:id="removeTeamBtn" mnemonicParsing="false" onAction="#removeTeamBtnOnAction" prefHeight="27.0" prefWidth="108.0" text="Remove Team" GridPane.columnIndex="1">
                            <GridPane.margin>
                               <Insets bottom="5.0" left="5.0" right="5.0" />
                            </GridPane.margin>
@@ -112,7 +112,7 @@
                   <Font size="16.0" />
                </font>
             </Text>
-            <Button fx:id="configPathBtn" mnemonicParsing="false" prefHeight="27.0" prefWidth="185.0" text="Add path..." />
+            <Button fx:id="configPathBtn" mnemonicParsing="false" onAction="#configPathBtnOnAction" prefHeight="27.0" prefWidth="185.0" text="Add path..." />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Description / Comment">
                <font>
                   <Font size="16.0" />
@@ -174,12 +174,12 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <Button fx:id="addBotBtn" mnemonicParsing="false" prefHeight="27.0" prefWidth="109.0" text="Add Bot">
+                        <Button fx:id="addBotBtn" mnemonicParsing="false" onAction="#addBotBtnOnAction" prefHeight="27.0" prefWidth="109.0" text="Add Bot">
                            <GridPane.margin>
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="removeBotBtn" mnemonicParsing="false" prefHeight="27.0" prefWidth="108.0" text="Delete Bot" GridPane.columnIndex="1">
+                        <Button fx:id="removeBotBtn" mnemonicParsing="false" onAction="#removeBotBtnOnAction" prefHeight="27.0" prefWidth="108.0" text="Delete Bot" GridPane.columnIndex="1">
                            <GridPane.margin>
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </GridPane.margin>

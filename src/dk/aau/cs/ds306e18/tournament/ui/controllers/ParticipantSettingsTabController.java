@@ -6,9 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
 
 public class ParticipantSettingsTabController {
 
@@ -34,17 +32,21 @@ public class ParticipantSettingsTabController {
     }
 
     @FXML void addBotBtnOnAction(ActionEvent actionEvent){
+        System.out.println("Test Add Bot");
 
     }
 
     @FXML void removeBotBtnOnAction(ActionEvent actionEvent){
         int selectedIndex = botsListView.getSelectionModel().getSelectedIndex();
+        System.out.println("Test Remove Bot");
+
         if (selectedIndex != -1){
             //Remove bot from list of bots
             //refresh listview
         }
     }
     @FXML void addTeamBtnOnAction(ActionEvent actionEvent){
+        System.out.println("Test Add Team");
 
     }
 
@@ -58,7 +60,5 @@ public class ParticipantSettingsTabController {
     }
 
     @FXML void configPathBtnOnAction(ActionEvent actionEvent){
-        //OPen a file chooser in a popup and let them find the correct path
-
-    }
+                }
 }
