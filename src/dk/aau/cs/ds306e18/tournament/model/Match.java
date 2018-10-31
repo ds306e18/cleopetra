@@ -34,7 +34,7 @@ public final class Match {
 
     /** Set the blue Team of this Match. Returns the Match itself, which allows chaining. */
     public Match setBlue(Team blue) {
-        if (!played) throw new IllegalStateException("Match has already been played.");
+        if (played) throw new IllegalStateException("Match has already been played.");
         if (blueFromMatch != null) {
             // Remove connection to the fromMatch
             if (blueWasWinnerInPreviousMatch) setBlueToWinnerOf(null);
@@ -46,7 +46,7 @@ public final class Match {
 
     /** Set the orange Team of this Match. Returns the Match itself, which allows chaining. */
     public Match setOrange(Team orange) {
-        if (!played) throw new IllegalStateException("Match has already been played.");
+        if (played) throw new IllegalStateException("Match has already been played.");
         if (orangeFromMatch != null) {
             // Remove connection to the fromMatch
             if (orangeWasWinnerInPreviousMatch) setOrangeToWinnerOf(null);
@@ -59,7 +59,7 @@ public final class Match {
     /** Set the blue Team of this Match to use the winner of another Match. Any previous connection or definition of
      * the blue Team will be removed. Returns the Match itself, which allows chaining. */
     public Match setBlueToWinnerOf(Match match) {
-        if (!played) throw new IllegalStateException("Match has already been played.");
+        if (played) throw new IllegalStateException("Match has already been played.");
         if (match == this) throw new IllegalArgumentException("A match can not have a connection to itself.");
 
         if (blueFromMatch != null) {
@@ -95,7 +95,7 @@ public final class Match {
     /** Set the blue Team of this Match to use the loser of another Match. Any previous connection or definition of
      * the blue Team will be removed. Returns the Match itself, which allows chaining. */
     public Match setBlueToLoserOf(Match match) {
-        if (!played) throw new IllegalStateException("Match has already been played.");
+        if (played) throw new IllegalStateException("Match has already been played.");
         if (match == this) throw new IllegalArgumentException("A match can not have a connection to itself.");
 
         if (blueFromMatch != null) {
@@ -131,7 +131,7 @@ public final class Match {
     /** Set the orange Team of this Match to use the winner of another Match. Any previous connection or definition of
      * the orange Team will be removed. Returns the Match itself, which allows chaining. */
     public Match setOrangeToWinnerOf(Match match) {
-        if (!played) throw new IllegalStateException("Match has already been played.");
+        if (played) throw new IllegalStateException("Match has already been played.");
         if (match == this) throw new IllegalArgumentException("A match can not have a connection to itself.");
 
         if (orangeFromMatch != null) {
@@ -167,7 +167,7 @@ public final class Match {
     /** Set the orange Team of this Match to use the loser of another Match. Any previous connection or definition of
      * the orange Team will be removed. Returns the Match itself, which allows chaining. */
     public Match setOrangeToLoserOf(Match match) {
-        if (!played) throw new IllegalStateException("Match has already been played.");
+        if (played) throw new IllegalStateException("Match has already been played.");
         if (match == this) throw new IllegalArgumentException("A match can not have a connection to itself.");
 
         if (orangeFromMatch != null) {
