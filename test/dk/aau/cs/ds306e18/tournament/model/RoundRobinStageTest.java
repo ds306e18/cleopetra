@@ -3,6 +3,10 @@ package dk.aau.cs.ds306e18.tournament.model;
 import dk.aau.cs.ds306e18.tournament.TestUtilities;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import static dk.aau.cs.ds306e18.tournament.TestUtilities.*;
 import static org.junit.Assert.*;
 
@@ -186,5 +190,83 @@ public class RoundRobinStageTest {
         bracket.start(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
         assertEquals(0, bracket.getPendingMatches().size());
+    }
+
+    @Test
+    public void getTopTeams01(){ //No teams
+
+        RoundRobinStage bracket = new RoundRobinStage();
+        bracket.start(new ArrayList<Team>());
+
+        assertEquals(0, bracket.getTopTeams(10, new TieBreakerBySeed()).size());
+    }
+
+    @Test
+    public void getTopTeams02(){
+
+        RoundRobinStage bracket = new RoundRobinStage();
+        ArrayList<Team> inputTeams = TestUtilities.generateSeededTeams(4,2);
+        bracket.start(inputTeams);
+
+        setAllMatchesPlayed(bracket);
+        //All teams now have the same amount of points.
+
+        ArrayList<Team> top3Teams = new ArrayList<>(bracket.getTopTeams(3, new TieBreakerBySeed()));
+
+        //Get the team not in the top3Teams list
+        Team notInTopTeam = null;
+        for(Team teamInput : inputTeams){
+            for(Team teamTop : top3Teams){
+                if(teamInput != teamTop)
+                    notInTopTeam = teamInput;
+            }
+        }
+
+        //
+        HashMap<Team, Integer> teamPoints = bracket.getTeamPointsMap();
+        Team top3Team = top3Teams.get(2);
+        Integer top3TeamPoints = teamPoints.get(top3Team);
+        Integer notInTopTeamPoints = teamPoints.get(notInTopTeam);
+        assertFalse(top3TeamPoints > notInTopTeamPoints ||
+                top3Team.getInitialSeedValue() < notInTopTeam.getInitialSeedValue());
+    }
+
+    @Test
+    public void getStatus01(){ //Pending
+
+        RoundRobinStage bracket = new RoundRobinStage();
+
+        assertEquals(StageStatus.PENDING, bracket.getStatus());
+    }
+
+    @Test
+    public void getStatus02(){ //Running
+
+        RoundRobinStage bracket = new RoundRobinStage();
+        bracket.start(TestUtilities.generateTeams(4, 2));
+
+        assertEquals(StageStatus.RUNNING, bracket.getStatus());
+    }
+
+    @Test
+    public void getStatus03(){ //Concluded // max number of rounds and all played
+
+        RoundRobinStage bracket = new RoundRobinStage();
+        bracket.start(TestUtilities.generateTeams(2,2));
+
+        //Set all matches to played
+        setAllMatchesPlayed(bracket);
+
+        assertEquals(StageStatus.CONCLUDED, bracket.getStatus());
+    }
+
+    /** sets all upcoming matches in the given format to have been played.*/
+    private void setAllMatchesPlayed(KnockoutFormat format){
+
+        //Set all matches to played
+        List<Match> matches = format.getUpcomingMatches();
+        for(Match match : matches){
+            match.setHasBeenPlayed(true);
+        }
     }
 }
