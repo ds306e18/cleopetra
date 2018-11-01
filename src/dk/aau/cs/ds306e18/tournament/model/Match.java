@@ -258,7 +258,7 @@ public final class Match {
     }
 
     /** Returns a list of all Matches that must be finished before this Match is playable, including itself.
-     * The Matches will be ordered after inorder depth-first search approach. */
+     * The Matches will be ordered after pre-order depth-first search approach. */
     public ArrayList<Match> getTreeAsListDFS() {
         // Depth-first search can be performed using a stack
         LinkedList<Match> stack = new LinkedList<>();
