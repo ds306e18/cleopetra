@@ -1,5 +1,7 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
+import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import dk.aau.cs.ds306e18.tournament.model.match.MatchStatus;
 import org.junit.Test;
 
 import java.util.List;

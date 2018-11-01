@@ -1,4 +1,6 @@
-package dk.aau.cs.ds306e18.tournament.model;
+package dk.aau.cs.ds306e18.tournament.model.match;
+
+import dk.aau.cs.ds306e18.tournament.model.Team;
 
 import java.util.*;
 

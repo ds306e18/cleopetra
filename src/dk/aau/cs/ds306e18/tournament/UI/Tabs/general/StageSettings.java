@@ -1,6 +1,5 @@
-package dk.aau.cs.ds306e18.tournament.UI.Tabs.general;
+package dk.aau.cs.ds306e18.tournament.ui.tabs.general;
 
-import dk.aau.cs.ds306e18.tournament.model.Format;
 import dk.aau.cs.ds306e18.tournament.model.Stage;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
@@ -37,9 +36,9 @@ public class StageSettings extends VBox {
         nameBox.getChildren().addAll(nameLabel, nameTextField);
         nameBox.setPadding(standardPaddingInsets);
 
-        // Format
+        // format
         BorderPane formatLayout = new BorderPane();
-        Label formatLabel = new Label("Format:");
+        Label formatLabel = new Label("format:");
         formatChoiceBox = new ChoiceBox<>(FXCollections.observableArrayList(StageFormatOption.values()));
         formatChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (this.stage != null && StageFormatOption.getOption(this.stage.getFormat()) != newValue) {

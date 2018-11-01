@@ -1,12 +1,13 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
+import dk.aau.cs.ds306e18.tournament.model.format.RoundRobinFormat;
 import org.junit.Test;
 
 import static dk.aau.cs.ds306e18.tournament.TestUtilities.*;
 import static org.junit.Assert.*;
 
 
-public class RoundRobinStageTest {
+public class RoundRobinFormatTest {
 
 
     @Test
@@ -15,7 +16,7 @@ public class RoundRobinStageTest {
         int numberOfTeams = 4;
         int teamSize = 1;
 
-        RoundRobinStage bracket = new RoundRobinStage();
+        RoundRobinFormat bracket = new RoundRobinFormat();
         bracket.start(generateTeams(numberOfTeams, teamSize));
     }
 
@@ -26,7 +27,7 @@ public class RoundRobinStageTest {
         int numberOfTeams = 20;
         int teamSize = 1;
 
-        RoundRobinStage bracket = new RoundRobinStage();
+        RoundRobinFormat bracket = new RoundRobinFormat();
         bracket.start(generateTeams(numberOfTeams, teamSize));
 
         assertEquals((bracket.runCheck(3)), 13);

@@ -1,6 +1,6 @@
-package dk.aau.cs.ds306e18.tournament.UI.Tabs;
+package dk.aau.cs.ds306e18.tournament.ui.tabs;
 
-import dk.aau.cs.ds306e18.tournament.UI.FixedTextField;
+import dk.aau.cs.ds306e18.tournament.ui.FixedTextField;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -59,7 +59,7 @@ public class ParticipantSettings  extends Tab{
         buttons.setSpacing(10);
 
         addBtn.setOnAction(e -> {
-            dk.aau.cs.ds306e18.tournament.UI.Stage tempStage = new dk.aau.cs.ds306e18.tournament.UI.Stage(id, "Team " + id);
+            dk.aau.cs.ds306e18.tournament.ui.Stage tempStage = new dk.aau.cs.ds306e18.tournament.ui.Stage(id, "Team " + id);
             id += 1;
             table.getItems().add(tempStage);
         });
@@ -136,7 +136,7 @@ public class ParticipantSettings  extends Tab{
         buttons.setSpacing(10);
 
         addBtn.setOnAction(e -> {
-            dk.aau.cs.ds306e18.tournament.UI.Stage tempStage = new dk.aau.cs.ds306e18.tournament.UI.Stage(id, "Team " + id);
+            dk.aau.cs.ds306e18.tournament.ui.Stage tempStage = new dk.aau.cs.ds306e18.tournament.ui.Stage(id, "Team " + id);
             id += 1;
             table.getItems().add(tempStage);
         });
