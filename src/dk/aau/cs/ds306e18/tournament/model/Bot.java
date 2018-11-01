@@ -52,4 +52,10 @@ public class Bot {
     public void setConfigPath(Path configPath) {
         this.configPath = configPath;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
+
 }
