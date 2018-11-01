@@ -6,7 +6,7 @@ import javafx.scene.Node;
 
 import java.util.*;
 
-public class SwissStage extends KnockoutFormat implements Format, MatchListener {
+public class SwissStage extends GroupFormat implements Format, MatchListener {
 
     private ArrayList<ArrayList<Match>> rounds;
     private int maxRounds;

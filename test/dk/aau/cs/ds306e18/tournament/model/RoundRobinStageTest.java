@@ -260,7 +260,7 @@ public class RoundRobinStageTest {
     }
 
     /** sets all upcoming matches in the given format to have been played.*/
-    private void setAllMatchesPlayed(KnockoutFormat format){
+    private void setAllMatchesPlayed(GroupFormat format){
 
         //Set all matches to played
         List<Match> matches = format.getUpcomingMatches();

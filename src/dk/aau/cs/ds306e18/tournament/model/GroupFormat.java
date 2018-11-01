@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public abstract class KnockoutFormat implements Format {
+public abstract class GroupFormat implements Format {
 
     public ArrayList<Team> teams;
     public StageStatus status = StageStatus.PENDING;
