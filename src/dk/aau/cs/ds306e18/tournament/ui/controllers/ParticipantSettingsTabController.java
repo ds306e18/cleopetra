@@ -31,11 +31,11 @@ public class ParticipantSettingsTabController {
     @FXML private void initialize() {
 
         botsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println("ListView Selection Changed (selected: )");
+            System.out.println("Bots ListView Changed (selected: )"+ + teamsListView.getSelectionModel().getSelectedIndex());
             updateBotFields();
         });
         teamsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println("ListView Selection Changed (selected: )");
+            System.out.println("Teams Listview changed (selected:  )"+ teamsListView.getSelectionModel().getSelectedIndex());
             updateTeamFields();
         });
     }
@@ -54,12 +54,14 @@ public class ParticipantSettingsTabController {
 
 
     void updateTeamFields(){
-        teamNameTextField.setText(Tournament.get()
-                .getTeams().get(teamsListView.getSelectionModel().getSelectedIndex()).getTeamName());
-        botsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
-                .getBots()));
-        botsListView.refresh();
-
+        if (teamsListView.getSelectionModel().getSelectedIndex()!=-1) {
+            botsListView.getSelectionModel().clearSelection();
+            teamNameTextField.setText(Tournament.get()
+                    .getTeams().get(teamsListView.getSelectionModel().getSelectedIndex()).getTeamName());
+            botsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
+                    .getBots()));
+            botsListView.refresh();
+        }
     }
 
     @FXML void botDesscriptionTextAreaOnKeyReleased(KeyEvent event) {
@@ -87,12 +89,13 @@ public class ParticipantSettingsTabController {
     }
 
     @FXML void addBotBtnOnAction(ActionEvent actionEvent){
-        Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
-                .addBot(new Bot("Bot 1 ", "Dev 1"));
-        botsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
+        if (teamsListView.getSelectionModel().getSelectedIndex()!=-1) {
+            Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
+                    .addBot(new Bot("Bot 1 ", "Dev 1"));
+            botsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
                     .getBots()));
-        botsListView.refresh();
-
+            botsListView.refresh();
+        }
         System.out.println("Test Add Bot");
     }
 
@@ -109,16 +112,21 @@ public class ParticipantSettingsTabController {
     }
     @FXML void addTeamBtnOnAction(ActionEvent actionEvent){
         System.out.println("Test Add Team");
-        Tournament.get().addTeam(new Team("Team 1",new ArrayList<Bot>(),0,""));
+        Tournament.get().addTeam(new Team("Team "+ Tournament.get().getTeams().size(),new ArrayList<Bot>(),0,""));
         teamsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams()));
         teamsListView.refresh();
+        teamsListView.getSelectionModel().select(Tournament.get().getTeams().size());
     }
 
     @FXML void removeTeamBtnOnAction(ActionEvent actionEvent){
+        botsListView.getSelectionModel().clearSelection();
+        botsListView.setItems(null);
+        botsListView.refresh();
         int selectedIndex = teamsListView.getSelectionModel().getSelectedIndex();
-        System.out.println("Test Remove team");
         if (selectedIndex != -1){
             Tournament.get().removeTeam(selectedIndex);
+            System.out.println("Test Remove team");
+
             teamsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams()));
             teamsListView.refresh();
         }
