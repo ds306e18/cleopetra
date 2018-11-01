@@ -14,14 +14,16 @@ public class FileWriter {
 
     private final static String stateFilename = "tournamentState.obj";
     private final static String filenameExtension = ".obj";
+
     private final static String matchEndOfLinePattern = "[^/]*$";
     private final static String matchFilenamePrefixPattern = "(/";
     private final static String matchFilenamePostfixPattern = ")";
-
-    private final static String matchExtensionDefaultPattern = ".*(\\.obj){1}";
+    private final static String matchExtensionDefaultPattern = ".*(\\.obj)";
     private final static String matchExtensionPrefixPattern = "[.";
     private final static String matchExtensionPostfixPattern = "]*$";
     private final static String matchDotPattern = "[\\.]";
+    private final static String matchFilenameWithDotPattern = ".*(\\.).*";
+    private final static String matchDotAndExtensionPattern = "\\.(.*)";
 
     /**
      * Writes serialised Tournament object to .obj-file with JSON-data
@@ -161,19 +163,20 @@ public class FileWriter {
     }
 
     /**
-     * Checks filename for correctly formed extension, and appends it if missing
+     * Checks filename for correctly formed extension, and appends it if missing. Also removes any extension given in filename.
      *
      * @param filename  the given filename
      * @param extension the given extension
-     * @return the filename with correct extension
+     * @return the filename with a correct extension
      */
     public static String checkFilename(String filename, String extension) {
-        //TODO; handle extensions also given in filename,
-        //TODO; e.g. delete from back to, and including dot, and append extension
+        // if a dot is found in given filename, remove everything from end and including dot
+        if (filename.matches(matchFilenameWithDotPattern))
+            filename = filename.replaceAll(matchDotAndExtensionPattern, "");
+
         //if filename matches ". 'extension' EOL", then simply return
-        if (filename.matches(matchExtensionPrefixPattern + extension
-                + matchExtensionPostfixPattern)) return filename;
-            // handle dot delimiter
+        if (filename.matches(matchExtensionPrefixPattern + extension + matchExtensionPostfixPattern)) return filename;
+        // handle dot delimiter
         else if (!(filename.matches(matchDotPattern))) return filename + "." + extension;
         else return filename + extension;
     }
