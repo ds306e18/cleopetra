@@ -105,10 +105,11 @@ public class ParticipantSettingsTabController {
         int selectedIndex = botsListView.getSelectionModel().getSelectedIndex();
         System.out.println("Test Remove Bot");
 
-        if (selectedIndex == -1 && botsListView.getItems().size()!=1){
+        if (selectedIndex != -1 && botsListView.getItems().size()!=1){
+            Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
+                    .removeBot(selectedIndex);
             botsListView.setItems(FXCollections.observableArrayList(Tournament.get()
-                    .getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
-                    .removeBot(selectedIndex)));
+                    .getTeams().get(teamsListView.getSelectionModel().getSelectedIndex()).getBots()));
             botsListView.refresh();
         }
     }
