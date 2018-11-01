@@ -43,6 +43,17 @@ public class ParticipantSettingsTabController {
         seedValueSpinner.setEditable(true);
         seedValueSpinner.setValueFactory(
                     new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE));
+
+        seedValueSpinner.valueFactoryProperty().addListener(((observable, oldValue, newValue) -> {
+            updateSeedValue();
+
+        }));
+
+    }
+
+    private void updateSeedValue() {
+        Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex()).setInitialSeedValue(seedValueSpinner.getValue());
+
     }
 
     void updateBotFields(){
