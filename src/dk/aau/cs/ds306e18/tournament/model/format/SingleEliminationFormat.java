@@ -4,8 +4,6 @@ import dk.aau.cs.ds306e18.tournament.model.*;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchListener;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchStatus;
-import dk.aau.cs.ds306e18.tournament.model.slot.StarterSlot;
-import dk.aau.cs.ds306e18.tournament.model.slot.WinnerOf;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
 import dk.aau.cs.ds306e18.tournament.ui.tabs.BracketOverview;
 import javafx.scene.Node;
@@ -76,12 +74,12 @@ public class SingleEliminationFormat implements Format, MatchListener {
             if (roundsLeft == rounds) {
                 // First round, all matches are empty
                 for (matchNumberInRound = 1; matchNumberInRound <= matchesInCurrentRound; matchNumberInRound++) {
-                    bracketList.add(new Match(new StarterSlot(null), new StarterSlot(null)));
+                    bracketList.add(new Match());
                 }
             } else {
                 // Fills all the remaining matches with winners from earlier rounds.
                 for (matchNumberInRound = 1; matchNumberInRound <= matchesInCurrentRound; matchNumberInRound++) {
-                    Match match = new Match(new WinnerOf(bracketList.get(matchIndex)), new WinnerOf(bracketList.get(matchIndex + 1)));
+                    Match match = new Match().setBlueToWinnerOf(bracketList.get(matchIndex)).setOrangeToWinnerOf(bracketList.get(matchIndex + 1));
                     bracketList.add(match);
                     matchIndex = matchIndex + 2;
                 }
@@ -140,19 +138,19 @@ public class SingleEliminationFormat implements Format, MatchListener {
             // The match in the first round will be deleted(null)
             if(byeList.contains(seedList.get(teamIndex)) || byeList.contains(seedList.get(teamIndex+1))) {
                 int matchCheckIndex = getParent(seedMatchIndex);
-                if(getRightSide(matchCheckIndex) == seedMatchIndex) {
-                    matches[getParent(seedMatchIndex)].setBlue(new StarterSlot(seedList.get(teamIndex)));
+                if(getLeftSide(matchCheckIndex) == seedMatchIndex) {
+                    matches[getParent(seedMatchIndex)].setBlue(seedList.get(teamIndex));
                 }
-                else matches[getParent(seedMatchIndex)].setOrange(new StarterSlot(seedList.get(teamIndex)));
+                else matches[getParent(seedMatchIndex)].setOrange(seedList.get(teamIndex));
                 matches[seedMatchIndex] = null;
                 seedMatchIndex--;
                 teamIndex = teamIndex + 2;
             }
             // If there are no byes in the matchup, place the teams vs each other as intended
             else {
-                matches[seedMatchIndex].setBlue(new StarterSlot(seedList.get(teamIndex)));
+                matches[seedMatchIndex].setBlue(seedList.get(teamIndex));
                 teamIndex++;
-                matches[seedMatchIndex].setOrange(new StarterSlot(seedList.get(teamIndex)));
+                matches[seedMatchIndex].setOrange(seedList.get(teamIndex));
                 seedMatchIndex--;
                 teamIndex++;
             }

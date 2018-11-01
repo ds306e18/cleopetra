@@ -84,7 +84,7 @@ public class SingleEliminationFormatTest {
         SingleEliminationFormat bracket = new SingleEliminationFormat();
         bracket.start(TestUtilities.generateSeededTeams(7,1));
         assertNull(bracket.getMatchesAsArray()[6]);
-        assertEquals(1,bracket.getMatchesAsArray()[2].getOrangeTeam().getInitialSeedValue());
+        assertEquals(1,bracket.getMatchesAsArray()[2].getBlueTeam().getInitialSeedValue());
     }
 
     //match 3 should be null and snd seed should be placed in next round
@@ -93,7 +93,7 @@ public class SingleEliminationFormatTest {
         SingleEliminationFormat bracket = new SingleEliminationFormat();
         bracket.start(TestUtilities.generateSeededTeams(6,1));
         assertNull(bracket.getMatchesAsArray()[4]);
-        assertEquals(2,bracket.getMatchesAsArray()[1].getOrangeTeam().getInitialSeedValue());
+        assertEquals(2,bracket.getMatchesAsArray()[1].getBlueTeam().getInitialSeedValue());
     }
 
     //There should only be one match in first around, this should be the worst seeded teams.
