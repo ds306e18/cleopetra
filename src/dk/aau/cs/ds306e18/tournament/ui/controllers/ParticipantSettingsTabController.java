@@ -1,12 +1,15 @@
 package dk.aau.cs.ds306e18.tournament.ui.controllers;
 
 import dk.aau.cs.ds306e18.tournament.model.*;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+
+import java.util.ArrayList;
 
 public class ParticipantSettingsTabController {
 
@@ -41,9 +44,15 @@ public class ParticipantSettingsTabController {
     }
 
     @FXML void addBotBtnOnAction(ActionEvent actionEvent){
-        System.out.println("Test Add Bot");
 
+
+        System.out.println("Test Add Bot");
     }
+
+
+
+
+
 
     @FXML void removeBotBtnOnAction(ActionEvent actionEvent){
         int selectedIndex = botsListView.getSelectionModel().getSelectedIndex();
@@ -56,6 +65,9 @@ public class ParticipantSettingsTabController {
     }
     @FXML void addTeamBtnOnAction(ActionEvent actionEvent){
         System.out.println("Test Add Team");
+        Tournament.get().addTeam(new Team("Team 1",new ArrayList<Bot>(),0,""));
+        teamsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams()));
+        teamsListView.refresh();
 
     }
 
@@ -63,8 +75,9 @@ public class ParticipantSettingsTabController {
         int selectedIndex = teamsListView.getSelectionModel().getSelectedIndex();
         System.out.println("Test Remove team");
         if (selectedIndex != -1){
-            //Remove bot from list of bots
-            //refresh listview
+            Tournament.get().removeTeam(selectedIndex);
+            teamsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams()));
+            teamsListView.refresh();
         }
     }
 
