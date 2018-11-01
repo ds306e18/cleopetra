@@ -28,7 +28,16 @@ public class ParticipantSettingsTabController {
     @FXML private void initialize() {
     }
 
-    @FXML void nameTextFieldOnKeyReleased(KeyEvent event) {
+    @FXML void botDesscriptionTextAreaOnKeyReleased(KeyEvent event) {
+    }
+
+    @FXML void developerTextFieldOnKeyReleased(KeyEvent event) {
+    }
+
+    @FXML void botNameTextFieldOnKeyReleased(KeyEvent event) {
+    }
+
+    @FXML void teamNameTextFieldOnKeyReleased(KeyEvent event) {
     }
 
     @FXML void addBotBtnOnAction(ActionEvent actionEvent){

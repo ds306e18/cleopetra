@@ -86,7 +86,7 @@
                   <Font size="16.0" />
                </font>
             </Text>
-            <TextField fx:id="botNameTextField">
+            <TextField fx:id="botNameTextField" onKeyReleased="#botNameTextFieldOnKeyReleased">
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
@@ -99,7 +99,7 @@
                   <Font size="16.0" />
                </font>
             </Text>
-            <TextField fx:id="developerTextField">
+            <TextField fx:id="developerTextField" onKeyReleased="#developerTextFieldOnKeyReleased">
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
@@ -118,7 +118,7 @@
                   <Font size="16.0" />
                </font>
             </Text>
-            <TextArea fx:id="botDescription" prefWidth="200.0">
+            <TextArea fx:id="botDescription" onKeyReleased="#botDesscriptionTextAreaOnKeyReleased" prefWidth="200.0">
                <VBox.margin>
                   <Insets right="20.0" />
                </VBox.margin>
@@ -142,7 +142,7 @@
                   <Font size="16.0" />
                </font>
             </Text>
-            <TextField fx:id="teamNameTextField">
+            <TextField fx:id="teamNameTextField" onKeyReleased="#teamNameTextFieldOnKeyReleased">
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
