@@ -28,6 +28,7 @@ public class ParticipantSettingsTabController {
     @FXML private ListView<Team> teamsListView;
     @FXML private VBox teamSettingsVbox;
     @FXML private VBox botSettingsVbox;
+    @FXML private Spinner<Integer> seedValueSpinner;
 
     @FXML private void initialize() {
 
@@ -38,6 +39,10 @@ public class ParticipantSettingsTabController {
         teamsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             updateTeamFields();
         });
+
+        seedValueSpinner.setEditable(true);
+        seedValueSpinner.setValueFactory(
+                    new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE));
     }
 
     void updateBotFields(){
@@ -81,12 +86,8 @@ public class ParticipantSettingsTabController {
     @FXML void botDesscriptionTextAreaOnKeyReleased(KeyEvent event) {
         Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex()).getBots().get(botsListView.getSelectionModel().getSelectedIndex())
                 .setDescription(botDescription.getText());
-        updateViewLists();
     }
 
-    private void updateViewLists() {
-
-    }
 
     @FXML void developerTextFieldOnKeyReleased(KeyEvent event) {
         Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex()).getBots().get(botsListView.getSelectionModel().getSelectedIndex())
@@ -128,7 +129,6 @@ public class ParticipantSettingsTabController {
         }
     }
     @FXML void addTeamBtnOnAction(ActionEvent actionEvent){
-        System.out.println("Test Add Team");
         Tournament.get().addTeam(new Team("Team "+ Tournament.get().getTeams().size()+1,new ArrayList<Bot>(),0,""));
         teamsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams()));
         teamsListView.getSelectionModel().selectLast();
@@ -144,7 +144,6 @@ public class ParticipantSettingsTabController {
         int selectedIndex = teamsListView.getSelectionModel().getSelectedIndex();
         if (selectedIndex != -1){
             Tournament.get().removeTeam(selectedIndex);
-            System.out.println("Test Remove team");
 
             teamsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams()));
             teamsListView.refresh();
