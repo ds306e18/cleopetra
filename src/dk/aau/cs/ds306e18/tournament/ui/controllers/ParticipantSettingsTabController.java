@@ -66,6 +66,7 @@ public class ParticipantSettingsTabController {
                     .getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
                     .getBots().get(botsListView.getSelectionModel().getSelectedIndex()).getDescription());
         }else clearBotFields();
+        Tournament.get().getTeams().forEach(this::checkForEmptyBotName);
     }
 
     private void clearBotFields() {
@@ -86,7 +87,7 @@ public class ParticipantSettingsTabController {
                     .getBots()));
             botsListView.refresh();
         }else clearTeamFields();
-        checkForEmptyName();
+        checkForEmptyTeamName();
     }
 
     private void clearTeamFields() {
@@ -118,7 +119,7 @@ public class ParticipantSettingsTabController {
                 .setTeamName(teamNameTextField.getText());
         teamsListView.refresh();
     }
-    void checkForEmptyName(){
+    void checkForEmptyTeamName(){
         for (Team team: Tournament.get().getTeams()) {
             String nameCheck = team.getTeamName();
             nameCheck = nameCheck.replaceAll("\\s+","");
@@ -127,9 +128,17 @@ public class ParticipantSettingsTabController {
             }
 
         }
-
     }
+    void checkForEmptyBotName(Team team){
+        for (Bot bot: team.getBots()){
+            String nameCheck = bot.getName();
+            nameCheck = nameCheck.replaceAll("\\s+","");
+            if (nameCheck.compareTo("")==0){
+                bot.setName("Bot ?");
+            }
 
+        }
+    }
 
     @FXML void addBotBtnOnAction(ActionEvent actionEvent){
         if (teamsListView.getSelectionModel().getSelectedIndex()!=-1) {
