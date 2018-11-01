@@ -158,7 +158,7 @@
                         <Font size="16.0" />
                      </font>
                   </Text>
-                  <Spinner fx:id="seedValueSpinner" prefHeight="25.0" prefWidth="88.0" />
+                  <Spinner fx:id="seedValueSpinner" onKeyReleased="#seedValueSpinnerOnAction" onMouseReleased="#seedValueSpinnerOnAction" prefHeight="25.0" prefWidth="88.0" />
                </children>
             </HBox>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Bots">

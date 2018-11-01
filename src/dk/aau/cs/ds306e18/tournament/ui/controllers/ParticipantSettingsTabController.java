@@ -53,7 +53,6 @@ public class ParticipantSettingsTabController {
 
     private void updateSeedValue() {
         Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex()).setInitialSeedValue(seedValueSpinner.getValue());
-
     }
 
     void updateBotFields(){
@@ -79,6 +78,8 @@ public class ParticipantSettingsTabController {
 
     void updateTeamFields(){
         if (teamsListView.getSelectionModel().getSelectedIndex()!=-1) {
+            seedValueSpinner.getValueFactory().setValue(Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
+                    .getInitialSeedValue());
             botsListView.getSelectionModel().clearSelection();
             teamNameTextField.setText(Tournament.get()
                     .getTeams().get(teamsListView.getSelectionModel().getSelectedIndex()).getTeamName());
@@ -121,7 +122,7 @@ public class ParticipantSettingsTabController {
     @FXML void addBotBtnOnAction(ActionEvent actionEvent){
         if (teamsListView.getSelectionModel().getSelectedIndex()!=-1) {
             Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
-                    .addBot(new Bot("Bot "+ Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex()).size()+1, "Dev 1"));
+                    .addBot(new Bot("Bot "+ (Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex()).size()+1), "Dev 1"));
             botsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
                     .getBots()));
             botsListView.refresh();
@@ -140,7 +141,7 @@ public class ParticipantSettingsTabController {
         }
     }
     @FXML void addTeamBtnOnAction(ActionEvent actionEvent){
-        Tournament.get().addTeam(new Team("Team "+ Tournament.get().getTeams().size()+1,new ArrayList<Bot>(),0,""));
+        Tournament.get().addTeam(new Team("Team "+ (Tournament.get().getTeams().size()+1),new ArrayList<Bot>(),0,""));
         teamsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams()));
         teamsListView.getSelectionModel().selectLast();
         teamsListView.refresh();
@@ -159,6 +160,14 @@ public class ParticipantSettingsTabController {
             teamsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams()));
             teamsListView.refresh();
         }
+    }
+    @FXML void seedValueSpinnerOnAction(){
+        int selectedIndex = teamsListView.getSelectionModel().getSelectedIndex();
+        if (selectedIndex != -1){
+            Tournament.get().getTeams().get(selectedIndex).setInitialSeedValue(seedValueSpinner.valueProperty().getValue());
+        }
+
+
     }
 
     @FXML void configPathBtnOnAction(ActionEvent actionEvent){
