@@ -1,4 +1,4 @@
-package dk.aau.cs.ds306e18.tournament.UI.Tabs.general;
+package dk.aau.cs.ds306e18.tournament.ui.tabs.general;
 
 import dk.aau.cs.ds306e18.tournament.model.Stage;
 import javafx.collections.FXCollections;

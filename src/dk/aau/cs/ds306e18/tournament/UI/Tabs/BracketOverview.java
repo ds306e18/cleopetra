@@ -1,4 +1,4 @@
-package dk.aau.cs.ds306e18.tournament.UI.Tabs;
+package dk.aau.cs.ds306e18.tournament.ui.tabs;
 
 import dk.aau.cs.ds306e18.tournament.model.Bot;
 import dk.aau.cs.ds306e18.tournament.model.SwissFormat;

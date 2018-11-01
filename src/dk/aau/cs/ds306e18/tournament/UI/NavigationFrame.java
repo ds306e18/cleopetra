@@ -1,8 +1,8 @@
-package dk.aau.cs.ds306e18.tournament.UI;
+package dk.aau.cs.ds306e18.tournament.ui;
 
-import dk.aau.cs.ds306e18.tournament.UI.Tabs.BracketOverview;
-import dk.aau.cs.ds306e18.tournament.UI.Tabs.general.GeneralSettingsTab;
-import dk.aau.cs.ds306e18.tournament.UI.Tabs.ParticipantSettings;
+import dk.aau.cs.ds306e18.tournament.ui.tabs.BracketOverview;
+import dk.aau.cs.ds306e18.tournament.ui.tabs.general.GeneralSettingsTab;
+import dk.aau.cs.ds306e18.tournament.ui.tabs.ParticipantSettings;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
