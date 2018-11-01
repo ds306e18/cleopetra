@@ -29,6 +29,37 @@ public class ParticipantSettingsTabController {
     @FXML private VBox botSettingsVbox;
 
     @FXML private void initialize() {
+
+        botsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println("ListView Selection Changed (selected: )");
+            updateBotFields();
+        });
+        teamsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println("ListView Selection Changed (selected: )");
+            updateTeamFields();
+        });
+    }
+
+    void updateBotFields(){
+        botNameTextField.setText(Tournament.get()
+                .getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
+                .getBots().get(botsListView.getSelectionModel().getSelectedIndex()).getName());
+        developerTextField.setText(Tournament.get()
+                .getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
+                .getBots().get(botsListView.getSelectionModel().getSelectedIndex()).getDeveloper());
+        botDescription.setText(Tournament.get()
+                .getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
+                .getBots().get(botsListView.getSelectionModel().getSelectedIndex()).getDescription());
+    }
+
+
+    void updateTeamFields(){
+        teamNameTextField.setText(Tournament.get()
+                .getTeams().get(teamsListView.getSelectionModel().getSelectedIndex()).getTeamName());
+        botsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
+                .getBots()));
+        botsListView.refresh();
+
     }
 
     @FXML void botDesscriptionTextAreaOnKeyReleased(KeyEvent event) {
@@ -54,7 +85,7 @@ public class ParticipantSettingsTabController {
                 .setTeamName(teamNameTextField.getText());
 
     }
-    
+
     @FXML void addBotBtnOnAction(ActionEvent actionEvent){
         Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
                 .addBot(new Bot("Bot 1 ", "Dev 1"));
