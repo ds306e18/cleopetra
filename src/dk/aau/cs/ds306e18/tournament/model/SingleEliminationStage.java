@@ -100,7 +100,7 @@ public class SingleEliminationStage implements Format, MatchListener {
         ArrayList<Team> byeList = new ArrayList<>();
         int amountOfByes = (int) Math.pow(2, rounds) - seedList.size();
         while(byeList.size() < amountOfByes) {
-            byeList.add(new Team("bye", null, 999, ""));
+            byeList.add(new Team("bye" + byeList.size(), new ArrayList<>(), 999, ""));
         }
         seedList.addAll(byeList);
 
