@@ -44,23 +44,23 @@ public class ParticipantSettingsTabController {
     }
 
     @FXML void addBotBtnOnAction(ActionEvent actionEvent){
-
+        Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex()).addBot(new Bot("Bot 1 ", "Dev 1", "path"));
+        botsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
+                    .getBots()));
+        botsListView.refresh();
 
         System.out.println("Test Add Bot");
     }
-
-
-
-
-
 
     @FXML void removeBotBtnOnAction(ActionEvent actionEvent){
         int selectedIndex = botsListView.getSelectionModel().getSelectedIndex();
         System.out.println("Test Remove Bot");
 
         if (selectedIndex != -1){
-            //Remove bot from list of bots
-            //refresh listview
+            botsListView.setItems(FXCollections.observableArrayList(Tournament.get()
+                    .getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
+                    .removeBot(selectedIndex)));
+            botsListView.refresh();
         }
     }
     @FXML void addTeamBtnOnAction(ActionEvent actionEvent){
@@ -68,7 +68,6 @@ public class ParticipantSettingsTabController {
         Tournament.get().addTeam(new Team("Team 1",new ArrayList<Bot>(),0,""));
         teamsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams()));
         teamsListView.refresh();
-
     }
 
     @FXML void removeTeamBtnOnAction(ActionEvent actionEvent){
@@ -82,5 +81,5 @@ public class ParticipantSettingsTabController {
     }
 
     @FXML void configPathBtnOnAction(ActionEvent actionEvent){
-                }
+     }
 }

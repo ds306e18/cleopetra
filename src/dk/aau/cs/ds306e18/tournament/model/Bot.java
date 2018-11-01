@@ -9,10 +9,10 @@ public class Bot {
     private String developer;
     private Path configPath;
 
-    public Bot(String name, String developer, Path configPath) {
+    public Bot(String name, String developer, String configPath) {
         this.name = name;
         this.developer = developer;
-        this.configPath = configPath;
+//        this.configPath = configPath;
     }
 
     public String getName() {
