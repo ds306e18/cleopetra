@@ -1,13 +1,14 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
 import dk.aau.cs.ds306e18.tournament.UI.Tabs.BracketOverview;
+import dk.aau.cs.ds306e18.tournament.model.*;
 import javafx.scene.Node;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class SingleEliminationStage implements Format, MatchListener {
+public class SingleEliminationFormat implements Format, MatchListener {
 
     private StageStatus status = StageStatus.PENDING;
     private ArrayList<Team> seededTeams;

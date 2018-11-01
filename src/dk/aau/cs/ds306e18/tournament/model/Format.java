@@ -1,6 +1,10 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
 import dk.aau.cs.ds306e18.tournament.UI.Tabs.BracketOverview;
+import dk.aau.cs.ds306e18.tournament.model.Match;
+import dk.aau.cs.ds306e18.tournament.model.StageStatus;
+import dk.aau.cs.ds306e18.tournament.model.Team;
+import dk.aau.cs.ds306e18.tournament.model.TieBreaker;
 import javafx.scene.Node;
 
 import java.util.List;

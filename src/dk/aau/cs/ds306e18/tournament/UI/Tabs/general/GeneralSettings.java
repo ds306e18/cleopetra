@@ -59,7 +59,7 @@ public class GeneralSettings extends VBox {
         stageButtons.setSpacing(10);
         stageButtons.getChildren().addAll(stageAddBtn, stageDeleteBtn);
         stageAddBtn.setOnAction(e -> {
-            Tournament.get().addStage(new Stage("New Stage", new SwissStage()));
+            Tournament.get().addStage(new Stage("New Stage", new SwissFormat()));
             stageListView.setItems(FXCollections.observableArrayList(Tournament.get().getStages()));
             stageListView.refresh();
         });

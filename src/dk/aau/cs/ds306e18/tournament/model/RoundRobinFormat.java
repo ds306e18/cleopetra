@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class RoundRobinStage implements Format, MatchListener {
+public class RoundRobinFormat implements Format, MatchListener {
 
     private static final Team DUMMY_TEAM = new Team("Dummy", null, 0, null);
 

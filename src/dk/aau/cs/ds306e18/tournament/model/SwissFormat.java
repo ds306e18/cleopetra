@@ -6,7 +6,7 @@ import javafx.scene.Node;
 
 import java.util.*;
 
-public class SwissStage implements Format, MatchListener {
+public class SwissFormat implements Format, MatchListener {
 
     private StageStatus status = StageStatus.PENDING;
     private ArrayList<ArrayList<Match>> rounds;
