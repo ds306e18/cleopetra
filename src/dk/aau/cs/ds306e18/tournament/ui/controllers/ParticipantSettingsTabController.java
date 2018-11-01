@@ -8,7 +8,6 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import javafx.util.Callback;
 
 import java.util.ArrayList;
 
@@ -87,6 +86,7 @@ public class ParticipantSettingsTabController {
                     .getBots()));
             botsListView.refresh();
         }else clearTeamFields();
+        checkForEmptyName();
     }
 
     private void clearTeamFields() {
@@ -110,14 +110,26 @@ public class ParticipantSettingsTabController {
     @FXML void botNameTextFieldOnKeyReleased(KeyEvent event) {
         Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex()).getBots().get(botsListView.getSelectionModel().getSelectedIndex())
                 .setName(botNameTextField.getText());
-
+        botsListView.refresh();
     }
 
     @FXML void teamNameTextFieldOnKeyReleased(KeyEvent event) {
         Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
                 .setTeamName(teamNameTextField.getText());
+        teamsListView.refresh();
+    }
+    void checkForEmptyName(){
+        for (Team team: Tournament.get().getTeams()) {
+            String nameCheck = team.getTeamName();
+            nameCheck = nameCheck.replaceAll("\\s+","");
+            if (nameCheck.compareTo("")==0){
+                team.setTeamName("Team ?");
+            }
+
+        }
 
     }
+
 
     @FXML void addBotBtnOnAction(ActionEvent actionEvent){
         if (teamsListView.getSelectionModel().getSelectedIndex()!=-1) {
