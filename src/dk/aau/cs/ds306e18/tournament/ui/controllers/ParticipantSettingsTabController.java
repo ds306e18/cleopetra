@@ -32,19 +32,32 @@ public class ParticipantSettingsTabController {
     }
 
     @FXML void botDesscriptionTextAreaOnKeyReleased(KeyEvent event) {
+        Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex()).getBots().get(botsListView.getSelectionModel().getSelectedIndex())
+                .setDescription(botDescription.getText());
+
     }
 
     @FXML void developerTextFieldOnKeyReleased(KeyEvent event) {
+        Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex()).getBots().get(botsListView.getSelectionModel().getSelectedIndex())
+                .setDeveloper(developerTextField.getText());
+
     }
 
     @FXML void botNameTextFieldOnKeyReleased(KeyEvent event) {
+        Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex()).getBots().get(botsListView.getSelectionModel().getSelectedIndex())
+                .setName(botNameTextField.getText());
+
     }
 
     @FXML void teamNameTextFieldOnKeyReleased(KeyEvent event) {
-    }
+        Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
+                .setTeamName(teamNameTextField.getText());
 
+    }
+    
     @FXML void addBotBtnOnAction(ActionEvent actionEvent){
-        Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex()).addBot(new Bot("Bot 1 ", "Dev 1", "path"));
+        Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
+                .addBot(new Bot("Bot 1 ", "Dev 1"));
         botsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
                     .getBots()));
         botsListView.refresh();
@@ -81,5 +94,5 @@ public class ParticipantSettingsTabController {
     }
 
     @FXML void configPathBtnOnAction(ActionEvent actionEvent){
-     }
+    }
 }
