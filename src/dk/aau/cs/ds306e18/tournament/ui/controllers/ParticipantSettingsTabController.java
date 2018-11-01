@@ -41,16 +41,18 @@ public class ParticipantSettingsTabController {
     }
 
     void updateBotFields(){
-        botNameTextField.setText(Tournament.get()
-                .getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
-                .getBots().get(botsListView.getSelectionModel().getSelectedIndex()).getName());
-        developerTextField.setText(Tournament.get()
-                .getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
-                .getBots().get(botsListView.getSelectionModel().getSelectedIndex()).getDeveloper());
-        botDescription.setText(Tournament.get()
-                .getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
-                .getBots().get(botsListView.getSelectionModel().getSelectedIndex()).getDescription());
-    }
+        if (botsListView.getSelectionModel().getSelectedIndex() !=-1) {
+            botNameTextField.setText(Tournament.get()
+                    .getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
+                    .getBots().get(botsListView.getSelectionModel().getSelectedIndex()).getName());
+            developerTextField.setText(Tournament.get()
+                    .getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
+                    .getBots().get(botsListView.getSelectionModel().getSelectedIndex()).getDeveloper());
+            botDescription.setText(Tournament.get()
+                    .getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
+                    .getBots().get(botsListView.getSelectionModel().getSelectedIndex()).getDescription());
+        }
+        }
 
 
     void updateTeamFields(){
@@ -103,7 +105,7 @@ public class ParticipantSettingsTabController {
         int selectedIndex = botsListView.getSelectionModel().getSelectedIndex();
         System.out.println("Test Remove Bot");
 
-        if (selectedIndex != -1){
+        if (selectedIndex == -1 && botsListView.getItems().size()!=1){
             botsListView.setItems(FXCollections.observableArrayList(Tournament.get()
                     .getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
                     .removeBot(selectedIndex)));
@@ -114,8 +116,10 @@ public class ParticipantSettingsTabController {
         System.out.println("Test Add Team");
         Tournament.get().addTeam(new Team("Team "+ Tournament.get().getTeams().size(),new ArrayList<Bot>(),0,""));
         teamsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams()));
+        teamsListView.getSelectionModel().selectLast();
         teamsListView.refresh();
-        teamsListView.getSelectionModel().select(Tournament.get().getTeams().size());
+        addBotBtnOnAction(actionEvent);
+
     }
 
     @FXML void removeTeamBtnOnAction(ActionEvent actionEvent){
