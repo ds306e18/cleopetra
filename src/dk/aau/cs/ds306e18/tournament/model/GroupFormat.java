@@ -1,6 +1,7 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -78,27 +79,13 @@ public abstract class GroupFormat implements Format {
     }
 
     /** Creates an ordered list of the teams based on the points.
-     * @param teamPoints
-     * @return an ordered list of the current teams*/
+     * @param teamPoints a HashMap containing the points of the teams.
+     * @return an ordered list of the current teams. */
     private ArrayList<Team> getOrderedTeamList(HashMap<Team, Integer> teamPoints){
 
-        ArrayList<Team> teamPointsOrderedList = new ArrayList<>();
-        ArrayList<Team> tempTeamsList = new ArrayList<>(teams);
-
-        while(tempTeamsList.size() != 0){
-            Team teamWithMostPoints = tempTeamsList.get(0);
-
-            //Find the team with the most points
-            for(Team team : tempTeamsList){
-                if(teamPoints.get(team) > teamPoints.get(teamWithMostPoints))
-                    teamWithMostPoints = team;
-            }
-
-            teamPointsOrderedList.add(teamWithMostPoints);
-            tempTeamsList.remove(teamWithMostPoints);
-        }
-
-        return teamPointsOrderedList;
+        ArrayList<Team> sortedTeams = new ArrayList<>(teams);
+        sortedTeams.sort(Comparator.comparingInt(teamPoints::get));
+        return sortedTeams;
     }
 
     public abstract List<Match> getAllMatches();
