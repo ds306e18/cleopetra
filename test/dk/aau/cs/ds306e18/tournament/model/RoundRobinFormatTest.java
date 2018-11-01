@@ -1,5 +1,6 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
+import dk.aau.cs.ds306e18.tournament.model.format.RoundRobinFormat;
 import org.junit.Test;
 
 import static dk.aau.cs.ds306e18.tournament.TestUtilities.*;

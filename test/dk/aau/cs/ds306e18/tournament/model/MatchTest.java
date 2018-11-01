@@ -1,5 +1,10 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
+import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import dk.aau.cs.ds306e18.tournament.model.match.MatchStatus;
+import dk.aau.cs.ds306e18.tournament.model.slot.LoserOf;
+import dk.aau.cs.ds306e18.tournament.model.slot.StarterSlot;
+import dk.aau.cs.ds306e18.tournament.model.slot.WinnerOf;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

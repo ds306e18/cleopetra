@@ -1,4 +1,10 @@
-package dk.aau.cs.ds306e18.tournament.model;
+package dk.aau.cs.ds306e18.tournament.model.match;
+
+import dk.aau.cs.ds306e18.tournament.model.Team;
+import dk.aau.cs.ds306e18.tournament.model.slot.LoserOf;
+import dk.aau.cs.ds306e18.tournament.model.slot.Slot;
+import dk.aau.cs.ds306e18.tournament.model.slot.StarterSlot;
+import dk.aau.cs.ds306e18.tournament.model.slot.WinnerOf;
 
 import java.util.*;
 

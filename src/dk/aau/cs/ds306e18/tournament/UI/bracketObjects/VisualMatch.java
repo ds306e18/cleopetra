@@ -1,7 +1,7 @@
 package dk.aau.cs.ds306e18.tournament.ui.bracketObjects;
 
 import dk.aau.cs.ds306e18.tournament.ui.tabs.BracketOverview;
-import dk.aau.cs.ds306e18.tournament.model.Match;
+import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;

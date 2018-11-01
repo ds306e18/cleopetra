@@ -1,9 +1,9 @@
 package dk.aau.cs.ds306e18.tournament.ui.tabs.general;
 
-import dk.aau.cs.ds306e18.tournament.model.Format;
-import dk.aau.cs.ds306e18.tournament.model.RoundRobinFormat;
-import dk.aau.cs.ds306e18.tournament.model.SingleEliminationFormat;
-import dk.aau.cs.ds306e18.tournament.model.SwissFormat;
+import dk.aau.cs.ds306e18.tournament.model.format.Format;
+import dk.aau.cs.ds306e18.tournament.model.format.RoundRobinFormat;
+import dk.aau.cs.ds306e18.tournament.model.format.SingleEliminationFormat;
+import dk.aau.cs.ds306e18.tournament.model.format.SwissFormat;
 
 public enum StageFormatOption {
     SINGLE_ELIMINATION("Single Elimination", SingleEliminationFormat.class),

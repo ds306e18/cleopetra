@@ -1,4 +1,7 @@
-package dk.aau.cs.ds306e18.tournament.model;
+package dk.aau.cs.ds306e18.tournament.model.slot;
+
+import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import dk.aau.cs.ds306e18.tournament.model.Team;
 
 /** Matches has two Slots. A Slot contains the Team for the Match. The Team in a Slot is not always known
  * from the start, e.g. when the Team is the winner of another Match.
