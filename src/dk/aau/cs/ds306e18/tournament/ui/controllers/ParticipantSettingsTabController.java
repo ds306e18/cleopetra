@@ -30,6 +30,8 @@ public class ParticipantSettingsTabController {
     @FXML private Spinner<Integer> seedValueSpinner;
 
     @FXML private void initialize() {
+        botSettingsVbox.setVisible(false);
+        teamSettingsVbox.setVisible(false);
 
 
         botsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -56,6 +58,7 @@ public class ParticipantSettingsTabController {
 
     void updateBotFields(){
         if (botsListView.getSelectionModel().getSelectedIndex() !=-1) {
+            botSettingsVbox.setVisible(true);
             botNameTextField.setText(Tournament.get()
                     .getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
                     .getBots().get(botsListView.getSelectionModel().getSelectedIndex()).getName());
@@ -73,11 +76,13 @@ public class ParticipantSettingsTabController {
         botDescription.setText("");
         developerTextField.setText("");
         botNameTextField.setText("");
+        botSettingsVbox.setVisible(false);
     }
 
 
     void updateTeamFields(){
         if (teamsListView.getSelectionModel().getSelectedIndex()!=-1) {
+            teamSettingsVbox.setVisible(true);
             seedValueSpinner.getValueFactory().setValue(Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
                     .getInitialSeedValue());
             botsListView.getSelectionModel().clearSelection();
@@ -91,6 +96,7 @@ public class ParticipantSettingsTabController {
     }
 
     private void clearTeamFields() {
+        teamSettingsVbox.setVisible(false);
         teamNameTextField.setText("");
         botsListView.setItems(null);
         botsListView.refresh();
