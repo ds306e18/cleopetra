@@ -1,4 +1,4 @@
-package dk.aau.cs.ds306e18.tournament.ui.bracketObjects;
+package dk.aau.cs.ds306e18.tournament.UI.bracketObjects;
 
 import dk.aau.cs.ds306e18.tournament.ui.tabs.BracketOverview;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
