@@ -3,13 +3,26 @@ package dk.aau.cs.ds306e18.tournament.ui.controllers;
 import dk.aau.cs.ds306e18.tournament.model.*;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 
 public class ParticipantSettingsTabController {
 
@@ -28,6 +41,8 @@ public class ParticipantSettingsTabController {
     @FXML private VBox teamSettingsVbox;
     @FXML private VBox botSettingsVbox;
     @FXML private Spinner<Integer> seedValueSpinner;
+    final private FileChooser fileChooser = new FileChooser();
+    @FXML private Text configPathText;
 
     @FXML private void initialize() {
 
@@ -48,6 +63,36 @@ public class ParticipantSettingsTabController {
 
 
     }
+
+    //TODO Setup ConfigPath
+    @FXML void configPathBtnOnAction(ActionEvent actionEvent){
+        configPathText.setText("");
+
+        File file = fileChooser.showOpenDialog((Stage)participantSettingsTab.getScene().getWindow());
+        if (file != null) {
+            openFile(file);
+            List<File> files = Arrays.asList(file);
+            setConfigPathText(files);
+        }
+    }
+
+    private void setConfigPathText(List<File> files) {
+        if (files == null || files.isEmpty()) {
+            return;
+        }
+        for (File file : files) {
+            configPathText.setText(file.getAbsolutePath() + "\n");
+        }
+    }
+
+    private void openFile(File file) {
+        try {
+            this.desktop.open(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void initSeedSpinner() {
         //Makes the spinner editable and sets the values that can be chosen
         seedValueSpinner.setEditable(true);
@@ -138,9 +183,7 @@ public class ParticipantSettingsTabController {
         }
     }
 
-    //TODO Setup ConfigPath
-    @FXML void configPathBtnOnAction(ActionEvent actionEvent){
-    }
+
     //Updates the textfields with the values from the selected bot.
     void updateBotFields(){
         if (botsListView.getSelectionModel().getSelectedIndex() !=-1) {
@@ -204,4 +247,10 @@ public class ParticipantSettingsTabController {
 
         }
     }
+
+    private Desktop desktop = Desktop.getDesktop();
+
+
+
+
 }
