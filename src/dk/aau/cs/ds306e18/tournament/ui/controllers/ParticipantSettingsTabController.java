@@ -64,7 +64,6 @@ public class ParticipantSettingsTabController {
 
     }
 
-    //TODO Setup ConfigPath
     @FXML void configPathBtnOnAction(ActionEvent actionEvent){
         configPathText.setText("");
 
@@ -82,6 +81,7 @@ public class ParticipantSettingsTabController {
         }
         for (File file : files) {
             configPathText.setText(file.getAbsolutePath() + "\n");
+            botsListView.getSelectionModel().getSelectedItem().setConfigPath(file.getAbsolutePath());
         }
     }
 
