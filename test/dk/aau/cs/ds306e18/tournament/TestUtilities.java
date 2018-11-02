@@ -1,7 +1,6 @@
 package dk.aau.cs.ds306e18.tournament;
 
 import dk.aau.cs.ds306e18.tournament.model.Bot;
-import dk.aau.cs.ds306e18.tournament.model.SingleEliminationStage;
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
 
@@ -137,9 +136,7 @@ public class TestUtilities {
             tournament.addTeam(generateTeam(randomIntInRange(minNumPlayers, maxNumPlayers)));
         }
 
-        //TODO; add stage
-        SingleEliminationStage singleEliminationStage = new SingleEliminationStage();
-        //tournament.addStage();
+        //TODO; should also create a sample stage
 
         return tournament;
 

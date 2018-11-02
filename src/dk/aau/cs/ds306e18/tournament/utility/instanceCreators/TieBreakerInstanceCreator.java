@@ -1,8 +1,8 @@
 package dk.aau.cs.ds306e18.tournament.utility.instanceCreators;
 
 import com.google.gson.InstanceCreator;
-import dk.aau.cs.ds306e18.tournament.model.TieBreaker;
-import dk.aau.cs.ds306e18.tournament.model.TieBreakerBySeed;
+import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
+import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreakerBySeed;
 
 import java.lang.reflect.Type;
 

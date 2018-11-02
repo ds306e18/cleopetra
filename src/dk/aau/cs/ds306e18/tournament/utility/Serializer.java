@@ -2,7 +2,7 @@ package dk.aau.cs.ds306e18.tournament.utility;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import dk.aau.cs.ds306e18.tournament.model.TieBreaker;
+import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import dk.aau.cs.ds306e18.tournament.utility.instanceCreators.TieBreakerInstanceCreator;
 
