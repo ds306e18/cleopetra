@@ -227,7 +227,7 @@ public class RoundRobinStageTest {
         Integer top3TeamPoints = teamPoints.get(top3Team);
         Integer notInTopTeamPoints = teamPoints.get(notInTopTeam);
         assertTrue(top3TeamPoints >= notInTopTeamPoints &&
-                top3Team.getInitialSeedValue() < notInTopTeam.getInitialSeedValue());
+                top3Team.getInitialSeedValue() <= notInTopTeam.getInitialSeedValue());
     }
 
     @Test

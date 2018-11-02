@@ -1,9 +1,9 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class GroupFormat implements Format {
 
@@ -20,71 +20,48 @@ public abstract class GroupFormat implements Format {
         HashMap<Team, Integer> teamPoints = getTeamPointsMap();
 
         //Created ordered team list based on wins
-        ArrayList<Team> orderedTeamList = getOrderedTeamList(teamPoints);
+        ArrayList<Team> orderedTeamList = getTeamsOrderedByPoints(teamPoints);
 
         //Get the requested count of top teams from that list
-        return getTopTeamsFromOrderedList(count, tieBreaker, orderedTeamList, teamPoints);
+        return getTopTeams(count, tieBreaker, orderedTeamList, teamPoints);
     }
 
     /** Get a requested about of top players.
      * @param count the top number of players you request.
      * @param tieBreaker the tiebreaker to be used by method.
      * @param teamPointsOrderList a list of the teams.
-     * @param teamPoints hashMap containing the given teams and their points.
+     * @param pointsMap hashMap containing the given teams and their points.
      * @return a list containing the requested amount of top players. */
-    private ArrayList<Team> getTopTeamsFromOrderedList(int count, TieBreaker tieBreaker, ArrayList<Team> teamPointsOrderList, HashMap<Team, Integer> teamPoints){
+    private List<Team> getTopTeams(int count, TieBreaker tieBreaker, ArrayList<Team> teamPointsOrderList, HashMap<Team, Integer> pointsMap){
 
         if(teams.size() <= count) //Is the requested count larger then the count of teams?
             return new ArrayList<>(teamPointsOrderList);
-        else {
-            if (teamPoints.get(teamPointsOrderList.get(count - 1)).equals(teamPoints.get(teamPointsOrderList.get(count)))) {
+        if (!pointsMap.get(teamPointsOrderList.get(count - 1)).equals(pointsMap.get(teamPointsOrderList.get(count))))
+            return teamPointsOrderList.subList(0, count);
 
-                //TIE BREAKING!
+        // TIE BREAKING!
 
-                ArrayList<Team> topTeamsList = new ArrayList<>();
+        int tiedTeamsPoints = pointsMap.get(teamPointsOrderList.get(count - 1));
 
-                //Find the teams that are tied
-                ArrayList<Team> tiedTeams = new ArrayList<>();
-                for (Team team : teamPointsOrderList)
-                    if (teamPoints.get(team) == teamPoints.get(teamPointsOrderList.get(count - 1))) //Does the current team has the same points as the for sure tied one.
-                        tiedTeams.add(team);
+        // Create list with the teams with more points and guaranteed to be in top teams
+        List<Team> topTeams = teams.stream().filter(t -> pointsMap.get(t) > tiedTeamsPoints).collect(Collectors.toList());
 
-                //Create list with the topteams down untill and without the tied teams
-                for (Team team : teamPointsOrderList) {
+        // Find the teams that are tied
+        List<Team> tiedTeams = teams.stream().filter(t -> pointsMap.get(t) == tiedTeamsPoints).collect(Collectors.toList());
 
-                    if (teamPoints.get(team) == teamPoints.get(teamPointsOrderList.get(count - 1)))
-                        break;
-                    else
-                        topTeamsList.add(team);
-                }
+        // Order the list of tied teams, and get the best
+        tiedTeams = tieBreaker.compareAll(tiedTeams, count - topTeams.size());
+        topTeams.addAll(tiedTeams);
 
-                //Get list of tie broken teams //TODO this returns teams in reverse order than expected, but still works :O
-                ArrayList<Team> tieBrokenTeams = new ArrayList<>(tieBreaker.compareAll(tiedTeams, tiedTeams.size()));
-
-                //Fill the topteamsList with the remaining needed count of teams from the tie broken teams
-                while (topTeamsList.size() < count) {
-                    topTeamsList.add(tieBrokenTeams.get(0));
-                    tieBrokenTeams.remove(0);
-                }
-
-                return topTeamsList;
-            }
-            //Get the desired number of teams
-            ArrayList<Team> desiredNumberOfTeam = new ArrayList<>();
-            for (int i = 0; i < count; i++)
-                desiredNumberOfTeam.add(teamPointsOrderList.get(i));
-
-            return desiredNumberOfTeam;
-        }
+        return topTeams;
     }
 
     /** Creates an ordered list of the teams based on the points.
      * @param teamPoints a HashMap containing the points of the teams.
      * @return an ordered list of the current teams. */
-    private ArrayList<Team> getOrderedTeamList(HashMap<Team, Integer> teamPoints){
-
+    private ArrayList<Team> getTeamsOrderedByPoints(HashMap<Team, Integer> teamPoints){
         ArrayList<Team> sortedTeams = new ArrayList<>(teams);
-        sortedTeams.sort(Comparator.comparingInt(teamPoints::get));
+        sortedTeams.sort((a, b) -> teamPoints.get(b) - teamPoints.get(a));
         return sortedTeams;
     }
 
