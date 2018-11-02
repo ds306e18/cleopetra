@@ -18,7 +18,6 @@ import javafx.stage.Stage;
 
 import java.awt.*;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -60,8 +59,6 @@ public class ParticipantSettingsTabController {
 
         //Initializes seed value spinner
         initSeedSpinner();
-
-
     }
 
     @FXML void configPathBtnOnAction(ActionEvent actionEvent){
@@ -69,12 +66,11 @@ public class ParticipantSettingsTabController {
 
         File file = fileChooser.showOpenDialog((Stage)participantSettingsTab.getScene().getWindow());
         if (file != null) {
-            openFile(file);
             List<File> files = Arrays.asList(file);
             setConfigPathText(files);
         }
     }
-
+    //Sets the configPath text and changes the path for the selected bot
     private void setConfigPathText(List<File> files) {
         if (files == null || files.isEmpty()) {
             return;
@@ -84,15 +80,6 @@ public class ParticipantSettingsTabController {
             botsListView.getSelectionModel().getSelectedItem().setConfigPath(file.getAbsolutePath());
         }
     }
-
-    private void openFile(File file) {
-        try {
-            this.desktop.open(file);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     private void initSeedSpinner() {
         //Makes the spinner editable and sets the values that can be chosen
         seedValueSpinner.setEditable(true);
@@ -247,10 +234,4 @@ public class ParticipantSettingsTabController {
 
         }
     }
-
-    private Desktop desktop = Desktop.getDesktop();
-
-
-
-
 }
