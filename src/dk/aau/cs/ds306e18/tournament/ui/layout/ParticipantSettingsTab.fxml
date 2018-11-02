@@ -113,14 +113,10 @@
                   <Font size="16.0" />
                </font>
             </Text>
-            <HBox prefHeight="27.0" prefWidth="163.0">
+            <HBox maxHeight="40.0" prefHeight="27.0" prefWidth="163.0">
                <children>
                   <Button fx:id="configPathBtn" mnemonicParsing="false" onAction="#configPathBtnOnAction" prefHeight="27.0" prefWidth="90.0" text="Add path..." />
-                  <Text fx:id="configPathText" strokeType="OUTSIDE" strokeWidth="0.0" text="Path" textAlignment="CENTER" wrappingWidth="93.96875">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Text>
+                  <TextField fx:id="configPathTextField" prefHeight="27.0" prefWidth="100.0" promptText="Set path here" />
                </children>
             </HBox>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Description / Comment">

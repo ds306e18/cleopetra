@@ -41,13 +41,14 @@ public class ParticipantSettingsTabController {
     @FXML private VBox botSettingsVbox;
     @FXML private Spinner<Integer> seedValueSpinner;
     final private FileChooser fileChooser = new FileChooser();
-    @FXML private Text configPathText;
+    @FXML private TextField configPathTextField;
 
     @FXML private void initialize() {
 
         //Sets the VBox for team and bot as false, hiding them
         botSettingsVbox.setVisible(false);
         teamSettingsVbox.setVisible(false);
+        configPathTextField.setEditable(false);
 
         //Adds selectionslisteners to bot and team listviews
         botsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -62,7 +63,6 @@ public class ParticipantSettingsTabController {
     }
 
     @FXML void configPathBtnOnAction(ActionEvent actionEvent){
-        configPathText.setText("");
 
         File file = fileChooser.showOpenDialog((Stage)participantSettingsTab.getScene().getWindow());
         if (file != null) {
@@ -76,7 +76,7 @@ public class ParticipantSettingsTabController {
             return;
         }
         for (File file : files) {
-            configPathText.setText(file.getAbsolutePath() + "\n");
+            configPathTextField.setText(file.getAbsolutePath() + "\n");
             botsListView.getSelectionModel().getSelectedItem().setConfigPath(file.getAbsolutePath());
         }
     }
@@ -186,6 +186,7 @@ public class ParticipantSettingsTabController {
     }
     //Clears bot fields and hides bot box.
     private void clearBotFields() {
+        configPathTextField.setText("");
         botDescription.setText("");
         developerTextField.setText("");
         botNameTextField.setText("");
