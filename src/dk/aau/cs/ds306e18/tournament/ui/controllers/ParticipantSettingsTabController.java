@@ -3,7 +3,6 @@ package dk.aau.cs.ds306e18.tournament.ui.controllers;
 import dk.aau.cs.ds306e18.tournament.model.*;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -12,11 +11,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -61,7 +58,6 @@ public class ParticipantSettingsTabController {
         //Initializes seed value spinner
         initSeedSpinner();
     }
-
     @FXML void configPathBtnOnAction(ActionEvent actionEvent){
 
         File file = fileChooser.showOpenDialog((Stage)participantSettingsTab.getScene().getWindow());
@@ -69,33 +65,6 @@ public class ParticipantSettingsTabController {
             List<File> files = Arrays.asList(file);
             setConfigPathText(files);
         }
-    }
-    //Sets the configPath text and changes the path for the selected bot
-    private void setConfigPathText(List<File> files) {
-        if (files == null || files.isEmpty()) {
-            return;
-        }
-        for (File file : files) {
-            configPathTextField.setText(file.getAbsolutePath() + "\n");
-            botsListView.getSelectionModel().getSelectedItem().setConfigPath(file.getAbsolutePath());
-        }
-    }
-    private void initSeedSpinner() {
-        //Makes the spinner editable and sets the values that can be chosen
-        seedValueSpinner.setEditable(true);
-        seedValueSpinner.setValueFactory(
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, Integer.MAX_VALUE));
-
-        //Adds value listener to spinner
-        seedValueSpinner.valueFactoryProperty().addListener(((observable, oldValue, newValue) -> {
-            updateSeedValue();
-
-        }));
-    }
-
-    //Updates the seed value for the selected team
-    private void updateSeedValue() {
-        Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex()).setInitialSeedValue(seedValueSpinner.getValue());
     }
     //Updates tournament values from fields when key released
     @FXML void botDesscriptionTextAreaOnKeyReleased(KeyEvent event) {
@@ -169,8 +138,6 @@ public class ParticipantSettingsTabController {
             Tournament.get().getTeams().get(selectedIndex).setInitialSeedValue(seedValueSpinner.valueProperty().getValue());
         }
     }
-
-
     //Updates the textfields with the values from the selected bot.
     void updateBotFields(){
         if (botsListView.getSelectionModel().getSelectedIndex() !=-1) {
@@ -227,6 +194,7 @@ public class ParticipantSettingsTabController {
 
         }
     }
+
     void checkForEmptyBotName(Team team){
         for (Bot bot: team.getBots()){
             String nameCheck = bot.getName();
@@ -236,5 +204,31 @@ public class ParticipantSettingsTabController {
             }
 
         }
+    }
+    private void initSeedSpinner() {
+        //Makes the spinner editable and sets the values that can be chosen
+        seedValueSpinner.setEditable(true);
+        seedValueSpinner.setValueFactory(
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, Integer.MAX_VALUE));
+
+        //Adds value listener to spinner
+        seedValueSpinner.valueFactoryProperty().addListener(((observable, oldValue, newValue) -> {
+            updateSeedValue();
+
+        }));
+    }
+    //Sets the configPath text and changes the path for the selected bot
+    private void setConfigPathText(List<File> files) {
+        if (files == null || files.isEmpty()) {
+            return;
+        }
+        for (File file : files) {
+            configPathTextField.setText(file.getAbsolutePath() + "\n");
+            botsListView.getSelectionModel().getSelectedItem().setConfigPath(file.getAbsolutePath());
+        }
+    }
+    //Updates the seed value for the selected team
+    private void updateSeedValue() {
+        Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex()).setInitialSeedValue(seedValueSpinner.getValue());
     }
 }
