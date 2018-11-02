@@ -1,0 +1,140 @@
+.button, #TS-leftside .choice-box {
+    -fx-background-color: #f8f8f8;
+    -fx-background-radius: 0;
+    -fx-border-color: #c2c2c2;
+}
+
+.button:hover {
+    -fx-background-color: #ececec;
+}
+
+.button:pressed{
+    -fx-background-color: #f8f8f8;
+}
+
+#tabPane {
+    -fx-tab-min-height: 4em;
+    -fx-tab-min-width: 12em;
+}
+
+#tabPane .tab .tab-label {
+    -fx-alignment: center;
+    -fx-text-fill: #8e8e8e;
+}
+
+
+#tabPane .tab {
+    -fx-background-color: #f8f8f8;
+    -fx-border-color: #c2c2c2;
+    -fx-border-width: 1 1 1 1;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+#tabPane .tab:selected {
+    -fx-background-color: #FFF;
+    -fx-border-width: 2 1 1 1;
+    -fx-border-color: #34C5E2 #c2c2c2 #c2c2c2 #c2c2c2;
+}
+
+
+
+#TS-rightside .tab {
+    -fx-background-color: transparent;
+    -fx-alignment: center;
+}
+
+.text-field, .text-area {
+    -fx-background-radius: 0;
+}
+
+#TS-rightside {
+    -fx-border-width: 0 0 0 1;
+    -fx-border-color: #c2c2c2;
+}
+
+#TS-leftside #stageTable .column-header .label {
+    -fx-text-fill: #fff;
+    -fx-background-color: #34C5E2;
+}
+
+#TS-leftside #stageTable .column-header {
+    -fx-background-color: #34C5E2;
+}
+
+#TS-leftside #stageTable {
+    -fx-border-width: 1;
+}
+
+#TS-leftside .text-field{
+    -fx-max-width: 250;
+}
+
+#TS-leftside .list-view{
+    -fx-max-width: 250;
+}
+
+#TS-leftside .grid {
+    -fx-max-width: 250;
+}
+
+#PS-leftside, #PS-center, #PS-rightside {
+    -fx-padding: 0 0 0 20;
+    -fx-border-width: 0 0 0 1;
+    -fx-border-color: #c2c2c2;
+}
+
+#globalGrid {
+    -fx-padding: 0 0 0 20;
+    -fx-border-width: 0 0 0 1;
+    -fx-border-color: #c2c2c2;
+}
+
+/* Matches overview - Matches design */
+#matchPlayed .team1-color {
+    -fx-fill: #4271f9;
+}
+
+#matchPlayed .team2-color {
+    -fx-fill: #f28542;
+}
+
+#matchPlayed .team1-triangle {
+    visibility: visible;
+}
+
+#matchPlayed .team2-triangle {
+    visibility: hidden;
+}
+
+#matchTBD .team1-color, #matchTBD .team2-color {
+    -fx-fill: #404040;
+}
+
+#matchTBD .team1-name, #matchTBD .team2-name {
+    -fx-font-style: italic;
+    -fx-text-alignment: center;
+}
+
+#matchTBD .team1-score, #matchTBD .team2-score {
+    visibility: hidden;
+}
+
+#matchTBD .team1-triangle, #matchTBD .team2-triangle {
+    visibility: hidden;
+}
+
+#matchUpcoming .team1-score, #matchUpcoming .team2-score {
+    visibility: hidden;
+}
+
+#matchUpcoming .team1-triangle, #matchUpcoming .team2-triangle {
+    visibility: hidden;
+}
+
+.match:hover{
+    -fx-border-width: 1;
+    -fx-border-color: green;
+    -fx-cursor: hand;
+}
