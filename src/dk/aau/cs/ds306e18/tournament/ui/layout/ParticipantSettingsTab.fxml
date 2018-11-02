@@ -15,7 +15,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane id="PS-mainGrid" fx:id="participantSettingsTab" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="532.0" prefWidth="800.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.controllers.ParticipantSettingsTabController">
+<BorderPane id="PS-mainGrid" fx:id="participantSettingsTab" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="532.0" prefWidth="800.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/10.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.controllers.ParticipantSettingsTabController">
    <left>
       <VBox id="PS-leftside" maxWidth="300.0" prefWidth="3000.0" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
@@ -113,7 +113,12 @@
                   <Font size="16.0" />
                </font>
             </Text>
-            <Button fx:id="configPathBtn" mnemonicParsing="false" onAction="#configPathBtnOnAction" prefHeight="27.0" prefWidth="185.0" text="Add path..." />
+            <HBox maxHeight="40.0" prefHeight="27.0" prefWidth="163.0">
+               <children>
+                  <Button fx:id="configPathBtn" mnemonicParsing="false" onAction="#configPathBtnOnAction" prefHeight="27.0" prefWidth="90.0" text="Add path..." />
+                  <TextField fx:id="configPathTextField" prefHeight="27.0" prefWidth="100.0" promptText="Set path here" />
+               </children>
+            </HBox>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Description / Comment">
                <font>
                   <Font size="16.0" />
