@@ -1,5 +1,7 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
+import dk.aau.cs.ds306e18.tournament.model.format.Format;
+
 public class Stage {
 
     private String name;
@@ -26,7 +28,7 @@ public class Stage {
     public void setFormat(Format format) {
         if (this.format.getStatus() != StageStatus.PENDING) throw new IllegalStateException("Stage has already started.");
         this.format = format;
-        System.out.println("Format changed!");
+        System.out.println("format changed!");
     }
 
     public int getNumberOfTeamsWanted() {

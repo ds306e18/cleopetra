@@ -1,6 +1,9 @@
-package dk.aau.cs.ds306e18.tournament.UI.Tabs.general;
+package dk.aau.cs.ds306e18.tournament.ui.tabs.general;
 
 import dk.aau.cs.ds306e18.tournament.model.*;
+import dk.aau.cs.ds306e18.tournament.model.format.SwissFormat;
+import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
+import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreakerBySeed;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
@@ -59,7 +62,7 @@ public class GeneralSettings extends VBox {
         stageButtons.setSpacing(10);
         stageButtons.getChildren().addAll(stageAddBtn, stageDeleteBtn);
         stageAddBtn.setOnAction(e -> {
-            Tournament.get().addStage(new Stage("New Stage", new SwissStage()));
+            Tournament.get().addStage(new Stage("New Stage", new SwissFormat()));
             stageListView.setItems(FXCollections.observableArrayList(Tournament.get().getStages()));
             stageListView.refresh();
         });

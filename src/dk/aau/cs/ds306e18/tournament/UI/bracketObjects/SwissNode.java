@@ -1,8 +1,8 @@
-package dk.aau.cs.ds306e18.tournament.UI.bracketObjects;
+package dk.aau.cs.ds306e18.tournament.ui.bracketObjects;
 
-import dk.aau.cs.ds306e18.tournament.UI.Tabs.BracketOverview;
-import dk.aau.cs.ds306e18.tournament.model.Match;
-import dk.aau.cs.ds306e18.tournament.model.SwissStage;
+import dk.aau.cs.ds306e18.tournament.ui.tabs.BracketOverview;
+import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import dk.aau.cs.ds306e18.tournament.model.format.SwissFormat;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
@@ -12,15 +12,15 @@ import java.util.ArrayList;
 public class SwissNode extends VBox {
 
     /** Used to display the a swiss stage. */
-    public SwissNode(SwissStage swissStage, BracketOverview bracketOverview){
-        refreshMatches(swissStage, bracketOverview);
+    public SwissNode(SwissFormat swissFormat, BracketOverview bracketOverview){
+        refreshMatches(swissFormat, bracketOverview);
     }
     
     /** Refreshes this vbox to represent the given swiss stage.
-     * @param swissStage the swiss stage to represent. */ //TODO Should be rename and reworked.
-    private void refreshMatches(SwissStage swissStage, BracketOverview bracketOverview){
+     * @param swissFormat the swiss stage to represent. */ //TODO Should be rename and reworked.
+    private void refreshMatches(SwissFormat swissFormat, BracketOverview bracketOverview){
 
-        ArrayList<ArrayList<Match>> rounds = swissStage.getRounds();
+        ArrayList<ArrayList<Match>> rounds = swissFormat.getRounds();
 
         //Go through all rounds.
         for(int i = 0; i < rounds.size(); i++){

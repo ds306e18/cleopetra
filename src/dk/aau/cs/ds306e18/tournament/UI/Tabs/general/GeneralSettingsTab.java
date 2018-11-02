@@ -1,11 +1,9 @@
-package dk.aau.cs.ds306e18.tournament.UI.Tabs.general;
+package dk.aau.cs.ds306e18.tournament.ui.tabs.general;
 
-import dk.aau.cs.ds306e18.tournament.UI.FixedTextField;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 
 
 public class GeneralSettingsTab extends Tab {
