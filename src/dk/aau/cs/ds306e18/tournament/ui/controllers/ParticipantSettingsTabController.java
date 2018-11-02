@@ -179,6 +179,8 @@ public class ParticipantSettingsTabController {
             botNameTextField.setText(selectedBot.getName());
             developerTextField.setText(selectedBot.getDeveloper());
             botDescription.setText(selectedBot.getDescription());
+            configPathTextField.setText(selectedBot.getConfigPath());
+
             //if no bot is selected clear the fields and hide the botsettgins box.
         }else clearBotFields();
         //Check for empty names
