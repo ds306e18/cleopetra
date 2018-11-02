@@ -79,9 +79,4 @@ public class Team {
         }
         return paths;
     }
-
-    @Override
-    public String toString() {
-        return teamName;
-    }
 }

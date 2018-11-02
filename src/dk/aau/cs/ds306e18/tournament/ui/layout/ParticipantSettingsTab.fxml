@@ -3,7 +3,6 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
@@ -15,7 +14,8 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane id="PS-mainGrid" fx:id="participantSettingsTab" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="532.0" prefWidth="800.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.controllers.ParticipantSettingsTabController">
+
+<BorderPane id="PS-mainGrid" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="532.0" prefWidth="800.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <left>
       <VBox id="PS-leftside" maxWidth="300.0" prefWidth="3000.0" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
@@ -32,7 +32,7 @@
                   <Font name="System Bold" size="16.0" />
                </font>
             </Text>
-            <ListView fx:id="teamsListView" maxWidth="1.7976931348623157E308" minWidth="200.0" prefWidth="3000.0" VBox.vgrow="ALWAYS">
+            <ListView maxWidth="1.7976931348623157E308" minWidth="200.0" prefWidth="3000.0" VBox.vgrow="ALWAYS">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
@@ -51,12 +51,12 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <Button fx:id="addTeamBtn" mnemonicParsing="false" onAction="#addTeamBtnOnAction" prefHeight="27.0" prefWidth="109.0" text="Add Team">
+                        <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="109.0" text="Add Team">
                            <GridPane.margin>
                               <Insets bottom="5.0" left="5.0" right="5.0" />
                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="removeTeamBtn" mnemonicParsing="false" onAction="#removeTeamBtnOnAction" prefHeight="27.0" prefWidth="108.0" text="Remove Team" GridPane.columnIndex="1">
+                        <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="108.0" text="Remove Team" GridPane.columnIndex="1">
                            <GridPane.margin>
                               <Insets bottom="5.0" left="5.0" right="5.0" />
                            </GridPane.margin>
@@ -72,7 +72,7 @@
       </VBox>
    </left>
    <right>
-      <VBox id="PS-rightside" fx:id="botSettingsVbox" maxWidth="0.0" spacing="10.0" BorderPane.alignment="CENTER">
+      <VBox id="PS-rightside" maxWidth="0.0" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Bot Settings" wrappingWidth="208.8034381866455">
                <font>
@@ -87,7 +87,7 @@
                   <Font size="16.0" />
                </font>
             </Text>
-            <TextField fx:id="botNameTextField" onKeyReleased="#botNameTextFieldOnKeyReleased">
+            <TextField>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
@@ -100,7 +100,7 @@
                   <Font size="16.0" />
                </font>
             </Text>
-            <TextField fx:id="developerTextField" onKeyReleased="#developerTextFieldOnKeyReleased">
+            <TextField>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
@@ -113,13 +113,20 @@
                   <Font size="16.0" />
                </font>
             </Text>
-            <Button fx:id="configPathBtn" mnemonicParsing="false" onAction="#configPathBtnOnAction" prefHeight="27.0" prefWidth="185.0" text="Add path..." />
+            <TextField>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+               <VBox.margin>
+                  <Insets right="20.0" />
+               </VBox.margin>
+            </TextField>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Description / Comment">
                <font>
                   <Font size="16.0" />
                </font>
             </Text>
-            <TextArea fx:id="botDescription" onKeyReleased="#botDesscriptionTextAreaOnKeyReleased" prefWidth="200.0">
+            <TextArea prefWidth="200.0">
                <VBox.margin>
                   <Insets right="20.0" />
                </VBox.margin>
@@ -128,7 +135,7 @@
       </VBox>
    </right>
    <center>
-      <VBox id="PS-center" fx:id="teamSettingsVbox" maxWidth="0.0" spacing="10.0" BorderPane.alignment="CENTER">
+      <VBox id="PS-center" maxWidth="0.0" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Team Settings" wrappingWidth="248.80345344543457">
                <font>
@@ -143,7 +150,7 @@
                   <Font size="16.0" />
                </font>
             </Text>
-            <TextField fx:id="teamNameTextField" onKeyReleased="#teamNameTextFieldOnKeyReleased">
+            <TextField>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
@@ -151,22 +158,12 @@
                   <Insets right="20.0" />
                </VBox.margin>
             </TextField>
-            <HBox prefHeight="28.0" prefWidth="249.0">
-               <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Seed value:              ">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Text>
-                  <Spinner fx:id="seedValueSpinner" onKeyReleased="#seedValueSpinnerOnAction" onMouseReleased="#seedValueSpinnerOnAction" prefHeight="25.0" prefWidth="88.0" />
-               </children>
-            </HBox>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Bots">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
             </Text>
-            <ListView fx:id="botsListView" maxHeight="225.0">
+            <ListView maxHeight="225.0">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
@@ -185,12 +182,12 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <Button fx:id="addBotBtn" mnemonicParsing="false" onAction="#addBotBtnOnAction" prefHeight="27.0" prefWidth="109.0" text="Add Bot">
+                        <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="109.0" text="Add Team">
                            <GridPane.margin>
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="removeBotBtn" mnemonicParsing="false" onAction="#removeBotBtnOnAction" prefHeight="27.0" prefWidth="108.0" text="Delete Bot" GridPane.columnIndex="1">
+                        <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="108.0" text="Delete Team" GridPane.columnIndex="1">
                            <GridPane.margin>
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </GridPane.margin>
