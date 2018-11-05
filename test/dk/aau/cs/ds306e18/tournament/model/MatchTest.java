@@ -283,4 +283,25 @@ public class MatchTest {
         assertEquals(orangeScore2, teamBlue.getGoalsConceded());
         assertEquals(blueScore2, teamOrange.getGoalsConceded());
     }
+
+    @Test
+    public void setScores03(){ //Multiple matches
+
+        Team teamBlue = new Team(null, null, 1, null);
+        Team teamOrange = new Team(null, null, 1, null);
+        Match match1 = new Match(teamBlue, teamOrange);
+        Match match2 = new Match(teamBlue, teamOrange);
+
+        int blueScore = 5;
+        int orangeScore = 2;
+        match1.setScores(blueScore, orangeScore, true);
+        match2.setScores(blueScore, orangeScore, true);
+
+        assertEquals(blueScore*2, teamBlue.getGoalsScored());
+        assertEquals(orangeScore*2, teamBlue.getGoalsConceded());
+        assertEquals(orangeScore*2, teamOrange.getGoalsScored());
+        assertEquals(blueScore*2, teamOrange.getGoalsConceded());
+    }
+
+
 }
