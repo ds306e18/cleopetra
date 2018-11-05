@@ -71,6 +71,8 @@ public class TournamentSettingsTabController {
             } else {
                 stageSettingsVBox.setVisible(false);
             }
+
+            setContent();
         });
     }
 
@@ -98,10 +100,13 @@ public class TournamentSettingsTabController {
             stagesListView.refresh();
         }
     }
-    @FXML void setContent(MouseEvent event) {
+
+    @FXML void setContent() {
         Stage selectedItem = stagesListView.getSelectionModel().getSelectedItem();
-        stageNameTextfield.setText(selectedItem.getName());
-        formatChoicebox.getSelectionModel().select(StageFormatOption.getOption(selectedItem.getFormat()));
+        if (selectedItem != null) {
+            stageNameTextfield.setText(selectedItem.getName());
+            formatChoicebox.getSelectionModel().select(StageFormatOption.getOption(selectedItem.getFormat()));
+        }
     }
 
 

@@ -73,7 +73,7 @@
                   <Insets bottom="-5.0" left="20.0" />
                </VBox.margin>
             </Text>
-            <ListView fx:id="stagesListView" onMouseClicked="#setContent" prefHeight="200.0" prefWidth="200.0">
+            <ListView fx:id="stagesListView" prefHeight="200.0" prefWidth="200.0">
                <VBox.margin>
                   <Insets left="20.0" />
                </VBox.margin>
