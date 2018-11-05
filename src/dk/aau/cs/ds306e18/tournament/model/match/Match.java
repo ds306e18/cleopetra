@@ -344,6 +344,7 @@ public final class Match {
         if (this.played != played) {
             if (played) {
                 this.played = true;
+                giveTeamsMatchScore();
                 transferWinnerAndLoser();
                 notifyListeners();
             } else {
@@ -351,9 +352,29 @@ public final class Match {
                     // TODO Does not check if a following stage has started
                     throw new IllegalStateException("A following match has already been played.");
                 this.played = false;
+                subtractMatchScoresFromTeams();
                 retractWinnerAndLoser();
                 notifyListeners();
             }
+        }
+    }
+
+    /** Used when a match has been played. This sends the score to the teams to save as stats.
+     * Should only be done when the game has ended. */
+    private void giveTeamsMatchScore(){
+
+        if(!played) throw new IllegalStateException("Match has not been played.");
+
+        this.blueTeam.addGoalsScoredAndConceded(blueScore, orangeScore);
+        this.orangeTeam.addGoalsScoredAndConceded(orangeScore, blueScore);
+    }
+
+    /** Used when a match is reset. This subtracts the current score from the teams score,
+     * but only if the match has been played.*/
+    private void subtractMatchScoresFromTeams(){
+        if(played){
+            this.blueTeam.subtractGoalsScoredAndConceded(blueScore, orangeScore);
+            this.orangeTeam.subtractGoalsScoredAndConceded(orangeScore, blueScore);
         }
     }
 

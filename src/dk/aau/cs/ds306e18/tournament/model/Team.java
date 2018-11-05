@@ -11,12 +11,16 @@ public class Team {
     private ArrayList<Bot> bots;
     private int initialSeedValue;
     private String description;
+    private int goalsScored;
+    private int goalsConceded; //This is goals scored on this team by opponent teams
 
     public Team(String teamName, ArrayList<Bot> bots, int initialSeedValue, String description) {
         this.teamName = teamName;
         this.bots = bots;
         this.initialSeedValue = initialSeedValue;
         this.description = description;
+        this.goalsScored = 0;
+        this.goalsConceded = 0;
     }
 
     public String getTeamName() {
@@ -78,5 +82,60 @@ public class Team {
             paths.add(bot.getConfigPath());
         }
         return paths;
+    }
+
+    /** Adds both points to the goals scored count and the goals conceded count.
+     * @param pointsToAddConceded the number of points to be added to the current conceded score.
+     * @param pointsToAddScored the number of points to be added to the current score. */
+    public void addGoalsScoredAndConceded(int pointsToAddScored, int pointsToAddConceded){
+        addGoalsScored(pointsToAddScored);
+        addGoalsConceded(pointsToAddConceded);
+    }
+
+    /** Adds the given points to the goals scored count.
+     * @param pointsToAdd the number of points to be added to the current score. */
+    public void addGoalsScored(int pointsToAdd){
+        this.goalsScored += pointsToAdd;
+    }
+
+    /** Adds the given points to the goals concede count.
+     * @param pointsToAdd the number of points to be added to the current conceded score. */
+    public void addGoalsConceded(int pointsToAdd){
+        this.goalsConceded += pointsToAdd;
+    }
+
+    /** Subtract both points from the goals scored count and the goals conceded count.
+     * @param pointsToSubtractConceded the number of points to be subtracted from the current conceded score.
+     * @param pointsToSubtractScored the number of points to be subtracted from the current score. */
+    public void subtractGoalsScoredAndConceded(int pointsToSubtractScored, int pointsToSubtractConceded){
+        subtractGoalsScored(pointsToSubtractScored);
+        subtractGoalsConceded(pointsToSubtractConceded);
+    }
+
+    /** Subtract the given points from the goals scored count.
+     * @param pointsToSubtract the number of points to be subtracted from the current score. */
+    public void subtractGoalsScored(int pointsToSubtract){
+        this.goalsScored -= pointsToSubtract;
+    }
+
+    /** Subtract the given points from the goals concede count.
+     * @param pointsToSubtract the number of points to be subtracted from the current conceded score. */
+    public void subtractGoalsConceded(int pointsToSubtract){
+        this.goalsConceded -= pointsToSubtract;
+    }
+
+    /** @return the number of goals this team has scored. */
+    public int getGoalsScored() {
+        return goalsScored;
+    }
+
+    /** @return the number of goals that opponents has scored against this team. */
+    public int getGoalsConceded() {
+        return goalsConceded;
+    }
+
+    /** @return the difference between goals scored and goals conceded. */
+    public int getGoalDiff(){
+        return goalsScored - goalsConceded;
     }
 }
