@@ -417,15 +417,13 @@ public class SwissFormatTest {
             assertFalse(team == teamWithHighestSeed);
     }
 
-    /** sets all upcoming matches in the given swissFormat to have been played.*/
-    private void setAllMatchesPlayed(SwissFormat swissFormat){
+    /** sets all upcoming matches in the given format to have been played.*/
+    private void setAllMatchesPlayed(GroupFormat format){
 
         //Set all matches to played
-        List<Match> matches = swissFormat.getUpcomingMatches();
+        List<Match> matches = format.getUpcomingMatches();
         for(Match match : matches){
             match.setHasBeenPlayed(true);
         }
     }
-
-
 }
