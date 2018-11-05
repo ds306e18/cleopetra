@@ -106,19 +106,83 @@
                   <Font name="System Bold" size="24.0" />
                </font>
                <VBox.margin>
-                  <Insets left="20.0" top="15.0" />
+                  <Insets top="15.0" />
                </VBox.margin>
             </Text>
-            <Text fill="#565656" strokeType="OUTSIDE" strokeWidth="0.0" text="Select a stage to edit its settings" wrappingWidth="311.91465950012207">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Stage name:">
                <font>
-                  <Font name="System Bold" size="18.0" />
+                  <Font size="16.0" />
                </font>
                <VBox.margin>
-                  <Insets left="20.0" top="10.0" />
+                  <Insets />
                </VBox.margin>
             </Text>
-            <HBox prefHeight="100.0" prefWidth="200.0" />
+            <TextField fx:id="stageNameTextfield" onKeyReleased="#nameTextFieldOnKeyReleased">
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+               <VBox.margin>
+                  <Insets right="20.0" />
+               </VBox.margin>
+            </TextField>
+            <HBox alignment="CENTER_LEFT" prefHeight="39.0" prefWidth="400.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Format: ">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Text>
+                  <ChoiceBox fx:id="formatChoicebox" prefHeight="25.0" prefWidth="111.0">
+                     <HBox.margin>
+                        <Insets left="30.0" />
+                     </HBox.margin>
+                  </ChoiceBox>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="39.0" prefWidth="400.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Seeding method:">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Text>
+                  <ChoiceBox fx:id="seedingMethodChoicebox" prefHeight="25.0" prefWidth="111.0">
+                     <HBox.margin>
+                        <Insets left="30.0" />
+                     </HBox.margin>
+                  </ChoiceBox>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="400.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Rounds: ">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Text>
+                  <TextField fx:id="roundsTextfield" alignment="CENTER" onKeyReleased="#nameTextFieldOnKeyReleased" prefHeight="27.0" prefWidth="34.0">
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                     <HBox.margin>
+                        <Insets left="30.0" />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+            </HBox>
          </children>
+         <GridPane.margin>
+            <Insets />
+         </GridPane.margin>
+         <padding>
+            <Insets left="20.0" right="20.0" />
+         </padding>
       </VBox>
    </children>
 </GridPane>

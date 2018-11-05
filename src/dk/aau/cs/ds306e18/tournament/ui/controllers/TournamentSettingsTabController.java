@@ -4,13 +4,12 @@ import dk.aau.cs.ds306e18.tournament.model.*;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 
 public class TournamentSettingsTabController {
 
@@ -21,6 +20,13 @@ public class TournamentSettingsTabController {
     @FXML private Button addStageBtn;
     @FXML private Button removeStageBtn;
     @FXML private VBox stageSettingsVBox;
+    @FXML private Text selectStageText;
+    @FXML private Text stageSettingsHeadLabel;
+    @FXML private HBox stageSettingsContent;
+    @FXML private TextField stageNameTextfield;
+    @FXML private ChoiceBox<Format> formatChoicebox;
+    @FXML private ChoiceBox<Object> seedingMethodChoicebox;
+    @FXML private TextField roundsTextfield;
 
     @FXML private void initialize() {
         nameTextField.setText(Tournament.get().getName());
@@ -33,7 +39,6 @@ public class TournamentSettingsTabController {
     @FXML void nameTextFieldOnKeyReleased(KeyEvent event) {
         Tournament.get().setName(nameTextField.getText());
     }
-
 
     @FXML void addStageBtnOnAction(ActionEvent actionEvent) {
         Tournament.get().addStage(new Stage("New Stage", new SwissStage()));
@@ -48,5 +53,9 @@ public class TournamentSettingsTabController {
             stagesListView.setItems(FXCollections.observableArrayList(Tournament.get().getStages()));
             stagesListView.refresh();
         }
+    }
+
+    void setContent(Stage stage){
+
     }
 }
