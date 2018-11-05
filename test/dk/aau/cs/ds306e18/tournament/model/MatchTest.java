@@ -4,6 +4,7 @@ import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchStatus;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -244,5 +245,42 @@ public class MatchTest {
         assertFalse(matchTwo.dependsOn(matchOne));
         assertTrue(matchTwo.dependsOn(matchThree));
         assertNull(matchTwo.getOrangeTeam());
+    }
+
+    @Test
+    public void setScores01(){
+
+        Team teamBlue = new Team(null, null, 1, null);
+        Team teamOrange = new Team(null, null, 1, null);
+        Match match = new Match(teamBlue, teamOrange);
+
+        int blueScore = 5;
+        int orangeScore = 2;
+        match.setScores(blueScore, orangeScore, true);
+
+        assertEquals(blueScore, teamBlue.getGoalsScored(), blueScore);
+        assertEquals(orangeScore, teamBlue.getGoalsConceded());
+        assertEquals(orangeScore, teamOrange.getGoalsScored());
+        assertEquals(blueScore, teamOrange.getGoalsConceded());
+    }
+
+    @Test
+    public void setScores02(){
+
+        Team teamBlue = new Team(null, null, 1, null);
+        Team teamOrange = new Team(null, null, 1, null);
+        Match match = new Match(teamBlue, teamOrange);
+
+        int blueScore1 = 5;
+        int orangeScore1 = 2;
+        int blueScore2 = 2;
+        int orangeScore2 = 2;
+        match.setScores(blueScore1, orangeScore1, true);
+        match.setScores(blueScore2, orangeScore2, true);
+
+        assertEquals(blueScore2, teamBlue.getGoalsScored());
+        assertEquals(orangeScore2, teamOrange.getGoalsScored());
+        assertEquals(orangeScore2, teamBlue.getGoalsConceded());
+        assertEquals(blueScore2, teamOrange.getGoalsConceded());
     }
 }

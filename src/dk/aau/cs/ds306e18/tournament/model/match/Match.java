@@ -311,6 +311,13 @@ public final class Match {
 
     public void setBlueScore(int blueScore) {
         if (!isReadyToPlay()) throw new IllegalStateException("Match is not playable");
+
+        //Update both teams goalsScored and goalsConceded
+        blueTeam.subtractGoalsScored(this.blueScore);
+        blueTeam.addGoalsScored(blueScore);
+        orangeTeam.subtractGoalsConceded(this.blueScore);
+        orangeTeam.addGoalsConceded(blueScore);
+
         this.blueScore = blueScore;
     }
 
@@ -320,13 +327,20 @@ public final class Match {
 
     public void setOrangeScore(int orangeScore) {
         if (!isReadyToPlay()) throw new IllegalStateException("Match is not playable");
+
+        //Update both teams goalsScored and goalsConceded
+        orangeTeam.subtractGoalsScored(this.orangeScore);
+        orangeTeam.addGoalsScored(orangeScore);
+        blueTeam.subtractGoalsConceded(this.orangeScore);
+        blueTeam.addGoalsConceded(orangeScore);
+
         this.orangeScore = orangeScore;
     }
 
     public void setScores(int blueScore, int orangeScore) {
         if (!isReadyToPlay()) throw new IllegalStateException("Match is not playable");
-        this.blueScore = blueScore;
-        this.orangeScore = orangeScore;
+        setBlueScore(blueScore);
+        setOrangeScore(orangeScore);
     }
 
     public void setScores(int blueScore, int orangeScore, boolean hasBeenPlayed) {
@@ -344,15 +358,13 @@ public final class Match {
         if (this.played != played) {
             if (played) {
                 this.played = true;
-                giveTeamsMatchScore();
                 transferWinnerAndLoser();
                 notifyListeners();
             } else {
-                if (winnerDestination.hasBeenPlayed() || loserDestination.hasBeenPlayed())
+                if ((winnerDestination != null && winnerDestination.hasBeenPlayed()) || (loserDestination != null && loserDestination.hasBeenPlayed()))
                     // TODO Does not check if a following stage has started
                     throw new IllegalStateException("A following match has already been played.");
                 this.played = false;
-                subtractMatchScoresFromTeams();
                 retractWinnerAndLoser();
                 notifyListeners();
             }
