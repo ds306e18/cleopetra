@@ -1,9 +1,11 @@
 package dk.aau.cs.ds306e18.tournament.model.format;
 
-import dk.aau.cs.ds306e18.tournament.model.*;
+import dk.aau.cs.ds306e18.tournament.model.Bot;
+import dk.aau.cs.ds306e18.tournament.model.GroupFormat;
+import dk.aau.cs.ds306e18.tournament.model.StageStatus;
+import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchListener;
-import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
 import dk.aau.cs.ds306e18.tournament.ui.tabs.BracketOverview;
 import javafx.scene.Node;
 
@@ -16,9 +18,9 @@ public class RoundRobinFormat extends GroupFormat implements MatchListener {
 
     private ArrayList<Match> matches;
     private static final Team DUMMY_TEAM = new Team("Dummy", new ArrayList<Bot>(), 0, "");
-    private ArrayList<RoundRobinGroup> groups;
-    //should be set, to determine number of groups should be created
-    private int numberOfGroups;
+    private ArrayList<RoundRobinGroup> groups = new ArrayList<>();
+    //should be set before start() is called, to determine number of groups that should be created
+    private int numberOfGroups = 1;
 
     /**
      * Constructor that automatically creates an arraylist of matches made on the principles of berger tables.
@@ -26,21 +28,21 @@ public class RoundRobinFormat extends GroupFormat implements MatchListener {
      * @param seededTeams arraylist of all the teams in the bracket.
      */
     public void start(List<Team> seededTeams) {
-        this.teams = new ArrayList<>(seededTeams);
+        teams = new ArrayList<>(seededTeams);
         ArrayList<Team> teams = new ArrayList<>(seededTeams);
-
-        createGroupsWithMatches(teams);
 
         if (seededTeams.size() == 0) {
             matches = new ArrayList<>();
             status = StageStatus.CONCLUDED;
         } else {
+            createGroupsWithMatches(teams);
             matches = extractMatchesFromGroups();
             status = StageStatus.RUNNING;
         }
     }
 
     private void createGroupsWithMatches(ArrayList<Team> teams) {
+
         for (int i = 0; i < numberOfGroups; i++) {
             ArrayList<Team> splitArray = splitArrayForEachGroup((i) * teams.size());
 
@@ -151,15 +153,14 @@ public class RoundRobinFormat extends GroupFormat implements MatchListener {
 
         for (int i = 0; i < tempMatches.length; i++) {
             for (int j = 0; j < tempMatches[i].length; j++) {
-                if (tempMatches[i][j].getOrangeTeam().equals(DUMMY_TEAM) ||
-                        tempMatches[i][j].getBlueTeam().equals(DUMMY_TEAM)) {
+                if (tempMatches[i][j].getOrangeTeam().getTeamName().equals("Dummy") ||
+                        tempMatches[i][j].getBlueTeam().getTeamName().equals("Dummy")) {
                     continue;
                 } else {
                     matches.add(tempMatches[i][j]);
                 }
             }
         }
-
         return matches;
     }
 
