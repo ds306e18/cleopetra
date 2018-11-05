@@ -313,9 +313,9 @@ public final class Match {
         if (!isReadyToPlay()) throw new IllegalStateException("Match is not playable");
 
         //Update both teams goalsScored and goalsConceded
-        blueTeam.subtractGoalsScored(this.blueScore);
+        blueTeam.addGoalsScored(-this.blueScore);
         blueTeam.addGoalsScored(blueScore);
-        orangeTeam.subtractGoalsConceded(this.blueScore);
+        orangeTeam.addGoalsConceded(-this.blueScore);
         orangeTeam.addGoalsConceded(blueScore);
 
         this.blueScore = blueScore;
@@ -329,9 +329,9 @@ public final class Match {
         if (!isReadyToPlay()) throw new IllegalStateException("Match is not playable");
 
         //Update both teams goalsScored and goalsConceded
-        orangeTeam.subtractGoalsScored(this.orangeScore);
+        orangeTeam.addGoalsScored(-this.orangeScore);
         orangeTeam.addGoalsScored(orangeScore);
-        blueTeam.subtractGoalsConceded(this.orangeScore);
+        blueTeam.addGoalsConceded(-this.orangeScore);
         blueTeam.addGoalsConceded(orangeScore);
 
         this.orangeScore = orangeScore;
@@ -368,25 +368,6 @@ public final class Match {
                 retractWinnerAndLoser();
                 notifyListeners();
             }
-        }
-    }
-
-    /** Used when a match has been played. This sends the score to the teams to save as stats.
-     * Should only be done when the game has ended. */
-    private void giveTeamsMatchScore(){
-
-        if(!played) throw new IllegalStateException("Match has not been played.");
-
-        this.blueTeam.addGoalsScoredAndConceded(blueScore, orangeScore);
-        this.orangeTeam.addGoalsScoredAndConceded(orangeScore, blueScore);
-    }
-
-    /** Used when a match is reset. This subtracts the current score from the teams score,
-     * but only if the match has been played.*/
-    private void subtractMatchScoresFromTeams(){
-        if(played){
-            this.blueTeam.subtractGoalsScoredAndConceded(blueScore, orangeScore);
-            this.orangeTeam.subtractGoalsScoredAndConceded(orangeScore, blueScore);
         }
     }
 

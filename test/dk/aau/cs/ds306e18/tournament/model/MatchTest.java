@@ -258,7 +258,7 @@ public class MatchTest {
         int orangeScore = 2;
         match.setScores(blueScore, orangeScore, true);
 
-        assertEquals(blueScore, teamBlue.getGoalsScored(), blueScore);
+        assertEquals(blueScore, teamBlue.getGoalsScored());
         assertEquals(orangeScore, teamBlue.getGoalsConceded());
         assertEquals(orangeScore, teamOrange.getGoalsScored());
         assertEquals(blueScore, teamOrange.getGoalsConceded());

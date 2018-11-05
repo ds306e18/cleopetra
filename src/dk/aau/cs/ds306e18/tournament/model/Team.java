@@ -104,26 +104,6 @@ public class Team {
         this.goalsConceded += pointsToAdd;
     }
 
-    /** Subtract both points from the goals scored count and the goals conceded count.
-     * @param pointsToSubtractConceded the number of points to be subtracted from the current conceded score.
-     * @param pointsToSubtractScored the number of points to be subtracted from the current score. */
-    public void subtractGoalsScoredAndConceded(int pointsToSubtractScored, int pointsToSubtractConceded){
-        subtractGoalsScored(pointsToSubtractScored);
-        subtractGoalsConceded(pointsToSubtractConceded);
-    }
-
-    /** Subtract the given points from the goals scored count.
-     * @param pointsToSubtract the number of points to be subtracted from the current score. */
-    public void subtractGoalsScored(int pointsToSubtract){
-        this.goalsScored -= pointsToSubtract;
-    }
-
-    /** Subtract the given points from the goals concede count.
-     * @param pointsToSubtract the number of points to be subtracted from the current conceded score. */
-    public void subtractGoalsConceded(int pointsToSubtract){
-        this.goalsConceded -= pointsToSubtract;
-    }
-
     /** @return the number of goals this team has scored. */
     public int getGoalsScored() {
         return goalsScored;

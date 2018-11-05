@@ -85,7 +85,7 @@ public class TeamTest {
         Team team = new Team("Team Pleb", null, 0, null);
 
         int goalsScored = 5;
-        team.subtractGoalsScored(goalsScored);
+        team.addGoalsScored(-goalsScored);
 
         assertEquals(-goalsScored, team.getGoalsScored());
     }
@@ -95,7 +95,7 @@ public class TeamTest {
         Team team = new Team("Team Pleb", null, 0, null);
 
         int goalsScored = 0;
-        team.subtractGoalsScored(goalsScored);
+        team.addGoalsScored(-goalsScored);
 
         assertEquals(-goalsScored, team.getGoalsScored());
     }
@@ -105,7 +105,7 @@ public class TeamTest {
         Team team = new Team("Team Pleb", null, 0, null);
 
         int goalsScored = -5;
-        team.subtractGoalsScored(goalsScored);
+        team.addGoalsScored(-goalsScored);
 
         assertEquals(-1*goalsScored, team.getGoalsScored());
     }
@@ -115,7 +115,7 @@ public class TeamTest {
         Team team = new Team("Team Pleb", null, 0, null);
 
         int goalsConceded = 5;
-        team.subtractGoalsConceded(goalsConceded);
+        team.addGoalsConceded(-goalsConceded);
 
         assertEquals(-goalsConceded, team.getGoalsConceded());
     }
@@ -125,7 +125,7 @@ public class TeamTest {
         Team team = new Team("Team Pleb", null, 0, null);
 
         int goalsConceded = 0;
-        team.subtractGoalsConceded(goalsConceded);
+        team.addGoalsConceded(-goalsConceded);
 
         assertEquals(-goalsConceded, team.getGoalsConceded());
     }
@@ -135,7 +135,7 @@ public class TeamTest {
         Team team = new Team("Team Pleb", null, 0, null);
 
         int goalsConceded = -5;
-        team.subtractGoalsConceded(goalsConceded);
+        team.addGoalsConceded(-goalsConceded);
 
         assertEquals(-1*goalsConceded, team.getGoalsConceded());
     }
@@ -146,7 +146,7 @@ public class TeamTest {
 
         int goalsScored = 5;
         int goalsConceded = 5;
-        team.subtractGoalsScoredAndConceded(goalsScored, goalsConceded);
+        team.addGoalsScoredAndConceded(-goalsScored, -goalsConceded);
 
         assertEquals(-goalsScored, team.getGoalsScored());
         assertEquals(-goalsConceded, team.getGoalsConceded());
