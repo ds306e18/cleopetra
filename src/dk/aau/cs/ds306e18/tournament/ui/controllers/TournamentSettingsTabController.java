@@ -17,10 +17,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.effect.BlendMode;
+import javafx.util.Callback;
 
 public class TournamentSettingsTabController {
-
-    int testID = 0;
 
     @FXML
     private GridPane tournamentSettingsTab;
@@ -101,69 +100,6 @@ public class TournamentSettingsTabController {
 
             setContent();
         });
-
-        /* Testing drag and drop */
-        ListCell thisCell = (ListCell) stagesListView.getCellFactory();
-
-        stagesListView.setOnDragDetected(event -> {
-            System.out.println("setOnDragDetected");
-
-            if (thisCell.getItem() == null) {
-                return;
-            }
-
-            ObservableList<Stage> items = stagesListView.getItems();
-
-            Dragboard dragBoard = thisCell.startDragAndDrop(TransferMode.MOVE);
-            ClipboardContent content = new ClipboardContent();
-
-            dragBoard.setContent(content);
-            event.consume();
-        });
-
-
-        stagesListView.setOnDragEntered(dragEvent -> {
-            System.out.println("setOnDragEntered");
-
-            stagesListView.setBlendMode(BlendMode.DIFFERENCE);
-        });
-
-
-        stagesListView.setOnDragOver(dragEvent -> {
-            System.out.println("setOnDragOver");
-
-            dragEvent.acceptTransferModes(TransferMode.MOVE);
-            dragEvent.consume();
-        });
-
-
-        stagesListView.setOnDragDropped(dragEvent -> {
-            System.out.println("setOnDragDropped");
-            if (stagesListView.getItems() == null) {
-                return;
-            }
-
-            Dragboard db = dragEvent.getDragboard();
-            boolean success = false;
-
-            if (db.hasString()) {
-                ObservableList<Stage> items = stagesListView.getItems();
-                int draggedindex = items.indexOf(db.getString());
-
-            }
-
-
-            dragEvent.setDropCompleted(true);
-        });
-
-
-        stagesListView.setOnDragExited(dragEvent -> {
-            System.out.println("setOnDragExited");
-
-            stagesListView.setBlendMode(null);
-        });
-
-        stagesListView.setOnDragDone(dragEvent -> System.out.println("setOnDragDone"));
     }
 
     @FXML
@@ -180,8 +116,7 @@ public class TournamentSettingsTabController {
 
     @FXML
     void addStageBtnOnAction(ActionEvent actionEvent) {
-        Tournament.get().addStage(new Stage("New Stage" + testID, new SwissStage()));
-        testID++;
+        Tournament.get().addStage(new Stage("New Stage", new SwissStage()));
         stagesListView.setItems(FXCollections.observableArrayList(Tournament.get().getStages()));
         stagesListView.refresh();
     }
