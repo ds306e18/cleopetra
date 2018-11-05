@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -54,8 +55,14 @@ public class TournamentSettingsTabController {
             stagesListView.refresh();
         }
     }
+    @FXML void setContent(MouseEvent event) {
+        int selectedIndex = stagesListView.getSelectionModel().getSelectedIndex();
+        stageNameTextfield.setText(Tournament.get().getStages().get(selectedIndex).getName());
+    }
 
-    void setContent(Stage stage){
+    @FXML
+    void stageNameTextFieldOnKeyReleased(KeyEvent event) {
 
     }
+
 }

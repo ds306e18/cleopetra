@@ -73,7 +73,7 @@
                   <Insets bottom="-5.0" left="20.0" />
                </VBox.margin>
             </Text>
-            <ListView fx:id="stagesListView" prefHeight="200.0" prefWidth="200.0">
+            <ListView fx:id="stagesListView" onMouseClicked="#setContent" prefHeight="200.0" prefWidth="200.0">
                <VBox.margin>
                   <Insets left="20.0" />
                </VBox.margin>
@@ -117,7 +117,7 @@
                   <Insets />
                </VBox.margin>
             </Text>
-            <TextField fx:id="stageNameTextfield" onKeyReleased="#nameTextFieldOnKeyReleased">
+            <TextField fx:id="stageNameTextfield" onKeyReleased="#stageNameTextFieldOnKeyReleased">
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
