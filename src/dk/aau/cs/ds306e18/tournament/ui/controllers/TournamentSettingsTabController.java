@@ -41,6 +41,10 @@ public class TournamentSettingsTabController {
         Tournament.get().setName(nameTextField.getText());
     }
 
+    @FXML void stageNameTextFieldOnKeyReleased(KeyEvent event) {
+        Tournament.get().setName(nameTextField.getText());
+    }
+
     @FXML void addStageBtnOnAction(ActionEvent actionEvent) {
         Tournament.get().addStage(new Stage("New Stage", new SwissStage()));
         stagesListView.setItems(FXCollections.observableArrayList(Tournament.get().getStages()));
@@ -56,13 +60,10 @@ public class TournamentSettingsTabController {
         }
     }
     @FXML void setContent(MouseEvent event) {
-        int selectedIndex = stagesListView.getSelectionModel().getSelectedIndex();
-        stageNameTextfield.setText(Tournament.get().getStages().get(selectedIndex).getName());
+        Stage selectedItem = stagesListView.getSelectionModel().getSelectedItem();
+        stageNameTextfield.setText(selectedItem.getName());
     }
 
-    @FXML
-    void stageNameTextFieldOnKeyReleased(KeyEvent event) {
 
-    }
 
 }
