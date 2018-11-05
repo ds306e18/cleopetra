@@ -53,7 +53,7 @@ public class TournamentSettingsTabController {
             }
 
             /* Check to see if rounds should be visible or not */
-            if (StageFormatOption.getOption(selectedStage.getFormat()) != StageFormatOption.ROUND_ROBIN){
+            if (selectedStage != null && StageFormatOption.getOption(selectedStage.getFormat()) != StageFormatOption.ROUND_ROBIN){
                 roundsHBox.setVisible(false);
             } else {
                 roundsHBox.setVisible(true);
