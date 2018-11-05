@@ -39,7 +39,13 @@ public class TournamentSettingsTabController {
 
         /* Stage format initial items */
         formatChoicebox.setItems(FXCollections.observableArrayList(StageFormatOption.values()));
-
+        formatChoicebox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            Stage selectedStage = stagesListView.getSelectionModel().getSelectedItem();
+            if (selectedStage != null && StageFormatOption.getOption(selectedStage.getFormat()) != newValue) {
+                selectedStage.setFormat(newValue.getNewInstance());
+            }
+        });
+        formatChoicebox.getSelectionModel().select(0);
     }
 
     @FXML void nameTextFieldOnKeyReleased(KeyEvent event) {
@@ -69,7 +75,7 @@ public class TournamentSettingsTabController {
     @FXML void setContent(MouseEvent event) {
         Stage selectedItem = stagesListView.getSelectionModel().getSelectedItem();
         stageNameTextfield.setText(selectedItem.getName());
-
+        formatChoicebox.getSelectionModel().select(StageFormatOption.getOption(selectedItem.getFormat()));
     }
 
 
