@@ -1,5 +1,9 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
+import dk.aau.cs.ds306e18.tournament.model.format.Format;
+import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,7 +15,7 @@ public abstract class GroupFormat implements Format {
     public StageStatus status = StageStatus.PENDING;
 
     /** @return a hashMap containing the teams and their points. */
-    abstract HashMap<Team, Integer> getTeamPointsMap();
+    public abstract HashMap<Team, Integer> getTeamPointsMap();
 
     @Override
     public List<Team> getTopTeams(int count, TieBreaker tieBreaker) {
@@ -68,9 +72,9 @@ public abstract class GroupFormat implements Format {
     public abstract List<Match> getAllMatches();
 
     @Override
-    public ArrayList<Match> getCompletedMatches() {
+    public List<Match> getCompletedMatches() {
 
-        ArrayList<Match> allMatches = new ArrayList<>(getAllMatches());
+        List<Match> allMatches = new ArrayList<>(getAllMatches());
         ArrayList<Match> playedMatches = new ArrayList<>();
 
         for (Match match : allMatches)

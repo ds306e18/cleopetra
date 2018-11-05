@@ -1,5 +1,8 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
+import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
+import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreakerBySeed;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
