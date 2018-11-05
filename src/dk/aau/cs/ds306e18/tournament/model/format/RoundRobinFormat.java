@@ -13,7 +13,7 @@ import java.util.List;
 
 public class RoundRobinFormat extends GroupFormat implements MatchListener {
 
-    private static final Team DUMMY_TEAM = new Team("Dummy", null, 0, null);
+    private static final Team DUMMY_TEAM = new Team("Dummy", new ArrayList<>(), 0, "Dummy team description");
 
     private ArrayList<Match> matches;
 
