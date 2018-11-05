@@ -81,6 +81,21 @@ public class TeamTest {
     }
 
     @Test
+    public void addGoalsScoredAndConceded02(){
+        Team team = new Team("Team Pleb", null, 0, null);
+
+        int goalsScored = 10;
+        int goalsConceded = 5;
+
+        team.addGoalsScoredAndConceded(goalsScored, goalsConceded);
+        team.addGoalsScoredAndConceded(goalsScored, goalsConceded);
+        team.addGoalsScoredAndConceded(goalsScored, goalsConceded);
+        team.addGoalsScoredAndConceded(goalsScored, goalsConceded);
+        assertEquals(goalsScored * 4, team.getGoalsScored());
+        assertEquals(goalsConceded * 4, team.getGoalsConceded());
+    }
+
+    @Test
     public void subtractGoalsScored01(){
         Team team = new Team("Team Pleb", null, 0, null);
 
