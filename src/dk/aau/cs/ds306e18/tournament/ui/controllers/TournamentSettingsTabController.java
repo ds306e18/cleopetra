@@ -1,6 +1,7 @@
 package dk.aau.cs.ds306e18.tournament.ui.controllers;
 
 import dk.aau.cs.ds306e18.tournament.model.*;
+import dk.aau.cs.ds306e18.tournament.ui.StageFormatOption;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -25,7 +26,7 @@ public class TournamentSettingsTabController {
     @FXML private Text stageSettingsHeadLabel;
     @FXML private HBox stageSettingsContent;
     @FXML private TextField stageNameTextfield;
-    @FXML private ChoiceBox<Format> formatChoicebox;
+    @FXML private ChoiceBox<StageFormatOption> formatChoicebox;
     @FXML private ChoiceBox<Object> seedingMethodChoicebox;
     @FXML private TextField roundsTextfield;
 
@@ -35,6 +36,10 @@ public class TournamentSettingsTabController {
         tieBreakerChoiceBox.setItems(FXCollections.observableArrayList(new TieBreakerBySeed()));
         tieBreakerChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> Tournament.get().setTieBreaker(newValue));
         tieBreakerChoiceBox.getSelectionModel().select(0);
+
+        /* Stage format initial items */
+        formatChoicebox.setItems(FXCollections.observableArrayList(StageFormatOption.values()));
+
     }
 
     @FXML void nameTextFieldOnKeyReleased(KeyEvent event) {
@@ -42,7 +47,9 @@ public class TournamentSettingsTabController {
     }
 
     @FXML void stageNameTextFieldOnKeyReleased(KeyEvent event) {
-        Tournament.get().setName(nameTextField.getText());
+        Stage selectedItem = stagesListView.getSelectionModel().getSelectedItem();
+        selectedItem.setName(stageNameTextfield.getText());
+        stagesListView.refresh();
     }
 
     @FXML void addStageBtnOnAction(ActionEvent actionEvent) {
@@ -62,6 +69,7 @@ public class TournamentSettingsTabController {
     @FXML void setContent(MouseEvent event) {
         Stage selectedItem = stagesListView.getSelectionModel().getSelectedItem();
         stageNameTextfield.setText(selectedItem.getName());
+
     }
 
 
