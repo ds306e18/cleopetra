@@ -159,7 +159,7 @@
                   </ChoiceBox>
                </children>
             </HBox>
-            <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="400.0">
+            <HBox fx:id="roundsHBox" alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="400.0">
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Rounds: ">
                      <font>

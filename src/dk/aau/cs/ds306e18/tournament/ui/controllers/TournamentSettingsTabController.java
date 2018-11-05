@@ -1,7 +1,10 @@
 package dk.aau.cs.ds306e18.tournament.ui.controllers;
 
 import dk.aau.cs.ds306e18.tournament.model.*;
+import dk.aau.cs.ds306e18.tournament.oldui.Tabs.general.StageSettings;
 import dk.aau.cs.ds306e18.tournament.ui.StageFormatOption;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -29,6 +32,7 @@ public class TournamentSettingsTabController {
     @FXML private ChoiceBox<StageFormatOption> formatChoicebox;
     @FXML private ChoiceBox<Object> seedingMethodChoicebox;
     @FXML private TextField roundsTextfield;
+    @FXML private HBox roundsHBox;
 
     @FXML private void initialize() {
         nameTextField.setText(Tournament.get().getName());
@@ -37,15 +41,37 @@ public class TournamentSettingsTabController {
         tieBreakerChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> Tournament.get().setTieBreaker(newValue));
         tieBreakerChoiceBox.getSelectionModel().select(0);
 
-        /* Stage format initial items */
+        // Hide rounds by default
+        roundsHBox.setVisible(false);
+
+        /* Stage format initial items and setting new format for a stage */
         formatChoicebox.setItems(FXCollections.observableArrayList(StageFormatOption.values()));
         formatChoicebox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             Stage selectedStage = stagesListView.getSelectionModel().getSelectedItem();
             if (selectedStage != null && StageFormatOption.getOption(selectedStage.getFormat()) != newValue) {
                 selectedStage.setFormat(newValue.getNewInstance());
             }
+
+            /* Check to see if rounds should be visible or not */
+            if (StageFormatOption.getOption(selectedStage.getFormat()) != StageFormatOption.ROUND_ROBIN){
+                roundsHBox.setVisible(false);
+            } else {
+                roundsHBox.setVisible(true);
+            }
+
         });
         formatChoicebox.getSelectionModel().select(0);
+
+        /* Hide stage settings by default and if the listview is empty. */
+        stageSettingsVBox.setVisible(false);
+
+        stagesListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (stagesListView.getItems().size() != 0){
+                stageSettingsVBox.setVisible(true);
+            } else {
+                stageSettingsVBox.setVisible(false);
+            }
+        });
     }
 
     @FXML void nameTextFieldOnKeyReleased(KeyEvent event) {
