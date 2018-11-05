@@ -94,12 +94,16 @@ public class TestUtilities {
     /** @return the given x factored. x! */
     public static int factorial(int x){
 
-        int result = 0;
+        int result = x;
 
-        for(int i = x; i > 0; i--)
-            result += i;
+        for(int i = x-1; i > 0; i--)
+            result *= i;
 
         return result;
+    }
+
+    public static int numberOfMatchesInRoundRobin(int x) {
+        return x * (x-1) / 2;
     }
 
     /** sets all upcoming matches in the given swissStage to have been played.*/
