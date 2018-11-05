@@ -10,16 +10,15 @@ import javafx.scene.Node;
 
 import java.util.*;
 
-public class SwissFormat implements Format, MatchListener {
+public class SwissFormat extends GroupFormat implements MatchListener {
 
-    private StageStatus status = StageStatus.PENDING;
     private ArrayList<ArrayList<Match>> rounds;
     private int maxRounds;
-    private ArrayList<Team> teams;
     private HashMap<Team, Integer> teamPoints;
 
     @Override
     public void start(List<Team> teams) {
+
 
         rounds = new ArrayList<>();
         maxRounds = calculateMaxRounds(teams.size());
@@ -190,40 +189,6 @@ public class SwissFormat implements Format, MatchListener {
         return matches;
     }
 
-    @Override
-    public List<Match> getUpcomingMatches() {
-
-        List<Match> allMatches = getAllMatches();
-        ArrayList<Match> upComingMatches = new ArrayList<>();
-
-        for(Match match : allMatches)
-            if(!match.hasBeenPlayed())
-                upComingMatches.add(match);
-
-        return upComingMatches;
-    }
-
-    /** All created matches can be played in swiss.
-     * @return an empty ArrayList<Match>*/
-    @Override
-    public List<Match> getPendingMatches() {
-
-        return new ArrayList<>();
-    }
-
-    @Override
-    public List<Match> getCompletedMatches() {
-
-        List<Match> allMatches = getAllMatches();
-        ArrayList<Match> playedMatches = new ArrayList<>();
-
-        for(Match match : allMatches)
-            if(match.hasBeenPlayed())
-                playedMatches.add(match);
-
-        return playedMatches;
-    }
-
     public int getMaxRounds() {
         return maxRounds;
     }
@@ -231,11 +196,6 @@ public class SwissFormat implements Format, MatchListener {
     public boolean hasMaxNumberOfRounds() {
 
         return rounds.size() == getMaxRounds();
-    }
-
-    @Override
-    public StageStatus getStatus() {
-        return status;
     }
 
     /** Used for tests. This should not be used to anything else. */
@@ -251,67 +211,9 @@ public class SwissFormat implements Format, MatchListener {
         }
     }
 
-    @Override
-    public List<Team> getTopTeams(int count, TieBreaker tieBreaker) {
-
-        //Create points ordered team list
-        ArrayList<Team> teamPointsOrderList = new ArrayList<>();
-        ArrayList<Team> tempTeamsList = new ArrayList<>(teams);
-        while(tempTeamsList.size() != 0){
-            Team teamWithMostPoints = tempTeamsList.get(0);
-
-            //Find the team with the most points
-            for(Team team : tempTeamsList){
-                if(teamPoints.get(team) > teamPoints.get(teamWithMostPoints))
-                    teamWithMostPoints = team;
-            }
-
-            teamPointsOrderList.add(teamWithMostPoints);
-            tempTeamsList.remove(teamWithMostPoints);
-        }
-
-        if(teams.size() <= count) //Is the requested count larger then the count of teams?
-            return new ArrayList<>(teamPointsOrderList);
-        else {
-            if (teamPoints.get(teamPointsOrderList.get(count - 1)).equals(teamPoints.get(teamPointsOrderList.get(count)))) {
-
-                //TIE BREAKING!
-
-                ArrayList<Team> topTeamsList = new ArrayList<>();
-
-                //Find the teams that are tied
-                ArrayList<Team> tiedTeams = new ArrayList<>();
-                for(Team team : teamPointsOrderList)
-                    if(teamPoints.get(team) == teamPoints.get(teamPointsOrderList.get(count-1))) //Does the current team has the same points as the for sure tied one.
-                        tiedTeams.add(team);
-
-                //Create list with the topteams down untill and without the tied teams
-                for(Team team : teamPointsOrderList){
-
-                    if(teamPoints.get(team) == teamPoints.get(teamPointsOrderList.get(count-1)))
-                        break;
-                    else
-                        topTeamsList.add(team);
-                }
-
-                //Get list of tie broken teams
-                ArrayList<Team> tieBrokenTeams = new ArrayList<>(tieBreaker.compareAll(tiedTeams, tiedTeams.size()));
-
-                //Fill the topteamsList with the remaining needed count of teams from the tie broken teams
-                while(topTeamsList.size() < count){
-                    topTeamsList.add(tieBrokenTeams.get(0));
-                    tieBrokenTeams.remove(0);
-                }
-
-                return topTeamsList;
-            }
-            //Get the desired number of teams
-            ArrayList<Team> desiredNumberOfTeam = new ArrayList<>();
-            for (int i = 0; i < count; i++)
-                desiredNumberOfTeam.add(teamPointsOrderList.get(i));
-
-            return desiredNumberOfTeam;
-        }
+    /** @return a hashMap containing the teams and their points. */
+    public HashMap<Team, Integer> getTeamPointsMap() {
+        return new HashMap<>(teamPoints);
     }
 
     @Override
