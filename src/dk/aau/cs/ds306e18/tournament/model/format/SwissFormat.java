@@ -62,7 +62,7 @@ public class SwissFormat implements Format, MatchListener {
             return false;
         } else if(rounds.size() == maxRounds){ //Is it legal to create another round?
             return false;
-        } else if(getUpcomingMatches().size() != 0) //Has all matches been played?
+        } else if(getUpcomingMatches().size() != 0) //Has all atches been played?
             return false;
         else if(rounds.size() != 0) { //Assign points for played matches
             assignPoints();
