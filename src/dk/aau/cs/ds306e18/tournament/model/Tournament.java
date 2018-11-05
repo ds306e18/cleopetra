@@ -1,6 +1,7 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -72,6 +73,10 @@ public class Tournament {
 
     public List<Stage> getStages() {
         return new ArrayList<>(stages);
+    }
+
+    public void swapStages(Stage primaryStage, Stage secondaryStage) {
+        Collections.swap(stages, stages.indexOf(primaryStage), stages.indexOf(secondaryStage));
     }
 
     /** Returns the number of stages that has not started yet. */

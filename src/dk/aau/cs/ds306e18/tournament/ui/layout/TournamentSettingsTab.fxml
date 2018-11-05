@@ -142,23 +142,6 @@
                   </ChoiceBox>
                </children>
             </HBox>
-            <HBox alignment="CENTER_LEFT" prefHeight="39.0" prefWidth="400.0">
-               <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Seeding method:">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin>
-                  </Text>
-                  <ChoiceBox fx:id="seedingMethodChoicebox" prefHeight="25.0" prefWidth="111.0">
-                     <HBox.margin>
-                        <Insets left="30.0" />
-                     </HBox.margin>
-                  </ChoiceBox>
-               </children>
-            </HBox>
             <HBox fx:id="roundsHBox" alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="400.0">
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Rounds: ">
