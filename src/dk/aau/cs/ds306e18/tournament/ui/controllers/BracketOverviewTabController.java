@@ -27,16 +27,18 @@ public class BracketOverviewTabController {
 
     @FXML
     private void initialize(){
-
         initializeSwissBracket();
         ArrayList<GridPane> matches = getAllVisualMatches(swissStage);
         drawAllMatches(matches);
     }
 
+    /** Adds the given matches to the content of the overviewVBox. */
     private void drawAllMatches(ArrayList<GridPane> matches){
         overviewVBox.getChildren().addAll(matches);
     }
 
+    /** @param format the format to generate matches from.
+     * @return an arrayList containing gridpanes, where each is a visual representation of a match in the given format. */
     private ArrayList<GridPane> getAllVisualMatches(Format format){
         ArrayList<Match> allMatches = new ArrayList<>(format.getAllMatches());
 
@@ -49,6 +51,8 @@ public class BracketOverviewTabController {
         return visualMatches;
     }
 
+    /** @param match the match to be visualised
+     * @return a gridPane containing the visualisation of the given match. */
     private GridPane loadVisualMatch(Match match) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../layout/MatchVisual.fxml"));
         GridPane root = null;
@@ -69,6 +73,7 @@ public class BracketOverviewTabController {
         return root;
     }
 
+    /** a temperate method that generates a swiss bracket. */
     private void initializeSwissBracket(){
         swissStage = new SwissStage();
         ArrayList<Team> teams = new ArrayList<Team>();
