@@ -3,7 +3,7 @@ package dk.aau.cs.ds306e18.tournament.utility;
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import org.junit.Test;
 
-import static dk.aau.cs.ds306e18.tournament.TestUtilities.generateTournament;
+import static dk.aau.cs.ds306e18.tournament.TestUtilities.generateTournamentOnlyTeams;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -11,14 +11,14 @@ public class FileWriterTest {
 
     @Test
     public void writeToFilesystem() {
-        Tournament tournament = generateTournament();
+        Tournament tournament = generateTournamentOnlyTeams();
         assertTrue(FileWriter.writeToFilesystem("", tournament));
 
     }
 
     @Test
     public void readFromFilesystem1() {
-        Tournament tournament = generateTournament();
+        Tournament tournament = generateTournamentOnlyTeams();
         assertTrue(FileWriter.writeToFilesystem("", tournament));
         Tournament reserializedTournament = FileWriter.readFromFilesystem("");
         assertEquals(reserializedTournament, tournament);
@@ -26,7 +26,7 @@ public class FileWriterTest {
 
     @Test
     public void readFromFilesystem2() {
-        Tournament tournament = generateTournament();
+        Tournament tournament = generateTournamentOnlyTeams();
         assertTrue(FileWriter.writeToFilesystem("", "filename", tournament));
         Tournament reserializedTournament = FileWriter.readFromFilesystem("", "filename");
         assertEquals(reserializedTournament, tournament);
@@ -34,7 +34,7 @@ public class FileWriterTest {
 
     @Test
     public void readFromFilesystem3() {
-        Tournament tournament = generateTournament();
+        Tournament tournament = generateTournamentOnlyTeams();
         assertTrue(FileWriter.writeToFilesystem("", "filename", "object", tournament));
         Tournament reserializedTournament = FileWriter.readFromFilesystem("", "filename", "object");
         assertEquals(tournament, reserializedTournament);
