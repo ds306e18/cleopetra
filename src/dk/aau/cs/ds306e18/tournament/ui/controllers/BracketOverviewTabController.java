@@ -24,9 +24,11 @@ public class BracketOverviewTabController {
     @FXML private Button prevMatchBtn;
 
     private SwissStage swissStage;
+    private GridPane selectedMatch;
 
     @FXML
     private void initialize(){
+        selectedMatch = null;
         initializeSwissBracket();
         ArrayList<GridPane> matches = getAllVisualMatches(swissStage);
         drawAllMatches(matches);

@@ -9,7 +9,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane id="matchUpcoming" maxWidth="0.0" styleClass="match" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.controllers.MatchVisualController">
+<GridPane id="matchUpcoming" maxWidth="0.0" onMouseClicked="#matchClicked" styleClass="match" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.controllers.MatchVisualController">
      <children>
         <Polygon fill="#c1c1c1" points="-60.3970947265625, -18.66666603088379, -60.397125244140625, 2.3333332538604736, -44.230499267578125, -7.333332538604736" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="team1-triangle" GridPane.columnIndex="3" />
         <Polygon fill="#c1c1c1" points="-60.3970947265625, -18.66666603088379, -60.397125244140625, 2.3333332538604736, -44.230499267578125, -7.333332538604736" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="team2-triangle" GridPane.columnIndex="3" GridPane.rowIndex="1" />
