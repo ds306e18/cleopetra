@@ -15,16 +15,16 @@ import java.util.ArrayList;
 
 public class BracketOverviewTabController {
 
-    @FXML private Button nextMatchBtn;
     @FXML private GridPane bracketOverviewTab;
     @FXML private VBox selectedMatchVBox;
-    @FXML private Button nextStageBtn;
     @FXML private VBox overviewVBox;
+    @FXML private Button nextMatchBtn;
+    @FXML private Button nextStageBtn;
     @FXML private Button prevStageBtn;
     @FXML private Button prevMatchBtn;
 
     private SwissStage swissStage;
-    private GridPane selectedMatch;
+    private MatchVisualController selectedMatch;
 
     @FXML
     private void initialize(){
@@ -69,6 +69,7 @@ public class BracketOverviewTabController {
 
         match.setScores(2,4,true);
         mvc.setMatch(match);
+        mvc.setBoc(this);
         root.setId("matchplayed"); //TODO should be done based on the status of the match
         //TODO add winner style functionality
 
@@ -109,5 +110,10 @@ public class BracketOverviewTabController {
         overviewVBox.getChildren().clear();
         overviewVBox.getChildren().add(swissStage.getJavaFxNode(null));
         //bracketOverviewTab.requestLayout();
+    }
+
+    public void setSelectedMatch(MatchVisualController match){
+        this.selectedMatch = match;
+        System.out.println(match.toString());
     }
 }

@@ -12,6 +12,8 @@ public class MatchVisualController {
     @FXML private Text teamOneScore;
     @FXML private Text textTeam2;
 
+    private BracketOverviewTabController boc;
+
     @FXML
     private void initialize(){
         System.out.println("Match Visual Initialized");
@@ -20,7 +22,12 @@ public class MatchVisualController {
     /** Gets called when a match is clicked. */
     @FXML
     void matchClicked() {
-        System.out.println("Clicked");
+        boc.setSelectedMatch(this);
+    }
+
+    /** Used to set the BracketOverviewController. Is used to ref that this is clicked/Selected. */
+    public void setBoc(BracketOverviewTabController boc){
+        this.boc = boc;
     }
 
     public void setMatch(Match match){
