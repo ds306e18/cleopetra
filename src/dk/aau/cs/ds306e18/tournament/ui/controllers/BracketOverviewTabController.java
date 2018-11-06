@@ -1,13 +1,10 @@
 package dk.aau.cs.ds306e18.tournament.ui.controllers;
 
-import dk.aau.cs.ds306e18.tournament.model.Bot;
-import dk.aau.cs.ds306e18.tournament.model.Match;
-import dk.aau.cs.ds306e18.tournament.model.SwissStage;
-import dk.aau.cs.ds306e18.tournament.model.Team;
+import dk.aau.cs.ds306e18.tournament.model.*;
+import dk.aau.cs.ds306e18.tournament.oldui.bracketObjects.VisualMatch;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -31,23 +28,28 @@ public class BracketOverviewTabController {
     @FXML
     private void initialize(){
 
-        tempCreateSwissBracket();
-        loadVisualMatch(swissStage.getAllMatches().get(0));
+        initializeSwissBracket();
+        ArrayList<GridPane> matches = getAllVisualMatches(swissStage);
+        drawAllMatches(matches);
     }
 
-    private void getMatches(){
+    private void drawAllMatches(ArrayList<GridPane> matches){
+        overviewVBox.getChildren().addAll(matches);
+    }
 
-        URL matchFxml = getClass().getResource("../layout/MatchVisual.fxml");
+    private ArrayList<GridPane> getAllVisualMatches(Format format){
+        ArrayList<Match> allMatches = new ArrayList<>(format.getAllMatches());
 
-        try {
-            GridPane root = FXMLLoader.load(matchFxml);
-            overviewVBox.getChildren().add(root);
-        } catch (IOException e) {
-            e.printStackTrace();
+        ArrayList<GridPane> visualMatches = new ArrayList<>();
+
+        for(Match match : allMatches){
+            visualMatches.add(loadVisualMatch(match));
         }
+
+        return visualMatches;
     }
 
-    private void loadVisualMatch(Match match) {
+    private GridPane loadVisualMatch(Match match) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../layout/MatchVisual.fxml"));
         GridPane root = null;
         MatchVisualController mvc = null;
@@ -59,12 +61,15 @@ public class BracketOverviewTabController {
             e.printStackTrace();
         }
 
+        match.setScores(2,4,true);
         mvc.setMatch(match);
+        root.setId("matchplayed"); //TODO should be done based on the status of the match
+        //TODO add winner style functionality
 
-        overviewVBox.getChildren().add(root);
+        return root;
     }
 
-    private void tempCreateSwissBracket(){
+    private void initializeSwissBracket(){
         swissStage = new SwissStage();
         ArrayList<Team> teams = new ArrayList<Team>();
         ArrayList<Bot> team1 = new ArrayList<>();
@@ -90,6 +95,7 @@ public class BracketOverviewTabController {
         swissStage.start(teams);
     }
 
+    /** Meant to update the created matches on button click -> this method. */
     @FXML
     void updateBracket(ActionEvent event) {
         System.out.println("Clioced");

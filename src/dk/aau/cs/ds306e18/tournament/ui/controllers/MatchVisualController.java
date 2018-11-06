@@ -21,7 +21,6 @@ public class MatchVisualController {
     @FXML
     private void initialize(){
         System.out.println("Match Visual Initialized");
-
     }
 
     public void setMatch(Match match){
