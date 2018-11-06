@@ -17,9 +17,6 @@ public class RoundRobinGroup {
 
         this.teams = new ArrayList<>(seededTeams);
 
-        //if there is an uneven amount of teams, add a dummy team and later remove matches that include the dummy team
-        if (teams.size() % 2 != 0)
-            teams.add(DUMMY_TEAM);
     }
 
     public void setMatches(ArrayList<Match> matches) {

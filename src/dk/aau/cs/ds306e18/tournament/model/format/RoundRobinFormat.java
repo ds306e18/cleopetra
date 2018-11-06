@@ -46,6 +46,11 @@ public class RoundRobinFormat extends GroupFormat implements MatchListener {
         for (int i = 0; i < numberOfGroups; i++) {
             ArrayList<Team> splitArray = splitArrayForEachGroup((i) * teams.size());
 
+            //if there is an uneven amount of teams, add a dummy team and later remove matches that include the dummy team
+            if ( splitArray.size() % 2 != 0 ) {
+                splitArray.add(DUMMY_TEAM);
+            }
+
             RoundRobinGroup roundRobinGroup = new RoundRobinGroup(splitArray);
             roundRobinGroup.setMatches(generateMatches(roundRobinGroup.getTeams()));
             groups.add(roundRobinGroup);
@@ -153,8 +158,8 @@ public class RoundRobinFormat extends GroupFormat implements MatchListener {
 
         for (int i = 0; i < tempMatches.length; i++) {
             for (int j = 0; j < tempMatches[i].length; j++) {
-                if (tempMatches[i][j].getOrangeTeam().getTeamName().equals("Dummy") ||
-                        tempMatches[i][j].getBlueTeam().getTeamName().equals("Dummy")) {
+                if (tempMatches[i][j].getOrangeTeam().equals(DUMMY_TEAM) ||
+                        tempMatches[i][j].getBlueTeam().equals(DUMMY_TEAM)) {
                     continue;
                 } else {
                     matches.add(tempMatches[i][j]);
