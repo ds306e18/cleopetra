@@ -2,6 +2,7 @@ package dk.aau.cs.ds306e18.tournament.utility;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import dk.aau.cs.ds306e18.tournament.model.format.Format;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import dk.aau.cs.ds306e18.tournament.utility.instanceCreators.TieBreakerInstanceCreator;
@@ -13,7 +14,8 @@ public class Serializer {
 
     // Initialize a GSON-object where the TieBreaker InstanceCreator has been registered
     private static Gson gson = new GsonBuilder()
-            .registerTypeAdapter(TieBreaker.class, new TieBreakerInstanceCreator()).create();
+            .registerTypeAdapter(TieBreaker.class, new TieBreakerInstanceCreator())
+            .registerTypeAdapter(Format.class, new FormatAdaptor()).create();
 
     /**
      * Takes a tournament and returns the serialized object as a String
