@@ -50,7 +50,7 @@ public class TournamentSettingsTabController {
     @FXML
     private TextField roundsTextfield;
     @FXML
-    private HBox roundsHBox;
+    private GridPane stageOptions;
     @FXML
     private Button swapUp;
     @FXML
@@ -88,10 +88,10 @@ public class TournamentSettingsTabController {
             }
 
             /* Rounds are only visible if a specific format is chosen. */
-            if (getSelectedStage() != null && StageFormatOption.getOption(getSelectedStage().getFormat()) != StageFormatOption.ROUND_ROBIN) {
-                roundsHBox.setVisible(false);
+            if (getSelectedStage() != null && StageFormatOption.getOption(getSelectedStage().getFormat()) != StageFormatOption.SWISS_SYSTEM) {
+                stageOptions.setVisible(false);
             } else {
-                roundsHBox.setVisible(true);
+                stageOptions.setVisible(true);
             }
 
         });

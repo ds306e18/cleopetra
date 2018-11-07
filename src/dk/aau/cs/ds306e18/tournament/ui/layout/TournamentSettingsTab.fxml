@@ -106,7 +106,7 @@
             <Insets />
          </GridPane.margin>
       </VBox>
-      <VBox id="TS-rightside" fx:id="stageSettingsVBox" prefHeight="200.0" prefWidth="338.0" spacing="10.0" visible="false" GridPane.columnIndex="1">
+      <VBox id="TS-rightside" fx:id="stageSettingsVBox" prefHeight="200.0" prefWidth="338.0" spacing="10.0" GridPane.columnIndex="1">
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Stage settings" wrappingWidth="311.91465950012207">
                <font>
@@ -132,40 +132,50 @@
                   <Insets right="20.0" />
                </VBox.margin>
             </TextField>
-            <HBox alignment="CENTER_LEFT" prefHeight="39.0" prefWidth="400.0">
+            <GridPane>
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                  <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+               </rowConstraints>
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Format: ">
                      <font>
                         <Font size="16.0" />
                      </font>
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin>
                   </Text>
-                  <ChoiceBox fx:id="formatChoicebox" prefHeight="25.0" prefWidth="111.0">
-                     <HBox.margin>
-                        <Insets left="30.0" />
-                     </HBox.margin>
-                  </ChoiceBox>
+                  <ChoiceBox fx:id="formatChoicebox" prefHeight="25.0" prefWidth="111.0" GridPane.columnIndex="1" />
                </children>
-            </HBox>
-            <HBox fx:id="roundsHBox" alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="400.0">
+               <VBox.margin>
+                  <Insets right="20.0" />
+               </VBox.margin>
+            </GridPane>
+            <GridPane fx:id="stageOptions">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                  <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+               </rowConstraints>
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Rounds: ">
                      <font>
                         <Font size="16.0" />
                      </font>
                   </Text>
-                  <TextField fx:id="roundsTextfield" alignment="CENTER" prefHeight="27.0" prefWidth="34.0">
+                  <TextField fx:id="roundsTextfield" alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="50.0" GridPane.columnIndex="1">
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
-                     <HBox.margin>
-                        <Insets left="30.0" />
-                     </HBox.margin>
                   </TextField>
                </children>
-            </HBox>
+               <VBox.margin>
+                  <Insets right="20.0" />
+               </VBox.margin>
+            </GridPane>
          </children>
          <GridPane.margin>
             <Insets />
