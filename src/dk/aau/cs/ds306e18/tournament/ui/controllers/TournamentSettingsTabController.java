@@ -144,6 +144,7 @@ public class TournamentSettingsTabController {
 
         stagesListView.setItems(FXCollections.observableArrayList(Tournament.get().getStages()));
         stagesListView.refresh();
+        stagesListView.getSelectionModel().selectLast();
     }
 
     /**

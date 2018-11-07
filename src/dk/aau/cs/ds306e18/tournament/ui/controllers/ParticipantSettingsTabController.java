@@ -96,6 +96,7 @@ public class ParticipantSettingsTabController {
             botsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
                     .getBots()));
             botsListView.refresh();
+            botsListView.getSelectionModel().selectLast();
         }
     }
     // Updates the lists on button press action
