@@ -129,6 +129,6 @@ public class BracketOverviewTabController {
 
     public void setSelectedMatch(MatchVisualController match){
         this.selectedMatch = match;
-        System.out.println(match.toString());
+        System.out.println(match.getLastSetMatch().toString());
     }
 }

@@ -238,4 +238,15 @@ public class Match {
             listener.onMatchPlayed(this);
         }
     }
+
+    @Override
+    public String toString() {
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("UID: ").append(hashCode()).append(", ").append("Status: ").append(getStatus().toString()).append("\n");
+        sb.append("B ").append(getBlueTeam().getTeamName()).append(", Score: ").append(getBlueScore()).append("\n");
+        sb.append("O ").append(getOrangeTeam().getTeamName()).append(", Score: ").append(getOrangeScore());
+
+        return sb.toString();
+    }
 }
