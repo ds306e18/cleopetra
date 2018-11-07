@@ -80,15 +80,22 @@
             </ListView>
             <GridPane style="-fx-max-width: 250;">
                <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="91.33331298828125" minWidth="10.0" prefWidth="79.33331298828125" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="104.00002034505206" minWidth="10.0" prefWidth="104.00002034505206" />
+                  <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="77.33331298828125" minWidth="10.0" prefWidth="72.0" />
                </columnConstraints>
                <rowConstraints>
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <Button fx:id="addStageBtn" mnemonicParsing="false" onAction="#addStageBtnOnAction" prefHeight="27.0" prefWidth="109.0" text="Add stage" />
-                  <Button fx:id="removeStageBtn" mnemonicParsing="false" onAction="#removeStageBtnOnAction" prefHeight="27.0" prefWidth="108.0" text="Remove stage" GridPane.columnIndex="1" />
+                  <Button fx:id="addStageBtn" mnemonicParsing="false" onAction="#addStageBtnOnAction" prefHeight="27.0" prefWidth="79.0" text="Add" />
+                  <Button fx:id="removeStageBtn" mnemonicParsing="false" onAction="#removeStageBtnOnAction" prefHeight="27.0" prefWidth="81.0" text="Remove" GridPane.columnIndex="1" />
+                  <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="5.0" GridPane.columnIndex="2">
+                     <children>
+                        <Button fx:id="swapUp" disable="true" mnemonicParsing="false" onAction="#swapStageUpwards" text="▲" />
+                        <Button fx:id="swapDown" disable="true" mnemonicParsing="false" onAction="#swapStageDownwards" text="▼" />
+                     </children>
+                  </HBox>
                </children>
                <VBox.margin>
                   <Insets left="20.0" right="20.0" />
@@ -99,7 +106,7 @@
             <Insets />
          </GridPane.margin>
       </VBox>
-      <VBox id="TS-rightside" fx:id="stageSettingsVBox" prefHeight="200.0" prefWidth="338.0" spacing="10.0" GridPane.columnIndex="1">
+      <VBox id="TS-rightside" fx:id="stageSettingsVBox" prefHeight="200.0" prefWidth="338.0" spacing="10.0" visible="false" GridPane.columnIndex="1">
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Stage settings" wrappingWidth="311.91465950012207">
                <font>
@@ -149,7 +156,7 @@
                         <Font size="16.0" />
                      </font>
                   </Text>
-                  <TextField fx:id="roundsTextfield" alignment="CENTER" onKeyReleased="#nameTextFieldOnKeyReleased" prefHeight="27.0" prefWidth="34.0">
+                  <TextField fx:id="roundsTextfield" alignment="CENTER" prefHeight="27.0" prefWidth="34.0">
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>

@@ -19,6 +19,8 @@ import javafx.scene.text.Text;
 import javafx.scene.effect.BlendMode;
 import javafx.util.Callback;
 
+import java.util.Collections;
+
 public class TournamentSettingsTabController {
 
     @FXML
@@ -49,48 +51,55 @@ public class TournamentSettingsTabController {
     private TextField roundsTextfield;
     @FXML
     private HBox roundsHBox;
+    @FXML
+    private Button swapUp;
+    @FXML
+    private Button swapDown;
 
 
-    /* TODO: Clean code && Comments
-       TODO: Maybe add int rounds to Stage model?
-       TODO: Fix and store the number of rounds for a stage somewhere.
-       TODO: Is seeding method still relevant? if so, create the observable list.
-       TODO: Maybe add drag functionality to the listview to choose stage order.
-       TODO: Look more into having a getJavaFxNode.
+    /* TODO List
+       DONE: Clean code && Comments
+       DONE: Look more into having a getJavaFxNode. Nope, not for prototype.
+       DONE: Is seeding method still relevant? Nope not for prototype.
+       Done: Add arrows to order stages.
+       DONE: Disable arrows if a swap is not possible. (Listener)
     */
 
     @FXML
     private void initialize() {
+        /* Retrieve and set tournament name into textfield. */
         nameTextField.setText(Tournament.get().getName());
 
+        /* Retrieve and add choices to choicebox for the Tiebreaker box.
+         * Also upon change sets the new tiebreaker rule to the tournament model. */
         tieBreakerChoiceBox.setItems(FXCollections.observableArrayList(new TieBreakerBySeed()));
         tieBreakerChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> Tournament.get().setTieBreaker(newValue));
         tieBreakerChoiceBox.getSelectionModel().select(0);
 
-        // Hide rounds by default
-        roundsHBox.setVisible(false);
 
-        /* Stage format initial items and setting new format for a stage */
+        /* Retrieve possible formats and add to a choicebox */
         formatChoicebox.setItems(FXCollections.observableArrayList(StageFormatOption.values()));
+
+        /* Listener for the format choicebox. Used to change a Stage format when a different format is chosen */
         formatChoicebox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            Stage selectedStage = stagesListView.getSelectionModel().getSelectedItem();
-            if (selectedStage != null && StageFormatOption.getOption(selectedStage.getFormat()) != newValue) {
-                selectedStage.setFormat(newValue.getNewInstance());
+
+            if (getSelectedStage() != null && StageFormatOption.getOption(getSelectedStage().getFormat()) != newValue) {
+                getSelectedStage().setFormat(newValue.getNewInstance());
             }
 
-            /* Check to see if rounds should be visible or not */
-            if (selectedStage != null && StageFormatOption.getOption(selectedStage.getFormat()) != StageFormatOption.ROUND_ROBIN) {
+            /* Rounds are only visible if a specific format is chosen. */
+            if (getSelectedStage() != null && StageFormatOption.getOption(getSelectedStage().getFormat()) != StageFormatOption.ROUND_ROBIN) {
                 roundsHBox.setVisible(false);
             } else {
                 roundsHBox.setVisible(true);
             }
 
         });
-        formatChoicebox.getSelectionModel().select(0);
 
-        /* Hide stage settings by default and if the listview is empty. */
-        stageSettingsVBox.setVisible(false);
-
+        /* By default the stage settings are hidden.
+         * This listener is used to show the stage settings when there is at least one Stage added.
+         * Also handles disabling and enabling of buttons for stages.
+         * */
         stagesListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (stagesListView.getItems().size() != 0) {
                 stageSettingsVBox.setVisible(true);
@@ -98,6 +107,19 @@ public class TournamentSettingsTabController {
                 stageSettingsVBox.setVisible(false);
             }
 
+            /* Handle stage order button disabling / enabling */
+            if (getSelectedIndex() == 0) {
+                swapUp.setDisable(true);
+            } else {
+                swapUp.setDisable(false);
+            }
+            if (getSelectedIndex() == stagesListView.getItems().size() - 1 && getSelectedIndex() != -1) {
+                swapDown.setDisable(true);
+            } else {
+                swapDown.setDisable(false);
+            }
+
+            /* Set content inside stage settings of chosen stage */
             setContent();
         });
     }
@@ -109,35 +131,77 @@ public class TournamentSettingsTabController {
 
     @FXML
     void stageNameTextFieldOnKeyReleased(KeyEvent event) {
-        Stage selectedItem = stagesListView.getSelectionModel().getSelectedItem();
-        selectedItem.setName(stageNameTextfield.getText());
+        getSelectedStage().setName(stageNameTextfield.getText());
         stagesListView.refresh();
     }
 
+    /**
+     * Adds a stage to the stages list and also to the tournament model.
+     */
     @FXML
     void addStageBtnOnAction(ActionEvent actionEvent) {
         Tournament.get().addStage(new Stage("New Stage", new SwissStage()));
+
         stagesListView.setItems(FXCollections.observableArrayList(Tournament.get().getStages()));
         stagesListView.refresh();
     }
 
+    /**
+     * Removes a stage from the Stages list and also from the tournament model.
+     */
     @FXML
-    void removeStageBtnOnAction(ActionEvent actionEvent) {
-        int selectedIndex = stagesListView.getSelectionModel().getSelectedIndex();
-        if (selectedIndex != -1) {
-            Tournament.get().removeStage(selectedIndex);
-            stagesListView.setItems(FXCollections.observableArrayList(Tournament.get().getStages()));
-            stagesListView.refresh();
+    void removeStageBtnOnAction() {
+        if (getSelectedIndex() != -1) {
+            Tournament.get().removeStage(getSelectedIndex());
+            stagesListView.getItems().remove(getSelectedIndex());
         }
     }
 
+    /**
+     * Sets correct text into fields inside the stage settings.
+     */
     private void setContent() {
-        Stage selectedItem = stagesListView.getSelectionModel().getSelectedItem();
-        if (selectedItem != null) {
-            stageNameTextfield.setText(selectedItem.getName());
-            formatChoicebox.getSelectionModel().select(StageFormatOption.getOption(selectedItem.getFormat()));
+        if (getSelectedStage() != null) {
+            stageNameTextfield.setText(getSelectedStage().getName());
+            formatChoicebox.getSelectionModel().select(StageFormatOption.getOption(getSelectedStage().getFormat()));
         }
     }
 
+    /**
+     * Swaps a stage upwards in the list of stages. Used to allow ordering of stages.
+     * This also swaps the stages in the tournament model.
+     */
+    @FXML
+    private void swapStageUpwards() {
+        if (getSelectedIndex() != 0 && getSelectedIndex() != -1) {
+            Collections.swap(stagesListView.getItems(), getSelectedIndex(), getSelectedIndex() - 1);
+            Tournament.get().swapStages(stagesListView.getItems().get(getSelectedIndex()), stagesListView.getItems().get(getSelectedIndex() - 1));
+
+            stagesListView.getSelectionModel().select(getSelectedIndex() - 1);
+        }
+    }
+
+    /**
+     * Swaps a stage downwards in the list of stages. Used to allow ordering of stages.
+     * This also swaps the stages in the tournament model.
+     */
+    @FXML
+    private void swapStageDownwards() {
+        int listSize = stagesListView.getItems().size();
+
+        if (getSelectedIndex() != listSize - 1 && getSelectedIndex() != -1) {
+            Collections.swap(stagesListView.getItems(), getSelectedIndex(), getSelectedIndex() + 1);
+            Tournament.get().swapStages(stagesListView.getItems().get(getSelectedIndex()), stagesListView.getItems().get(getSelectedIndex() + 1));
+            stagesListView.getSelectionModel().select(getSelectedIndex() + 1);
+        }
+    }
+
+    private Stage getSelectedStage() {
+        return stagesListView.getSelectionModel().getSelectedItem();
+    }
+
+    private int getSelectedIndex() {
+        return stagesListView.getSelectionModel().getSelectedIndex();
+    }
 
 }
