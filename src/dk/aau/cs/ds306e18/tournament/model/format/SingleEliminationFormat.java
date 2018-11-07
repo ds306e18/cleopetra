@@ -1,11 +1,12 @@
 package dk.aau.cs.ds306e18.tournament.model.format;
 
+import dk.aau.cs.ds306e18.tournament.ui.controllers.BracketOverviewTabController;
+
 import dk.aau.cs.ds306e18.tournament.model.*;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchListener;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchStatus;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
-import dk.aau.cs.ds306e18.tournament.ui.tabs.BracketOverview;
 import javafx.scene.Node;
 
 import java.util.ArrayList;
@@ -237,7 +238,7 @@ public class SingleEliminationFormat implements Format, MatchListener {
     }
 
     @Override
-    public Node getJavaFxNode(BracketOverview bracketOverview) {
+    public Node getJavaFxNode(BracketOverviewTabController bracketOverview) {
         return null; //TODO
     }
 }

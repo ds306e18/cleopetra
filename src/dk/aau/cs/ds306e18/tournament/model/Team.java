@@ -1,6 +1,5 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
-import java.nio.file.Path;
 import java.util.ArrayList;
 
 public class Team {
@@ -76,8 +75,8 @@ public class Team {
         return new ArrayList<>(bots);
     }
 
-    public ArrayList<Path> getConfigPaths() {
-        ArrayList<Path> paths = new ArrayList<>();
+    public ArrayList<String> getConfigPaths() {
+        ArrayList<String> paths = new ArrayList<>();
         for (Bot bot : bots) {
             paths.add(bot.getConfigPath());
         }
@@ -117,5 +116,10 @@ public class Team {
     /** @return the difference between goals scored and goals conceded. */
     public int getGoalDiff(){
         return goalsScored - goalsConceded;
+    }
+
+    @Override
+    public String toString() {
+        return teamName;
     }
 }
