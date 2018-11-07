@@ -1,6 +1,7 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
 import dk.aau.cs.ds306e18.tournament.oldui.Tabs.BracketOverview;
+import dk.aau.cs.ds306e18.tournament.ui.controllers.BracketOverviewTabController;
 import javafx.scene.Node;
 
 import java.util.List;
@@ -28,6 +29,6 @@ public interface Format {
     /** Returns a list of all the matches that have been played. */
     List<Match> getCompletedMatches();
 
-    /** Returns a Node of the stage. This node contains a reference to it self and other functionality to display the stage.*/
-    Node getJavaFxNode(BracketOverview bracketOverview);
+    /** Returns a Node of the stage. This node contains functionality to display the stage.*/
+    Node getJavaFxNode(BracketOverviewTabController boc);
 }
