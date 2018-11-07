@@ -1,6 +1,9 @@
 package dk.aau.cs.ds306e18.tournament.ui.controllers;
 
 import dk.aau.cs.ds306e18.tournament.model.*;
+import dk.aau.cs.ds306e18.tournament.model.format.SwissFormat;
+import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
+import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreakerBySeed;
 import dk.aau.cs.ds306e18.tournament.ui.StageFormatOption;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -136,7 +139,7 @@ public class TournamentSettingsTabController {
      */
     @FXML
     void addStageBtnOnAction(ActionEvent actionEvent) {
-        Tournament.get().addStage(new Stage("New Stage", new SwissStage()));
+        Tournament.get().addStage(new Stage("New Stage", new SwissFormat()));
 
         stagesListView.setItems(FXCollections.observableArrayList(Tournament.get().getStages()));
         stagesListView.refresh();
