@@ -1,6 +1,6 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
-import dk.aau.cs.ds306e18.tournament.oldui.Tabs.BracketOverview;
+import dk.aau.cs.ds306e18.tournament.ui.controllers.BracketOverviewTabController;
 import javafx.scene.Node;
 
 import java.util.ArrayList;
@@ -174,7 +174,7 @@ public class RoundRobinStage implements Format, MatchListener {
     }
 
     @Override
-    public Node getJavaFxNode(BracketOverview bracketOverview) {
+    public Node getJavaFxNode(BracketOverviewTabController bracketOverview) {
         return null; //TODO
     }
 }
