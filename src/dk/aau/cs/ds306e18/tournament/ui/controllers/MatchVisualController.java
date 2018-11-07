@@ -13,6 +13,7 @@ public class MatchVisualController {
     @FXML private Text textTeam2;
 
     private BracketOverviewTabController boc;
+    private Match lastSetMatch;
 
     @FXML
     private void initialize(){
@@ -31,9 +32,14 @@ public class MatchVisualController {
     }
 
     public void setMatch(Match match){
+        this.lastSetMatch = match;
         this.textTeam1.setText(match.getOrangeTeam().getTeamName());
         this.textTeam2.setText(match.getBlueTeam().getTeamName());
         this.teamOneScore.setText(String.valueOf(match.getOrangeScore()));
         this.teamTwoScore.setText(String.valueOf(match.getBlueScore()));
+    }
+
+    public Match getLastSetMatch() {
+        return lastSetMatch;
     }
 }
