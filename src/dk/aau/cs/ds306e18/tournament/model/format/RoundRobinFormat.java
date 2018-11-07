@@ -42,20 +42,25 @@ public class RoundRobinFormat extends GroupFormat implements MatchListener {
     }
 
     private void createGroupsWithMatches(ArrayList<Team> teams) {
+        int leftoverTeams = teams.size() % numberOfGroups;
 
         for (int i = 0; i < numberOfGroups; i++) {
-            ArrayList<Team> splitArray = splitArrayForEachGroup((i) * teams.size());
+            ArrayList<Team> splitArray = splitArrayForEachGroup((i) * (teams.size()/numberOfGroups));
 
+            if (leftoverTeams != 0) {
+                splitArray.add(teams.get(teams.size()-leftoverTeams));
+                leftoverTeams--;
+            }
             //if there is an uneven amount of teams, add a dummy team and later remove matches that include the dummy team
             if ( splitArray.size() % 2 != 0 ) {
                 splitArray.add(DUMMY_TEAM);
             }
 
-            RoundRobinGroup roundRobinGroup = new RoundRobinGroup(splitArray);
-            roundRobinGroup.setMatches(generateMatches(roundRobinGroup.getTeams()));
-            groups.add(roundRobinGroup);
+                RoundRobinGroup roundRobinGroup = new RoundRobinGroup(splitArray);
+                roundRobinGroup.setMatches(generateMatches(roundRobinGroup.getTeams()));
+                groups.add(roundRobinGroup);
+            }
         }
-    }
 
     private ArrayList<Team> splitArrayForEachGroup(int startingPoint) {
         ArrayList<Team> splitArray = new ArrayList<>();
@@ -90,24 +95,25 @@ public class RoundRobinFormat extends GroupFormat implements MatchListener {
                 //the other team is found by berger tables rules (findIdOfNextPlayer) on the id of the team in the same match,
                 //but previous round
                 else if (match == 0) {
-                    //if uneven round, player with highest id becomes blue player
-                    if ((round % 2) != 0) {
-                        nextOrange = findIdOfNextPlayer(map.get(tempMatches[round - 1][match].getBlueTeam()));
-                        tempMatches[round][match] = createNewMatch((teams.get(teams.size() - 1)), teams.get(nextOrange - 1));
-                        //else become orange team
-                    } else {
-                        nextBlue = findIdOfNextPlayer(map.get(tempMatches[round - 1][match].getOrangeTeam()));
+                    //else become orange team
+                    if ((round % 2) == 0) {
+                        nextBlue = findIdOfNextPlayer(map.get(tempMatches[round - 1][match].getOrangeTeam()), teams.size());
                         tempMatches[round][match] = createNewMatch(teams.get(nextBlue - 1), (teams.get(teams.size() - 1)));
+                        //if uneven round, player with highest id becomes blue player
+                    } else {
+                        nextOrange = findIdOfNextPlayer(map.get(tempMatches[round - 1][match].getBlueTeam()), teams.size());
+                        tempMatches[round][match] = createNewMatch((teams.get(teams.size() - 1)), teams.get(nextOrange - 1));
                     }
                 } else {
                     //if not the first round, or first match, find both players by findIdOfNextPlayer according to berger tables,
                     //on previous teams
-                    nextBlue = findIdOfNextPlayer(map.get(tempMatches[round - 1][match].getBlueTeam()));
-                    nextOrange = findIdOfNextPlayer(map.get(tempMatches[round - 1][match].getOrangeTeam()));
+                    nextBlue = findIdOfNextPlayer(map.get(tempMatches[round - 1][match].getBlueTeam()), teams.size());
+                    nextOrange = findIdOfNextPlayer(map.get(tempMatches[round - 1][match].getOrangeTeam()), teams.size());
                     tempMatches[round][match] = createNewMatch(teams.get(nextBlue - 1), (teams.get(nextOrange - 1)));
                 }
             }
         }
+
         return removeDummyMatches(tempMatches);
     }
 
@@ -120,7 +126,7 @@ public class RoundRobinFormat extends GroupFormat implements MatchListener {
      */
     private HashMap<Team, Integer> createIdHashMap(ArrayList<Team> teams) {
         HashMap<Team, Integer> map = new HashMap<>();
-        for (int m = 1; m < teams.size() + 1; m++) {
+        for (int m = 1; m <= teams.size(); m++) {
             map.put(teams.get(m - 1), m);
         }
         return map;
@@ -143,10 +149,10 @@ public class RoundRobinFormat extends GroupFormat implements MatchListener {
      * @param id of the team in the match in the previous round.
      * @return the id of the team that should be in this match, according to last.
      */
-    public int findIdOfNextPlayer(int id) {
-        if ((id + (teams.size() / 2)) > (teams.size() - 1)) {
-            return id - ((teams.size() / 2) - 1);
-        } else return id + (teams.size() / 2);
+    public int findIdOfNextPlayer(int id, int limit) {
+        if ((id + (limit / 2)) > (limit - 1)) {
+            return id - ((limit / 2) - 1);
+        } else return id + (limit / 2);
     }
 
     /**
@@ -220,6 +226,14 @@ public class RoundRobinFormat extends GroupFormat implements MatchListener {
 
     public int getNumberOfGroups() {
         return numberOfGroups;
+    }
+
+    public ArrayList<RoundRobinGroup> getGroups() {
+        return groups;
+    }
+
+    public static Team getDummyTeam() {
+        return DUMMY_TEAM;
     }
 
     @Override

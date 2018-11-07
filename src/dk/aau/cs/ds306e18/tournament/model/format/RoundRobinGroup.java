@@ -10,13 +10,11 @@ import java.util.ArrayList;
 public class RoundRobinGroup {
 
     private ArrayList<Team> teams;
-    private static final Team DUMMY_TEAM = new Team("Dummy", new ArrayList<Bot>(), 0, "");
-    private ArrayList<Match> matches;
+        private ArrayList<Match> matches;
 
     RoundRobinGroup(ArrayList<Team> seededTeams) {
 
         this.teams = new ArrayList<>(seededTeams);
-
     }
 
     public void setMatches(ArrayList<Match> matches) {
@@ -24,6 +22,16 @@ public class RoundRobinGroup {
     }
 
     public ArrayList<Team> getTeams() {
+        return teams;
+    }
+
+    public ArrayList<Team> getTeamsWithoutDummy() {
+        ArrayList<Team> teams = new ArrayList<>();
+        for (Team team: this.teams) {
+            if (team.equals(RoundRobinFormat.getDummyTeam())) {
+                continue;
+            } else teams.add(team);
+        }
         return teams;
     }
 
