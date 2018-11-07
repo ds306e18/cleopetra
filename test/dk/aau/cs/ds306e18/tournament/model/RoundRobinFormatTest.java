@@ -1,6 +1,7 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
 import dk.aau.cs.ds306e18.tournament.model.format.RoundRobinFormat;
+import dk.aau.cs.ds306e18.tournament.model.format.RoundRobinGroup;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreakerBySeed;
 import org.junit.Test;
@@ -71,15 +72,15 @@ public class RoundRobinFormatTest {
         RoundRobinFormat bracket = new RoundRobinFormat();
         bracket.start(generateTeams(numberOfTeams, teamSize));
 
-        assertEquals((bracket.findIdOfNextPlayer(3)), 13);
-        assertEquals((bracket.findIdOfNextPlayer(1)), 11);
+        assertEquals((bracket.findIdOfNextPlayer(3,numberOfTeams)), 13);
+        assertEquals((bracket.findIdOfNextPlayer(1,numberOfTeams)), 11);
 
         for (int i = 1; i <= numberOfTeams; i++) {
-            assertTrue(bracket.findIdOfNextPlayer(i) < numberOfTeams);
-            assertTrue(bracket.findIdOfNextPlayer(i) > 0);
+            assertTrue(bracket.findIdOfNextPlayer(i,numberOfTeams) < numberOfTeams);
+            assertTrue(bracket.findIdOfNextPlayer(i,numberOfTeams) > 0);
             if (i >= (numberOfTeams / 2)) {
-                assertTrue(bracket.findIdOfNextPlayer(i) < i);
-            } else assertTrue(bracket.findIdOfNextPlayer(i) > i);
+                assertTrue(bracket.findIdOfNextPlayer(i, numberOfTeams) < i);
+            } else assertTrue(bracket.findIdOfNextPlayer(i, numberOfTeams) > i);
         }
     }
 
@@ -259,6 +260,100 @@ public class RoundRobinFormatTest {
         setAllMatchesPlayed(bracket);
 
         assertEquals(StageStatus.CONCLUDED, bracket.getStatus());
+    }
+
+    @Test
+    public void groupSizes01() { //even group size, even number of teams in each group
+
+        RoundRobinFormat bracket = new RoundRobinFormat();
+        bracket.setNumberOfGroups(2);
+        bracket.start(generateTeams(12,2));
+
+
+        assertEquals(2,bracket.getGroups().size());
+        for (RoundRobinGroup group: bracket.getGroups()) {
+            assertEquals(6, group.getTeamsWithoutDummy().size());
+            assertEquals(6,group.getTeams().size());
+            assertEquals(15,group.getMatches().size());
+        }
+
+        for (Match match : bracket.getAllMatches()) {
+            assertTrue(match.getBlueTeam() != RoundRobinFormat.getDummyTeam() &&
+                    match.getOrangeTeam() != RoundRobinFormat.getDummyTeam());
+        }
+
+        assertEquals(30,bracket.getAllMatches().size());
+
+    }
+
+    @Test
+    public void groupSizes02() { //even group size, uneven number of teams in each group
+
+        RoundRobinFormat bracket = new RoundRobinFormat();
+        bracket.setNumberOfGroups(2);
+        bracket.start(generateTeams(10,2));
+
+        assertEquals(2,bracket.getGroups().size());
+        for (RoundRobinGroup group: bracket.getGroups()) {
+            assertEquals(5, group.getTeamsWithoutDummy().size());
+            assertEquals(6, group.getTeams().size());
+            assertEquals(10,group.getMatches().size());
+        }
+
+        for (Match match : bracket.getAllMatches()) {
+            assertTrue(match.getBlueTeam() != RoundRobinFormat.getDummyTeam() &&
+                    match.getOrangeTeam() != RoundRobinFormat.getDummyTeam());
+        }
+
+        assertEquals(20,bracket.getAllMatches().size());
+    }
+
+    @Test
+    public void groupSizes03() { //uneven group size, even number of teams in each group
+
+        RoundRobinFormat bracket = new RoundRobinFormat();
+        bracket.setNumberOfGroups(3);
+        bracket.start(generateTeams(18,2));
+
+        assertEquals(3,bracket.getGroups().size());
+        for (RoundRobinGroup group: bracket.getGroups()) {
+            assertEquals(6, group.getTeamsWithoutDummy().size());
+            assertEquals(6,group.getTeams().size());
+            assertEquals(15,group.getMatches().size());
+        }
+        for (Match match : bracket.getAllMatches()) {
+            assertTrue(match.getBlueTeam() != RoundRobinFormat.getDummyTeam() &&
+                    match.getOrangeTeam() != RoundRobinFormat.getDummyTeam());
+        }
+
+        assertEquals(45,bracket.getAllMatches().size());
+    }
+
+    @Test
+    public void groupSizes04() { //uneven group size, even number of teams in each group
+
+        RoundRobinFormat bracket = new RoundRobinFormat();
+        bracket.setNumberOfGroups(3);
+        bracket.start(generateTeams(10,2));
+
+        assertEquals(3,bracket.getGroups().size());
+        for (RoundRobinGroup group: bracket.getGroups()) {
+
+            if (group.getTeamsWithoutDummy().size() == 3) {
+                assertEquals(4,group.getTeams().size());
+                assertEquals(3,group.getMatches().size());
+            } else if (group.getTeamsWithoutDummy().size() == 4) {
+                assertEquals(4,group.getTeams().size());
+                assertEquals(6,group.getMatches().size());
+            }
+        }
+
+        for (Match match : bracket.getAllMatches()) {
+            assertTrue(match.getBlueTeam() != RoundRobinFormat.getDummyTeam() &&
+                    match.getOrangeTeam() != RoundRobinFormat.getDummyTeam());
+        }
+
+        assertEquals(12,bracket.getAllMatches().size());
     }
 
     /**
