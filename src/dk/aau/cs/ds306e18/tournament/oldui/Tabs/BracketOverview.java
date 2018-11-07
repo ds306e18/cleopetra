@@ -91,7 +91,7 @@ public BracketOverview(){
         //Image imageBracket = new Image("http://i.imgur.com/dcRQBS7.png");
         //ImageView imageViewBracket = new ImageView(imageBracket);
 
-        content.getChildren().add(tempSwissStage.getJavaFxNode(this));
+        content.getChildren().add(tempSwissStage.getJavaFxNode(null)); //TODO changed from this -> null
 
         return content;
     }
