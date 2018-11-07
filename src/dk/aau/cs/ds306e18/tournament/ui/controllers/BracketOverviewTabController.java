@@ -1,18 +1,14 @@
 package dk.aau.cs.ds306e18.tournament.ui.controllers;
 
 import dk.aau.cs.ds306e18.tournament.model.*;
-import dk.aau.cs.ds306e18.tournament.oldui.Tabs.BracketOverview;
-import dk.aau.cs.ds306e18.tournament.oldui.bracketObjects.VisualMatch;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 
 public class BracketOverviewTabController {
@@ -127,6 +123,7 @@ public class BracketOverviewTabController {
         //bracketOverviewTab.requestLayout();
     }
 
+    /** Gets called when a match in overviewTab is clicked. */
     public void setSelectedMatch(MatchVisualController match){
         this.selectedMatch = match;
         System.out.println(match.getLastSetMatch().toString());
