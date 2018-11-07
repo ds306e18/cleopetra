@@ -7,12 +7,26 @@ public class Bot {
 
     private String name;
     private String developer;
-    private Path configPath;
+    private String description;
+    private String configPath;
 
-    public Bot(String name, String developer, Path configPath) {
+    public Bot(String name, String developer, String configPath) {
         this.name = name;
         this.developer = developer;
         this.configPath = configPath;
+    }
+
+    public Bot(String name, String developer){
+        this.name = name;
+        this.developer = developer;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getName() {
@@ -31,11 +45,17 @@ public class Bot {
         this.developer = developer;
     }
 
-    public Path getConfigPath() {
+    public String getConfigPath() {
         return configPath;
     }
 
-    public void setConfigPath(Path configPath) {
+    public void setConfigPath(String configPath) {
         this.configPath = configPath;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
+
 }

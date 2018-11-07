@@ -72,11 +72,16 @@ public class Team {
         return new ArrayList<>(bots);
     }
 
-    public ArrayList<Path> getConfigPaths() {
-        ArrayList<Path> paths = new ArrayList<>();
+    public ArrayList<String> getConfigPaths() {
+        ArrayList<String> paths = new ArrayList<>();
         for (Bot bot : bots) {
             paths.add(bot.getConfigPath());
         }
         return paths;
+    }
+
+    @Override
+    public String toString() {
+        return teamName;
     }
 }
