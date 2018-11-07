@@ -7,10 +7,10 @@ import javafx.scene.text.Text;
 
 public class MatchVisualController {
 
-    @FXML private Text teamTwoScore;
-    @FXML private Text textTeam1;
-    @FXML private Text teamOneScore;
-    @FXML private Text textTeam2;
+    @FXML private Text textOrangeName;
+    @FXML private Text teamOrangeScore;
+    @FXML private Text textBlueName;
+    @FXML private Text teamBlueScore;
 
     private BracketOverviewTabController boc;
     private Match lastSetMatch;
@@ -33,10 +33,10 @@ public class MatchVisualController {
 
     public void setMatch(Match match){
         this.lastSetMatch = match;
-        this.textTeam1.setText(match.getOrangeTeam().getTeamName());
-        this.textTeam2.setText(match.getBlueTeam().getTeamName());
-        this.teamOneScore.setText(String.valueOf(match.getOrangeScore()));
-        this.teamTwoScore.setText(String.valueOf(match.getBlueScore()));
+        this.textBlueName.setText(match.getBlueTeam().getTeamName());
+        this.textOrangeName.setText(match.getOrangeTeam().getTeamName());
+        this.teamBlueScore.setText(String.valueOf(match.getBlueScore()));
+        this.teamOrangeScore.setText(String.valueOf(match.getOrangeScore()));
     }
 
     public Match getLastSetMatch() {
