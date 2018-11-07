@@ -9,37 +9,72 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane id="matchUpcoming" maxWidth="0.0" onMouseClicked="#matchClicked" styleClass="match" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.controllers.MatchVisualController">
-     <children>
-        <Polygon fill="#c1c1c1" points="-60.3970947265625, -18.66666603088379, -60.397125244140625, 2.3333332538604736, -44.230499267578125, -7.333332538604736" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="team1-triangle" GridPane.columnIndex="3" />
-        <Polygon fill="#c1c1c1" points="-60.3970947265625, -18.66666603088379, -60.397125244140625, 2.3333332538604736, -44.230499267578125, -7.333332538604736" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="team2-triangle" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-        <Rectangle fill="#c1c1c1" height="21.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="84.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-        <Rectangle fill="#f28542" height="21.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="team2-color" width="4.0" GridPane.rowIndex="1" />
-        <Rectangle fill="WHITE" height="21.0" stroke="#c1c1c1" strokeType="INSIDE" width="21.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-        <Rectangle fill="#4271f9" height="21.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="team1-color" width="4.0" />
-        <Rectangle fill="#c1c1c1" height="21.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="84.0" GridPane.columnIndex="1" />
-        <Rectangle fill="WHITE" height="21.0" stroke="#c1c1c1" strokeType="INSIDE" width="21.0" GridPane.columnIndex="2" />
-        <Text fx:id="textTeam1" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="team1-name" text="Team 1" wrappingWidth="72.66659426689148" GridPane.columnIndex="1">
-           <GridPane.margin>
-              <Insets left="5.0" />
-           </GridPane.margin>
-        </Text>
-        <Text fx:id="teamOneScore" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="team1-score" text="1" textAlignment="CENTER" wrappingWidth="20.135406494140625" GridPane.columnIndex="2" />
-        <Text fx:id="textTeam2" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="team2-name" text="Team 2" wrappingWidth="72.66659426689148" GridPane.columnIndex="1" GridPane.rowIndex="1">
-           <GridPane.margin>
-              <Insets left="5.0" />
-           </GridPane.margin>
-        </Text>
-        <Text fx:id="teamTwoScore" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="team2-score" text="1" textAlignment="CENTER" wrappingWidth="20.135406494140625" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-     </children>
-     <columnConstraints>
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="5.0" minWidth="5.0" prefWidth="5.0" />
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="82.0" minWidth="82.0" prefWidth="82.0" />
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="21.0" minWidth="21.0" prefWidth="21.0" />
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="16.0" minWidth="16.0" prefWidth="16.0" />
-     </columnConstraints>
-     <rowConstraints>
-        <RowConstraints minHeight="0.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-     </rowConstraints>
-</GridPane>
+<VBox id="matchPlayed" onMouseClicked="#matchClicked" prefHeight="46.0" prefWidth="148.0" spacing="6.0" styleClass="match" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.controllers.MatchVisualController">
+   <children>
+      <HBox alignment="CENTER_LEFT" prefHeight="12.0" prefWidth="171.0">
+         <children>
+            <Rectangle fill="#404040" height="20.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="color" width="4.0" />
+            <Group styleClass="team">
+               <HBox.margin>
+                  <Insets left="2.0" />
+               </HBox.margin>
+               <children>
+                  <Rectangle fill="#c1c1c1" height="20.0" layoutX="1.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="teamBg" width="85.0" />
+                  <Text fx:id="textTeam1" layoutX="5.0" layoutY="15.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="teamName" text="Team 1" wrappingWidth="80.63671875" />
+               </children>
+            </Group>
+            <Group styleClass="score">
+               <children>
+                  <Rectangle fill="#cdcfd0" height="20.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="scoreBg" width="20.0" />
+                  <Text fx:id="teamOneScore" layoutY="15.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="scoreNo" text="5" textAlignment="CENTER" wrappingWidth="20.0">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Text>
+               </children>
+            </Group>
+            <Polygon fill="#c1c1c1" points="-23.999984741210938, -30.00000762939453, -24.0, -50.0, -9.75, -40.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="triangle" />
+         </children>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+         <styleClass>
+            <String fx:value="team1" />
+            <String fx:value="blue" />
+            <String fx:value="winner" />
+         </styleClass>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" prefHeight="20.0" prefWidth="143.0">
+         <children>
+            <Rectangle fill="#404040" height="20.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="color" width="4.0" />
+            <Group styleClass="team">
+               <HBox.margin>
+                  <Insets left="2.0" />
+               </HBox.margin>
+               <children>
+                  <Rectangle fill="#c1c1c1" height="20.0" layoutX="1.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="teamBg" width="85.0" />
+                  <Text fx:id="textTeam2" layoutX="5.0" layoutY="15.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="teamName" text="Team 2" wrappingWidth="80.63671875" />
+               </children>
+            </Group>
+            <Group styleClass="score">
+               <children>
+                  <Rectangle fill="#cdcfd0" height="20.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="scoreBg" width="20.0" />
+                  <Text fx:id="teamTwoScore" layoutY="15.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="scoreNo" text="2" textAlignment="CENTER" wrappingWidth="20.0">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Text>
+               </children>
+            </Group>
+            <Polygon fill="#c1c1c1" points="-23.999984741210938, -30.00000762939453, -24.0, -50.0, -9.75, -40.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="triangle" />
+         </children>
+         <styleClass>
+            <String fx:value="team2" />
+            <String fx:value="orange" />
+         </styleClass>
+      </HBox>
+   </children>
+   <VBox.margin>
+      <Insets />
+   </VBox.margin>
+</VBox>
