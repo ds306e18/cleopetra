@@ -1,10 +1,12 @@
 package dk.aau.cs.ds306e18.tournament.ui.controllers;
 
 import dk.aau.cs.ds306e18.tournament.model.*;
+import dk.aau.cs.ds306e18.tournament.oldui.Tabs.BracketOverview;
 import dk.aau.cs.ds306e18.tournament.oldui.bracketObjects.VisualMatch;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -30,8 +32,15 @@ public class BracketOverviewTabController {
     private void initialize(){
         selectedMatch = null;
         initializeSwissBracket();
-        ArrayList<VBox> matches = getAllVisualMatches(swissStage);
-        drawAllMatches(matches);
+        updateView(swissStage);
+        //ArrayList<VBox> matches = getAllVisualMatches(swissStage);
+        //drawAllMatches(matches);
+    }
+
+    private void updateView(Format format){
+
+        overviewVBox.getChildren().clear();
+        overviewVBox.getChildren().add(format.getJavaFxNode(this));
     }
 
     /** Adds the given matches to the content of the overviewVBox. */
@@ -55,7 +64,7 @@ public class BracketOverviewTabController {
 
     /** @param match the match to be visualised
      * @return a gridPane containing the visualisation of the given match. */
-    private VBox loadVisualMatch(Match match) {
+    public VBox loadVisualMatch(Match match) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../layout/MatchVisual.fxml"));
         VBox root = null;
         MatchVisualController mvc = null;
@@ -70,7 +79,9 @@ public class BracketOverviewTabController {
         match.setScores(2,4,true);
         mvc.setMatch(match);
         mvc.setBoc(this);
-        root.setId("matchplayed"); //TODO should be done based on the status of the match
+        //root.setId("matchplayed"); //TODO should be done based on the status of the match
+        //root.setId("TBD");
+        //root.setId("upcomming");
         //TODO add winner style functionality
 
         return root;
@@ -101,6 +112,10 @@ public class BracketOverviewTabController {
         teams.add(new Team("Team 4", team4, 4, "hello"));
 
         swissStage.start(teams);
+
+        for (Match match : swissStage.getUpcomingMatches())
+            match.setScores(2, 4, true);
+        swissStage.createNewRound();
     }
 
     /** Meant to update the created matches on button click -> this method. */
