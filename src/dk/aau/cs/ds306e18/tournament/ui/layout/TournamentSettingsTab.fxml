@@ -106,7 +106,7 @@
             <Insets />
          </GridPane.margin>
       </VBox>
-      <VBox id="TS-rightside" fx:id="stageSettingsVBox" prefHeight="200.0" prefWidth="338.0" spacing="10.0" GridPane.columnIndex="1">
+      <VBox id="TS-rightside" fx:id="stageSettingsVBox" prefHeight="200.0" prefWidth="338.0" spacing="10.0" visible="false" GridPane.columnIndex="1">
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Stage settings" wrappingWidth="311.91465950012207">
                <font>
