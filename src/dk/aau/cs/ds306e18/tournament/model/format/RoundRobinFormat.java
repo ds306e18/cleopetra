@@ -44,30 +44,37 @@ public class RoundRobinFormat extends GroupFormat implements MatchListener {
     private void createGroupsWithMatches(ArrayList<Team> teams) {
         int leftoverTeams = teams.size() % numberOfGroups;
 
-        for (int i = 0; i < numberOfGroups; i++) {
-            ArrayList<Team> splitArray = splitArrayForEachGroup((i) * (teams.size()/numberOfGroups));
 
+        //sorts the teams so that the lowest seeds comes first
+        teams.sort(new SortBySeed());
+
+        for (int i = 0; i < numberOfGroups; i++) {
+            ArrayList<Team> splitArray = splitArrayForEachGroup(teams, i);
+
+            //if there must be groups with more teams than others, add an extra team to the first groups, from the highest
+            //index of the teams array
             if (leftoverTeams != 0) {
-                splitArray.add(teams.get(teams.size()-leftoverTeams));
+                splitArray.add(teams.get(teams.size() - leftoverTeams));
                 leftoverTeams--;
             }
+
             //if there is an uneven amount of teams, add a dummy team and later remove matches that include the dummy team
-            if ( splitArray.size() % 2 != 0 ) {
+            if (splitArray.size() % 2 != 0) {
                 splitArray.add(DUMMY_TEAM);
             }
 
-                RoundRobinGroup roundRobinGroup = new RoundRobinGroup(splitArray);
-                roundRobinGroup.setMatches(generateMatches(roundRobinGroup.getTeams()));
-                groups.add(roundRobinGroup);
-            }
+            RoundRobinGroup roundRobinGroup = new RoundRobinGroup(splitArray);
+            roundRobinGroup.setMatches(generateMatches(roundRobinGroup.getTeams()));
+            groups.add(roundRobinGroup);
         }
+    }
 
-    private ArrayList<Team> splitArrayForEachGroup(int startingPoint) {
+
+    private ArrayList<Team> splitArrayForEachGroup(ArrayList<Team> teams, int startingPoint) {
         ArrayList<Team> splitArray = new ArrayList<>();
 
-        for (int i = 0; i < teams.size() / numberOfGroups; i++) {
-            splitArray.add(teams.get(startingPoint + i));
-        }
+        for (int i = 0; i < teams.size() / numberOfGroups; i++)
+            splitArray.add(teams.get(startingPoint + numberOfGroups * i));
         return splitArray;
     }
 
