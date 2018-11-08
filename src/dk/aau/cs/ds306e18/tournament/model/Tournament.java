@@ -55,7 +55,7 @@ public class Tournament {
     }
 
     public void sortTeamsAfterInitialSeed() {
-        if (started) throw new IllegalStateException("Tournament has already started.");
+        //TODO if (started) throw new IllegalStateException("Tournament has already started.");
         // Sort teams by comparator and not data structure, since seed value is not final
         teams.sort(Comparator.comparingInt(Team::getInitialSeedValue));
     }
