@@ -188,7 +188,7 @@ public class RoundRobinFormat extends GroupFormat implements MatchListener {
     }
 
     /**
-     * As format is Round Robin, nothing is necessary to repair after deserialization, except listeners
+     * As format is Round Robin, nothing is necessary to postDeserializationRepair after deserialization, except listeners
      */
     @Override
     public void repair() {

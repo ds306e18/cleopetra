@@ -466,7 +466,7 @@ public final class Match {
     /**
      * Repairs references to parents in Match-tree for deserialized objects
      */
-    public void repair() {
+    public void postDeserializationRepair() {
         if (this.blueFromMatch != null) {
             if (this.blueWasWinnerInPreviousMatch) {
                 this.blueFromMatch.winnerDestination = this;
@@ -475,7 +475,7 @@ public final class Match {
                 this.blueFromMatch.loserDestination = this;
                 this.blueFromMatch.loserGoesToBlue = true;
             }
-            blueFromMatch.repair();
+            blueFromMatch.postDeserializationRepair();
         }
 
         if (this.orangeFromMatch != null) {
@@ -486,7 +486,7 @@ public final class Match {
                 this.orangeFromMatch.loserDestination = this;
                 this.orangeFromMatch.winnerGoesToBlue = false;
             }
-            orangeFromMatch.repair();
+            orangeFromMatch.postDeserializationRepair();
         }
     }
 
