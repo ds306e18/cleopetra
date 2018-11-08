@@ -4,8 +4,10 @@ import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreakerBySeed;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 public class Tournament {
 
@@ -29,6 +31,7 @@ public class Tournament {
 
     public void setName(String name) {
         this.name = name;
+        System.out.println("Named changed:" + name);
     }
 
     public void addTeam(Team team) {
@@ -52,7 +55,7 @@ public class Tournament {
     }
 
     public void sortTeamsAfterInitialSeed() {
-        if (started) throw new IllegalStateException("Tournament has already started.");
+        //TODO if (started) throw new IllegalStateException("Tournament has already started.");
         // Sort teams by comparator and not data structure, since seed value is not final
         teams.sort(Comparator.comparingInt(Team::getInitialSeedValue));
     }
@@ -74,6 +77,10 @@ public class Tournament {
 
     public List<Stage> getStages() {
         return new ArrayList<>(stages);
+    }
+
+    public void swapStages(Stage primaryStage, Stage secondaryStage) {
+        Collections.swap(stages, stages.indexOf(primaryStage), stages.indexOf(secondaryStage));
     }
 
     /** Returns the number of stages that has not started yet. */
@@ -141,5 +148,23 @@ public class Tournament {
     public void setTieBreaker(TieBreaker tieBreaker) {
         if (started) throw new IllegalStateException("Tournament has already started.");
         this.tieBreaker = tieBreaker;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Tournament that = (Tournament) o;
+        return started == that.started &&
+                currentStageIndex == that.currentStageIndex &&
+                Objects.equals(getName(), that.getName()) &&
+                Objects.equals(getTeams(), that.getTeams()) &&
+                Objects.equals(getStages(), that.getStages()) &&
+                Objects.equals(getTieBreaker(), that.getTieBreaker());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName(), getTeams(), getStages(), getTieBreaker(), started, currentStageIndex);
     }
 }

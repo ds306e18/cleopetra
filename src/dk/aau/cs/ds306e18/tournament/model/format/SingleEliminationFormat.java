@@ -1,22 +1,25 @@
 package dk.aau.cs.ds306e18.tournament.model.format;
 
-import dk.aau.cs.ds306e18.tournament.model.*;
+import dk.aau.cs.ds306e18.tournament.model.StageStatus;
+import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchListener;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchStatus;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
-import dk.aau.cs.ds306e18.tournament.ui.tabs.BracketOverview;
+import dk.aau.cs.ds306e18.tournament.ui.controllers.BracketOverviewTabController;
 import javafx.scene.Node;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class SingleEliminationFormat implements Format, MatchListener {
 
     private StageStatus status = StageStatus.PENDING;
     private ArrayList<Team> seededTeams;
-    private Match finalMatch;
+    transient private Match finalMatch;
     private Match[] matches;
     private int rounds;
 
@@ -42,7 +45,7 @@ public class SingleEliminationFormat implements Format, MatchListener {
 
     @Override
     public List<Match> getUpcomingMatches() {
-         return finalMatch.getTreeAsListBFS().stream().filter(c -> c.getStatus().equals(MatchStatus.READY_TO_BE_PLAYED) && !c.hasBeenPlayed()).collect(Collectors.toList());
+        return finalMatch.getTreeAsListBFS().stream().filter(c -> c.getStatus().equals(MatchStatus.READY_TO_BE_PLAYED) && !c.hasBeenPlayed()).collect(Collectors.toList());
     }
 
     @Override
@@ -59,9 +62,12 @@ public class SingleEliminationFormat implements Format, MatchListener {
         return this.matches;
     }
 
-    /** Generates a single-elimination bracket structure. References between the empty matches are made by winnerOf and starterSlots.
+    /**
+     * Generates a single-elimination bracket structure. References between the empty matches are made by winnerOf and starterSlots.
      * Matches are accessed through finalMatch (the root).
-     * @param rounds the amount of rounds in the bracket*/
+     *
+     * @param rounds the amount of rounds in the bracket
+     */
     private void generateBracket(int rounds) {
         int matchesInCurrentRound, matchNumberInRound, matchIndex = 0;
         ArrayList<Match> bracketList = new ArrayList<>();
@@ -69,7 +75,7 @@ public class SingleEliminationFormat implements Format, MatchListener {
         // Generate the bracket from the first round to the final. All matches except those in
         // the first uses the winners of previous matches.
         for (int roundsLeft = rounds; roundsLeft > 0; roundsLeft--) {
-            matchesInCurrentRound = (int) Math.pow(2, roundsLeft-1);
+            matchesInCurrentRound = (int) Math.pow(2, roundsLeft - 1);
 
             if (roundsLeft == rounds) {
                 // First round, all matches are empty
@@ -92,10 +98,12 @@ public class SingleEliminationFormat implements Format, MatchListener {
         matches = finalMatch.getTreeAsListBFS().toArray(matches);
     }
 
-    /** Seeds the single-elimination bracket with teams to give better placements.
+    /**
+     * Seeds the single-elimination bracket with teams to give better placements.
      * If there are an insufficient amount of teams, the team(s) with the best seeding(s) will be placed in the next round instead.
+     *
      * @param seededTeams a list containing the teams in the tournament
-     * @param rounds the amount of rounds in the bracket
+     * @param rounds      the amount of rounds in the bracket
      */
     private void seedBracket(List<Team> seededTeams, int rounds) {
 
@@ -104,8 +112,8 @@ public class SingleEliminationFormat implements Format, MatchListener {
         //Create needed amount of byes to match with the slots
         ArrayList<Team> byeList = new ArrayList<>();
         int amountOfByes = (int) Math.pow(2, rounds) - seedList.size();
-        while(byeList.size() < amountOfByes) {
-            byeList.add(new Team("bye", null, 999, ""));
+        while (byeList.size() < amountOfByes) {
+            byeList.add(new Team("bye" + byeList.size(), new ArrayList<>(), 999, ""));
         }
         seedList.addAll(byeList);
 
@@ -131,17 +139,16 @@ public class SingleEliminationFormat implements Format, MatchListener {
 
         // Using the seeded list to place the teams into the correct matches
         // If there are byes, the best seeded teams will be placed in their slots parents
-        int seedMatchIndex = finalMatch.getTreeAsListBFS().size()-1;
+        int seedMatchIndex = finalMatch.getTreeAsListBFS().size() - 1;
         int teamIndex = 0, teamCount = seedList.size();
-        while(teamIndex < teamCount){
+        while (teamIndex < teamCount) {
             // If the matchup would be between a team and a bye, the team will be placed at its parent match as a starterSlot
             // The match in the first round will be deleted(null)
-            if(byeList.contains(seedList.get(teamIndex)) || byeList.contains(seedList.get(teamIndex+1))) {
+            if (byeList.contains(seedList.get(teamIndex)) || byeList.contains(seedList.get(teamIndex + 1))) {
                 int matchCheckIndex = getParent(seedMatchIndex);
-                if(getLeftSide(matchCheckIndex) == seedMatchIndex) {
+                if (getLeftSide(matchCheckIndex) == seedMatchIndex) {
                     matches[getParent(seedMatchIndex)].setBlue(seedList.get(teamIndex));
-                }
-                else matches[getParent(seedMatchIndex)].setOrange(seedList.get(teamIndex));
+                } else matches[getParent(seedMatchIndex)].setOrange(seedList.get(teamIndex));
                 matches[seedMatchIndex] = null;
                 seedMatchIndex--;
                 teamIndex = teamIndex + 2;
@@ -172,11 +179,11 @@ public class SingleEliminationFormat implements Format, MatchListener {
         if (i == 1) {
             return -1;
         } else {
-            return Math.floorDiv(i,2)-1;
+            return Math.floorDiv(i, 2) - 1;
         }
     }
 
-    int getLeftSide(int i){
+    int getLeftSide(int i) {
         i = i + 1;
         return 2 * i;
     }
@@ -186,10 +193,13 @@ public class SingleEliminationFormat implements Format, MatchListener {
         return 2 * i - 1;
     }
 
-    /** Determines the teams with the best performances in the current stage
-     * @param count amount of teams to return
+    /**
+     * Determines the teams with the best performances in the current stage
+     *
+     * @param count      amount of teams to return
      * @param tieBreaker a tiebreaker to decide the best teams if their are placed the same
-     * @return a list containing the best placed teams in the tournament */
+     * @return a list containing the best placed teams in the tournament
+     */
     @Override
     public List<Team> getTopTeams(int count, TieBreaker tieBreaker) {
         List<Team> topTeams = new ArrayList<>();
@@ -198,7 +208,7 @@ public class SingleEliminationFormat implements Format, MatchListener {
         int roundUpperBoundIndex = 1, currentMatchIndex = 0;
 
         //Will run until team size fits the count
-        while(topTeams.size() < count) {
+        while (topTeams.size() < count) {
             //places the losers and winners of the round into two different temporary lists
             while (currentMatchIndex < roundUpperBoundIndex) {
                 if (!topTeams.contains(finalMatch.getTreeAsListBFS().get(currentMatchIndex).getWinner())) {
@@ -229,15 +239,49 @@ public class SingleEliminationFormat implements Format, MatchListener {
         }
 
         //If there are too many teams, remove teams
-        while(topTeams.size() > count){
-            topTeams.remove(topTeams.size()-1);
+        while (topTeams.size() > count) {
+            topTeams.remove(topTeams.size() - 1);
         }
 
         return topTeams;
     }
 
     @Override
-    public Node getJavaFxNode(BracketOverview bracketOverview) {
+    public Node getJavaFxNode(BracketOverviewTabController bracketOverview) {
         return null; //TODO
+    }
+
+    /**
+     * Repairs match-structure after deserialization
+     */
+    @Override
+    public void repair() {
+        // set final match to root of Match-tree
+        this.finalMatch = this.matches[0];
+        // register listener for each finalMatch
+        this.finalMatch.registerListener(this);
+        // recursively call repair
+        this.finalMatch.repair();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SingleEliminationFormat that = (SingleEliminationFormat) o;
+        boolean equals;
+        equals = rounds == that.rounds &&
+                getStatus() == that.getStatus() &&
+                Objects.equals(seededTeams, that.seededTeams);
+
+        equals = Arrays.equals(matches, that.matches);
+        return equals;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(getStatus(), seededTeams, finalMatch, rounds);
+        result = 31 * result + Arrays.hashCode(matches);
+        return result;
     }
 }

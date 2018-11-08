@@ -96,7 +96,7 @@ public class SwissFormatTest {
         assertEquals(numberOfTeams/2, bracket.getAllMatches().size());
 
         //Fill in scores
-        ArrayList<Match> matches = bracket.getRawMatches();
+        List<Match> matches = bracket.getRawMatches();
         for(Match match : matches){
             match.setScores(5, 2, true);
         }
@@ -260,7 +260,7 @@ public class SwissFormatTest {
     public void createNewRound04(){
 
         //Create a list of unique teams.
-        ArrayList<Team> teams = new ArrayList<>();
+        List<Team> teams = new ArrayList<>();
         for(int i = 0; i < 7; i++)
             teams.add(new Team(String.valueOf(i), TestUtilities.generateBots(2), 0, "Hello"));
 
@@ -417,15 +417,13 @@ public class SwissFormatTest {
             assertFalse(team == teamWithHighestSeed);
     }
 
-    /** sets all upcoming matches in the given swissFormat to have been played.*/
-    private void setAllMatchesPlayed(SwissFormat swissFormat){
+    /** sets all upcoming matches in the given format to have been played.*/
+    private void setAllMatchesPlayed(GroupFormat format){
 
         //Set all matches to played
-        List<Match> matches = swissFormat.getUpcomingMatches();
+        List<Match> matches = format.getUpcomingMatches();
         for(Match match : matches){
             match.setHasBeenPlayed(true);
         }
     }
-
-
 }
