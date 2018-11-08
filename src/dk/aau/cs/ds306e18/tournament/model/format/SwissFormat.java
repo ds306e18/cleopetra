@@ -11,6 +11,7 @@ import javafx.scene.Node;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class SwissFormat extends GroupFormat implements MatchListener {
 
@@ -20,8 +21,6 @@ public class SwissFormat extends GroupFormat implements MatchListener {
 
     @Override
     public void start(List<Team> teams) {
-
-
         rounds = new ArrayList<>();
         maxRounds = calculateMaxRounds(teams.size());
         teamPoints = createPointsHashMap(teams);
@@ -226,5 +225,26 @@ public class SwissFormat extends GroupFormat implements MatchListener {
     /** @return an arraylist of the current created rounds. */
     public ArrayList<ArrayList<Match>> getRounds(){
         return new ArrayList<>(this.rounds);
+    }
+
+    /** As format is Round Robin, nothing is necessary to repair after deserialization, except listeners */
+    @Override
+    public void repair() {
+        for (Match match : getAllMatches()) match.registerListener(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SwissFormat that = (SwissFormat) o;
+        return getMaxRounds() == that.getMaxRounds() &&
+                Objects.equals(getRounds(), that.getRounds()) &&
+                Objects.equals(teamPoints, that.teamPoints);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getRounds(), getMaxRounds(), teamPoints);
     }
 }

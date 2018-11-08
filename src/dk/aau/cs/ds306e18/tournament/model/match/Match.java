@@ -2,39 +2,48 @@ package dk.aau.cs.ds306e18.tournament.model.match;
 
 import dk.aau.cs.ds306e18.tournament.model.Team;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
 
-/** <p>A Match consists of two Slots, which holds the Teams participating in the Match, and each Team's
+/**
+ * <p>A Match consists of two Slots, which holds the Teams participating in the Match, and each Team's
  * score. A Slot might contain a Team, which is temporarily unknown (e.g. when the
  * Team is the winner of another Match). The method {@code isReadyToPlay()} returns true, when both Slots'
  * Team is known and ready.</p>
  * <p>When the Match get marked as has been played, and it is possible to retrieve
- * the winner and the loser of the match.</p> */
+ * the winner and the loser of the match.</p>
+ */
 public final class Match {
-
     private int blueScore = 0;
     private int orangeScore = 0;
     private boolean played = false;
     private Team blueTeam, orangeTeam;
     private Match blueFromMatch, orangeFromMatch;
     private boolean blueWasWinnerInPreviousMatch, orangeWasWinnerInPreviousMatch;
-    private Match winnerDestination, loserDestination;
+    transient private Match winnerDestination, loserDestination;
     private boolean winnerGoesToBlue, loserGoesToBlue;
 
-    private List<MatchListener> listeners = new LinkedList<>();
+    transient private List<MatchListener> listeners = new LinkedList<>();
 
-    /** Construct an empty Match. */
+    /**
+     * Construct an empty Match.
+     */
     public Match() {
-
     }
 
-    /** Construct a Match where both Teams are known from the start. */
+    /**
+     * Construct a Match where both Teams are known from the start.
+     */
     public Match(Team blue, Team orange) {
         blueTeam = blue;
         orangeTeam = orange;
     }
 
-    /** Set the blue Team of this Match. Returns the Match itself, which allows chaining. */
+    /**
+     * Set the blue Team of this Match. Returns the Match itself, which allows chaining.
+     */
     public Match setBlue(Team blue) {
         if (played) throw new IllegalStateException("Match has already been played.");
         if (blueFromMatch != null) {
@@ -46,7 +55,9 @@ public final class Match {
         return this;
     }
 
-    /** Set the orange Team of this Match. Returns the Match itself, which allows chaining. */
+    /**
+     * Set the orange Team of this Match. Returns the Match itself, which allows chaining.
+     */
     public Match setOrange(Team orange) {
         if (played) throw new IllegalStateException("Match has already been played.");
         if (orangeFromMatch != null) {
@@ -58,8 +69,10 @@ public final class Match {
         return this;
     }
 
-    /** Set the blue Team of this Match to use the winner of another Match. Any previous connection or definition of
-     * the blue Team will be removed. Returns the Match itself, which allows chaining. */
+    /**
+     * Set the blue Team of this Match to use the winner of another Match. Any previous connection or definition of
+     * the blue Team will be removed. Returns the Match itself, which allows chaining.
+     */
     public Match setBlueToWinnerOf(Match match) {
         if (played) throw new IllegalStateException("Match has already been played.");
         if (match == this) throw new IllegalArgumentException("A match can not have a connection to itself.");
@@ -94,8 +107,10 @@ public final class Match {
         return this;
     }
 
-    /** Set the blue Team of this Match to use the loser of another Match. Any previous connection or definition of
-     * the blue Team will be removed. Returns the Match itself, which allows chaining. */
+    /**
+     * Set the blue Team of this Match to use the loser of another Match. Any previous connection or definition of
+     * the blue Team will be removed. Returns the Match itself, which allows chaining.
+     */
     public Match setBlueToLoserOf(Match match) {
         if (played) throw new IllegalStateException("Match has already been played.");
         if (match == this) throw new IllegalArgumentException("A match can not have a connection to itself.");
@@ -130,8 +145,10 @@ public final class Match {
         return this;
     }
 
-    /** Set the orange Team of this Match to use the winner of another Match. Any previous connection or definition of
-     * the orange Team will be removed. Returns the Match itself, which allows chaining. */
+    /**
+     * Set the orange Team of this Match to use the winner of another Match. Any previous connection or definition of
+     * the orange Team will be removed. Returns the Match itself, which allows chaining.
+     */
     public Match setOrangeToWinnerOf(Match match) {
         if (played) throw new IllegalStateException("Match has already been played.");
         if (match == this) throw new IllegalArgumentException("A match can not have a connection to itself.");
@@ -166,8 +183,10 @@ public final class Match {
         return this;
     }
 
-    /** Set the orange Team of this Match to use the loser of another Match. Any previous connection or definition of
-     * the orange Team will be removed. Returns the Match itself, which allows chaining. */
+    /**
+     * Set the orange Team of this Match to use the loser of another Match. Any previous connection or definition of
+     * the orange Team will be removed. Returns the Match itself, which allows chaining.
+     */
     public Match setOrangeToLoserOf(Match match) {
         if (played) throw new IllegalStateException("Match has already been played.");
         if (match == this) throw new IllegalArgumentException("A match can not have a connection to itself.");
@@ -202,7 +221,9 @@ public final class Match {
         return this;
     }
 
-    /** Returns true when both Teams are known and ready, even if the Match has already been played. */
+    /**
+     * Returns true when both Teams are known and ready, even if the Match has already been played.
+     */
     public boolean isReadyToPlay() {
         return blueTeam != null && orangeTeam != null;
     }
@@ -235,9 +256,11 @@ public final class Match {
         }
     }
 
-    /** Returns a list of all Matches that must be finished before this Match is playable, including itself.
+    /**
+     * Returns a list of all Matches that must be finished before this Match is playable, including itself.
      * The matches will be ordered after breadth-first search approach. If the order is reversed, the order will be
-     * the logical order of playing the Matches, with the root as the last Match. */
+     * the logical order of playing the Matches, with the root as the last Match.
+     */
     public ArrayList<Match> getTreeAsListBFS() {
         // Breadth-first search can be performed using a queue
         LinkedList<Match> queue = new LinkedList<>();
@@ -259,8 +282,10 @@ public final class Match {
         return list;
     }
 
-    /** Returns a list of all Matches that must be finished before this Match is playable, including itself.
-     * The Matches will be ordered after pre-order depth-first search approach. */
+    /**
+     * Returns a list of all Matches that must be finished before this Match is playable, including itself.
+     * The Matches will be ordered after pre-order depth-first search approach.
+     */
     public ArrayList<Match> getTreeAsListDFS() {
         // Depth-first search can be performed using a stack
         LinkedList<Match> stack = new LinkedList<>();
@@ -280,7 +305,9 @@ public final class Match {
         return matches;
     }
 
-    /** Returns true if the other Match must be concluded before this match is playable. */
+    /**
+     * Returns true if the other Match must be concluded before this match is playable.
+     */
     public boolean dependsOn(Match otherMatch) {
         if (this == otherMatch) return false;
 
@@ -371,8 +398,10 @@ public final class Match {
         }
     }
 
-    /** Let the following matches know, that the winner or loser now found.
-     * Helper method to {@code setHasBeenPlayed(boolean)} */
+    /**
+     * Let the following matches know, that the winner or loser now found.
+     * Helper method to {@code setHasBeenPlayed(boolean)}
+     */
     private void transferWinnerAndLoser() {
         if (winnerDestination != null) {
             if (winnerGoesToBlue) winnerDestination.blueTeam = getWinner();
@@ -384,8 +413,10 @@ public final class Match {
         }
     }
 
-    /** Let the following matches know, that the winner or loser is no longer defined.
-     * Helper method to {@code setHasBeenPlayed(boolean)} */
+    /**
+     * Let the following matches know, that the winner or loser is no longer defined.
+     * Helper method to {@code setHasBeenPlayed(boolean)}
+     */
     private void retractWinnerAndLoser() {
         if (winnerDestination != null) {
             if (winnerGoesToBlue) winnerDestination.blueTeam = null;
@@ -397,17 +428,23 @@ public final class Match {
         }
     }
 
-    /** Sets both team scores to 0 and marks match as not played yet. */
+    /**
+     * Sets both team scores to 0 and marks match as not played yet.
+     */
     public void reset() {
         setScores(0, 0, false);
     }
 
-    /** Returns the blue team or null if blue is unknown. */
+    /**
+     * Returns the blue team or null if blue is unknown.
+     */
     public Team getBlueTeam() {
         return blueTeam;
     }
 
-    /** Returns the orange team or null if orange is unknown. */
+    /**
+     * Returns the orange team or null if orange is unknown.
+     */
     public Team getOrangeTeam() {
         return orangeTeam;
     }
@@ -424,5 +461,53 @@ public final class Match {
         for (MatchListener listener : listeners) {
             listener.onMatchPlayed(this);
         }
+    }
+
+    /**
+     * Repairs references to parents in Match-tree for deserialized objects
+     */
+    public void repair() {
+        if (this.blueFromMatch != null) {
+            if (this.blueWasWinnerInPreviousMatch) {
+                this.blueFromMatch.winnerDestination = this;
+                this.blueFromMatch.winnerGoesToBlue = true;
+            } else {
+                this.blueFromMatch.loserDestination = this;
+                this.blueFromMatch.loserGoesToBlue = true;
+            }
+            blueFromMatch.repair();
+        }
+
+        if (this.orangeFromMatch != null) {
+            if (this.orangeWasWinnerInPreviousMatch) {
+                this.orangeFromMatch.winnerDestination = this;
+                this.orangeFromMatch.winnerGoesToBlue = false;
+            } else {
+                this.orangeFromMatch.loserDestination = this;
+                this.orangeFromMatch.winnerGoesToBlue = false;
+            }
+            orangeFromMatch.repair();
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Match match = (Match) o;
+        return getBlueScore() == match.getBlueScore() &&
+                getOrangeScore() == match.getOrangeScore() &&
+                played == match.played &&
+                blueWasWinnerInPreviousMatch == match.blueWasWinnerInPreviousMatch &&
+                orangeWasWinnerInPreviousMatch == match.orangeWasWinnerInPreviousMatch &&
+                winnerGoesToBlue == match.winnerGoesToBlue &&
+                loserGoesToBlue == match.loserGoesToBlue &&
+                Objects.equals(getBlueTeam(), match.getBlueTeam()) &&
+                Objects.equals(getOrangeTeam(), match.getOrangeTeam());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getBlueScore(), getOrangeScore(), played, getBlueTeam(), getOrangeTeam(), blueWasWinnerInPreviousMatch, orangeWasWinnerInPreviousMatch, winnerGoesToBlue, loserGoesToBlue);
     }
 }
