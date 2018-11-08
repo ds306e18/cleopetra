@@ -13,7 +13,7 @@ public class SerializerTest {
      * it to a Tournament object, and checks equality between the original object and the resuscitated object
      */
     @Test
-    public void serializingNaiveConcurrencyTest() {
+    public void serializingPrimitiveTournamentConcurrencyTest() {
         Tournament tournament = generateTournamentOnlyTeams();
         String jsonObject = Serializer.serialize(tournament);
         Tournament deserializedTournament = Serializer.deserialize(jsonObject);
