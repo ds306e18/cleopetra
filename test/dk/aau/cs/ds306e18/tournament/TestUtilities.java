@@ -19,6 +19,10 @@ import static java.time.Instant.now;
 
 public class TestUtilities {
 
+    private static int minNumPlayers = 2;
+    private static int maxNumPlayers = 5;
+    private static int numTeams = randomIntInRange(2, 5);
+
     /**
      * Returns a random int between lower and upper
      *
@@ -127,19 +131,15 @@ public class TestUtilities {
     }
 
     /**
-     * Generates a random tournament with between 2 and 20 teams, with between 2 and 10 players each
+     * Generates a random tournament with numTeams teams, with between minNumPlayers and maxNumPlayers players each
      *
      * @return random Tournament object
      */
     public static Tournament generateTournamentOnlyTeams() {
-        int minNumPlayers = 2;
-        int maxNumPlayers = 10;
-
         Tournament tournament = new Tournament();
         tournament.setName("DatTournament");
 
-        // add between 2 to 20 teams, with between minNumPlayers
-        for (int i = 0; i < randomIntInRange(2, 20); i++) {
+        for (int i = 0; i < numTeams; i++) {
             tournament.addTeam(generateTeam(randomIntInRange(minNumPlayers, maxNumPlayers)));
         }
 
@@ -147,94 +147,67 @@ public class TestUtilities {
     }
 
     /**
-     * Generates a random Round Robin tournament with between 2 and 20 teams, with between 2 and 10 players each
+     * Generates a random Round Robin tournament with numTeams teams, with between minNumPlayers and maxNumPlayers players each
      *
      * @return random Tournament object
      */
     public static Tournament generateRoundRobinTournament() {
-        int minNumPlayers = 2;
-        int maxNumPlayers = 10;
-
         Tournament tournament = new Tournament();
         tournament.setName("DatTournament");
 
-        ArrayList<Team> teams = new ArrayList<>();
-
-        // add between 2 to 20 teams, with between minNumPlayers
-        for (int i = 0; i < randomIntInRange(2, 20); i++) {
-            Team team = generateTeam(randomIntInRange(minNumPlayers, maxNumPlayers));
-            tournament.addTeam(team);
-            teams.add(team);
-        }
+        for (int i = 0; i < numTeams; i++)
+            tournament.addTeam(generateTeam(randomIntInRange(minNumPlayers, maxNumPlayers)));
 
         RoundRobinFormat roundRobinFormat = new RoundRobinFormat();
-        roundRobinFormat.start(teams);
 
         Stage stage = new Stage("Round Robin stage", roundRobinFormat, 0);
 
         tournament.addStage(stage);
+        tournament.start();
 
         return tournament;
     }
 
     /**
-     * Generates a random Single Elimination tournament with between 2 and 20 teams, with between 2 and 10 players each
+     * Generates a random Single Elimination tournament with numTeams teams, with between minNumPlayers and maxNumPlayers players each
      *
      * @return random Tournament object
      */
     public static Tournament generateSingleEliminationTournament() {
-        int minNumPlayers = 2;
-        int maxNumPlayers = 10;
-
         Tournament tournament = new Tournament();
         tournament.setName("DatTournament");
 
-        ArrayList<Team> teams = new ArrayList<>();
-
-        // add between 2 to 20 teams, with between minNumPlayers
-        for (int i = 0; i < randomIntInRange(2, 20); i++) {
-            Team team = generateTeam(randomIntInRange(minNumPlayers, maxNumPlayers));
-            tournament.addTeam(team);
-            teams.add(team);
-        }
+        for (int i = 0; i < numTeams; i++)
+            tournament.addTeam(generateTeam(randomIntInRange(minNumPlayers, maxNumPlayers)));
 
         SingleEliminationFormat singleEliminationFormat = new SingleEliminationFormat();
-        singleEliminationFormat.start(teams);
 
         Stage stage = new Stage("Single Elimination stage", singleEliminationFormat, 0);
 
         tournament.addStage(stage);
+        tournament.start();
 
         return tournament;
     }
 
     /**
-     * Generates a random Single Elimination tournament with between 2 and 20 teams, with between 2 and 10 players each
+     * Generates a random Single Elimination tournament with numTeams teams, with between minNumPlayers and maxNumPlayers players each
      *
      * @return random Tournament object
      */
     public static Tournament generateSwissTournament() {
-        int minNumPlayers = 2;
-        int maxNumPlayers = 10;
-
         Tournament tournament = new Tournament();
         tournament.setName("DatTournament");
 
-        ArrayList<Team> teams = new ArrayList<>();
-
-        // add between 2 to 20 teams, with between minNumPlayers
-        for (int i = 0; i < randomIntInRange(2, 20); i++) {
-            Team team = generateTeam(randomIntInRange(minNumPlayers, maxNumPlayers));
-            tournament.addTeam(team);
-            teams.add(team);
-        }
+        for (int i = 0; i < numTeams; i++)
+            tournament.addTeam(generateTeam(randomIntInRange(minNumPlayers, maxNumPlayers)));
 
         SwissFormat swissFormat = new SwissFormat();
-        swissFormat.start(teams);
 
         Stage stage = new Stage("Swiss stage", swissFormat, 0);
 
         tournament.addStage(stage);
+        tournament.start();
 
         return tournament;
     }
