@@ -11,8 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import static dk.aau.cs.ds306e18.tournament.TestUtilities.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 
 public class RoundRobinFormatTest {
@@ -283,6 +282,7 @@ public class RoundRobinFormatTest {
         }
 
         assertEquals(30,bracket.getAllMatches().size());
+        assertNotSame(bracket.getGroups().get(0), bracket.getGroups().get(1));
 
     }
 
@@ -306,6 +306,7 @@ public class RoundRobinFormatTest {
         }
 
         assertEquals(20,bracket.getAllMatches().size());
+        assertNotSame(bracket.getGroups().get(0), bracket.getGroups().get(1));
     }
 
     @Test
@@ -327,6 +328,8 @@ public class RoundRobinFormatTest {
         }
 
         assertEquals(45,bracket.getAllMatches().size());
+        assertNotSame(bracket.getGroups().get(0), bracket.getGroups().get(1));
+        assertNotSame(bracket.getGroups().get(0), bracket.getGroups().get(2));
     }
 
     @Test
@@ -354,6 +357,8 @@ public class RoundRobinFormatTest {
         }
 
         assertEquals(12,bracket.getAllMatches().size());
+        assertNotSame(bracket.getGroups().get(0), bracket.getGroups().get(1));
+        assertNotSame(bracket.getGroups().get(0), bracket.getGroups().get(2));
     }
 
     /**
