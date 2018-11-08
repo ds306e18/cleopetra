@@ -1,25 +1,30 @@
-package dk.aau.cs.ds306e18.tournament.model;
+package dk.aau.cs.ds306e18.tournament.model.format;
 
-import dk.aau.cs.ds306e18.tournament.oldui.Tabs.BracketOverview;
-import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.SwissNode;
+import dk.aau.cs.ds306e18.tournament.model.GroupFormat;
+import dk.aau.cs.ds306e18.tournament.model.StageStatus;
+import dk.aau.cs.ds306e18.tournament.model.Team;
+import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import dk.aau.cs.ds306e18.tournament.model.match.MatchListener;
 import dk.aau.cs.ds306e18.tournament.ui.controllers.BracketOverviewTabController;
+import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.SwissNode;
 import javafx.scene.Node;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
-public class SwissStage implements Format, MatchListener {
+public class SwissFormat extends GroupFormat implements MatchListener {
 
-    private StageStatus status = StageStatus.PENDING;
     private ArrayList<ArrayList<Match>> rounds;
-    private int MAX_ROUNDS;
-    private ArrayList<Team> teams;
+    private int maxRounds;
     private HashMap<Team, Integer> teamPoints;
 
     @Override
     public void start(List<Team> teams) {
 
+
         rounds = new ArrayList<>();
-        MAX_ROUNDS = calculateMaxRounds(teams.size()); // TODO: Add the ability to end Swiss after X rounds
+        maxRounds = calculateMaxRounds(teams.size());
         teamPoints = createPointsHashMap(teams);
         this.teams = new ArrayList<>(teams);
         status = StageStatus.RUNNING;
@@ -54,10 +59,10 @@ public class SwissStage implements Format, MatchListener {
     public boolean createNewRound() {
 
         if(status == StageStatus.PENDING){
-            return false; //TODO Could be an exception
+            return false;
         } else if(status == StageStatus.CONCLUDED){
-            return false; //TODO Could be an exception
-        } else if(rounds.size() == MAX_ROUNDS){ //Is it legal to create another round?
+            return false;
+        } else if(rounds.size() == maxRounds){ //Is it legal to create another round?
             return false;
         } else if(getUpcomingMatches().size() != 0) //Has all matches been played?
             return false;
@@ -136,7 +141,7 @@ public class SwissStage implements Format, MatchListener {
 
                 //Has the two selected teams played each other before?
                 if(!hasTheseTeamsPlayedBefore(team1, team2)){
-                    Match match = new Match(new StarterSlot(team1), new StarterSlot(team2));
+                    Match match = new Match(team1, team2);
                     match.registerListener(this);
                     createdMatches.add(match);
                     break; //Two valid teams has been found, and match has been created. BREAK.
@@ -187,67 +192,31 @@ public class SwissStage implements Format, MatchListener {
         return matches;
     }
 
-    @Override
-    public List<Match> getUpcomingMatches() {
-
-        List<Match> allMatches = getAllMatches();
-        ArrayList<Match> upComingMatches = new ArrayList<>();
-
-        for(Match match : allMatches)
-            if(!match.hasBeenPlayed())
-                upComingMatches.add(match);
-
-        return upComingMatches;
-    }
-
-    /** All created matches can be played in swiss.
-     * @return an empty ArrayList<Match>*/
-    @Override
-    public List<Match> getPendingMatches() {
-
-        return new ArrayList<>();
-    }
-
-    @Override
-    public List<Match> getCompletedMatches() {
-
-        List<Match> allMatches = getAllMatches();
-        ArrayList<Match> playedMatches = new ArrayList<>();
-
-        for(Match match : allMatches)
-            if(match.hasBeenPlayed())
-                playedMatches.add(match);
-
-        return playedMatches;
-    }
-
-    public int getMAX_ROUNDS() {
-        return MAX_ROUNDS;
+    public int getMaxRounds() {
+        return maxRounds;
     }
 
     public boolean hasMaxNumberOfRounds() {
 
-        return rounds.size() == getMAX_ROUNDS();
+        return rounds.size() == getMaxRounds();
     }
 
-    @Override
-    public StageStatus getStatus() {
-        return status; // TODO: Determine when the stage is over
-    }
-
-    //TODO DELETE currently used for testing as a workaround.
+    /** Used for tests. This should not be used to anything else. */
     public ArrayList<Match> getRawMatches(){
         return rounds.get(rounds.size() - 1);
     }
 
     @Override
     public void onMatchPlayed(Match match) {
-        // TODO: Evaluate if last match, if it is then status = CONCLUDED. Also add tests
+        //Evaluate: has last possible match been played?
+        if(hasMaxNumberOfRounds() && getUpcomingMatches().size() == 0){
+            status = StageStatus.CONCLUDED;
+        }
     }
 
-    @Override
-    public List<Team> getTopTeams(int count, TieBreaker tieBreaker) {
-        return null; // TODO: Returns a list of the teams that performed best this stage. They should be sorted after performance, with best team first.
+    /** @return a hashMap containing the teams and their points. */
+    public HashMap<Team, Integer> getTeamPointsMap() {
+        return new HashMap<>(teamPoints);
     }
 
     @Override

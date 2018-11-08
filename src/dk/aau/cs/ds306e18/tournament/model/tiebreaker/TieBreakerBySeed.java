@@ -1,8 +1,10 @@
-package dk.aau.cs.ds306e18.tournament.model;
+package dk.aau.cs.ds306e18.tournament.model.tiebreaker;
+
+import dk.aau.cs.ds306e18.tournament.model.Team;
 
 import java.util.Random;
 
-public class TieBreakerBySeed implements TieBreaker {
+public class TieBreakerBySeed extends TieBreaker {
 
     private Random rand = new Random();
 

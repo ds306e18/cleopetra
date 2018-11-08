@@ -98,6 +98,7 @@ public class ParticipantSettingsTabController {
             botsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
                     .getBots()));
             botsListView.refresh();
+            botsListView.getSelectionModel().selectLast();
         }
     }
     // Updates the lists on button press action
@@ -118,7 +119,11 @@ public class ParticipantSettingsTabController {
         teamsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams()));
         teamsListView.getSelectionModel().selectLast();
         teamsListView.refresh();
-        addBotBtnOnAction(actionEvent);
+        Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
+                        .addBot(new Bot("Bot "+ (Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex()).size()+1), "Dev 1", "null")); //TODO Should the path be something concrete? Mikkel at merge.
+        botsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
+                    .getBots()));
+        botsListView.refresh();
     }
     // Updates the lists on button press action
     @FXML void removeTeamBtnOnAction(ActionEvent actionEvent){

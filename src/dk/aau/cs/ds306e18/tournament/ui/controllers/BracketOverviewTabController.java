@@ -1,6 +1,10 @@
 package dk.aau.cs.ds306e18.tournament.ui.controllers;
 
 import dk.aau.cs.ds306e18.tournament.model.*;
+import dk.aau.cs.ds306e18.tournament.model.format.Format;
+import dk.aau.cs.ds306e18.tournament.model.format.SingleEliminationFormat;
+import dk.aau.cs.ds306e18.tournament.model.format.SwissFormat;
+import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,8 +25,8 @@ public class BracketOverviewTabController {
     @FXML private Button prevStageBtn;
     @FXML private Button prevMatchBtn;
 
-    private SwissStage swissStage; //TODO temp
-    private SingleEliminationStage singleEli; //TODO temp
+    private SwissFormat swissFormat; //TODO temp
+    private SingleEliminationFormat singleEli; //TODO temp
 
     private MatchVisualController selectedMatch;
 
@@ -85,11 +89,11 @@ public class BracketOverviewTabController {
         team1.add(new Bot("t8b2", "mk", null));
         teams.add(new Team("Team 8", team8, 8, "hello"));
 
-        singleEli = new SingleEliminationStage();
+        singleEli = new SingleEliminationFormat();
         singleEli.start(teams);
 
         //Set matches
-        ArrayList<Match> matches = new ArrayList<>(singleEli.getAllMatches());
+        ArrayList<Match> matches = new ArrayList<Match>(singleEli.getAllMatches());
         matches.get(5).setScores(2,4,true);
         matches.get(4).setScores(3,1,true);
 
@@ -122,7 +126,7 @@ public class BracketOverviewTabController {
 
     /** a temperate method that generates a swiss bracket. */
     private void initializeSwissBracket(){
-        swissStage = new SwissStage();
+        swissFormat = new SwissFormat();
         ArrayList<Team> teams = new ArrayList<Team>();
         ArrayList<Bot> team1 = new ArrayList<>();
         team1.add(new Bot("t1b1", "mk", null));
@@ -144,11 +148,11 @@ public class BracketOverviewTabController {
         team1.add(new Bot("t4b2", "mk", null));
         teams.add(new Team("Team 4", team4, 4, "hello"));
 
-        swissStage.start(teams);
+        swissFormat.start(teams);
 
-        for (Match match : swissStage.getUpcomingMatches())
+        for (Match match : swissFormat.getUpcomingMatches())
             match.setScores(2, 4, true);
-        swissStage.createNewRound();
+        swissFormat.createNewRound();
     }
 
     /** WIP: Meant to update the created matches on button click -> this method. */
@@ -156,12 +160,12 @@ public class BracketOverviewTabController {
     void updateBracket(ActionEvent event) {
         System.out.println("Clioced");
         overviewVBox.getChildren().clear();
-        overviewVBox.getChildren().add(swissStage.getJavaFxNode(null));
+        overviewVBox.getChildren().add(swissFormat.getJavaFxNode(null));
     }
 
     /** Gets called when a match in overviewTab is clicked. */
     public void setSelectedMatch(MatchVisualController match){
         this.selectedMatch = match;
-        System.out.println(match.getLastSetMatch().toString());
+        System.out.println("New match selected!");
     }
 }

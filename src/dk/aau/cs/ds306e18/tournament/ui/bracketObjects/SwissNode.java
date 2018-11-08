@@ -1,7 +1,7 @@
 package dk.aau.cs.ds306e18.tournament.ui.bracketObjects;
 
-import dk.aau.cs.ds306e18.tournament.model.Match;
-import dk.aau.cs.ds306e18.tournament.model.SwissStage;
+import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import dk.aau.cs.ds306e18.tournament.model.format.SwissFormat;
 import dk.aau.cs.ds306e18.tournament.ui.controllers.BracketOverviewTabController;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -15,14 +15,14 @@ public class SwissNode extends HBox {
     private BracketOverviewTabController boc;
 
     /** Used to display the a swiss stage. */
-    public SwissNode(SwissStage swissStage, BracketOverviewTabController boc){
+    public SwissNode(SwissFormat swissStage, BracketOverviewTabController boc){
         this.boc = boc;
         refreshMatches(swissStage, boc);
     }
     
     /** Refreshes this node to represent the given swiss stage.
      * @param swissStage the swiss stage to represent. */ //TODO Should be rename and reworked.
-    private void refreshMatches(SwissStage swissStage, BracketOverviewTabController boc){
+    private void refreshMatches(SwissFormat swissStage, BracketOverviewTabController boc){
 
         //Clear content
         this.getChildren().clear();

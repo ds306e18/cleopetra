@@ -1,10 +1,12 @@
 package dk.aau.cs.ds306e18.tournament;
 
-import dk.aau.cs.ds306e18.tournament.model.Bot;
-import dk.aau.cs.ds306e18.tournament.model.Team;
+import dk.aau.cs.ds306e18.tournament.model.*;
+import dk.aau.cs.ds306e18.tournament.model.format.Format;
+import dk.aau.cs.ds306e18.tournament.model.match.Match;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 public class TestUtilities {
@@ -87,6 +89,27 @@ public class TestUtilities {
         }
 
         return teams;
+    }
+
+    /** @return the given x factored. x! */
+    public static int factorial(int x){
+
+        int result = 0;
+
+        for(int i = x; i > 0; i--)
+            result += i;
+
+        return result;
+    }
+
+    /** sets all upcoming matches in the given swissStage to have been played.*/
+    public static void setAllMatchesPlayed(Format stage) {
+
+        //Set all matches to played
+        List<Match> matches = stage.getUpcomingMatches();
+        for (Match match : matches) {
+            match.setHasBeenPlayed(true);
+        }
     }
 
     /** Generates an arrayList with the requested number of teams containing the requested number of bots with ascending seed values.

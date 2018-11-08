@@ -1,9 +1,9 @@
 package dk.aau.cs.ds306e18.tournament.oldui.Tabs;
 
 import dk.aau.cs.ds306e18.tournament.model.Bot;
-import dk.aau.cs.ds306e18.tournament.model.SwissStage;
 import dk.aau.cs.ds306e18.tournament.model.Team;
-import dk.aau.cs.ds306e18.tournament.model.Match;
+import dk.aau.cs.ds306e18.tournament.model.format.SwissFormat;
+import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -25,7 +25,7 @@ public class BracketOverview extends Tab{
 
     private Insets standardPaddingInsets = new Insets(5, 5, 5, 5);
 
-    private SwissStage tempSwissStage;
+    private SwissFormat tempSwissFormat;
 
     private Match selectedMatch = null;
 
@@ -35,7 +35,7 @@ public class BracketOverview extends Tab{
 
 public BracketOverview(){
 
-        this.tempSwissStage = createTempSwiss(); //TODO temp
+        this.tempSwissFormat = createTempSwiss(); //TODO temp
 
         this.setText("Bracket Overview");
         this.content = new HBox();
@@ -64,9 +64,9 @@ public BracketOverview(){
     }
 
     //TODO TEMP
-    private SwissStage createTempSwiss(){
+    private SwissFormat createTempSwiss(){
 
-        SwissStage swissStage = new SwissStage();
+        SwissFormat swissStage = new SwissFormat();
 
         ArrayList<Team> teams = new ArrayList<Team>();
 
@@ -91,7 +91,7 @@ public BracketOverview(){
         //Image imageBracket = new Image("http://i.imgur.com/dcRQBS7.png");
         //ImageView imageViewBracket = new ImageView(imageBracket);
 
-        content.getChildren().add(tempSwissStage.getJavaFxNode(null)); //TODO changed from this -> null
+        content.getChildren().add(tempSwissFormat.getJavaFxNode(null)); //TODO changed from this -> null
 
         return content;
     }
