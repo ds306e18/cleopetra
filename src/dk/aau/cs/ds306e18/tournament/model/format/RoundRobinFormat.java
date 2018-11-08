@@ -34,11 +34,28 @@ public class RoundRobinFormat extends GroupFormat implements MatchListener {
         if (seededTeams.size() == 0) {
             matches = new ArrayList<>();
             status = StageStatus.CONCLUDED;
+            //if the number of groups is within the allowed range, create groups
+        } else if (numberOfGroupsAllowed()) {
+            createGroupsWithMatches(teams);
+            matches = extractMatchesFromGroups();
+            status = StageStatus.RUNNING;
+            //else set the number of groups to the maximum allowed (2 teams per group) and create groups
         } else {
+            setNumberOfGroups(maxNumberOfGroups());
             createGroupsWithMatches(teams);
             matches = extractMatchesFromGroups();
             status = StageStatus.RUNNING;
         }
+    }
+
+    private int maxNumberOfGroups() {
+        return teams.size() / 2;
+    }
+
+    private boolean numberOfGroupsAllowed() {
+        if (teams.size() / numberOfGroups >= 2) {
+            return true;
+        } else return false;
     }
 
     private void createGroupsWithMatches(ArrayList<Team> teams) {
@@ -228,7 +245,9 @@ public class RoundRobinFormat extends GroupFormat implements MatchListener {
 
     public void setNumberOfGroups(int numberOfGroups) {
         if (status == StageStatus.RUNNING) throw new IllegalStateException("The matches are already generated.");
-        this.numberOfGroups = numberOfGroups;
+        if (numberOfGroups >= 1) {
+            this.numberOfGroups = numberOfGroups;
+        }
     }
 
     public int getNumberOfGroups() {
