@@ -361,6 +361,34 @@ public class RoundRobinFormatTest {
         assertNotSame(bracket.getGroups().get(0), bracket.getGroups().get(2));
     }
 
+    @Test //more than 0 matches
+    public void tooManyGroups() {
+
+        int numberOfTeams = 10;
+        int teamSize = 2;
+
+
+        RoundRobinFormat bracket = new RoundRobinFormat();
+        bracket.setNumberOfGroups(20);
+        bracket.start(generateTeams(numberOfTeams, teamSize));
+
+        assertEquals(5, bracket.getGroups().size());
+    }
+
+    @Test //more than 0 matches
+    public void tooFewGroups() {
+
+        int numberOfTeams = 10;
+        int teamSize = 2;
+
+
+        RoundRobinFormat bracket = new RoundRobinFormat();
+        bracket.setNumberOfGroups(0);
+        bracket.start(generateTeams(numberOfTeams, teamSize));
+
+        assertEquals(1, bracket.getGroups().size());
+    }
+
     /**
      * sets all upcoming matches in the given format to have been played.
      */
