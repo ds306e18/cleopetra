@@ -138,3 +138,63 @@
     -fx-border-color: green;
     -fx-cursor: hand;
 }
+
+
+/* Exit program overlay design */
+#exitPopup {
+    -fx-border-width: 1;
+    -fx-border-color: #c2c2c2;
+    -fx-background-color: white;
+}
+
+#exitPopup .cancelBtn {
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-background-radius: 0;
+    -fx-background-color: transparent;
+}
+
+#exitPopup .cancelBtn:focused {
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+}
+
+#exitPopup .cancelBtn:pressed {
+    -fx-background-color: black;
+    -fx-text-fill: white;
+}
+
+#exitPopup .optionBtn {
+    -fx-border-width: 0;
+}
+
+#exitPopup .optionBtn:focused {
+    -fx-border-width: 0;
+}
+
+#exitPopup .saveBtn {
+    -fx-background-color: #BAD26E;
+    -fx-text-fill: #FFFFFF;
+}
+
+#exitPopup .saveBtn:pressed {
+    -fx-background-color: #dfeabc;
+}
+
+#exitPopup .noSaveBtn {
+    -fx-background-color: #FE7065;
+    -fx-text-fill: #FFFFFF;
+}
+
+#exitPopup .noSaveBtn:pressed {
+    -fx-background-color: #feafa8;
+}
+
+#exitPopup .cancelBtn2 {
+    -fx-background-color: #bababa;
+    -fx-text-fill: #FFFFFF;
+}
+
+#exitPopup .cancelBtn2:pressed {
+    -fx-background-color: #d3d3d3;
+}
