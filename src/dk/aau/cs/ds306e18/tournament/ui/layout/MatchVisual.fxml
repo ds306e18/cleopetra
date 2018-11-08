@@ -11,7 +11,7 @@
 
 <VBox id="matchPlayed" onMouseClicked="#matchClicked" spacing="2.0" styleClass="match" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.controllers.MatchVisualController">
    <children>
-      <HBox alignment="CENTER_LEFT" prefHeight="12.0" prefWidth="171.0">
+      <HBox fx:id="hboxBlueTeam" alignment="CENTER_LEFT" prefHeight="12.0" prefWidth="171.0">
          <children>
             <Rectangle fill="#404040" height="20.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="color" width="4.0" />
             <Group styleClass="team">
@@ -44,7 +44,7 @@
             <String fx:value="winner" />
          </styleClass>
       </HBox>
-      <HBox alignment="CENTER_LEFT" prefHeight="20.0" prefWidth="143.0">
+      <HBox fx:id="hboxOrangeTeam" alignment="CENTER_LEFT" prefHeight="20.0" prefWidth="143.0">
          <children>
             <Rectangle fill="#404040" height="20.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="color" width="4.0" />
             <Group styleClass="team">
@@ -77,4 +77,7 @@
    <VBox.margin>
       <Insets />
    </VBox.margin>
+   <padding>
+      <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+   </padding>
 </VBox>
