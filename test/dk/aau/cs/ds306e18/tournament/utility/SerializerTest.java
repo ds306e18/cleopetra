@@ -16,7 +16,7 @@ public class SerializerTest {
     public void serializingNaiveConcurrencyTest() {
         Tournament tournament = generateTournamentOnlyTeams();
         String jsonObject = Serializer.serialize(tournament);
-        Tournament deserializedTournament = Serializer.deserialise(jsonObject);
+        Tournament deserializedTournament = Serializer.deserialize(jsonObject);
 
         assertEquals(tournament, deserializedTournament);
     }
@@ -29,7 +29,7 @@ public class SerializerTest {
     public void serializingRoundRobinConcurrencyTest() {
         Tournament tournament = generateRoundRobinTournament();
         String jsonObject = Serializer.serialize(tournament);
-        Tournament deserializedTournament = Serializer.deserialise(jsonObject);
+        Tournament deserializedTournament = Serializer.deserialize(jsonObject);
 
         assertEquals(tournament, deserializedTournament);
     }
@@ -42,7 +42,7 @@ public class SerializerTest {
     public void serializingSingleEliminationConcurrencyTest() {
         Tournament tournament = generateSingleEliminationTournament();
         String jsonObject = Serializer.serialize(tournament);
-        Tournament deserializedTournament = Serializer.deserialise(jsonObject);
+        Tournament deserializedTournament = Serializer.deserialize(jsonObject);
 
         assertEquals(tournament, deserializedTournament);
     }
@@ -55,7 +55,7 @@ public class SerializerTest {
     public void serializingSwissConcurrencyTest() {
         Tournament tournament = generateSwissTournament();
         String jsonObject = Serializer.serialize(tournament);
-        Tournament deserializedTournament = Serializer.deserialise(jsonObject);
+        Tournament deserializedTournament = Serializer.deserialize(jsonObject);
 
         assertEquals(tournament, deserializedTournament);
     }

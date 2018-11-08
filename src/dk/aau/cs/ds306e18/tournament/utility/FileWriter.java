@@ -7,7 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import static dk.aau.cs.ds306e18.tournament.utility.Serializer.deserialise;
+import static dk.aau.cs.ds306e18.tournament.utility.Serializer.deserialize;
 import static dk.aau.cs.ds306e18.tournament.utility.Serializer.serialize;
 
 public class FileWriter {
@@ -130,7 +130,7 @@ public class FileWriter {
         try {
             // read all bytes from path and create string from input,
             // passing to deserialize and returning newly created Tournament
-            return deserialise(new String(Files.readAllBytes(path)));
+            return deserialize(new String(Files.readAllBytes(path)));
         } catch (IOException e) {
             System.out.println("ERROR: Caught IOException when reading from " + pathFilename + ". " + e.getMessage());
         }

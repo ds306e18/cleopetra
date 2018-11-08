@@ -32,6 +32,9 @@ public interface Format {
     /** Returns a list of all the matches that have been played. */
     List<Match> getCompletedMatches();
 
-    /** Returns a Node of the stage. This node contains a reference to it self and other functionality to display the stage.*/
+    /** Returns a Node of the stage. This node contains a reference to it self and other functionality to display the stage. */
     Node getJavaFxNode(BracketOverview bracketOverview);
+
+    /** Repairs structure of matches after deserialization. */
+    void repair();
 }
