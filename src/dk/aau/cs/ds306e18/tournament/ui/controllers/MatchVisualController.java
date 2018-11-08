@@ -21,9 +21,7 @@ public class MatchVisualController {
     private Match lastSetMatch;
 
     @FXML
-    private void initialize(){
-        System.out.println("Match Visual Initialized");
-    }
+    private void initialize(){ }
 
     /** Gets called when a match is clicked. */
     @FXML
@@ -36,18 +34,9 @@ public class MatchVisualController {
         this.boc = boc;
     }
 
+    /** Sets the fields that reorientates this controllers node. */
     public void setMyNodeObj(Node node){
         this.myNodeObj = node;
-    }
-
-    public void updateMatch(Match match){
-        this.myNodeObj.setId("TBD"); //Get status of match and set visual representation to match. //TODO TeMP
-        this.myNodeObj.setId("matchplayed");
-        this.lastSetMatch = match;
-        this.textBlueName.setText(match.getBlueTeam().getTeamName());
-        this.textOrangeName.setText(match.getOrangeTeam().getTeamName());
-        this.teamBlueScore.setText(String.valueOf(match.getBlueScore()));
-        this.teamOrangeScore.setText(String.valueOf(match.getOrangeScore()));
     }
 
     /** Clears the visuals match for both text and css. */
@@ -61,11 +50,13 @@ public class MatchVisualController {
         teamBlueScore.setText("");
     }
 
-    public void updateMatch2(Match match){
+    /** Updates the state/ui of this match. */
+    public void updateMatch(Match match){
 
         clearFields();
         this.lastSetMatch = match;
 
+        //Load teams
         Team blueTeam = null;
         Team orangeTeam = null;
         try {
@@ -75,6 +66,7 @@ public class MatchVisualController {
 
         }
 
+        //Set tags and id based on the given match and its status
         switch (match.getStatus()) {
             case NOT_PLAYABLE:          //CSS
                                         myNodeObj.setId("matchTBD");
@@ -130,6 +122,7 @@ public class MatchVisualController {
         }
     }
 
+    /** @return the last match that were given to the updateMatch method. */
     public Match getLastSetMatch() {
         return lastSetMatch;
     }
