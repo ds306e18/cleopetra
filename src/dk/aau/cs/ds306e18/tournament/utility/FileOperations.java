@@ -10,7 +10,7 @@ import java.nio.file.Paths;
 import static dk.aau.cs.ds306e18.tournament.utility.Serializer.deserialize;
 import static dk.aau.cs.ds306e18.tournament.utility.Serializer.serialize;
 
-public class FileWriter {
+public class FileOperations {
 
     private final static String stateFilename = "tournamentState.obj";
     private final static String filenameExtension = ".obj";
@@ -33,9 +33,9 @@ public class FileWriter {
      * @param tournament the given tournament to serialize and write to disk
      * @return boolean of success
      */
-    public static boolean writeToFilesystem(String fqn, String filename, String extension, Tournament tournament) {
+    public static boolean writeTournamentToFilesystem(String fqn, String filename, String extension, Tournament tournament) {
         String pathFilename = checkFilenameInString(checkTrailingSlash(fqn), checkFilename(filename, extension));
-        return writeSerializedTournament(pathFilename, tournament);
+        return writeTournament(pathFilename, tournament);
     }
 
     /**
@@ -46,9 +46,9 @@ public class FileWriter {
      * @param tournament the given tournament to serialize and write to disk
      * @return boolean of success
      */
-    public static boolean writeToFilesystem(String fqn, String filename, Tournament tournament) {
+    public static boolean writeTournamentToFilesystem(String fqn, String filename, Tournament tournament) {
         String pathFilename = checkFilenameInString(checkTrailingSlash(fqn), checkFilename(filename));
-        return writeSerializedTournament(pathFilename, tournament);
+        return writeTournament(pathFilename, tournament);
     }
 
     /**
@@ -58,9 +58,9 @@ public class FileWriter {
      * @param tournament the given tournament to serialize and write to disk
      * @return boolean of success
      */
-    public static boolean writeToFilesystem(String fqn, Tournament tournament) {
+    public static boolean writeTournamentToFilesystem(String fqn, Tournament tournament) {
         String pathFilename = checkFilenameInString(checkTrailingSlash(fqn), stateFilename);
-        return writeSerializedTournament(pathFilename, tournament);
+        return writeTournament(pathFilename, tournament);
 
     }
 
@@ -71,7 +71,7 @@ public class FileWriter {
      * @param tournament   the given Tournament object to serialize
      * @return boolean of success
      */
-    private static boolean writeSerializedTournament(String pathFilename, Tournament tournament) {
+    private static boolean writeTournament(String pathFilename, Tournament tournament) {
         Path path = Paths.get(pathFilename);
         try {
             // call serialize and getBytes from returned string, writing with no options to given path, thus
@@ -92,7 +92,7 @@ public class FileWriter {
      * @param extension the custom extension given
      * @return a Tournament object if successful, else null
      */
-    public static Tournament readFromFilesystem(String fqn, String filename, String extension) {
+    public static Tournament readTournamentFromFilesystem(String fqn, String filename, String extension) {
         return readSerializedTournament(checkFilenameInString(checkTrailingSlash(fqn), checkFilename(filename, extension)));
     }
 
@@ -103,7 +103,7 @@ public class FileWriter {
      * @param filename the custom filename given
      * @return a Tournament object if successful, else null
      */
-    public static Tournament readFromFilesystem(String fqn, String filename) {
+    public static Tournament readTournamentFromFilesystem(String fqn, String filename) {
         return readSerializedTournament(checkFilenameInString(checkTrailingSlash(fqn), checkFilename(filename)));
     }
 
@@ -114,7 +114,7 @@ public class FileWriter {
      * @param fqn the Fully Qualified Name for the directory
      * @return a Tournament object if successful, else null
      */
-    public static Tournament readFromFilesystem(String fqn) {
+    public static Tournament readTournamentFromFilesystem(String fqn) {
         return readSerializedTournament(checkFilenameInString(checkTrailingSlash(fqn), stateFilename));
     }
 
