@@ -1,23 +1,22 @@
 package dk.aau.cs.ds306e18.tournament.ui.controllers;
 
 import dk.aau.cs.ds306e18.tournament.model.*;
-import dk.aau.cs.ds306e18.tournament.oldui.Tabs.general.StageSettings;
+import dk.aau.cs.ds306e18.tournament.model.format.SwissFormat;
+import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
+import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreakerBySeed;
 import dk.aau.cs.ds306e18.tournament.ui.StageFormatOption;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.scene.input.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.scene.effect.BlendMode;
-import javafx.util.Callback;
 
 import java.util.Collections;
 
@@ -140,7 +139,7 @@ public class TournamentSettingsTabController {
      */
     @FXML
     void addStageBtnOnAction(ActionEvent actionEvent) {
-        Tournament.get().addStage(new Stage("New Stage", new SwissStage()));
+        Tournament.get().addStage(new Stage("New Stage", new SwissFormat()));
 
         stagesListView.setItems(FXCollections.observableArrayList(Tournament.get().getStages()));
         stagesListView.refresh();

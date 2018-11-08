@@ -1,14 +1,14 @@
 package dk.aau.cs.ds306e18.tournament.ui;
 
-import dk.aau.cs.ds306e18.tournament.model.Format;
-import dk.aau.cs.ds306e18.tournament.model.RoundRobinStage;
-import dk.aau.cs.ds306e18.tournament.model.SingleEliminationStage;
-import dk.aau.cs.ds306e18.tournament.model.SwissStage;
+import dk.aau.cs.ds306e18.tournament.model.format.Format;
+import dk.aau.cs.ds306e18.tournament.model.format.RoundRobinFormat;
+import dk.aau.cs.ds306e18.tournament.model.format.SingleEliminationFormat;
+import dk.aau.cs.ds306e18.tournament.model.format.SwissFormat;
 
 public enum StageFormatOption {
-    SINGLE_ELIMINATION("Single Elimination", SingleEliminationStage.class),
-    SWISS_SYSTEM("Swiss", SwissStage.class),
-    ROUND_ROBIN("Round Robin", RoundRobinStage.class);
+    SINGLE_ELIMINATION("Single Elimination", SingleEliminationFormat.class),
+    SWISS_SYSTEM("Swiss", SwissFormat.class),
+    ROUND_ROBIN("Round Robin", RoundRobinFormat.class);
 
     private final String name;
     private final Class<?> clazz;
