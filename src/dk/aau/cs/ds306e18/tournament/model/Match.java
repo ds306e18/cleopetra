@@ -244,8 +244,23 @@ public class Match {
 
         StringBuilder sb = new StringBuilder();
         sb.append("UID: ").append(hashCode()).append(", ").append("Status: ").append(getStatus().toString()).append("\n");
-        sb.append("B ").append(getBlueTeam().getTeamName()).append(", Score: ").append(getBlueScore()).append("\n");
-        sb.append("O ").append(getOrangeTeam().getTeamName()).append(", Score: ").append(getOrangeScore());
+
+        Team blueTeam = null;
+        Team orangeTeam = null;
+        try {
+            blueTeam = getBlueTeam();
+            orangeTeam = getOrangeTeam();
+        }catch (IllegalStateException e){}
+
+        if(blueTeam != null)
+            sb.append("B ").append(getBlueTeam().getTeamName()).append(", Score: ").append(getBlueScore()).append("\n");
+        else {
+            sb.append("B ").append("TBD").append("\n");
+        }
+        if(orangeTeam != null)
+            sb.append("O ").append(getOrangeTeam().getTeamName()).append(", Score: ").append(getOrangeScore());
+        else
+            sb.append("O ").append("TBD").append("\n");
 
         return sb.toString();
     }
