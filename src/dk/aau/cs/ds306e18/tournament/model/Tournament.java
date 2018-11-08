@@ -4,6 +4,7 @@ import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreakerBySeed;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -30,6 +31,7 @@ public class Tournament {
 
     public void setName(String name) {
         this.name = name;
+        System.out.println("Named changed:" + name);
     }
 
     public void addTeam(Team team) {
@@ -75,6 +77,10 @@ public class Tournament {
 
     public List<Stage> getStages() {
         return new ArrayList<>(stages);
+    }
+
+    public void swapStages(Stage primaryStage, Stage secondaryStage) {
+        Collections.swap(stages, stages.indexOf(primaryStage), stages.indexOf(secondaryStage));
     }
 
     /** Returns the number of stages that has not started yet. */

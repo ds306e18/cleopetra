@@ -1,19 +1,26 @@
 package dk.aau.cs.ds306e18.tournament;
 
-import dk.aau.cs.ds306e18.tournament.ui.Launcher;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
+import java.net.URL;
 
 
-
-public class Main  {
-    public static void main(String[]args){
-        System.out.println("hola mundo");
-        startLauncher(args);
-
-
+public class Main extends Application {
+    @Override
+    public void start(Stage primaryStage) throws Exception{
+        URL resource = getClass().getResource("ui/layout/MainLayout.fxml");
+        Parent root = FXMLLoader.load(resource);
+        primaryStage.setTitle("DatTournament Runner");
+        primaryStage.setScene(new Scene(root));
+        primaryStage.show();
     }
-    //Creates and starts a new launcher
-    private static void startLauncher(String[] args) {
-        Launcher launcher = new Launcher().startLauncher(args);
-    }
 
+    public static void main(String[] args) {
+        System.out.println("Hola mundo");
+        launch(args);
+    }
 }

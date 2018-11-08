@@ -1,14 +1,17 @@
 package dk.aau.cs.ds306e18.tournament.model.format;
 
-import dk.aau.cs.ds306e18.tournament.model.*;
+import dk.aau.cs.ds306e18.tournament.model.GroupFormat;
+import dk.aau.cs.ds306e18.tournament.model.StageStatus;
+import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchListener;
-import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
-import dk.aau.cs.ds306e18.tournament.ui.tabs.BracketOverview;
-import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.SwissNode;
+import dk.aau.cs.ds306e18.tournament.ui.controllers.BracketOverviewTabController;
 import javafx.scene.Node;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
 
 public class SwissFormat extends GroupFormat implements MatchListener {
 
@@ -215,9 +218,8 @@ public class SwissFormat extends GroupFormat implements MatchListener {
     }
 
     @Override
-    public Node getJavaFxNode(BracketOverview bracketOverview) {
-
-        return new SwissNode(this, bracketOverview);
+    public Node getJavaFxNode(BracketOverviewTabController bracketOverview) {
+        return null; // TODO
     }
 
     /** @return an arraylist of the current created rounds. */

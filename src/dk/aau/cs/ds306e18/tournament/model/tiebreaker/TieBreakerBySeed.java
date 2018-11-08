@@ -1,7 +1,6 @@
 package dk.aau.cs.ds306e18.tournament.model.tiebreaker;
 
 import dk.aau.cs.ds306e18.tournament.model.Team;
-import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
 
 import java.util.Objects;
 import java.util.Random;
