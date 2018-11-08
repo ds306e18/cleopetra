@@ -170,7 +170,7 @@ public class TestUtilities {
         RoundRobinFormat roundRobinFormat = new RoundRobinFormat();
         roundRobinFormat.start(teams);
 
-        Stage stage = new Stage("Round Robin stage", roundRobinFormat);
+        Stage stage = new Stage("Round Robin stage", roundRobinFormat, 0);
 
         tournament.addStage(stage);
 
@@ -201,7 +201,7 @@ public class TestUtilities {
         SingleEliminationFormat singleEliminationFormat = new SingleEliminationFormat();
         singleEliminationFormat.start(teams);
 
-        Stage stage = new Stage("Single Elimination stage", singleEliminationFormat);
+        Stage stage = new Stage("Single Elimination stage", singleEliminationFormat, 0);
 
         tournament.addStage(stage);
 
@@ -232,7 +232,7 @@ public class TestUtilities {
         SwissFormat swissFormat = new SwissFormat();
         swissFormat.start(teams);
 
-        Stage stage = new Stage("Swiss stage", swissFormat);
+        Stage stage = new Stage("Swiss stage", swissFormat, 0);
 
         tournament.addStage(stage);
 
