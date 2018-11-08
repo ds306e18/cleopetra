@@ -227,7 +227,7 @@ public class SwissFormat extends GroupFormat implements MatchListener {
         return new ArrayList<>(this.rounds);
     }
 
-    /** As format is Round Robin, nothing is necessary to repair after deserialization, except listeners */
+    /** As format is Round Robin, nothing is necessary to postDeserializationRepair after deserialization, except listeners */
     @Override
     public void repair() {
         for (Match match : getAllMatches()) match.registerListener(this);

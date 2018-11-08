@@ -260,8 +260,8 @@ public class SingleEliminationFormat implements Format, MatchListener {
         this.finalMatch = this.matches[0];
         // register listener for each finalMatch
         this.finalMatch.registerListener(this);
-        // recursively call repair
-        this.finalMatch.repair();
+        // recursively call postDeserializationRepair
+        this.finalMatch.postDeserializationRepair();
     }
 
     @Override
