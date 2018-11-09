@@ -139,7 +139,8 @@ public class TournamentSettingsTabController {
      */
     @FXML
     void addStageBtnOnAction(ActionEvent actionEvent) {
-        Tournament.get().addStage(new Stage("New Stage", new SwissFormat()));
+        // increments unique id
+        Tournament.get().addStage(new Stage("New Stage", new SwissFormat(), Tournament.get().getStages().size()+1));
 
         stagesListView.setItems(FXCollections.observableArrayList(Tournament.get().getStages()));
         stagesListView.refresh();
