@@ -25,15 +25,15 @@ public class SwissNode extends ScrollPane {
     public SwissNode(SwissFormat swissStage, BracketOverviewTabController boc){
         this.boc = boc;
 
-        this.setContent(refreshMatches(swissStage, boc));
+        this.setContent(getContentTable(swissStage, boc));
         this.setPannable(true); //Enables dragging with the mouse
         this.setHbarPolicy(ScrollBarPolicy.NEVER);
         this.setVbarPolicy(ScrollBarPolicy.NEVER);
     }
-    
+
     /** Refreshes this node to represent the given swiss stage.
      * @param swissStage the swiss stage to represent. */ //TODO Should be rename and reworked.
-    private HBox refreshMatches(SwissFormat swissStage, BracketOverviewTabController boc){
+    private HBox getContentTable(SwissFormat swissStage, BracketOverviewTabController boc){
 
         HBox content = new HBox();
 
