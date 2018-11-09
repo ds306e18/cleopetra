@@ -5,7 +5,6 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -23,9 +22,8 @@ public class ExitProgramController {
     private Button cancelBtn;
 
     @FXML
-    void cancelClose(ActionEvent event) {    // get a handle to the stage
+    void cancelClose(ActionEvent event) {
         Stage stage = (Stage) cancelBtn.getScene().getWindow();
-        // do what you have to do
         stage.close();
     }
 
@@ -69,8 +67,6 @@ public class ExitProgramController {
 
         /* TODO: Create check if file was written successfully */
         System.exit(0);
-
-
     }
 
     @FXML
@@ -78,7 +74,6 @@ public class ExitProgramController {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setX(event.getScreenX() - x);
         stage.setY(event.getScreenY() - y);
-
     }
 
     @FXML
@@ -86,6 +81,4 @@ public class ExitProgramController {
         x = event.getSceneX();
         y = event.getSceneY();
     }
-
-
 }

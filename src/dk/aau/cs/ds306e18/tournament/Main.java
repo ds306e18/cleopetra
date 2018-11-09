@@ -32,7 +32,7 @@ public class Main extends Application {
 
             // Load exit program FXML file
             try {
-            AnchorPane exitRoot = FXMLLoader.load(getClass().getResource("ui/layout/Exit.fxml"));
+                AnchorPane exitRoot = FXMLLoader.load(getClass().getResource("ui/layout/Exit.fxml"));
 
                 exitStage.setScene(new Scene(exitRoot));
                 exitStage.show();
@@ -43,7 +43,7 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        System.out.println("Hola mundo");
+        System.out.println("Hej verden!");
         launch(args);
     }
 }
