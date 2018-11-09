@@ -242,7 +242,7 @@ public class BracketOverviewTabController {
 
     /** Emsures that the score is legal and less than 999*/
     private void checkIntegerScore(String oldValue, String newValue, TextField teamScore){
-        if (newValue.charAt(0)=='0' && newValue.length()!=1){
+        if (newValue.length()>1&& newValue.charAt(0)=='0'){
             System.out.println("Test");
             teamScore.setText(newValue.replaceFirst("0",""));
         }
