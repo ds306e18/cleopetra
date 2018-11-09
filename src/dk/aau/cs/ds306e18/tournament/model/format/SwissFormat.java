@@ -237,4 +237,12 @@ public class SwissFormat extends GroupFormat implements MatchListener {
         else
             return true;
     }
+
+    /** @return the size of the first round. The number of matches in that round. (all rounds have the same size) */
+    public int getRoundSize(){
+        if(getRounds().size() != 0){
+            return  getRounds().get(0).size();
+        }else
+            throw new IllegalStateException("There is no rounds in this SwissFormat");
+    }
 }
