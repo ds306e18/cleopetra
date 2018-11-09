@@ -33,7 +33,7 @@ public class FileOperations {
      * @param tournament the given tournament to serialize and write to disk
      * @return boolean of success
      */
-    public static boolean writeTournamentToFilesystem(String fqn, String filename, String extension, Tournament tournament) {
+    public static boolean writeTournamentToFilesystem(String fqn, String filename, String extension, Tournament tournament) throws IOException {
         String pathFilename = checkFilenameInString(checkTrailingSlash(fqn), checkFilename(filename, extension));
         return writeTournament(pathFilename, tournament);
     }
@@ -46,7 +46,7 @@ public class FileOperations {
      * @param tournament the given tournament to serialize and write to disk
      * @return boolean of success
      */
-    public static boolean writeTournamentToFilesystem(String fqn, String filename, Tournament tournament) {
+    public static boolean writeTournamentToFilesystem(String fqn, String filename, Tournament tournament) throws IOException {
         String pathFilename = checkFilenameInString(checkTrailingSlash(fqn), checkFilename(filename));
         return writeTournament(pathFilename, tournament);
     }
@@ -58,7 +58,7 @@ public class FileOperations {
      * @param tournament the given tournament to serialize and write to disk
      * @return boolean of success
      */
-    public static boolean writeTournamentToFilesystem(String fqn, Tournament tournament) {
+    public static boolean writeTournamentToFilesystem(String fqn, Tournament tournament) throws IOException {
         String pathFilename = checkFilenameInString(checkTrailingSlash(fqn), stateFilename);
         return writeTournament(pathFilename, tournament);
 
@@ -71,17 +71,13 @@ public class FileOperations {
      * @param tournament   the given Tournament object to serialize
      * @return boolean of success
      */
-    private static boolean writeTournament(String pathFilename, Tournament tournament) {
+    private static boolean writeTournament(String pathFilename, Tournament tournament) throws IOException {
         Path path = Paths.get(pathFilename);
-        try {
-            // call serialize and getBytes from returned string, writing with no options to given path, thus
-            // creating, writing and closing if no exception is caught or overwriting with same procedure if object exists
-            Files.write(path, serialize(tournament).getBytes());
-            return true;
-        } catch (IOException e) {
-            System.out.println("ERROR: Caught IOException when writing to " + pathFilename + ". " + e.getMessage());
-        }
-        return false;
+
+        // call serialize and getBytes from returned string, writing with no options to given path, thus
+        // creating, writing and closing if no exception is caught or overwriting with same procedure if object exists
+        Files.write(path, serialize(tournament).getBytes());
+        return true;
     }
 
     /**
@@ -176,7 +172,7 @@ public class FileOperations {
 
         //if filename matches ". 'extension' EOL", then simply return
         if (filename.matches(matchExtensionPrefixPattern + extension + matchExtensionPostfixPattern)) return filename;
-        // handle dot delimiter
+            // handle dot delimiter
         else if (!(filename.matches(matchDotPattern))) return filename + "." + extension;
         else return filename + extension;
     }
