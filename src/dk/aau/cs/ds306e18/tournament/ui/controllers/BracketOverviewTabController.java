@@ -52,7 +52,6 @@ public class BracketOverviewTabController {
         initializeSingleEliBracket(); //TODO temp
         updateView(singleEli);
         orangeTeamScore.textProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println(observable);
             checkIntegerScore(oldValue,newValue,orangeTeamScore);
         });
         blueTeamScore.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -180,7 +179,6 @@ public class BracketOverviewTabController {
     /** WIP: Meant to update the created matches on button click -> this method. */
     @FXML
     void updateBracket(ActionEvent event) {
-        System.out.println("Clioced");
         overviewVBox.getChildren().clear();
         overviewVBox.getChildren().add(swissFormat.getJavaFxNode(null));
     }
@@ -189,7 +187,6 @@ public class BracketOverviewTabController {
     public void setSelectedMatch(MatchVisualController match){
         this.selectedMatch = match;
         updateTeamViewer(match.getLastSetMatch());
-        System.out.println("New match selected!");
     }
 
     /** Toggles edit for match scores */
@@ -243,7 +240,6 @@ public class BracketOverviewTabController {
     /** Emsures that the score is legal and less than 999*/
     private void checkIntegerScore(String oldValue, String newValue, TextField teamScore){
         if (newValue.length()>1&& newValue.charAt(0)=='0'){
-            System.out.println("Test");
             teamScore.setText(newValue.replaceFirst("0",""));
         }
 
