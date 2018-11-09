@@ -92,49 +92,107 @@
 }
 
 /* Matches overview - Matches design */
-#matchPlayed .team1-color {
+.match:hover{
+    -fx-border-width: 1;
+    -fx-border-color: green;
+    -fx-cursor: hand;
+    -fx-border-insets: -2;
+}
+
+.triangle {
+    visibility: hidden;
+}
+
+.blue .color {
     -fx-fill: #4271f9;
 }
 
-#matchPlayed .team2-color {
+.orange .color {
     -fx-fill: #f28542;
 }
 
-#matchPlayed .team1-triangle {
+.scoreBg {
+    -fx-fill: white;
+    -fx-stroke-type: inside;
+    -fx-stroke-width: 1;
+    -fx-stroke: #c1c1c1;
+}
+
+#matchPlayed .winner .triangle {
     visibility: visible;
 }
 
-#matchPlayed .team2-triangle {
-    visibility: hidden;
+#matchPlayed .winner .scoreNo {
+    -fx-fill: green;
 }
 
-#matchTBD .team1-color, #matchTBD .team2-color {
-    -fx-fill: #404040;
-}
-
-#matchTBD .team1-name, #matchTBD .team2-name {
+#matchTBD .teamName {
     -fx-font-style: italic;
     -fx-text-alignment: center;
-}
-
-#matchTBD .team1-score, #matchTBD .team2-score {
-    visibility: hidden;
-}
-
-#matchTBD .team1-triangle, #matchTBD .team2-triangle {
-    visibility: hidden;
-}
-
-#matchUpcoming .team1-score, #matchUpcoming .team2-score {
-    visibility: hidden;
-}
-
-#matchUpcoming .team1-triangle, #matchUpcoming .team2-triangle {
-    visibility: hidden;
 }
 
 .match:hover{
     -fx-border-width: 1;
     -fx-border-color: green;
     -fx-cursor: hand;
+}
+
+
+/* Exit program overlay design */
+#exitPopup {
+    -fx-border-width: 1;
+    -fx-border-color: #c2c2c2;
+    -fx-background-color: white;
+}
+
+#exitPopup .cancelBtn {
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-background-radius: 0;
+    -fx-background-color: transparent;
+}
+
+#exitPopup .cancelBtn:focused {
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+}
+
+#exitPopup .cancelBtn:pressed {
+    -fx-background-color: black;
+    -fx-text-fill: white;
+}
+
+#exitPopup .optionBtn {
+    -fx-border-width: 0;
+}
+
+#exitPopup .optionBtn:focused {
+    -fx-border-width: 0;
+}
+
+#exitPopup .saveBtn {
+    -fx-background-color: #BAD26E;
+    -fx-text-fill: #FFFFFF;
+}
+
+#exitPopup .saveBtn:pressed {
+    -fx-background-color: #dfeabc;
+}
+
+#exitPopup .noSaveBtn {
+    -fx-background-color: #FE7065;
+    -fx-text-fill: #FFFFFF;
+}
+
+#exitPopup .noSaveBtn:pressed {
+    -fx-background-color: #feafa8;
+}
+
+#exitPopup .cancelBtn2 {
+    -fx-background-color: #bababa;
+    -fx-text-fill: #FFFFFF;
+}
+
+#exitPopup .cancelBtn2:pressed {
+    -fx-background-color: #d3d3d3;
 }

@@ -510,4 +510,23 @@ public final class Match {
     public int hashCode() {
         return Objects.hash(getBlueScore(), getOrangeScore(), played, getBlueTeam(), getOrangeTeam(), blueWasWinnerInPreviousMatch, orangeWasWinnerInPreviousMatch, winnerGoesToBlue, loserGoesToBlue);
     }
+
+    @Override
+    public String toString() {
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("UID: ").append(hashCode()).append(", ").append("Status: ").append(getStatus().toString()).append("\n");
+
+        if(blueTeam != null)
+            sb.append("B ").append(getBlueTeam().getTeamName()).append(", Score: ").append(getBlueScore()).append("\n");
+        else {
+            sb.append("B ").append("TBD").append("\n");
+        }
+        if(orangeTeam != null)
+            sb.append("O ").append(getOrangeTeam().getTeamName()).append(", Score: ").append(getOrangeScore());
+        else
+            sb.append("O ").append("TBD").append("\n");
+
+        return sb.toString();
+    }
 }

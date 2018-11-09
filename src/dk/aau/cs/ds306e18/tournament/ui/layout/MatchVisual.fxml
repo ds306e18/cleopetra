@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox id="matchPlayed" onMouseClicked="#matchClicked" spacing="2.0" styleClass="match" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.controllers.MatchVisualController">
+   <children>
+      <HBox fx:id="hboxBlueTeam" alignment="CENTER_LEFT" prefHeight="12.0" prefWidth="171.0">
+         <children>
+            <Rectangle fill="#404040" height="20.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="color" width="4.0" />
+            <Group styleClass="team">
+               <HBox.margin>
+                  <Insets left="2.0" />
+               </HBox.margin>
+               <children>
+                  <Rectangle fill="#c1c1c1" height="20.0" layoutX="1.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="teamBg" width="85.0" />
+                  <Text fx:id="textBlueName" layoutX="5.0" layoutY="15.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="teamName" text="Team 1" wrappingWidth="80.63671875" />
+               </children>
+            </Group>
+            <Group styleClass="score">
+               <children>
+                  <Rectangle fill="#cdcfd0" height="20.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="scoreBg" width="20.0" />
+                  <Text fx:id="teamBlueScore" layoutY="15.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="scoreNo" text="5" textAlignment="CENTER" wrappingWidth="20.0">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Text>
+               </children>
+            </Group>
+            <Polygon fill="#c1c1c1" points="-23.999984741210938, -30.00000762939453, -24.0, -50.0, -9.75, -40.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="triangle" />
+         </children>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+         <styleClass>
+            <String fx:value="team1" />
+            <String fx:value="blue" />
+            <String fx:value="winner" />
+         </styleClass>
+      </HBox>
+      <HBox fx:id="hboxOrangeTeam" alignment="CENTER_LEFT" prefHeight="20.0" prefWidth="143.0">
+         <children>
+            <Rectangle fill="#404040" height="20.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="color" width="4.0" />
+            <Group styleClass="team">
+               <HBox.margin>
+                  <Insets left="2.0" />
+               </HBox.margin>
+               <children>
+                  <Rectangle fill="#c1c1c1" height="20.0" layoutX="1.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="teamBg" width="85.0" />
+                  <Text fx:id="textOrangeName" layoutX="5.0" layoutY="15.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="teamName" text="Team 2" wrappingWidth="80.63671875" />
+               </children>
+            </Group>
+            <Group styleClass="score">
+               <children>
+                  <Rectangle fill="#cdcfd0" height="20.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="scoreBg" width="20.0" />
+                  <Text fx:id="teamOrangeScore" layoutY="15.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="scoreNo" text="2" textAlignment="CENTER" wrappingWidth="20.0">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Text>
+               </children>
+            </Group>
+            <Polygon fill="#c1c1c1" points="-23.999984741210938, -30.00000762939453, -24.0, -50.0, -9.75, -40.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="triangle" />
+         </children>
+         <styleClass>
+            <String fx:value="team2" />
+            <String fx:value="orange" />
+         </styleClass>
+      </HBox>
+   </children>
+   <VBox.margin>
+      <Insets />
+   </VBox.margin>
+   <padding>
+      <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+   </padding>
+</VBox>

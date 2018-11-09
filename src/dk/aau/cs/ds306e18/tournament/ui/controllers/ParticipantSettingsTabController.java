@@ -1,6 +1,8 @@
 package dk.aau.cs.ds306e18.tournament.ui.controllers;
 
-import dk.aau.cs.ds306e18.tournament.model.*;
+import dk.aau.cs.ds306e18.tournament.model.Bot;
+import dk.aau.cs.ds306e18.tournament.model.Team;
+import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -92,7 +94,7 @@ public class ParticipantSettingsTabController {
     @FXML void addBotBtnOnAction(ActionEvent actionEvent){
         if (teamsListView.getSelectionModel().getSelectedIndex()!=-1) {
             Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
-                    .addBot(new Bot("Bot "+ (Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex()).size()+1), "Dev 1"));
+                    .addBot(new Bot("Bot "+ (Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex()).size()+1), "Dev 1", "Path 1")); //TODO Should the path be something concrete? Mikkel at merge.
             botsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
                     .getBots()));
             botsListView.refresh();
@@ -118,7 +120,7 @@ public class ParticipantSettingsTabController {
         teamsListView.getSelectionModel().selectLast();
         teamsListView.refresh();
         Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
-                        .addBot(new Bot("Bot "+ (Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex()).size()+1), "Dev 1"));
+                        .addBot(new Bot("Bot "+ (Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex()).size()+1), "Dev 1", "null")); //TODO Should the path be something concrete? Mikkel at merge.
         botsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
                     .getBots()));
         botsListView.refresh();
@@ -201,15 +203,15 @@ public class ParticipantSettingsTabController {
     }
 
     void checkForEmptyBotName(Team team){
-        for (Bot bot: team.getBots()){
+        for (Bot bot: team.getBots()) {
             String nameCheck = bot.getName();
-            nameCheck = nameCheck.replaceAll("\\s+","");
-            if (nameCheck.compareTo("")==0){
+            nameCheck = nameCheck.replaceAll("\\s+", "");
+            if (nameCheck.compareTo("") == 0) {
                 bot.setName("Bot ?");
             }
-
         }
     }
+
     private void initSeedSpinner() {
         //Makes the spinner editable and sets the values that can be chosen
         seedValueSpinner.setEditable(true);
