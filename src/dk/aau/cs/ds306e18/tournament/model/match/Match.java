@@ -462,7 +462,6 @@ public final class Match {
             listener.onMatchPlayed(this);
         }
     }
-
     /**
      * Repairs references to parents in Match-tree for deserialized objects
      */

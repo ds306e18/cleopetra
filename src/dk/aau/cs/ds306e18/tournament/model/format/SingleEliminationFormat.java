@@ -1,13 +1,13 @@
 package dk.aau.cs.ds306e18.tournament.model.format;
 
+import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.SingleEliminationNode;
+import dk.aau.cs.ds306e18.tournament.ui.controllers.BracketOverviewTabController;
 import dk.aau.cs.ds306e18.tournament.model.StageStatus;
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchListener;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchStatus;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
-import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.SingleEliminationNode;
-import dk.aau.cs.ds306e18.tournament.ui.controllers.BracketOverviewTabController;
 import javafx.scene.Node;
 
 import java.util.ArrayList;
