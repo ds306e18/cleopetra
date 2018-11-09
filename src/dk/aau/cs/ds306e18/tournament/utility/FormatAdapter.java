@@ -5,7 +5,7 @@ import dk.aau.cs.ds306e18.tournament.model.format.Format;
 
 import java.lang.reflect.Type;
 
-public class FormatAdaptor implements JsonSerializer<Format>, JsonDeserializer<Format> {
+public class FormatAdapter implements JsonSerializer<Format>, JsonDeserializer<Format> {
 
     @Override
     public JsonElement serialize(Format src, Type typeOfSrc, JsonSerializationContext context) {
