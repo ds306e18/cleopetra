@@ -70,4 +70,8 @@ public class Bot {
     public int hashCode() {
         return Objects.hash(getName(), getDeveloper(), getConfigPath());
     }
+
+    public String toString(){
+        return name;
+    }
 }

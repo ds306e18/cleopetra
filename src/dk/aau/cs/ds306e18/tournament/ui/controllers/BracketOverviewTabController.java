@@ -5,12 +5,19 @@ import dk.aau.cs.ds306e18.tournament.model.format.Format;
 import dk.aau.cs.ds306e18.tournament.model.format.SingleEliminationFormat;
 import dk.aau.cs.ds306e18.tournament.model.format.SwissFormat;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,6 +31,14 @@ public class BracketOverviewTabController {
     @FXML private Button nextStageBtn;
     @FXML private Button prevStageBtn;
     @FXML private Button prevMatchBtn;
+    @FXML private Button playMatchBtn;
+    @FXML private Button editMatchBtn;
+    @FXML private Label blueTeamNameLabel;
+    @FXML private TextField blueTeamScore;
+    @FXML private ListView blueTeamListView;
+    @FXML private Label orangeTeamNameLabel;
+    @FXML private TextField orangeTeamScore;
+    @FXML private ListView orangeTeamListView;
 
     private SwissFormat swissFormat; //TODO temp
     private SingleEliminationFormat singleEli; //TODO temp
@@ -36,6 +51,12 @@ public class BracketOverviewTabController {
         initializeSwissBracket(); //TODO temp
         initializeSingleEliBracket(); //TODO temp
         updateView(singleEli);
+        orangeTeamScore.textProperty().addListener((observable, oldValue, newValue) -> {
+            checkIntegerScore(oldValue,newValue,orangeTeamScore);
+        });
+        blueTeamScore.textProperty().addListener((observable, oldValue, newValue) -> {
+            checkIntegerScore(oldValue,newValue, blueTeamScore);
+        });
     }
 
     /** Updates the content of this element. Displays the javaFxNode from the given format. */
@@ -158,7 +179,6 @@ public class BracketOverviewTabController {
     /** WIP: Meant to update the created matches on button click -> this method. */
     @FXML
     void updateBracket(ActionEvent event) {
-        System.out.println("Clioced");
         overviewVBox.getChildren().clear();
         overviewVBox.getChildren().add(swissFormat.getJavaFxNode(null));
     }
@@ -166,6 +186,68 @@ public class BracketOverviewTabController {
     /** Gets called when a match in overviewTab is clicked. */
     public void setSelectedMatch(MatchVisualController match){
         this.selectedMatch = match;
-        System.out.println("New match selected!");
+        updateTeamViewer(match.getLastSetMatch());
+    }
+
+    /** Toggles edit for match scores */
+    @FXML void editMatchBtnOnAction(ActionEvent event){
+        if (blueTeamScore.editableProperty().getValue()){
+            selectedMatch.getLastSetMatch().setBlueScore(Integer.parseInt(blueTeamScore.getText()));
+            selectedMatch.getLastSetMatch().setOrangeScore(Integer.parseInt(orangeTeamScore.getText()));
+            blueTeamScore.setEditable(false);
+            orangeTeamScore.setEditable(false);
+            editMatchBtn.setText("Edit match");
+        }else{
+            blueTeamScore.setEditable(true);
+            orangeTeamScore.setEditable(true);
+            editMatchBtn.setText("Save edit");
+        }
+    }
+
+    /** Updates the team viewer on match clicked in overviewTab */
+    private void updateTeamViewer(Match match) {
+        if (match.getBlueTeam()!=null){
+            //updates blue team
+            blueTeamNameLabel.setText(match.getBlueTeam().getTeamName());
+            blueTeamScore.setText(Integer.toString(match.getBlueScore()));
+            blueTeamListView.setItems(FXCollections.observableArrayList(match.getBlueTeam().getBots()));
+            blueTeamListView.refresh();
+        }
+        else{
+            //updates blue team
+            blueTeamNameLabel.setText("Blue team");
+            blueTeamScore.setText("");
+            blueTeamListView.setItems(null);
+            blueTeamListView.refresh();
+        }
+        if (match.getOrangeTeam()!=null) {
+            //Updates orange team
+            orangeTeamNameLabel.setText(match.getOrangeTeam().getTeamName());
+            orangeTeamScore.setText(Integer.toString(match.getOrangeScore()));
+            orangeTeamListView.setItems(FXCollections.observableArrayList(match.getOrangeTeam().getBots()));
+            orangeTeamListView.refresh();
+        }
+        else {
+            //Updates orange team
+            orangeTeamNameLabel.setText("Orange team");
+            orangeTeamScore.setText("");
+            orangeTeamListView.setItems(null);
+            orangeTeamListView.refresh();
+        }
+
+    }
+
+    /** Emsures that the score is legal and less than 999*/
+    private void checkIntegerScore(String oldValue, String newValue, TextField teamScore){
+        if (newValue.length()>1&& newValue.charAt(0)=='0'){
+            teamScore.setText(newValue.replaceFirst("0",""));
+        }
+
+        if(newValue.length()<=3) {
+            if (!newValue.matches("\\d*")) {
+                teamScore.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        }else teamScore.setText(oldValue);
+
     }
 }
