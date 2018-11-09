@@ -3,7 +3,10 @@ package dk.aau.cs.ds306e18.tournament.ui.bracketObjects;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.format.SwissFormat;
 import dk.aau.cs.ds306e18.tournament.ui.controllers.BracketOverviewTabController;
+import javafx.event.EventHandler;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -34,7 +37,32 @@ public class SwissNode extends HBox {
         ArrayList<VBox> roundBoxs = new ArrayList<>();
         for(int i = 0; i < numberOfRounds; i++){
             roundBoxs.add(new VBox());
-            roundBoxs.get(i).getChildren().add(new Label("Round " + i)); //Add labels to the VBox'
+            roundBoxs.get(i).getChildren().add(new Label("Round " + (i+1))); //Add labels to the VBox'
+        }
+
+        //If there is another round that can be generated.
+        //Then add a new Vbox with label and generate button.
+        if(swissStage.getMaxRounds() > numberOfRounds){
+            VBox lastVBox = new VBox();
+            lastVBox.setMinWidth(175); //TODO magic number, but it is the same as the matches width.
+            lastVBox.getChildren().add(new Label("Round " + (numberOfRounds+1)));
+            Button generateButton = new Button();
+            generateButton.setText("Generate Round");
+            generateButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    boc.generateNewSwissRound();
+                }
+            });
+
+            //Is it not allowed to generate new round? Disable button.
+            if(!swissStage.isGenerateNewRoundAllowed())
+                generateButton.setDisable(true);
+            else
+                generateButton.setDisable(false);
+            
+            lastVBox.getChildren().add(generateButton);
+            roundBoxs.add(lastVBox);
         }
 
         //Get all matches from each round and add them to matching vbox

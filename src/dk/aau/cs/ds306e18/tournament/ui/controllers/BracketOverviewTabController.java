@@ -34,8 +34,8 @@ public class BracketOverviewTabController {
     private void initialize(){
         selectedMatch = null;
         initializeSwissBracket(); //TODO temp
-        initializeSingleEliBracket(); //TODO temp
-        updateView(singleEli);
+        //initializeSingleEliBracket(); //TODO temp
+        updateView(swissFormat);
     }
 
     /** Updates the content of this element. Displays the javaFxNode from the given format. */
@@ -152,7 +152,7 @@ public class BracketOverviewTabController {
 
         for (Match match : swissFormat.getUpcomingMatches())
             match.setScores(2, 4, true);
-        swissFormat.createNewRound();
+        //swissFormat.createNewRound();
     }
 
     /** WIP: Meant to update the created matches on button click -> this method. */
@@ -167,5 +167,11 @@ public class BracketOverviewTabController {
     public void setSelectedMatch(MatchVisualController match){
         this.selectedMatch = match;
         System.out.println("New match selected!");
+    }
+
+    public void generateNewSwissRound(){
+        swissFormat.createNewRound();
+        updateView(swissFormat);
+        System.out.println("Generate new swiss round!");
     }
 }
