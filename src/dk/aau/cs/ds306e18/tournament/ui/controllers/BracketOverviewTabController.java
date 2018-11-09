@@ -181,22 +181,36 @@ public class BracketOverviewTabController {
         System.out.println("New match selected!");
     }
 
+    /** Updates the team viewer on match clicked in overviewTab */
     private void updateTeamViewer(Match match) {
-
-        //updates blue team
-        blueTeamNameLabel.setText(match.getBlueTeam().getTeamName());
-        blueTeamScoreLabel.setText(Integer.toString(match.getBlueScore()));
-        blueTeamListView.setItems(FXCollections.observableArrayList(match.getBlueTeam().getBots()));
-        blueTeamListView.refresh();
-
-        //Updates orange team
-        orangeTeamNameLabel.setText(match.getOrangeTeam().getTeamName());
-        orangeTeamScoreLabel.setText(Integer.toString(match.getOrangeScore()));
-        orangeTeamListView.setItems(FXCollections.observableArrayList(match.getOrangeTeam().getBots()));
-        orangeTeamListView.refresh();
-
-
-
-
+        if (match.getBlueTeam()!=null){
+            //updates blue team
+            blueTeamNameLabel.setText(match.getBlueTeam().getTeamName());
+            blueTeamScoreLabel.setText(Integer.toString(match.getBlueScore()));
+            blueTeamListView.setItems(FXCollections.observableArrayList(match.getBlueTeam().getBots()));
+            blueTeamListView.refresh();
+        }
+        else{
+            //updates blue team
+            blueTeamNameLabel.setText("Blue team");
+            blueTeamScoreLabel.setText("TBD");
+            blueTeamListView.setItems(null);
+            blueTeamListView.refresh();
+        }
+        if (match.getOrangeTeam()!=null) {
+            //Updates orange team
+            orangeTeamNameLabel.setText(match.getOrangeTeam().getTeamName());
+            orangeTeamScoreLabel.setText(Integer.toString(match.getOrangeScore()));
+            orangeTeamListView.setItems(FXCollections.observableArrayList(match.getOrangeTeam().getBots()));
+            orangeTeamListView.refresh();
+        }
+        else {
+            //Updates orange team
+            orangeTeamNameLabel.setText("Orange team");
+            orangeTeamScoreLabel.setText("TBD");
+            orangeTeamListView.setItems(null);
+            orangeTeamListView.refresh();
+        }
+        
     }
 }
