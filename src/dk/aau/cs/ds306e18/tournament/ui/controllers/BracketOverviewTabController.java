@@ -116,10 +116,8 @@ public class BracketOverviewTabController {
             e.printStackTrace();
         }
 
-
         mvc.setBoc(this);
-        mvc.setMyNodeObj(root);
-        mvc.updateMatch(match);
+        mvc.setShowedMatch(match);
 
         return root;
     }
