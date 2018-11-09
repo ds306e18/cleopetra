@@ -18,7 +18,7 @@ public class MatchVisualController {
 
     private BracketOverviewTabController boc;
     private Node myNodeObj;
-    private Match lastSetMatch;
+    private Match showedMatch;
 
     @FXML
     private void initialize(){ }
@@ -54,17 +54,11 @@ public class MatchVisualController {
     public void updateMatch(Match match){
 
         clearFields();
-        this.lastSetMatch = match;
+        this.showedMatch = match;
 
         //Load teams
-        Team blueTeam = null;
-        Team orangeTeam = null;
-        try {
-            blueTeam = match.getBlueTeam();
-            orangeTeam = match.getOrangeTeam();
-        }catch (IllegalStateException e){
-
-        }
+        Team blueTeam = match.getBlueTeam();
+        Team orangeTeam = match.getOrangeTeam();
 
         //Set tags and id based on the given match and its status
         switch (match.getStatus()) {
@@ -123,7 +117,7 @@ public class MatchVisualController {
     }
 
     /** @return the last match that were given to the updateMatch method. */
-    public Match getLastSetMatch() {
-        return lastSetMatch;
+    public Match getShowedMatch() {
+        return showedMatch;
     }
 }
