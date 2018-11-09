@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
@@ -42,6 +43,7 @@ public class BracketOverviewTabController {
     private void updateView(Format format){
         overviewVBox.getChildren().clear();
         overviewVBox.getChildren().add(format.getJavaFxNode(this));
+        //VBox.setVgrow(overviewVBox.getChildren().get(0), Priority.ALWAYS); //TODO this shuold be handled in fxml for this
     }
 
     /** a temperate method that generates a single elimination bracket. */

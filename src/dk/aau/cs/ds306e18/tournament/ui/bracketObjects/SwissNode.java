@@ -6,6 +6,7 @@ import dk.aau.cs.ds306e18.tournament.ui.controllers.BracketOverviewTabController
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -16,22 +17,25 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /** Used to display the a swiss stage. */
-public class SwissNode extends HBox {
+public class SwissNode extends ScrollPane {
 
     private BracketOverviewTabController boc;
 
     /** Used to display the a swiss stage. */
     public SwissNode(SwissFormat swissStage, BracketOverviewTabController boc){
         this.boc = boc;
-        refreshMatches(swissStage, boc);
+
+        this.setContent(refreshMatches(swissStage, boc));
+        this.setPannable(true); //Enables dragging with the mouse
+        this.setHbarPolicy(ScrollBarPolicy.NEVER);
+        this.setVbarPolicy(ScrollBarPolicy.NEVER);
     }
     
     /** Refreshes this node to represent the given swiss stage.
      * @param swissStage the swiss stage to represent. */ //TODO Should be rename and reworked.
-    private void refreshMatches(SwissFormat swissStage, BracketOverviewTabController boc){
+    private HBox refreshMatches(SwissFormat swissStage, BracketOverviewTabController boc){
 
-        //Clear content
-        this.getChildren().clear();
+        HBox content = new HBox();
 
         //Get number of rounds
         int numberOfRounds = swissStage.getRounds().size();
@@ -66,18 +70,20 @@ public class SwissNode extends HBox {
 
         //Add all vboxs to this
         for (VBox roundBox : roundBoxs) {
-            this.getChildren().addAll(roundBox);
+            content.getChildren().addAll(roundBox);
             if (arrowBoxes.size() != 0) {
-                this.getChildren().add(arrowBoxes.get(0));
+                content.getChildren().add(arrowBoxes.get(0));
                 arrowBoxes.remove(0);
             }
         }
+
+        return content;
     }
 
     /** @return the vbox that has the "generate next round" button. */
     private VBox getNextRoundVBox(SwissFormat swissFormat){
 
-        int numberOfRounds = swissFormat.getRoundSize();
+        int numberOfRounds = swissFormat.getRounds().size();
 
         VBox lastVBox = new VBox();
         lastVBox.setMinWidth(175); //TODO magic number, but it is the same as the matches width.
