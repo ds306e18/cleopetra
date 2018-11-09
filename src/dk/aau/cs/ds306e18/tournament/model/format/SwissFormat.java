@@ -58,21 +58,15 @@ public class SwissFormat extends GroupFormat implements MatchListener {
      * @return true if a round was generated and false if a new round could not be generated. */
     public boolean createNewRound() {
 
-        if(status == StageStatus.PENDING){
-            return false;
-        } else if(status == StageStatus.CONCLUDED){
-            return false;
-        } else if(rounds.size() == maxRounds){ //Is it legal to create another round?
-            return false;
-        } else if(getUpcomingMatches().size() != 0) //Has all matches been played?
-            return false;
-        else if(rounds.size() != 0) { //Assign points for played matches
-            assignPoints();
+        if(isGenerateNewRoundAllowed()){
+            if(rounds.size() != 0) //Assign points for played matches
+                assignPoints();
+
             createRound();
+
             return true;
         }else{
-            createRound();
-            return true;
+            return false;
         }
     }
 
@@ -228,5 +222,19 @@ public class SwissFormat extends GroupFormat implements MatchListener {
     /** @return an arraylist of the current created rounds. */
     public ArrayList<ArrayList<Match>> getRounds(){
         return new ArrayList<>(this.rounds);
+    }
+
+    /** @return true if it is allowed to generate a new round. */
+    public boolean isGenerateNewRoundAllowed(){
+        if(status == StageStatus.PENDING){
+            return false;
+        } else if(status == StageStatus.CONCLUDED){
+            return false;
+        } else if(rounds.size() == maxRounds){ //Is it legal to create another round?
+            return false;
+        } else if(getUpcomingMatches().size() != 0) //Has all matches been played?
+            return false;
+        else
+            return true;
     }
 }
