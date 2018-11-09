@@ -71,7 +71,4 @@ public class Bot {
         return Objects.hash(getName(), getDeveloper(), getConfigPath());
     }
 
-    public String toString(){
-        return name;
-    }
 }
