@@ -5,10 +5,13 @@ import dk.aau.cs.ds306e18.tournament.model.format.Format;
 import dk.aau.cs.ds306e18.tournament.model.format.SingleEliminationFormat;
 import dk.aau.cs.ds306e18.tournament.model.format.SwissFormat;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
@@ -24,6 +27,14 @@ public class BracketOverviewTabController {
     @FXML private Button nextStageBtn;
     @FXML private Button prevStageBtn;
     @FXML private Button prevMatchBtn;
+    @FXML private Button playMatchBtn;
+    @FXML private Button editMatchBtn;
+    @FXML private Label blueTeamNameLabel;
+    @FXML private Label blueTeamScoreLabel;
+    @FXML private ListView blueTeamListView;
+    @FXML private Label orangeTeamNameLabel;
+    @FXML private Label orangeTeamScoreLabel;
+    @FXML private ListView orangeTeamListView;
 
     private SwissFormat swissFormat; //TODO temp
     private SingleEliminationFormat singleEli; //TODO temp
@@ -166,6 +177,26 @@ public class BracketOverviewTabController {
     /** Gets called when a match in overviewTab is clicked. */
     public void setSelectedMatch(MatchVisualController match){
         this.selectedMatch = match;
+        updateTeamViewer(match.getLastSetMatch());
         System.out.println("New match selected!");
+    }
+
+    private void updateTeamViewer(Match match) {
+
+        //updates blue team
+        blueTeamNameLabel.setText(match.getBlueTeam().getTeamName());
+        blueTeamScoreLabel.setText(Integer.toString(match.getBlueScore()));
+        blueTeamListView.setItems(FXCollections.observableArrayList(match.getBlueTeam().getBots()));
+        blueTeamListView.refresh();
+
+        //Updates orange team
+        orangeTeamNameLabel.setText(match.getOrangeTeam().getTeamName());
+        orangeTeamScoreLabel.setText(Integer.toString(match.getOrangeScore()));
+        orangeTeamListView.setItems(FXCollections.observableArrayList(match.getOrangeTeam().getBots()));
+        orangeTeamListView.refresh();
+
+
+
+
     }
 }

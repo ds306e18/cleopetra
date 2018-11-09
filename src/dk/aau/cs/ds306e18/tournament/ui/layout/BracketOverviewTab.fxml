@@ -16,10 +16,10 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<GridPane id="mainGrid" fx:id="bracketOverviewTab" minWidth="-Infinity" prefHeight="532.0" prefWidth="800.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.controllers.BracketOverviewTabController">
+<GridPane id="mainGrid" fx:id="bracketOverviewTab" minWidth="-Infinity" prefHeight="532.0" prefWidth="800.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/10.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.controllers.BracketOverviewTabController">
    <columnConstraints>
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="464.0" minWidth="10.0" prefWidth="279.7777506510417" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="669.7777862548828" minWidth="10.0" prefWidth="300.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="526.0" minWidth="10.0" prefWidth="510.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="669.7777862548828" minWidth="10.0" prefWidth="290.0" />
    </columnConstraints>
    <rowConstraints>
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -281,24 +281,24 @@
                               <RowConstraints maxHeight="39.0" minHeight="10.0" prefHeight="34.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <ListView prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" />
-                              <ListView prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                              <Label text="Team 1">
+                              <ListView fx:id="blueTeamListView" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" />
+                              <ListView fx:id="orangeTeamListView" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                              <Label fx:id="blueTeamNameLabel" text="Blue team" textFill="#6a82fc">
                                  <font>
                                     <Font name="System Bold" size="16.0" />
                                  </font>
                               </Label>
-                              <Label text="Team 2" GridPane.columnIndex="2" GridPane.halignment="RIGHT">
+                              <Label fx:id="orangeTeamNameLabel" text="Orange team" textFill="#f5af17" GridPane.columnIndex="2" GridPane.halignment="RIGHT">
                                  <font>
                                     <Font name="System Bold" size="16.0" />
                                  </font>
                               </Label>
-                              <Label text="5" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                              <Label fx:id="blueTeamScoreLabel" text="5" GridPane.halignment="CENTER" GridPane.rowIndex="2">
                                  <font>
                                     <Font name="System Bold" size="20.0" />
                                  </font>
                               </Label>
-                              <Label text="10" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                              <Label fx:id="orangeTeamScoreLabel" text="10" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2">
                                  <font>
                                     <Font name="System Bold" size="20.0" />
                                  </font>
