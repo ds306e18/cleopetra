@@ -55,38 +55,38 @@ public class BracketOverviewTabController {
         teams.add(new Team("Team 1", team1, 1, "hello"));
 
         ArrayList<Bot> team2 = new ArrayList<>();
-        team1.add(new Bot("t2b1", "mk", null));
-        team1.add(new Bot("t2b2", "mk", null));
+        team2.add(new Bot("t2b1", "mk", null));
+        team2.add(new Bot("t2b2", "mk", null));
         teams.add(new Team("Team 2", team2, 2, "hello"));
 
         ArrayList<Bot> team3 = new ArrayList<>();
-        team1.add(new Bot("t3b1", "mk", null));
-        team1.add(new Bot("t3b2", "mk", null));
+        team3.add(new Bot("t3b1", "mk", null));
+        team3.add(new Bot("t3b2", "mk", null));
         teams.add(new Team("Team 3", team3, 3, "hello"));
 
         ArrayList<Bot> team4 = new ArrayList<>();
-        team1.add(new Bot("t4b1", "mk", null));
-        team1.add(new Bot("t4b2", "mk", null));
+        team4.add(new Bot("t4b1", "mk", null));
+        team4.add(new Bot("t4b2", "mk", null));
         teams.add(new Team("Team 4", team4, 4, "hello"));
 
         ArrayList<Bot> team5 = new ArrayList<>();
-        team1.add(new Bot("t5b1", "mk", null));
-        team1.add(new Bot("t5b2", "mk", null));
+        team5.add(new Bot("t5b1", "mk", null));
+        team5.add(new Bot("t5b2", "mk", null));
         teams.add(new Team("Team 5", team4, 5, "hello"));
 
         ArrayList<Bot> team6 = new ArrayList<>();
-        team1.add(new Bot("t6b1", "mk", null));
-        team1.add(new Bot("t6b2", "mk", null));
+        team6.add(new Bot("t6b1", "mk", null));
+        team6.add(new Bot("t6b2", "mk", null));
         teams.add(new Team("Team 6", team4, 6, "hello"));
 
         ArrayList<Bot> team7 = new ArrayList<>();
-        team1.add(new Bot("t7b1", "mk", null));
-        team1.add(new Bot("t7b2", "mk", null));
+        team7.add(new Bot("t7b1", "mk", null));
+        team7.add(new Bot("t7b2", "mk", null));
         teams.add(new Team("Team 7", team7, 7, "hello"));
 
         ArrayList<Bot> team8 = new ArrayList<>();
-        team1.add(new Bot("t8b1", "mk", null));
-        team1.add(new Bot("t8b2", "mk", null));
+        team8.add(new Bot("t8b1", "mk", null));
+        team8.add(new Bot("t8b2", "mk", null));
         teams.add(new Team("Team 8", team8, 8, "hello"));
 
         singleEli = new SingleEliminationFormat();
