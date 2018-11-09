@@ -178,6 +178,11 @@ public class RoundRobinStage implements Format, MatchListener {
     }
 
     @Override
+    public void repair() {
+        // TODO
+    }
+
+    @Override
     public Node getJavaFxNode(BracketOverviewTabController boc) {
         return null; //TODO
     }

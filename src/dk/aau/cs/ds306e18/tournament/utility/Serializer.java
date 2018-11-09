@@ -20,7 +20,7 @@ public class Serializer {
             // register custom InstanceCreator for TieBreakers as necessary for inheritance
             .registerTypeAdapter(TieBreaker.class, new TieBreakerInstanceCreator())
             // register custom TypeAdapter for storing class-information on specific formats during serialization
-            .registerTypeAdapter(Format.class, new FormatAdaptor())
+            .registerTypeAdapter(Format.class, new FormatAdapter())
             .create();
 
     /**
