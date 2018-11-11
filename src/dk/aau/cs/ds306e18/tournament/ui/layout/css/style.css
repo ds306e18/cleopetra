@@ -80,13 +80,17 @@
 }
 
 #PS-leftside, #PS-center, #PS-rightside {
-    -fx-padding: 0 0 0 20;
+    -fx-padding: 0 20 0 20;
     -fx-border-width: 0 0 0 1;
     -fx-border-color: #c2c2c2;
 }
 
+#PS-leftside {
+    -fx-padding: 0 20 20 20 !important;
+}
+
 #globalGrid {
-    -fx-padding: 0 0 0 20;
+    -fx-padding: 0 20 0 20;
     -fx-border-width: 0 0 0 1;
     -fx-border-color: #c2c2c2;
 }

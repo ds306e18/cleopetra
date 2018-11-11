@@ -12,6 +12,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -24,7 +25,7 @@ import java.util.List;
 
 public class ParticipantSettingsTabController {
 
-    @FXML private BorderPane participantSettingsTab;
+    @FXML private GridPane participantSettingsTab;
     @FXML private TextField teamNameTextField;
     @FXML private TextField botNameTextField;
     @FXML private TextField developerTextField;

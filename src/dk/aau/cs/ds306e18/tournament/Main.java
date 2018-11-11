@@ -19,6 +19,11 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         URL resource = getClass().getResource("ui/layout/MainLayout.fxml");
         Parent root = FXMLLoader.load(resource);
+
+        /* Min width + height*/
+        primaryStage.setMinWidth(800);
+        primaryStage.setMinHeight(650);
+
         primaryStage.setTitle("DatTournament Runner");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
