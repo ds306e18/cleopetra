@@ -15,7 +15,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
@@ -39,6 +42,7 @@ public class BracketOverviewTabController {
     @FXML private Label orangeTeamNameLabel;
     @FXML private TextField orangeTeamScore;
     @FXML private ListView orangeTeamListView;
+    @FXML private ScrollPane overviewScrollPane;
 
     private SwissFormat swissFormat; //TODO temp
     private SingleEliminationFormat singleEli; //TODO temp
@@ -47,10 +51,17 @@ public class BracketOverviewTabController {
 
     @FXML
     private void initialize(){
+
+        // Scrollpane settings
+        overviewScrollPane.setPannable(true);
+        overviewScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        overviewScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
         selectedMatch = null;
         initializeSwissBracket(); //TODO temp
         initializeSingleEliBracket(); //TODO temp
         updateView(singleEli);
+        updateView(swissFormat);
         orangeTeamScore.textProperty().addListener((observable, oldValue, newValue) -> {
             checkIntegerScore(oldValue,newValue,orangeTeamScore);
         });
@@ -61,8 +72,10 @@ public class BracketOverviewTabController {
 
     /** Updates the content of this element. Displays the javaFxNode from the given format. */
     private void updateView(Format format){
-        overviewVBox.getChildren().clear();
-        overviewVBox.getChildren().add(format.getJavaFxNode(this));
+/*        overviewVBox.getChildren().clear();
+        overviewVBox.getChildren().add(format.getJavaFxNode(this));*/
+        overviewScrollPane.setContent(format.getJavaFxNode(this));
+        //VBox.setVgrow(overviewVBox.getChildren().get(0), Priority.ALWAYS); //TODO this shuold be handled in fxml for this
     }
 
     /** a temperate method that generates a single elimination bracket. */
@@ -155,25 +168,25 @@ public class BracketOverviewTabController {
         teams.add(new Team("Team 1", team1, 1, "hello"));
 
         ArrayList<Bot> team2 = new ArrayList<>();
-        team1.add(new Bot("t2b1", "mk", null));
-        team1.add(new Bot("t2b2", "mk", null));
+        team2.add(new Bot("t2b1", "mk", null));
+        team2.add(new Bot("t2b2", "mk", null));
         teams.add(new Team("Team 2", team2, 2, "hello"));
 
         ArrayList<Bot> team3 = new ArrayList<>();
-        team1.add(new Bot("t3b1", "mk", null));
-        team1.add(new Bot("t3b2", "mk", null));
+        team3.add(new Bot("t3b1", "mk", null));
+        team3.add(new Bot("t3b2", "mk", null));
         teams.add(new Team("Team 3", team3, 3, "hello"));
 
         ArrayList<Bot> team4 = new ArrayList<>();
-        team1.add(new Bot("t4b1", "mk", null));
-        team1.add(new Bot("t4b2", "mk", null));
+        team4.add(new Bot("t4b1", "mk", null));
+        team4.add(new Bot("t4b2", "mk", null));
         teams.add(new Team("Team 4", team4, 4, "hello"));
 
         swissFormat.start(teams);
 
         for (Match match : swissFormat.getUpcomingMatches())
             match.setScores(2, 4, true);
-        swissFormat.createNewRound();
+        //swissFormat.createNewRound();
     }
 
     /** WIP: Meant to update the created matches on button click -> this method. */
@@ -249,5 +262,11 @@ public class BracketOverviewTabController {
             }
         }else teamScore.setText(oldValue);
 
+    }
+
+    public void generateNewSwissRound(){
+        swissFormat.createNewRound();
+        updateView(swissFormat);
+        System.out.println("Generate new swiss round!");
     }
 }

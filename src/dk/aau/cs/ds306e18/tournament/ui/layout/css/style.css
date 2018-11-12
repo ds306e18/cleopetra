@@ -200,3 +200,8 @@
 #exitPopup .cancelBtn2:pressed {
     -fx-background-color: #d3d3d3;
 }
+
+/* Scrollpane bracket overview */
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
