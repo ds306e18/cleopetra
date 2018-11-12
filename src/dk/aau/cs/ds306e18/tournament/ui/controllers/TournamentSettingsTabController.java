@@ -1,7 +1,6 @@
 package dk.aau.cs.ds306e18.tournament.ui.controllers;
 
 import dk.aau.cs.ds306e18.tournament.model.*;
-import dk.aau.cs.ds306e18.tournament.model.format.Format;
 import dk.aau.cs.ds306e18.tournament.model.format.SwissFormat;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreakerBySeed;
@@ -92,14 +91,12 @@ public class TournamentSettingsTabController {
                 selectedStage.setFormat(newValue.getNewInstance());
             }
 
-            /* Rounds are only visible if a specific format is chosen. TODO: Load options from format instead of type checking. */
-            // boolean showRounds = selectedStage != null && StageFormatOption.getOption(selectedStage.getFormat()) != StageFormatOption.SWISS_SYSTEM;
-            // stageOptions.setVisible(showRounds);
+            // Show settings unique to format
             formatUniqueSettingsHolder.getChildren().clear();
             if (selectedStage != null) {
-                Node formatSettings = selectedStage.getFormat().getOptionFXNode();
+                Node formatSettings = selectedStage.getFormat().getSettingsFXNode();
                 if (formatSettings != null) {
-                    formatUniqueSettingsHolder.getChildren().add(selectedStage.getFormat().getOptionFXNode());
+                    formatUniqueSettingsHolder.getChildren().add(selectedStage.getFormat().getSettingsFXNode());
                 }
             }
         });

@@ -253,7 +253,7 @@ public class SingleEliminationFormat implements Format, MatchListener {
     }
 
     @Override
-    public Node getOptionFXNode() {
+    public Node getSettingsFXNode() {
         return null;
     }
 

@@ -188,7 +188,7 @@ public class RoundRobinFormat extends GroupFormat implements MatchListener {
     }
 
     @Override
-    public Node getOptionFXNode() {
+    public Node getSettingsFXNode() {
         return null; //TODO
     }
 

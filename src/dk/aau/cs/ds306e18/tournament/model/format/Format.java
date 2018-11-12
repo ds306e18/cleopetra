@@ -52,9 +52,9 @@ public interface Format {
     Node getBracketFXNode(BracketOverviewTabController bracketOverview);
 
     /**
-     * Returns a Node with the options specific to this format. Can return null.
+     * Returns a Node with the settings specific to this format. Can return null.
      */
-    Node getOptionFXNode();
+    Node getSettingsFXNode();
 
     /**
      * Repairs structure of matches after deserialization.

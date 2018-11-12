@@ -261,7 +261,7 @@ public class SwissFormat extends GroupFormat implements MatchListener {
     }
 
     @Override
-    public Node getOptionFXNode() {
+    public Node getSettingsFXNode() {
         return new SwissOptionsNode(this);
     }
 
