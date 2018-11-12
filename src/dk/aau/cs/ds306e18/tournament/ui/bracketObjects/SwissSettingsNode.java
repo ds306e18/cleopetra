@@ -6,18 +6,19 @@ import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.layout.BorderPane;
 
-public class SwissOptionsNode extends BorderPane {
+public class SwissSettingsNode extends BorderPane {
 
     private final SwissFormat swiss;
 
-    public SwissOptionsNode(SwissFormat swiss) {
+    public SwissSettingsNode(SwissFormat swiss) {
         this.swiss = swiss;
 
-        // Label
+        // Rounds label
         Label roundsLabel = new Label("Rounds:");
         setLeft(roundsLabel);
 
-        Spinner<Integer> roundsSpinner = new Spinner<>(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, Integer.MAX_VALUE, 1));
+        // Rounds spinner
+        Spinner<Integer> roundsSpinner = new Spinner<>(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, Integer.MAX_VALUE));
         roundsSpinner.setEditable(true);
         roundsSpinner.getValueFactory().setValue(swiss.getRoundCount());
         roundsSpinner.getValueFactory().valueProperty().addListener((observable, oldValue, newValue) -> {

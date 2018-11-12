@@ -5,7 +5,7 @@ import dk.aau.cs.ds306e18.tournament.model.StageStatus;
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchListener;
-import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.SwissOptionsNode;
+import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.SwissSettingsNode;
 import dk.aau.cs.ds306e18.tournament.ui.controllers.BracketOverviewTabController;
 import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.SwissNode;
 import javafx.scene.Node;
@@ -262,7 +262,7 @@ public class SwissFormat extends GroupFormat implements MatchListener {
 
     @Override
     public Node getSettingsFXNode() {
-        return new SwissOptionsNode(this);
+        return new SwissSettingsNode(this);
     }
 
     /**

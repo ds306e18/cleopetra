@@ -5,6 +5,7 @@ import dk.aau.cs.ds306e18.tournament.model.StageStatus;
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchListener;
+import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.RoundRobinSettingsNode;
 import dk.aau.cs.ds306e18.tournament.ui.controllers.BracketOverviewTabController;
 import javafx.scene.Node;
 
@@ -281,7 +282,7 @@ public class RoundRobinFormat extends GroupFormat implements MatchListener {
 
     @Override
     public Node getSettingsFXNode() {
-        return null; //TODO
+        return new RoundRobinSettingsNode(this);
     }
 
     /**
