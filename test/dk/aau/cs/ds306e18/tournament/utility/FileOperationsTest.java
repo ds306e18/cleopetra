@@ -3,8 +3,11 @@ package dk.aau.cs.ds306e18.tournament.utility;
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import org.junit.Test;
 
+import java.io.IOException;
+
 import static dk.aau.cs.ds306e18.tournament.TestUtilities.generateTournamentOnlyTeams;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class FileOperationsTest {
@@ -12,14 +15,22 @@ public class FileOperationsTest {
     @Test
     public void writeToFilesystem() {
         Tournament tournament = generateTournamentOnlyTeams();
-        assertTrue(FileOperations.writeTournamentToFilesystem("", tournament));
+        try {
+            assertTrue(FileOperations.writeTournamentToFilesystem("", tournament));
+        } catch (IOException e) {
+            assertFalse(true);
+        }
 
     }
 
     @Test
     public void readFromFilesystem1() {
         Tournament tournament = generateTournamentOnlyTeams();
-        assertTrue(FileOperations.writeTournamentToFilesystem("", tournament));
+        try {
+            assertTrue(FileOperations.writeTournamentToFilesystem("", tournament));
+        } catch (IOException e) {
+            assertFalse(true);
+        }
         Tournament reserializedTournament = FileOperations.readTournamentFromFilesystem("");
         assertEquals(reserializedTournament, tournament);
     }
@@ -27,7 +38,11 @@ public class FileOperationsTest {
     @Test
     public void readFromFilesystem2() {
         Tournament tournament = generateTournamentOnlyTeams();
-        assertTrue(FileOperations.writeTournamentToFilesystem("", "filename", tournament));
+        try {
+            assertTrue(FileOperations.writeTournamentToFilesystem("", "filename", tournament));
+        } catch (IOException e) {
+            assertFalse(true);
+        }
         Tournament reserializedTournament = FileOperations.readTournamentFromFilesystem("", "filename");
         assertEquals(reserializedTournament, tournament);
     }
@@ -35,7 +50,11 @@ public class FileOperationsTest {
     @Test
     public void readFromFilesystem3() {
         Tournament tournament = generateTournamentOnlyTeams();
-        assertTrue(FileOperations.writeTournamentToFilesystem("", "filename", "object", tournament));
+        try {
+            assertTrue(FileOperations.writeTournamentToFilesystem("", "filename", "object", tournament));
+        } catch (IOException e) {
+            assertFalse(true);
+        }
         Tournament reserializedTournament = FileOperations.readTournamentFromFilesystem("", "filename", "object");
         assertEquals(tournament, reserializedTournament);
     }
