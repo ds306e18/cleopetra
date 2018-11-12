@@ -5,6 +5,7 @@ import dk.aau.cs.ds306e18.tournament.model.format.SwissFormat;
 import dk.aau.cs.ds306e18.tournament.ui.controllers.BracketOverviewTabController;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
+import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /** Used to display the a swiss stage. */
-public class SwissNode extends ScrollPane {
+public class SwissNode extends HBox {
 
     private BracketOverviewTabController boc;
 
@@ -25,10 +26,11 @@ public class SwissNode extends ScrollPane {
     public SwissNode(SwissFormat swissStage, BracketOverviewTabController boc){
         this.boc = boc;
 
-        this.setContent(refreshMatches(swissStage, boc));
-        this.setPannable(true); //Enables dragging with the mouse
-        this.setHbarPolicy(ScrollBarPolicy.NEVER);
-        this.setVbarPolicy(ScrollBarPolicy.NEVER);
+        /* Sizing */
+
+
+        //this.setContent(refreshMatches(swissStage, boc));
+        this.getChildren().add(refreshMatches(swissStage, boc));
     }
     
     /** Refreshes this node to represent the given swiss stage.

@@ -9,7 +9,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
@@ -25,6 +27,8 @@ public class BracketOverviewTabController {
     @FXML private Button nextStageBtn;
     @FXML private Button prevStageBtn;
     @FXML private Button prevMatchBtn;
+    @FXML private ScrollPane overviewScrollPane;
+
 
     private SwissFormat swissFormat; //TODO temp
     private SingleEliminationFormat singleEli; //TODO temp
@@ -37,12 +41,18 @@ public class BracketOverviewTabController {
         initializeSwissBracket(); //TODO temp
         //initializeSingleEliBracket(); //TODO temp
         updateView(swissFormat);
+
+        // Scrollpane settings
+        overviewScrollPane.setPannable(true);
+        overviewScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        overviewScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
     }
 
     /** Updates the content of this element. Displays the javaFxNode from the given format. */
     private void updateView(Format format){
-        overviewVBox.getChildren().clear();
-        overviewVBox.getChildren().add(format.getJavaFxNode(this));
+/*        overviewVBox.getChildren().clear();
+        overviewVBox.getChildren().add(format.getJavaFxNode(this));*/
+        overviewScrollPane.setContent(format.getJavaFxNode(this));
         //VBox.setVgrow(overviewVBox.getChildren().get(0), Priority.ALWAYS); //TODO this shuold be handled in fxml for this
     }
 
