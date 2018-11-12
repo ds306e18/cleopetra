@@ -31,20 +31,18 @@ public class RoundRobinFormat extends GroupFormat implements MatchListener {
         teams = new ArrayList<>(seededTeams);
         ArrayList<Team> teams = new ArrayList<>(seededTeams);
 
-        if (seededTeams.size() == 0) {
+        if (seededTeams.size() <= 1) {
             matches = new ArrayList<>();
             status = StageStatus.CONCLUDED;
-            //if the number of groups is within the allowed range, create groups
-        } else if (numberOfGroupsAllowed()) {
-            createGroupsWithMatches(teams);
-            matches = extractMatchesFromGroups();
-            status = StageStatus.RUNNING;
-            //else set the number of groups to the maximum allowed (2 teams per group) and create groups
         } else {
-            setNumberOfGroups(maxNumberOfGroups());
+            // If the number of groups is not okay set the number of groups to the maximum allowed (2 teams per group)
+            if (!numberOfGroupsAllowed()) {
+                setNumberOfGroups(maxNumberOfGroups());
+            }
+
+            status = StageStatus.RUNNING;
             createGroupsWithMatches(teams);
             matches = extractMatchesFromGroups();
-            status = StageStatus.RUNNING;
         }
     }
 
@@ -68,7 +66,7 @@ public class RoundRobinFormat extends GroupFormat implements MatchListener {
         int leftoverTeams = teams.size() % numberOfGroups;
 
         for (int i = 0; i < numberOfGroups; i++) {
-            ArrayList<Team> splitArray = splitArrayForEachGroup(teams, i);
+            ArrayList<Team> splitArray = pickTeamsForGroup(teams, i);
 
             //if there must be groups with more teams than others, add an extra team to the first groups, from the highest
             //index of the teams array
@@ -90,13 +88,13 @@ public class RoundRobinFormat extends GroupFormat implements MatchListener {
 
 
     /**
-     * @param startingPoint splits the list of teams into n (numberOfGroups) arrays.
-     * @return
+     * @return a list that contains each n'th (numberOfGroups) team.
      */
-    private ArrayList<Team> splitArrayForEachGroup(ArrayList<Team> teams, int startingPoint) {
+    private ArrayList<Team> pickTeamsForGroup(ArrayList<Team> teams, int startingPoint) {
         ArrayList<Team> splitArray = new ArrayList<>();
 
-        for (int i = 0; i < teams.size() / numberOfGroups; i++)
+        int pickCount = teams.size() / numberOfGroups;
+        for (int i = 0; i < pickCount; i++)
             splitArray.add(teams.get(startingPoint + numberOfGroups * i));
         return splitArray;
     }
@@ -258,9 +256,11 @@ public class RoundRobinFormat extends GroupFormat implements MatchListener {
      * @param numberOfGroups sets the number of groups in the format. Sanity check for atleast 1 group
      */
     public void setNumberOfGroups(int numberOfGroups) {
-        if (status == StageStatus.RUNNING) throw new IllegalStateException("The matches are already generated.");
+        if (status != StageStatus.PENDING) throw new IllegalStateException("The matches are already generated.");
         if (numberOfGroups >= 1) {
             this.numberOfGroups = numberOfGroups;
+        } else {
+            this.numberOfGroups = 1;
         }
     }
 
