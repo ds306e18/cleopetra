@@ -52,18 +52,20 @@ public class RoundRobinFormat extends GroupFormat implements MatchListener {
         return teams.size() / 2;
     }
 
+    //there must be at least 2 teams per group
     private boolean numberOfGroupsAllowed() {
-        if (teams.size() / numberOfGroups >= 2) {
+        if ((teams.size() / numberOfGroups) >= 2) {
             return true;
         } else return false;
     }
 
+
+    /**
+     * this function takes the teams input array, which is the list of all teams, and split this into sub arrays, and
+     * creates groups with matches based on these. These groups are added to the groups list in class.
+     */
     private void createGroupsWithMatches(ArrayList<Team> teams) {
         int leftoverTeams = teams.size() % numberOfGroups;
-
-
-        //sorts the teams so that the lowest seeds comes first
-        teams.sort(new SortBySeed());
 
         for (int i = 0; i < numberOfGroups; i++) {
             ArrayList<Team> splitArray = splitArrayForEachGroup(teams, i);
@@ -75,7 +77,7 @@ public class RoundRobinFormat extends GroupFormat implements MatchListener {
                 leftoverTeams--;
             }
 
-            //if there is an uneven amount of teams, add a dummy team and later remove matches that include the dummy team
+            //if there is an uneven amount of teams in the group, add a dummy team and later remove matches that include the dummy team
             if (splitArray.size() % 2 != 0) {
                 splitArray.add(DUMMY_TEAM);
             }
@@ -87,6 +89,10 @@ public class RoundRobinFormat extends GroupFormat implements MatchListener {
     }
 
 
+    /**
+     * @param startingPoint splits the list of teams into n (numberOfGroups) arrays.
+     * @return
+     */
     private ArrayList<Team> splitArrayForEachGroup(ArrayList<Team> teams, int startingPoint) {
         ArrayList<Team> splitArray = new ArrayList<>();
 
@@ -96,7 +102,8 @@ public class RoundRobinFormat extends GroupFormat implements MatchListener {
     }
 
     /**
-     * Creates a list of matches, with each team changing color between each of their matches.
+     * Creates a list of matches, with each team changing color between each of their matches, algorithm based on
+     * berger tables
      *
      * @param teams arraylist of all teams in the bracket.
      * @return returns a complete arraylist of matches.
@@ -199,6 +206,10 @@ public class RoundRobinFormat extends GroupFormat implements MatchListener {
         return matches;
     }
 
+
+    /**
+     * @return a list of all matches contained in the Round Robin Groups
+     */
     private ArrayList<Match> extractMatchesFromGroups() {
         ArrayList<Match> listOfAllMatches = new ArrayList<>();
         for (RoundRobinGroup group : groups) {
@@ -243,6 +254,9 @@ public class RoundRobinFormat extends GroupFormat implements MatchListener {
         return teamPoints;
     }
 
+    /**
+     * @param numberOfGroups sets the number of groups in the format. Sanity check for atleast 1 group
+     */
     public void setNumberOfGroups(int numberOfGroups) {
         if (status == StageStatus.RUNNING) throw new IllegalStateException("The matches are already generated.");
         if (numberOfGroups >= 1) {
