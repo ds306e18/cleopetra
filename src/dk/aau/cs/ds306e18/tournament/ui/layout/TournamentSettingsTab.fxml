@@ -155,30 +155,7 @@
                   <Insets right="20.0" />
                </VBox.margin>
             </GridPane>
-            <GridPane fx:id="stageOptions">
-               <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-                  <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-               </rowConstraints>
-               <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Rounds: ">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Text>
-                  <TextField fx:id="roundsTextfield" alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="50.0" GridPane.columnIndex="1">
-                     <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </padding>
-                  </TextField>
-               </children>
-               <VBox.margin>
-                  <Insets right="20.0" />
-               </VBox.margin>
-            </GridPane>
+            <VBox fx:id="formatUniqueSettingsHolder" prefHeight="200.0" prefWidth="100.0" />
          </children>
          <GridPane.margin>
             <Insets />

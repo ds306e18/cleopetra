@@ -1,11 +1,9 @@
 package dk.aau.cs.ds306e18.tournament.ui.bracketObjects;
 
 import dk.aau.cs.ds306e18.tournament.model.format.SwissFormat;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 
 public class SwissOptionsNode extends BorderPane {
@@ -15,10 +13,16 @@ public class SwissOptionsNode extends BorderPane {
     public SwissOptionsNode(SwissFormat swiss) {
         this.swiss = swiss;
 
-        TextField roundsTextField = new TextField("Rounds:");
-        setLeft(roundsTextField);
+        // Label
+        Label roundsLabel = new Label("Rounds:");
+        setLeft(roundsLabel);
 
-        Spinner<Integer> roundsSpinner = new Spinner<>(1, Integer.MAX_VALUE, 3);
-
+        Spinner<Integer> roundsSpinner = new Spinner<>(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, Integer.MAX_VALUE, 1));
+        roundsSpinner.setEditable(true);
+        roundsSpinner.getValueFactory().setValue(swiss.getRoundCount());
+        roundsSpinner.getValueFactory().valueProperty().addListener((observable, oldValue, newValue) -> {
+            swiss.setRoundCount(newValue);
+        });
+        setRight(roundsSpinner);
     }
 }
