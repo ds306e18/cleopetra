@@ -34,9 +34,9 @@ public class BracketOverviewTabController {
     @FXML
     private void initialize(){
         selectedMatch = null;
-        initializeSwissBracket(); //TODO temp
-        //initializeSingleEliBracket(); //TODO temp
-        updateView(swissFormat);
+        //initializeSwissBracket(); //TODO temp
+        initializeSingleEliBracket(); //TODO temp
+        updateView(singleEli);
     }
 
     /** Updates the content of this element. Displays the javaFxNode from the given format. */

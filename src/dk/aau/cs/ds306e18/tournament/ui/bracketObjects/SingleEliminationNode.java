@@ -25,8 +25,8 @@ public class SingleEliminationNode extends ScrollPane {
         this.setVbarPolicy(ScrollBarPolicy.NEVER);
     }
 
-    /** Refreshes this node to represent the given swiss stage.
-     * @param singleEliFormat the swiss stage to represent. */ //TODO Should be rename and reworked.
+    /** Refreshes this node to represent the given single elimination stage.
+     * @param singleEliFormat the swiss stage to represent. */
     private GridPane getContentTable(SingleEliminationFormat singleEliFormat, BracketOverviewTabController boc){
 
         GridPane content = new GridPane();
