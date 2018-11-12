@@ -23,24 +23,18 @@ public class SwissNode extends HBox {
     private BracketOverviewTabController boc;
 
     /** Used to display the a swiss stage. */
-    public SwissNode(SwissFormat swissStage, BracketOverviewTabController boc){
+    public SwissNode(SwissFormat format, BracketOverviewTabController boc){
         this.boc = boc;
 
-        /* Sizing */
-
-
-        //this.setContent(refreshMatches(swissStage, boc));
-        this.getChildren().add(refreshMatches(swissStage, boc));
+        refreshMatches(format, boc);
     }
     
     /** Refreshes this node to represent the given swiss stage.
-     * @param swissStage the swiss stage to represent. */ //TODO Should be rename and reworked.
-    private HBox refreshMatches(SwissFormat swissStage, BracketOverviewTabController boc){
-
-        HBox content = new HBox();
+     * @param format the swiss stage to represent. */ //TODO Should be rename and reworked.
+    private void refreshMatches(SwissFormat format, BracketOverviewTabController boc){
 
         //Get number of rounds
-        int numberOfRounds = swissStage.getRounds().size();
+        int numberOfRounds = format.getRounds().size();
 
         //Create that amount of VBoxs matching the number of swiss rounds.
         ArrayList<VBox> roundBoxs = new ArrayList<>();
@@ -50,12 +44,12 @@ public class SwissNode extends HBox {
         }
 
         //If there can be generated another round, then add a vbox that allows this (Button for generating).
-        if(swissStage.getMaxRounds() > numberOfRounds)
-            roundBoxs.add(getNextRoundVBox(swissStage));
+        if(format.getMaxRounds() > numberOfRounds)
+            roundBoxs.add(getNextRoundVBox(format));
 
         //Get all matches from each round and add them to the matching vbox
-        for(int i = 0; i < swissStage.getRounds().size(); i++){
-            for (Match match : swissStage.getRounds().get(i)) {
+        for(int i = 0; i < format.getRounds().size(); i++){
+            for (Match match : format.getRounds().get(i)) {
                 roundBoxs.get(i).getChildren().add(boc.loadVisualMatch(match)); //Create a visual match
             }
         }
@@ -72,14 +66,12 @@ public class SwissNode extends HBox {
 
         //Add all vboxs to this
         for (VBox roundBox : roundBoxs) {
-            content.getChildren().addAll(roundBox);
+            this.getChildren().addAll(roundBox);
             if (arrowBoxes.size() != 0) {
-                content.getChildren().add(arrowBoxes.get(0));
+                this.getChildren().add(arrowBoxes.get(0));
                 arrowBoxes.remove(0);
             }
         }
-
-        return content;
     }
 
     /** @return the vbox that has the "generate next round" button. */
