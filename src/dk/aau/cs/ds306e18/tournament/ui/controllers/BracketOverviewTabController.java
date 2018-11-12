@@ -78,7 +78,7 @@ public class BracketOverviewTabController {
         //VBox.setVgrow(overviewVBox.getChildren().get(0), Priority.ALWAYS); //TODO this shuold be handled in fxml for this
     }
 
-    /** a temperate method that generates a single elimination bracket. */
+    /** a temperate method that generates a single elimination bracket. TODO: Replace with actual bracket */
     private void initializeSingleEliBracket(){
 
         ArrayList<Team> teams = new ArrayList<>();
@@ -128,10 +128,8 @@ public class BracketOverviewTabController {
 
         //Set matches
         ArrayList<Match> matches = new ArrayList<Match>(singleEli.getAllMatches());
-        matches.get(5).setScores(2,4,true);
-        matches.get(4).setScores(3,1,true);
-
-
+        matches.get(5).setScores(2, 4, true);
+        matches.get(4).setScores(3, 1, true);
     }
 
     /** @param match the match to be visualised
@@ -150,15 +148,13 @@ public class BracketOverviewTabController {
             e.printStackTrace();
         }
 
-
         mvc.setBoc(this);
-        mvc.setMyNodeObj(root);
-        mvc.updateMatch(match);
+        mvc.setShowedMatch(match);
 
         return root;
     }
 
-    /** a temperate method that generates a swiss bracket. */
+    /** a temperate method that generates a swiss bracket. TODO: Replace with actual swiss bracket */
     private void initializeSwissBracket(){
         swissFormat = new SwissFormat();
         ArrayList<Team> teams = new ArrayList<Team>();
@@ -196,17 +192,17 @@ public class BracketOverviewTabController {
         overviewVBox.getChildren().add(swissFormat.getJavaFxNode(null));
     }
 
-    /** Gets called when a match in overviewTab is clicked. */
+    /** Sets the selected match. */
     public void setSelectedMatch(MatchVisualController match){
         this.selectedMatch = match;
-        updateTeamViewer(match.getLastSetMatch());
+        updateTeamViewer(match.getShowedMatch());
     }
 
     /** Toggles edit for match scores */
     @FXML void editMatchBtnOnAction(ActionEvent event){
         if (blueTeamScore.editableProperty().getValue()){
-            selectedMatch.getLastSetMatch().setBlueScore(Integer.parseInt(blueTeamScore.getText()));
-            selectedMatch.getLastSetMatch().setOrangeScore(Integer.parseInt(orangeTeamScore.getText()));
+            selectedMatch.getShowedMatch().setBlueScore(Integer.parseInt(blueTeamScore.getText()));
+            selectedMatch.getShowedMatch().setOrangeScore(Integer.parseInt(orangeTeamScore.getText()));
             blueTeamScore.setEditable(false);
             orangeTeamScore.setEditable(false);
             editMatchBtn.setText("Edit match");
@@ -267,6 +263,5 @@ public class BracketOverviewTabController {
     public void generateNewSwissRound(){
         swissFormat.createNewRound();
         updateView(swissFormat);
-        System.out.println("Generate new swiss round!");
     }
 }

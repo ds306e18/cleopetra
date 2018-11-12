@@ -31,7 +31,6 @@ public class Tournament {
 
     public void setName(String name) {
         this.name = name;
-        System.out.println("Named changed:" + name);
     }
 
     public void addTeam(Team team) {

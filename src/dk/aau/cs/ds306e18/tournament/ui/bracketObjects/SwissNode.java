@@ -124,7 +124,6 @@ public class SwissNode extends HBox {
         //double matchVBoxHeight = roundBoxs.get(1).getLayoutBounds().getHeight(); //Get window height //TODO does not work, the height will first calculate on stage.show
         //double matchVBoxHeight = roundBoxs.get(0).getChildren().size() * roundBoxs.get(0).getChildren().get(1).  ; //Get window height
         double matchVBoxHeight = 500;
-        System.out.println(matchVBoxHeight);
         double spacing = matchVBoxHeight/10; //The spacing in the top and bottom of the triangle.
         double triangleWidth = matchVBoxHeight/10;
         roundArrow.getPoints().addAll(Arrays.asList(

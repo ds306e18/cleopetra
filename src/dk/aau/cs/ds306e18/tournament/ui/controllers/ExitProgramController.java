@@ -7,7 +7,6 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -27,7 +26,6 @@ public class ExitProgramController {
     @FXML
     void cancelClose(ActionEvent event) {
         Stage exitStage = (Stage) cancelBtn.getScene().getWindow();
-
         exitStage.close();
     }
 
@@ -77,6 +75,4 @@ public class ExitProgramController {
         x = event.getSceneX();
         y = event.getSceneY();
     }
-
-
 }

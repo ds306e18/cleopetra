@@ -37,7 +37,6 @@ public class Stage {
         if (this.format.getStatus() != StageStatus.PENDING)
             throw new IllegalStateException("Stage has already started.");
         this.format = format;
-        System.out.println("format changed!");
     }
 
     public int getNumberOfTeamsWanted() {
