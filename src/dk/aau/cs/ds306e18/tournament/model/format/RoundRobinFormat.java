@@ -183,7 +183,12 @@ public class RoundRobinFormat extends GroupFormat implements MatchListener {
     }
 
     @Override
-    public Node getJavaFxNode(BracketOverviewTabController bracketOverview) {
+    public Node getBracketFXNode(BracketOverviewTabController bracketOverview) {
+        return null; //TODO
+    }
+
+    @Override
+    public Node getOptionFXNode() {
         return null; //TODO
     }
 

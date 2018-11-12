@@ -23,7 +23,7 @@ public class SwissFormatTest {
         SwissFormat bracket = new SwissFormat();
         bracket.start(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
-        assertEquals(numberOfTeams - 1, bracket.getMaxRounds());
+        assertEquals(numberOfTeams - 1, bracket.getMaxRoundsPossible());
     }
 
     //Odd number of teams
@@ -36,7 +36,7 @@ public class SwissFormatTest {
         SwissFormat bracket = new SwissFormat();
         bracket.start(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
-        assertEquals(numberOfTeams, bracket.getMaxRounds());
+        assertEquals(numberOfTeams, bracket.getMaxRoundsPossible());
     }
 
     //No teams
@@ -49,7 +49,7 @@ public class SwissFormatTest {
         SwissFormat bracket = new SwissFormat();
         bracket.start(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
-        assertEquals(numberOfTeams, bracket.getMaxRounds());
+        assertEquals(numberOfTeams, bracket.getMaxRoundsPossible());
     }
 
     //more than 0 matches // one round
@@ -96,7 +96,7 @@ public class SwissFormatTest {
         assertEquals(numberOfTeams/2, bracket.getAllMatches().size());
 
         //Fill in scores
-        List<Match> matches = bracket.getRawMatches();
+        List<Match> matches = bracket.getLatestRound();
         for(Match match : matches){
             match.setScores(5, 2, true);
         }

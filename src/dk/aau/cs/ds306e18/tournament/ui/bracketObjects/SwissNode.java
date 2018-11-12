@@ -5,9 +5,7 @@ import dk.aau.cs.ds306e18.tournament.model.format.SwissFormat;
 import dk.aau.cs.ds306e18.tournament.ui.controllers.BracketOverviewTabController;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
-import javafx.scene.control.Control;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -50,7 +48,7 @@ public class SwissNode extends HBox {
         }
 
         //If there can be generated another round, then add a vbox that allows this (Button for generating).
-        if(swissStage.getMaxRounds() > numberOfRounds)
+        if(swissStage.getMaxRoundsPossible() > numberOfRounds)
             roundBoxs.add(getNextRoundVBox(swissStage));
 
         //Get all matches from each round and add them to the matching vbox

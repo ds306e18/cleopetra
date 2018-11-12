@@ -5,8 +5,6 @@ import dk.aau.cs.ds306e18.tournament.model.format.Format;
 import dk.aau.cs.ds306e18.tournament.model.format.SingleEliminationFormat;
 import dk.aau.cs.ds306e18.tournament.model.format.SwissFormat;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,10 +15,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -73,8 +68,8 @@ public class BracketOverviewTabController {
     /** Updates the content of this element. Displays the javaFxNode from the given format. */
     private void updateView(Format format){
 /*        overviewVBox.getChildren().clear();
-        overviewVBox.getChildren().add(format.getJavaFxNode(this));*/
-        overviewScrollPane.setContent(format.getJavaFxNode(this));
+        overviewVBox.getChildren().add(format.getBracketFXNode(this));*/
+        overviewScrollPane.setContent(format.getBracketFXNode(this));
         //VBox.setVgrow(overviewVBox.getChildren().get(0), Priority.ALWAYS); //TODO this shuold be handled in fxml for this
     }
 
@@ -189,7 +184,7 @@ public class BracketOverviewTabController {
     @FXML
     void updateBracket(ActionEvent event) {
         overviewVBox.getChildren().clear();
-        overviewVBox.getChildren().add(swissFormat.getJavaFxNode(null));
+        overviewVBox.getChildren().add(swissFormat.getBracketFXNode(null));
     }
 
     /** Sets the selected match. */
