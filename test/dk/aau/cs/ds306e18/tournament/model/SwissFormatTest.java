@@ -101,7 +101,7 @@ public class SwissFormatTest {
             match.setScores(5, 2, true);
         }
 
-        bracket.createNewRound();
+        bracket.startNextRound();
 
         assertEquals((numberOfTeams/2) * 2, bracket.getAllMatches().size());
     }
@@ -223,7 +223,7 @@ public class SwissFormatTest {
         //All has to be played
         setAllMatchesPlayed(bracket);
 
-        assertTrue(bracket.createNewRound());
+        assertTrue(bracket.startNextRound());
     }
 
     //Create round is illegal: max rounds has been created.
@@ -239,7 +239,7 @@ public class SwissFormatTest {
         //All has to be played
         setAllMatchesPlayed(bracket);
 
-        assertFalse(bracket.createNewRound());
+        assertFalse(bracket.startNextRound());
     }
 
     //Create new round is illegal: no matches has been played
@@ -252,7 +252,7 @@ public class SwissFormatTest {
         SwissFormat bracket = new SwissFormat();
         bracket.start(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
-        assertFalse(bracket.createNewRound());
+        assertFalse(bracket.startNextRound());
     }
 
     //No team can play each other more than once
@@ -274,8 +274,8 @@ public class SwissFormatTest {
             for(Match match : matches)
                 match.setHasBeenPlayed(true);
 
-            bracket.createNewRound();
-        }while(!bracket.hasMaxNumberOfRounds());
+            bracket.startNextRound();
+        }while(!bracket.hasUnstartedRounds());
 
         List<Match> allMatches = bracket.getAllMatches();
 
@@ -311,11 +311,11 @@ public class SwissFormatTest {
         //All has to be played
         setAllMatchesPlayed(bracket);
 
-        assertFalse(bracket.createNewRound());
+        assertFalse(bracket.startNextRound());
     }
 
     @Test
-    public void hasMaxNumberOfRounds01(){
+    public void hasUnstartedRounds01(){
 
         int numberOfTeams = 2;
         int teamSize = 2;
@@ -323,11 +323,11 @@ public class SwissFormatTest {
         SwissFormat bracket = new SwissFormat();
         bracket.start(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
-        assertTrue(bracket.hasMaxNumberOfRounds());
+        assertFalse(bracket.hasUnstartedRounds());
     }
 
     @Test
-    public void hasMaxNumberOfRounds02(){
+    public void hasUnstartedRounds02(){
 
         int numberOfTeams = 4;
         int teamSize = 2;
@@ -335,7 +335,63 @@ public class SwissFormatTest {
         SwissFormat bracket = new SwissFormat();
         bracket.start(TestUtilities.generateTeams(numberOfTeams, teamSize));
 
-        assertFalse(bracket.hasMaxNumberOfRounds());
+        assertTrue(bracket.hasUnstartedRounds());
+    }
+
+    @Test
+    public void hasUnstartedRounds03(){
+
+        int numberOfTeams = 12;
+        int teamSize = 2;
+
+        SwissFormat bracket = new SwissFormat();
+        bracket.setRoundCount(1);
+        bracket.start(TestUtilities.generateTeams(numberOfTeams, teamSize));
+
+        assertFalse(bracket.hasUnstartedRounds());
+    }
+
+    @Test
+    public void setRoundCount01() {
+        int numberOfTeams = 12;
+        int teamSize = 2;
+
+        SwissFormat bracket = new SwissFormat();
+        bracket.setRoundCount(3);
+        bracket.start(TestUtilities.generateTeams(numberOfTeams, teamSize));
+
+        assertTrue(bracket.hasUnstartedRounds());
+        assertEquals(3, bracket.getRoundCount());
+    }
+
+    @Test
+    public void setRoundCount02() {
+        int numberOfTeams = 8;
+        int teamSize = 2;
+
+        SwissFormat bracket = new SwissFormat();
+        bracket.setRoundCount(44444);
+        bracket.start(TestUtilities.generateTeams(numberOfTeams, teamSize));
+
+        assertTrue(bracket.hasUnstartedRounds());
+        assertEquals(7, bracket.getRoundCount());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void setRoundCount03() {
+        SwissFormat bracket = new SwissFormat();
+        bracket.setRoundCount(-2);
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void setRoundCount04() {
+        int numberOfTeams = 8;
+        int teamSize = 2;
+
+        SwissFormat bracket = new SwissFormat();
+        bracket.setRoundCount(3);
+        bracket.start(TestUtilities.generateTeams(numberOfTeams, teamSize));
+        bracket.setRoundCount(2);
     }
 
     @Test
@@ -351,7 +407,7 @@ public class SwissFormatTest {
 
         SwissFormat bracket = new SwissFormat();
         bracket.start(TestUtilities.generateTeams(4, 2));
-        bracket.createNewRound();
+        bracket.startNextRound();
 
         assertEquals(StageStatus.RUNNING, bracket.getStatus());
     }
@@ -361,7 +417,7 @@ public class SwissFormatTest {
 
         SwissFormat bracket = new SwissFormat();
         bracket.start(TestUtilities.generateTeams(2,2));
-        bracket.createNewRound();
+        bracket.startNextRound();
 
         //Set all matches to played
         setAllMatchesPlayed(bracket);
@@ -374,7 +430,7 @@ public class SwissFormatTest {
 
         SwissFormat bracket = new SwissFormat();
         bracket.start(TestUtilities.generateTeams(2,2));
-        bracket.createNewRound();
+        bracket.startNextRound();
 
         assertNotEquals(StageStatus.CONCLUDED, bracket.getStatus());
     }
@@ -414,7 +470,7 @@ public class SwissFormatTest {
 
         //Make sure that that team is not a part of the top 3
         for(Team team : top3Teams)
-            assertFalse(team == teamWithHighestSeed);
+            assertNotSame(team, teamWithHighestSeed);
     }
 
     /** sets all upcoming matches in the given format to have been played.*/

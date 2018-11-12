@@ -17,21 +17,25 @@ import java.util.Objects;
 public class SwissFormat extends GroupFormat implements MatchListener {
 
     private ArrayList<ArrayList<Match>> rounds;
-    private int maxRoundsPossible, roundCount;
+    private int maxRoundsPossible;
+    private int roundCount = 4;
     private HashMap<Team, Integer> teamPoints;
 
     @Override
     public void start(List<Team> teams) {
         rounds = new ArrayList<>();
         maxRoundsPossible = getMaxRoundsPossible(teams.size());
+        roundCount = maxRoundsPossible < roundCount ? maxRoundsPossible : roundCount;
         teamPoints = createPointsHashMap(teams);
         this.teams = new ArrayList<>(teams);
         status = StageStatus.RUNNING;
 
-        createNewRound(); //generate the first round
+        startNextRound(); // Generate the first round
     }
 
-    /** Creates the hashMap that stores the "swiss" points for the teams. */
+    /**
+     * Creates the hashMap that stores the "swiss" points for the teams.
+     */
     private HashMap<Team, Integer> createPointsHashMap(List<Team> teams) {
 
         HashMap<Team, Integer> pointsMap = new HashMap<>();
@@ -47,18 +51,31 @@ public class SwissFormat extends GroupFormat implements MatchListener {
      *
      * @return true if a round was generated and false if a new round could not be generated.
      */
-    public boolean createNewRound() {
+    public boolean startNextRound() {
+        if (!canStartNextRound())
+            return false;
 
-        if (isGenerateNewRoundAllowed()) {
-            if (rounds.size() != 0) //Assign points for played matches
-                assignPointsForLatestRound();
+        if (rounds.size() != 0) // Assign points for played matches
+            assignPointsForLatestRound();
+        createNextRound();
 
-            createRound();
+        return true;
+    }
 
-            return true;
-        } else {
+    /**
+     * @return true if it is allowed to generate a new round.
+     */
+    public boolean canStartNextRound() {
+        if (status == StageStatus.PENDING) {
+            return false;
+        } else if (status == StageStatus.CONCLUDED) {
+            return false;
+        } else if (!hasUnstartedRounds()) { //Is it legal to create another round?
+            return false;
+        } else if (getUpcomingMatches().size() != 0) { //Has all matches been played?
             return false;
         }
+        return true;
     }
 
     /**
@@ -85,7 +102,7 @@ public class SwissFormat extends GroupFormat implements MatchListener {
      * @param teamPoints a hashMap containing teams as key and their points as value.
      * @return the given list sorted based on the given points.
      */
-    private ArrayList<Team> orderTeamsListFromPoints(ArrayList<Team> teamList, HashMap<Team, Integer> teamPoints) {
+    private ArrayList<Team> getOrderedTeamsListFromPoints(ArrayList<Team> teamList, HashMap<Team, Integer> teamPoints) {
         ArrayList<Team> tempTeams = new ArrayList<>(teamList);
         ArrayList<Team> orderedTeams = new ArrayList<>();
 
@@ -113,10 +130,10 @@ public class SwissFormat extends GroupFormat implements MatchListener {
      * and with the teams with the closest amount of points.
      * Credit for algorithm: Amanda.
      */
-    private void createRound() {
+    private void createNextRound() {
 
         // Create ordered list of team, based on points.
-        ArrayList<Team> orderedTeamList = orderTeamsListFromPoints(teams, teamPoints);
+        ArrayList<Team> orderedTeamList = getOrderedTeamsListFromPoints(teams, teamPoints);
 
         ArrayList<Match> createdMatches = new ArrayList<>();
 
@@ -189,7 +206,9 @@ public class SwissFormat extends GroupFormat implements MatchListener {
         return maxRoundsPossible;
     }
 
-    /** Returns the max number of rounds that can be played with the given number of teams. */
+    /**
+     * Returns the max number of rounds that can be played with the given number of teams.
+     */
     public static int getMaxRoundsPossible(int numberOfTeams) {
         if (numberOfTeams == 0)
             return 0;
@@ -203,6 +222,8 @@ public class SwissFormat extends GroupFormat implements MatchListener {
     public void setRoundCount(int roundCount) {
         if (status != StageStatus.PENDING)
             throw new IllegalStateException("Swiss stage has already started.");
+        if (roundCount < 1)
+            throw new IllegalArgumentException("There must be at least one round.");
         this.roundCount = roundCount;
     }
 
@@ -210,7 +231,9 @@ public class SwissFormat extends GroupFormat implements MatchListener {
         return rounds.size() < roundCount;
     }
 
-    /** @Return the latest generated round. Or null if there are no rounds generated. */
+    /**
+     * @Return the latest generated round. Or null if there are no rounds generated.
+     */
     public List<Match> getLatestRound() {
         if (rounds.size() == 0) return null;
         return new ArrayList<>(rounds.get(rounds.size() - 1));
@@ -224,7 +247,9 @@ public class SwissFormat extends GroupFormat implements MatchListener {
         }
     }
 
-    /** @return a hashMap containing the teams and their points. */
+    /**
+     * @return a hashMap containing the teams and their points.
+     */
     public HashMap<Team, Integer> getTeamPointsMap() {
         return new HashMap<>(teamPoints);
     }
@@ -239,7 +264,9 @@ public class SwissFormat extends GroupFormat implements MatchListener {
         return null; // TODO
     }
 
-    /** @return an arraylist of the current created rounds. */
+    /**
+     * @return an arraylist of the current created rounds.
+     */
     public ArrayList<ArrayList<Match>> getRounds() {
         ArrayList<ArrayList<Match>> roundsCopy = new ArrayList<>(rounds.size());
         for (ArrayList<Match> r : rounds) {
@@ -248,9 +275,9 @@ public class SwissFormat extends GroupFormat implements MatchListener {
         return roundsCopy;
     }
 
-    /** As format is Round Robin, nothing is necessary to postDeserializationRepair after deserialization, except listeners */
     @Override
     public void repair() {
+        // Repair listeners
         for (Match match : getAllMatches()) match.registerListener(this);
     }
 
@@ -267,19 +294,5 @@ public class SwissFormat extends GroupFormat implements MatchListener {
     @Override
     public int hashCode() {
         return Objects.hash(getRounds(), getMaxRoundsPossible(), teamPoints);
-    }
-
-    /** @return true if it is allowed to generate a new round. */
-    public boolean isGenerateNewRoundAllowed() {
-        if (status == StageStatus.PENDING) {
-            return false;
-        } else if (status == StageStatus.CONCLUDED) {
-            return false;
-        } else if (!hasUnstartedRounds()) { //Is it legal to create another round?
-            return false;
-        } else if (getUpcomingMatches().size() != 0) { //Has all matches been played?
-            return false;
-        }
-        return true;
     }
 }

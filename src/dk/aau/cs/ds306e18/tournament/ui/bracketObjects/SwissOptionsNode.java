@@ -19,11 +19,6 @@ public class SwissOptionsNode extends BorderPane {
         setLeft(roundsTextField);
 
         Spinner<Integer> roundsSpinner = new Spinner<>(1, Integer.MAX_VALUE, 3);
-        roundsSpinner.valueFactoryProperty().addListener(new ChangeListener<SpinnerValueFactory<Integer>>() {
-            @Override
-            public void changed(ObservableValue<? extends SpinnerValueFactory<Integer>> observable, SpinnerValueFactory<Integer> oldValue, SpinnerValueFactory<Integer> newValue) {
-                swiss
-            }
-        });
+
     }
 }

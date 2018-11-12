@@ -98,7 +98,7 @@ public class SwissNode extends HBox {
         });
 
         //Is it not allowed to generate new round? Disable button.
-        if(!swissFormat.isGenerateNewRoundAllowed())
+        if(!swissFormat.canStartNextRound())
             generateButton.setDisable(true);
         else
             generateButton.setDisable(false);

@@ -177,7 +177,7 @@ public class BracketOverviewTabController {
 
         for (Match match : swissFormat.getUpcomingMatches())
             match.setScores(2, 4, true);
-        //swissFormat.createNewRound();
+        //swissFormat.startNextRound();
     }
 
     /** WIP: Meant to update the created matches on button click -> this method. */
@@ -256,7 +256,7 @@ public class BracketOverviewTabController {
     }
 
     public void generateNewSwissRound(){
-        swissFormat.createNewRound();
+        swissFormat.startNextRound();
         updateView(swissFormat);
     }
 }
