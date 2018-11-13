@@ -5,6 +5,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.text.Font;
 
 public class SwissSettingsNode extends BorderPane {
 
@@ -15,6 +16,7 @@ public class SwissSettingsNode extends BorderPane {
 
         // Rounds label
         Label roundsLabel = new Label("Rounds:");
+        roundsLabel.setFont(new Font("System", 16));
         setLeft(roundsLabel);
 
         // Rounds spinner
