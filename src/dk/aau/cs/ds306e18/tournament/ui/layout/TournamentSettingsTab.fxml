@@ -149,13 +149,16 @@
                         <Font size="16.0" />
                      </font>
                   </Text>
-                  <ChoiceBox fx:id="formatChoicebox" prefHeight="25.0" prefWidth="111.0" GridPane.columnIndex="1" />
+                  <ChoiceBox fx:id="formatChoicebox" prefHeight="27.0" prefWidth="130.0" GridPane.columnIndex="1" />
                </children>
                <VBox.margin>
                   <Insets right="20.0" />
                </VBox.margin>
             </GridPane>
-            <VBox fx:id="formatUniqueSettingsHolder" prefHeight="200.0" prefWidth="100.0" />
+            <VBox fx:id="formatUniqueSettingsHolder" prefHeight="200.0" prefWidth="100.0">
+               <VBox.margin>
+                  <Insets right="20.0" />
+               </VBox.margin></VBox>
          </children>
          <GridPane.margin>
             <Insets />
