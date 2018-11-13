@@ -56,7 +56,7 @@
                   <Insets bottom="20.0" top="15.0" />
                </VBox.margin>
             </Text>
-            <GridPane>
+            <GridPane fx:id="selectedMatchInfo">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" />
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="8.0" />
@@ -98,7 +98,7 @@
                   <Pane maxHeight="16.0" minHeight="16.0" prefHeight="16.0" GridPane.rowIndex="3" />
                </children>
             </GridPane>
-            <HBox alignment="CENTER">
+            <HBox fx:id="selectedMatchButtonHolder" alignment="CENTER">
                <children>
                   <Button fx:id="playMatchBtn" mnemonicParsing="false" prefHeight="27.0" prefWidth="110.0" text="Play">
                      <HBox.margin>
@@ -109,7 +109,7 @@
                </children>
             </HBox>
             <Pane VBox.vgrow="ALWAYS" />
-            <HBox alignment="CENTER">
+            <HBox fx:id="stageNavigationButtonsHolder" alignment="CENTER">
                <children>
                   <Button fx:id="nextStageBtn" mnemonicParsing="false" prefHeight="27.0" prefWidth="110.0" text="Next Stage">
                      <HBox.margin>

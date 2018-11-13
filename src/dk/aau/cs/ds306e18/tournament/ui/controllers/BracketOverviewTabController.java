@@ -9,11 +9,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 
 public class BracketOverviewTabController {
+
+    public static BracketOverviewTabController instance;
 
     @FXML
     private VBox startTournamentInstructionsHolder;
@@ -49,14 +52,19 @@ public class BracketOverviewTabController {
     private ListView<Bot> orangeTeamListView;
     @FXML
     private ScrollPane overviewScrollPane;
+    @FXML
+    private GridPane selectedMatchInfo;
+    @FXML
+    private HBox selectedMatchButtonHolder;
+    @FXML
+    private HBox stageNavigationButtonsHolder;
 
     private MatchVisualController selectedMatch;
 
     @FXML
     private void initialize() {
 
-        overviewScrollPane.setManaged(false);
-        overviewScrollPane.setVisible(false);
+        instance = this; // TODO Make references to other controllers work in MainController
 
         orangeTeamScore.textProperty().addListener((observable, oldValue, newValue) -> {
             validateScoreInput(oldValue, newValue, orangeTeamScore);
@@ -66,14 +74,29 @@ public class BracketOverviewTabController {
         });
     }
 
-    /**
-     * Updates the content of this element. Displays the javaFxNode from the given format.
-     */
-    private void updateView(Format format) {
-/*        overviewVBox.getChildren().clear();
-        overviewVBox.getChildren().add(format.getJavaFxNode(this));*/
+    /** Updates all elements depending on the state of the tournament and the shown stage. */
+    public void update() {
+        Tournament tournament = Tournament.get();
+        if (!tournament.hasStarted()) {
+            showStartTournamentInstructions(true);
+            setSelectedMatch(null);
+            stageNavigationButtonsHolder.setDisable(true);
+        } else {
+            showStartTournamentInstructions(false);
+            Format format = tournament.getCurrentStage().getFormat();
+            showFormat(format);
+        }
+    }
+
+    private void showStartTournamentInstructions(boolean show) {
+        startTournamentInstructionsHolder.setManaged(show);
+        startTournamentInstructionsHolder.setVisible(show);
+        overviewScrollPane.setManaged(!show);
+        overviewScrollPane.setVisible(!show);
+    }
+
+    public void showFormat(Format format) {
         overviewScrollPane.setContent(format.getJavaFxNode(this));
-        //VBox.setVgrow(overviewVBox.getChildren().get(0), Priority.ALWAYS); //TODO this shuold be handled in fxml for this
     }
 
     /**
@@ -105,7 +128,43 @@ public class BracketOverviewTabController {
      */
     public void setSelectedMatch(MatchVisualController match) {
         this.selectedMatch = match;
-        updateTeamViewer(match.getShowedMatch());
+        updateTeamViewer(match == null ? null : match.getShowedMatch());
+    }
+
+    /**
+     * Updates the team viewer on match clicked in overviewTab
+     */
+    private void updateTeamViewer(Match match) {
+        boolean disable = (match == null);
+        selectedMatchInfo.setDisable(disable);
+        selectedMatchButtonHolder.setDisable(disable);
+
+        if (match != null && match.getBlueTeam() != null) {
+            // Blue team
+            blueTeamNameLabel.setText(match.getBlueTeam().getTeamName());
+            blueTeamScore.setText(Integer.toString(match.getBlueScore()));
+            blueTeamListView.setItems(FXCollections.observableArrayList(match.getBlueTeam().getBots()));
+            blueTeamListView.refresh();
+        } else {
+            // Orange team is unknown
+            blueTeamNameLabel.setText("Blue team");
+            blueTeamScore.setText("");
+            blueTeamListView.setItems(null);
+            blueTeamListView.refresh();
+        }
+        if (match != null && match.getOrangeTeam() != null) {
+            // Orange team
+            orangeTeamNameLabel.setText(match.getOrangeTeam().getTeamName());
+            orangeTeamScore.setText(Integer.toString(match.getOrangeScore()));
+            orangeTeamListView.setItems(FXCollections.observableArrayList(match.getOrangeTeam().getBots()));
+            orangeTeamListView.refresh();
+        } else {
+            // Orange team is unknown
+            orangeTeamNameLabel.setText("Orange team");
+            orangeTeamScore.setText("");
+            orangeTeamListView.setItems(null);
+            orangeTeamListView.refresh();
+        }
     }
 
     /**
@@ -127,38 +186,6 @@ public class BracketOverviewTabController {
     }
 
     /**
-     * Updates the team viewer on match clicked in overviewTab
-     */
-    private void updateTeamViewer(Match match) {
-        if (match.getBlueTeam() != null) {
-            // Blue team
-            blueTeamNameLabel.setText(match.getBlueTeam().getTeamName());
-            blueTeamScore.setText(Integer.toString(match.getBlueScore()));
-            blueTeamListView.setItems(FXCollections.observableArrayList(match.getBlueTeam().getBots()));
-            blueTeamListView.refresh();
-        } else {
-            // Orange team is unknown
-            blueTeamNameLabel.setText("Blue team");
-            blueTeamScore.setText("");
-            blueTeamListView.setItems(null);
-            blueTeamListView.refresh();
-        }
-        if (match.getOrangeTeam() != null) {
-            // Orange team
-            orangeTeamNameLabel.setText(match.getOrangeTeam().getTeamName());
-            orangeTeamScore.setText(Integer.toString(match.getOrangeScore()));
-            orangeTeamListView.setItems(FXCollections.observableArrayList(match.getOrangeTeam().getBots()));
-            orangeTeamListView.refresh();
-        } else {
-            // Orange team is unknown
-            orangeTeamNameLabel.setText("Orange team");
-            orangeTeamScore.setText("");
-            orangeTeamListView.setItems(null);
-            orangeTeamListView.refresh();
-        }
-    }
-
-    /**
      * Ensures that the score is legal and less than 999. Then applies it to the team score.
      */
     private void validateScoreInput(String oldValue, String newValue, TextField teamScore) {
@@ -175,18 +202,11 @@ public class BracketOverviewTabController {
 
     public void onStartTournamentButtonPressed(ActionEvent actionEvent) {
         if (Tournament.get().canStart()) {
-            startTournamentInstructionsHolder.setManaged(false);
-            startTournamentInstructionsHolder.setVisible(false);
-            overviewScrollPane.setManaged(true);
-            overviewScrollPane.setVisible(true);
             Tournament.get().start();
-            show(Tournament.get().getCurrentStage().getFormat());
+            update();
         } else {
+            // TODO Show error message to user
             System.out.println("Can't start tournament.");
         }
-    }
-
-    public void show(Format format) {
-        overviewScrollPane.setContent(format.getJavaFxNode(this));
     }
 }
