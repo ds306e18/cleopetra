@@ -23,9 +23,19 @@
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
    </rowConstraints>
    <children>
-      <VBox id="globalGrid">
+      <VBox id="globalGrid" alignment="CENTER">
          <children>
-            <ScrollPane fx:id="overviewScrollPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
+            <VBox fx:id="startTournamentInstructionsHolder" alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <Label prefHeight="89.0" prefWidth="246.0" text="Double check you settings before you start.&#10;You must have at least:&#10;- One stage&#10;- Two teams">
+                     <VBox.margin>
+                        <Insets bottom="16.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Button mnemonicParsing="false" onAction="#onStartTournamentButtonPressed" prefHeight="68.0" prefWidth="156.0" text="Start Tournament" />
+               </children>
+            </VBox>
+            <ScrollPane fx:id="overviewScrollPane" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" pannable="true" style="-fx-background-color: transparent;" vbarPolicy="NEVER" VBox.vgrow="ALWAYS">
                <VBox.margin>
                   <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                </VBox.margin>

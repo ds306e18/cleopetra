@@ -2,11 +2,7 @@ package dk.aau.cs.ds306e18.tournament.ui.controllers;
 
 import dk.aau.cs.ds306e18.tournament.model.*;
 import dk.aau.cs.ds306e18.tournament.model.format.Format;
-import dk.aau.cs.ds306e18.tournament.model.format.SingleEliminationFormat;
-import dk.aau.cs.ds306e18.tournament.model.format.SwissFormat;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,16 +13,14 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class BracketOverviewTabController {
 
+    @FXML
+    private VBox startTournamentInstructionsHolder;
     @FXML
     private GridPane bracketOverviewTab;
     @FXML
@@ -65,17 +59,14 @@ public class BracketOverviewTabController {
     @FXML
     private void initialize() {
 
-        // Scrollpane settings
-        overviewScrollPane.setPannable(true);
-        overviewScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        overviewScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        overviewScrollPane.setManaged(false);
+        overviewScrollPane.setVisible(false);
 
-        selectedMatch = null;
         orangeTeamScore.textProperty().addListener((observable, oldValue, newValue) -> {
-            checkIntegerScore(oldValue, newValue, orangeTeamScore);
+            validateScoreInput(oldValue, newValue, orangeTeamScore);
         });
         blueTeamScore.textProperty().addListener((observable, oldValue, newValue) -> {
-            checkIntegerScore(oldValue, newValue, blueTeamScore);
+            validateScoreInput(oldValue, newValue, blueTeamScore);
         });
     }
 
@@ -88,7 +79,6 @@ public class BracketOverviewTabController {
         overviewScrollPane.setContent(format.getJavaFxNode(this));
         //VBox.setVgrow(overviewVBox.getChildren().get(0), Priority.ALWAYS); //TODO this shuold be handled in fxml for this
     }
-
 
     /**
      * @param match the match to be visualised
@@ -112,15 +102,6 @@ public class BracketOverviewTabController {
         mvc.setShowedMatch(match);
 
         return root;
-    }
-
-    /**
-     * WIP: Meant to update the created matches on button click -> this method. TODO
-     */
-    @FXML
-    void updateBracket(ActionEvent event) {
-        overviewVBox.getChildren().clear();
-        overviewVBox.getChildren().add(null);
     }
 
     /**
@@ -182,9 +163,9 @@ public class BracketOverviewTabController {
     }
 
     /**
-     * Emsures that the score is legal and less than 999
+     * Ensures that the score is legal and less than 999. Then applies it to the team score.
      */
-    private void checkIntegerScore(String oldValue, String newValue, TextField teamScore) {
+    private void validateScoreInput(String oldValue, String newValue, TextField teamScore) {
         if (newValue.length() > 1 && newValue.charAt(0) == '0') {
             teamScore.setText(newValue.replaceFirst("0", ""));
         }
@@ -194,5 +175,22 @@ public class BracketOverviewTabController {
                 teamScore.setText(newValue.replaceAll("[^\\d]", ""));
             }
         } else teamScore.setText(oldValue);
+    }
+
+    public void onStartTournamentButtonPressed(ActionEvent actionEvent) {
+        if (Tournament.get().canStart()) {
+            startTournamentInstructionsHolder.setManaged(false);
+            startTournamentInstructionsHolder.setVisible(false);
+            overviewScrollPane.setManaged(true);
+            overviewScrollPane.setVisible(true);
+            Tournament.get().start();
+            show(Tournament.get().getCurrentStage().getFormat());
+        } else {
+            System.out.println("Can't start tournament.");
+        }
+    }
+
+    public void show(Format format) {
+        overviewScrollPane.setContent(format.getJavaFxNode(this));
     }
 }
