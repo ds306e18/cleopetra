@@ -1,16 +1,22 @@
 package dk.aau.cs.ds306e18.tournament.ui.controllers;
 
-import dk.aau.cs.ds306e18.tournament.model.*;
+import dk.aau.cs.ds306e18.tournament.model.Bot;
+import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import dk.aau.cs.ds306e18.tournament.model.format.Format;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 
@@ -63,15 +69,7 @@ public class BracketOverviewTabController {
 
     @FXML
     private void initialize() {
-
         instance = this; // TODO Make references to other controllers work in MainController
-
-        orangeTeamScore.textProperty().addListener((observable, oldValue, newValue) -> {
-            validateScoreInput(oldValue, newValue, orangeTeamScore);
-        });
-        blueTeamScore.textProperty().addListener((observable, oldValue, newValue) -> {
-            validateScoreInput(oldValue, newValue, blueTeamScore);
-        });
     }
 
     /** Updates all elements depending on the state of the tournament and the shown stage. */
@@ -172,32 +170,21 @@ public class BracketOverviewTabController {
      */
     @FXML
     void editMatchBtnOnAction(ActionEvent event) {
-        if (blueTeamScore.editableProperty().getValue()) {
-            selectedMatch.getShowedMatch().setBlueScore(Integer.parseInt(blueTeamScore.getText()));
-            selectedMatch.getShowedMatch().setOrangeScore(Integer.parseInt(orangeTeamScore.getText()));
-            blueTeamScore.setEditable(false);
-            orangeTeamScore.setEditable(false);
-            editMatchBtn.setText("Edit match");
-        } else {
-            blueTeamScore.setEditable(true);
-            orangeTeamScore.setEditable(true);
-            editMatchBtn.setText("Save edit");
-        }
-    }
+        try {
+            Stage editMatchScoreStage = new Stage();
+            editMatchScoreStage.initStyle(StageStyle.TRANSPARENT);
+            editMatchScoreStage.initModality(Modality.APPLICATION_MODAL);
 
-    /**
-     * Ensures that the score is legal and less than 999. Then applies it to the team score.
-     */
-    private void validateScoreInput(String oldValue, String newValue, TextField teamScore) {
-        if (newValue.length() > 1 && newValue.charAt(0) == '0') {
-            teamScore.setText(newValue.replaceFirst("0", ""));
-        }
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../layout/EditMatchScore.fxml"));
+            AnchorPane editMatchStageRoot = loader.load();
+            EditMatchScoreController emsc = loader.getController();
+            emsc.setMatch(selectedMatch.getShowedMatch());
+            editMatchScoreStage.setScene(new Scene(editMatchStageRoot));
+            editMatchScoreStage.show();
 
-        if (newValue.length() <= 3) {
-            if (!newValue.matches("\\d*")) {
-                teamScore.setText(newValue.replaceAll("[^\\d]", ""));
-            }
-        } else teamScore.setText(oldValue);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void onStartTournamentButtonPressed(ActionEvent actionEvent) {
