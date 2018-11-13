@@ -9,6 +9,7 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -47,105 +48,80 @@
       </VBox>
       <VBox id="globalGrid" GridPane.columnIndex="1">
          <children>
-            <VBox fx:id="selectedMatchVBox" prefHeight="100.0" spacing="15.0">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Selected match" wrappingWidth="188.3590259552002">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
                <VBox.margin>
-                  <Insets />
+                  <Insets bottom="20.0" top="15.0" />
                </VBox.margin>
+            </Text>
+            <GridPane>
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="8.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints vgrow="SOMETIMES" />
+                <RowConstraints vgrow="SOMETIMES" />
+                <RowConstraints minHeight="40.0" vgrow="SOMETIMES" />
+                  <RowConstraints />
+              </rowConstraints>
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Selected match" wrappingWidth="188.3590259552002">
+                  <Label fx:id="blueTeamNameLabel" alignment="CENTER" minWidth="130.0" text="Blue team" textFill="#6a82fc">
                      <font>
-                        <Font name="System Bold" size="24.0" />
+                        <Font name="System Bold" size="16.0" />
                      </font>
-                     <VBox.margin>
-                        <Insets top="15.0" />
-                     </VBox.margin>
-                  </Text>
-                  <HBox minHeight="-Infinity">
-                     <children>
-                        <GridPane prefHeight="234.0" prefWidth="369.0">
-                          <columnConstraints>
-                            <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="167.0" minWidth="10.0" prefWidth="167.0" />
-                              <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="118.0" minWidth="0.0" prefWidth="5.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="167.0" minWidth="10.0" prefWidth="167.0" />
-                          </columnConstraints>
-                          <rowConstraints>
-                            <RowConstraints maxHeight="-Infinity" minHeight="0.0" prefHeight="35.0" vgrow="SOMETIMES" />
-                            <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="130.0" vgrow="SOMETIMES" />
-                            <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="39.0" minHeight="10.0" prefHeight="34.0" vgrow="SOMETIMES" />
-                          </rowConstraints>
-                           <children>
-                              <ListView fx:id="blueTeamListView" maxWidth="-Infinity" prefHeight="200.0" prefWidth="100.0" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-                              <ListView fx:id="orangeTeamListView" maxWidth="-Infinity" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-                              <Label fx:id="blueTeamNameLabel" text="Blue team" textFill="#6a82fc">
-                                 <font>
-                                    <Font name="System Bold" size="16.0" />
-                                 </font>
-                              </Label>
-                              <Label fx:id="orangeTeamNameLabel" text="Orange team" textFill="#f5af17" GridPane.columnIndex="2" GridPane.halignment="RIGHT">
-                                 <font>
-                                    <Font name="System Bold" size="16.0" />
-                                 </font>
-                              </Label>
-                              <TextField fx:id="blueTeamScore" alignment="CENTER" editable="false" maxWidth="-Infinity" prefWidth="40.0" GridPane.halignment="CENTER" GridPane.rowIndex="2">
-                                 <font>
-                                    <Font name="System Bold" size="11.0" />
-                                 </font>
-                              </TextField>
-                              <TextField fx:id="orangeTeamScore" alignment="CENTER" editable="false" maxWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2">
-                                 <font>
-                                    <Font name="System Bold" size="11.0" />
-                                 </font>
-                              </TextField>
-                              <Label text=":" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                                 <font>
-                                    <Font name="System Bold" size="20.0" />
-                                 </font>
-                              </Label>
-                              <Button fx:id="playMatchBtn" mnemonicParsing="false" prefHeight="27.0" prefWidth="109.0" text="Play match" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
-                              <Button fx:id="editMatchBtn" mnemonicParsing="false" onAction="#editMatchBtnOnAction" prefHeight="27.0" prefWidth="109.0" text="Edit match" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
-                           </children>
-                        </GridPane>
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER" prefHeight="100.0">
-                     <children>
-                        <GridPane alignment="CENTER" maxHeight="60.0" maxWidth="500.0" minWidth="250.0" prefHeight="500.0" style="-fx-max-width: 250;">
-                           <columnConstraints>
-                              <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                              <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                           </columnConstraints>
-                           <rowConstraints>
-                              <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
-                           </rowConstraints>
-                           <children>
-                              <Button fx:id="nextMatchBtn" mnemonicParsing="false" prefHeight="27.0" prefWidth="109.0" text="Next match">
-                                 <GridPane.margin>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </GridPane.margin>
-                              </Button>
-                              <Button fx:id="nextStageBtn" mnemonicParsing="false" prefHeight="27.0" prefWidth="108.0" text="Next Stage" GridPane.columnIndex="1">
-                                 <GridPane.margin>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </GridPane.margin>
-                              </Button>
-                              <Button fx:id="prevStageBtn" mnemonicParsing="false" prefHeight="27.0" prefWidth="108.0" text="Previous Stage" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                                 <GridPane.margin>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </GridPane.margin>
-                              </Button>
-                              <Button fx:id="prevMatchBtn" mnemonicParsing="false" prefHeight="27.0" prefWidth="108.0" text="Previous match" GridPane.rowIndex="1">
-                                 <GridPane.margin>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </GridPane.margin>
-                              </Button>
-                           </children>
-                        </GridPane>
-                     </children>
-                  </HBox>
+                  </Label>
+                  <Label fx:id="orangeTeamNameLabel" alignment="CENTER" minWidth="130.0" text="Orange team" textFill="#f5af17" GridPane.columnIndex="2">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+                  <ListView fx:id="blueTeamListView" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="117.0" minWidth="130.0" mouseTransparent="true" prefHeight="117.0" prefWidth="130.0" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                  <ListView fx:id="orangeTeamListView" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="117.0" minWidth="130.0" mouseTransparent="true" prefHeight="117.0" prefWidth="130.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                  <TextField fx:id="blueTeamScore" alignment="CENTER" editable="false" maxWidth="-Infinity" minWidth="40.0" prefWidth="40.0" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                     <font>
+                        <Font name="System Bold" size="11.0" />
+                     </font>
+                  </TextField>
+                  <TextField fx:id="orangeTeamScore" alignment="CENTER" editable="false" maxWidth="-Infinity" minWidth="40.0" prefWidth="40.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                     <font>
+                        <Font name="System Bold" size="11.0" />
+                     </font>
+                  </TextField>
+                  <Label text=":" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </Label>
+                  <Pane maxHeight="16.0" minHeight="16.0" prefHeight="16.0" GridPane.rowIndex="3" />
                </children>
-            </VBox>
+            </GridPane>
+            <HBox alignment="CENTER">
+               <children>
+                  <Button fx:id="playMatchBtn" mnemonicParsing="false" prefHeight="27.0" prefWidth="110.0" text="Play">
+                     <HBox.margin>
+                        <Insets right="16.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="editMatchBtn" mnemonicParsing="false" onAction="#editMatchBtnOnAction" prefHeight="27.0" prefWidth="110.0" text="Edit scores" />
+               </children>
+            </HBox>
+            <Pane VBox.vgrow="ALWAYS" />
+            <HBox alignment="CENTER">
+               <children>
+                  <Button fx:id="nextStageBtn" mnemonicParsing="false" prefHeight="27.0" prefWidth="110.0" text="Next Stage">
+                     <HBox.margin>
+                        <Insets right="16.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="prevStageBtn" mnemonicParsing="false" prefHeight="27.0" prefWidth="110.0" text="Previous Stage" />
+               </children>
+               <VBox.margin>
+                  <Insets bottom="16.0" />
+               </VBox.margin>
+            </HBox>
          </children>
          <GridPane.margin>
             <Insets />
