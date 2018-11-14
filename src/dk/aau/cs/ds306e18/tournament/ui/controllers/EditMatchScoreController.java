@@ -30,7 +30,6 @@ public class EditMatchScoreController {
     }
 
     public void setMatch(Match match) {
-        System.out.println("IO");
         if (match == null) {
             closeWindow();
         }

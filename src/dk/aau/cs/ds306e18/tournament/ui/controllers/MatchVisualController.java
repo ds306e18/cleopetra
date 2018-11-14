@@ -2,13 +2,14 @@ package dk.aau.cs.ds306e18.tournament.ui.controllers;
 
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.Team;
+import dk.aau.cs.ds306e18.tournament.model.match.MatchChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-public class MatchVisualController {
+public class MatchVisualController implements MatchChangeListener {
 
     @FXML private VBox matchRoot;
     @FXML private Text textOrangeName;
@@ -48,25 +49,43 @@ public class MatchVisualController {
 
     /** Updates the state/ui of this match. */
     public void setShowedMatch(Match match){
+        if (showedMatch != null) showedMatch.unregisterMatchChangeListener(this);
+        showedMatch = match;
+        showedMatch.registerMatchChangeListener(this);
+        updateFields();
+    }
 
+    /** @return the match that this shows. */
+    public Match getShowedMatch() {
+        return showedMatch;
+    }
+
+    @Override
+    public void onMatchChanged(Match match) {
+        updateFields();
+    }
+
+    public void updateFields() {
         clearFields();
-        this.showedMatch = match;
 
-        //Load teams
-        Team blueTeam = match.getBlueTeam();
-        Team orangeTeam = match.getOrangeTeam();
+        if (showedMatch == null) {
+            return;
+        }
+
+        Team blueTeam = showedMatch.getBlueTeam();
+        Team orangeTeam = showedMatch.getOrangeTeam();
 
         //Set tags and id based on the given match and its status
-        switch (match.getStatus()) {
+        switch (showedMatch.getStatus()) {
             case NOT_PLAYABLE:
                 //CSS
                 matchRoot.setId("matchTBD");
 
                 //DATA
                 if(blueTeam != null)
-                    textBlueName.setText(match.getBlueTeam().getTeamName());
+                    textBlueName.setText(showedMatch.getBlueTeam().getTeamName());
                 if(orangeTeam != null)
-                    textOrangeName.setText(match.getOrangeTeam().getTeamName());
+                    textOrangeName.setText(showedMatch.getOrangeTeam().getTeamName());
 
                 break;
             case READY_TO_BE_PLAYED:
@@ -78,8 +97,10 @@ public class MatchVisualController {
                 hboxOrangeTeam.getStyleClass().add("team2");
 
                 //Data
-                textBlueName.setText(match.getBlueTeam().getTeamName());
-                textOrangeName.setText(match.getOrangeTeam().getTeamName());
+                textBlueName.setText(showedMatch.getBlueTeam().getTeamName());
+                textOrangeName.setText(showedMatch.getOrangeTeam().getTeamName());
+                teamBlueScore.setText(String.valueOf(showedMatch.getBlueScore()));
+                teamOrangeScore.setText(String.valueOf(showedMatch.getOrangeScore()));
                 break;
             case BLUE_WINS:
                 //CSS
@@ -91,10 +112,10 @@ public class MatchVisualController {
                 hboxOrangeTeam.getStyleClass().add("team2");
 
                 //Data
-                textBlueName.setText(match.getBlueTeam().getTeamName());
-                textOrangeName.setText(match.getOrangeTeam().getTeamName());
-                teamBlueScore.setText(String.valueOf(match.getBlueScore()));
-                teamOrangeScore.setText(String.valueOf(match.getOrangeScore()));
+                textBlueName.setText(showedMatch.getBlueTeam().getTeamName());
+                textOrangeName.setText(showedMatch.getOrangeTeam().getTeamName());
+                teamBlueScore.setText(String.valueOf(showedMatch.getBlueScore()));
+                teamOrangeScore.setText(String.valueOf(showedMatch.getOrangeScore()));
                 break;
             case ORANGE_WINS:
                 //CSS
@@ -106,18 +127,13 @@ public class MatchVisualController {
                 hboxOrangeTeam.getStyleClass().add("winner");
 
                 //Data
-                textBlueName.setText(match.getBlueTeam().getTeamName());
-                textOrangeName.setText(match.getOrangeTeam().getTeamName());
-                teamBlueScore.setText(String.valueOf(match.getBlueScore()));
-                teamOrangeScore.setText(String.valueOf(match.getOrangeScore()));
+                textBlueName.setText(showedMatch.getBlueTeam().getTeamName());
+                textOrangeName.setText(showedMatch.getOrangeTeam().getTeamName());
+                teamBlueScore.setText(String.valueOf(showedMatch.getBlueScore()));
+                teamOrangeScore.setText(String.valueOf(showedMatch.getOrangeScore()));
                 break;
             case DRAW:
             default: throw new IllegalStateException();
         }
-    }
-
-    /** @return the match that this shows. */
-    public Match getShowedMatch() {
-        return showedMatch;
     }
 }
