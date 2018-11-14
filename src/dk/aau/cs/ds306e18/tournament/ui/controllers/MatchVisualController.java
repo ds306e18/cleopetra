@@ -88,7 +88,7 @@ public class MatchVisualController implements MatchChangeListener {
                     textOrangeName.setText(showedMatch.getOrangeTeam().getTeamName());
 
                 break;
-            case READY_TO_BE_PLAYED:
+            case READY_TO_BE_PLAYED: case DRAW:
                 //CSS
                 matchRoot.setId("matchUpcoming");
                 hboxBlueTeam.getStyleClass().add("blue");
@@ -126,7 +126,6 @@ public class MatchVisualController implements MatchChangeListener {
                 teamBlueScore.setText(String.valueOf(showedMatch.getBlueScore()));
                 teamOrangeScore.setText(String.valueOf(showedMatch.getOrangeScore()));
                 break;
-            case DRAW:
             default: throw new IllegalStateException();
         }
     }
