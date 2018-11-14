@@ -11,7 +11,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -76,21 +75,21 @@ public class ParticipantSettingsTabController {
     /** Updates tournament values from fields when key released */
     @FXML
     void botDesscriptionTextAreaOnKeyReleased(KeyEvent event) {
-        Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex()).getBots().get(botsListView.getSelectionModel().getSelectedIndex())
+        Tournament.get().getTeams().get(getSelectedTeamIndex()).getBots().get(botsListView.getSelectionModel().getSelectedIndex())
                 .setDescription(botDescription.getText());
     }
 
     /** Updates tournament values from fields when key released. */
     @FXML
     void developerTextFieldOnKeyReleased(KeyEvent event) {
-        Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex()).getBots().get(botsListView.getSelectionModel().getSelectedIndex())
+        Tournament.get().getTeams().get(getSelectedTeamIndex()).getBots().get(botsListView.getSelectionModel().getSelectedIndex())
                 .setDeveloper(developerTextField.getText());
     }
 
     /** Updates tournament values from fields when key released. */
     @FXML
     void botNameTextFieldOnKeyReleased(KeyEvent event) {
-        Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex()).getBots().get(botsListView.getSelectionModel().getSelectedIndex())
+        Tournament.get().getTeams().get(getSelectedTeamIndex()).getBots().get(botsListView.getSelectionModel().getSelectedIndex())
                 .setName(botNameTextField.getText());
         botsListView.refresh();
     }
@@ -98,8 +97,7 @@ public class ParticipantSettingsTabController {
     /** Updates tournament values from fields when key released. */
     @FXML
     void teamNameTextFieldOnKeyReleased(KeyEvent event) {
-        Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
-                .setTeamName(teamNameTextField.getText());
+        Tournament.get().getTeams().get(getSelectedTeamIndex()).setTeamName(teamNameTextField.getText());
         teamsListView.refresh();
     }
 
@@ -108,8 +106,8 @@ public class ParticipantSettingsTabController {
     void addBotBtnOnAction(ActionEvent actionEvent) {
         if (teamsListView.getSelectionModel().getSelectedIndex() != -1) {
             Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
-                    .addBot(new Bot("Bot " + (Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex()).size() + 1), "Dev 1", "Path 1")); //TODO Should the path be something concrete? Mikkel at merge.
-            botsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
+                    .addBot(new Bot("Bot " + (Tournament.get().getTeams().get(getSelectedTeamIndex()).size() + 1), "Dev 1", "Path 1"));
+            botsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams().get(getSelectedTeamIndex())
                     .getBots()));
             botsListView.refresh();
             botsListView.getSelectionModel().selectLast();
@@ -122,10 +120,10 @@ public class ParticipantSettingsTabController {
         int selectedIndex = botsListView.getSelectionModel().getSelectedIndex();
 
         if (selectedIndex != -1 && botsListView.getItems().size() != 1) {
-            Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
+            Tournament.get().getTeams().get(getSelectedTeamIndex())
                     .removeBot(selectedIndex);
             botsListView.setItems(FXCollections.observableArrayList(Tournament.get()
-                    .getTeams().get(teamsListView.getSelectionModel().getSelectedIndex()).getBots()));
+                    .getTeams().get(getSelectedTeamIndex()).getBots()));
             botsListView.refresh();
         }
     }
@@ -135,11 +133,11 @@ public class ParticipantSettingsTabController {
     void addTeamBtnOnAction(ActionEvent actionEvent) {
         Tournament.get().addTeam(new Team("Team " + (Tournament.get().getTeams().size() + 1), new ArrayList<Bot>(), 0, ""));
         teamsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams()));
-        teamsListView.getSelectionModel().selectLast();
         teamsListView.refresh();
-        Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
+        teamsListView.getSelectionModel().selectLast();
+        Tournament.get().getTeams().get(getSelectedTeamIndex())
                 .addBot(new Bot("Bot", "Anonymous", ""));
-        botsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
+        botsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams().get(getSelectedTeamIndex())
                 .getBots()));
         botsListView.refresh();
     }
@@ -162,9 +160,8 @@ public class ParticipantSettingsTabController {
     /** Updates tournament values from spinner when edit or action pressed */
     @FXML
     void seedValueSpinnerOnAction() {
-        int selectedIndex = teamsListView.getSelectionModel().getSelectedIndex();
-        if (selectedIndex != -1) {
-            Tournament.get().getTeams().get(selectedIndex).setInitialSeedValue(seedValueSpinner.valueProperty().getValue());
+        if (getSelectedTeamIndex() != -1) {
+            Tournament.get().getTeams().get(getSelectedTeamIndex()).setInitialSeedValue(seedValueSpinner.valueProperty().getValue());
         }
     }
 
@@ -172,7 +169,7 @@ public class ParticipantSettingsTabController {
     void updateBotFields() {
         if (botsListView.getSelectionModel().getSelectedIndex() != -1) {
             botSettingsVbox.setVisible(true);
-            Bot selectedBot = Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex()).getBots().get(botsListView.getSelectionModel().getSelectedIndex());
+            Bot selectedBot = Tournament.get().getTeams().get(getSelectedTeamIndex()).getBots().get(botsListView.getSelectionModel().getSelectedIndex());
             botNameTextField.setText(selectedBot.getName());
             developerTextField.setText(selectedBot.getDeveloper());
             botDescription.setText(selectedBot.getDescription());
@@ -195,17 +192,22 @@ public class ParticipantSettingsTabController {
 
     /** Updates the textfields with the values from the selected team. */
     void updateTeamFields() {
-        if (teamsListView.getSelectionModel().getSelectedIndex() != -1) {
-            teamSettingsVbox.setVisible(true);
-            Team selectedTeam = Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex());
+
+        teamSettingsVbox.setVisible(teamsListView.getItems().size() != 0);
+
+        if (getSelectedTeamIndex() != -1) {
+            Team selectedTeam = Tournament.get().getTeams().get(getSelectedTeamIndex());
             seedValueSpinner.getValueFactory().setValue(selectedTeam.getInitialSeedValue());
 
             botsListView.getSelectionModel().clearSelection();
             teamNameTextField.setText(selectedTeam.getTeamName());
             botsListView.setItems(FXCollections.observableArrayList(selectedTeam.getBots()));
             botsListView.refresh();
+
             //if no bot is selected clear the fields and hide the teamsettings box.
-        } else clearTeamFields();
+        } else
+            clearTeamFields();
+
         //Check for empty names
         checkForEmptyTeamName();
     }
@@ -264,6 +266,14 @@ public class ParticipantSettingsTabController {
 
     /** Updates the seed value for the selected team */
     private void updateSeedValue() {
-        Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex()).setInitialSeedValue(seedValueSpinner.getValue());
+        Tournament.get().getTeams().get(getSelectedTeamIndex()).setInitialSeedValue(seedValueSpinner.getValue());
+    }
+
+    private Team getSelectedTeam(){
+        return teamsListView.getSelectionModel().getSelectedItem();
+    }
+
+    private int getSelectedTeamIndex() {
+        return teamsListView.getSelectionModel().getSelectedIndex();
     }
 }
