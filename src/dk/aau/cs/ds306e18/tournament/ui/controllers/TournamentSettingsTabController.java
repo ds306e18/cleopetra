@@ -61,6 +61,9 @@ public class TournamentSettingsTabController {
         /* Retrieve and set tournament name into textfield. */
         nameTextField.setText(Tournament.get().getName());
 
+        /* By default the remove stage button is disabled. */
+        removeStageBtn.setDisable(true);
+
         /* Retrieve and add choices to choicebox for the Tiebreaker box.
          * Also upon change sets the new tiebreaker rule to the tournament model. */
         tieBreakerChoiceBox.setItems(FXCollections.observableArrayList(new TieBreakerBySeed()));
@@ -81,6 +84,12 @@ public class TournamentSettingsTabController {
 
             /* Set content inside stage settings to show chosen stage */
             showStageValues();
+
+            /* If the stageListView has no items. Then the remove button is disabled. */
+            if(stagesListView.getItems().size() == 0)
+                removeStageBtn.setDisable(true);
+            else
+                removeStageBtn.setDisable(false);
         });
 
         /* Retrieve possible formats and add to a choicebox */
