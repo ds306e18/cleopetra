@@ -50,6 +50,9 @@ public class ParticipantSettingsTabController {
         teamSettingsVbox.setVisible(false);
         configPathTextField.setEditable(false);
 
+        //By default the remove stage button is disabled
+        removeTeamBtn.setDisable(true);
+
         //Adds selectionslisteners to bot and team listviews
         botsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             updateBotFields();
@@ -204,9 +207,15 @@ public class ParticipantSettingsTabController {
             botsListView.setItems(FXCollections.observableArrayList(selectedTeam.getBots()));
             botsListView.refresh();
 
-            //if no bot is selected clear the fields and hide the teamsettings box.
-        } else
+            //If the teamListView has items, then the enable remove button
+            if(teamsListView.getItems().size() != 0)
+                removeTeamBtn.setDisable(false);
+
+            //if no bot is selected clear the fields and hide the teamsettings box and disable remove team button
+        } else {
+            removeTeamBtn.setDisable(true);
             clearTeamFields();
+        }
 
         //Check for empty names
         checkForEmptyTeamName();
