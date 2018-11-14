@@ -135,10 +135,9 @@ public class ParticipantSettingsTabController {
         teamsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams()));
         teamsListView.refresh();
         teamsListView.getSelectionModel().selectLast();
-        Tournament.get().getTeams().get(getSelectedTeamIndex())
-                .addBot(new Bot("Bot", "Anonymous", ""));
-        botsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams().get(getSelectedTeamIndex())
-                .getBots()));
+
+        Tournament.get().getTeams().get(getSelectedTeamIndex()).addBot(new Bot("Bot", "Anonymous", ""));
+        botsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams().get(getSelectedTeamIndex()).getBots()));
         botsListView.refresh();
     }
 
@@ -148,9 +147,9 @@ public class ParticipantSettingsTabController {
         botsListView.getSelectionModel().clearSelection();
         botsListView.setItems(null);
         botsListView.refresh();
-        int selectedIndex = teamsListView.getSelectionModel().getSelectedIndex();
-        if (selectedIndex != -1) {
-            Tournament.get().removeTeam(selectedIndex);
+
+        if (getSelectedTeamIndex() != -1) {
+            Tournament.get().removeTeam(getSelectedTeamIndex());
 
             teamsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams()));
             teamsListView.refresh();
