@@ -2,125 +2,118 @@ package dk.aau.cs.ds306e18.tournament.ui.bracketObjects;
 
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.format.SwissFormat;
+import dk.aau.cs.ds306e18.tournament.model.match.MatchPlayedListener;
 import dk.aau.cs.ds306e18.tournament.ui.controllers.BracketOverviewTabController;
-import javafx.event.EventHandler;
+import dk.aau.cs.ds306e18.tournament.ui.controllers.MatchVisualController;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Polygon;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /** Used to display the a swiss stage. */
-public class SwissNode extends HBox {
+public class SwissNode extends HBox implements MatchPlayedListener {
+
+    private final Insets MARGINS = new Insets(0, 0, 8, 0);
+    private final int COLUMN_WIDTH = 175;
 
     private final SwissFormat swiss;
     private final BracketOverviewTabController boc;
 
+    private Button generateRoundButton;
+    private ArrayList<MatchVisualController> mvcs = new ArrayList<>();
+
     /** Used to display the a swiss stage. */
-    public SwissNode(SwissFormat swiss, BracketOverviewTabController boc){
+    public SwissNode(SwissFormat swiss, BracketOverviewTabController boc) {
         this.boc = boc;
         this.swiss = swiss;
-        refreshMatches(swiss, boc);
+        swiss.registerMatchPlayedListener(this);
+        update();
     }
-    
-    /** Refreshes this node to represent the given swiss stage.
-     * @param format the swiss stage to represent. */ //TODO Should be rename and reworked.
-    private void refreshMatches(SwissFormat format, BracketOverviewTabController boc){
 
-        //Get number of rounds
-        int numberOfRounds = format.getRounds().size();
+    /** Updates all UI elements for the swiss stage. */
+    private void update() {
+        clean();
 
-        //Create that amount of VBoxs matching the number of swiss rounds.
-        ArrayList<VBox> roundBoxs = new ArrayList<>();
-        for(int i = 0; i < numberOfRounds; i++){
-            roundBoxs.add(new VBox());
-            roundBoxs.get(i).getChildren().add(new Label("Round " + (i+1))); //Add labels to the VBox'
-        }
+        ArrayList<ArrayList<Match>> rounds = swiss.getRounds();
+        int numberOfRounds = rounds.size();
 
-        //If there can be generated another round, then add a vbox that allows this (Button for generating).
-        if(format.getMaxRoundsPossible() > numberOfRounds)
-            roundBoxs.add(getNextRoundVBox(format));
+        // Create that amount of columns matching the number of generated rounds.
+        for (int i = 0; i < numberOfRounds; i++) {
+            VBox column = new VBox();
+            column.setMinWidth(COLUMN_WIDTH);
+            column.setPrefWidth(COLUMN_WIDTH);
 
-        //Get all matches from each round and add them to the matching vbox
-        for(int i = 0; i < format.getRounds().size(); i++){
-            for (Match match : format.getRounds().get(i)) {
-                roundBoxs.get(i).getChildren().add(boc.loadVisualMatch(match)); //Create a visual match
+            // Round Label
+            Label roundLabel = new Label("Round " + (i + 1));
+            VBox.setMargin(roundLabel, MARGINS);
+            column.getChildren().add(roundLabel);
+
+            // Get all matches from round and add them to the column
+            ArrayList<Match> round = rounds.get(i);
+            for (Match match : round) {
+
+                MatchVisualController vmatch = boc.loadVisualMatch(match);
+                VBox.setMargin(vmatch.getRoot(), MARGINS);
+                column.getChildren().add(vmatch.getRoot());
+                mvcs.add(vmatch);
             }
+
+            getChildren().add(column);
         }
 
-        ArrayList<VBox> arrowBoxes = new ArrayList<>();
-
-        //Check if there is atleast two boxes present in roundBoxes
-        if(roundBoxs.size() >= 2){
-            //Create arrows
-            for(int i = 0; i < roundBoxs.size() -1; i++){
-                arrowBoxes.add(getTriangleBox());
-            }
+        // If there can be generated another round, then add a column more that contains a button for generating.
+        if (swiss.hasUnstartedRounds()) {
+            getChildren().add(getNextRoundVBox(numberOfRounds + 1));
         }
+    }
 
-        //Add all vboxs to this
-        for (VBox roundBox : roundBoxs) {
-            this.getChildren().addAll(roundBox);
-            if (arrowBoxes.size() != 0) {
-                this.getChildren().add(arrowBoxes.get(0));
-                arrowBoxes.remove(0);
-            }
+    /** Completely remove all UI elements. */
+    private void clean() {
+        for (MatchVisualController mvc : mvcs) {
+            mvc.decoupleFromModel();
         }
+        getChildren().clear();
+        mvcs.clear();
+        generateRoundButton = null;
     }
 
     /** @return the vbox that has the "generate next round" button. */
-    private VBox getNextRoundVBox(SwissFormat swissFormat){
+    private VBox getNextRoundVBox(int roundNumber) {
 
-        int numberOfRounds = swissFormat.getRounds().size();
+        // Column vbox
+        VBox column = new VBox();
+        column.setMinWidth(COLUMN_WIDTH);
+        column.setPrefWidth(COLUMN_WIDTH);
 
-        VBox lastVBox = new VBox();
-        lastVBox.setMinWidth(175); //TODO magic number, but it is the same as the matches width.
-        lastVBox.getChildren().add(new Label("Round " + (numberOfRounds+1)));
-        Button generateButton = new Button();
-        generateButton.setText("Generate Round");
-        generateButton.setOnMouseClicked(e -> swissFormat.startNextRound());
+        // Round Label
+        Label roundLabel = new Label("Round " + roundNumber);
+        VBox.setMargin(roundLabel, MARGINS);
+        column.getChildren().add(roundLabel);
 
-        //Is it not allowed to generate new round? Disable button.
-        if(!swissFormat.canStartNextRound())
-            generateButton.setDisable(true);
-        else
-            generateButton.setDisable(false);
+        // Generate next round button
+        generateRoundButton = new Button();
+        generateRoundButton.setText("Generate Round");
+        generateRoundButton.setOnMouseClicked(e -> {
+            swiss.startNextRound();
+            update();
+        });
+        column.getChildren().add(generateRoundButton);
+        updateGenerateRoundButton();
 
-        lastVBox.getChildren().add(generateButton);
-
-        return lastVBox;
+        return column;
     }
 
-    /** @return a vbox containing the triangle that is shown between matches. */
-    private VBox getTriangleBox(){
+    /** Enables or disables generate round button depending on the state. */
+    private void updateGenerateRoundButton() {
+        if (generateRoundButton != null)
+            generateRoundButton.setDisable(!swiss.canStartNextRound());
+    }
 
-        VBox arrowBox = new VBox();
-        VBox topSpacer = new VBox();
-        VBox content = new VBox();
-        VBox bottomSpacer = new VBox();
-        topSpacer.setVgrow(topSpacer, Priority.ALWAYS); //TODO maybe first parameter wrong.
-        arrowBox.setVgrow(bottomSpacer, Priority.ALWAYS); //TODO maybe first parameter wrong.
-
-        Polygon roundArrow = new Polygon();
-        //double matchVBoxHeight = roundBoxs.get(1).getLayoutBounds().getHeight(); //Get window height //TODO does not work, the height will first calculate on stage.show
-        //double matchVBoxHeight = roundBoxs.get(0).getChildren().size() * roundBoxs.get(0).getChildren().get(1).  ; //Get window height
-        double matchVBoxHeight = 500;
-        double spacing = matchVBoxHeight/10; //The spacing in the top and bottom of the triangle.
-        double triangleWidth = matchVBoxHeight/10;
-        roundArrow.getPoints().addAll(Arrays.asList(
-                0d, 0d + spacing,
-                triangleWidth, matchVBoxHeight/2,
-                0d, matchVBoxHeight - spacing));
-
-        content.getChildren().add(roundArrow);
-        arrowBox.getChildren().addAll(topSpacer, content, bottomSpacer);
-        //this.getChildren().add(arrowBox);
-
-        return arrowBox;
+    @Override
+    public void onMatchPlayed(Match match) {
+        updateGenerateRoundButton();
     }
 }

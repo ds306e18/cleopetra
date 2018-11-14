@@ -32,7 +32,7 @@ public class SingleEliminationNode extends VBox {
 
         //Get all matches from each round and add them to matching vbox
         for (Match match : allMatches) {
-            this.getChildren().add(boc.loadVisualMatch(match));
+            this.getChildren().add(boc.loadVisualMatch(match).getRoot());
         }
     }
 }
