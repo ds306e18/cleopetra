@@ -50,8 +50,9 @@ public class ParticipantSettingsTabController {
         teamSettingsVbox.setVisible(false);
         configPathTextField.setEditable(false);
 
-        //By default the remove stage button is disabled
+        //By default the remove stage and bot button is disabled
         removeTeamBtn.setDisable(true);
+        removeBotBtn.setDisable(true);
 
         //Adds selectionslisteners to bot and team listviews
         botsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -128,6 +129,7 @@ public class ParticipantSettingsTabController {
             botsListView.setItems(FXCollections.observableArrayList(Tournament.get()
                     .getTeams().get(getSelectedTeamIndex()).getBots()));
             botsListView.refresh();
+            botsListView.getSelectionModel().selectLast();
         }
     }
 
@@ -146,7 +148,6 @@ public class ParticipantSettingsTabController {
 
         botsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams().get(getSelectedTeamIndex()).getBots()));
         botsListView.refresh();
-
     }
 
     /** Updates the lists on button press action */
@@ -183,8 +184,15 @@ public class ParticipantSettingsTabController {
             botDescription.setText(selectedBot.getDescription());
             configPathTextField.setText(selectedBot.getConfigPath());
 
+            //If the botListView has more then 1 items, then enable remove button
+            if(botsListView.getItems().size() > 1)
+                removeBotBtn.setDisable(false);
+
             //if no bot is selected clear the fields and hide the botsettgins box.
-        } else clearBotFields();
+        } else {
+            removeBotBtn.setDisable(true);
+            clearBotFields();
+        }
         //Check for empty names
         Tournament.get().getTeams().forEach(this::checkForEmptyBotName);
     }
