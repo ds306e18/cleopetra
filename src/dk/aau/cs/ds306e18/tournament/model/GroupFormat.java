@@ -11,8 +11,8 @@ import java.util.stream.Collectors;
 
 public abstract class GroupFormat implements Format {
 
-    public ArrayList<Team> teams;
-    public StageStatus status = StageStatus.PENDING;
+    protected ArrayList<Team> teams;
+    protected StageStatus status = StageStatus.PENDING;
 
     /** @return a hashMap containing the teams and their points. */
     public abstract HashMap<Team, Integer> getTeamPointsMap();
