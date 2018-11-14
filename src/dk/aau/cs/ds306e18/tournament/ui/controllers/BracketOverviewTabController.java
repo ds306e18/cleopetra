@@ -17,6 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 
@@ -94,7 +95,7 @@ public class BracketOverviewTabController {
     }
 
     public void showFormat(Format format) {
-        overviewScrollPane.setContent(format.getJavaFxNode(this));
+        overviewScrollPane.setContent(format.getBracketFXNode(this));
     }
 
     /**

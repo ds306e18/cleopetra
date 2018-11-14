@@ -5,6 +5,7 @@ import dk.aau.cs.ds306e18.tournament.model.StageStatus;
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchPlayedListener;
+import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.RoundRobinSettingsNode;
 import dk.aau.cs.ds306e18.tournament.ui.controllers.BracketOverviewTabController;
 import javafx.scene.Node;
 
@@ -275,13 +276,15 @@ public class RoundRobinFormat extends GroupFormat implements MatchPlayedListener
     }
 
     @Override
-    public Node getJavaFxNode(BracketOverviewTabController bracketOverview) {
+    public Node getBracketFXNode(BracketOverviewTabController bracketOverview) {
         return null; //TODO
     }
 
-    /**
-     * As format is Round Robin, nothing is necessary to postDeserializationRepair after deserialization, except listeners
-     */
+    @Override
+    public Node getSettingsFXNode() {
+        return new RoundRobinSettingsNode(this);
+    }
+
     @Override
     public void repair() {
         for (Match match : this.getAllMatches()) match.registerMatchPlayedListener(this);

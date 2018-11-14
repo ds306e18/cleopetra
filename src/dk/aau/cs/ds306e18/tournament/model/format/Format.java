@@ -49,7 +49,12 @@ public interface Format {
     /**
      * Returns a Node of the stage. This node contains a reference to it self and other functionality to display the stage.
      */
-    Node getJavaFxNode(BracketOverviewTabController bracketOverview);
+    Node getBracketFXNode(BracketOverviewTabController bracketOverview);
+
+    /**
+     * Returns a Node with the settings specific to this format. Can return null.
+     */
+    Node getSettingsFXNode();
 
     /**
      * Repairs structure of matches after deserialization.

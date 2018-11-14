@@ -5,9 +5,7 @@ import dk.aau.cs.ds306e18.tournament.model.format.SwissFormat;
 import dk.aau.cs.ds306e18.tournament.ui.controllers.BracketOverviewTabController;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
-import javafx.scene.control.Control;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -45,7 +43,7 @@ public class SwissNode extends HBox {
         }
 
         //If there can be generated another round, then add a vbox that allows this (Button for generating).
-        if(format.getMaxRounds() > numberOfRounds)
+        if(format.getMaxRoundsPossible() > numberOfRounds)
             roundBoxs.add(getNextRoundVBox(format));
 
         //Get all matches from each round and add them to the matching vbox
@@ -85,10 +83,10 @@ public class SwissNode extends HBox {
         lastVBox.getChildren().add(new Label("Round " + (numberOfRounds+1)));
         Button generateButton = new Button();
         generateButton.setText("Generate Round");
-        generateButton.setOnMouseClicked(e -> swissFormat.createNewRound());
+        generateButton.setOnMouseClicked(e -> swissFormat.startNextRound());
 
         //Is it not allowed to generate new round? Disable button.
-        if(!swissFormat.isGenerateNewRoundAllowed())
+        if(!swissFormat.canStartNextRound())
             generateButton.setDisable(true);
         else
             generateButton.setDisable(false);
