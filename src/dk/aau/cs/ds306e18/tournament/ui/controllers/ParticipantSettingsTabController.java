@@ -153,6 +153,7 @@ public class ParticipantSettingsTabController {
 
             teamsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams()));
             teamsListView.refresh();
+            teamsListView.getSelectionModel().selectLast();
         }
     }
 
