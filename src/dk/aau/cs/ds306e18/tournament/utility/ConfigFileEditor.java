@@ -38,6 +38,24 @@ public class ConfigFileEditor {
         }
     }
 
+    public void editLine(String parameter, String value) {
+        for (String line : this.config) {
+            if (line.startsWith(parameter)) {
+                line = removeValue(line) + value;
+                return;
+            }
+        }
+    }
+
+    public void editLine(String parameter, int num, String value) {
+        for (String line : this.config) {
+            if (line.startsWith(parameter + num)) {
+                line = removeValue(line) + value;
+                return;
+            }
+        }
+    }
+
     private static String removeValue(String line) {
         return line.replaceAll(removeValuePattern, "= ");
     }
