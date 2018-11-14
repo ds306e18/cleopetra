@@ -8,6 +8,7 @@ import dk.aau.cs.ds306e18.tournament.ui.StageFormatOption;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ListView;
@@ -47,14 +48,11 @@ public class TournamentSettingsTabController {
     @FXML
     private ChoiceBox<StageFormatOption> formatChoicebox;
     @FXML
-    private TextField roundsTextfield;
-    @FXML
-    private GridPane stageOptions;
-    @FXML
     private Button swapUp;
     @FXML
     private Button swapDown;
-
+    @FXML
+    private VBox formatUniqueSettingsHolder;
 
     @FXML
     private void initialize() {
@@ -102,9 +100,14 @@ public class TournamentSettingsTabController {
                 selectedStage.setFormat(newValue.getNewInstance());
             }
 
-            /* Rounds are only visible if a specific format is chosen. TODO: Load options from format instead of type checking. */
-            boolean showRounds = selectedStage != null && StageFormatOption.getOption(selectedStage.getFormat()) != StageFormatOption.SWISS_SYSTEM;
-            stageOptions.setVisible(showRounds);
+            // Show settings unique to format
+            formatUniqueSettingsHolder.getChildren().clear();
+            if (selectedStage != null) {
+                Node formatSettings = selectedStage.getFormat().getSettingsFXNode();
+                if (formatSettings != null) {
+                    formatUniqueSettingsHolder.getChildren().add(selectedStage.getFormat().getSettingsFXNode());
+                }
+            }
         });
     }
 

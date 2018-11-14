@@ -246,9 +246,8 @@ public class ParticipantSettingsTabController {
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(1, Integer.MAX_VALUE));
 
         //Adds value listener to spinner
-        seedValueSpinner.valueFactoryProperty().addListener(((observable, oldValue, newValue) -> {
+        seedValueSpinner.getValueFactory().valueProperty().addListener(((observable, oldValue, newValue) -> {
             updateSeedValue();
-
         }));
     }
 
