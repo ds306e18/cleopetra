@@ -92,9 +92,7 @@ public class MatchVisualController implements MatchChangeListener {
                 //CSS
                 matchRoot.setId("matchUpcoming");
                 hboxBlueTeam.getStyleClass().add("blue");
-                hboxBlueTeam.getStyleClass().add("team1");
                 hboxOrangeTeam.getStyleClass().add("orange");
-                hboxOrangeTeam.getStyleClass().add("team2");
 
                 //Data
                 textBlueName.setText(showedMatch.getBlueTeam().getTeamName());
@@ -106,10 +104,8 @@ public class MatchVisualController implements MatchChangeListener {
                 //CSS
                 matchRoot.setId("matchPlayed");
                 hboxBlueTeam.getStyleClass().add("blue");
-                hboxBlueTeam.getStyleClass().add("team1");
                 hboxBlueTeam.getStyleClass().add("winner");
                 hboxOrangeTeam.getStyleClass().add("orange");
-                hboxOrangeTeam.getStyleClass().add("team2");
 
                 //Data
                 textBlueName.setText(showedMatch.getBlueTeam().getTeamName());
@@ -121,9 +117,7 @@ public class MatchVisualController implements MatchChangeListener {
                 //CSS
                 matchRoot.setId("matchPlayed");
                 hboxBlueTeam.getStyleClass().add("blue");
-                hboxBlueTeam.getStyleClass().add("team1");
                 hboxOrangeTeam.getStyleClass().add("orange");
-                hboxOrangeTeam.getStyleClass().add("team2");
                 hboxOrangeTeam.getStyleClass().add("winner");
 
                 //Data
