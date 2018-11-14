@@ -4,7 +4,7 @@ import dk.aau.cs.ds306e18.tournament.model.GroupFormat;
 import dk.aau.cs.ds306e18.tournament.model.StageStatus;
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
-import dk.aau.cs.ds306e18.tournament.model.match.MatchListener;
+import dk.aau.cs.ds306e18.tournament.model.match.MatchPlayedListener;
 import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.SwissSettingsNode;
 import dk.aau.cs.ds306e18.tournament.ui.controllers.BracketOverviewTabController;
 import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.SwissNode;
@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
-public class SwissFormat extends GroupFormat implements MatchListener {
+public class SwissFormat extends GroupFormat implements MatchPlayedListener {
 
     private ArrayList<ArrayList<Match>> rounds;
     private int maxRoundsPossible;
@@ -152,7 +152,7 @@ public class SwissFormat extends GroupFormat implements MatchListener {
                 //Has the two selected teams played each other before?
                 if (!hasTheseTeamsPlayedBefore(team1, team2)) {
                     Match match = new Match(team1, team2);
-                    match.registerListener(this);
+                    match.registerMatchPlayedListener(this);
                     createdMatches.add(match);
                     break; //Two valid teams has been found, and match has been created. BREAK.
                 }
@@ -278,8 +278,7 @@ public class SwissFormat extends GroupFormat implements MatchListener {
 
     @Override
     public void repair() {
-        // Repair listeners
-        for (Match match : getAllMatches()) match.registerListener(this);
+        for (Match match : getAllMatches()) match.registerMatchPlayedListener(this);
     }
 
     @Override

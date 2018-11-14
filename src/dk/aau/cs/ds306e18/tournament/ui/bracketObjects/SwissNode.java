@@ -18,13 +18,14 @@ import java.util.Arrays;
 /** Used to display the a swiss stage. */
 public class SwissNode extends HBox {
 
-    private BracketOverviewTabController boc;
+    private final SwissFormat swiss;
+    private final BracketOverviewTabController boc;
 
     /** Used to display the a swiss stage. */
-    public SwissNode(SwissFormat format, BracketOverviewTabController boc){
+    public SwissNode(SwissFormat swiss, BracketOverviewTabController boc){
         this.boc = boc;
-
-        refreshMatches(format, boc);
+        this.swiss = swiss;
+        refreshMatches(swiss, boc);
     }
     
     /** Refreshes this node to represent the given swiss stage.
@@ -82,12 +83,7 @@ public class SwissNode extends HBox {
         lastVBox.getChildren().add(new Label("Round " + (numberOfRounds+1)));
         Button generateButton = new Button();
         generateButton.setText("Generate Round");
-        generateButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                boc.generateNewSwissRound();
-            }
-        });
+        generateButton.setOnMouseClicked(e -> swissFormat.startNextRound());
 
         //Is it not allowed to generate new round? Disable button.
         if(!swissFormat.canStartNextRound())
