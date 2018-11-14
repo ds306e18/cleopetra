@@ -134,14 +134,19 @@ public class ParticipantSettingsTabController {
     /** Updates the lists on button press action */
     @FXML
     void addTeamBtnOnAction(ActionEvent actionEvent) {
-        Tournament.get().addTeam(new Team("Team " + (Tournament.get().getTeams().size() + 1), new ArrayList<Bot>(), 0, ""));
+
+        //Create a team with a bot and add the team to the tournament
+        Team team = new Team("Team " + (Tournament.get().getTeams().size() + 1), new ArrayList<Bot>(), 0, "");
+        team.addBot(new Bot("Bot", "Anonymous", ""));
+        Tournament.get().addTeam(team);
+
         teamsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams()));
         teamsListView.refresh();
         teamsListView.getSelectionModel().selectLast();
 
-        Tournament.get().getTeams().get(getSelectedTeamIndex()).addBot(new Bot("Bot", "Anonymous", ""));
         botsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams().get(getSelectedTeamIndex()).getBots()));
         botsListView.refresh();
+
     }
 
     /** Updates the lists on button press action */
