@@ -132,11 +132,15 @@
 
 #matchPlayed .winner .scoreNo {
     -fx-fill: green;
+    -fx-font-weight: bold;
+}
+
+#matchPlayed .winner .teamName {
+	-fx-font-weight: bold;
 }
 
 #matchTBD .teamName {
     -fx-font-style: italic;
-    -fx-text-alignment: center;
 }
 
 .match:hover{

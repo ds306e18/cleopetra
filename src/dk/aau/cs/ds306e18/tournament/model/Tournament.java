@@ -129,7 +129,7 @@ public class Tournament {
     }
 
     public boolean canStart() {
-        return teams.size() < 2 && !stages.isEmpty();
+        return teams.size() >= 2 && !stages.isEmpty();
     }
 
     public void start() {

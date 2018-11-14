@@ -25,7 +25,8 @@ public final class Match {
     transient private Match winnerDestination, loserDestination;
     private boolean winnerGoesToBlue, loserGoesToBlue;
 
-    transient private List<MatchListener> listeners = new LinkedList<>();
+    transient private List<MatchPlayedListener> playedListeners = new LinkedList<>();
+    transient private List<MatchChangeListener> changeListeners = new LinkedList<>();
 
     /**
      * Construct an empty Match.
@@ -52,6 +53,7 @@ public final class Match {
             else setBlueToLoserOf(null);
         }
         blueTeam = blue;
+        notifyMatchChangeListeners();
         return this;
     }
 
@@ -66,6 +68,7 @@ public final class Match {
             else setOrangeToLoserOf(null);
         }
         orangeTeam = orange;
+        notifyMatchChangeListeners();
         return this;
     }
 
@@ -103,7 +106,10 @@ public final class Match {
             match.winnerGoesToBlue = true;
             if (match.hasBeenPlayed()) blueTeam = match.getWinner();
             else blueTeam = null;
+            match.notifyMatchChangeListeners();
         }
+
+        notifyMatchChangeListeners();
         return this;
     }
 
@@ -141,7 +147,10 @@ public final class Match {
             match.loserGoesToBlue = true;
             if (match.hasBeenPlayed()) blueTeam = match.getLoser();
             else blueTeam = null;
+            match.notifyMatchChangeListeners();
         }
+
+        notifyMatchChangeListeners();
         return this;
     }
 
@@ -179,7 +188,10 @@ public final class Match {
             match.winnerGoesToBlue = false;
             if (match.hasBeenPlayed()) orangeTeam = match.getWinner();
             else orangeTeam = null;
+            match.notifyMatchChangeListeners();
         }
+
+        notifyMatchChangeListeners();
         return this;
     }
 
@@ -217,7 +229,10 @@ public final class Match {
             match.loserGoesToBlue = false;
             if (match.hasBeenPlayed()) orangeTeam = match.getLoser();
             else orangeTeam = null;
+            match.notifyMatchChangeListeners();
         }
+
+        notifyMatchChangeListeners();
         return this;
     }
 
@@ -346,6 +361,7 @@ public final class Match {
         orangeTeam.addGoalsConceded(blueScore);
 
         this.blueScore = blueScore;
+        notifyMatchChangeListeners();
     }
 
     public int getOrangeScore() {
@@ -362,6 +378,7 @@ public final class Match {
         blueTeam.addGoalsConceded(orangeScore);
 
         this.orangeScore = orangeScore;
+        notifyMatchChangeListeners();
     }
 
     public void setScores(int blueScore, int orangeScore) {
@@ -386,15 +403,15 @@ public final class Match {
             if (played) {
                 this.played = true;
                 transferWinnerAndLoser();
-                notifyListeners();
             } else {
                 if ((winnerDestination != null && winnerDestination.hasBeenPlayed()) || (loserDestination != null && loserDestination.hasBeenPlayed()))
                     // TODO Does not check if a following stage has started
                     throw new IllegalStateException("A following match has already been played.");
                 this.played = false;
                 retractWinnerAndLoser();
-                notifyListeners();
             }
+            notifyMatchPlayedListeners();
+            notifyMatchChangeListeners();
         }
     }
 
@@ -406,10 +423,12 @@ public final class Match {
         if (winnerDestination != null) {
             if (winnerGoesToBlue) winnerDestination.blueTeam = getWinner();
             else winnerDestination.orangeTeam = getWinner();
+            winnerDestination.notifyMatchChangeListeners();
         }
         if (loserDestination != null) {
             if (loserGoesToBlue) loserDestination.blueTeam = getLoser();
             else loserDestination.orangeTeam = getLoser();
+            loserDestination.notifyMatchChangeListeners();
         }
     }
 
@@ -421,10 +440,12 @@ public final class Match {
         if (winnerDestination != null) {
             if (winnerGoesToBlue) winnerDestination.blueTeam = null;
             else winnerDestination.orangeTeam = null;
+            winnerDestination.notifyMatchChangeListeners();
         }
         if (loserDestination != null) {
             if (loserGoesToBlue) loserDestination.blueTeam = null;
             else loserDestination.orangeTeam = null;
+            loserDestination.notifyMatchChangeListeners();
         }
     }
 
@@ -449,19 +470,36 @@ public final class Match {
         return orangeTeam;
     }
 
-    public void registerListener(MatchListener listener) {
-        listeners.add(listener);
+    /** Listeners registered here will be notified when the match is played or reset. */
+    public void registerMatchPlayedListener(MatchPlayedListener listener) {
+        playedListeners.add(listener);
     }
 
-    public void unregisterListener(MatchListener listener) {
-        listeners.remove(listener);
+    public void unregisterMatchPlayedListener(MatchPlayedListener listener) {
+        playedListeners.remove(listener);
     }
 
-    public void notifyListeners() {
-        for (MatchListener listener : listeners) {
+    public void notifyMatchPlayedListeners() {
+        for (MatchPlayedListener listener : playedListeners) {
             listener.onMatchPlayed(this);
         }
     }
+
+    /** Listeners registered here will be notified when any value in the match changes. */
+    public void registerMatchChangeListener(MatchChangeListener listener) {
+        changeListeners.add(listener);
+    }
+
+    public void unregisterMatchChangeListener(MatchChangeListener listener) {
+        changeListeners.remove(listener);
+    }
+
+    public void notifyMatchChangeListeners() {
+        for (MatchChangeListener listener : changeListeners) {
+            listener.onMatchChanged(this);
+        }
+    }
+
     /**
      * Repairs references to parents in Match-tree for deserialized objects
      */

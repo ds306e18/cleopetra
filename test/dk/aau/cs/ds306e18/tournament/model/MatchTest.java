@@ -303,5 +303,17 @@ public class MatchTest {
         assertEquals(blueScore*2, teamOrange.getGoalsConceded());
     }
 
+    @Test
+    public void reconnectAfterPlay01() {
+        Team tA = new Team("A", null, 0, "a");
+        Match matchOne = new Match(tA, new Team("B", null, 0, "b"));
+        Match matchTwo = new Match().setBlue(new Team("C", null, 0, "c")).setOrangeToWinnerOf(matchOne);
+        Match matchThree = new Match(new Team("D", null, 0, "d"), new Team("E", null, 0, "e"));
 
+        matchOne.setScores(0, 0, true);
+
+        matchTwo.setOrangeToWinnerOf(matchThree);
+
+        System.out.println(matchTwo.getOrangeTeam());
+    }
 }

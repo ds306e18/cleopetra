@@ -4,7 +4,7 @@ import dk.aau.cs.ds306e18.tournament.model.GroupFormat;
 import dk.aau.cs.ds306e18.tournament.model.StageStatus;
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
-import dk.aau.cs.ds306e18.tournament.model.match.MatchListener;
+import dk.aau.cs.ds306e18.tournament.model.match.MatchPlayedListener;
 import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.RoundRobinSettingsNode;
 import dk.aau.cs.ds306e18.tournament.ui.controllers.BracketOverviewTabController;
 import javafx.scene.Node;
@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
-public class RoundRobinFormat extends GroupFormat implements MatchListener {
+public class RoundRobinFormat extends GroupFormat implements MatchPlayedListener {
 
     private static final Team DUMMY_TEAM = new Team("Dummy", new ArrayList<>(), 0, "Dummy team description");
 
@@ -166,7 +166,7 @@ public class RoundRobinFormat extends GroupFormat implements MatchListener {
     private Match createNewMatch(Team team1, Team team2) {
 
         Match match = new Match(team1, team2);
-        match.registerListener(this);
+        match.registerMatchPlayedListener(this);
         return match;
     }
 
@@ -285,12 +285,9 @@ public class RoundRobinFormat extends GroupFormat implements MatchListener {
         return new RoundRobinSettingsNode(this);
     }
 
-    /**
-     * As format is Round Robin, nothing is necessary to postDeserializationRepair after deserialization, except listeners
-     */
     @Override
     public void repair() {
-        for (Match match : this.getAllMatches()) match.registerListener(this);
+        for (Match match : this.getAllMatches()) match.registerMatchPlayedListener(this);
     }
 
     @Override

@@ -5,7 +5,7 @@ import dk.aau.cs.ds306e18.tournament.ui.controllers.BracketOverviewTabController
 import dk.aau.cs.ds306e18.tournament.model.StageStatus;
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
-import dk.aau.cs.ds306e18.tournament.model.match.MatchListener;
+import dk.aau.cs.ds306e18.tournament.model.match.MatchPlayedListener;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchStatus;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
 import javafx.scene.Node;
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class SingleEliminationFormat implements Format, MatchListener {
+public class SingleEliminationFormat implements Format, MatchPlayedListener {
 
     private StageStatus status = StageStatus.PENDING;
     private ArrayList<Team> seededTeams;
@@ -31,7 +31,7 @@ public class SingleEliminationFormat implements Format, MatchListener {
         generateBracket(rounds);
         seedBracket(seededTeams, rounds);
         status = StageStatus.RUNNING;
-        finalMatch.registerListener(this);
+        finalMatch.registerMatchPlayedListener(this);
     }
 
     @Override
@@ -265,7 +265,7 @@ public class SingleEliminationFormat implements Format, MatchListener {
         // set final match to root of Match-tree
         this.finalMatch = this.matches[0];
         // register listener for each finalMatch
-        this.finalMatch.registerListener(this);
+        this.finalMatch.registerMatchPlayedListener(this);
         // recursively call postDeserializationRepair
         this.finalMatch.postDeserializationRepair();
     }
