@@ -10,10 +10,7 @@ import dk.aau.cs.ds306e18.tournament.model.match.MatchStatus;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
 import javafx.scene.Node;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class SingleEliminationFormat implements Format, MatchPlayedListener {
@@ -23,6 +20,8 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
     transient private Match finalMatch;
     private Match[] matches;
     private int rounds;
+
+    transient private List<MatchPlayedListener> matchPlayedListeners = new LinkedList<>();
 
     @Override
     public void start(List<Team> seededTeams) {
@@ -60,7 +59,7 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
     }
 
     public Match[] getMatchesAsArray() {
-        return this.matches;
+        return this.matches.clone();
     }
 
     /**
@@ -167,7 +166,6 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
 
     @Override
     public void onMatchPlayed(Match match) {
-        // TODO: Register stage as listener to all relevant matches
         if (finalMatch.hasBeenPlayed()) {
             status = StageStatus.CONCLUDED;
         } else {
@@ -192,6 +190,10 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
     int getRightSide(int i) {
         i = i + 1;
         return 2 * i - 1;
+    }
+
+    public int getRounds() {
+        return rounds;
     }
 
     /**
