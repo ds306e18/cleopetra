@@ -10,10 +10,7 @@ import dk.aau.cs.ds306e18.tournament.ui.controllers.BracketOverviewTabController
 import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.SwissNode;
 import javafx.scene.Node;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class SwissFormat extends GroupFormat implements MatchPlayedListener {
 
@@ -21,6 +18,8 @@ public class SwissFormat extends GroupFormat implements MatchPlayedListener {
     private int maxRoundsPossible;
     private int roundCount = 4;
     private HashMap<Team, Integer> teamPoints;
+
+    transient private List<MatchPlayedListener> matchPlayedListeners = new LinkedList<>();
 
     @Override
     public void start(List<Team> teams) {
@@ -240,14 +239,6 @@ public class SwissFormat extends GroupFormat implements MatchPlayedListener {
         return new ArrayList<>(rounds.get(rounds.size() - 1));
     }
 
-    @Override
-    public void onMatchPlayed(Match match) {
-        // Has last possible match been played?
-        if (!hasUnstartedRounds() && getUpcomingMatches().size() == 0) {
-            status = StageStatus.CONCLUDED;
-        }
-    }
-
     /**
      * @return a hashMap containing the teams and their points.
      */
@@ -274,6 +265,30 @@ public class SwissFormat extends GroupFormat implements MatchPlayedListener {
             roundsCopy.add(new ArrayList<>(r));
         }
         return roundsCopy;
+    }
+
+    /** Listeners registered here will be notified whenever a match is played or reset in this format. */
+    public void registerMatchPlayedListener(MatchPlayedListener listener) {
+        // Can't add self
+        if (listener != this)
+            matchPlayedListeners.add(listener);
+    }
+
+    public void unregisterMatchPlayedListener(MatchPlayedListener listener) {
+        matchPlayedListeners.remove(listener);
+    }
+
+    @Override
+    public void onMatchPlayed(Match match) {
+        // Has last possible match been played?
+        if (!hasUnstartedRounds() && getUpcomingMatches().size() == 0) {
+            status = StageStatus.CONCLUDED;
+        }
+
+        // Notify listeners
+        for (MatchPlayedListener listener : matchPlayedListeners) {
+            listener.onMatchPlayed(match);
+        }
     }
 
     @Override

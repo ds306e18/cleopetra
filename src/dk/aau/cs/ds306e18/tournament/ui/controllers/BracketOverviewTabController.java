@@ -102,7 +102,7 @@ public class BracketOverviewTabController {
      * @param match the match to be visualised
      * @return a gridPane containing the visualisation of the given match.
      */
-    public VBox loadVisualMatch(Match match) {
+    public MatchVisualController loadVisualMatch(Match match) {
 
         //Load the fxml document into the Controller and JavaFx node.
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../layout/MatchVisual.fxml"));
@@ -119,7 +119,7 @@ public class BracketOverviewTabController {
         mvc.setBoc(this);
         mvc.setShowedMatch(match);
 
-        return root;
+        return mvc;
     }
 
     /**
