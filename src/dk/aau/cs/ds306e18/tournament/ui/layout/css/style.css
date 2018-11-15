@@ -45,6 +45,10 @@
     -fx-alignment: center;
 }
 
+#TS-rightside .spinner {
+    -fx-max-width: 130;
+}
+
 .text-field, .text-area {
     -fx-background-radius: 0;
 }
@@ -80,13 +84,17 @@
 }
 
 #PS-leftside, #PS-center, #PS-rightside {
-    -fx-padding: 0 0 0 20;
+    -fx-padding: 0 20 0 20;
     -fx-border-width: 0 0 0 1;
     -fx-border-color: #c2c2c2;
 }
 
+#PS-leftside {
+    -fx-padding: 0 20 20 20 !important;
+}
+
 #globalGrid {
-    -fx-padding: 0 0 0 20;
+    -fx-padding: 0 20 0 20;
     -fx-border-width: 0 0 0 1;
     -fx-border-color: #c2c2c2;
 }
@@ -124,11 +132,15 @@
 
 #matchPlayed .winner .scoreNo {
     -fx-fill: green;
+    -fx-font-weight: bold;
+}
+
+#matchPlayed .winner .teamName {
+	-fx-font-weight: bold;
 }
 
 #matchTBD .teamName {
     -fx-font-style: italic;
-    -fx-text-alignment: center;
 }
 
 .match:hover{
@@ -195,4 +207,9 @@
 
 #exitPopup .cancelBtn2:pressed {
     -fx-background-color: #d3d3d3;
+}
+
+/* Scrollpane bracket overview */
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
 }

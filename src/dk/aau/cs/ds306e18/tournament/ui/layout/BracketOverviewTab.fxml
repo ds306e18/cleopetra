@@ -1,308 +1,131 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.Group?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Polygon?>
-<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<GridPane id="mainGrid" fx:id="bracketOverviewTab" minWidth="-Infinity" prefHeight="532.0" prefWidth="800.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.controllers.BracketOverviewTabController">
+<GridPane id="mainGrid" fx:id="bracketOverviewTab" prefHeight="572.0" prefWidth="800.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.controllers.BracketOverviewTabController">
    <columnConstraints>
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="464.0" minWidth="10.0" prefWidth="279.7777506510417" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="669.7777862548828" minWidth="10.0" prefWidth="300.0" />
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="300.0" minWidth="10.0" prefWidth="100.0" />
    </columnConstraints>
    <rowConstraints>
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
    </rowConstraints>
    <children>
-      <VBox id="globalGrid" prefHeight="200.0" prefWidth="100.0">
+      <VBox id="globalGrid" alignment="CENTER">
          <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Overview" wrappingWidth="118.13675880432129">
-               <font>
-                  <Font name="System Bold" size="24.0" />
-               </font>
-               <VBox.margin>
-                  <Insets top="15.0" />
-               </VBox.margin>
-            </Text>
-            <GridPane maxWidth="-Infinity" prefHeight="485.0">
-               <VBox.margin>
-                  <Insets right="20.0" />
-               </VBox.margin>
-               <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-               </rowConstraints>
+            <VBox fx:id="startTournamentInstructionsHolder" alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <VBox fx:id="overviewVBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="300.0" prefHeight="800.0" prefWidth="74.0" spacing="5.0">
-                     <children>
-                        <VBox id="matchPlayed" prefHeight="46.0" prefWidth="148.0" spacing="6.0" styleClass="match">
-                           <children>
-                              <HBox alignment="CENTER_LEFT" prefHeight="12.0" prefWidth="171.0">
-                                 <children>
-                                    <Rectangle fill="#404040" height="20.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="color" width="4.0" />
-                                    <Group styleClass="team">
-                                       <HBox.margin>
-                                          <Insets left="2.0" />
-                                       </HBox.margin>
-                                       <children>
-                                          <Rectangle fill="#c1c1c1" height="20.0" layoutX="1.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="teamBg" width="85.0" />
-                                          <Text layoutX="5.0" layoutY="15.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="teamName" text="Team 1" wrappingWidth="80.63671875" />
-                                       </children>
-                                    </Group>
-                                    <Group styleClass="score">
-                                       <children>
-                                          <Rectangle fill="#cdcfd0" height="20.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="scoreBg" width="20.0" />
-                                          <Text layoutY="15.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="scoreNo" text="5" textAlignment="CENTER" wrappingWidth="20.0">
-                                             <font>
-                                                <Font name="System Bold" size="12.0" />
-                                             </font>
-                                          </Text>
-                                       </children>
-                                    </Group>
-                                    <Polygon fill="#c1c1c1" points="-23.999984741210938, -30.00000762939453, -24.0, -50.0, -9.75, -40.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="triangle" />
-                                 </children>
-                                 <VBox.margin>
-                                    <Insets />
-                                 </VBox.margin>
-                                 <styleClass>
-                                    <String fx:value="team1" />
-                                    <String fx:value="blue" />
-                                    <String fx:value="winner" />
-                                 </styleClass>
-                              </HBox>
-                              <HBox alignment="CENTER_LEFT" prefHeight="20.0" prefWidth="143.0">
-                                 <children>
-                                    <Rectangle fill="#404040" height="20.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="color" width="4.0" />
-                                    <Group styleClass="team">
-                                       <HBox.margin>
-                                          <Insets left="2.0" />
-                                       </HBox.margin>
-                                       <children>
-                                          <Rectangle fill="#c1c1c1" height="20.0" layoutX="1.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="teamBg" width="85.0" />
-                                          <Text layoutX="5.0" layoutY="15.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="teamName" text="Team 2" wrappingWidth="80.63671875" />
-                                       </children>
-                                    </Group>
-                                    <Group styleClass="score">
-                                       <children>
-                                          <Rectangle fill="#cdcfd0" height="20.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="scoreBg" width="20.0" />
-                                          <Text layoutY="15.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="scoreNo" text="2" textAlignment="CENTER" wrappingWidth="20.0">
-                                             <font>
-                                                <Font name="System Bold" size="12.0" />
-                                             </font>
-                                          </Text>
-                                       </children>
-                                    </Group>
-                                    <Polygon fill="#c1c1c1" points="-23.999984741210938, -30.00000762939453, -24.0, -50.0, -9.75, -40.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="triangle" />
-                                 </children>
-                                 <styleClass>
-                                    <String fx:value="team2" />
-                                    <String fx:value="orange" />
-                                 </styleClass>
-                              </HBox>
-                           </children>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                        </VBox>
-                        <VBox id="matchTBD" prefHeight="46.0" prefWidth="148.0" spacing="6.0" styleClass="match">
-                           <children>
-                              <HBox alignment="CENTER_LEFT" prefHeight="12.0" prefWidth="171.0" styleClass="team1">
-                                 <children>
-                                    <Rectangle fill="#404040" height="20.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="color" width="4.0" />
-                                    <Group styleClass="team">
-                                       <HBox.margin>
-                                          <Insets left="2.0" />
-                                       </HBox.margin>
-                                       <children>
-                                          <Rectangle fill="#c1c1c1" height="20.0" layoutX="1.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="teamBg" width="85.0" />
-                                          <Text layoutX="5.0" layoutY="15.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="teamName" text="TBD" wrappingWidth="80.63671875" />
-                                       </children>
-                                    </Group>
-                                    <Group styleClass="score">
-                                       <children>
-                                          <Rectangle fill="#cdcfd0" height="20.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="scoreBg" width="20.0" />
-                                          <Text layoutY="15.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="scoreNo" textAlignment="CENTER" wrappingWidth="20.0">
-                                             <font>
-                                                <Font name="System Bold" size="12.0" />
-                                             </font>
-                                          </Text>
-                                       </children>
-                                    </Group>
-                                    <Polygon fill="#c1c1c1" points="-23.999984741210938, -30.00000762939453, -24.0, -50.0, -9.75, -40.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="triangle" />
-                                 </children>
-                                 <VBox.margin>
-                                    <Insets />
-                                 </VBox.margin>
-                              </HBox>
-                              <HBox alignment="CENTER_LEFT" prefHeight="12.0" prefWidth="171.0" styleClass="team2">
-                                 <children>
-                                    <Rectangle fill="#404040" height="20.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="color" width="4.0" />
-                                    <Group styleClass="team">
-                                       <HBox.margin>
-                                          <Insets left="2.0" />
-                                       </HBox.margin>
-                                       <children>
-                                          <Rectangle fill="#c1c1c1" height="20.0" layoutX="1.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="teamBg" width="85.0" />
-                                          <Text layoutX="5.0" layoutY="15.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="teamName" text="TBD" wrappingWidth="80.63671875" />
-                                       </children>
-                                    </Group>
-                                    <Group styleClass="score">
-                                       <children>
-                                          <Rectangle fill="#cdcfd0" height="20.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="scoreBg" width="20.0" />
-                                          <Text layoutY="15.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="scoreNo" textAlignment="CENTER" wrappingWidth="20.0">
-                                             <font>
-                                                <Font name="System Bold" size="12.0" />
-                                             </font>
-                                          </Text>
-                                       </children>
-                                    </Group>
-                                    <Polygon fill="#c1c1c1" points="-23.999984741210938, -30.00000762939453, -24.0, -50.0, -9.75, -40.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="triangle" />
-                                 </children>
-                              </HBox>
-                           </children>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                        </VBox>
-                        <VBox id="matchUpcoming" prefHeight="46.0" prefWidth="148.0" spacing="6.0" styleClass="match">
-                           <children>
-                              <HBox alignment="CENTER_LEFT" prefHeight="12.0" prefWidth="171.0">
-                                 <children>
-                                    <Rectangle fill="#404040" height="20.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="color" width="4.0" />
-                                    <Group styleClass="team">
-                                       <HBox.margin>
-                                          <Insets left="2.0" />
-                                       </HBox.margin>
-                                       <children>
-                                          <Rectangle fill="#c1c1c1" height="20.0" layoutX="1.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="teamBg" width="85.0" />
-                                          <Text layoutX="5.0" layoutY="15.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="teamName" text="Team 1" wrappingWidth="80.63671875" />
-                                       </children>
-                                    </Group>
-                                    <Group styleClass="score">
-                                       <children>
-                                          <Rectangle fill="#cdcfd0" height="20.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="scoreBg" width="20.0" />
-                                          <Text layoutY="15.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="scoreNo" textAlignment="CENTER" wrappingWidth="20.0">
-                                             <font>
-                                                <Font name="System Bold" size="12.0" />
-                                             </font>
-                                          </Text>
-                                       </children>
-                                    </Group>
-                                    <Polygon fill="#c1c1c1" points="-23.999984741210938, -30.00000762939453, -24.0, -50.0, -9.75, -40.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="triangle" />
-                                 </children>
-                                 <VBox.margin>
-                                    <Insets />
-                                 </VBox.margin>
-                                 <styleClass>
-                                    <String fx:value="team1" />
-                                    <String fx:value="blue" />
-                                 </styleClass>
-                              </HBox>
-                              <HBox alignment="CENTER_LEFT" prefHeight="12.0" prefWidth="171.0">
-                                 <children>
-                                    <Rectangle fill="#404040" height="20.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="color" width="4.0" />
-                                    <Group styleClass="team">
-                                       <HBox.margin>
-                                          <Insets left="2.0" />
-                                       </HBox.margin>
-                                       <children>
-                                          <Rectangle fill="#c1c1c1" height="20.0" layoutX="1.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="teamBg" width="85.0" />
-                                          <Text layoutX="5.0" layoutY="15.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="teamName" text="Team 2" wrappingWidth="80.63671875" />
-                                       </children>
-                                    </Group>
-                                    <Group styleClass="score">
-                                       <children>
-                                          <Rectangle fill="#cdcfd0" height="20.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="scoreBg" width="20.0" />
-                                          <Text layoutY="15.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="scoreNo" textAlignment="CENTER" wrappingWidth="20.0">
-                                             <font>
-                                                <Font name="System Bold" size="12.0" />
-                                             </font>
-                                          </Text>
-                                       </children>
-                                    </Group>
-                                    <Polygon fill="#c1c1c1" points="-23.999984741210938, -30.00000762939453, -24.0, -50.0, -9.75, -40.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="triangle" />
-                                 </children>
-                                 <styleClass>
-                                    <String fx:value="team2" />
-                                    <String fx:value="orange" />
-                                 </styleClass>
-                              </HBox>
-                           </children>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                        </VBox>
-                     </children>
-                  </VBox>
+                  <Label prefHeight="89.0" prefWidth="246.0" text="Double check you settings before you start.&#10;You must have at least:&#10;- One stage&#10;- Two teams">
+                     <VBox.margin>
+                        <Insets bottom="16.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Button mnemonicParsing="false" onAction="#onStartTournamentButtonPressed" prefHeight="68.0" prefWidth="156.0" text="Start Tournament" />
                </children>
-            </GridPane>
+            </VBox>
+            <ScrollPane fx:id="overviewScrollPane" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" pannable="true" style="-fx-background-color: transparent;" vbarPolicy="NEVER" VBox.vgrow="ALWAYS">
+               <VBox.margin>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </VBox.margin>
+            </ScrollPane>
          </children>
+         <GridPane.margin>
+            <Insets />
+         </GridPane.margin>
       </VBox>
-      <VBox id="globalGrid" prefHeight="541.0" prefWidth="420.0" GridPane.columnIndex="1">
+      <VBox id="globalGrid" GridPane.columnIndex="1">
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Selected match" wrappingWidth="188.3590259552002">
                <font>
                   <Font name="System Bold" size="24.0" />
                </font>
                <VBox.margin>
-                  <Insets top="15.0" />
+                  <Insets bottom="20.0" top="15.0" />
                </VBox.margin>
             </Text>
-            <VBox fx:id="selectedMatchVBox" prefHeight="100.0">
-               <VBox.margin>
-                  <Insets right="20.0" />
-               </VBox.margin>
+            <GridPane fx:id="selectedMatchInfo">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="8.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints vgrow="SOMETIMES" />
+                <RowConstraints vgrow="SOMETIMES" />
+                <RowConstraints minHeight="40.0" vgrow="SOMETIMES" />
+                  <RowConstraints />
+              </rowConstraints>
                <children>
-                  <HBox alignment="CENTER" prefHeight="100.0">
-                     <children>
-                        <GridPane alignment="CENTER" maxHeight="60.0" maxWidth="500.0" minWidth="250.0" prefHeight="100.0" style="-fx-max-width: 250;">
-                           <columnConstraints>
-                              <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                              <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                           </columnConstraints>
-                           <rowConstraints>
-                              <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
-                           </rowConstraints>
-                           <children>
-                              <Button fx:id="nextMatchBtn" mnemonicParsing="false" onAction="#updateBracket" prefHeight="27.0" prefWidth="109.0" text="Next match">
-                                 <GridPane.margin>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </GridPane.margin>
-                              </Button>
-                              <Button fx:id="nextStageBtn" mnemonicParsing="false" prefHeight="27.0" prefWidth="108.0" text="Next Stage" GridPane.columnIndex="1">
-                                 <GridPane.margin>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </GridPane.margin>
-                              </Button>
-                              <Button fx:id="prevStageBtn" mnemonicParsing="false" prefHeight="27.0" prefWidth="108.0" text="Previous Stage" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                                 <GridPane.margin>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </GridPane.margin>
-                              </Button>
-                              <Button fx:id="prevMatchBtn" mnemonicParsing="false" prefHeight="27.0" prefWidth="108.0" text="Previous match" GridPane.rowIndex="1">
-                                 <GridPane.margin>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </GridPane.margin>
-                              </Button>
-                           </children>
-                        </GridPane>
-                     </children>
-                  </HBox>
+                  <Label fx:id="blueTeamNameLabel" alignment="CENTER" minWidth="130.0" text="Blue team" textFill="#6a82fc">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="orangeTeamNameLabel" alignment="CENTER" minWidth="130.0" text="Orange team" textFill="#f5af17" GridPane.columnIndex="2">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+                  <ListView fx:id="blueTeamListView" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="117.0" minWidth="130.0" mouseTransparent="true" prefHeight="117.0" prefWidth="130.0" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                  <ListView fx:id="orangeTeamListView" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="117.0" minWidth="130.0" mouseTransparent="true" prefHeight="117.0" prefWidth="130.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                  <TextField fx:id="blueTeamScore" alignment="CENTER" editable="false" maxWidth="-Infinity" minWidth="40.0" prefWidth="40.0" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                     <font>
+                        <Font name="System Bold" size="11.0" />
+                     </font>
+                  </TextField>
+                  <TextField fx:id="orangeTeamScore" alignment="CENTER" editable="false" maxWidth="-Infinity" minWidth="40.0" prefWidth="40.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                     <font>
+                        <Font name="System Bold" size="11.0" />
+                     </font>
+                  </TextField>
+                  <Label text=":" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </Label>
+                  <Pane maxHeight="16.0" minHeight="16.0" prefHeight="16.0" GridPane.rowIndex="3" />
                </children>
-            </VBox>
+            </GridPane>
+            <HBox fx:id="selectedMatchButtonHolder" alignment="CENTER">
+               <children>
+                  <Button fx:id="playMatchBtn" mnemonicParsing="false" prefHeight="27.0" prefWidth="110.0" text="Play">
+                     <HBox.margin>
+                        <Insets right="16.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="editMatchBtn" mnemonicParsing="false" onAction="#editMatchBtnOnAction" prefHeight="27.0" prefWidth="110.0" text="Edit scores" />
+               </children>
+            </HBox>
+            <Pane VBox.vgrow="ALWAYS" />
+            <HBox fx:id="stageNavigationButtonsHolder" alignment="CENTER">
+               <children>
+                  <Button fx:id="nextStageBtn" mnemonicParsing="false" prefHeight="27.0" prefWidth="110.0" text="Next Stage">
+                     <HBox.margin>
+                        <Insets right="16.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="prevStageBtn" mnemonicParsing="false" prefHeight="27.0" prefWidth="110.0" text="Previous Stage" />
+               </children>
+               <VBox.margin>
+                  <Insets bottom="16.0" />
+               </VBox.margin>
+            </HBox>
          </children>
+         <GridPane.margin>
+            <Insets />
+         </GridPane.margin>
       </VBox>
    </children>
 </GridPane>

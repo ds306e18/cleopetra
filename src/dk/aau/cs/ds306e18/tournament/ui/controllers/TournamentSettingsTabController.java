@@ -8,6 +8,7 @@ import dk.aau.cs.ds306e18.tournament.ui.StageFormatOption;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ListView;
@@ -47,27 +48,19 @@ public class TournamentSettingsTabController {
     @FXML
     private ChoiceBox<StageFormatOption> formatChoicebox;
     @FXML
-    private TextField roundsTextfield;
-    @FXML
-    private GridPane stageOptions;
-    @FXML
     private Button swapUp;
     @FXML
     private Button swapDown;
-
-
-    /* TODO List
-       DONE: Clean code && Comments
-       DONE: Look more into having a getJavaFxNode. Nope, not for prototype.
-       DONE: Is seeding method still relevant? Nope not for prototype.
-       Done: Add arrows to order stages.
-       DONE: Disable arrows if a swap is not possible. (Listener)
-    */
+    @FXML
+    private VBox formatUniqueSettingsHolder;
 
     @FXML
     private void initialize() {
         /* Retrieve and set tournament name into textfield. */
         nameTextField.setText(Tournament.get().getName());
+
+        /* By default the remove stage button is disabled. */
+        removeStageBtn.setDisable(true);
 
         /* Retrieve and add choices to choicebox for the Tiebreaker box.
          * Also upon change sets the new tiebreaker rule to the tournament model. */
@@ -75,51 +68,47 @@ public class TournamentSettingsTabController {
         tieBreakerChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> Tournament.get().setTieBreaker(newValue));
         tieBreakerChoiceBox.getSelectionModel().select(0);
 
+        /* By default the stage settings are hidden.
+         * This listener is used to show the stage settings when there is at least one Stage added.
+         * Also handles disabling and enabling of buttons for stages. */
+        stagesListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            stageSettingsVBox.setVisible(stagesListView.getItems().size() != 0);
+
+            /* Handle stage order button disabling / enabling */
+            int selectedIndex = getSelectedIndex();
+            swapUp.setDisable(selectedIndex == 0);
+            swapDown.setDisable(selectedIndex == stagesListView.getItems().size() - 1 && selectedIndex != -1);
+
+            /* Set content inside stage settings to show chosen stage */
+            showStageValues();
+
+            /* If the stageListView has no items. Then the remove, up and down buttons is disabled. */
+            if(stagesListView.getItems().size() == 0) {
+                removeStageBtn.setDisable(true);
+                swapUp.setDisable(true);
+                swapDown.setDisable(true);
+            } else
+                removeStageBtn.setDisable(false);
+        });
 
         /* Retrieve possible formats and add to a choicebox */
         formatChoicebox.setItems(FXCollections.observableArrayList(StageFormatOption.values()));
 
         /* Listener for the format choicebox. Used to change a Stage format when a different format is chosen */
         formatChoicebox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-
-            if (getSelectedStage() != null && StageFormatOption.getOption(getSelectedStage().getFormat()) != newValue) {
-                getSelectedStage().setFormat(newValue.getNewInstance());
+            Stage selectedStage = getSelectedStage();
+            if (selectedStage != null && StageFormatOption.getOption(selectedStage.getFormat()) != newValue) {
+                selectedStage.setFormat(newValue.getNewInstance());
             }
 
-            /* Rounds are only visible if a specific format is chosen. */
-            if (getSelectedStage() != null && StageFormatOption.getOption(getSelectedStage().getFormat()) != StageFormatOption.SWISS_SYSTEM) {
-                stageOptions.setVisible(false);
-            } else {
-                stageOptions.setVisible(true);
+            // Show settings unique to format
+            formatUniqueSettingsHolder.getChildren().clear();
+            if (selectedStage != null) {
+                Node formatSettings = selectedStage.getFormat().getSettingsFXNode();
+                if (formatSettings != null) {
+                    formatUniqueSettingsHolder.getChildren().add(selectedStage.getFormat().getSettingsFXNode());
+                }
             }
-
-        });
-
-        /* By default the stage settings are hidden.
-         * This listener is used to show the stage settings when there is at least one Stage added.
-         * Also handles disabling and enabling of buttons for stages.
-         * */
-        stagesListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (stagesListView.getItems().size() != 0) {
-                stageSettingsVBox.setVisible(true);
-            } else {
-                stageSettingsVBox.setVisible(false);
-            }
-
-            /* Handle stage order button disabling / enabling */
-            if (getSelectedIndex() == 0) {
-                swapUp.setDisable(true);
-            } else {
-                swapUp.setDisable(false);
-            }
-            if (getSelectedIndex() == stagesListView.getItems().size() - 1 && getSelectedIndex() != -1) {
-                swapDown.setDisable(true);
-            } else {
-                swapDown.setDisable(false);
-            }
-
-            /* Set content inside stage settings of chosen stage */
-            setContent();
         });
     }
 
@@ -139,7 +128,8 @@ public class TournamentSettingsTabController {
      */
     @FXML
     void addStageBtnOnAction(ActionEvent actionEvent) {
-        Tournament.get().addStage(new Stage("New Stage", new SwissFormat()));
+        // increments unique id
+        Tournament.get().addStage(new Stage("New Stage", new SwissFormat(), Tournament.get().getStages().size()+1));
 
         stagesListView.setItems(FXCollections.observableArrayList(Tournament.get().getStages()));
         stagesListView.refresh();
@@ -158,9 +148,9 @@ public class TournamentSettingsTabController {
     }
 
     /**
-     * Sets correct text into fields inside the stage settings.
+     * Show the correct values in the stage settings panel.
      */
-    private void setContent() {
+    private void showStageValues() {
         if (getSelectedStage() != null) {
             stageNameTextfield.setText(getSelectedStage().getName());
             formatChoicebox.getSelectionModel().select(StageFormatOption.getOption(getSelectedStage().getFormat()));

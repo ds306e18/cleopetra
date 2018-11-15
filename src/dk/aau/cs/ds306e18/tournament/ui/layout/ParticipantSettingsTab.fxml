@@ -6,7 +6,6 @@
 <?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -15,11 +14,19 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane id="PS-mainGrid" fx:id="participantSettingsTab" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="532.0" prefWidth="800.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/10.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.controllers.ParticipantSettingsTabController">
-   <left>
-      <VBox id="PS-leftside" maxWidth="300.0" prefWidth="3000.0" spacing="10.0" BorderPane.alignment="CENTER">
+<GridPane id="PS-mainGrid" fx:id="participantSettingsTab" prefHeight="572.0" prefWidth="800.0" stylesheets="@css/style.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/10.0.1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.controllers.ParticipantSettingsTabController">
+  <columnConstraints>
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <VBox id="PS-leftside" spacing="10.0">
          <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Participant settings" wrappingWidth="248.80345344543457">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Participant settings" wrappingWidth="221.80345344543457">
                <font>
                   <Font name="System Bold" size="24.0" />
                </font>
@@ -32,17 +39,17 @@
                   <Font name="System Bold" size="16.0" />
                </font>
             </Text>
-            <ListView fx:id="teamsListView" maxWidth="1.7976931348623157E308" minWidth="200.0" prefWidth="3000.0" VBox.vgrow="ALWAYS">
+            <ListView fx:id="teamsListView" VBox.vgrow="ALWAYS">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
                <VBox.margin>
-                  <Insets right="20.0" />
+                  <Insets />
                </VBox.margin>
             </ListView>
-            <HBox>
+            <HBox alignment="CENTER" prefHeight="50.0">
                <children>
-                  <GridPane maxWidth="0.0" prefHeight="50.0" prefWidth="431.0" style="-fx-max-width: 250;" HBox.hgrow="ALWAYS">
+                  <GridPane prefHeight="50.0" style="-fx-max-width: 250;" HBox.hgrow="ALWAYS">
                      <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                         <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -62,80 +69,20 @@
                            </GridPane.margin>
                         </Button>
                      </children>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
                   </GridPane>
                </children>
                <VBox.margin>
-                  <Insets right="20.0" top="-5.0" />
+                  <Insets />
                </VBox.margin>
             </HBox>
          </children>
       </VBox>
-   </left>
-   <right>
-      <VBox id="PS-rightside" fx:id="botSettingsVbox" maxWidth="0.0" spacing="10.0" BorderPane.alignment="CENTER">
+      <VBox id="PS-center" fx:id="teamSettingsVbox" spacing="10.0" GridPane.columnIndex="1">
          <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Bot Settings" wrappingWidth="208.8034381866455">
-               <font>
-                  <Font name="System Bold" size="24.0" />
-               </font>
-               <VBox.margin>
-                  <Insets top="15.0" />
-               </VBox.margin>
-            </Text>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" Bot name:">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Text>
-            <TextField fx:id="botNameTextField" onKeyReleased="#botNameTextFieldOnKeyReleased">
-               <padding>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </padding>
-               <VBox.margin>
-                  <Insets right="20.0" />
-               </VBox.margin>
-            </TextField>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Developer:">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Text>
-            <TextField fx:id="developerTextField" onKeyReleased="#developerTextFieldOnKeyReleased">
-               <padding>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </padding>
-               <VBox.margin>
-                  <Insets right="20.0" />
-               </VBox.margin>
-            </TextField>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Config path:">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Text>
-            <HBox maxHeight="40.0" prefHeight="27.0" prefWidth="163.0">
-               <children>
-                  <Button fx:id="configPathBtn" mnemonicParsing="false" onAction="#configPathBtnOnAction" prefHeight="27.0" prefWidth="90.0" text="Add path..." />
-                  <TextField fx:id="configPathTextField" prefHeight="27.0" prefWidth="100.0" promptText="Set path here" />
-               </children>
-            </HBox>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Description / Comment">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Text>
-            <TextArea fx:id="botDescription" onKeyReleased="#botDesscriptionTextAreaOnKeyReleased" prefWidth="200.0">
-               <VBox.margin>
-                  <Insets right="20.0" />
-               </VBox.margin>
-            </TextArea>
-         </children>
-      </VBox>
-   </right>
-   <center>
-      <VBox id="PS-center" fx:id="teamSettingsVbox" maxWidth="0.0" spacing="10.0" BorderPane.alignment="CENTER">
-         <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Team Settings" wrappingWidth="248.80345344543457">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Team Settings" wrappingWidth="180.80345344543457">
                <font>
                   <Font name="System Bold" size="24.0" />
                </font>
@@ -153,10 +100,10 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
                <VBox.margin>
-                  <Insets right="20.0" />
+                  <Insets />
                </VBox.margin>
             </TextField>
-            <HBox prefHeight="28.0" prefWidth="249.0">
+            <HBox prefHeight="28.0">
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Seed value:              ">
                      <font>
@@ -176,7 +123,7 @@
                   <Insets />
                </opaqueInsets>
                <VBox.margin>
-                  <Insets right="20.0" />
+                  <Insets />
                </VBox.margin>
             </ListView>
             <HBox alignment="CENTER" prefHeight="50.0">
@@ -204,10 +151,69 @@
                   </GridPane>
                </children>
                <VBox.margin>
-                  <Insets right="20.0" />
+                  <Insets />
                </VBox.margin>
             </HBox>
          </children>
       </VBox>
-   </center>
-</BorderPane>
+      <VBox id="PS-rightside" fx:id="botSettingsVbox" spacing="10.0" GridPane.columnIndex="2">
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Bot Settings" wrappingWidth="208.8034381866455">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="15.0" />
+               </VBox.margin>
+            </Text>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" Bot name:">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Text>
+            <TextField fx:id="botNameTextField" onKeyReleased="#botNameTextFieldOnKeyReleased">
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </TextField>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Developer:">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Text>
+            <TextField fx:id="developerTextField" onKeyReleased="#developerTextFieldOnKeyReleased">
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </TextField>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Config path:">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Text>
+            <HBox maxHeight="40.0" prefHeight="27.0" prefWidth="163.0">
+               <children>
+                  <Button fx:id="configPathBtn" mnemonicParsing="false" onAction="#configPathBtnOnAction" prefHeight="27.0" prefWidth="90.0" text="Add path..." />
+                  <TextField fx:id="configPathTextField" prefHeight="27.0" prefWidth="100.0" promptText="Set path here" />
+               </children>
+            </HBox>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Description / Comment">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Text>
+            <TextArea fx:id="botDescription" onKeyReleased="#botDesscriptionTextAreaOnKeyReleased">
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </TextArea>
+         </children>
+      </VBox>
+   </children>
+</GridPane>

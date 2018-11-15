@@ -1,11 +1,12 @@
 package dk.aau.cs.ds306e18.tournament.ui.controllers;
 
+import dk.aau.cs.ds306e18.tournament.model.Tournament;
+import dk.aau.cs.ds306e18.tournament.utility.FileOperations;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -16,17 +17,16 @@ import java.io.PrintWriter;
 
 public class ExitProgramController {
 
-    double x = 0;
-    double y = 0;
+    private double x = 0;
+    private double y = 0;
 
     @FXML
     private Button cancelBtn;
 
     @FXML
-    void cancelClose(ActionEvent event) {    // get a handle to the stage
-        Stage stage = (Stage) cancelBtn.getScene().getWindow();
-        // do what you have to do
-        stage.close();
+    void cancelClose(ActionEvent event) {
+        Stage exitStage = (Stage) cancelBtn.getScene().getWindow();
+        exitStage.close();
     }
 
     @FXML
@@ -36,41 +36,31 @@ public class ExitProgramController {
 
     @FXML
     void saveTournament(ActionEvent event) {
-        /* TODO: Add functionality
-         * TODO: Handle if filechooser was closed during selection */
+        /* TODO: Handle if filechooser was closed during selection */
+
+        boolean writeStatus = false;
+        String extension = "rlts";
 
         Stage stage = (Stage) cancelBtn.getScene().getWindow();
 
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Choose save destination and name");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Tournament format (*.rlts)", "*.rlts"));
-        fileChooser.setInitialFileName("tournamentName.rlts");
+        fileChooser.setTitle("Choose file name and save destination");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Tournament format (*." + extension + ")", "*." + extension));
+        fileChooser.setInitialFileName(Tournament.get().getName() + "." + extension);
 
         File file = fileChooser.showSaveDialog(stage);
 
         if (file != null) {
-            if (!file.getName().endsWith(".rlts")) {
-                file = new File(file.getAbsolutePath() + ".rlts");
+            try {
+                writeStatus = FileOperations.writeTournamentToFilesystem(file.getParent(), file.getName(), extension, Tournament.get());
+            } catch (IOException e) {
+                System.out.println("ERROR: Caught IOException when writing to " + file.getAbsolutePath() + ". " + e.getMessage());
             }
         }
 
-        /* TEST */
-        try {
-            FileWriter write = new FileWriter(file, true);
-            PrintWriter printer = new PrintWriter(write);
-
-            printer.printf("Hello");
-            printer.close();
-
-        } catch (IOException e) {
-            e.getStackTrace();
-            System.out.println(e.getMessage());
+        if (writeStatus) {
+            System.exit(0);
         }
-
-        /* TODO: Create check if file was written successfully */
-        System.exit(0);
-
-
     }
 
     @FXML
@@ -78,7 +68,6 @@ public class ExitProgramController {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setX(event.getScreenX() - x);
         stage.setY(event.getScreenY() - y);
-
     }
 
     @FXML
@@ -86,6 +75,4 @@ public class ExitProgramController {
         x = event.getSceneX();
         y = event.getSceneY();
     }
-
-
 }

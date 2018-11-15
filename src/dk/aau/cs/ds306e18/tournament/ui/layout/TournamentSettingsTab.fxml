@@ -15,8 +15,8 @@
 
 <GridPane id="mainGrid" fx:id="tournamentSettingsTab" minWidth="-Infinity" prefHeight="532.0" prefWidth="800.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.controllers.TournamentSettingsTabController">
    <columnConstraints>
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="464.0" minWidth="10.0" prefWidth="436.44451904296875" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="392.0" minWidth="10.0" prefWidth="363.55548095703125" />
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="430.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="400.0" minWidth="10.0" prefWidth="350.0" />
    </columnConstraints>
    <rowConstraints>
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -29,12 +29,12 @@
                   <Font name="System Bold" size="24.0" />
                </font>
                <VBox.margin>
-                  <Insets left="20.0" top="15.0" />
+                  <Insets top="15.0" />
                </VBox.margin>
             </Text>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tournament name:">
                <VBox.margin>
-                  <Insets left="20.0" top="10.0" />
+                  <Insets top="10.0" />
                </VBox.margin>
                <font>
                   <Font size="16.0" />
@@ -42,7 +42,7 @@
             </Text>
             <TextField fx:id="nameTextField" onKeyReleased="#nameTextFieldOnKeyReleased" VBox.vgrow="NEVER">
                <VBox.margin>
-                  <Insets left="20.0" />
+                  <Insets />
                </VBox.margin>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -55,7 +55,7 @@
                         <Font size="16.0" />
                      </font>
                      <HBox.margin>
-                        <Insets left="20.0" />
+                        <Insets />
                      </HBox.margin>
                   </Text>
                   <ChoiceBox fx:id="tieBreakerChoiceBox" prefHeight="25.0" prefWidth="111.0">
@@ -70,12 +70,12 @@
                   <Font name="System Bold" size="16.0" />
                </font>
                <VBox.margin>
-                  <Insets bottom="-5.0" left="20.0" />
+                  <Insets bottom="-5.0" />
                </VBox.margin>
             </Text>
             <ListView fx:id="stagesListView" prefHeight="200.0" prefWidth="200.0">
                <VBox.margin>
-                  <Insets left="20.0" />
+                  <Insets />
                </VBox.margin>
             </ListView>
             <GridPane style="-fx-max-width: 250;">
@@ -98,13 +98,16 @@
                   </HBox>
                </children>
                <VBox.margin>
-                  <Insets left="20.0" right="20.0" />
+                  <Insets />
                </VBox.margin>
             </GridPane>
          </children>
          <GridPane.margin>
             <Insets />
          </GridPane.margin>
+         <padding>
+            <Insets left="20.0" right="20.0" />
+         </padding>
       </VBox>
       <VBox id="TS-rightside" fx:id="stageSettingsVBox" prefHeight="200.0" prefWidth="338.0" spacing="10.0" visible="false" GridPane.columnIndex="1">
          <children>
@@ -146,36 +149,16 @@
                         <Font size="16.0" />
                      </font>
                   </Text>
-                  <ChoiceBox fx:id="formatChoicebox" prefHeight="25.0" prefWidth="111.0" GridPane.columnIndex="1" />
+                  <ChoiceBox fx:id="formatChoicebox" prefHeight="27.0" prefWidth="130.0" GridPane.columnIndex="1" />
                </children>
                <VBox.margin>
                   <Insets right="20.0" />
                </VBox.margin>
             </GridPane>
-            <GridPane fx:id="stageOptions">
-               <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-                  <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-               </rowConstraints>
-               <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Rounds: ">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Text>
-                  <TextField fx:id="roundsTextfield" alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="50.0" GridPane.columnIndex="1">
-                     <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </padding>
-                  </TextField>
-               </children>
+            <VBox fx:id="formatUniqueSettingsHolder" prefHeight="200.0" prefWidth="100.0">
                <VBox.margin>
                   <Insets right="20.0" />
-               </VBox.margin>
-            </GridPane>
+               </VBox.margin></VBox>
          </children>
          <GridPane.margin>
             <Insets />

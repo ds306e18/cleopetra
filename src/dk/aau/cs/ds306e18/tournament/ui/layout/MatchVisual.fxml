@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.shape.*?>
-<?import javafx.scene.text.*?>
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Polygon?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Text?>
 
-<VBox id="matchPlayed" onMouseClicked="#matchClicked" spacing="2.0" styleClass="match" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.controllers.MatchVisualController">
+<VBox id="matchPlayed" fx:id="matchRoot" onMouseClicked="#matchClicked" spacing="2.0" styleClass="match" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.controllers.MatchVisualController">
    <children>
       <HBox fx:id="hboxBlueTeam" alignment="CENTER_LEFT" prefHeight="12.0" prefWidth="171.0">
          <children>
@@ -26,11 +26,7 @@
             <Group styleClass="score">
                <children>
                   <Rectangle fill="#cdcfd0" height="20.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="scoreBg" width="20.0" />
-                  <Text fx:id="teamBlueScore" layoutY="15.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="scoreNo" text="5" textAlignment="CENTER" wrappingWidth="20.0">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font>
-                  </Text>
+                  <Text fx:id="teamBlueScore" layoutY="15.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="scoreNo" text="5" textAlignment="CENTER" wrappingWidth="20.0" />
                </children>
             </Group>
             <Polygon fill="#c1c1c1" points="-23.999984741210938, -30.00000762939453, -24.0, -50.0, -9.75, -40.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="triangle" />
@@ -60,9 +56,6 @@
                <children>
                   <Rectangle fill="#cdcfd0" height="20.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="scoreBg" width="20.0" />
                   <Text fx:id="teamOrangeScore" layoutY="15.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="scoreNo" text="2" textAlignment="CENTER" wrappingWidth="20.0">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font>
                   </Text>
                </children>
             </Group>

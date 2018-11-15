@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 public class Tournament {
 
@@ -30,7 +31,6 @@ public class Tournament {
 
     public void setName(String name) {
         this.name = name;
-        System.out.println("Named changed:" + name);
     }
 
     public void addTeam(Team team) {
@@ -54,7 +54,7 @@ public class Tournament {
     }
 
     public void sortTeamsAfterInitialSeed() {
-        if (started) throw new IllegalStateException("Tournament has already started.");
+        //TODO if (started) throw new IllegalStateException("Tournament has already started.");
         // Sort teams by comparator and not data structure, since seed value is not final
         teams.sort(Comparator.comparingInt(Team::getInitialSeedValue));
     }
@@ -129,7 +129,7 @@ public class Tournament {
     }
 
     public boolean canStart() {
-        return teams.size() < 2 && !stages.isEmpty();
+        return teams.size() >= 2 && !stages.isEmpty();
     }
 
     public void start() {
@@ -147,5 +147,23 @@ public class Tournament {
     public void setTieBreaker(TieBreaker tieBreaker) {
         if (started) throw new IllegalStateException("Tournament has already started.");
         this.tieBreaker = tieBreaker;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Tournament that = (Tournament) o;
+        return started == that.started &&
+                currentStageIndex == that.currentStageIndex &&
+                Objects.equals(getName(), that.getName()) &&
+                Objects.equals(getTeams(), that.getTeams()) &&
+                Objects.equals(getStages(), that.getStages()) &&
+                Objects.equals(getTieBreaker(), that.getTieBreaker());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName(), getTeams(), getStages(), getTieBreaker(), started, currentStageIndex);
     }
 }

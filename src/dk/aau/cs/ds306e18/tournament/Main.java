@@ -19,6 +19,11 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         URL resource = getClass().getResource("ui/layout/MainLayout.fxml");
         Parent root = FXMLLoader.load(resource);
+
+        /* Min width + height*/
+        primaryStage.setMinWidth(800);
+        primaryStage.setMinHeight(650);
+
         primaryStage.setTitle("DatTournament Runner");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
@@ -32,7 +37,7 @@ public class Main extends Application {
 
             // Load exit program FXML file
             try {
-            AnchorPane exitRoot = FXMLLoader.load(getClass().getResource("ui/layout/Exit.fxml"));
+                AnchorPane exitRoot = FXMLLoader.load(getClass().getResource("ui/layout/Exit.fxml"));
 
                 exitStage.setScene(new Scene(exitRoot));
                 exitStage.show();
@@ -43,7 +48,7 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        System.out.println("Hola mundo");
+        System.out.println("Hej verden!");
         launch(args);
     }
 }

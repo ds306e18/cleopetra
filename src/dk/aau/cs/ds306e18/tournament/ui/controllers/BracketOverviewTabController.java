@@ -1,110 +1,108 @@
 package dk.aau.cs.ds306e18.tournament.ui.controllers;
 
-import dk.aau.cs.ds306e18.tournament.model.*;
+import dk.aau.cs.ds306e18.tournament.model.Bot;
+import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import dk.aau.cs.ds306e18.tournament.model.format.Format;
-import dk.aau.cs.ds306e18.tournament.model.format.SingleEliminationFormat;
-import dk.aau.cs.ds306e18.tournament.model.format.SwissFormat;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Button;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class BracketOverviewTabController {
 
-    @FXML private GridPane bracketOverviewTab;
-    @FXML private VBox selectedMatchVBox;
-    @FXML private VBox overviewVBox;
-    @FXML private Button nextMatchBtn;
-    @FXML private Button nextStageBtn;
-    @FXML private Button prevStageBtn;
-    @FXML private Button prevMatchBtn;
+    public static BracketOverviewTabController instance;
 
-    private SwissFormat swissFormat; //TODO temp
-    private SingleEliminationFormat singleEli; //TODO temp
+    @FXML
+    private VBox startTournamentInstructionsHolder;
+    @FXML
+    private GridPane bracketOverviewTab;
+    @FXML
+    private VBox selectedMatchVBox;
+    @FXML
+    private VBox overviewVBox;
+    @FXML
+    private Button nextMatchBtn;
+    @FXML
+    private Button nextStageBtn;
+    @FXML
+    private Button prevStageBtn;
+    @FXML
+    private Button prevMatchBtn;
+    @FXML
+    private Button playMatchBtn;
+    @FXML
+    private Button editMatchBtn;
+    @FXML
+    private Label blueTeamNameLabel;
+    @FXML
+    private TextField blueTeamScore;
+    @FXML
+    private ListView<Bot> blueTeamListView;
+    @FXML
+    private Label orangeTeamNameLabel;
+    @FXML
+    private TextField orangeTeamScore;
+    @FXML
+    private ListView<Bot> orangeTeamListView;
+    @FXML
+    private ScrollPane overviewScrollPane;
+    @FXML
+    private GridPane selectedMatchInfo;
+    @FXML
+    private HBox selectedMatchButtonHolder;
+    @FXML
+    private HBox stageNavigationButtonsHolder;
 
     private MatchVisualController selectedMatch;
 
     @FXML
     private void initialize(){
-        selectedMatch = null;
-        //initializeSwissBracket(); //TODO temp
-        initializeSingleEliBracket(); //TODO temp
-        updateView(singleEli);
+        instance = this; // TODO Make references to other controllers work in MainController
     }
 
-    /** Updates the content of this element. Displays the javaFxNode from the given format. */
-    private void updateView(Format format){
-        overviewVBox.getChildren().clear();
-        overviewVBox.getChildren().add(format.getJavaFxNode(this));
-        //VBox.setVgrow(overviewVBox.getChildren().get(0), Priority.ALWAYS); //TODO this shuold be handled in fxml for this
+    /** Updates all elements depending on the state of the tournament and the shown stage. */
+    public void update() {
+        Tournament tournament = Tournament.get();
+        if (!tournament.hasStarted()) {
+            showStartTournamentInstructions(true);
+            setSelectedMatch(null);
+            stageNavigationButtonsHolder.setDisable(true);
+        } else {
+            showStartTournamentInstructions(false);
+            Format format = tournament.getCurrentStage().getFormat();
+            showFormat(format);
+        }
     }
 
-    /** a temperate method that generates a single elimination bracket. */
-    private void initializeSingleEliBracket(){
-
-        ArrayList<Team> teams = new ArrayList<>();
-
-        ArrayList<Bot> team1 = new ArrayList<>();
-        team1.add(new Bot("t1b1", "mk", null));
-        team1.add(new Bot("t1b2", "mk", null));
-        teams.add(new Team("Team 1", team1, 1, "hello"));
-
-        ArrayList<Bot> team2 = new ArrayList<>();
-        team1.add(new Bot("t2b1", "mk", null));
-        team1.add(new Bot("t2b2", "mk", null));
-        teams.add(new Team("Team 2", team2, 2, "hello"));
-
-        ArrayList<Bot> team3 = new ArrayList<>();
-        team1.add(new Bot("t3b1", "mk", null));
-        team1.add(new Bot("t3b2", "mk", null));
-        teams.add(new Team("Team 3", team3, 3, "hello"));
-
-        ArrayList<Bot> team4 = new ArrayList<>();
-        team1.add(new Bot("t4b1", "mk", null));
-        team1.add(new Bot("t4b2", "mk", null));
-        teams.add(new Team("Team 4", team4, 4, "hello"));
-
-        ArrayList<Bot> team5 = new ArrayList<>();
-        team1.add(new Bot("t5b1", "mk", null));
-        team1.add(new Bot("t5b2", "mk", null));
-        teams.add(new Team("Team 5", team4, 5, "hello"));
-
-        ArrayList<Bot> team6 = new ArrayList<>();
-        team1.add(new Bot("t6b1", "mk", null));
-        team1.add(new Bot("t6b2", "mk", null));
-        teams.add(new Team("Team 6", team4, 6, "hello"));
-
-        ArrayList<Bot> team7 = new ArrayList<>();
-        team1.add(new Bot("t7b1", "mk", null));
-        team1.add(new Bot("t7b2", "mk", null));
-        teams.add(new Team("Team 7", team7, 7, "hello"));
-
-        ArrayList<Bot> team8 = new ArrayList<>();
-        team1.add(new Bot("t8b1", "mk", null));
-        team1.add(new Bot("t8b2", "mk", null));
-        teams.add(new Team("Team 8", team8, 8, "hello"));
-
-        singleEli = new SingleEliminationFormat();
-        singleEli.start(teams);
-
-        //Set matches
-        ArrayList<Match> matches = new ArrayList<Match>(singleEli.getAllMatches());
-        matches.get(5).setScores(2,4,true);
-        matches.get(4).setScores(3,1,true);
-
-
+    private void showStartTournamentInstructions(boolean show) {
+        startTournamentInstructionsHolder.setManaged(show);
+        startTournamentInstructionsHolder.setVisible(show);
+        overviewScrollPane.setManaged(!show);
+        overviewScrollPane.setVisible(!show);
     }
 
-    /** @param match the match to be visualised
-     * @return a gridPane containing the visualisation of the given match. */
-    public VBox loadVisualMatch(Match match) {
+    public void showFormat(Format format) {
+        overviewScrollPane.setContent(format.getBracketFXNode(this));
+    }
+
+    /**
+     * @param match the match to be visualised
+     * @return a gridPane containing the visualisation of the given match.
+     */
+    public MatchVisualController loadVisualMatch(Match match) {
 
         //Load the fxml document into the Controller and JavaFx node.
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../layout/MatchVisual.fxml"));
@@ -118,62 +116,85 @@ public class BracketOverviewTabController {
             e.printStackTrace();
         }
 
-
         mvc.setBoc(this);
-        mvc.setMyNodeObj(root);
-        mvc.updateMatch(match);
+        mvc.setShowedMatch(match);
 
-        return root;
+        return mvc;
     }
 
-    /** a temperate method that generates a swiss bracket. */
-    private void initializeSwissBracket(){
-        swissFormat = new SwissFormat();
-        ArrayList<Team> teams = new ArrayList<Team>();
-        ArrayList<Bot> team1 = new ArrayList<>();
-        team1.add(new Bot("t1b1", "mk", null));
-        team1.add(new Bot("t1b2", "mk", null));
-        teams.add(new Team("Team 1", team1, 1, "hello"));
-
-        ArrayList<Bot> team2 = new ArrayList<>();
-        team1.add(new Bot("t2b1", "mk", null));
-        team1.add(new Bot("t2b2", "mk", null));
-        teams.add(new Team("Team 2", team2, 2, "hello"));
-
-        ArrayList<Bot> team3 = new ArrayList<>();
-        team1.add(new Bot("t3b1", "mk", null));
-        team1.add(new Bot("t3b2", "mk", null));
-        teams.add(new Team("Team 3", team3, 3, "hello"));
-
-        ArrayList<Bot> team4 = new ArrayList<>();
-        team1.add(new Bot("t4b1", "mk", null));
-        team1.add(new Bot("t4b2", "mk", null));
-        teams.add(new Team("Team 4", team4, 4, "hello"));
-
-        swissFormat.start(teams);
-
-        for (Match match : swissFormat.getUpcomingMatches())
-            match.setScores(2, 4, true);
-        //swissFormat.createNewRound();
-    }
-
-    /** WIP: Meant to update the created matches on button click -> this method. */
-    @FXML
-    void updateBracket(ActionEvent event) {
-        System.out.println("Clioced");
-        overviewVBox.getChildren().clear();
-        overviewVBox.getChildren().add(swissFormat.getJavaFxNode(null));
-    }
-
-    /** Gets called when a match in overviewTab is clicked. */
-    public void setSelectedMatch(MatchVisualController match){
+    /**
+     * Sets the selected match.
+     */
+    public void setSelectedMatch(MatchVisualController match) {
         this.selectedMatch = match;
-        System.out.println("New match selected!");
+        updateTeamViewer(match == null ? null : match.getShowedMatch());
     }
 
-    public void generateNewSwissRound(){
-        swissFormat.createNewRound();
-        updateView(swissFormat);
-        System.out.println("Generate new swiss round!");
+    /**
+     * Updates the team viewer on match clicked in overviewTab
+     */
+    private void updateTeamViewer(Match match) {
+        boolean disable = (match == null);
+        selectedMatchInfo.setDisable(disable);
+        selectedMatchButtonHolder.setDisable(disable);
+
+        if (match != null && match.getBlueTeam() != null) {
+            // Blue team
+            blueTeamNameLabel.setText(match.getBlueTeam().getTeamName());
+            blueTeamScore.setText(Integer.toString(match.getBlueScore()));
+            blueTeamListView.setItems(FXCollections.observableArrayList(match.getBlueTeam().getBots()));
+            blueTeamListView.refresh();
+        } else {
+            // Orange team is unknown
+            blueTeamNameLabel.setText("Blue team");
+            blueTeamScore.setText("");
+            blueTeamListView.setItems(null);
+            blueTeamListView.refresh();
+        }
+        if (match != null && match.getOrangeTeam() != null) {
+            // Orange team
+            orangeTeamNameLabel.setText(match.getOrangeTeam().getTeamName());
+            orangeTeamScore.setText(Integer.toString(match.getOrangeScore()));
+            orangeTeamListView.setItems(FXCollections.observableArrayList(match.getOrangeTeam().getBots()));
+            orangeTeamListView.refresh();
+        } else {
+            // Orange team is unknown
+            orangeTeamNameLabel.setText("Orange team");
+            orangeTeamScore.setText("");
+            orangeTeamListView.setItems(null);
+            orangeTeamListView.refresh();
+        }
+    }
+
+    /**
+     * Toggles edit for match scores
+     */
+    @FXML
+    void editMatchBtnOnAction(ActionEvent event) {
+        try {
+            Stage editMatchScoreStage = new Stage();
+            editMatchScoreStage.initStyle(StageStyle.TRANSPARENT);
+            editMatchScoreStage.initModality(Modality.APPLICATION_MODAL);
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../layout/EditMatchScore.fxml"));
+            AnchorPane editMatchStageRoot = loader.load();
+            EditMatchScoreController emsc = loader.getController();
+            emsc.setMatch(selectedMatch.getShowedMatch());
+            editMatchScoreStage.setScene(new Scene(editMatchStageRoot));
+            editMatchScoreStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void onStartTournamentButtonPressed(ActionEvent actionEvent) {
+        if (Tournament.get().canStart()) {
+            Tournament.get().start();
+            update();
+        } else {
+            // TODO Show error message to user
+            System.out.println("Can't start tournament.");
+        }
     }
 }
