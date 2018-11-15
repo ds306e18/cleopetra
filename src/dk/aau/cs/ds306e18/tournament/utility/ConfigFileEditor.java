@@ -16,41 +16,51 @@ import java.util.List;
 
 public class ConfigFileEditor {
 
-    private List<String> config;
+    private static List<String> config;
 
     private static String removeValuePattern = "= .*$";
 
-    public void readConfig(String filename) {
+    public static List<String> getConfig() {
+        return config;
+    }
+
+    public static void setConfig(List<String> config) {
+        ConfigFileEditor.config = config;
+    }
+
+    public static void readConfig(String filename) {
         Path in = Paths.get(filename);
         try {
-            this.config = Files.readAllLines(in);
+            config = Files.readAllLines(in);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void writeConfig(String filename) {
+    public static void writeConfig(String filename) {
         Path out = Paths.get(filename);
         try {
-            Files.write(out, this.config, Charset.defaultCharset());
+            Files.write(out, config, Charset.defaultCharset());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void editLine(String parameter, String value) {
-        for (String line : this.config) {
+    public static void editLine(String parameter, String value) {
+        for (int i = 0; i < config.size(); i++) {
+            String line = config.get(i);
             if (line.startsWith(parameter)) {
-                line = removeValue(line) + value;
+                config.set(i, removeValue(line) + value);
                 return;
             }
         }
     }
 
-    public void editLine(String parameter, int num, String value) {
-        for (String line : this.config) {
+    public static void editLine(String parameter, int num, String value) {
+        for (int i = 0; i < config.size(); i++) {
+            String line = config.get(i);
             if (line.startsWith(parameter + num)) {
-                line = removeValue(line) + value;
+                config.set(i, removeValue(line) + value);
                 return;
             }
         }
