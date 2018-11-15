@@ -129,4 +129,13 @@ public class MatchVisualController implements MatchChangeListener {
             default: throw new IllegalStateException();
         }
     }
+
+    public VBox getRoot() {
+        return matchRoot;
+    }
+
+    /** Decouples the controller from the model, allowing the controller to be thrown to the garbage collector. */
+    public void decoupleFromModel() {
+        showedMatch.unregisterMatchChangeListener(this);
+    }
 }
