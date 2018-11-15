@@ -140,7 +140,7 @@ public class ParticipantSettingsTabController {
     void addTeamBtnOnAction(ActionEvent actionEvent) {
 
         //Create a team with a bot and add the team to the tournament
-        Team team = new Team("Team " + (Tournament.get().getTeams().size() + 1), new ArrayList<Bot>(), 0, "");
+        Team team = new Team("Team " + (Tournament.get().getTeams().size() + 1), new ArrayList<Bot>(), teamsListView.getItems().size()+1, "");
         team.addBot(new Bot("Bot", "Anonymous", ""));
         Tournament.get().addTeam(team);
 
@@ -214,6 +214,12 @@ public class ParticipantSettingsTabController {
         teamSettingsVbox.setVisible(teamsListView.getItems().size() != 0);
 
         if (getSelectedTeamIndex() != -1) {
+
+            // Handle team order button disabling / enabling
+            int selectedIndex = getSelectedTeamIndex();
+            swapUp.setDisable(selectedIndex == 0);
+            swapDown.setDisable(selectedIndex == teamsListView.getItems().size() - 1 && selectedIndex != - 1);
+
             Team selectedTeam = Tournament.get().getTeams().get(getSelectedTeamIndex());
             seedValueSpinner.getValueFactory().setValue(selectedTeam.getInitialSeedValue());
 
@@ -293,30 +299,36 @@ public class ParticipantSettingsTabController {
         Tournament.get().getTeams().get(getSelectedTeamIndex()).setInitialSeedValue(seedValueSpinner.getValue());
     }
 
-    /** Swaps a stage upwards in the list of stages. Used to allow ordering of stages.
-     * This also swaps the stages in the tournament model. */
+    /** Swaps a team upwards in the list of teams. Used to allow ordering of Team and thereby their seed. */
     @FXML
     private void swapTeamUpwards() {
-        /*if (getSelectedTeamIndex() != 0 && getSelectedTeamIndex() != -1) {
-            Collections.swap(teamsListView.getItems(), getSelectedTeamIndex(), getSelectedTeamIndex() - 1);
-            Tournament.get().swapStages(teamsListView.getItems().get(getSelectedTeamIndex()), teamsListView.getItems().get(getSelectedTeamIndex() - 1));
 
-            teamsListView.getSelectionModel().select(getSelectedTeamIndex() - 1);
-        }*/
+        Team teamSelected = Tournament.get().getTeams().get(getSelectedTeamIndex());
+        Team teamAbove = Tournament.get().getTeams().get(getSelectedTeamIndex() - 1);
+
+        teamSelected.setInitialSeedValue(teamSelected.getInitialSeedValue() -1);
+        teamAbove.setInitialSeedValue(teamAbove.getInitialSeedValue() + 1);
+
+        Tournament.get().sortTeamsAfterInitialSeed();
+
+        teamsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams()));
+        teamsListView.refresh();
     }
 
-    /** Swaps a stage downwards in the list of stages. Used to allow ordering of stages.
-     * This also swaps the stages in the tournament model. */
+    /** Swaps a team downwards in the list of teams. Used to allow ordering of Team and thereby their seed. */
     @FXML
     private void swapTeamDownwards() {
 
-        /*int listSize = teamsListView.getItems().size();
+        Team teamSelected = Tournament.get().getTeams().get(getSelectedTeamIndex());
+        Team teamBelow = Tournament.get().getTeams().get(getSelectedTeamIndex() + 1);
 
-        if (getSelectedTeamIndex() != listSize - 1 && getSelectedTeamIndex() != -1) {
-            Collections.swap(teamsListView.getItems(), getSelectedTeamIndex(), getSelectedTeamIndex() + 1);
-            Tournament.get().swapStages(teamsListView.getItems().get(getSelectedTeamIndex()), teamsListView.getItems().get(getSelectedTeamIndex() + 1));
-            teamsListView.getSelectionModel().select(getSelectedTeamIndex() + 1);
-        }*/
+        teamSelected.setInitialSeedValue(teamSelected.getInitialSeedValue() + 1);
+        teamBelow.setInitialSeedValue(teamBelow.getInitialSeedValue() - 1);
+
+        Tournament.get().sortTeamsAfterInitialSeed();
+
+        teamsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams()));
+        teamsListView.refresh();
     }
 
     private Team getSelectedTeam(){
