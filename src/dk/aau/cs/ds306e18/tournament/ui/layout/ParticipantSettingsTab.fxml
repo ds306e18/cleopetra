@@ -101,16 +101,6 @@
                   <Insets />
                </VBox.margin>
             </TextField>
-            <HBox prefHeight="28.0">
-               <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Seed value:              ">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Text>
-                  <Spinner fx:id="seedValueSpinner" onKeyReleased="#seedValueSpinnerOnAction" onMouseReleased="#seedValueSpinnerOnAction" prefHeight="25.0" prefWidth="88.0" />
-               </children>
-            </HBox>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Bots">
                <font>
                   <Font name="System Bold" size="16.0" />

@@ -38,7 +38,6 @@ public class ParticipantSettingsTabController {
     @FXML private ListView<Team> teamsListView;
     @FXML private VBox teamSettingsVbox;
     @FXML private VBox botSettingsVbox;
-    @FXML private Spinner<Integer> seedValueSpinner;
     @FXML private TextField configPathTextField;
     @FXML private Button swapUp;
     @FXML private Button swapDown;
@@ -63,9 +62,6 @@ public class ParticipantSettingsTabController {
         teamsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             updateTeamFields();
         });
-
-        //Initializes seed value spinner
-        initSeedSpinner();
     }
 
     @FXML
@@ -168,14 +164,6 @@ public class ParticipantSettingsTabController {
         }
     }
 
-    /** Updates tournament values from spinner when edit or action pressed */
-    @FXML
-    void seedValueSpinnerOnAction() {
-        if (getSelectedTeamIndex() != -1) {
-            Tournament.get().getTeams().get(getSelectedTeamIndex()).setInitialSeedValue(seedValueSpinner.valueProperty().getValue());
-        }
-    }
-
     /** Updates the textfields with the values from the selected bot. */
     void updateBotFields() {
         if (botsListView.getSelectionModel().getSelectedIndex() != -1) {
@@ -221,7 +209,6 @@ public class ParticipantSettingsTabController {
             swapDown.setDisable(selectedIndex == teamsListView.getItems().size() - 1 && selectedIndex != - 1);
 
             Team selectedTeam = Tournament.get().getTeams().get(getSelectedTeamIndex());
-            seedValueSpinner.getValueFactory().setValue(selectedTeam.getInitialSeedValue());
 
             botsListView.getSelectionModel().clearSelection();
             teamNameTextField.setText(selectedTeam.getTeamName());
@@ -271,18 +258,6 @@ public class ParticipantSettingsTabController {
         }
     }
 
-    private void initSeedSpinner() {
-        //Makes the spinner editable and sets the values that can be chosen
-        seedValueSpinner.setEditable(true);
-        seedValueSpinner.setValueFactory(
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, Integer.MAX_VALUE));
-
-        //Adds value listener to spinner
-        seedValueSpinner.getValueFactory().valueProperty().addListener(((observable, oldValue, newValue) -> {
-            updateSeedValue();
-        }));
-    }
-
     /** Sets the configPath text and changes the path for the selected bot */
     private void setConfigPathText(List<File> files) {
         if (files == null || files.isEmpty()) {
@@ -292,11 +267,6 @@ public class ParticipantSettingsTabController {
             configPathTextField.setText(file.getAbsolutePath() + "\n");
             botsListView.getSelectionModel().getSelectedItem().setConfigPath(file.getAbsolutePath());
         }
-    }
-
-    /** Updates the seed value for the selected team */
-    private void updateSeedValue() {
-        Tournament.get().getTeams().get(getSelectedTeamIndex()).setInitialSeedValue(seedValueSpinner.getValue());
     }
 
     /** Swaps a team upwards in the list of teams. Used to allow ordering of Team and thereby their seed. */
