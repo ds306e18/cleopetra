@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -40,6 +41,8 @@ public class ParticipantSettingsTabController {
     @FXML private VBox botSettingsVbox;
     @FXML private Spinner<Integer> seedValueSpinner;
     @FXML private TextField configPathTextField;
+    @FXML private Button swapUp;
+    @FXML private Button swapDown;
     final private FileChooser fileChooser = new FileChooser();
 
     @FXML
@@ -289,6 +292,32 @@ public class ParticipantSettingsTabController {
     /** Updates the seed value for the selected team */
     private void updateSeedValue() {
         Tournament.get().getTeams().get(getSelectedTeamIndex()).setInitialSeedValue(seedValueSpinner.getValue());
+    }
+
+    /** Swaps a stage upwards in the list of stages. Used to allow ordering of stages.
+     * This also swaps the stages in the tournament model. */
+    @FXML
+    private void swapTeamUpwards() {
+        /*if (getSelectedTeamIndex() != 0 && getSelectedTeamIndex() != -1) {
+            Collections.swap(teamsListView.getItems(), getSelectedTeamIndex(), getSelectedTeamIndex() - 1);
+            Tournament.get().swapStages(teamsListView.getItems().get(getSelectedTeamIndex()), teamsListView.getItems().get(getSelectedTeamIndex() - 1));
+
+            teamsListView.getSelectionModel().select(getSelectedTeamIndex() - 1);
+        }*/
+    }
+
+    /** Swaps a stage downwards in the list of stages. Used to allow ordering of stages.
+     * This also swaps the stages in the tournament model. */
+    @FXML
+    private void swapTeamDownwards() {
+
+        /*int listSize = teamsListView.getItems().size();
+
+        if (getSelectedTeamIndex() != listSize - 1 && getSelectedTeamIndex() != -1) {
+            Collections.swap(teamsListView.getItems(), getSelectedTeamIndex(), getSelectedTeamIndex() + 1);
+            Tournament.get().swapStages(teamsListView.getItems().get(getSelectedTeamIndex()), teamsListView.getItems().get(getSelectedTeamIndex() + 1));
+            teamsListView.getSelectionModel().select(getSelectedTeamIndex() + 1);
+        }*/
     }
 
     private Team getSelectedTeam(){
