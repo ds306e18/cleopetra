@@ -20,6 +20,7 @@ import java.util.ArrayList;
 public class SingleEliminationNode extends GridPane {
 
     private final Insets MARGINS = new Insets(0, 0, 8, 0);
+    private final int CELL_SIZE = 50;
 
     private final SingleEliminationFormat singleElimination;
     private final BracketOverviewTabController boc;
@@ -39,7 +40,6 @@ public class SingleEliminationNode extends GridPane {
 
         Match[] matchArray = singleElimination.getMatchesAsArray();
         int rounds = singleElimination.getRounds();
-        int matchInFirstRound = pow2(rounds);
 
         int m = 0; // match index
         for (int r = 0; r < rounds; r++) {
@@ -51,20 +51,22 @@ public class SingleEliminationNode extends GridPane {
             for (int i = 0; i < matchesInRound; i++) {
                 Match match = matchArray[m];
                 m++;
+                VBox box = new VBox();
 
                 // Some matches can be null
                 if (match != null) {
                     MatchVisualController mvc = boc.loadVisualMatch(match);
                     mvcs.add(mvc);
-                    VBox box = new VBox(mvc.getRoot());
-                    box.setAlignment(Pos.CENTER);
-                    box.setMinHeight(85 * cellSpan);
-
-                    add(box, column, i * cellSpan);
-                    setRowSpan(box, cellSpan);
-                    setMargin(box, MARGINS);
-                    setValignment(box, VPos.CENTER);
+                    box.getChildren().add(mvc.getRoot());
                 }
+
+                box.setAlignment(Pos.CENTER);
+                box.setMinHeight(CELL_SIZE * cellSpan);
+
+                add(box, column, (matchesInRound - 1 - i) * cellSpan);
+                setRowSpan(box, cellSpan);
+                setMargin(box, MARGINS);
+                setValignment(box, VPos.CENTER);
             }
         }
     }
