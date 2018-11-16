@@ -247,7 +247,7 @@ public class SwissFormat extends GroupFormat implements MatchPlayedListener {
     }
 
     @Override
-    public Node getBracketFXNode(BracketOverviewTabController boc) {
+    public SwissNode getBracketFXNode(BracketOverviewTabController boc) {
         return new SwissNode(this, boc);
     }
 

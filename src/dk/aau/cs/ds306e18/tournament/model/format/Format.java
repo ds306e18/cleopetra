@@ -4,6 +4,7 @@ import dk.aau.cs.ds306e18.tournament.model.StageStatus;
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
+import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.CleanableUI;
 import dk.aau.cs.ds306e18.tournament.ui.controllers.BracketOverviewTabController;
 import javafx.scene.Node;
 
@@ -49,7 +50,7 @@ public interface Format {
     /**
      * Returns a Node of the stage. This node contains a reference to it self and other functionality to display the stage.
      */
-    Node getBracketFXNode(BracketOverviewTabController bracketOverview);
+    <T extends Node & CleanableUI> T getBracketFXNode(BracketOverviewTabController bracketOverview);
 
     /**
      * Returns a Node with the settings specific to this format. Can return null.

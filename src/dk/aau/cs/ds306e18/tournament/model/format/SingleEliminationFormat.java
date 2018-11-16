@@ -250,7 +250,7 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
     }
 
     @Override
-    public Node getBracketFXNode(BracketOverviewTabController boc) {
+    public SingleEliminationNode getBracketFXNode(BracketOverviewTabController boc) {
         return new SingleEliminationNode(this, boc);
     }
 
