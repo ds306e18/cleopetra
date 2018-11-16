@@ -398,6 +398,18 @@ public final class Match {
         return orangeTeam;
     }
 
+    public Match getBlueFromMatch() {
+        return blueFromMatch;
+    }
+
+    public Match getOrangeFromMatch() {
+        return orangeFromMatch;
+    }
+
+    public Match getWinnerDestination() {
+        return winnerDestination;
+    }
+
     public void registerListener(MatchListener listener) {
         listeners.add(listener);
     }

@@ -50,7 +50,7 @@ public class SingleEliminationFormat extends Elimination implements MatchListene
     }
 
     public Match[] getMatchesAsArray() {
-        return this.upperBracketMatches;
+        return this.upperBracketMatchesArray;
     }
 
 

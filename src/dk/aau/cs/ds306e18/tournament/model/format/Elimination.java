@@ -12,7 +12,7 @@ abstract class Elimination implements Format, MatchListener {
     StageStatus status = StageStatus.PENDING;
     ArrayList<Team> seededTeams;
     Match finalMatch;
-    Match[] upperBracketMatches;
+    Match[] upperBracketMatchesArray;
     int rounds;
 
     /** Generates a single-elimination bracket structure. References between the empty upperBracketMatches are made by winnerOf and starterSlots.
@@ -41,12 +41,11 @@ abstract class Elimination implements Format, MatchListener {
                 }
             }
         }
-
         // The final is the last match in the list
-
         finalMatch = bracketList.get(bracketList.size() - 1);
-        upperBracketMatches = new Match[bracketList.size()];
-        upperBracketMatches = finalMatch.getTreeAsListBFS().toArray(upperBracketMatches);
+
+        upperBracketMatchesArray = new Match[bracketList.size()];
+        upperBracketMatchesArray = finalMatch.getTreeAsListBFS().toArray(upperBracketMatchesArray);
     }
 
     /** Seeds the single-elimination bracket with teams to give better placements.
@@ -96,18 +95,18 @@ abstract class Elimination implements Format, MatchListener {
             if(byeList.contains(seedList.get(teamIndex)) || byeList.contains(seedList.get(teamIndex+1))) {
                 int matchCheckIndex = getParent(seedMatchIndex);
                 if(getLeftSide(matchCheckIndex) == seedMatchIndex) {
-                    upperBracketMatches[getParent(seedMatchIndex)].setBlue(seedList.get(teamIndex));
+                    upperBracketMatchesArray[getParent(seedMatchIndex)].setBlue(seedList.get(teamIndex));
                 }
-                else upperBracketMatches[getParent(seedMatchIndex)].setOrange(seedList.get(teamIndex));
-                upperBracketMatches[seedMatchIndex] = null;
+                else upperBracketMatchesArray[getParent(seedMatchIndex)].setOrange(seedList.get(teamIndex));
+                upperBracketMatchesArray[seedMatchIndex] = null;
                 seedMatchIndex--;
                 teamIndex = teamIndex + 2;
             }
             // If there are no byes in the matchup, place the teams vs each other as intended
             else {
-                upperBracketMatches[seedMatchIndex].setBlue(seedList.get(teamIndex));
+                upperBracketMatchesArray[seedMatchIndex].setBlue(seedList.get(teamIndex));
                 teamIndex++;
-                upperBracketMatches[seedMatchIndex].setOrange(seedList.get(teamIndex));
+                upperBracketMatchesArray[seedMatchIndex].setOrange(seedList.get(teamIndex));
                 seedMatchIndex--;
                 teamIndex++;
             }
