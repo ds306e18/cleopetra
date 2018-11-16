@@ -28,7 +28,7 @@
          <children>
             <VBox fx:id="startTournamentInstructionsHolder" alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <Label prefHeight="89.0" prefWidth="246.0" text="Double check you settings before you start.&#10;You must have at least:&#10;- One stage&#10;- Two teams">
+                  <Label prefHeight="89.0" prefWidth="246.0" text="Double check your settings before you start.&#10;You must have at least:&#10;- One stage&#10;- Two teams">
                      <VBox.margin>
                         <Insets bottom="16.0" />
                      </VBox.margin>
