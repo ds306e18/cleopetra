@@ -80,7 +80,12 @@ public class SingleEliminationNode extends GridPane {
         return res;
     }
 
+    /** Completely remove all UI elements. */
     private void clean() {
-
+        getChildren().clear();
+        for (MatchVisualController mvc : mvcs) {
+            mvc.decoupleFromModel();
+        }
+        mvcs.clear();
     }
 }
