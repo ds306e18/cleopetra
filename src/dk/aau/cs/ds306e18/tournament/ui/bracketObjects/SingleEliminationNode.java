@@ -3,36 +3,85 @@ package dk.aau.cs.ds306e18.tournament.ui.bracketObjects;
 import dk.aau.cs.ds306e18.tournament.model.format.SingleEliminationFormat;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.ui.controllers.BracketOverviewTabController;
+import dk.aau.cs.ds306e18.tournament.ui.controllers.MatchVisualController;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.geometry.VPos;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
 
-/** Used to display the a swiss stage. */
-public class SingleEliminationNode extends VBox {
+/** Used to display the a single elimination stage. */
+public class SingleEliminationNode extends GridPane {
 
-    private BracketOverviewTabController boc;
+    private final Insets MARGINS = new Insets(0, 0, 8, 0);
+    private final int CELL_SIZE = 50;
 
-    /** Used to display the a swiss stage. */
-    public SingleEliminationNode(SingleEliminationFormat singleEliStage, BracketOverviewTabController boc){
+    private final SingleEliminationFormat singleElimination;
+    private final BracketOverviewTabController boc;
+
+    private ArrayList<MatchVisualController> mvcs = new ArrayList<>();
+
+    /** Used to display the a single elimination stage. */
+    public SingleEliminationNode(SingleEliminationFormat singleElimination, BracketOverviewTabController boc){
+        this.singleElimination = singleElimination;
         this.boc = boc;
-        refreshMatches(singleEliStage, boc);
+        update();
     }
-    
-    /** Refreshes this node to represent the given swiss stage.
-     * @param swissStage the swiss stage to represent. */ //TODO Should be rename and reworked.
-    private void refreshMatches(SingleEliminationFormat swissStage, BracketOverviewTabController boc){
 
-        //TODO THIS IS VERY WORK IN PROGRESS! CREATED FOR TESTING PURPOSE
+    /** Updates all UI elements for the single elimination stage. */
+    private void update() {
+        clean();
 
-        //Clear content
-        this.getChildren().clear();
+        Match[] matchArray = singleElimination.getMatchesAsArray();
+        int rounds = singleElimination.getRounds();
 
-        //Create that amount of VBoxs
-        ArrayList<Match> allMatches = new ArrayList<>(swissStage.getAllMatches());
+        int m = 0; // match index
+        for (int r = 0; r < rounds; r++) {
+            int matchesInRound = pow2(r);
+            int column = rounds - 1 - r;
+            int cellSpan = pow2(column);
 
-        //Get all matches from each round and add them to matching vbox
-        for (Match match : allMatches) {
-            this.getChildren().add(boc.loadVisualMatch(match).getRoot());
+            // Add matches for round r
+            for (int i = 0; i < matchesInRound; i++) {
+                Match match = matchArray[m];
+                m++;
+                VBox box = new VBox();
+
+                // Some matches can be null
+                if (match != null) {
+                    MatchVisualController mvc = boc.loadVisualMatch(match);
+                    mvcs.add(mvc);
+                    box.getChildren().add(mvc.getRoot());
+                }
+
+                box.setAlignment(Pos.CENTER);
+                box.setMinHeight(CELL_SIZE * cellSpan);
+
+                add(box, column, (matchesInRound - 1 - i) * cellSpan);
+                setRowSpan(box, cellSpan);
+                setMargin(box, MARGINS);
+                setValignment(box, VPos.CENTER);
+            }
         }
+    }
+
+    /** Returns 2 to the power of n. */
+    private int pow2(int n) {
+        int res = 1;
+        for (int i = 0; i < n; i++) {
+            res *= 2;
+        }
+        return res;
+    }
+
+    /** Completely remove all UI elements. */
+    private void clean() {
+        getChildren().clear();
+        for (MatchVisualController mvc : mvcs) {
+            mvc.decoupleFromModel();
+        }
+        mvcs.clear();
     }
 }

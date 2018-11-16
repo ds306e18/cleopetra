@@ -69,7 +69,7 @@ public class BracketOverviewTabController {
     private MatchVisualController selectedMatch;
 
     @FXML
-    private void initialize() {
+    private void initialize(){
         instance = this; // TODO Make references to other controllers work in MainController
     }
 

@@ -25,7 +25,6 @@ public class SwissNode extends HBox implements MatchPlayedListener {
     private Button generateRoundButton;
     private ArrayList<MatchVisualController> mvcs = new ArrayList<>();
 
-    /** Used to display the a swiss stage. */
     public SwissNode(SwissFormat swiss, BracketOverviewTabController boc) {
         this.boc = boc;
         this.swiss = swiss;
