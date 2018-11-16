@@ -100,11 +100,20 @@
 }
 
 /* Matches overview - Matches design */
+
+.match {
+    -fx-border-width: 1;
+    -fx-border-color: transparent;
+}
+
 .match:hover{
+    -fx-cursor: hand;
     -fx-border-width: 1;
     -fx-border-color: green;
-    -fx-cursor: hand;
-    -fx-border-insets: -2;
+}
+
+.selectedMatch {
+    -fx-border-color: blue;
 }
 
 .triangle {
@@ -143,11 +152,6 @@
     -fx-font-style: italic;
 }
 
-.match:hover{
-    -fx-border-width: 1;
-    -fx-border-color: green;
-    -fx-cursor: hand;
-}
 
 
 /* Exit program overlay design */

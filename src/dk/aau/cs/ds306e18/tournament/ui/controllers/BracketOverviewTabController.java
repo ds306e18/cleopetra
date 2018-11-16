@@ -126,6 +126,9 @@ public class BracketOverviewTabController {
      * Sets the selected match.
      */
     public void setSelectedMatch(MatchVisualController match) {
+        if (selectedMatch != null){
+            selectedMatch.getRoot().getStyleClass().remove("selectedMatch");
+        }
         this.selectedMatch = match;
         updateTeamViewer(match == null ? null : match.getShowedMatch());
     }
