@@ -9,10 +9,7 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -52,6 +49,10 @@ public class TournamentSettingsTabController {
     @FXML
     private Button swapDown;
     @FXML
+    private Spinner<Integer> teamsInStageSpinner;
+    @FXML
+    private Label teamsInStageAll;
+    @FXML
     private VBox formatUniqueSettingsHolder;
 
     @FXML
@@ -89,6 +90,12 @@ public class TournamentSettingsTabController {
                 swapDown.setDisable(true);
             } else
                 removeStageBtn.setDisable(false);
+        });
+
+        /* Setup teams wanted in stage spinner */
+        teamsInStageSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(2, Integer.MAX_VALUE));
+        teamsInStageSpinner.getValueFactory().valueProperty().addListener((observable, oldValue, newValue) -> {
+            getSelectedStage().setNumberOfTeamsWanted(newValue);
         });
 
         /* Retrieve possible formats and add to a choicebox */
@@ -151,9 +158,18 @@ public class TournamentSettingsTabController {
      * Show the correct values in the stage settings panel.
      */
     private void showStageValues() {
-        if (getSelectedStage() != null) {
-            stageNameTextfield.setText(getSelectedStage().getName());
-            formatChoicebox.getSelectionModel().select(StageFormatOption.getOption(getSelectedStage().getFormat()));
+        Stage selectedStage = getSelectedStage();
+        if (selectedStage != null) {
+            stageNameTextfield.setText(selectedStage.getName());
+            formatChoicebox.getSelectionModel().select(StageFormatOption.getOption(selectedStage.getFormat()));
+            if (selectedStage.getId() != 1) {
+                teamsInStageAll.setVisible(false);
+                teamsInStageSpinner.setVisible(true);
+                teamsInStageSpinner.getValueFactory().setValue(selectedStage.getNumberOfTeamsWanted());
+            } else {
+                teamsInStageAll.setVisible(true);
+                teamsInStageSpinner.setVisible(false);
+            }
         }
     }
 
