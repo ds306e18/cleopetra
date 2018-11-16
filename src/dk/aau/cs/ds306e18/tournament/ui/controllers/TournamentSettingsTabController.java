@@ -23,36 +23,21 @@ import java.util.Collections;
 
 public class TournamentSettingsTabController {
 
-    @FXML
-    private GridPane tournamentSettingsTab;
-    @FXML
-    private TextField nameTextField;
-    @FXML
-    private ChoiceBox<TieBreaker> tieBreakerChoiceBox;
-    @FXML
-    private ListView<Stage> stagesListView;
-    @FXML
-    private Button addStageBtn;
-    @FXML
-    private Button removeStageBtn;
-    @FXML
-    private VBox stageSettingsVBox;
-    @FXML
-    private Text selectStageText;
-    @FXML
-    private Text stageSettingsHeadLabel;
-    @FXML
-    private HBox stageSettingsContent;
-    @FXML
-    private TextField stageNameTextfield;
-    @FXML
-    private ChoiceBox<StageFormatOption> formatChoicebox;
-    @FXML
-    private Button swapUp;
-    @FXML
-    private Button swapDown;
-    @FXML
-    private VBox formatUniqueSettingsHolder;
+    @FXML private GridPane tournamentSettingsTab;
+    @FXML private TextField nameTextField;
+    @FXML private ChoiceBox<TieBreaker> tieBreakerChoiceBox;
+    @FXML private ListView<Stage> stagesListView;
+    @FXML private Button addStageBtn;
+    @FXML private Button removeStageBtn;
+    @FXML private VBox stageSettingsVBox;
+    @FXML private Text selectStageText;
+    @FXML private Text stageSettingsHeadLabel;
+    @FXML private HBox stageSettingsContent;
+    @FXML private TextField stageNameTextfield;
+    @FXML private ChoiceBox<StageFormatOption> formatChoicebox;
+    @FXML private Button swapUp;
+    @FXML private Button swapDown;
+    @FXML private VBox formatUniqueSettingsHolder;
 
     @FXML
     private void initialize() {

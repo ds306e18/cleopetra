@@ -38,8 +38,9 @@ public class ParticipantSettingsTabController {
     @FXML private ListView<Team> teamsListView;
     @FXML private VBox teamSettingsVbox;
     @FXML private VBox botSettingsVbox;
-    @FXML private Spinner<Integer> seedValueSpinner;
     @FXML private TextField configPathTextField;
+    @FXML private Button swapUp;
+    @FXML private Button swapDown;
     final private FileChooser fileChooser = new FileChooser();
 
     @FXML
@@ -61,9 +62,6 @@ public class ParticipantSettingsTabController {
         teamsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             updateTeamFields();
         });
-
-        //Initializes seed value spinner
-        initSeedSpinner();
     }
 
     @FXML
@@ -110,7 +108,7 @@ public class ParticipantSettingsTabController {
     void addBotBtnOnAction(ActionEvent actionEvent) {
         if (teamsListView.getSelectionModel().getSelectedIndex() != -1) {
             Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
-                    .addBot(new Bot("Bot " + (Tournament.get().getTeams().get(getSelectedTeamIndex()).size() + 1), "Dev 1", "Path 1"));
+                    .addBot(new Bot("Bot " + (botsListView.getItems().size() + 1), "Dev 1", ""));
             botsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams().get(getSelectedTeamIndex())
                     .getBots()));
             botsListView.refresh();
@@ -138,8 +136,8 @@ public class ParticipantSettingsTabController {
     void addTeamBtnOnAction(ActionEvent actionEvent) {
 
         //Create a team with a bot and add the team to the tournament
-        Team team = new Team("Team " + (Tournament.get().getTeams().size() + 1), new ArrayList<Bot>(), 0, "");
-        team.addBot(new Bot("Bot", "Anonymous", ""));
+        Team team = new Team("Team " + (Tournament.get().getTeams().size() + 1), new ArrayList<Bot>(), teamsListView.getItems().size()+1, "");
+        team.addBot(new Bot("Bot 1", "Dev 1", ""));
         Tournament.get().addTeam(team);
 
         teamsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams()));
@@ -163,14 +161,6 @@ public class ParticipantSettingsTabController {
             teamsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams()));
             teamsListView.refresh();
             teamsListView.getSelectionModel().selectLast();
-        }
-    }
-
-    /** Updates tournament values from spinner when edit or action pressed */
-    @FXML
-    void seedValueSpinnerOnAction() {
-        if (getSelectedTeamIndex() != -1) {
-            Tournament.get().getTeams().get(getSelectedTeamIndex()).setInitialSeedValue(seedValueSpinner.valueProperty().getValue());
         }
     }
 
@@ -212,8 +202,13 @@ public class ParticipantSettingsTabController {
         teamSettingsVbox.setVisible(teamsListView.getItems().size() != 0);
 
         if (getSelectedTeamIndex() != -1) {
+
+            // Handle team order button disabling / enabling
+            int selectedIndex = getSelectedTeamIndex();
+            swapUp.setDisable(selectedIndex == 0);
+            swapDown.setDisable(selectedIndex == teamsListView.getItems().size() - 1 && selectedIndex != - 1);
+
             Team selectedTeam = Tournament.get().getTeams().get(getSelectedTeamIndex());
-            seedValueSpinner.getValueFactory().setValue(selectedTeam.getInitialSeedValue());
 
             botsListView.getSelectionModel().clearSelection();
             teamNameTextField.setText(selectedTeam.getTeamName());
@@ -263,18 +258,6 @@ public class ParticipantSettingsTabController {
         }
     }
 
-    private void initSeedSpinner() {
-        //Makes the spinner editable and sets the values that can be chosen
-        seedValueSpinner.setEditable(true);
-        seedValueSpinner.setValueFactory(
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, Integer.MAX_VALUE));
-
-        //Adds value listener to spinner
-        seedValueSpinner.getValueFactory().valueProperty().addListener(((observable, oldValue, newValue) -> {
-            updateSeedValue();
-        }));
-    }
-
     /** Sets the configPath text and changes the path for the selected bot */
     private void setConfigPathText(List<File> files) {
         if (files == null || files.isEmpty()) {
@@ -286,9 +269,31 @@ public class ParticipantSettingsTabController {
         }
     }
 
-    /** Updates the seed value for the selected team */
-    private void updateSeedValue() {
-        Tournament.get().getTeams().get(getSelectedTeamIndex()).setInitialSeedValue(seedValueSpinner.getValue());
+    /** Swaps a team upwards in the list of teams. Used to allow ordering of Team and thereby their seed. */
+    @FXML
+    private void swapTeamUpwards() {
+        swapTeamSeeds(Tournament.get().getTeams().get(getSelectedTeamIndex()),
+                Tournament.get().getTeams().get(getSelectedTeamIndex() - 1));
+    }
+
+    /** Swaps a team downwards in the list of teams. Used to allow ordering of Team and thereby their seed. */
+    @FXML
+    private void swapTeamDownwards() {
+        swapTeamSeeds(Tournament.get().getTeams().get(getSelectedTeamIndex()),
+                Tournament.get().getTeams().get(getSelectedTeamIndex() + 1));
+    }
+
+    /** Swaps seeds of the firsts given team with the second team. */
+    private void swapTeamSeeds(Team first, Team second){
+
+        int firstSeed = first.getInitialSeedValue();
+        first.setInitialSeedValue(second.getInitialSeedValue());
+        second.setInitialSeedValue(firstSeed);
+
+        Tournament.get().sortTeamsAfterInitialSeed();
+
+        teamsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams()));
+        teamsListView.refresh();
     }
 
     private Team getSelectedTeam(){
