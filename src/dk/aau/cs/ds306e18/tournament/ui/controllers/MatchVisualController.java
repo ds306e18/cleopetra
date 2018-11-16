@@ -28,6 +28,7 @@ public class MatchVisualController implements MatchChangeListener {
     /** Gets called when a match is clicked. */
     @FXML
     void matchClicked() {
+        matchRoot.getStyleClass().add("selectedMatch");
         boc.setSelectedMatch(this);
     }
 

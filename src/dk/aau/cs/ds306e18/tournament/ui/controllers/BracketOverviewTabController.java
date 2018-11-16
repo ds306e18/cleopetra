@@ -69,7 +69,7 @@ public class BracketOverviewTabController {
     private MatchVisualController selectedMatch;
 
     @FXML
-    private void initialize() {
+    private void initialize(){
         instance = this; // TODO Make references to other controllers work in MainController
     }
 
@@ -126,6 +126,9 @@ public class BracketOverviewTabController {
      * Sets the selected match.
      */
     public void setSelectedMatch(MatchVisualController match) {
+        if (selectedMatch != null){
+            selectedMatch.getRoot().getStyleClass().remove("selectedMatch");
+        }
         this.selectedMatch = match;
         updateTeamViewer(match == null ? null : match.getShowedMatch());
     }
