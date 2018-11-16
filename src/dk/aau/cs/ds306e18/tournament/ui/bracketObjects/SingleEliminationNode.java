@@ -2,21 +2,17 @@ package dk.aau.cs.ds306e18.tournament.ui.bracketObjects;
 
 import dk.aau.cs.ds306e18.tournament.model.format.SingleEliminationFormat;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
-import dk.aau.cs.ds306e18.tournament.model.match.MatchPlayedListener;
 import dk.aau.cs.ds306e18.tournament.ui.controllers.BracketOverviewTabController;
 import dk.aau.cs.ds306e18.tournament.ui.controllers.MatchVisualController;
-import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
 
-/** Used to display the a swiss stage. */
+/** Used to display the a single elimination stage. */
 public class SingleEliminationNode extends GridPane {
 
     private final Insets MARGINS = new Insets(0, 0, 8, 0);
@@ -27,7 +23,7 @@ public class SingleEliminationNode extends GridPane {
 
     private ArrayList<MatchVisualController> mvcs = new ArrayList<>();
 
-    /** Used to display the a swiss stage. */
+    /** Used to display the a single elimination stage. */
     public SingleEliminationNode(SingleEliminationFormat singleElimination, BracketOverviewTabController boc){
         this.singleElimination = singleElimination;
         this.boc = boc;
