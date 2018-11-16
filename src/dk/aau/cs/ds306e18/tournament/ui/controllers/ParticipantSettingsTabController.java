@@ -108,7 +108,7 @@ public class ParticipantSettingsTabController {
     void addBotBtnOnAction(ActionEvent actionEvent) {
         if (teamsListView.getSelectionModel().getSelectedIndex() != -1) {
             Tournament.get().getTeams().get(teamsListView.getSelectionModel().getSelectedIndex())
-                    .addBot(new Bot("Bot " + (Tournament.get().getTeams().get(getSelectedTeamIndex()).size() + 1), "Dev 1", "Path 1"));
+                    .addBot(new Bot("Bot " + (botsListView.getItems().size() + 1), "Dev 1", ""));
             botsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams().get(getSelectedTeamIndex())
                     .getBots()));
             botsListView.refresh();
@@ -137,7 +137,7 @@ public class ParticipantSettingsTabController {
 
         //Create a team with a bot and add the team to the tournament
         Team team = new Team("Team " + (Tournament.get().getTeams().size() + 1), new ArrayList<Bot>(), teamsListView.getItems().size()+1, "");
-        team.addBot(new Bot("Bot", "Anonymous", ""));
+        team.addBot(new Bot("Bot 1", "Dev 1", ""));
         Tournament.get().addTeam(team);
 
         teamsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams()));
