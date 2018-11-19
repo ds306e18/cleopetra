@@ -69,6 +69,43 @@ public class ConfigFileEditor {
         }
     }
 
+    /**
+     * Gets line by index
+     *
+     * @param i index of line
+     * @return line on index i
+     */
+    public static String getLine(int i) {
+        return config.get(i);
+    }
+
+    /**
+     * Gets first line matching parameter, if config is empty, returns null
+     *
+     * @param parameter is beginning of line
+     * @return first line which starts with parameter
+     */
+    public static String getLine(String parameter) {
+        for (int i = 0; i < config.size(); i++) {
+            if (config.get(i).startsWith(parameter)) {
+                return config.get(i);
+            }
+        }
+        return null;
+    }
+
+
+    /**
+     * Gets value of argument, assuming the line is split with "=". Trims whitespace before returning value. If no split is found, just returns line.
+     *
+     * @param line is the line to extract value from
+     * @return value found, trimmed for whitespace
+     */
+    public static String getValue(String line) {
+        String[] value = line.split("=");
+        return value[value.length - 1].trim();
+    }
+
     private static String removeValue(String line) {
         return line.replaceAll(removeValuePattern, "= ");
     }
@@ -85,9 +122,9 @@ public class ConfigFileEditor {
         }
 
         for (Bot bot : match.getOrangeTeam().getBots()) {
-            editLine("participant_config_", numParticipantsOrange, bot.getConfigPath());
-            editLine("participant_team_", numParticipantsOrange, "1");
-            editLine("participant_type_", numParticipantsOrange, "rlbot");
+            editLine("participant_config_", numParticipantsBlue + numParticipantsOrange, bot.getConfigPath());
+            editLine("participant_team_", numParticipantsBlue + numParticipantsOrange, "1");
+            editLine("participant_type_", numParticipantsBlue + numParticipantsOrange, "rlbot");
             numParticipantsOrange++;
         }
 
