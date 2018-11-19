@@ -1,9 +1,16 @@
 package dk.aau.cs.ds306e18.tournament.ui.controllers;
 
 import dk.aau.cs.ds306e18.tournament.model.Bot;
+import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import dk.aau.cs.ds306e18.tournament.model.format.Format;
+import dk.aau.cs.ds306e18.tournament.model.format.SwissFormat;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import dk.aau.cs.ds306e18.tournament.model.match.MatchPlayedListener;
+import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreakerBySeed;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,11 +24,12 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.scene.layout.VBox;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
 
-public class BracketOverviewTabController {
+public class BracketOverviewTabController implements MatchPlayedListener {
 
     public static BracketOverviewTabController instance;
 
@@ -65,6 +73,11 @@ public class BracketOverviewTabController {
     private HBox selectedMatchButtonHolder;
     @FXML
     private HBox stageNavigationButtonsHolder;
+    @FXML
+    private VBox bracketLeaderboard;
+    @FXML
+    private TableView<Team> leaderboardTableview;
+
 
     private MatchVisualController selectedMatch;
 
@@ -80,11 +93,50 @@ public class BracketOverviewTabController {
             showStartTournamentInstructions(true);
             setSelectedMatch(null);
             stageNavigationButtonsHolder.setDisable(true);
+
+            bracketLeaderboard.setVisible(false);
+            bracketOverviewTab.getColumnConstraints().get(0).setMaxWidth(0);
         } else {
             showStartTournamentInstructions(false);
             Format format = tournament.getCurrentStage().getFormat();
             showFormat(format);
+
+            if (format instanceof SwissFormat){
+                bracketLeaderboard.setVisible(true);
+                bracketOverviewTab.getColumnConstraints().get(0).setMaxWidth(200);
+
+                refreshLeaderboard();
+                ((SwissFormat) format).registerMatchPlayedListener(this);
+            }
         }
+    }
+
+    public void refreshLeaderboard(){
+        leaderboardTableview.getItems().clear();
+        leaderboardTableview.getColumns().clear();
+
+        Tournament tournament = Tournament.get();
+        int totalNumberTeams = tournament.getTeams().size();
+        Format format = tournament.getCurrentStage().getFormat();
+
+        HashMap<Team, Integer> pointsHashmap = ((SwissFormat) format).getTeamPointsMap();
+        List<Team> sortedTeams = format.getTopTeams(totalNumberTeams, new TieBreakerBySeed());
+
+        leaderboardTableview.getItems().addAll(sortedTeams);
+
+        TableColumn<Team, String> nameColumn = new TableColumn<>("Name");
+        nameColumn.setCellValueFactory(cellData -> {
+            return new SimpleStringProperty(cellData.getValue().getTeamName());
+        });
+
+        TableColumn<Team, Integer> pointColumn = new TableColumn<>("Score");
+        pointColumn.setCellValueFactory(cellData -> {
+            int value = pointsHashmap.get(cellData.getValue());
+            ObservableValue<Integer> obsInt = new SimpleIntegerProperty(value).asObject();
+            return obsInt;
+        });
+
+        leaderboardTableview.getColumns().addAll(nameColumn, pointColumn);
     }
 
     private void showStartTournamentInstructions(boolean show) {
@@ -96,6 +148,9 @@ public class BracketOverviewTabController {
 
     public void showFormat(Format format) {
         overviewScrollPane.setContent(format.getBracketFXNode(this));
+        if (Tournament.get().getCurrentStage().getFormat() instanceof SwissFormat) {
+            ((SwissFormat) Tournament.get().getCurrentStage().getFormat()).unregisterMatchPlayedListener(this);
+        }
     }
 
     /**
@@ -199,5 +254,11 @@ public class BracketOverviewTabController {
             // TODO Show error message to user
             System.out.println("Can't start tournament.");
         }
+    }
+
+    @Override
+    public void onMatchPlayed(Match match) {
+        // TODO: Add leaderboard refresh function
+        refreshLeaderboard();
     }
 }

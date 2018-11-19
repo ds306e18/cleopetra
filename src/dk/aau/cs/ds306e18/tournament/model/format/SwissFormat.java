@@ -83,7 +83,6 @@ public class SwissFormat extends GroupFormat implements MatchPlayedListener {
      * Teams will get 2 points for winning and -2 for loosing.
      */
     private void assignPointsForLatestRound() {
-
         ArrayList<Match> finishedRoundMatches = rounds.get(rounds.size() - 1);
 
         for (Match match : finishedRoundMatches) {

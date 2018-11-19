@@ -23,6 +23,7 @@ public class Main extends Application {
         /* Min width + height*/
         primaryStage.setMinWidth(800);
         primaryStage.setMinHeight(650);
+        primaryStage.setMaximized(true);
 
         primaryStage.setTitle("DatTournament Runner");
         primaryStage.setScene(new Scene(root));
