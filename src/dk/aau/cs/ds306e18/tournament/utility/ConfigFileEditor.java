@@ -10,13 +10,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
-/*TODO
-    num_participants = <count>
-    participant_config_X = <path>
-    participant_team_X = <teamIndex>
-    participant_type_X = rlbot
- */
-
 public class ConfigFileEditor {
 
     private static ArrayList<String> config;
@@ -86,14 +79,13 @@ public class ConfigFileEditor {
      * @return first line which starts with parameter
      */
     public static String getLine(String parameter) {
-        for (int i = 0; i < config.size(); i++) {
-            if (config.get(i).startsWith(parameter)) {
-                return config.get(i);
+        for (String line : config) {
+            if (line.startsWith(parameter)) {
+                return line;
             }
         }
         return null;
     }
-
 
     /**
      * Gets value of argument, assuming the line is split with "=". Trims whitespace before returning value. If no split is found, just returns line.
@@ -104,6 +96,15 @@ public class ConfigFileEditor {
     public static String getValue(String line) {
         String[] value = line.split("=");
         return value[value.length - 1].trim();
+    }
+
+    public static String getValueOfLine(String parameter) {
+        for (String line : config) {
+            if (line.startsWith(parameter)) {
+                return getValue(line);
+            }
+        }
+        return null;
     }
 
     private static String removeValue(String line) {
