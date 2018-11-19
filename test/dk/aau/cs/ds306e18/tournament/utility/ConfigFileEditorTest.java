@@ -57,9 +57,9 @@ public class ConfigFileEditorTest {
     public void readWriteConcurrencyTest() {
         setTestConfig();
         ConfigFileEditor.setConfig(testConfig);
-        ConfigFileEditor.writeConfig("testconfig1.cfg");
+        ConfigFileEditor.writeConfig("dummyconfig.cfg");
 
-        ConfigFileEditor.readConfig("testconfig1.cfg");
+        ConfigFileEditor.readConfig("dummyconfig.cfg");
         assertEquals(testConfig, ConfigFileEditor.getConfig());
     }
 
