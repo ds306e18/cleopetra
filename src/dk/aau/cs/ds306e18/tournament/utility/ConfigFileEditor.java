@@ -1,11 +1,14 @@
 package dk.aau.cs.ds306e18.tournament.utility;
 
+import dk.aau.cs.ds306e18.tournament.model.Bot;
+import dk.aau.cs.ds306e18.tournament.model.match.Match;
+
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
+import java.util.ArrayList;
 
 /*TODO
     num_participants = <count>
@@ -16,22 +19,22 @@ import java.util.List;
 
 public class ConfigFileEditor {
 
-    private static List<String> config;
+    private static ArrayList<String> config;
 
     private static String removeValuePattern = "= .*$";
 
-    public static List<String> getConfig() {
+    public static ArrayList<String> getConfig() {
         return config;
     }
 
-    public static void setConfig(List<String> config) {
+    public static void setConfig(ArrayList<String> config) {
         ConfigFileEditor.config = config;
     }
 
     public static void readConfig(String filename) {
         Path in = Paths.get(filename);
         try {
-            config = Files.readAllLines(in);
+            config = (ArrayList<String>) Files.readAllLines(in);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -68,5 +71,26 @@ public class ConfigFileEditor {
 
     private static String removeValue(String line) {
         return line.replaceAll(removeValuePattern, "= ");
+    }
+
+    public static void configureMatch(Match match) {
+        int numParticipantsBlue = 0;
+        int numParticipantsOrange = 0;
+
+        for (Bot bot : match.getBlueTeam().getBots()) {
+            editLine("participant_config_", numParticipantsBlue, bot.getConfigPath());
+            editLine("participant_team_", numParticipantsBlue, "0");
+            editLine("participant_type_", numParticipantsBlue, "rlbot");
+            numParticipantsBlue++;
+        }
+
+        for (Bot bot : match.getOrangeTeam().getBots()) {
+            editLine("participant_config_", numParticipantsOrange, bot.getConfigPath());
+            editLine("participant_team_", numParticipantsOrange, "1");
+            editLine("participant_type_", numParticipantsOrange, "rlbot");
+            numParticipantsOrange++;
+        }
+
+        editLine("num_participant", Integer.toString(numParticipantsBlue + numParticipantsOrange));
     }
 }
