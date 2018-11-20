@@ -5,6 +5,7 @@ import dk.aau.cs.ds306e18.tournament.model.StageStatus;
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import dk.aau.cs.ds306e18.tournament.model.match.MatchChangeListener;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchPlayedListener;
 import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.SwissSettingsNode;
 import dk.aau.cs.ds306e18.tournament.ui.controllers.BracketOverviewTabController;
@@ -13,7 +14,7 @@ import javafx.scene.Node;
 
 import java.util.*;
 
-public class SwissFormat extends GroupFormat implements MatchPlayedListener {
+public class SwissFormat extends GroupFormat implements MatchPlayedListener, MatchChangeListener {
 
     private ArrayList<ArrayList<Match>> rounds;
     private int maxRoundsPossible;
@@ -21,6 +22,7 @@ public class SwissFormat extends GroupFormat implements MatchPlayedListener {
     private HashMap<Team, Integer> teamPoints;
 
     transient private List<MatchPlayedListener> matchPlayedListeners = new LinkedList<>();
+    transient private List<MatchChangeListener> matchChangedListeners = new LinkedList<>();
 
     @Override
     public void start(List<Team> teams) {
@@ -156,6 +158,7 @@ public class SwissFormat extends GroupFormat implements MatchPlayedListener {
                 if (!hasTheseTeamsPlayedBefore(team1, team2)) {
                     Match match = new Match(team1, team2);
                     match.registerMatchPlayedListener(this);
+                    match.registerMatchChangeListener(this);
                     createdMatches.add(match);
                     break; //Two valid teams has been found, and match has been created. BREAK.
                 }
@@ -271,7 +274,9 @@ public class SwissFormat extends GroupFormat implements MatchPlayedListener {
         return roundsCopy;
     }
 
-    /** Listeners registered here will be notified whenever a match is played or reset in this format. */
+    /**
+     * Listeners registered here will be notified whenever a match is played or reset in this format.
+     */
     public void registerMatchPlayedListener(MatchPlayedListener listener) {
         // Can't add self
         if (listener != this)
@@ -282,13 +287,26 @@ public class SwissFormat extends GroupFormat implements MatchPlayedListener {
         matchPlayedListeners.remove(listener);
     }
 
-    private void calculateAndAssignTeamPoints (Team team){
+    /**
+     * Listeners registered here will be notified whenever a match has changed or reset in this format.
+     */
+    public void registerMatchChangedListener(MatchChangeListener listener) {
+        // Can't add self
+        if (listener != this)
+            matchChangedListeners.add(listener);
+    }
+
+    public void unregisterMatchChangedListener(MatchChangeListener listener) {
+        matchChangedListeners.remove(listener);
+    }
+
+    private void calculateAndAssignTeamPoints(Team team) {
         int points = 0;
 
         for (Match match : getCompletedMatches()) {
             if (match.getWinner().equals(team)) {
                 points += 2;
-            } else if (match.getLoser().equals(team)){
+            } else if (match.getLoser().equals(team)) {
                 points -= 2;
             }
         }
@@ -299,8 +317,8 @@ public class SwissFormat extends GroupFormat implements MatchPlayedListener {
     @Override
     public void onMatchPlayed(Match match) {
         // Check both teams and recalculate their points to avoid errors.
-        calculateAndAssignTeamPoints(match.getWinner());
-        calculateAndAssignTeamPoints(match.getLoser());
+        calculateAndAssignTeamPoints(match.getBlueTeam());
+        calculateAndAssignTeamPoints(match.getOrangeTeam());
 
         // Has last possible match been played?
         if (!hasUnstartedRounds() && getUpcomingMatches().size() == 0) {
@@ -331,5 +349,17 @@ public class SwissFormat extends GroupFormat implements MatchPlayedListener {
     @Override
     public int hashCode() {
         return Objects.hash(getRounds(), getMaxRoundsPossible(), teamPoints);
+    }
+
+    @Override
+    public void onMatchChanged(Match match) {
+        // Check both teams and recalculate their points to avoid errors.
+        calculateAndAssignTeamPoints(match.getBlueTeam());
+        calculateAndAssignTeamPoints(match.getOrangeTeam());
+
+        // Notify listeners
+        for (MatchChangeListener listener : matchChangedListeners) {
+            listener.onMatchChanged(match);
+        }
     }
 }

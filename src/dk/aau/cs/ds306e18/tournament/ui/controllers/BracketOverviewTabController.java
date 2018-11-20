@@ -6,6 +6,7 @@ import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import dk.aau.cs.ds306e18.tournament.model.format.Format;
 import dk.aau.cs.ds306e18.tournament.model.format.SwissFormat;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import dk.aau.cs.ds306e18.tournament.model.match.MatchChangeListener;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchPlayedListener;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreakerBySeed;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -29,7 +30,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
-public class BracketOverviewTabController implements MatchPlayedListener {
+public class BracketOverviewTabController implements MatchPlayedListener, MatchChangeListener {
 
     public static BracketOverviewTabController instance;
 
@@ -107,6 +108,7 @@ public class BracketOverviewTabController implements MatchPlayedListener {
 
                 refreshLeaderboard();
                 ((SwissFormat) format).registerMatchPlayedListener(this);
+                ((SwissFormat) format).registerMatchChangedListener(this);
             }
         }
     }
@@ -150,6 +152,7 @@ public class BracketOverviewTabController implements MatchPlayedListener {
         overviewScrollPane.setContent(format.getBracketFXNode(this));
         if (Tournament.get().getCurrentStage().getFormat() instanceof SwissFormat) {
             ((SwissFormat) Tournament.get().getCurrentStage().getFormat()).unregisterMatchPlayedListener(this);
+            ((SwissFormat) Tournament.get().getCurrentStage().getFormat()).unregisterMatchChangedListener(this);
         }
     }
 
@@ -259,6 +262,11 @@ public class BracketOverviewTabController implements MatchPlayedListener {
     @Override
     public void onMatchPlayed(Match match) {
         // TODO: Add leaderboard refresh function
+        refreshLeaderboard();
+    }
+
+    @Override
+    public void onMatchChanged(Match match) {
         refreshLeaderboard();
     }
 }

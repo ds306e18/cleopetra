@@ -2,6 +2,7 @@ package dk.aau.cs.ds306e18.tournament.ui.bracketObjects;
 
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.format.SwissFormat;
+import dk.aau.cs.ds306e18.tournament.model.match.MatchChangeListener;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchPlayedListener;
 import dk.aau.cs.ds306e18.tournament.ui.controllers.BracketOverviewTabController;
 import dk.aau.cs.ds306e18.tournament.ui.controllers.MatchVisualController;
@@ -14,7 +15,7 @@ import javafx.scene.layout.VBox;
 import java.util.ArrayList;
 
 /** Used to display the a swiss stage. */
-public class SwissNode extends HBox implements MatchPlayedListener {
+public class SwissNode extends HBox implements MatchPlayedListener, MatchChangeListener {
 
     private final Insets MARGINS = new Insets(0, 0, 8, 0);
     private final int COLUMN_WIDTH = 175;
@@ -29,6 +30,7 @@ public class SwissNode extends HBox implements MatchPlayedListener {
         this.boc = boc;
         this.swiss = swiss;
         swiss.registerMatchPlayedListener(this);
+        swiss.registerMatchChangedListener(this);
         update();
     }
 
@@ -114,5 +116,10 @@ public class SwissNode extends HBox implements MatchPlayedListener {
     @Override
     public void onMatchPlayed(Match match) {
         updateGenerateRoundButton();
+    }
+
+    @Override
+    public void onMatchChanged(Match match) {
+        // Do nothing
     }
 }
