@@ -3,6 +3,7 @@ package dk.aau.cs.ds306e18.tournament.model.format;
 import dk.aau.cs.ds306e18.tournament.model.GroupFormat;
 import dk.aau.cs.ds306e18.tournament.model.StageStatus;
 import dk.aau.cs.ds306e18.tournament.model.Team;
+import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchPlayedListener;
 import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.SwissSettingsNode;
@@ -55,8 +56,9 @@ public class SwissFormat extends GroupFormat implements MatchPlayedListener {
         if (!canStartNextRound())
             return false;
 
+        /*
         if (rounds.size() != 0) // Assign points for played matches
-            assignPointsForLatestRound();
+            assignPointsForLatestRound();*/
         createNextRound();
 
         return true;
@@ -83,6 +85,8 @@ public class SwissFormat extends GroupFormat implements MatchPlayedListener {
      * Teams will get 2 points for winning and -2 for loosing.
      */
     private void assignPointsForLatestRound() {
+        /*
+
         ArrayList<Match> finishedRoundMatches = rounds.get(rounds.size() - 1);
 
         for (Match match : finishedRoundMatches) {
@@ -92,6 +96,7 @@ public class SwissFormat extends GroupFormat implements MatchPlayedListener {
             teamPoints.put(winnerTeam, teamPoints.get(winnerTeam) + 2);
             teamPoints.put(loserTeam, teamPoints.get(loserTeam) - 2);
         }
+        */
     }
 
     /**
@@ -277,8 +282,26 @@ public class SwissFormat extends GroupFormat implements MatchPlayedListener {
         matchPlayedListeners.remove(listener);
     }
 
+    private void calculateAndAssignTeamPoints (Team team){
+        int points = 0;
+
+        for (Match match : getCompletedMatches()) {
+            if (match.getWinner().equals(team)) {
+                points += 2;
+            } else if (match.getLoser().equals(team)){
+                points -= 2;
+            }
+        }
+
+        teamPoints.put(team, points);
+    }
+
     @Override
     public void onMatchPlayed(Match match) {
+        // Check both teams and recalculate their points to avoid errors.
+        calculateAndAssignTeamPoints(match.getWinner());
+        calculateAndAssignTeamPoints(match.getLoser());
+
         // Has last possible match been played?
         if (!hasUnstartedRounds() && getUpcomingMatches().size() == 0) {
             status = StageStatus.CONCLUDED;
