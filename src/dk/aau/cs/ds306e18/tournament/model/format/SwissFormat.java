@@ -316,9 +316,6 @@ public class SwissFormat extends GroupFormat implements MatchPlayedListener, Mat
 
     @Override
     public void onMatchPlayed(Match match) {
-        // Check both teams and recalculate their points to avoid errors.
-        calculateAndAssignTeamPoints(match.getBlueTeam());
-        calculateAndAssignTeamPoints(match.getOrangeTeam());
 
         // Has last possible match been played?
         if (!hasUnstartedRounds() && getUpcomingMatches().size() == 0) {

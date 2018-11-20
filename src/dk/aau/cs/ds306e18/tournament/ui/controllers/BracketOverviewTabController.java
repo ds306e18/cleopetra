@@ -30,7 +30,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
-public class BracketOverviewTabController implements MatchPlayedListener, MatchChangeListener {
+public class BracketOverviewTabController implements MatchChangeListener {
 
     public static BracketOverviewTabController instance;
 
@@ -107,7 +107,6 @@ public class BracketOverviewTabController implements MatchPlayedListener, MatchC
                 bracketOverviewTab.getColumnConstraints().get(0).setMaxWidth(200);
 
                 refreshLeaderboard();
-                ((SwissFormat) format).registerMatchPlayedListener(this);
                 ((SwissFormat) format).registerMatchChangedListener(this);
             }
         }
@@ -151,7 +150,6 @@ public class BracketOverviewTabController implements MatchPlayedListener, MatchC
     public void showFormat(Format format) {
         overviewScrollPane.setContent(format.getBracketFXNode(this));
         if (Tournament.get().getCurrentStage().getFormat() instanceof SwissFormat) {
-            ((SwissFormat) Tournament.get().getCurrentStage().getFormat()).unregisterMatchPlayedListener(this);
             ((SwissFormat) Tournament.get().getCurrentStage().getFormat()).unregisterMatchChangedListener(this);
         }
     }
@@ -257,12 +255,6 @@ public class BracketOverviewTabController implements MatchPlayedListener, MatchC
             // TODO Show error message to user
             System.out.println("Can't start tournament.");
         }
-    }
-
-    @Override
-    public void onMatchPlayed(Match match) {
-        // TODO: Add leaderboard refresh function
-        refreshLeaderboard();
     }
 
     @Override
