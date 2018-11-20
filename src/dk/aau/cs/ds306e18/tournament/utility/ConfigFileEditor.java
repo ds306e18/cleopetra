@@ -12,19 +12,29 @@ import java.util.ArrayList;
 
 public class ConfigFileEditor {
 
+    private static boolean valid;
     private static ArrayList<String> config;
 
-    private static String removeValuePattern = "= .*$";
+    private final static String REMOVE_VALUE_PATTERN = "= .*$";
 
-    public static ArrayList<String> getConfig() {
+    private final static String PARAMETER_PARTICIPANT_CONFIG = "participant_config_";
+    private final static String PARAMETER_PARTICIPANT_TEAM = "participant_team_";
+    private final static String PARAMETER_PARTICIPANT_TYPE = "participant_type_";
+    private final static String PARAMETER_PARTICIPANT_NUM = "num_participant";
+
+    private final static String PARAMETER_BLUE_TEAM = "0";
+    private final static String PARAMETER_ORANGE_TEAM = "1";
+    private final static String PARAMETER_BOT_TYPE = "rlbot";
+
+    static ArrayList<String> getConfig() {
         return config;
     }
 
-    public static void setConfig(ArrayList<String> config) {
+    static void setConfig(ArrayList<String> config) {
         ConfigFileEditor.config = config;
     }
 
-    public static void readConfig(String filename) {
+    static void readConfig(String filename) {
         Path in = Paths.get(filename);
         try {
             config = (ArrayList<String>) Files.readAllLines(in);
@@ -42,7 +52,7 @@ public class ConfigFileEditor {
         }
     }
 
-    public static void editLine(String parameter, String value) {
+    private static void editLine(String parameter, String value) {
         for (int i = 0; i < config.size(); i++) {
             String line = config.get(i);
             if (line.startsWith(parameter)) {
@@ -52,7 +62,7 @@ public class ConfigFileEditor {
         }
     }
 
-    public static void editLine(String parameter, int num, String value) {
+    static void editLine(String parameter, int num, String value) {
         for (int i = 0; i < config.size(); i++) {
             String line = config.get(i);
             if (line.startsWith(parameter + num)) {
@@ -68,7 +78,7 @@ public class ConfigFileEditor {
      * @param i index of line
      * @return line on index i
      */
-    public static String getLine(int i) {
+    static String getLine(int i) {
         return config.get(i);
     }
 
@@ -78,7 +88,7 @@ public class ConfigFileEditor {
      * @param parameter is beginning of line
      * @return first line which starts with parameter
      */
-    public static String getLine(String parameter) {
+    static String getLine(String parameter) {
         for (String line : config) {
             if (line.startsWith(parameter)) {
                 return line;
@@ -93,12 +103,12 @@ public class ConfigFileEditor {
      * @param line is the line to extract value from
      * @return value found, trimmed for whitespace
      */
-    public static String getValue(String line) {
+    private static String getValue(String line) {
         String[] value = line.split("=");
         return value[value.length - 1].trim();
     }
 
-    public static String getValueOfLine(String parameter) {
+    static String getValueOfLine(String parameter) {
         for (String line : config) {
             if (line.startsWith(parameter)) {
                 return getValue(line);
@@ -108,7 +118,7 @@ public class ConfigFileEditor {
     }
 
     private static String removeValue(String line) {
-        return line.replaceAll(removeValuePattern, "= ");
+        return line.replaceAll(REMOVE_VALUE_PATTERN, "= ");
     }
 
     public static void configureMatch(Match match) {
@@ -116,19 +126,24 @@ public class ConfigFileEditor {
         int numParticipantsOrange = 0;
 
         for (Bot bot : match.getBlueTeam().getBots()) {
-            editLine("participant_config_", numParticipantsBlue, bot.getConfigPath());
-            editLine("participant_team_", numParticipantsBlue, "0");
-            editLine("participant_type_", numParticipantsBlue, "rlbot");
+            editLine(PARAMETER_PARTICIPANT_CONFIG, numParticipantsBlue, bot.getConfigPath());
+            editLine(PARAMETER_PARTICIPANT_TEAM, numParticipantsBlue, PARAMETER_BLUE_TEAM);
+            editLine(PARAMETER_PARTICIPANT_TYPE, numParticipantsBlue, PARAMETER_BOT_TYPE);
             numParticipantsBlue++;
         }
 
         for (Bot bot : match.getOrangeTeam().getBots()) {
-            editLine("participant_config_", numParticipantsBlue + numParticipantsOrange, bot.getConfigPath());
-            editLine("participant_team_", numParticipantsBlue + numParticipantsOrange, "1");
-            editLine("participant_type_", numParticipantsBlue + numParticipantsOrange, "rlbot");
+            editLine(PARAMETER_PARTICIPANT_CONFIG, numParticipantsBlue + numParticipantsOrange, bot.getConfigPath());
+            editLine(PARAMETER_PARTICIPANT_TEAM, numParticipantsBlue + numParticipantsOrange, PARAMETER_ORANGE_TEAM);
+            editLine(PARAMETER_PARTICIPANT_TYPE, numParticipantsBlue + numParticipantsOrange, PARAMETER_BOT_TYPE);
             numParticipantsOrange++;
         }
 
-        editLine("num_participant", Integer.toString(numParticipantsBlue + numParticipantsOrange));
+        editLine(PARAMETER_PARTICIPANT_NUM, Integer.toString(numParticipantsBlue + numParticipantsOrange));
+    }
+
+    public static boolean validateConfig() {
+        //TODO
+        return false;
     }
 }

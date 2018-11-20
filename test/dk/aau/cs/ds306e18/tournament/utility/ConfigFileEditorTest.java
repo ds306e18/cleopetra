@@ -8,6 +8,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNull;
 
 public class ConfigFileEditorTest {
 
@@ -119,6 +120,13 @@ public class ConfigFileEditorTest {
         setTestConfig();
         ConfigFileEditor.setConfig(testConfig);
         assertEquals("[Participant Configuration]", ConfigFileEditor.getValueOfLine("[Particip"));
+    }
+
+    @Test
+    public void getValueOfLineTest1() {
+        setTestConfig();
+        ConfigFileEditor.setConfig(testConfig);
+        assertNull(ConfigFileEditor.getValueOfLine("notavailable"));
     }
 
     @Test
