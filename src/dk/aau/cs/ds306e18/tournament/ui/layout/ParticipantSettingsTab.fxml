@@ -60,8 +60,8 @@
                   <Button fx:id="removeTeamBtn" mnemonicParsing="false" onAction="#removeTeamBtnOnAction" prefHeight="27.0" prefWidth="81.0" text="Remove" GridPane.columnIndex="1" />
                   <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="5.0" GridPane.columnIndex="2">
                      <children>
-                        <Button fx:id="swapUp" disable="true" mnemonicParsing="false" onAction="#swapTeamUpwards" text="▲" />
-                        <Button fx:id="swapDown" disable="true" mnemonicParsing="false" onAction="#swapTeamDownwards" text="▼" />
+                        <Button fx:id="swapUpTeam" disable="true" mnemonicParsing="false" onAction="#swapTeamUpwards" text="▲" />
+                        <Button fx:id="swapDownTeam" disable="true" mnemonicParsing="false" onAction="#swapTeamDownwards" text="▼" />
                      </children>
                   </HBox>
                </children>
