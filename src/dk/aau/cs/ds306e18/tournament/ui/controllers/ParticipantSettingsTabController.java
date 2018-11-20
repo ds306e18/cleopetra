@@ -167,6 +167,13 @@ public class ParticipantSettingsTabController {
     /** Updates the textfields with the values from the selected bot. */
     void updateBotFields() {
         if (botsListView.getSelectionModel().getSelectedIndex() != -1) {
+
+            //Disable addBotButton if there is 5 teams in list.
+            if(botsListView.getItems().size() >= 5)
+                addBotBtn.setDisable(true);
+            else
+                addBotBtn.setDisable(false);
+
             botSettingsVbox.setVisible(true);
             Bot selectedBot = Tournament.get().getTeams().get(getSelectedTeamIndex()).getBots().get(botsListView.getSelectionModel().getSelectedIndex());
             botNameTextField.setText(selectedBot.getName());
