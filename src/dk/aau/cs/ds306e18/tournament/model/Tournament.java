@@ -97,6 +97,10 @@ public class Tournament {
         return stages.get(currentStageIndex);
     }
 
+    public int getCurrentStageIndex() {
+        return currentStageIndex;
+    }
+
     public void startNextStage() {
         if (!started)
             throw new IllegalStateException("The first stage should be started through the start() method.");

@@ -1,13 +1,16 @@
 package dk.aau.cs.ds306e18.tournament.ui.controllers;
 
 import dk.aau.cs.ds306e18.tournament.model.Bot;
+import dk.aau.cs.ds306e18.tournament.model.StageStatus;
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import dk.aau.cs.ds306e18.tournament.model.format.Format;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.CleanableUI;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
@@ -17,7 +20,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 
@@ -35,10 +37,6 @@ public class BracketOverviewTabController {
     private VBox overviewVBox;
     @FXML
     private Button nextMatchBtn;
-    @FXML
-    private Button nextStageBtn;
-    @FXML
-    private Button prevStageBtn;
     @FXML
     private Button prevMatchBtn;
     @FXML
@@ -65,7 +63,14 @@ public class BracketOverviewTabController {
     private HBox selectedMatchButtonHolder;
     @FXML
     private HBox stageNavigationButtonsHolder;
+    @FXML
+    private Button nextStageBtn;
+    @FXML
+    private Button prevStageBtn;
 
+    private int showedStageIndex = -1;
+    private CleanableUI cleanableBracket;
+    private Format showedFormat;
     private MatchVisualController selectedMatch;
 
     @FXML
@@ -77,13 +82,16 @@ public class BracketOverviewTabController {
     public void update() {
         Tournament tournament = Tournament.get();
         if (!tournament.hasStarted()) {
+            showedStageIndex = -1;
+            showedFormat = null;
             showStartTournamentInstructions(true);
             setSelectedMatch(null);
-            stageNavigationButtonsHolder.setDisable(true);
+            updateStageNavigationButtons();
         } else {
+            if (showedStageIndex == -1) showedStageIndex = 0;
             showStartTournamentInstructions(false);
-            Format format = tournament.getCurrentStage().getFormat();
-            showFormat(format);
+            showFormat(tournament.getCurrentStage().getFormat());
+            updateStageNavigationButtons();
         }
     }
 
@@ -95,7 +103,15 @@ public class BracketOverviewTabController {
     }
 
     public void showFormat(Format format) {
-        overviewScrollPane.setContent(format.getBracketFXNode(this));
+        if (cleanableBracket != null) {
+            cleanableBracket.clean();
+        }
+        showedFormat = format;
+        if (format != null) {
+            Node bracket = format.getBracketFXNode(this);
+            overviewScrollPane.setContent(bracket);
+            cleanableBracket = (CleanableUI) bracket;
+        }
     }
 
     /**
@@ -198,6 +214,21 @@ public class BracketOverviewTabController {
         } else {
             // TODO Show error message to user
             System.out.println("Can't start tournament.");
+        }
+    }
+
+    private void updateStageNavigationButtons() {
+        System.out.println("Oi");
+        if (showedStageIndex == -1 || showedFormat == null) {
+            nextStageBtn.setDisable(true);
+            prevStageBtn.setDisable(true);
+        } else {
+            int stageCount = Tournament.get().getStages().size();
+            prevStageBtn.setDisable(showedStageIndex == 0);
+
+            boolean concluded = Tournament.get().getStages().get(showedStageIndex).getFormat().getStatus() == StageStatus.CONCLUDED;
+            nextStageBtn.setDisable(!concluded); // TODO Should also update onMatchPlayed
+            // TODO Swap next/prev stage
         }
     }
 }
