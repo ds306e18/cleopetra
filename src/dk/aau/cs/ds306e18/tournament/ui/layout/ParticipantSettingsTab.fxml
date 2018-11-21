@@ -141,8 +141,8 @@
                         <Insets />
                      </GridPane.margin>
                   </Button>
-                  <Button fx:id="copyBotBtn" mnemonicParsing="false" onAction="#addBotBtnOnAction" prefHeight="27.0" prefWidth="100.0" text="Copy" GridPane.rowIndex="1" />
-                  <Button fx:id="pasteBotBtn" mnemonicParsing="false" onAction="#removeBotBtnOnAction" prefHeight="27.0" prefWidth="100.0" text="Paste" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Button fx:id="copyBotBtn" mnemonicParsing="false" onAction="#onCopyBotButtonAction" prefHeight="27.0" prefWidth="100.0" text="Copy" GridPane.rowIndex="1" />
+                  <Button fx:id="pasteBotBtn" mnemonicParsing="false" onAction="#onPasteBotButtonAction" prefHeight="27.0" prefWidth="100.0" text="Paste" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                </children>
             </GridPane>
             <Label fx:id="clipboardLabel" text="Clipboard:" />

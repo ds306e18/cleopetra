@@ -24,6 +24,8 @@ import java.util.List;
 
 public class ParticipantSettingsTabController {
 
+    private static final String CLIPBOARD_PREFIX = "Clipboard: ";
+    private static final String CLIPBOARD_EMPTY_STRING = "<empty>";
 
     @FXML private GridPane participantSettingsTab;
     @FXML private TextField teamNameTextField;
@@ -47,6 +49,8 @@ public class ParticipantSettingsTabController {
     @FXML private Label clipboardLabel;
     final private FileChooser fileChooser = new FileChooser();
 
+    private Bot clipboardBot;
+
     @FXML
     private void initialize() {
 
@@ -66,6 +70,8 @@ public class ParticipantSettingsTabController {
         teamsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             updateTeamFields();
         });
+
+        updateBotClipboardLabel();
     }
 
     @FXML
@@ -311,5 +317,33 @@ public class ParticipantSettingsTabController {
 
     private int getSelectedTeamIndex() {
         return teamsListView.getSelectionModel().getSelectedIndex();
+    }
+
+    public void onCopyBotButtonAction(ActionEvent actionEvent) {
+        Bot selectedBot = botsListView.getSelectionModel().getSelectedItem();
+        if (selectedBot != null) {
+            clipboardBot = selectedBot.clone();
+        } else {
+            clipboardBot = null;
+        }
+        updateBotClipboardLabel();
+    }
+
+    public void onPasteBotButtonAction(ActionEvent actionEvent) {
+        Team selectedTeam = getSelectedTeam();
+        if (clipboardBot != null) {
+            selectedTeam.addBot(clipboardBot.clone());
+            botsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams().get(getSelectedTeamIndex()).getBots()));
+            botsListView.refresh();
+            botsListView.getSelectionModel().selectLast();
+        }
+    }
+
+    public void updateBotClipboardLabel() {
+        if (clipboardBot == null) {
+            clipboardLabel.setText(CLIPBOARD_PREFIX + CLIPBOARD_EMPTY_STRING);
+        } else {
+            clipboardLabel.setText(CLIPBOARD_PREFIX + clipboardBot.getName());
+        }
     }
 }
