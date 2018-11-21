@@ -26,14 +26,11 @@ public class ConfigFileEditor {
     private final static String PARAMETER_ORANGE_TEAM = "1";
     private final static String PARAMETER_BOT_TYPE = "rlbot";
 
-    static ArrayList<String> getConfig() {
-        return config;
-    }
-
-    static void setConfig(ArrayList<String> config) {
-        ConfigFileEditor.config = config;
-    }
-
+    /**
+     * Reads all lines from a given file and puts them in ArrayList config
+     *
+     * @param filename the filename to read
+     */
     static void readConfig(String filename) {
         Path in = Paths.get(filename);
         try {
@@ -43,6 +40,11 @@ public class ConfigFileEditor {
         }
     }
 
+    /**
+     * Writes all lines from config to a file with system-default charset
+     *
+     * @param filename the filename to write to
+     */
     public static void writeConfig(String filename) {
         Path out = Paths.get(filename);
         try {
@@ -52,6 +54,12 @@ public class ConfigFileEditor {
         }
     }
 
+    /**
+     * Edits value of first occurrence of line with given parameter
+     *
+     * @param parameter the given parameter to edit
+     * @param value     the value to edit given parameter with
+     */
     private static void editLine(String parameter, String value) {
         for (int i = 0; i < config.size(); i++) {
             String line = config.get(i);
@@ -62,6 +70,13 @@ public class ConfigFileEditor {
         }
     }
 
+    /**
+     * Edits value of first occurrence of line with given numbered parameter
+     *
+     * @param parameter the given parameter to edit
+     * @param num       the number of a numbered parameter
+     * @param value     the value to edit given parameter with
+     */
     static void editLine(String parameter, int num, String value) {
         for (int i = 0; i < config.size(); i++) {
             String line = config.get(i);
@@ -108,6 +123,12 @@ public class ConfigFileEditor {
         return value[value.length - 1].trim();
     }
 
+    /**
+     * Composite method of getLine and getValue method, returns null, if no parameter exists
+     *
+     * @param parameter the given parameter
+     * @return the value at first line with parameter
+     */
     static String getValueOfLine(String parameter) {
         for (String line : config) {
             if (line.startsWith(parameter)) {
@@ -117,10 +138,21 @@ public class ConfigFileEditor {
         return null;
     }
 
+    /**
+     * Takes a parameter-line and regex-substitutes equals and everyting after with an equals and a space for easy appending of value
+     *
+     * @param line the given line to remove value from
+     * @return the given line with value removed
+     */
     private static String removeValue(String line) {
         return line.replaceAll(REMOVE_VALUE_PATTERN, "= ");
     }
 
+    /**
+     * Configures the config based on the state of a given Match
+     *
+     * @param match the match to configure the config for
+     */
     public static void configureMatch(Match match) {
         int numParticipantsBlue = 0;
         int numParticipantsOrange = 0;
@@ -145,5 +177,13 @@ public class ConfigFileEditor {
     public static boolean validateConfig() {
         //TODO
         return false;
+    }
+
+    static ArrayList<String> getConfig() {
+        return config;
+    }
+
+    static void setConfig(ArrayList<String> config) {
+        ConfigFileEditor.config = config;
     }
 }
