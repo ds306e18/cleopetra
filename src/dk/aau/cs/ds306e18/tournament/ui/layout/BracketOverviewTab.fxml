@@ -44,7 +44,6 @@
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
-            <Button fx:id="refreshBtnTemp" mnemonicParsing="false" onAction="#refreshLeaderboard" text="Refresh" />
          </children>
          <GridPane.margin>
             <Insets />

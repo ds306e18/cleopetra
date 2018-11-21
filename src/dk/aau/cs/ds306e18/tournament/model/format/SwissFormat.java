@@ -87,8 +87,6 @@ public class SwissFormat extends GroupFormat implements MatchPlayedListener, Mat
      * Teams will get 2 points for winning and -2 for loosing.
      */
     private void assignPointsForLatestRound() {
-        /*
-
         ArrayList<Match> finishedRoundMatches = rounds.get(rounds.size() - 1);
 
         for (Match match : finishedRoundMatches) {
@@ -98,7 +96,6 @@ public class SwissFormat extends GroupFormat implements MatchPlayedListener, Mat
             teamPoints.put(winnerTeam, teamPoints.get(winnerTeam) + 2);
             teamPoints.put(loserTeam, teamPoints.get(loserTeam) - 2);
         }
-        */
     }
 
     /**
@@ -300,6 +297,13 @@ public class SwissFormat extends GroupFormat implements MatchPlayedListener, Mat
         matchChangedListeners.remove(listener);
     }
 
+    /**
+     * Checks a given team for every completed match if they have been a loser or winner. Then assigning their points
+     * based upon their win/loss ratio. A win gives 2 points and a loss reduces points by 2.
+     * By going through all completed matches we can assure proper point giving due to recalculations.
+     *
+     * @param team The given team to check, calculate and then assign point for.
+     */
     private void calculateAndAssignTeamPoints(Team team) {
         int points = 0;
 
@@ -316,7 +320,6 @@ public class SwissFormat extends GroupFormat implements MatchPlayedListener, Mat
 
     @Override
     public void onMatchPlayed(Match match) {
-
         // Has last possible match been played?
         if (!hasUnstartedRounds() && getUpcomingMatches().size() == 0) {
             status = StageStatus.CONCLUDED;
@@ -350,7 +353,7 @@ public class SwissFormat extends GroupFormat implements MatchPlayedListener, Mat
 
     @Override
     public void onMatchChanged(Match match) {
-        // Check both teams and recalculate their points to avoid errors.
+        // Calculate and assign points for each team in the match.
         calculateAndAssignTeamPoints(match.getBlueTeam());
         calculateAndAssignTeamPoints(match.getOrangeTeam());
 

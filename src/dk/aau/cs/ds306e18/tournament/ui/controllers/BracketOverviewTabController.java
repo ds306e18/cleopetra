@@ -83,61 +83,31 @@ public class BracketOverviewTabController implements MatchChangeListener {
     private MatchVisualController selectedMatch;
 
     @FXML
-    private void initialize(){
+    private void initialize() {
         instance = this; // TODO Make references to other controllers work in MainController
     }
 
-    /** Updates all elements depending on the state of the tournament and the shown stage. */
+    /**
+     * Updates all elements depending on the state of the tournament and the shown stage.
+     */
     public void update() {
         Tournament tournament = Tournament.get();
+        showLeaderboard(false);
+
         if (!tournament.hasStarted()) {
             showStartTournamentInstructions(true);
             setSelectedMatch(null);
             stageNavigationButtonsHolder.setDisable(true);
-
-            bracketLeaderboard.setVisible(false);
-            bracketOverviewTab.getColumnConstraints().get(0).setMaxWidth(0);
         } else {
             showStartTournamentInstructions(false);
             Format format = tournament.getCurrentStage().getFormat();
             showFormat(format);
-
-            if (format instanceof SwissFormat){
-                bracketLeaderboard.setVisible(true);
-                bracketOverviewTab.getColumnConstraints().get(0).setMaxWidth(200);
-
-                refreshLeaderboard();
-                ((SwissFormat) format).registerMatchChangedListener(this);
-            }
         }
     }
 
-    public void refreshLeaderboard(){
-        leaderboardTableview.getItems().clear();
-        leaderboardTableview.getColumns().clear();
-
-        Tournament tournament = Tournament.get();
-        int totalNumberTeams = tournament.getTeams().size();
-        Format format = tournament.getCurrentStage().getFormat();
-
-        HashMap<Team, Integer> pointsHashmap = ((SwissFormat) format).getTeamPointsMap();
-        List<Team> sortedTeams = format.getTopTeams(totalNumberTeams, new TieBreakerBySeed());
-
-        leaderboardTableview.getItems().addAll(sortedTeams);
-
-        TableColumn<Team, String> nameColumn = new TableColumn<>("Name");
-        nameColumn.setCellValueFactory(cellData -> {
-            return new SimpleStringProperty(cellData.getValue().getTeamName());
-        });
-
-        TableColumn<Team, Integer> pointColumn = new TableColumn<>("Score");
-        pointColumn.setCellValueFactory(cellData -> {
-            int value = pointsHashmap.get(cellData.getValue());
-            ObservableValue<Integer> obsInt = new SimpleIntegerProperty(value).asObject();
-            return obsInt;
-        });
-
-        leaderboardTableview.getColumns().addAll(nameColumn, pointColumn);
+    public void showLeaderboard(boolean state) {
+        bracketLeaderboard.setVisible(state);
+        bracketOverviewTab.getColumnConstraints().get(0).setMaxWidth(state ? 200 : 0);
     }
 
     private void showStartTournamentInstructions(boolean show) {
@@ -182,11 +152,45 @@ public class BracketOverviewTabController implements MatchChangeListener {
      * Sets the selected match.
      */
     public void setSelectedMatch(MatchVisualController match) {
-        if (selectedMatch != null){
+        if (selectedMatch != null) {
             selectedMatch.getRoot().getStyleClass().remove("selectedMatch");
         }
         this.selectedMatch = match;
         updateTeamViewer(match == null ? null : match.getShowedMatch());
+    }
+
+    /**
+     * Refreshes the leaderboard by clearing its content and then creating columns with data retrieved
+     * from the HashMap provided. The list is sorted based upon the team points in a descending order.
+     *
+     * @param pointMap The HashMap containing the teams and their points.
+     */
+    public void refreshLeaderboard(HashMap<Team, Integer> pointMap) {
+        // Clear everything inside the tableView
+        leaderboardTableview.getItems().clear();
+        leaderboardTableview.getColumns().clear();
+
+        // Assign teams to the listView from the HashMap provided.
+        leaderboardTableview.getItems().addAll(pointMap.keySet());
+
+        // Create columns and assign values based on the provided HashMap.
+        TableColumn<Team, String> nameColumn = new TableColumn<>("Name");
+        nameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTeamName()));
+
+        TableColumn<Team, Integer> pointColumn = new TableColumn<>("Points");
+        pointColumn.setCellValueFactory(cellData -> {
+            int points = pointMap.get(cellData.getValue());
+            return new SimpleIntegerProperty(points).asObject();
+        });
+
+        // Styling - Descending order and centering text.
+        pointColumn.setSortType(TableColumn.SortType.DESCENDING);
+        pointColumn.setStyle("-fx-alignment: CENTER;");
+
+        // Add sorting order and columns to the tableview.
+        leaderboardTableview.getColumns().add(nameColumn);
+        leaderboardTableview.getColumns().add(pointColumn);
+        leaderboardTableview.getSortOrder().add(pointColumn);
     }
 
     /**
@@ -259,6 +263,6 @@ public class BracketOverviewTabController implements MatchChangeListener {
 
     @Override
     public void onMatchChanged(Match match) {
-        refreshLeaderboard();
+
     }
 }

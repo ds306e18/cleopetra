@@ -15,7 +15,7 @@ import javafx.scene.layout.VBox;
 import java.util.ArrayList;
 
 /** Used to display the a swiss stage. */
-public class SwissNode extends HBox implements MatchPlayedListener {
+public class SwissNode extends HBox implements MatchPlayedListener, MatchChangeListener {
 
     private final Insets MARGINS = new Insets(0, 0, 8, 0);
     private final int COLUMN_WIDTH = 175;
@@ -30,12 +30,17 @@ public class SwissNode extends HBox implements MatchPlayedListener {
         this.boc = boc;
         this.swiss = swiss;
         swiss.registerMatchPlayedListener(this);
+        swiss.registerMatchChangedListener(this);
+        boc.showLeaderboard(true);
         update();
     }
 
     /** Updates all UI elements for the swiss stage. */
     private void update() {
         clean();
+
+        /* Assign initial teams and points to leaderboard */
+        boc.refreshLeaderboard(swiss.getTeamPointsMap());
 
         ArrayList<ArrayList<Match>> rounds = swiss.getRounds();
         int numberOfRounds = rounds.size();
@@ -115,5 +120,10 @@ public class SwissNode extends HBox implements MatchPlayedListener {
     @Override
     public void onMatchPlayed(Match match) {
         updateGenerateRoundButton();
+    }
+
+    @Override
+    public void onMatchChanged(Match match) {
+        boc.refreshLeaderboard(swiss.getTeamPointsMap());
     }
 }
