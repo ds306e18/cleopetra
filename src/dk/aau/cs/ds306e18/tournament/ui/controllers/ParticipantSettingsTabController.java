@@ -59,19 +59,23 @@ public class ParticipantSettingsTabController {
         teamSettingsVbox.setVisible(false);
         configPathTextField.setEditable(false);
 
-        //By default the remove stage and bot button is disabled
+        //By default the remove team and bot button is disabled
         removeTeamBtn.setDisable(true);
         removeBotBtn.setDisable(true);
 
         //Adds selectionslisteners to bot and team listviews
         botsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             updateBotFields();
+            updateAddRemoveButtonsEnabling();
+            updateCopyPasteButtonsEnabling();
         });
         teamsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             updateTeamFields();
+            updateAddRemoveButtonsEnabling();
+            updateCopyPasteButtonsEnabling();
         });
 
-        updateBotClipboardLabel();
+        updateClipboardLabel();
     }
 
     @FXML
@@ -179,9 +183,6 @@ public class ParticipantSettingsTabController {
 
         if (botsListView.getSelectionModel().getSelectedIndex() != -1) {
 
-            //Disable addBotButton if there is 5 teams in list.
-            addBotBtn.setDisable(botsListView.getItems().size() >= 5);
-
             botSettingsVbox.setVisible(true);
             Bot selectedBot = Tournament.get().getTeams().get(getSelectedTeamIndex()).getBots().get(botsListView.getSelectionModel().getSelectedIndex());
             botNameTextField.setText(selectedBot.getName());
@@ -189,13 +190,8 @@ public class ParticipantSettingsTabController {
             botDescription.setText(selectedBot.getDescription());
             configPathTextField.setText(selectedBot.getConfigPath());
 
-            //If the botListView has more then 1 items, then enable remove button
-            if(botsListView.getItems().size() > 1)
-                removeBotBtn.setDisable(false);
-
-            //if no bot is selected clear the fields and hide the botsettgins box.
         } else {
-            removeBotBtn.setDisable(true);
+            //if no bot is selected clear the fields and hide the botsettgins box.
             clearBotFields();
         }
         //Check for empty names
@@ -234,8 +230,8 @@ public class ParticipantSettingsTabController {
             if(teamsListView.getItems().size() != 0)
                 removeTeamBtn.setDisable(false);
 
-            //if no bot is selected clear the fields and hide the teamsettings box and disable remove team button
         } else {
+            //if no bot is selected clear the fields and hide the teamsettings box and disable remove team button
             removeTeamBtn.setDisable(true);
             clearTeamFields();
         }
@@ -326,7 +322,8 @@ public class ParticipantSettingsTabController {
         } else {
             clipboardBot = null;
         }
-        updateBotClipboardLabel();
+        updateClipboardLabel();
+        updateCopyPasteButtonsEnabling();
     }
 
     public void onPasteBotButtonAction(ActionEvent actionEvent) {
@@ -339,11 +336,28 @@ public class ParticipantSettingsTabController {
         }
     }
 
-    public void updateBotClipboardLabel() {
+    public void updateClipboardLabel() {
         if (clipboardBot == null) {
             clipboardLabel.setText(CLIPBOARD_PREFIX + CLIPBOARD_EMPTY_STRING);
         } else {
             clipboardLabel.setText(CLIPBOARD_PREFIX + clipboardBot.getName());
         }
+    }
+
+    public void updateCopyPasteButtonsEnabling() {
+        Bot selectedBot = botsListView.getSelectionModel().getSelectedItem();
+        copyBotBtn.setDisable(selectedBot == null);
+
+        Team selectedTeam = getSelectedTeam();
+        boolean spaceOnSelectedTeam = selectedTeam != null && selectedTeam.getBots().size() >= Team.MAX_SIZE;
+        pasteBotBtn.setDisable(clipboardBot == null || spaceOnSelectedTeam);
+    }
+
+    public void updateAddRemoveButtonsEnabling() {
+        Team selectedTeam = getSelectedTeam();
+        Bot selectedBot = botsListView.getSelectionModel().getSelectedItem();
+
+        addBotBtn.setDisable(selectedTeam != null && selectedTeam.getBots().size() >= Team.MAX_SIZE);
+        removeBotBtn.setDisable(selectedBot == null);
     }
 }
