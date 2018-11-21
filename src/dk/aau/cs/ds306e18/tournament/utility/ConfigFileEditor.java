@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class ConfigFileEditor {
 
-    private static boolean valid;
+    private static boolean valid = false;
     private static ArrayList<String> config;
 
     private final static String REMOVE_VALUE_PATTERN = "= .*$";
@@ -27,13 +27,18 @@ public class ConfigFileEditor {
     private final static String PARAMETER_BOT_TYPE = "rlbot";
 
     /**
-     * Reads all lines from a given file and puts them in ArrayList config
+     * Reads all lines from a given file and puts them in ArrayList config. Throws ISE if read config is invalid and
+     * sets valid-flag if file is read.
      * @param filename the filename to read
      */
     static void readConfig(String filename) {
         Path in = Paths.get(filename);
         try {
             config = (ArrayList<String>) Files.readAllLines(in);
+            validateConfigSyntax();
+            if (!isValid()) {
+                throw new IllegalStateException("Warning: RLBot config-file read: " + filename + "'s syntax is not valid!");
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -166,10 +171,9 @@ public class ConfigFileEditor {
 
         editLine(PARAMETER_PARTICIPANT_NUM, Integer.toString(numParticipantsBlue + numParticipantsOrange));
 
-        // when finished, set valid-flag to true, if syntax is valid
-        boolean validSyntax = validateConfigSyntax();
-        valid = validSyntax;
-        return validSyntax;
+        // when finished, validate syntax and return boolean
+        validateConfigSyntax();
+        return isValid();
     }
 
     /**
@@ -177,7 +181,7 @@ public class ConfigFileEditor {
      * cases; square bracketed headers, hashtag-comments, and parameters with equals-symbols
      * @return the boolean of valid syntax in config
      */
-    private static boolean validateConfigSyntax() {
+    static void validateConfigSyntax() {
         for (String line : config) {
             // if line is not whitespace, check syntax
             if (!(line.isEmpty())) {
@@ -185,7 +189,8 @@ public class ConfigFileEditor {
                     case '[':
                         // if last char, without whitespace, is a closing square bracket, then header and break
                         if (line.trim().charAt(line.trim().length() - 1) == ']') break;
-                        return false;
+                        valid = false;
+                        return;
 
                     // hashtags are comments and allowed
                     case '#':
@@ -193,12 +198,13 @@ public class ConfigFileEditor {
 
                     // if none of the above, must be parameter-line, check for equals-symbol
                     default:
-                        if (!(line.contains("="))) return false;
-                        break;
+                        if (line.contains("=")) break;
+                        valid = false;
+                        return;
                 }
             }
         }
-        return true;
+        valid = true;
     }
 
     static ArrayList<String> getConfig() {
