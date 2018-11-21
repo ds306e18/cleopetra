@@ -172,7 +172,7 @@ public class ConfigFileEditor {
         return validSyntax;
     }
 
-    /** 
+    /**
      * Checks loaded config for valid syntax by iterating through each line. Allows empty lines, and checks for three
      * cases; square bracketed headers, hashtag-comments, and parameters with equals-symbols
      * @return the boolean of valid syntax in config
@@ -207,5 +207,9 @@ public class ConfigFileEditor {
 
     static void setConfig(ArrayList<String> config) {
         ConfigFileEditor.config = config;
+    }
+
+    public static boolean isValid() {
+        return valid;
     }
 }
