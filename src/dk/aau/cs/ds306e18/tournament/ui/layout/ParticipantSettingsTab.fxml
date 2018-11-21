@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
@@ -46,24 +47,31 @@
                   <Insets />
                </VBox.margin>
             </ListView>
-            <GridPane style="-fx-max-width: 250;">
+            <GridPane hgap="8.0" maxHeight="-Infinity" maxWidth="-Infinity">
                <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="91.33331298828125" minWidth="10.0" prefWidth="79.33331298828125" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="104.00002034505206" minWidth="10.0" prefWidth="104.00002034505206" />
-                  <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="77.33331298828125" minWidth="10.0" prefWidth="72.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
                </columnConstraints>
                <rowConstraints>
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <Button fx:id="addTeamBtn" mnemonicParsing="false" onAction="#addTeamBtnOnAction" prefHeight="27.0" prefWidth="79.0" text="Add" />
-                  <Button fx:id="removeTeamBtn" mnemonicParsing="false" onAction="#removeTeamBtnOnAction" prefHeight="27.0" prefWidth="81.0" text="Remove" GridPane.columnIndex="1" />
-                  <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="5.0" GridPane.columnIndex="2">
-                     <children>
-                        <Button fx:id="swapUpTeam" disable="true" mnemonicParsing="false" onAction="#swapTeamUpwards" text="▲" />
-                        <Button fx:id="swapDownTeam" disable="true" mnemonicParsing="false" onAction="#swapTeamDownwards" text="▼" />
-                     </children>
-                  </HBox>
+                  <Button fx:id="addTeamBtn" mnemonicParsing="false" onAction="#addTeamBtnOnAction" prefHeight="27.0" prefWidth="79.0" text="Add">
+                     <GridPane.margin>
+                        <Insets />
+                     </GridPane.margin></Button>
+                  <Button fx:id="removeTeamBtn" mnemonicParsing="false" onAction="#removeTeamBtnOnAction" prefHeight="27.0" prefWidth="81.0" text="Remove" GridPane.columnIndex="1">
+                     <GridPane.margin>
+                        <Insets />
+                     </GridPane.margin></Button>
+                  <Button fx:id="swapUpTeam" disable="true" minWidth="30.0" mnemonicParsing="false" onAction="#swapTeamUpwards" prefWidth="30.0" text="▲" GridPane.columnIndex="2">
+                     <GridPane.margin>
+                        <Insets />
+                     </GridPane.margin>
+                  </Button>
+                  <Button fx:id="swapDownTeam" disable="true" minWidth="30.0" mnemonicParsing="false" onAction="#swapTeamDownwards" prefWidth="30.0" text="▼" GridPane.columnIndex="3" />
                </children>
                <VBox.margin>
                   <Insets />
@@ -74,7 +82,7 @@
                   <Insets />
                </GridPane.margin>
          <padding>
-            <Insets left="20.0" right="20.0" />
+            <Insets left="20.0" right="20.0" top="20.0" />
          </padding>
       </VBox>
       <VBox id="PS-center" fx:id="teamSettingsVbox" spacing="10.0" GridPane.columnIndex="1">
@@ -105,7 +113,7 @@
                   <Font name="System" size="16.0" />
                </font>
             </Text>
-            <ListView fx:id="botsListView" maxHeight="225.0">
+            <ListView fx:id="botsListView" VBox.vgrow="ALWAYS">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
@@ -113,35 +121,38 @@
                   <Insets />
                </VBox.margin>
             </ListView>
-            <HBox alignment="CENTER" prefHeight="50.0">
+            <GridPane hgap="8.0" maxHeight="-Infinity" maxWidth="-Infinity" vgap="8.0">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints vgrow="SOMETIMES" />
+                  <RowConstraints vgrow="SOMETIMES" />
+               </rowConstraints>
                <children>
-                  <GridPane maxWidth="310.0" prefHeight="50.0" style="-fx-max-width: 250;">
-                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                     </columnConstraints>
-                     <rowConstraints>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                     </rowConstraints>
-                     <children>
-                        <Button fx:id="addBotBtn" mnemonicParsing="false" onAction="#addBotBtnOnAction" prefHeight="27.0" prefWidth="109.0" text="Add">
-                           <GridPane.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </GridPane.margin>
-                        </Button>
-                        <Button fx:id="removeBotBtn" mnemonicParsing="false" onAction="#removeBotBtnOnAction" prefHeight="27.0" prefWidth="108.0" text="Delete" GridPane.columnIndex="1">
-                           <GridPane.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </GridPane.margin>
-                        </Button>
-                     </children>
-                  </GridPane>
+                  <Button fx:id="addBotBtn" mnemonicParsing="false" onAction="#addBotBtnOnAction" prefHeight="27.0" prefWidth="100.0" text="Add">
+                     <GridPane.margin>
+                        <Insets />
+                     </GridPane.margin>
+                  </Button>
+                  <Button fx:id="removeBotBtn" mnemonicParsing="false" onAction="#removeBotBtnOnAction" prefHeight="27.0" prefWidth="100.0" text="Remove" GridPane.columnIndex="1">
+                     <GridPane.margin>
+                        <Insets />
+                     </GridPane.margin>
+                  </Button>
+                  <Button fx:id="copyBotBtn" mnemonicParsing="false" onAction="#addBotBtnOnAction" prefHeight="27.0" prefWidth="100.0" text="Copy" GridPane.rowIndex="1" />
+                  <Button fx:id="pasteBotBtn" mnemonicParsing="false" onAction="#removeBotBtnOnAction" prefHeight="27.0" prefWidth="100.0" text="Paste" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                </children>
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-            </HBox>
+            </GridPane>
+            <Label fx:id="clipboardLabel" text="Clipboard:" />
          </children>
+         <GridPane.margin>
+            <Insets />
+         </GridPane.margin>
+         <padding>
+            <Insets bottom="16.0" />
+         </padding>
       </VBox>
       <VBox id="PS-rightside" fx:id="botSettingsVbox" spacing="10.0" GridPane.columnIndex="2">
          <children>
@@ -184,10 +195,10 @@
                   <Font size="16.0" />
                </font>
             </Text>
-            <HBox maxHeight="40.0" prefHeight="27.0" prefWidth="163.0">
+            <HBox maxHeight="40.0" prefHeight="27.0">
                <children>
-                  <Button fx:id="configPathBtn" mnemonicParsing="false" onAction="#configPathBtnOnAction" prefHeight="27.0" prefWidth="90.0" text="Add path..." />
-                  <TextField fx:id="configPathTextField" prefHeight="27.0" prefWidth="100.0" promptText="Set path here" />
+                  <Button fx:id="configPathBtn" mnemonicParsing="false" onAction="#configPathBtnOnAction" prefHeight="27.0" prefWidth="60.0" text="Browse" />
+                  <TextField fx:id="configPathTextField" prefHeight="27.0" promptText="Set path here" HBox.hgrow="ALWAYS" />
                </children>
             </HBox>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Description / Comment">

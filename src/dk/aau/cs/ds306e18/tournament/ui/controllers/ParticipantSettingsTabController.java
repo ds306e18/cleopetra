@@ -24,6 +24,7 @@ import java.util.List;
 
 public class ParticipantSettingsTabController {
 
+
     @FXML private GridPane participantSettingsTab;
     @FXML private TextField teamNameTextField;
     @FXML private TextField botNameTextField;
@@ -41,6 +42,9 @@ public class ParticipantSettingsTabController {
     @FXML private TextField configPathTextField;
     @FXML private Button swapUpTeam;
     @FXML private Button swapDownTeam;
+    @FXML private Button copyBotBtn;
+    @FXML private Button pasteBotBtn;
+    @FXML private Label clipboardLabel;
     final private FileChooser fileChooser = new FileChooser();
 
     @FXML
