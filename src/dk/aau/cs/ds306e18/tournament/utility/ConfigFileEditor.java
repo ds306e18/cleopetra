@@ -174,6 +174,30 @@ public class ConfigFileEditor {
         editLine(PARAMETER_PARTICIPANT_NUM, Integer.toString(numParticipantsBlue + numParticipantsOrange));
     }
 
+    public static boolean validateConfigSyntax() {
+        for (String line : config) {
+            // if line is not whitespace, check syntax
+            if (!(line.isEmpty())) {
+                switch (line.charAt(0)) {
+                    case '[':
+                        // if last char, without whitespace, is a closing square bracket, then header and break
+                        if (line.trim().charAt(line.trim().length() - 1) == ']') break;
+                        return false;
+
+                    // hashtags are comments and allowed
+                    case '#':
+                        break;
+
+                    // if none of the above, must be parameter-line, check for equals-symbol
+                    default:
+                        if (!(line.contains("="))) return false;
+                        break;
+                }
+            }
+        }
+        return true;
+    }
+
     public static boolean validateConfig() {
         //TODO
         return false;
