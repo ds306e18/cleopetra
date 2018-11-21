@@ -39,8 +39,8 @@ public class ParticipantSettingsTabController {
     @FXML private VBox teamSettingsVbox;
     @FXML private VBox botSettingsVbox;
     @FXML private TextField configPathTextField;
-    @FXML private Button swapUp;
-    @FXML private Button swapDown;
+    @FXML private Button swapUpTeam;
+    @FXML private Button swapDownTeam;
     final private FileChooser fileChooser = new FileChooser();
 
     @FXML
@@ -166,7 +166,12 @@ public class ParticipantSettingsTabController {
 
     /** Updates the textfields with the values from the selected bot. */
     void updateBotFields() {
+
         if (botsListView.getSelectionModel().getSelectedIndex() != -1) {
+
+            //Disable addBotButton if there is 5 teams in list.
+            addBotBtn.setDisable(botsListView.getItems().size() >= 5);
+
             botSettingsVbox.setVisible(true);
             Bot selectedBot = Tournament.get().getTeams().get(getSelectedTeamIndex()).getBots().get(botsListView.getSelectionModel().getSelectedIndex());
             botNameTextField.setText(selectedBot.getName());
@@ -205,8 +210,8 @@ public class ParticipantSettingsTabController {
 
             // Handle team order button disabling / enabling
             int selectedIndex = getSelectedTeamIndex();
-            swapUp.setDisable(selectedIndex == 0);
-            swapDown.setDisable(selectedIndex == teamsListView.getItems().size() - 1 && selectedIndex != - 1);
+            swapUpTeam.setDisable(selectedIndex == 0);
+            swapDownTeam.setDisable(selectedIndex == teamsListView.getItems().size() - 1 && selectedIndex != - 1);
 
             Team selectedTeam = Tournament.get().getTeams().get(getSelectedTeamIndex());
 
