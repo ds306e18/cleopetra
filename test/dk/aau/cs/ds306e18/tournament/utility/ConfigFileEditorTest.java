@@ -9,6 +9,8 @@ import java.util.ArrayList;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNull;
+import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 public class ConfigFileEditorTest {
 
@@ -161,5 +163,22 @@ public class ConfigFileEditorTest {
         for (int i = match.getBlueTeam().size(); i < match.getOrangeTeam().size(); i++) {
             assertEquals("1", ConfigFileEditor.getValueOfLine("participant_team_" + i));
         }
+    }
+
+    @Test
+    public void validateConfigSyntax1() {
+        ConfigFileEditor.readConfig("testconfig.cfg");
+        assertTrue(ConfigFileEditor.isValid());
+    }
+
+    @Test
+    public void validateConfigSyntax2() {
+        ConfigFileEditor.readConfig("testconfig.cfg");
+        ArrayList<String> config = ConfigFileEditor.getConfig();
+        // remove trailing, closing square bracket from first header
+        config.set(0, config.get(0).split("]")[0]);
+        ConfigFileEditor.setConfig(config);
+        ConfigFileEditor.validateConfigSyntax();
+        assertFalse(ConfigFileEditor.isValid());
     }
 }
