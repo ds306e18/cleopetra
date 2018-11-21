@@ -45,10 +45,13 @@ public class ConfigFileEditor {
     }
 
     /**
-     * Writes all lines from config to a file with system-default charset
+     * Writes all lines from config to a file with system-default charset. Throws ISE if config is not valid. Not
+     * possible through ordinary usage of methods on config.
      * @param filename the filename to write to
      */
     public static void writeConfig(String filename) {
+        if (!isValid())
+            throw new IllegalStateException("Warning: RLBot config-file to write: " + filename + "'s syntax is not valid!");
         Path out = Paths.get(filename);
         try {
             Files.write(out, config, Charset.defaultCharset());
