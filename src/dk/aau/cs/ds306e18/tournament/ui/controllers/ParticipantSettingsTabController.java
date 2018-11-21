@@ -69,6 +69,12 @@ public class ParticipantSettingsTabController {
 
         File file = fileChooser.showOpenDialog((Stage) participantSettingsTab.getScene().getWindow());
         if (file != null) {
+
+            //Set the path of the fileChooser to be on folder above the current chosen one
+            String pathFinal = file.getPath().substring(0, file.getPath().lastIndexOf("\\"));
+            pathFinal = pathFinal.substring(0, pathFinal.lastIndexOf("\\"));
+            fileChooser.setInitialDirectory(new File(pathFinal));
+
             List<File> files = Arrays.asList(file);
             setConfigPathText(files);
         }
