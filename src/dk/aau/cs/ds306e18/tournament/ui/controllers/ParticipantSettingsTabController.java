@@ -74,10 +74,14 @@ public class ParticipantSettingsTabController {
         File file = fileChooser.showOpenDialog((Stage) participantSettingsTab.getScene().getWindow());
         if (file != null) {
 
-            //Set the path of the fileChooser to be on folder above the current chosen one
-            String pathFinal = file.getPath().substring(0, file.getPath().lastIndexOf("\\"));
-            pathFinal = pathFinal.substring(0, pathFinal.lastIndexOf("\\"));
-            fileChooser.setInitialDirectory(new File(pathFinal));
+            //If the path contains for than 1 backslash, make the filechoosers next start be one folder above the selected
+            if(getNumberOfBackslashesInString(file.getPath()) > 1){
+
+                String pathFinal = file.getPath().substring(0, file.getPath().lastIndexOf("\\"));
+                pathFinal = pathFinal.substring(0, pathFinal.lastIndexOf("\\"));
+
+                fileChooser.setInitialDirectory(new File(pathFinal));
+            }
 
             List<File> files = Arrays.asList(file);
             setConfigPathText(files);
@@ -280,13 +284,31 @@ public class ParticipantSettingsTabController {
         }
         for (File file : files) {
             //Format path to be shown
-            String path = file.getAbsolutePath().replace("\\", "/");
-            int lastSlashIndex = path.lastIndexOf("/");
-            int secondLastSlashIndex = path.lastIndexOf("/", lastSlashIndex - 1);
 
-            configPathTextField.setText("." + path.substring(secondLastSlashIndex));
+            //If there is more than two backslashes in string, then display shorter string
+            if(getNumberOfBackslashesInString(file.getAbsolutePath()) > 2){
+                String path = file.getAbsolutePath().replace("\\", "/");
+                int lastSlashIndex = path.lastIndexOf("/");
+                int secondLastSlashIndex = path.lastIndexOf("/", lastSlashIndex - 1);
+
+                configPathTextField.setText("." + path.substring(secondLastSlashIndex));
+            }else
+                configPathTextField.setText(file.getAbsolutePath());
+
             botsListView.getSelectionModel().getSelectedItem().setConfigPath(file.getAbsolutePath());
         }
+    }
+
+    /** @return the number of backslashes in the given string. */
+    private int getNumberOfBackslashesInString(String string){
+        //Count number of backslashes in string
+        int slashCounter = 0;
+        for(int i = 0; i < string.length(); i++){
+            if(string.charAt(i) == '\\')
+                slashCounter++;
+        }
+
+        return slashCounter;
     }
 
     /** Swaps a team upwards in the list of teams. Used to allow ordering of Team and thereby their seed. */
