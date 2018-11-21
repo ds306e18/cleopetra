@@ -28,7 +28,6 @@ public class ConfigFileEditor {
 
     /**
      * Reads all lines from a given file and puts them in ArrayList config
-     *
      * @param filename the filename to read
      */
     static void readConfig(String filename) {
@@ -42,7 +41,6 @@ public class ConfigFileEditor {
 
     /**
      * Writes all lines from config to a file with system-default charset
-     *
      * @param filename the filename to write to
      */
     public static void writeConfig(String filename) {
@@ -56,7 +54,6 @@ public class ConfigFileEditor {
 
     /**
      * Edits value of first occurrence of line with given parameter
-     *
      * @param parameter the given parameter to edit
      * @param value     the value to edit given parameter with
      */
@@ -72,7 +69,6 @@ public class ConfigFileEditor {
 
     /**
      * Edits value of first occurrence of line with given numbered parameter
-     *
      * @param parameter the given parameter to edit
      * @param num       the number of a numbered parameter
      * @param value     the value to edit given parameter with
@@ -89,7 +85,6 @@ public class ConfigFileEditor {
 
     /**
      * Gets line by index
-     *
      * @param i index of line
      * @return line on index i
      */
@@ -99,7 +94,6 @@ public class ConfigFileEditor {
 
     /**
      * Gets first line matching parameter, if config is empty, returns null
-     *
      * @param parameter is beginning of line
      * @return first line which starts with parameter
      */
@@ -113,8 +107,8 @@ public class ConfigFileEditor {
     }
 
     /**
-     * Gets value of argument, assuming the line is split with "=". Trims whitespace before returning value. If no split is found, just returns line.
-     *
+     * Gets value of argument, assuming the line is split with "=". Trims whitespace before returning value. If no split
+     * is found, just returns line.
      * @param line is the line to extract value from
      * @return value found, trimmed for whitespace
      */
@@ -125,7 +119,6 @@ public class ConfigFileEditor {
 
     /**
      * Composite method of getLine and getValue method, returns null, if no parameter exists
-     *
      * @param parameter the given parameter
      * @return the value at first line with parameter
      */
@@ -139,8 +132,8 @@ public class ConfigFileEditor {
     }
 
     /**
-     * Takes a parameter-line and regex-substitutes equals and everyting after with an equals and a space for easy appending of value
-     *
+     * Takes a parameter-line and regex-substitutes equals and everyting after with an equals and a space for easy
+     * appending of value
      * @param line the given line to remove value from
      * @return the given line with value removed
      */
@@ -150,10 +143,10 @@ public class ConfigFileEditor {
 
     /**
      * Configures the config based on the state of a given Match
-     *
      * @param match the match to configure the config for
+     * @return the boolean of success
      */
-    public static void configureMatch(Match match) {
+    public static boolean configureMatch(Match match) {
         int numParticipantsBlue = 0;
         int numParticipantsOrange = 0;
 
@@ -172,9 +165,19 @@ public class ConfigFileEditor {
         }
 
         editLine(PARAMETER_PARTICIPANT_NUM, Integer.toString(numParticipantsBlue + numParticipantsOrange));
+
+        // when finished, set valid-flag to true, if syntax is valid
+        boolean validSyntax = validateConfigSyntax();
+        valid = validSyntax;
+        return validSyntax;
     }
 
-    public static boolean validateConfigSyntax() {
+    /** 
+     * Checks loaded config for valid syntax by iterating through each line. Allows empty lines, and checks for three
+     * cases; square bracketed headers, hashtag-comments, and parameters with equals-symbols
+     * @return the boolean of valid syntax in config
+     */
+    private static boolean validateConfigSyntax() {
         for (String line : config) {
             // if line is not whitespace, check syntax
             if (!(line.isEmpty())) {
@@ -196,11 +199,6 @@ public class ConfigFileEditor {
             }
         }
         return true;
-    }
-
-    public static boolean validateConfig() {
-        //TODO
-        return false;
     }
 
     static ArrayList<String> getConfig() {
