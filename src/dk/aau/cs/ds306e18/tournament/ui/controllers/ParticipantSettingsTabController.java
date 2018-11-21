@@ -269,7 +269,12 @@ public class ParticipantSettingsTabController {
             return;
         }
         for (File file : files) {
-            configPathTextField.setText(file.getAbsolutePath() + "\n");
+            //Format path to be shown
+            String path = file.getAbsolutePath().replace("\\", "/");
+            int lastSlashIndex = path.lastIndexOf("/");
+            int secondLastSlashIndex = path.lastIndexOf("/", lastSlashIndex - 1);
+
+            configPathTextField.setText("." + path.substring(secondLastSlashIndex));
             botsListView.getSelectionModel().getSelectedItem().setConfigPath(file.getAbsolutePath());
         }
     }
