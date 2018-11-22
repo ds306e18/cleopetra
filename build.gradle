@@ -14,8 +14,8 @@ plugins {
     id 'application'
 }
 
-sourceCompatibility = 10
-targetCompatibility = 10
+sourceCompatibility = 8
+targetCompatibility = 8
 
 // Define the main class for the application
 mainClassName = 'dk.aau.cs.ds306e18.tournament.Main'
