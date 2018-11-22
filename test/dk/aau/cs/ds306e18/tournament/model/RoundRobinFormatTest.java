@@ -152,7 +152,7 @@ public class RoundRobinFormatTest {
         RoundRobinFormat bracket = new RoundRobinFormat();
         bracket.start(generateTeams(numberOfTeams, teamSize));
 
-        setAllMatchesPlayed(bracket);
+        setAllUpcommingMatchesPlayed(bracket);
 
         assertEquals(numberOfMatchesInRoundRobin(numberOfTeams), bracket.getCompletedMatches().size());
     }
@@ -209,7 +209,7 @@ public class RoundRobinFormatTest {
         ArrayList<Team> inputTeams = generateSeededTeams(4, 2);
         bracket.start(inputTeams);
 
-        setAllMatchesPlayed(bracket);
+        setAllUpcommingMatchesPlayed(bracket);
         //All teams now have the same amount of points.
 
         ArrayList<Team> top3Teams = new ArrayList<>(bracket.getTopTeams(3, new TieBreakerBySeed()));
@@ -256,7 +256,7 @@ public class RoundRobinFormatTest {
         bracket.start(generateTeams(2, 2));
 
         //Set all matches to played
-        setAllMatchesPlayed(bracket);
+        setAllUpcommingMatchesPlayed(bracket);
 
         assertEquals(StageStatus.CONCLUDED, bracket.getStatus());
     }
@@ -390,14 +390,20 @@ public class RoundRobinFormatTest {
     }
 
     /**
-     * sets all upcoming matches in the given format to have been played.
+     * sets all upcoming matches in the given format to have been played. The best seeded team wins.
      */
-    private void setAllMatchesPlayed(GroupFormat format) {
+    private void setAllUpcommingMatchesPlayed(GroupFormat format) {
 
         //Set all matches to played
         List<Match> matches = format.getUpcomingMatches();
         for (Match match : matches) {
-            match.setHasBeenPlayed(true);
+            Team blue = match.getBlueTeam();
+            Team orange = match.getOrangeTeam();
+            if (blue.getInitialSeedValue() < orange.getInitialSeedValue()) {
+                match.setScores(1, 0, true);
+            } else {
+                match.setScores(0, 1, true);
+            }
         }
     }
 }

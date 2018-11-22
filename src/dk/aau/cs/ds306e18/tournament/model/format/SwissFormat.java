@@ -7,6 +7,7 @@ import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchChangeListener;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchPlayedListener;
+import dk.aau.cs.ds306e18.tournament.model.match.MatchStatus;
 import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.SwissSettingsNode;
 import dk.aau.cs.ds306e18.tournament.ui.controllers.BracketOverviewTabController;
 import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.SwissNode;
@@ -308,10 +309,12 @@ public class SwissFormat extends GroupFormat implements MatchPlayedListener, Mat
         int points = 0;
 
         for (Match match : getCompletedMatches()) {
-            if (match.getWinner().equals(team)) {
-                points += 2;
-            } else if (match.getLoser().equals(team)) {
-                points -= 2;
+            if (match.getStatus() != MatchStatus.DRAW) {
+                if (match.getWinner().equals(team)) {
+                    points += 2;
+                } else if (match.getLoser().equals(team)) {
+                    points -= 2;
+                }
             }
         }
 

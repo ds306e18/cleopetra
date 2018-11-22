@@ -306,14 +306,20 @@ public class MatchTest {
     @Test
     public void reconnectAfterPlay01() {
         Team tA = new Team("A", null, 0, "a");
+        Team tE = new Team("E", null, 0, "e");
         Match matchOne = new Match(tA, new Team("B", null, 0, "b"));
         Match matchTwo = new Match().setBlue(new Team("C", null, 0, "c")).setOrangeToWinnerOf(matchOne);
-        Match matchThree = new Match(new Team("D", null, 0, "d"), new Team("E", null, 0, "e"));
+        Match matchThree = new Match(tE, new Team("D", null, 0, "d"));
 
-        matchOne.setScores(0, 0, true);
+        // Team A and E wins
+        matchOne.setScores(1, 0, true);
+        matchThree.setScores(1, 0, true);
 
+        // Match two's orange team should be A
+        assertSame(tA, matchTwo.getOrangeTeam());
+
+        // Match two's orange team should be E, if we change it to be winner of match three
         matchTwo.setOrangeToWinnerOf(matchThree);
-
-        System.out.println(matchTwo.getOrangeTeam());
+        assertSame(tE, matchTwo.getOrangeTeam());
     }
 }
