@@ -216,6 +216,7 @@ public class ConfigFileEditor {
 
     static void setConfig(ArrayList<String> config) {
         ConfigFileEditor.config = config;
+        validateConfigSyntax();
     }
 
     public static boolean isValid() {
