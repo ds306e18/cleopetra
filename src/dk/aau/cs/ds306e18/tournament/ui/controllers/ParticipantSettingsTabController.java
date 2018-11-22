@@ -82,6 +82,8 @@ public class ParticipantSettingsTabController {
             //If the path contains more than 1 backslash, make the filechoosers next start be one folder above the selected
             if(CharMatcher.is('\\').countIn(file.getAbsolutePath()) > 1)
                 fileChooser.setInitialDirectory(new File(getPathOneFolderAbove(file.getAbsolutePath())));
+            else
+                fileChooser.setInitialDirectory(null);
 
             List<File> files = Arrays.asList(file);
             setConfigPathText(files);
@@ -286,7 +288,7 @@ public class ParticipantSettingsTabController {
 
             //If there is more than two backslashes in string, then display shorter string
             if (CharMatcher.is('\\').countIn(file.getAbsolutePath()) > 2)
-                configPathTextField.setText("." + getShortFilePath(file.getAbsolutePath()));
+                configPathTextField.setText("." + getShortFilePath(file.getPath()));
             else
                 configPathTextField.setText(file.getAbsolutePath());
 
@@ -296,9 +298,10 @@ public class ParticipantSettingsTabController {
 
     /** @return a substring from the given string starting from the second last backslash. */
     private String getShortFilePath(String path) {
+
         String string = path.replace("\\", "/");
-        int lastSlashIndex = path.lastIndexOf("/");
-        int secondLastSlashIndex = path.lastIndexOf("/", lastSlashIndex - 1);
+        int lastSlashIndex = string.lastIndexOf("/");
+        int secondLastSlashIndex = string.lastIndexOf("/", lastSlashIndex - 1);
         return string.substring(secondLastSlashIndex);
     }
 
@@ -306,7 +309,7 @@ public class ParticipantSettingsTabController {
     private String getPathOneFolderAbove(String path) {
 
         String pathFinal = path.substring(0, path.lastIndexOf("\\"));
-        return pathFinal.substring(0, pathFinal.lastIndexOf("\\"));
+        return pathFinal.substring(0, pathFinal.lastIndexOf("\\")) + "\\";
     }
 
     /** Swaps a team upwards in the list of teams. Used to allow ordering of Team and thereby their seed. */
