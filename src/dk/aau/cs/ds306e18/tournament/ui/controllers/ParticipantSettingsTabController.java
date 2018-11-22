@@ -75,14 +75,9 @@ public class ParticipantSettingsTabController {
         File file = fileChooser.showOpenDialog((Stage) participantSettingsTab.getScene().getWindow());
         if (file != null) {
 
-            //If the path contains for than 1 backslash, make the filechoosers next start be one folder above the selected
-            if(CharMatcher.is('\\').countIn(file.getAbsolutePath()) > 1){
-
-                String pathFinal = file.getPath().substring(0, file.getPath().lastIndexOf("\\"));
-                pathFinal = pathFinal.substring(0, pathFinal.lastIndexOf("\\"));
-
-                fileChooser.setInitialDirectory(new File(pathFinal));
-            }
+            //If the path contains more than 1 backslash, make the filechoosers next start be one folder above the selected
+            if(CharMatcher.is('\\').countIn(file.getAbsolutePath()) > 1)
+                fileChooser.setInitialDirectory(new File(getPathOneFolderAbove(file.getAbsolutePath())));
 
             List<File> files = Arrays.asList(file);
             setConfigPathText(files);
@@ -286,17 +281,28 @@ public class ParticipantSettingsTabController {
             //Format path to be shown
 
             //If there is more than two backslashes in string, then display shorter string
-            if(CharMatcher.is('\\').countIn(file.getAbsolutePath()) > 2){
-                String path = file.getAbsolutePath().replace("\\", "/");
-                int lastSlashIndex = path.lastIndexOf("/");
-                int secondLastSlashIndex = path.lastIndexOf("/", lastSlashIndex - 1);
-
-                configPathTextField.setText("." + path.substring(secondLastSlashIndex));
-            }else
+            if (CharMatcher.is('\\').countIn(file.getAbsolutePath()) > 2)
+                configPathTextField.setText("." + getShortFilePath(file.getAbsolutePath()));
+            else
                 configPathTextField.setText(file.getAbsolutePath());
 
             botsListView.getSelectionModel().getSelectedItem().setConfigPath(file.getAbsolutePath());
         }
+    }
+
+    /** @return a substring from the given string starting from the second last backslash. */
+    private String getShortFilePath(String path) {
+        String string = path.replace("\\", "/");
+        int lastSlashIndex = path.lastIndexOf("/");
+        int secondLastSlashIndex = path.lastIndexOf("/", lastSlashIndex - 1);
+        return string.substring(secondLastSlashIndex);
+    }
+
+    /** @return the given path as a string with one file and one folder removed. */
+    private String getPathOneFolderAbove(String path) {
+
+        String pathFinal = path.substring(0, path.lastIndexOf("\\"));
+        return pathFinal.substring(0, pathFinal.lastIndexOf("\\"));
     }
 
     /** Swaps a team upwards in the list of teams. Used to allow ordering of Team and thereby their seed. */
