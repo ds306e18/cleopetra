@@ -63,14 +63,18 @@ public class ParticipantSettingsTabController {
         teamsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             updateTeamFields();
         });
+
+        setFileChooserCfgFilter(fileChooser);
+    }
+
+    private void setFileChooserCfgFilter(FileChooser fileChooser) {
+        //Only able to choose cfg files
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("CFG files (*.cfg)", "*.cfg");
+        fileChooser.getExtensionFilters().add(extFilter);
     }
 
     @FXML
     void configPathBtnOnAction(ActionEvent actionEvent) {
-
-        //Only able to choose cfg files
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("CFG files (*.cfg)", "*.cfg");
-        fileChooser.getExtensionFilters().add(extFilter);
 
         File file = fileChooser.showOpenDialog((Stage) participantSettingsTab.getScene().getWindow());
         if (file != null) {
