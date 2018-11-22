@@ -15,7 +15,7 @@ import javafx.scene.layout.VBox;
 import java.util.ArrayList;
 
 /** Used to display the a swiss stage. */
-public class SwissNode extends HBox implements MatchPlayedListener, MatchChangeListener {
+public class SwissNode extends HBox implements MatchPlayedListener, MatchChangeListener, CleanableUI {
 
     private final Insets MARGINS = new Insets(0, 0, 8, 0);
     private final int COLUMN_WIDTH = 175;
@@ -76,7 +76,7 @@ public class SwissNode extends HBox implements MatchPlayedListener, MatchChangeL
     }
 
     /** Completely remove all UI elements. */
-    private void clean() {
+    public void clean() {
         for (MatchVisualController mvc : mvcs) {
             mvc.decoupleFromModel();
         }

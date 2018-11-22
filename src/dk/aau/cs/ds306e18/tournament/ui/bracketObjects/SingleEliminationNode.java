@@ -13,7 +13,7 @@ import javafx.scene.layout.VBox;
 import java.util.ArrayList;
 
 /** Used to display the a single elimination stage. */
-public class SingleEliminationNode extends GridPane {
+public class SingleEliminationNode extends GridPane implements CleanableUI {
 
     private final Insets MARGINS = new Insets(0, 0, 8, 0);
     private final int CELL_SIZE = 50;
@@ -77,7 +77,7 @@ public class SingleEliminationNode extends GridPane {
     }
 
     /** Completely remove all UI elements. */
-    private void clean() {
+    public void clean() {
         getChildren().clear();
         for (MatchVisualController mvc : mvcs) {
             mvc.decoupleFromModel();

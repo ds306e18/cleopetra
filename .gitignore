@@ -6,6 +6,9 @@
 *.obj
 *.object
 
+# ConfigFileEditor-specific
+dummyconfig.cfg
+
 # User-specific stuff
 .idea/**/workspace.xml
 .idea/**/misc.xml
