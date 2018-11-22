@@ -28,7 +28,7 @@
    <children>
       <VBox id="globalGrid" fx:id="bracketLeaderboard" prefHeight="329.0" prefWidth="200.0">
          <children>
-            <Label text="Leaderboards">
+            <Label text="Leaderboard">
                <VBox.margin>
                   <Insets bottom="10.0" top="20.0" />
                </VBox.margin>

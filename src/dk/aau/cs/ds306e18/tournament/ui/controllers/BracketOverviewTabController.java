@@ -5,15 +5,11 @@ import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.StageStatus;
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import dk.aau.cs.ds306e18.tournament.model.format.Format;
-import dk.aau.cs.ds306e18.tournament.model.format.SwissFormat;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchChangeListener;
-import dk.aau.cs.ds306e18.tournament.model.match.MatchPlayedListener;
-import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreakerBySeed;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
-import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.CleanableUI;
+import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.ModelCoupledUI;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -31,7 +27,6 @@ import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 
 public class BracketOverviewTabController implements MatchChangeListener {
 
@@ -83,7 +78,7 @@ public class BracketOverviewTabController implements MatchChangeListener {
     private Button prevStageBtn;
 
     private int showedStageIndex = -1;
-    private CleanableUI cleanableBracket;
+    private ModelCoupledUI coupledBracket;
     private Format showedFormat;
     private MatchVisualController selectedMatch;
 
@@ -126,14 +121,19 @@ public class BracketOverviewTabController implements MatchChangeListener {
     }
 
     public void showFormat(Format format) {
-        if (cleanableBracket != null) {
-            cleanableBracket.clean();
+        if (coupledBracket != null) {
+            coupledBracket.decoupleFromModel();
         }
         showedFormat = format;
         if (format != null) {
             Node bracket = format.getBracketFXNode(this);
             overviewScrollPane.setContent(bracket);
-            cleanableBracket = (CleanableUI) bracket;
+            if (bracket instanceof ModelCoupledUI) {
+                coupledBracket = (ModelCoupledUI) bracket;
+            } else {
+                coupledBracket = null;
+                System.err.println("WARNING: " + bracket.getClass().toString() + " does not implement ModelCoupledUI.");
+            }
         }
     }
 

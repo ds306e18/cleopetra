@@ -15,7 +15,7 @@ import javafx.scene.layout.VBox;
 import java.util.ArrayList;
 
 /** Used to display the a swiss stage. */
-public class SwissNode extends HBox implements MatchPlayedListener, MatchChangeListener, CleanableUI {
+public class SwissNode extends HBox implements MatchPlayedListener, MatchChangeListener, ModelCoupledUI {
 
     private final Insets MARGINS = new Insets(0, 0, 8, 0);
     private final int COLUMN_WIDTH = 175;
@@ -37,7 +37,7 @@ public class SwissNode extends HBox implements MatchPlayedListener, MatchChangeL
 
     /** Updates all UI elements for the swiss stage. */
     private void update() {
-        clean();
+        removeElements();
 
         /* Assign initial teams and points to leaderboard */
         boc.refreshLeaderboard(swiss.getTeamPointsMap());
@@ -75,8 +75,15 @@ public class SwissNode extends HBox implements MatchPlayedListener, MatchChangeL
         }
     }
 
+    @Override
+    public void decoupleFromModel() {
+        removeElements();
+        swiss.unregisterMatchPlayedListener(this);
+        swiss.unregisterMatchChangedListener(this);
+    }
+
     /** Completely remove all UI elements. */
-    public void clean() {
+    public void removeElements() {
         for (MatchVisualController mvc : mvcs) {
             mvc.decoupleFromModel();
         }

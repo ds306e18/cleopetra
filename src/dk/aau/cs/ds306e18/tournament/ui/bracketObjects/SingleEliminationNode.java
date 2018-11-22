@@ -13,7 +13,7 @@ import javafx.scene.layout.VBox;
 import java.util.ArrayList;
 
 /** Used to display the a single elimination stage. */
-public class SingleEliminationNode extends GridPane implements CleanableUI {
+public class SingleEliminationNode extends GridPane implements ModelCoupledUI {
 
     private final Insets MARGINS = new Insets(0, 0, 8, 0);
     private final int CELL_SIZE = 50;
@@ -32,7 +32,7 @@ public class SingleEliminationNode extends GridPane implements CleanableUI {
 
     /** Updates all UI elements for the single elimination stage. */
     private void update() {
-        clean();
+        removeElements();
 
         Match[] matchArray = singleElimination.getMatchesAsArray();
         int rounds = singleElimination.getRounds();
@@ -76,8 +76,13 @@ public class SingleEliminationNode extends GridPane implements CleanableUI {
         return res;
     }
 
+    @Override
+    public void decoupleFromModel() {
+        removeElements();
+    }
+
     /** Completely remove all UI elements. */
-    public void clean() {
+    public void removeElements() {
         getChildren().clear();
         for (MatchVisualController mvc : mvcs) {
             mvc.decoupleFromModel();
