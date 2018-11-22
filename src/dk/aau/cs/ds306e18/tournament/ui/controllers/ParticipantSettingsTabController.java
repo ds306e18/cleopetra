@@ -1,5 +1,6 @@
 package dk.aau.cs.ds306e18.tournament.ui.controllers;
 
+import com.google.common.base.CharMatcher;
 import dk.aau.cs.ds306e18.tournament.model.Bot;
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
@@ -75,7 +76,7 @@ public class ParticipantSettingsTabController {
         if (file != null) {
 
             //If the path contains for than 1 backslash, make the filechoosers next start be one folder above the selected
-            if(getNumberOfBackslashesInString(file.getPath()) > 1){
+            if(CharMatcher.is('\\').countIn(file.getAbsolutePath()) > 1){
 
                 String pathFinal = file.getPath().substring(0, file.getPath().lastIndexOf("\\"));
                 pathFinal = pathFinal.substring(0, pathFinal.lastIndexOf("\\"));
@@ -263,7 +264,6 @@ public class ParticipantSettingsTabController {
             if (nameCheck.compareTo("") == 0) {
                 team.setTeamName("Team ?");
             }
-
         }
     }
 
@@ -286,7 +286,7 @@ public class ParticipantSettingsTabController {
             //Format path to be shown
 
             //If there is more than two backslashes in string, then display shorter string
-            if(getNumberOfBackslashesInString(file.getAbsolutePath()) > 2){
+            if(CharMatcher.is('\\').countIn(file.getAbsolutePath()) > 2){
                 String path = file.getAbsolutePath().replace("\\", "/");
                 int lastSlashIndex = path.lastIndexOf("/");
                 int secondLastSlashIndex = path.lastIndexOf("/", lastSlashIndex - 1);
@@ -297,18 +297,6 @@ public class ParticipantSettingsTabController {
 
             botsListView.getSelectionModel().getSelectedItem().setConfigPath(file.getAbsolutePath());
         }
-    }
-
-    /** @return the number of backslashes in the given string. */
-    private int getNumberOfBackslashesInString(String string){
-        //Count number of backslashes in string
-        int slashCounter = 0;
-        for(int i = 0; i < string.length(); i++){
-            if(string.charAt(i) == '\\')
-                slashCounter++;
-        }
-
-        return slashCounter;
     }
 
     /** Swaps a team upwards in the list of teams. Used to allow ordering of Team and thereby their seed. */
