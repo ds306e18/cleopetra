@@ -1,4 +1,4 @@
-package dk.aau.cs.ds306e18.tournament.ui.controllers;
+package dk.aau.cs.ds306e18.tournament.ui;
 
 import dk.aau.cs.ds306e18.tournament.model.Bot;
 import dk.aau.cs.ds306e18.tournament.model.StageStatus;
@@ -121,7 +121,7 @@ public class BracketOverviewTabController {
     public MatchVisualController loadVisualMatch(Match match) {
 
         //Load the fxml document into the Controller and JavaFx node.
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("../layout/MatchVisual.fxml"));
+        FXMLLoader loader = new FXMLLoader(BracketOverviewTabController.class.getResource("layout/MatchVisual.fxml"));
         VBox root = null;
         MatchVisualController mvc = null;
 
@@ -195,7 +195,7 @@ public class BracketOverviewTabController {
             editMatchScoreStage.initStyle(StageStyle.TRANSPARENT);
             editMatchScoreStage.initModality(Modality.APPLICATION_MODAL);
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("../layout/EditMatchScore.fxml"));
+            FXMLLoader loader = new FXMLLoader(BracketOverviewTabController.class.getResource("layout/EditMatchScore.fxml"));
             AnchorPane editMatchStageRoot = loader.load();
             EditMatchScoreController emsc = loader.getController();
             emsc.setMatch(selectedMatch.getShowedMatch());

@@ -1,4 +1,4 @@
-package dk.aau.cs.ds306e18.tournament.ui.controllers;
+package dk.aau.cs.ds306e18.tournament.ui;
 
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import javafx.event.ActionEvent;
@@ -27,6 +27,12 @@ public class EditMatchScoreController {
     private void initialize() {
         blueScoreSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(Integer.MIN_VALUE, Integer.MAX_VALUE, 0, 1));
         orangeScoreSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(Integer.MIN_VALUE, Integer.MAX_VALUE, 0, 1));
+
+        //Add listeners to spinners to check if matchIsOver should be disabled
+        blueScoreSpinner.valueProperty().addListener(e -> isTeamScoresEqual());
+        orangeScoreSpinner.valueProperty().addListener(e -> isTeamScoresEqual());
+
+        matchOverCheckBox.setDisable(true);
     }
 
     public void setMatch(Match match) {
@@ -42,6 +48,15 @@ public class EditMatchScoreController {
         orangeScoreSpinner.getValueFactory().setValue(match.getOrangeScore());
 
         matchOverCheckBox.setSelected(match.hasBeenPlayed());
+    }
+
+    /** Used to determine if the matchOverCheckBox should be disabled. */
+    private void isTeamScoresEqual(){
+        if(blueScoreSpinner.getValue() == orangeScoreSpinner.getValue()){
+            matchOverCheckBox.setDisable(true);
+            matchOverCheckBox.setSelected(false);
+        } else
+            matchOverCheckBox.setDisable(false);
     }
 
     @FXML

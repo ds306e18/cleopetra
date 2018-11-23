@@ -6,7 +6,7 @@ import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchPlayedListener;
 import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.SwissSettingsNode;
-import dk.aau.cs.ds306e18.tournament.ui.controllers.BracketOverviewTabController;
+import dk.aau.cs.ds306e18.tournament.ui.BracketOverviewTabController;
 import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.SwissNode;
 import javafx.scene.Node;
 
