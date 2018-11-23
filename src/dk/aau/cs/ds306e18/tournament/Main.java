@@ -1,6 +1,5 @@
 package dk.aau.cs.ds306e18.tournament;
 
-import dk.aau.cs.ds306e18.tournament.ui.controllers.ExitProgramController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -17,7 +16,7 @@ import java.net.URL;
 public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        URL resource = getClass().getResource("ui/layout/MainLayout.fxml");
+        URL resource = Main.class.getResource("ui/layout/MainLayout.fxml");
         Parent root = FXMLLoader.load(resource);
 
         /* Min width + height*/
@@ -37,7 +36,7 @@ public class Main extends Application {
 
             // Load exit program FXML file
             try {
-                AnchorPane exitRoot = FXMLLoader.load(getClass().getResource("ui/layout/Exit.fxml"));
+                AnchorPane exitRoot = FXMLLoader.load(Main.class.getResource("ui/layout/Exit.fxml"));
 
                 exitStage.setScene(new Scene(exitRoot));
                 exitStage.show();
