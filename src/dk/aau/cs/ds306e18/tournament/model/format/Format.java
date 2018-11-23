@@ -5,7 +5,8 @@ import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
 import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.ModelCoupledUI;
-import dk.aau.cs.ds306e18.tournament.ui.controllers.BracketOverviewTabController;
+import dk.aau.cs.ds306e18.tournament.ui.BracketOverviewTabController;
+
 import javafx.scene.Node;
 
 import java.util.List;

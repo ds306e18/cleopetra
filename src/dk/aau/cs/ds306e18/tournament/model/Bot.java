@@ -2,12 +2,19 @@ package dk.aau.cs.ds306e18.tournament.model;
 
 import java.util.Objects;
 
-public class Bot {
+public class Bot implements Cloneable {
 
     private String name;
     private String developer;
     private String description;
     private String configPath;
+
+    public Bot(String name, String developer, String configPath, String description) {
+        this.name = name;
+        this.developer = developer;
+        this.configPath = configPath;
+        this.description = description;
+    }
 
     public Bot(String name, String developer, String configPath) {
         this.name = name;
@@ -54,6 +61,11 @@ public class Bot {
 
     public String toString() {
         return name;
+    }
+
+    @Override
+    public Bot clone() {
+        return new Bot(name, developer, configPath, description);
     }
 
     @Override
