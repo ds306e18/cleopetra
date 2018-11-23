@@ -55,9 +55,6 @@ public class BracketOverviewTabController {
     private Format showedFormat;
     private MatchVisualController selectedMatch;
 
-    private final int REQUIRED_NUMBER_OF_TEAMS = 2;
-    private final int REQUIRED_NUMBER_OF_STAGES = 1;
-
     @FXML
     private void initialize(){
         instance = this; // TODO Make references to other controllers work in MainController
@@ -66,7 +63,7 @@ public class BracketOverviewTabController {
     /** Updates all elements depending on the state of the tournament and the shown stage. */
     public void update() {
 
-        checkDisableStartButton();
+        startTournamentBtn.setDisable(!Tournament.get().canStart());
         startRequirementsLabel.setText(getRequirementsText());
 
         Tournament tournament = Tournament.get();
@@ -84,40 +81,27 @@ public class BracketOverviewTabController {
         }
     }
 
-    /** Checks if the tournament is able to start, if not disable the start tournament button. */
-    private void checkDisableStartButton(){
-
-        int numberOfStages = Tournament.get().getStages().size();
-        int numberOfTeams = Tournament.get().getTeams().size();
-
-        startTournamentBtn.setDisable(numberOfStages < REQUIRED_NUMBER_OF_STAGES || numberOfTeams < REQUIRED_NUMBER_OF_TEAMS);
-    }
-
-    /** @return a string that contains the text for the requirements for starting the tournament. */
+    /** @return a string that contains text describing the requirements for starting the tournament. */
     private String getRequirementsText(){
+
+        //Are requirements met
+        if(Tournament.get().canStart()) return "You have met the requirement for starting a tournament.";
 
         int numberOfStages = Tournament.get().getStages().size();
         int numberOfTeams = Tournament.get().getTeams().size();
 
         StringBuilder sb = new StringBuilder();
         sb.append("Before you start, you need to have ");
-        if(numberOfStages < REQUIRED_NUMBER_OF_STAGES) {
-            sb.append("atleast ").append(getWordForNumber(REQUIRED_NUMBER_OF_STAGES - numberOfStages)).append(" stage");
 
-            if(numberOfTeams < REQUIRED_NUMBER_OF_TEAMS) {
-                sb.append(" and ").append(getWordForNumber(REQUIRED_NUMBER_OF_TEAMS - numberOfTeams)).append(" more teams.");
-            } else {
-                sb.append(".");
-            }
-        } else {
-            if(numberOfTeams < REQUIRED_NUMBER_OF_TEAMS) {
-                sb.append(getWordForNumber(REQUIRED_NUMBER_OF_TEAMS - numberOfTeams)).append(" more teams.");
-            }else {
-                return "You have met the requirement for starting a tournament.";
-            }
+        if(numberOfStages < Tournament.get().STARTREQUIREMENT_STAGES) {
+            sb.append("atleast ").append(getWordForNumber(Tournament.get().STARTREQUIREMENT_STAGES - numberOfStages)).append(" stage");
+            if(numberOfTeams < Tournament.get().STARTREQUIREMENT_TEAMS) sb.append(" and ");
         }
 
-        return sb.toString();
+        if(numberOfTeams < Tournament.get().STARTREQUIREMENT_TEAMS)
+            sb.append(getWordForNumber(Tournament.get().STARTREQUIREMENT_TEAMS - numberOfTeams)).append((numberOfTeams == 1) ? " more team" : " more teams");
+
+        return sb.append(".").toString();
     }
 
     /** @return the word matching the given number. Supports 1-10.*/

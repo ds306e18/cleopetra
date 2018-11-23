@@ -24,6 +24,8 @@ public class Tournament {
     private TieBreaker tieBreaker = new TieBreakerBySeed();
     private boolean started = false;
     private int currentStageIndex = -1;
+    public final int STARTREQUIREMENT_TEAMS = 2;
+    public final int STARTREQUIREMENT_STAGES = 1;
 
     public String getName() {
         return name;
@@ -133,7 +135,7 @@ public class Tournament {
     }
 
     public boolean canStart() {
-        return teams.size() >= 2 && !stages.isEmpty();
+        return teams.size() >= STARTREQUIREMENT_TEAMS && stages.size() >= STARTREQUIREMENT_STAGES;
     }
 
     public void start() {
