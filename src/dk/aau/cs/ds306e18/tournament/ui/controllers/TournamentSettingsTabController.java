@@ -3,6 +3,7 @@ package dk.aau.cs.ds306e18.tournament.ui.controllers;
 import dk.aau.cs.ds306e18.tournament.model.*;
 import dk.aau.cs.ds306e18.tournament.model.format.SwissFormat;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
+import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreakerByGoalDiff;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreakerBySeed;
 import dk.aau.cs.ds306e18.tournament.ui.StageFormatOption;
 import javafx.collections.FXCollections;
@@ -48,7 +49,7 @@ public class TournamentSettingsTabController {
 
         /* Retrieve and add choices to choicebox for the Tiebreaker box.
          * Also upon change sets the new tiebreaker rule to the tournament model. */
-        tieBreakerChoiceBox.setItems(FXCollections.observableArrayList(new TieBreakerBySeed()));
+        tieBreakerChoiceBox.setItems(FXCollections.observableArrayList(new TieBreakerBySeed(), new TieBreakerByGoalDiff()));
         tieBreakerChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> Tournament.get().setTieBreaker(newValue));
         tieBreakerChoiceBox.getSelectionModel().select(0);
 
