@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="exitPopup" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#windowDragged" onMousePressed="#windowPressed" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.controllers.EditMatchScoreController">
+<AnchorPane id="exitPopup" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#windowDragged" onMousePressed="#windowPressed" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="dk.aau.cs.ds306e18.tournament.ui.EditMatchScoreController">
    <children>
       <VBox alignment="CENTER">
          <children>
