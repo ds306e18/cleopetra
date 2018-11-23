@@ -1,10 +1,8 @@
-package dk.aau.cs.ds306e18.tournament.ui.controllers;
+package dk.aau.cs.ds306e18.tournament.ui;
 
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
 import javafx.scene.layout.GridPane;
 
 public class MainController {
