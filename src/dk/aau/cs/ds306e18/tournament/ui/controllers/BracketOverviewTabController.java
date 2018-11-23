@@ -27,46 +27,26 @@ public class BracketOverviewTabController {
 
     public static BracketOverviewTabController instance;
 
-    @FXML
-    private VBox startTournamentInstructionsHolder;
-    @FXML
-    private GridPane bracketOverviewTab;
-    @FXML
-    private VBox selectedMatchVBox;
-    @FXML
-    private VBox overviewVBox;
-    @FXML
-    private Button nextMatchBtn;
-    @FXML
-    private Button prevMatchBtn;
-    @FXML
-    private Button playMatchBtn;
-    @FXML
-    private Button editMatchBtn;
-    @FXML
-    private Label blueTeamNameLabel;
-    @FXML
-    private TextField blueTeamScore;
-    @FXML
-    private ListView<Bot> blueTeamListView;
-    @FXML
-    private Label orangeTeamNameLabel;
-    @FXML
-    private TextField orangeTeamScore;
-    @FXML
-    private ListView<Bot> orangeTeamListView;
-    @FXML
-    private ScrollPane overviewScrollPane;
-    @FXML
-    private GridPane selectedMatchInfo;
-    @FXML
-    private HBox selectedMatchButtonHolder;
-    @FXML
-    private HBox stageNavigationButtonsHolder;
-    @FXML
-    private Button nextStageBtn;
-    @FXML
-    private Button prevStageBtn;
+    @FXML private VBox startTournamentInstructionsHolder;
+    @FXML private GridPane bracketOverviewTab;
+    @FXML private VBox selectedMatchVBox;
+    @FXML private VBox overviewVBox;
+    @FXML private Button nextMatchBtn;
+    @FXML private Button prevMatchBtn;
+    @FXML private Button playMatchBtn;
+    @FXML private Button editMatchBtn;
+    @FXML private Label blueTeamNameLabel;
+    @FXML private TextField blueTeamScore;
+    @FXML private ListView<Bot> blueTeamListView;
+    @FXML private Label orangeTeamNameLabel;
+    @FXML private TextField orangeTeamScore;
+    @FXML private ListView<Bot> orangeTeamListView;
+    @FXML private ScrollPane overviewScrollPane;
+    @FXML private GridPane selectedMatchInfo;
+    @FXML private HBox selectedMatchButtonHolder;
+    @FXML private HBox stageNavigationButtonsHolder;
+    @FXML private Button nextStageBtn;
+    @FXML private Button prevStageBtn;
 
     private int showedStageIndex = -1;
     private CleanableUI cleanableBracket;
