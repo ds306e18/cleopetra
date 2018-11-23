@@ -5,7 +5,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -81,22 +80,22 @@
                   </Label>
                   <ListView fx:id="blueTeamListView" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="117.0" minWidth="130.0" mouseTransparent="true" prefHeight="117.0" prefWidth="130.0" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
                   <ListView fx:id="orangeTeamListView" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="117.0" minWidth="130.0" mouseTransparent="true" prefHeight="117.0" prefWidth="130.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-                  <TextField fx:id="blueTeamScore" alignment="CENTER" editable="false" maxWidth="-Infinity" minWidth="40.0" prefWidth="40.0" GridPane.halignment="CENTER" GridPane.rowIndex="2">
-                     <font>
-                        <Font name="System Bold" size="11.0" />
-                     </font>
-                  </TextField>
-                  <TextField fx:id="orangeTeamScore" alignment="CENTER" editable="false" maxWidth="-Infinity" minWidth="40.0" prefWidth="40.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2">
-                     <font>
-                        <Font name="System Bold" size="11.0" />
-                     </font>
-                  </TextField>
                   <Label text=":" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                      <font>
                         <Font name="System Bold" size="20.0" />
                      </font>
                   </Label>
                   <Pane maxHeight="16.0" minHeight="16.0" prefHeight="16.0" GridPane.rowIndex="3" />
+                  <Label fx:id="blueTeamScore" alignment="CENTER" maxWidth="-Infinity" minWidth="40.0" prefWidth="40.0" text="0" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="orangeTeamScore" alignment="CENTER" maxWidth="-Infinity" minWidth="40.0" prefWidth="40.0" text="0" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
                </children>
             </GridPane>
             <HBox fx:id="selectedMatchButtonHolder" alignment="CENTER">
