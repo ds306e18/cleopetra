@@ -291,24 +291,15 @@ public class ParticipantSettingsTabController {
         for (File file : files) {
             //Format path to be shown
 
-            //If there is more than two backslashes in string, then display shorter string
-            if (CharMatcher.is('\\').countIn(file.getAbsolutePath()) > 2)
-                configPathTextField.setText("." + getShortFilePath(file.getPath()));
-            else
-                configPathTextField.setText(file.getAbsolutePath());
+            // Update text field
+            String parentparent = file.getParentFile().getParent();
+            String shortPath = parentparent == null ? file.getPath() : file.getPath().replace(parentparent, "");
+            configPathTextField.setText(shortPath);
 
             botsListView.getSelectionModel().getSelectedItem().setConfigPath(file.getAbsolutePath());
         }
     }
 
-    /** @return a substring from the given string starting from the second last backslash. */
-    private String getShortFilePath(String path) {
-
-        String string = path.replace("\\", "/");
-        int lastSlashIndex = string.lastIndexOf("/");
-        int secondLastSlashIndex = string.lastIndexOf("/", lastSlashIndex - 1);
-        return string.substring(secondLastSlashIndex);
-    }
 
     /** @return the given path as a string with one file and one folder removed. */
     private String getPathOneFolderAbove(String path) {
