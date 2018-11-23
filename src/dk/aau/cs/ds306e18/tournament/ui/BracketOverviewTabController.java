@@ -1,10 +1,11 @@
-package dk.aau.cs.ds306e18.tournament.ui.controllers;
+package dk.aau.cs.ds306e18.tournament.ui;
 
 import dk.aau.cs.ds306e18.tournament.model.Bot;
 import dk.aau.cs.ds306e18.tournament.model.StageStatus;
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import dk.aau.cs.ds306e18.tournament.model.format.Format;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import dk.aau.cs.ds306e18.tournament.model.match.MatchChangeListener;
 import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.CleanableUI;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -23,7 +24,7 @@ import javafx.stage.StageStyle;
 
 import java.io.IOException;
 
-public class BracketOverviewTabController {
+public class BracketOverviewTabController implements MatchChangeListener {
 
     public static BracketOverviewTabController instance;
 
@@ -46,13 +47,13 @@ public class BracketOverviewTabController {
     @FXML
     private Label blueTeamNameLabel;
     @FXML
-    private TextField blueTeamScore;
+    private Label blueTeamScore;
     @FXML
     private ListView<Bot> blueTeamListView;
     @FXML
     private Label orangeTeamNameLabel;
     @FXML
-    private TextField orangeTeamScore;
+    private Label orangeTeamScore;
     @FXML
     private ListView<Bot> orangeTeamListView;
     @FXML
@@ -121,7 +122,7 @@ public class BracketOverviewTabController {
     public MatchVisualController loadVisualMatch(Match match) {
 
         //Load the fxml document into the Controller and JavaFx node.
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("../layout/MatchVisual.fxml"));
+        FXMLLoader loader = new FXMLLoader(BracketOverviewTabController.class.getResource("layout/MatchVisual.fxml"));
         VBox root = null;
         MatchVisualController mvc = null;
 
@@ -143,10 +144,12 @@ public class BracketOverviewTabController {
      */
     public void setSelectedMatch(MatchVisualController match) {
         if (selectedMatch != null){
+            selectedMatch.getShowedMatch().unregisterMatchChangeListener(this);
             selectedMatch.getRoot().getStyleClass().remove("selectedMatch");
         }
         this.selectedMatch = match;
         updateTeamViewer(match == null ? null : match.getShowedMatch());
+        if(selectedMatch != null) { selectedMatch.getShowedMatch().registerMatchChangeListener(this); }
     }
 
     /**
@@ -195,7 +198,7 @@ public class BracketOverviewTabController {
             editMatchScoreStage.initStyle(StageStyle.TRANSPARENT);
             editMatchScoreStage.initModality(Modality.APPLICATION_MODAL);
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("../layout/EditMatchScore.fxml"));
+            FXMLLoader loader = new FXMLLoader(BracketOverviewTabController.class.getResource("layout/EditMatchScore.fxml"));
             AnchorPane editMatchStageRoot = loader.load();
             EditMatchScoreController emsc = loader.getController();
             emsc.setMatch(selectedMatch.getShowedMatch());
@@ -230,5 +233,10 @@ public class BracketOverviewTabController {
             nextStageBtn.setDisable(!concluded); // TODO Should also update onMatchPlayed
             // TODO Swap next/prev stage
         }
+    }
+
+    @Override
+    public void onMatchChanged(Match match) {
+        updateTeamViewer(selectedMatch.getShowedMatch());
     }
 }

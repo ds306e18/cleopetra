@@ -1,4 +1,4 @@
-package dk.aau.cs.ds306e18.tournament.ui.controllers;
+package dk.aau.cs.ds306e18.tournament.ui;
 
 import com.google.common.base.CharMatcher;
 import dk.aau.cs.ds306e18.tournament.model.Bot;
@@ -25,6 +25,9 @@ import java.util.List;
 
 public class ParticipantSettingsTabController {
 
+    private static final String CLIPBOARD_PREFIX = "Clipboard: ";
+    private static final String CLIPBOARD_EMPTY_STRING = "<empty>";
+
     @FXML private GridPane participantSettingsTab;
     @FXML private TextField teamNameTextField;
     @FXML private TextField botNameTextField;
@@ -42,7 +45,12 @@ public class ParticipantSettingsTabController {
     @FXML private TextField configPathTextField;
     @FXML private Button swapUpTeam;
     @FXML private Button swapDownTeam;
+    @FXML private Button copyBotBtn;
+    @FXML private Button pasteBotBtn;
+    @FXML private Label clipboardLabel;
     final private FileChooser fileChooser = new FileChooser();
+
+    private Bot clipboardBot;
 
     @FXML
     private void initialize() {
@@ -52,18 +60,23 @@ public class ParticipantSettingsTabController {
         teamSettingsVbox.setVisible(false);
         configPathTextField.setEditable(false);
 
-        //By default the remove stage and bot button is disabled
+        //By default the remove team and bot button is disabled
         removeTeamBtn.setDisable(true);
         removeBotBtn.setDisable(true);
 
         //Adds selectionslisteners to bot and team listviews
         botsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             updateBotFields();
+            updateAddRemoveButtonsEnabling();
+            updateCopyPasteButtonsEnabling();
         });
         teamsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             updateTeamFields();
+            updateAddRemoveButtonsEnabling();
+            updateCopyPasteButtonsEnabling();
         });
 
+        updateClipboardLabel();
         setFileChooserCfgFilter(fileChooser);
     }
 
@@ -185,9 +198,6 @@ public class ParticipantSettingsTabController {
 
         if (botsListView.getSelectionModel().getSelectedIndex() != -1) {
 
-            //Disable addBotButton if there is 5 teams in list.
-            addBotBtn.setDisable(botsListView.getItems().size() >= 5);
-
             botSettingsVbox.setVisible(true);
             Bot selectedBot = Tournament.get().getTeams().get(getSelectedTeamIndex()).getBots().get(botsListView.getSelectionModel().getSelectedIndex());
             botNameTextField.setText(selectedBot.getName());
@@ -195,13 +205,8 @@ public class ParticipantSettingsTabController {
             botDescription.setText(selectedBot.getDescription());
             configPathTextField.setText(selectedBot.getConfigPath());
 
-            //If the botListView has more then 1 items, then enable remove button
-            if(botsListView.getItems().size() > 1)
-                removeBotBtn.setDisable(false);
-
-            //if no bot is selected clear the fields and hide the botsettgins box.
         } else {
-            removeBotBtn.setDisable(true);
+            //if no bot is selected clear the fields and hide the botsettgins box.
             clearBotFields();
         }
         //Check for empty names
@@ -240,8 +245,8 @@ public class ParticipantSettingsTabController {
             if(teamsListView.getItems().size() != 0)
                 removeTeamBtn.setDisable(false);
 
-            //if no bot is selected clear the fields and hide the teamsettings box and disable remove team button
         } else {
+            //if no bot is selected clear the fields and hide the teamsettings box and disable remove team button
             removeTeamBtn.setDisable(true);
             clearTeamFields();
         }
@@ -345,5 +350,51 @@ public class ParticipantSettingsTabController {
 
     private int getSelectedTeamIndex() {
         return teamsListView.getSelectionModel().getSelectedIndex();
+    }
+
+    public void onCopyBotButtonAction(ActionEvent actionEvent) {
+        Bot selectedBot = botsListView.getSelectionModel().getSelectedItem();
+        if (selectedBot != null) {
+            clipboardBot = selectedBot.clone();
+        } else {
+            clipboardBot = null;
+        }
+        updateClipboardLabel();
+        updateCopyPasteButtonsEnabling();
+    }
+
+    public void onPasteBotButtonAction(ActionEvent actionEvent) {
+        Team selectedTeam = getSelectedTeam();
+        if (clipboardBot != null) {
+            selectedTeam.addBot(clipboardBot.clone());
+            botsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams().get(getSelectedTeamIndex()).getBots()));
+            botsListView.refresh();
+            botsListView.getSelectionModel().selectLast();
+        }
+    }
+
+    public void updateClipboardLabel() {
+        if (clipboardBot == null) {
+            clipboardLabel.setText(CLIPBOARD_PREFIX + CLIPBOARD_EMPTY_STRING);
+        } else {
+            clipboardLabel.setText(CLIPBOARD_PREFIX + clipboardBot.getName());
+        }
+    }
+
+    public void updateCopyPasteButtonsEnabling() {
+        Bot selectedBot = botsListView.getSelectionModel().getSelectedItem();
+        copyBotBtn.setDisable(selectedBot == null);
+
+        Team selectedTeam = getSelectedTeam();
+        boolean spaceOnSelectedTeam = selectedTeam != null && selectedTeam.getBots().size() >= Team.MAX_SIZE;
+        pasteBotBtn.setDisable(clipboardBot == null || spaceOnSelectedTeam);
+    }
+
+    public void updateAddRemoveButtonsEnabling() {
+        Team selectedTeam = getSelectedTeam();
+        Bot selectedBot = botsListView.getSelectionModel().getSelectedItem();
+
+        addBotBtn.setDisable(selectedTeam != null && selectedTeam.getBots().size() >= Team.MAX_SIZE);
+        removeBotBtn.setDisable(selectedBot == null);
     }
 }
