@@ -31,7 +31,7 @@ public class ConfigFileEditor {
      * sets valid-flag if file is read.
      * @param filename the filename to read
      */
-    static void readConfig(String filename) {
+    public static void readConfig(String filename) {
         Path in = Paths.get(filename);
         try {
             config = (ArrayList<String>) Files.readAllLines(in);

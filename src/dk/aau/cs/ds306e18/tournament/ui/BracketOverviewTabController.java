@@ -1,5 +1,6 @@
 package dk.aau.cs.ds306e18.tournament.ui;
 
+import dk.aau.cs.ds306e18.tournament.MatchRunner;
 import dk.aau.cs.ds306e18.tournament.model.Bot;
 import dk.aau.cs.ds306e18.tournament.model.StageStatus;
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
@@ -238,5 +239,9 @@ public class BracketOverviewTabController implements MatchChangeListener {
     @Override
     public void onMatchChanged(Match match) {
         updateTeamViewer(selectedMatch.getShowedMatch());
+    }
+
+    public void onPlayMatchBtnAction(ActionEvent actionEvent) {
+        MatchRunner.startMatch(selectedMatch.getShowedMatch());
     }
 }
