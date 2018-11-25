@@ -242,6 +242,10 @@ public class BracketOverviewTabController implements MatchChangeListener {
     }
 
     public void onPlayMatchBtnAction(ActionEvent actionEvent) {
-        MatchRunner.startMatch(selectedMatch.getShowedMatch());
+        if (MatchRunner.isMatchRunning()) {
+            MatchRunner.stopMatch();
+        } else {
+            MatchRunner.startMatch(selectedMatch.getShowedMatch());
+        }
     }
 }
