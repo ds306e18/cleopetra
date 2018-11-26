@@ -17,7 +17,7 @@ import java.util.*;
 
 public class SwissFormat extends GroupFormat implements MatchPlayedListener, MatchChangeListener {
 
-    private ArrayList<ArrayList<Match>> rounds;
+    private ArrayList<ArrayList<Match>> rounds = new ArrayList<>();
     private int maxRoundsPossible;
     private int roundCount = 4;
     private HashMap<Team, Integer> teamPoints;

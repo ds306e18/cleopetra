@@ -111,7 +111,8 @@ public class FileOperations {
      * @return a Tournament object if successful, else null
      */
     public static Tournament readTournamentFromFilesystem(String fqn) {
-        return readSerializedTournament(checkFilenameInString(checkTrailingSlash(fqn), stateFilename));
+        //return readSerializedTournament(checkFilenameInString(checkTrailingSlash(fqn), stateFilename));
+        return readSerializedTournament(fqn);
     }
 
     /**

@@ -16,16 +16,44 @@ import java.net.URL;
 public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
+
+        // Start program with the launcher
+        AnchorPane launcherLoader = FXMLLoader.load(Main.class.getResource("ui/layout/Launcher.fxml"));
+
+        primaryStage.setTitle("DatTournament Launcher");
+        primaryStage.setScene(new Scene(launcherLoader));
+        primaryStage.setResizable(false);
+        primaryStage.show();
+
+
+
+
+        /*
         URL resource = Main.class.getResource("ui/layout/MainLayout.fxml");
         Parent root = FXMLLoader.load(resource);
 
-        /* Min width + height*/
+        // Min width + height
         primaryStage.setMinWidth(800);
         primaryStage.setMinHeight(650);
 
         primaryStage.setTitle("DatTournament Runner");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
+
+        // Launcher box display on top
+        Stage launcherStage = new Stage();
+        launcherStage.initStyle(StageStyle.TRANSPARENT);
+        launcherStage.initModality(Modality.APPLICATION_MODAL);
+
+        // Load exit program FXML file
+        try {
+            AnchorPane launcherRoot = FXMLLoader.load(Main.class.getResource("ui/layout/Launcher.fxml"));
+
+            launcherStage.setScene(new Scene(launcherRoot));
+            launcherStage.show();
+        } catch (IOException error) {
+            error.printStackTrace();
+        }
 
         Stage exitStage = new Stage();
         exitStage.initStyle(StageStyle.TRANSPARENT);
@@ -43,7 +71,7 @@ public class Main extends Application {
             } catch (IOException error) {
                 error.printStackTrace();
             }
-        });
+        });*/
     }
 
     public static void main(String[] args) {
