@@ -36,8 +36,6 @@ public class BracketOverviewTabController implements MatchChangeListener {
     @FXML private GridPane bracketOverviewTab;
     @FXML private VBox selectedMatchVBox;
     @FXML private VBox overviewVBox;
-    @FXML private Button nextMatchBtn;
-    @FXML private Button prevMatchBtn;
     @FXML private Button playMatchBtn;
     @FXML private Button editMatchBtn;
     @FXML private Label blueTeamNameLabel;
@@ -56,6 +54,7 @@ public class BracketOverviewTabController implements MatchChangeListener {
     @FXML private Button startTournamentBtn;
     @FXML private VBox bracketLeaderboard;
     @FXML private TableView<Team> leaderboardTableview;
+    @FXML private Label stageNameLabel;
 
     private int showedStageIndex = -1;
     private ModelCoupledUI coupledBracket;
@@ -84,7 +83,7 @@ public class BracketOverviewTabController implements MatchChangeListener {
         } else {
             if (showedStageIndex == -1) showedStageIndex = 0;
             showStartTournamentInstructions(false);
-            showFormat(tournament.getCurrentStage().getFormat());
+            showStage(tournament.getCurrentStage());
             updateStageNavigationButtons();
         }
     }
@@ -124,22 +123,25 @@ public class BracketOverviewTabController implements MatchChangeListener {
         startTournamentInstructionsHolder.setVisible(show);
         overviewScrollPane.setManaged(!show);
         overviewScrollPane.setVisible(!show);
+        stageNameLabel.setManaged(!show);
+        stageNameLabel.setVisible(!show);
     }
 
-    public void showFormat(Format format) {
+    public void showStage(dk.aau.cs.ds306e18.tournament.model.Stage stage) {
         if (coupledBracket != null) {
             coupledBracket.decoupleFromModel();
         }
-        showedFormat = format;
-        if (format != null) {
-            Node bracket = format.getBracketFXNode(this);
-            overviewScrollPane.setContent(bracket);
-            if (bracket instanceof ModelCoupledUI) {
-                coupledBracket = (ModelCoupledUI) bracket;
-            } else {
-                coupledBracket = null;
-                System.err.println("WARNING: " + bracket.getClass().toString() + " does not implement ModelCoupledUI.");
-            }
+
+        showedFormat = stage.getFormat();
+
+        stageNameLabel.setText(stage.getName());
+        Node bracket = showedFormat.getBracketFXNode(this);
+        overviewScrollPane.setContent(bracket);
+        if (bracket instanceof ModelCoupledUI) {
+            coupledBracket = (ModelCoupledUI) bracket;
+        } else {
+            coupledBracket = null;
+            System.err.println("WARNING: " + bracket.getClass().toString() + " does not implement ModelCoupledUI.");
         }
     }
 
@@ -287,11 +289,11 @@ public class BracketOverviewTabController implements MatchChangeListener {
             nextStageBtn.setDisable(true);
             prevStageBtn.setDisable(true);
         } else {
-            int stageCount = Tournament.get().getStages().size();
             prevStageBtn.setDisable(showedStageIndex == 0);
 
             boolean concluded = Tournament.get().getStages().get(showedStageIndex).getFormat().getStatus() == StageStatus.CONCLUDED;
-            nextStageBtn.setDisable(!concluded);
+            boolean isLastStage = Tournament.get().getStages().size() - 1 == showedStageIndex;
+            nextStageBtn.setDisable(!concluded && !isLastStage);
         }
     }
 
@@ -303,7 +305,7 @@ public class BracketOverviewTabController implements MatchChangeListener {
 
     public void prevStageBtnOnAction(ActionEvent actionEvent) {
         showedStageIndex--;
-        showFormat(Tournament.get().getStages().get(showedStageIndex).getFormat());
+        showStage(Tournament.get().getStages().get(showedStageIndex));
         setSelectedMatch(null);
         updateStageNavigationButtons();
     }
@@ -315,7 +317,7 @@ public class BracketOverviewTabController implements MatchChangeListener {
         }
 
         showedStageIndex++;
-        showFormat(Tournament.get().getStages().get(showedStageIndex).getFormat());
+        showStage(Tournament.get().getStages().get(showedStageIndex));
 
         setSelectedMatch(null);
         updateStageNavigationButtons();
