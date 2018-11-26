@@ -1,8 +1,10 @@
 package dk.aau.cs.ds306e18.tournament;
 
+import com.sun.javafx.robot.FXRobot;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.utility.ConfigFileEditor;
 
+import java.awt.*;
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -79,7 +81,7 @@ public class MatchRunner {
             try {
                 // We assume that the runner is in the same folder as the config
                 Path path = Paths.get(RLBotSettings.getConfigPath()).getParent();
-                String command = "python \"" + path.toString() + "/run.py\"";
+                String command = "cmd.exe /c start cmd.exe /c \"python \"" + path.toString() + "\\run.py\"\"";
                 System.out.println("command: " + command);
                 process = Runtime.getRuntime().exec(command);
 
