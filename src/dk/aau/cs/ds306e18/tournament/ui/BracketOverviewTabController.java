@@ -283,7 +283,6 @@ public class BracketOverviewTabController implements MatchChangeListener {
     }
 
     private void updateStageNavigationButtons() {
-        System.out.println("Oi");
         if (showedStageIndex == -1 || showedFormat == null) {
             nextStageBtn.setDisable(true);
             prevStageBtn.setDisable(true);
@@ -292,13 +291,33 @@ public class BracketOverviewTabController implements MatchChangeListener {
             prevStageBtn.setDisable(showedStageIndex == 0);
 
             boolean concluded = Tournament.get().getStages().get(showedStageIndex).getFormat().getStatus() == StageStatus.CONCLUDED;
-            nextStageBtn.setDisable(!concluded); // TODO Should also update onMatchPlayed
-            // TODO Swap next/prev stage button
+            nextStageBtn.setDisable(!concluded);
         }
     }
 
     @Override
     public void onMatchChanged(Match match) {
         updateTeamViewer(selectedMatch.getShowedMatch());
+        updateStageNavigationButtons();
+    }
+
+    public void prevStageBtnOnAction(ActionEvent actionEvent) {
+        showedStageIndex--;
+        showFormat(Tournament.get().getStages().get(showedStageIndex).getFormat());
+        setSelectedMatch(null);
+        updateStageNavigationButtons();
+    }
+
+    public void nextStageBtnOnAction(ActionEvent actionEvent) {
+        int latestStageIndex = Tournament.get().getCurrentStageIndex();
+        if (showedStageIndex == latestStageIndex) {
+            Tournament.get().startNextStage();
+        }
+
+        showedStageIndex++;
+        showFormat(Tournament.get().getStages().get(showedStageIndex).getFormat());
+
+        setSelectedMatch(null);
+        updateStageNavigationButtons();
     }
 }

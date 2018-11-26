@@ -80,6 +80,7 @@ public class SwissNode extends HBox implements MatchPlayedListener, MatchChangeL
         removeElements();
         swiss.unregisterMatchPlayedListener(this);
         swiss.unregisterMatchChangedListener(this);
+        boc.showLeaderboard(false); // TODO Move leaderboard to swiss node
     }
 
     /** Completely remove all UI elements. */
