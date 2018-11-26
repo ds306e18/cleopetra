@@ -25,8 +25,11 @@ public class EditMatchScoreController {
 
     @FXML
     private void initialize() {
-        blueScoreSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(Integer.MIN_VALUE, Integer.MAX_VALUE, 0, 1));
-        orangeScoreSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(Integer.MIN_VALUE, Integer.MAX_VALUE, 0, 1));
+        blueScoreSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE, 0, 1));
+        orangeScoreSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE, 0, 1));
+
+        blueScoreSpinner.setEditable(true);
+        orangeScoreSpinner.setEditable(true);
 
         //Add listeners to spinners to check if matchIsOver should be disabled
         blueScoreSpinner.valueProperty().addListener(e -> isTeamScoresEqual());
