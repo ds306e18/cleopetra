@@ -84,6 +84,16 @@ public class DoubleEliminationFormatTest {
     }
 
     @Test
+    public void dependsOnFinalMatch04() {
+        DoubleEliminationFormat bracket = new DoubleEliminationFormat();
+        bracket.start(TestUtilities.generateSeededTeams(9,1));
+        List<Match> matches = bracket.getAllMatches();
+        for(int n = 0; n < matches.size()-1; n++) {
+            assertTrue(matches.get(matches.size()-1).dependsOn(matches.get(n)));
+        }
+    }
+
+    @Test
     public void pendingMatchesTest01(){
         DoubleEliminationFormat bracket = new DoubleEliminationFormat();
         bracket.start(TestUtilities.generateSeededTeams(8, 1));
