@@ -73,20 +73,19 @@ public class LauncherController {
 
     @FXML
     void openLocalTournament(ActionEvent event) {
+        // TODO: Only be able to choose the correct file extension
+        // TODO: Filechooser start directory
 
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open tournament file");
         File file = fileChooser.showOpenDialog(getLauncherStage());
 
-        Stage systemStage = createSystemStage();
-
-        if (file != null && Tournament.get() != null){
-            System.out.println("Chosen file path: " + file.getAbsolutePath());
+        if (file != null){
             Tournament.get().setTournament(FileOperations.readTournamentFromFilesystem(file.getAbsolutePath()));
+            Stage systemStage = createSystemStage();
+            getLauncherStage().hide();
+            systemStage.show();
         }
 
-        getLauncherStage().hide();
-        systemStage.show();
     }
-
 }

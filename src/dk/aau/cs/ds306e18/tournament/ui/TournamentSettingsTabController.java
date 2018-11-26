@@ -7,6 +7,7 @@ import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreakerByGoalDiff;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreakerBySeed;
 import dk.aau.cs.ds306e18.tournament.ui.StageFormatOption;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -41,6 +42,9 @@ public class TournamentSettingsTabController {
 
     @FXML
     private void initialize() {
+        /* Assign items to the list in case of a tournament being loaded */
+        stagesListView.setItems(FXCollections.observableArrayList(Tournament.get().getStages()));
+
         /* Retrieve and set tournament name into textfield. */
         nameTextField.setText(Tournament.get().getName());
 
@@ -193,5 +197,4 @@ public class TournamentSettingsTabController {
     private int getSelectedIndex() {
         return stagesListView.getSelectionModel().getSelectedIndex();
     }
-
 }
