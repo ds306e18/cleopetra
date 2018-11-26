@@ -1,12 +1,15 @@
 package dk.aau.cs.ds306e18.tournament.ui;
 
 import dk.aau.cs.ds306e18.tournament.model.Bot;
+import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.StageStatus;
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import dk.aau.cs.ds306e18.tournament.model.format.Format;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchChangeListener;
-import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.CleanableUI;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.ModelCoupledUI;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -23,6 +26,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 public class BracketOverviewTabController implements MatchChangeListener {
 
@@ -50,21 +54,27 @@ public class BracketOverviewTabController implements MatchChangeListener {
     @FXML private Button prevStageBtn;
     @FXML private Label startRequirementsLabel;
     @FXML private Button startTournamentBtn;
+    @FXML private VBox bracketLeaderboard;
+    @FXML private TableView<Team> leaderboardTableview;
 
     private int showedStageIndex = -1;
-    private CleanableUI cleanableBracket;
+    private ModelCoupledUI coupledBracket;
     private Format showedFormat;
     private MatchVisualController selectedMatch;
 
     @FXML
-    private void initialize(){
+    private void initialize() {
         instance = this; // TODO Make references to other controllers work in MainController
     }
 
-    /** Updates all elements depending on the state of the tournament and the shown stage. */
+    /**
+     * Updates all elements depending on the state of the tournament and the shown stage.
+     */
     public void update() {
 
         Tournament tournament = Tournament.get();
+        showLeaderboard(false);
+
         if (!tournament.hasStarted()) {
             showedStageIndex = -1;
             showedFormat = null;
@@ -77,6 +87,11 @@ public class BracketOverviewTabController implements MatchChangeListener {
             showFormat(tournament.getCurrentStage().getFormat());
             updateStageNavigationButtons();
         }
+    }
+
+    public void showLeaderboard(boolean state) {
+        bracketLeaderboard.setVisible(state);
+        bracketOverviewTab.getColumnConstraints().get(0).setMaxWidth(state ? 200 : 0);
     }
 
     /** @return a string that contains text describing the requirements for starting the tournament. */
@@ -112,14 +127,19 @@ public class BracketOverviewTabController implements MatchChangeListener {
     }
 
     public void showFormat(Format format) {
-        if (cleanableBracket != null) {
-            cleanableBracket.clean();
+        if (coupledBracket != null) {
+            coupledBracket.decoupleFromModel();
         }
         showedFormat = format;
         if (format != null) {
             Node bracket = format.getBracketFXNode(this);
             overviewScrollPane.setContent(bracket);
-            cleanableBracket = (CleanableUI) bracket;
+            if (bracket instanceof ModelCoupledUI) {
+                coupledBracket = (ModelCoupledUI) bracket;
+            } else {
+                coupledBracket = null;
+                System.err.println("WARNING: " + bracket.getClass().toString() + " does not implement ModelCoupledUI.");
+            }
         }
     }
 
@@ -158,6 +178,40 @@ public class BracketOverviewTabController implements MatchChangeListener {
         this.selectedMatch = match;
         updateTeamViewer(match == null ? null : match.getShowedMatch());
         if(selectedMatch != null) { selectedMatch.getShowedMatch().registerMatchChangeListener(this); }
+    }
+
+    /**
+     * Refreshes the leaderboard by clearing its content and then creating columns with data retrieved
+     * from the HashMap provided. The list is sorted based upon the team points in a descending order.
+     *
+     * @param pointMap The HashMap containing the teams and their points.
+     */
+    public void refreshLeaderboard(HashMap<Team, Integer> pointMap) {
+        // Clear everything inside the tableView
+        leaderboardTableview.getItems().clear();
+        leaderboardTableview.getColumns().clear();
+
+        // Assign teams to the listView from the HashMap provided.
+        leaderboardTableview.getItems().addAll(pointMap.keySet());
+
+        // Create columns and assign values based on the provided HashMap.
+        TableColumn<Team, String> nameColumn = new TableColumn<>("Name");
+        nameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTeamName()));
+
+        TableColumn<Team, Integer> pointColumn = new TableColumn<>("Points");
+        pointColumn.setCellValueFactory(cellData -> {
+            int points = pointMap.get(cellData.getValue());
+            return new SimpleIntegerProperty(points).asObject();
+        });
+
+        // Styling - Descending order and centering text.
+        pointColumn.setSortType(TableColumn.SortType.DESCENDING);
+        pointColumn.setStyle("-fx-alignment: CENTER;");
+
+        // Add sorting order and columns to the tableview.
+        leaderboardTableview.getColumns().add(nameColumn);
+        leaderboardTableview.getColumns().add(pointColumn);
+        leaderboardTableview.getSortOrder().add(pointColumn);
     }
 
     /**
@@ -239,7 +293,7 @@ public class BracketOverviewTabController implements MatchChangeListener {
 
             boolean concluded = Tournament.get().getStages().get(showedStageIndex).getFormat().getStatus() == StageStatus.CONCLUDED;
             nextStageBtn.setDisable(!concluded); // TODO Should also update onMatchPlayed
-            // TODO Swap next/prev stage
+            // TODO Swap next/prev stage button
         }
     }
 
