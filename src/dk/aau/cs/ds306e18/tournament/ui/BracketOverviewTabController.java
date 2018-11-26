@@ -64,9 +64,6 @@ public class BracketOverviewTabController implements MatchChangeListener {
     /** Updates all elements depending on the state of the tournament and the shown stage. */
     public void update() {
 
-        startTournamentBtn.setDisable(!Tournament.get().canStart());
-        startRequirementsLabel.setText(getRequirementsText());
-
         Tournament tournament = Tournament.get();
         if (!tournament.hasStarted()) {
             showedStageIndex = -1;
@@ -94,35 +91,20 @@ public class BracketOverviewTabController implements MatchChangeListener {
         StringBuilder sb = new StringBuilder();
         sb.append("Before you start, you need to have ");
 
-        if(numberOfStages < Tournament.get().STARTREQUIREMENT_STAGES) {
-            sb.append("atleast ").append(getWordForNumber(Tournament.get().STARTREQUIREMENT_STAGES - numberOfStages)).append(" stage");
-            if(numberOfTeams < Tournament.get().STARTREQUIREMENT_TEAMS) sb.append(" and ");
+        if (numberOfStages < Tournament.START_REQUIREMENT_STAGES) {
+            sb.append("atleast ").append(Tournament.START_REQUIREMENT_STAGES).append(Tournament.START_REQUIREMENT_STAGES > 1 ? " stages" : " stage");
+            if(numberOfTeams < Tournament.START_REQUIREMENT_TEAMS) sb.append(" and ");
         }
 
-        if(numberOfTeams < Tournament.get().STARTREQUIREMENT_TEAMS)
-            sb.append(getWordForNumber(Tournament.get().STARTREQUIREMENT_TEAMS - numberOfTeams)).append((numberOfTeams == 1) ? " more team" : " more teams");
+        if (numberOfTeams < Tournament.START_REQUIREMENT_TEAMS)
+            sb.append(Tournament.START_REQUIREMENT_TEAMS - numberOfTeams).append((numberOfTeams == 1) ? " more team" : " more teams");
 
         return sb.append(".").toString();
     }
 
-    /** @return the word matching the given number. Supports 1-10.*/
-    private String getWordForNumber(int number){
-        switch (number){
-            case 1: return "one";
-            case 2: return "two";
-            case 3: return "three";
-            case 4: return "four";
-            case 5: return "five";
-            case 6: return "six";
-            case 7: return "seven";
-            case 8: return "eight";
-            case 9: return "nine";
-            case 10: return "ten";
-            default: return null;
-        }
-    }
-
     private void showStartTournamentInstructions(boolean show) {
+        startTournamentBtn.setDisable(!Tournament.get().canStart());
+        startRequirementsLabel.setText(getRequirementsText());
         startTournamentInstructionsHolder.setManaged(show);
         startTournamentInstructionsHolder.setVisible(show);
         overviewScrollPane.setManaged(!show);

@@ -18,14 +18,15 @@ public class Tournament {
         return instance;
     }
 
+    public static final int START_REQUIREMENT_TEAMS = 2;
+    public static final int START_REQUIREMENT_STAGES = 1;
+
     private String name = "Unnamed Tournament";
     private ArrayList<Team> teams = new ArrayList<>();
     private ArrayList<Stage> stages = new ArrayList<>();
     private TieBreaker tieBreaker = new TieBreakerBySeed();
     private boolean started = false;
     private int currentStageIndex = -1;
-    public final int STARTREQUIREMENT_TEAMS = 2;
-    public final int STARTREQUIREMENT_STAGES = 1;
 
     public String getName() {
         return name;
@@ -135,13 +136,13 @@ public class Tournament {
     }
 
     public boolean canStart() {
-        return teams.size() >= STARTREQUIREMENT_TEAMS && stages.size() >= STARTREQUIREMENT_STAGES;
+        return teams.size() >= START_REQUIREMENT_TEAMS && stages.size() >= START_REQUIREMENT_STAGES;
     }
 
     public void start() {
         if (started) throw new IllegalStateException("Tournament has already started.");
-        if (teams.size() < 2) throw new IllegalStateException("There must be at least two teams in the tournament.");
-        if (stages.isEmpty()) throw new IllegalStateException("There must be at least one stage in the tournament.");
+        if (teams.size() < START_REQUIREMENT_TEAMS) throw new IllegalStateException("There must be at least two teams in the tournament.");
+        if (stages.size() < START_REQUIREMENT_STAGES) throw new IllegalStateException("There must be at least one stage in the tournament.");
         started = true;
         startNextStage();
     }
