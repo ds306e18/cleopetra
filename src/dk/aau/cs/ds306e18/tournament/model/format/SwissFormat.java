@@ -3,8 +3,11 @@ package dk.aau.cs.ds306e18.tournament.model.format;
 import dk.aau.cs.ds306e18.tournament.model.GroupFormat;
 import dk.aau.cs.ds306e18.tournament.model.StageStatus;
 import dk.aau.cs.ds306e18.tournament.model.Team;
+import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import dk.aau.cs.ds306e18.tournament.model.match.MatchChangeListener;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchPlayedListener;
+import dk.aau.cs.ds306e18.tournament.model.match.MatchStatus;
 import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.SwissSettingsNode;
 import dk.aau.cs.ds306e18.tournament.ui.BracketOverviewTabController;
 import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.SwissNode;
@@ -12,7 +15,7 @@ import javafx.scene.Node;
 
 import java.util.*;
 
-public class SwissFormat extends GroupFormat implements MatchPlayedListener {
+public class SwissFormat extends GroupFormat implements MatchPlayedListener, MatchChangeListener {
 
     private ArrayList<ArrayList<Match>> rounds;
     private int maxRoundsPossible;
@@ -20,6 +23,7 @@ public class SwissFormat extends GroupFormat implements MatchPlayedListener {
     private HashMap<Team, Integer> teamPoints;
 
     transient private List<MatchPlayedListener> matchPlayedListeners = new LinkedList<>();
+    transient private List<MatchChangeListener> matchChangedListeners = new LinkedList<>();
 
     @Override
     public void start(List<Team> teams) {
@@ -55,8 +59,9 @@ public class SwissFormat extends GroupFormat implements MatchPlayedListener {
         if (!canStartNextRound())
             return false;
 
+        /*
         if (rounds.size() != 0) // Assign points for played matches
-            assignPointsForLatestRound();
+            assignPointsForLatestRound();*/
         createNextRound();
 
         return true;
@@ -83,7 +88,6 @@ public class SwissFormat extends GroupFormat implements MatchPlayedListener {
      * Teams will get 2 points for winning and -2 for loosing.
      */
     private void assignPointsForLatestRound() {
-
         ArrayList<Match> finishedRoundMatches = rounds.get(rounds.size() - 1);
 
         for (Match match : finishedRoundMatches) {
@@ -152,6 +156,7 @@ public class SwissFormat extends GroupFormat implements MatchPlayedListener {
                 if (!hasTheseTeamsPlayedBefore(team1, team2)) {
                     Match match = new Match(team1, team2);
                     match.registerMatchPlayedListener(this);
+                    match.registerMatchChangeListener(this);
                     createdMatches.add(match);
                     break; //Two valid teams has been found, and match has been created. BREAK.
                 }
@@ -267,7 +272,9 @@ public class SwissFormat extends GroupFormat implements MatchPlayedListener {
         return roundsCopy;
     }
 
-    /** Listeners registered here will be notified whenever a match is played or reset in this format. */
+    /**
+     * Listeners registered here will be notified whenever a match is played or reset in this format.
+     */
     public void registerMatchPlayedListener(MatchPlayedListener listener) {
         // Can't add self
         if (listener != this)
@@ -276,6 +283,42 @@ public class SwissFormat extends GroupFormat implements MatchPlayedListener {
 
     public void unregisterMatchPlayedListener(MatchPlayedListener listener) {
         matchPlayedListeners.remove(listener);
+    }
+
+    /**
+     * Listeners registered here will be notified whenever a match has changed or reset in this format.
+     */
+    public void registerMatchChangedListener(MatchChangeListener listener) {
+        // Can't add self
+        if (listener != this)
+            matchChangedListeners.add(listener);
+    }
+
+    public void unregisterMatchChangedListener(MatchChangeListener listener) {
+        matchChangedListeners.remove(listener);
+    }
+
+    /**
+     * Checks a given team for every completed match if they have been a loser or winner. Then assigning their points
+     * based upon their win/loss ratio. A win gives 2 points and a loss reduces points by 2.
+     * By going through all completed matches we can assure proper point giving due to recalculations.
+     *
+     * @param team The given team to check, calculate and then assign point for.
+     */
+    private void calculateAndAssignTeamPoints(Team team) {
+        int points = 0;
+
+        for (Match match : getCompletedMatches()) {
+            if (match.getStatus() != MatchStatus.DRAW) {
+                if (match.getWinner().equals(team)) {
+                    points += 2;
+                } else if (match.getLoser().equals(team)) {
+                    points -= 2;
+                }
+            }
+        }
+
+        teamPoints.put(team, points);
     }
 
     @Override
@@ -309,5 +352,17 @@ public class SwissFormat extends GroupFormat implements MatchPlayedListener {
     @Override
     public int hashCode() {
         return Objects.hash(getRounds(), getMaxRoundsPossible(), teamPoints);
+    }
+
+    @Override
+    public void onMatchChanged(Match match) {
+        // Calculate and assign points for each team in the match.
+        calculateAndAssignTeamPoints(match.getBlueTeam());
+        calculateAndAssignTeamPoints(match.getOrangeTeam());
+
+        // Notify listeners
+        for (MatchChangeListener listener : matchChangedListeners) {
+            listener.onMatchChanged(match);
+        }
     }
 }
