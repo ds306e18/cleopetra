@@ -32,50 +32,30 @@ public class BracketOverviewTabController implements MatchChangeListener {
 
     public static BracketOverviewTabController instance;
 
-    @FXML
-    private VBox startTournamentInstructionsHolder;
-    @FXML
-    private GridPane bracketOverviewTab;
-    @FXML
-    private VBox selectedMatchVBox;
-    @FXML
-    private VBox overviewVBox;
-    @FXML
-    private Button nextMatchBtn;
-    @FXML
-    private Button prevMatchBtn;
-    @FXML
-    private Button playMatchBtn;
-    @FXML
-    private Button editMatchBtn;
-    @FXML
-    private Label blueTeamNameLabel;
-    @FXML
-    private Label blueTeamScore;
-    @FXML
-    private ListView<Bot> blueTeamListView;
-    @FXML
-    private Label orangeTeamNameLabel;
-    @FXML
-    private Label orangeTeamScore;
-    @FXML
-    private ListView<Bot> orangeTeamListView;
-    @FXML
-    private ScrollPane overviewScrollPane;
-    @FXML
-    private GridPane selectedMatchInfo;
-    @FXML
-    private HBox selectedMatchButtonHolder;
-    @FXML
-    private HBox stageNavigationButtonsHolder;
-    @FXML
-    private VBox bracketLeaderboard;
-    @FXML
-    private TableView<Team> leaderboardTableview;
-    @FXML
-    private Button nextStageBtn;
-    @FXML
-    private Button prevStageBtn;
+    @FXML private VBox startTournamentInstructionsHolder;
+    @FXML private GridPane bracketOverviewTab;
+    @FXML private VBox selectedMatchVBox;
+    @FXML private VBox overviewVBox;
+    @FXML private Button nextMatchBtn;
+    @FXML private Button prevMatchBtn;
+    @FXML private Button playMatchBtn;
+    @FXML private Button editMatchBtn;
+    @FXML private Label blueTeamNameLabel;
+    @FXML private Label blueTeamScore;
+    @FXML private ListView<Bot> blueTeamListView;
+    @FXML private Label orangeTeamNameLabel;
+    @FXML private Label orangeTeamScore;
+    @FXML private ListView<Bot> orangeTeamListView;
+    @FXML private ScrollPane overviewScrollPane;
+    @FXML private GridPane selectedMatchInfo;
+    @FXML private HBox selectedMatchButtonHolder;
+    @FXML private HBox stageNavigationButtonsHolder;
+    @FXML private Button nextStageBtn;
+    @FXML private Button prevStageBtn;
+    @FXML private Label startRequirementsLabel;
+    @FXML private Button startTournamentBtn;
+    @FXML private VBox bracketLeaderboard;
+    @FXML private TableView<Team> leaderboardTableview;
 
     private int showedStageIndex = -1;
     private ModelCoupledUI coupledBracket;
@@ -91,6 +71,7 @@ public class BracketOverviewTabController implements MatchChangeListener {
      * Updates all elements depending on the state of the tournament and the shown stage.
      */
     public void update() {
+
         Tournament tournament = Tournament.get();
         showLeaderboard(false);
 
@@ -113,7 +94,32 @@ public class BracketOverviewTabController implements MatchChangeListener {
         bracketOverviewTab.getColumnConstraints().get(0).setMaxWidth(state ? 200 : 0);
     }
 
+    /** @return a string that contains text describing the requirements for starting the tournament. */
+    private String getRequirementsText(){
+
+        //Are requirements met
+        if(Tournament.get().canStart()) return "You have met the requirement for starting a tournament.";
+
+        int numberOfStages = Tournament.get().getStages().size();
+        int numberOfTeams = Tournament.get().getTeams().size();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("Before you start, you need to have ");
+
+        if (numberOfStages < Tournament.START_REQUIREMENT_STAGES) {
+            sb.append("atleast ").append(Tournament.START_REQUIREMENT_STAGES).append(Tournament.START_REQUIREMENT_STAGES > 1 ? " stages" : " stage");
+            if(numberOfTeams < Tournament.START_REQUIREMENT_TEAMS) sb.append(" and ");
+        }
+
+        if (numberOfTeams < Tournament.START_REQUIREMENT_TEAMS)
+            sb.append(Tournament.START_REQUIREMENT_TEAMS - numberOfTeams).append((numberOfTeams == 1) ? " more team" : " more teams");
+
+        return sb.append(".").toString();
+    }
+
     private void showStartTournamentInstructions(boolean show) {
+        startTournamentBtn.setDisable(!Tournament.get().canStart());
+        startRequirementsLabel.setText(getRequirementsText());
         startTournamentInstructionsHolder.setManaged(show);
         startTournamentInstructionsHolder.setVisible(show);
         overviewScrollPane.setManaged(!show);
