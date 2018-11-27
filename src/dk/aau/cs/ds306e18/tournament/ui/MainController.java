@@ -5,6 +5,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.GridPane;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainController {
 
     @FXML public GridPane tournamentSettingsTabContent;
