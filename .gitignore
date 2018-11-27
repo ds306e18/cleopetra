@@ -5,6 +5,7 @@
 # all serialized objects on disk should have this extension
 *.obj
 *.object
+saves/
 
 # ConfigFileEditor-specific
 dummyconfig.cfg

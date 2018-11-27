@@ -2,6 +2,7 @@ package dk.aau.cs.ds306e18.tournament.ui;
 
 import com.google.common.base.CharMatcher;
 import dk.aau.cs.ds306e18.tournament.RLBotSettings;
+import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -27,6 +28,15 @@ public class RLBotSettingsTabController {
     @FXML
     private void initialize() {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CFG files (*.cfg)", "*.cfg"));
+        updateConfigPathTextField();
+    }
+
+    /** Updates the text shown in the config path text field. */
+    private void updateConfigPathTextField() {
+        File file = new File(Tournament.get().getRlBotSettings().getConfigPath());
+        String parentparent = file.getParentFile().getParent();
+        String shortPath = parentparent == null ? file.getPath() : file.getPath().replace(parentparent, "");
+        configPathTextField.setText(shortPath);
     }
 
     @FXML
@@ -39,12 +49,9 @@ public class RLBotSettingsTabController {
             fileChooser.setInitialDirectory(file.getParentFile());
 
             // Update settings
-            RLBotSettings.setConfigPath(file.getAbsolutePath());
+            Tournament.get().getRlBotSettings().setConfigPath(file.getAbsolutePath());
 
-            // Update text field
-            String parentparent = file.getParentFile().getParent();
-            String shortPath = parentparent == null ? file.getPath() : file.getPath().replace(parentparent, "");
-            configPathTextField.setText(shortPath);
+            updateConfigPathTextField();
         }
     }
 }

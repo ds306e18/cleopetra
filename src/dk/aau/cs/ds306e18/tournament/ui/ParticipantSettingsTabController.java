@@ -100,8 +100,7 @@ public class ParticipantSettingsTabController {
             else
                 fileChooser.setInitialDirectory(null);
 
-            List<File> files = Arrays.asList(file);
-            setConfigPathText(files);
+            updateConfigPathTextField();
         }
     }
 
@@ -205,7 +204,7 @@ public class ParticipantSettingsTabController {
             botNameTextField.setText(selectedBot.getName());
             developerTextField.setText(selectedBot.getDeveloper());
             botDescription.setText(selectedBot.getDescription());
-            configPathTextField.setText(selectedBot.getConfigPath());
+            updateConfigPathTextField();
 
         } else {
             //if no bot is selected clear the fields and hide the botsettgins box.
@@ -285,23 +284,16 @@ public class ParticipantSettingsTabController {
         }
     }
 
-    /** Sets the configPath text and changes the path for the selected bot */
-    private void setConfigPathText(List<File> files) {
-        if (files == null || files.isEmpty()) {
-            return;
-        }
-        for (File file : files) {
-            //Format path to be shown
-
-            // Update text field
+    /** Updates the text display by the config path text field. */
+    private void updateConfigPathTextField() {
+        Bot selectedBot = botsListView.getSelectionModel().getSelectedItem();
+        if (selectedBot != null) {
+            File file = new File(selectedBot.getConfigPath());
             String parentparent = file.getParentFile().getParent();
             String shortPath = parentparent == null ? file.getPath() : file.getPath().replace(parentparent, "");
             configPathTextField.setText(shortPath);
-
-            botsListView.getSelectionModel().getSelectedItem().setConfigPath(file.getAbsolutePath());
         }
     }
-
 
     /** @return the given path as a string with one file and one folder removed. */
     private String getPathOneFolderAbove(String path) {

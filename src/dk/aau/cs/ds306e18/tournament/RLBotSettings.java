@@ -1,24 +1,25 @@
 package dk.aau.cs.ds306e18.tournament;
 
 import java.io.File;
+import java.util.Objects;
 
 public class RLBotSettings {
 
-    private static String configPath = "";
-    private static boolean configValid = false;
+    private String configPath = "";
+    private boolean configValid = false;
 
-    public static String getConfigPath() {
+    public String getConfigPath() {
         return configPath;
     }
 
     /** Set the path to the config file of the RLBot framework and checks if it is a valid config file. */
-    public static void setConfigPath(String path) {
+    public void setConfigPath(String path) {
         configPath = path == null ? "" : path;
         configValid = isValidConfigFile(path);
     }
 
     /** Returns true if the saved config file is valid */
-    public static boolean isConfigValid() {
+    public boolean isConfigValid() {
         return configValid;
     }
 
@@ -34,5 +35,19 @@ public class RLBotSettings {
         // TODO Other checks
 
         return true;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RLBotSettings that = (RLBotSettings) o;
+        return configValid == that.configValid &&
+                Objects.equals(configPath, that.configPath);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(configPath, configValid);
     }
 }
