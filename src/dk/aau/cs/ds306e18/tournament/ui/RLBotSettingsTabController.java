@@ -33,10 +33,13 @@ public class RLBotSettingsTabController {
 
     /** Updates the text shown in the config path text field. */
     private void updateConfigPathTextField() {
-        File file = new File(Tournament.get().getRlBotSettings().getConfigPath());
-        String parentparent = file.getParentFile().getParent();
-        String shortPath = parentparent == null ? file.getPath() : file.getPath().replace(parentparent, "");
-        configPathTextField.setText(shortPath);
+        String path = Tournament.get().getRlBotSettings().getConfigPath();
+        if (path != null && !path.isEmpty()) {
+            File file = new File(Tournament.get().getRlBotSettings().getConfigPath());
+            String parentparent = file.getParentFile().getParent();
+            String shortPath = parentparent == null ? file.getPath() : file.getPath().replace(parentparent, "");
+            configPathTextField.setText(shortPath);
+        }
     }
 
     @FXML

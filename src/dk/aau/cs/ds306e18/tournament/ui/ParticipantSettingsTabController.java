@@ -288,10 +288,13 @@ public class ParticipantSettingsTabController {
     private void updateConfigPathTextField() {
         Bot selectedBot = botsListView.getSelectionModel().getSelectedItem();
         if (selectedBot != null) {
-            File file = new File(selectedBot.getConfigPath());
-            String parentparent = file.getParentFile().getParent();
-            String shortPath = parentparent == null ? file.getPath() : file.getPath().replace(parentparent, "");
-            configPathTextField.setText(shortPath);
+            String path = selectedBot.getConfigPath();
+            if (path != null && !path.isEmpty()) {
+                File file = new File(selectedBot.getConfigPath());
+                String parentparent = file.getParentFile().getParent();
+                String shortPath = parentparent == null ? file.getPath() : file.getPath().replace(parentparent, "");
+                configPathTextField.setText(shortPath);
+            }
         }
     }
 
