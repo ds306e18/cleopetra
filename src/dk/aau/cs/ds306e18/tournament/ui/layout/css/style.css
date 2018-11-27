@@ -217,3 +217,21 @@
 .scroll-pane > .viewport {
     -fx-background-color: transparent;
 }
+
+
+/* Tableview remove vertical scrollbar */
+#mainGrid .table-view *.increment-button,
+#mainGrid .table-view *.decrement-button,
+#mainGrid .table-view *.increment-arrow,
+#mainGrid .table-view *.decrement-arrow
+{
+    -fx-padding: 0;
+    -fx-shape: "";
+}
+
+/* Launcher specific styling */
+#launcerMain {
+    -fx-stroke-type: inside;
+    -fx-stroke-width: 1;
+    -fx-stroke: #c1c1c1;
+}

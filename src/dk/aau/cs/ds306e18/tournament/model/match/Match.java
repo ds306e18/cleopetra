@@ -245,6 +245,7 @@ public final class Match {
 
     public Team getWinner() {
         if (!played) throw new IllegalStateException("Match has not been played.");
+        if (blueScore == orangeScore) throw new IllegalStateException("Match ended in draw.");
         if (blueScore > orangeScore)
             return getBlueTeam();
         return getOrangeTeam();
@@ -252,6 +253,7 @@ public final class Match {
 
     public Team getLoser() {
         if (!played) throw new IllegalStateException("Match has not been played.");
+        if (blueScore == orangeScore) throw new IllegalStateException("Match ended in draw.");
         if (blueScore > orangeScore)
             return getOrangeTeam();
         return getBlueTeam();
@@ -420,15 +422,17 @@ public final class Match {
      * Helper method to {@code setHasBeenPlayed(boolean)}
      */
     private void transferWinnerAndLoser() {
-        if (winnerDestination != null) {
-            if (winnerGoesToBlue) winnerDestination.blueTeam = getWinner();
-            else winnerDestination.orangeTeam = getWinner();
-            winnerDestination.notifyMatchChangeListeners();
-        }
-        if (loserDestination != null) {
-            if (loserGoesToBlue) loserDestination.blueTeam = getLoser();
-            else loserDestination.orangeTeam = getLoser();
-            loserDestination.notifyMatchChangeListeners();
+        if (getStatus() != MatchStatus.DRAW) {
+            if (winnerDestination != null) {
+                if (winnerGoesToBlue) winnerDestination.blueTeam = getWinner();
+                else winnerDestination.orangeTeam = getWinner();
+                winnerDestination.notifyMatchChangeListeners();
+            }
+            if (loserDestination != null) {
+                if (loserGoesToBlue) loserDestination.blueTeam = getLoser();
+                else loserDestination.orangeTeam = getLoser();
+                loserDestination.notifyMatchChangeListeners();
+            }
         }
     }
 

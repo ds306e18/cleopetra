@@ -5,7 +5,7 @@ import dk.aau.cs.ds306e18.tournament.model.StageStatus;
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchPlayedListener;
-import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.CleanableUI;
+import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.ModelCoupledUI;
 import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.RoundRobinSettingsNode;
 import dk.aau.cs.ds306e18.tournament.ui.BracketOverviewTabController;
 import javafx.scene.Node;
@@ -277,7 +277,7 @@ public class RoundRobinFormat extends GroupFormat implements MatchPlayedListener
     }
 
     @Override
-    public <T extends Node & CleanableUI> T getBracketFXNode(BracketOverviewTabController bracketOverview) {
+    public <T extends Node & ModelCoupledUI> T getBracketFXNode(BracketOverviewTabController bracketOverview) {
         return null; //TODO
     }
 

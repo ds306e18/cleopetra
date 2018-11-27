@@ -54,6 +54,8 @@ public class ParticipantSettingsTabController {
 
     @FXML
     private void initialize() {
+        /* Assign teams to the list in case of the tournament being loaded */
+        teamsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams()));
 
         //Sets the VBox for team and bot as false, hiding them
         botSettingsVbox.setVisible(false);
