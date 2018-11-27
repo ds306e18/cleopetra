@@ -73,7 +73,6 @@ public class LauncherController {
 
     @FXML
     void openLocalTournament(ActionEvent event) {
-        // TODO: Only be able to choose the correct file extension
         // TODO: Filechooser start directory
 
         String extension = "rlts";
@@ -82,6 +81,8 @@ public class LauncherController {
         fileChooser.setTitle("Open tournament file");
         // Set extension filter
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Tournament format (*." + extension + ")", "*." + extension));
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home") + (File.separatorChar + "Documents")));
+
         File file = fileChooser.showOpenDialog(getLauncherStage());
 
         if (file != null){
