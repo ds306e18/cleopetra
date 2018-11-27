@@ -9,8 +9,8 @@ import java.nio.file.Paths;
 
 public class MatchRunner {
 
-    // The %s will be replaced with the directory of the rlbot.cfg
-    private static final String COMMAND_FORMAT = "cmd.exe /c start cmd.exe /c \"python \"%s\\run.py\"\"";
+    // both %s will be replaced with the directory of the rlbot.cfg
+    private static final String COMMAND_FORMAT = "cmd.exe /c start cmd.exe /c \"cd %s & python \"%s\\run.py\"\"";
 
     /** Starts the given match in Rocket League. */
     public static boolean startMatch(RLBotSettings settings, Match match) {
@@ -27,7 +27,7 @@ public class MatchRunner {
 
             // We assume that the runner is in the same folder as the rlbot.cfg
             Path path = Paths.get(settings.getConfigPath()).getParent();
-            String command = String.format(COMMAND_FORMAT, path);
+            String command = String.format(COMMAND_FORMAT, path, path);
             System.out.println(command);
             Runtime.getRuntime().exec(command);
             return true;
