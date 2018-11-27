@@ -293,7 +293,7 @@ public class BracketOverviewTabController implements MatchChangeListener {
 
             boolean concluded = Tournament.get().getStages().get(showedStageIndex).getFormat().getStatus() == StageStatus.CONCLUDED;
             boolean isLastStage = Tournament.get().getStages().size() - 1 == showedStageIndex;
-            nextStageBtn.setDisable(!concluded && !isLastStage);
+            nextStageBtn.setDisable(!concluded || isLastStage);
         }
     }
 
