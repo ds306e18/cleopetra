@@ -29,7 +29,7 @@ public class DoubleEliminationFormat extends Elimination implements MatchPlayedL
         generateUpperBracket(rounds);
         seedUpperBracket(seededTeams, rounds);
         generateLowerBracket(rounds);
-        removeByes(rounds);
+        removeByes();
         status = StageStatus.RUNNING;
         finalMatch.registerMatchPlayedListener(this);
     }
@@ -131,7 +131,11 @@ public class DoubleEliminationFormat extends Elimination implements MatchPlayedL
         }
     }
 
-    public void generateLowerBracket(int roundsInUpperBracket) {
+    public int getNumberOfTeams(){
+        return seededTeams.size();
+    }
+
+    private void generateLowerBracket(int roundsInUpperBracket) {
         int matchesInCurrentRound = (int) Math.pow(2, roundsInUpperBracket - 2), matchNumberInRound, winnerOfMatchIndex = 0;
         upperBracketMatches = finalMatch.getTreeAsListBFS();
         lowerBracketMatchesArray = new Match[upperBracketMatchesArray.length - 1];
@@ -193,69 +197,51 @@ public class DoubleEliminationFormat extends Elimination implements MatchPlayedL
         }
 
         // The final is the last match in the list
-        Match tempMatch = new Match().setBlueToWinnerOf(finalMatch).setOrangeToWinnerOf(lowerBracketMatches.get(lowerBracketMatches.size() - 1));
-        finalMatch = tempMatch;
+        finalMatch = new Match().setBlueToWinnerOf(finalMatch).setOrangeToWinnerOf(lowerBracketMatches.get(lowerBracketMatches.size() - 1));
 
+        //Creates an array of matches to itarate trough when generating the lower bracket.
         lowerBracketMatchesArray = new Match[lowerBracketMatches.size()];
         lowerBracketMatchesArray = lowerBracketMatches.toArray(lowerBracketMatchesArray);
     }
 
     //The loop will remove the matches that would normally contain bye's.
-    public void removeByes(int roundsInUpperBracket) {
-        Match tempMatch;
-        Match tempWinnerMatch;
-        Match tempChickenDinnerMatch;
-        int byeAmountInFirstMatch = 0;
-        int matchesInFirstRound = (int) Math.pow(2, roundsInUpperBracket - 2);
+    private void removeByes() {
 
-        for (int i = 0; i < matchesInFirstRound; i++){
-            tempMatch = lowerBracketMatchesArray[i];
-            if(tempMatch.getBlueTeam() != null && tempMatch.getBlueTeam().getInitialSeedValue() == 999){ byeAmountInFirstMatch++; }
-            if(tempMatch.getOrangeTeam() != null && tempMatch.getOrangeTeam().getInitialSeedValue() == 999){ byeAmountInFirstMatch++; }
+        //Iterates for each match in the matches array
+        for (Match match : lowerBracketMatchesArray) {
 
-            //If there is one bye in the first match, set the parent's orangeFromMatch to the match's orangeFromMatch
-            if(byeAmountInFirstMatch == 1) {
-                tempMatch.getWinnerDestination().setBlueToLoserOf(tempMatch.getOrangeFromMatch());
-                lowerBracketMatchesArray[i] = null;
+            int byes = 0;
+            //Checks if one or both teams are a bye
+            if (match.getBlueTeam() != null && match.getBlueTeam().getBots() == null) {
+                byes++;
+            }
+            if (match.getOrangeTeam() != null && match.getOrangeTeam().getBots() == null) {
+                byes++;
+            }
+            //If only one team is a bye, sets blue in winner destination to be the loser of the previous match
+            //then removes the match from teh lowerBracketMatches list
+            if (byes == 1) {
+
+                match.getWinnerDestination().setBlueToLoserOf(match.getOrangeFromMatch());
+                lowerBracketMatches.remove(match);
             }
 
-            //If there are two byes in first match, set the match's parent's, parent orangeFrom match to the parent's.
-            if(byeAmountInFirstMatch == 2) {
-                tempWinnerMatch = tempMatch.getWinnerDestination();
-                tempChickenDinnerMatch = tempMatch.getWinnerDestination().getWinnerDestination();
-                if(tempChickenDinnerMatch.getBlueFromMatch() == tempWinnerMatch) {
-                    tempChickenDinnerMatch.setBlueToLoserOf(tempWinnerMatch.getOrangeFromMatch());
+            // IF both teams are bye's pass loser from the previous match to the either the blue or orange position
+            //in the winner's winner's destination then delete both match and its winner destination
+            if (byes == 2) {
+                if (match.getWinnerDestination().getWinnerDestination().equals(match.getWinnerDestination())) {
+                    match.getWinnerDestination().getWinnerDestination().setBlueToLoserOf(match.getWinnerDestination().getOrangeFromMatch());
                 }
-                if(tempChickenDinnerMatch.getOrangeFromMatch() == tempWinnerMatch) {
-                    tempChickenDinnerMatch.setOrangeToLoserOf(tempWinnerMatch.getOrangeFromMatch());
+
+                if (match.getWinnerDestination().getWinnerDestination().equals(match.getWinnerDestination())) {
+                    match.getWinnerDestination().getWinnerDestination().setOrangeToLoserOf(match.getWinnerDestination().getOrangeFromMatch());
                 }
-                removeByeMatch(tempWinnerMatch);
-                lowerBracketMatchesArray[i] = null;
-            }
-            byeAmountInFirstMatch = 0;
-        }
-
-        /*
-        for (int i = 0; i < (lowerBracketMatchesArray.length - 1) / 2; i++) {
-            tempMatch = lowerBracketMatchesArray[i];
-            lowerBracketMatchesArray[i] = lowerBracketMatchesArray[lowerBracketMatchesArray.length-1-i];
-            lowerBracketMatchesArray[lowerBracketMatchesArray.length-1-i] = tempMatch;
-        }
-        */
-
-        lowerBracketMatches = new ArrayList<>(Arrays.asList(lowerBracketMatchesArray));
-        lowerBracketMatches.removeIf(Objects::isNull);
-    }
-
-    //Removes a byeMatch from the array
-    public void removeByeMatch(Match byeMatch) {
-        for(int i = 0; i < lowerBracketMatchesArray.length-1; i++){
-            if(lowerBracketMatchesArray[i] != null) {
-                if (lowerBracketMatchesArray[i].equals(byeMatch)) {
-                    lowerBracketMatchesArray[i] = null;
-                }
+                lowerBracketMatches.remove(match.getWinnerDestination());
+                lowerBracketMatches.remove(match);
             }
         }
     }
+
+
 }
 

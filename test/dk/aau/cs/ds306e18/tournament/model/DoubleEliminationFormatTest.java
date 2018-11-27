@@ -47,8 +47,8 @@ public class DoubleEliminationFormatTest {
     @Test
     public void amountOfMatchesTest04() {
         DoubleEliminationFormat bracket = new DoubleEliminationFormat();
-        bracket.start(TestUtilities.generateSeededTeams(9,1));
-        assertEquals(16, bracket.getAllMatches().size());
+        bracket.start(TestUtilities.generateSeededTeams(9,5));
+        assertEquals((bracket.getNumberOfTeams()*2)-2, bracket.getAllMatches().size());
     }
 
     //final match should depend on all matches
