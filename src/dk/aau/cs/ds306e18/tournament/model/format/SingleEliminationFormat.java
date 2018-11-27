@@ -1,18 +1,21 @@
 package dk.aau.cs.ds306e18.tournament.model.format;
 
-import dk.aau.cs.ds306e18.tournament.model.*;
+import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.SingleEliminationNode;
+import dk.aau.cs.ds306e18.tournament.ui.BracketOverviewTabController;
+import dk.aau.cs.ds306e18.tournament.model.StageStatus;
+import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
-import dk.aau.cs.ds306e18.tournament.model.match.MatchListener;
+import dk.aau.cs.ds306e18.tournament.model.match.MatchPlayedListener;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchStatus;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
-import dk.aau.cs.ds306e18.tournament.ui.tabs.BracketOverview;
 import javafx.scene.Node;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
-public class SingleEliminationFormat extends Elimination implements MatchListener {
+public class SingleEliminationFormat extends Elimination implements MatchPlayedListener {
+
+    transient private List<MatchPlayedListener> matchPlayedListeners = new LinkedList<>();
 
     @Override
     public void start(List<Team> seededTeams) {
@@ -21,7 +24,7 @@ public class SingleEliminationFormat extends Elimination implements MatchListene
         generateUpperBracket(rounds);
         seedUpperBracket(seededTeams, rounds);
         status = StageStatus.RUNNING;
-        finalMatch.registerListener(this);
+        finalMatch.registerMatchPlayedListener(this);
     }
 
     @Override
@@ -36,7 +39,7 @@ public class SingleEliminationFormat extends Elimination implements MatchListene
 
     @Override
     public List<Match> getUpcomingMatches() {
-         return finalMatch.getTreeAsListBFS().stream().filter(c -> c.getStatus().equals(MatchStatus.READY_TO_BE_PLAYED) && !c.hasBeenPlayed()).collect(Collectors.toList());
+        return finalMatch.getTreeAsListBFS().stream().filter(c -> c.getStatus().equals(MatchStatus.READY_TO_BE_PLAYED) && !c.hasBeenPlayed()).collect(Collectors.toList());
     }
 
     @Override
@@ -53,10 +56,8 @@ public class SingleEliminationFormat extends Elimination implements MatchListene
         return this.upperBracketMatchesArray;
     }
 
-
     @Override
     public void onMatchPlayed(Match match) {
-        // TODO: Register stage as listener to all relevant matches
         if (finalMatch.hasBeenPlayed()) {
             status = StageStatus.CONCLUDED;
         } else {
@@ -76,7 +77,7 @@ public class SingleEliminationFormat extends Elimination implements MatchListene
         int roundUpperBoundIndex = 1, currentMatchIndex = 0;
 
         //Will run until team size fits the count
-        while(topTeams.size() < count) {
+        while (topTeams.size() < count) {
             //places the losers and winners of the round into two different temporary lists
             while (currentMatchIndex < roundUpperBoundIndex) {
                 if (!topTeams.contains(finalMatch.getTreeAsListBFS().get(currentMatchIndex).getWinner())) {
@@ -107,15 +108,54 @@ public class SingleEliminationFormat extends Elimination implements MatchListene
         }
 
         //If there are too many teams, remove teams
-        while(topTeams.size() > count){
-            topTeams.remove(topTeams.size()-1);
+        while (topTeams.size() > count) {
+            topTeams.remove(topTeams.size() - 1);
         }
 
         return topTeams;
     }
 
     @Override
-    public Node getJavaFxNode(BracketOverview bracketOverview) {
-        return null; //TODO
+    public SingleEliminationNode getBracketFXNode(BracketOverviewTabController boc) {
+        return new SingleEliminationNode(this, boc);
+    }
+
+    @Override
+    public Node getSettingsFXNode() {
+        return null;
+    }
+
+    /**
+     * Repairs match-structure after deserialization
+     */
+    @Override
+    public void repair() {
+        // set final match to root of Match-tree
+        this.finalMatch = this.upperBracketMatchesArray[0];
+        // register listener for each finalMatch
+        this.finalMatch.registerMatchPlayedListener(this);
+        // recursively call postDeserializationRepair
+        this.finalMatch.postDeserializationRepair();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SingleEliminationFormat that = (SingleEliminationFormat) o;
+        boolean equals;
+        equals = rounds == that.rounds &&
+                getStatus() == that.getStatus() &&
+                Objects.equals(seededTeams, that.seededTeams);
+
+        equals = Arrays.equals(upperBracketMatchesArray, that.upperBracketMatchesArray);
+        return equals;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(getStatus(), seededTeams, finalMatch, rounds);
+        result = 31 * result + Arrays.hashCode(upperBracketMatchesArray);
+        return result;
     }
 }

@@ -14,8 +14,8 @@ plugins {
     id 'application'
 }
 
-sourceCompatibility = 10
-targetCompatibility = 10
+sourceCompatibility = 8
+targetCompatibility = 8
 
 // Define the main class for the application
 mainClassName = 'dk.aau.cs.ds306e18.tournament.Main'
@@ -23,6 +23,9 @@ mainClassName = 'dk.aau.cs.ds306e18.tournament.Main'
 dependencies {
     // This dependency is found on compile classpath of this component and consumers.
     compile 'com.google.guava:guava:23.0'
+
+    // Using GSON for serializing objects for transfer and storage
+    compile 'com.google.code.gson:gson:2.8.5'
 
     // Use JUnit test framework
     testCompile 'junit:junit:4.12'
@@ -38,8 +41,18 @@ repositories {
 // Setup modules
 sourceSets {
     main.java.srcDirs = ['src']
-    main.resources.srcDirs = ['src/resources']
+    main.resources.srcDirs = ['src']
 
     test.java.srcDirs = ['test']
-    test.resources.srcDirs = ['test/resources']
+    test.resources.srcDirs = ['test']
+}
+
+// Build a fat jar
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Main-Class': 'dk.aau.cs.ds306e18.tournament.Main'
+    }
+    baseName = 'tournamentsystem'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
 }

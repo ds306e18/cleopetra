@@ -133,8 +133,8 @@ public class SingleEliminationFormatTest {
         SingleEliminationFormat bracket = new SingleEliminationFormat();
         bracket.start(TestUtilities.generateTeams(8,1));
         assertEquals(3, bracket.getPendingMatches().size());
-        bracket.getAllMatches().get(bracket.getAllMatches().size()-1).setHasBeenPlayed(true);
-        bracket.getAllMatches().get(bracket.getAllMatches().size()-2).setHasBeenPlayed(true);
+        bracket.getAllMatches().get(bracket.getAllMatches().size()-1).setScores(1, 2, true);
+        bracket.getAllMatches().get(bracket.getAllMatches().size()-2).setScores(1, 2, true);
         assertEquals(2, bracket.getPendingMatches().size());
     }
 

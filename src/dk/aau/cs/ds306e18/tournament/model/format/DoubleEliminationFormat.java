@@ -3,10 +3,12 @@ package dk.aau.cs.ds306e18.tournament.model.format;
 import dk.aau.cs.ds306e18.tournament.model.StageStatus;
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
-import dk.aau.cs.ds306e18.tournament.model.match.MatchListener;
+import dk.aau.cs.ds306e18.tournament.model.match.MatchPlayedListener;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchStatus;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
-import dk.aau.cs.ds306e18.tournament.ui.tabs.BracketOverview;
+import dk.aau.cs.ds306e18.tournament.ui.BracketOverviewTabController;
+import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.ModelCoupledUI;
+//import dk.aau.cs.ds306e18.tournament.ui.tabs.BracketOverview;
 import javafx.scene.Node;
 
 import java.util.ArrayList;
@@ -15,7 +17,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class DoubleEliminationFormat extends Elimination implements MatchListener {
+public class DoubleEliminationFormat extends Elimination implements MatchPlayedListener {
     Match[] lowerBracketMatchesArray;
     ArrayList<Match> upperBracketMatches = new ArrayList<>();
     ArrayList<Match> lowerBracketMatches = new ArrayList<>();
@@ -29,7 +31,7 @@ public class DoubleEliminationFormat extends Elimination implements MatchListene
         generateLowerBracket(rounds);
         removeByes(rounds);
         status = StageStatus.RUNNING;
-        finalMatch.registerListener(this);
+        finalMatch.registerMatchPlayedListener(this);
     }
 
     @Override
@@ -96,17 +98,27 @@ public class DoubleEliminationFormat extends Elimination implements MatchListene
         return getAllMatches().stream().filter(c -> c.hasBeenPlayed()).collect(Collectors.toList());
     }
 
+    @Override
+    public <T extends Node & ModelCoupledUI> T getBracketFXNode(BracketOverviewTabController bracketOverview) {
+        return null;
+    }
+
+    @Override
+    public Node getSettingsFXNode() {
+        return null;
+    }
+
+    @Override
+    public void repair() {
+
+    }
+
     public List<Match> getLowerBracketMatches() {
         return lowerBracketMatches;
     }
 
     public List<Match> getUpperBracketMatches(){
         return upperBracketMatches;
-    }
-
-    @Override
-    public Node getJavaFxNode(BracketOverview bracketOverview) {
-        return null;
     }
 
     @Override

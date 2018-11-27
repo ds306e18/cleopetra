@@ -3,12 +3,12 @@ package dk.aau.cs.ds306e18.tournament.model.format;
 import dk.aau.cs.ds306e18.tournament.model.StageStatus;
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
-import dk.aau.cs.ds306e18.tournament.model.match.MatchListener;
+import dk.aau.cs.ds306e18.tournament.model.match.MatchPlayedListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
-abstract class Elimination implements Format, MatchListener {
+abstract class Elimination implements Format, MatchPlayedListener {
     StageStatus status = StageStatus.PENDING;
     ArrayList<Team> seededTeams;
     Match finalMatch;
@@ -131,6 +131,10 @@ abstract class Elimination implements Format, MatchListener {
     int getRightSide(int i) {
         i = i + 1;
         return 2 * i - 1;
+    }
+
+    public int getRounds() {
+        return rounds;
     }
 
 }

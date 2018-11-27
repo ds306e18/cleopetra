@@ -1,0 +1,230 @@
+.button, .choice-box {
+    -fx-background-color: #f8f8f8;
+    -fx-background-radius: 0;
+    -fx-border-color: #c2c2c2;
+}
+
+.button:hover {
+    -fx-background-color: #ececec;
+}
+
+.button:pressed{
+    -fx-background-color: #f8f8f8;
+}
+
+#tabPane {
+    -fx-tab-min-height: 4em;
+    -fx-tab-min-width: 12em;
+}
+
+#tabPane .tab .tab-label {
+    -fx-alignment: center;
+    -fx-text-fill: #8e8e8e;
+}
+
+
+#tabPane .tab {
+    -fx-background-color: #f8f8f8;
+    -fx-border-color: #c2c2c2;
+    -fx-border-width: 1 1 1 1;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+#tabPane .tab:selected {
+    -fx-background-color: #FFF;
+    -fx-border-width: 2 1 1 1;
+    -fx-border-color: #34C5E2 #c2c2c2 #c2c2c2 #c2c2c2;
+}
+
+
+
+#TS-rightside .tab {
+    -fx-background-color: transparent;
+    -fx-alignment: center;
+}
+
+#TS-rightside .spinner {
+    -fx-max-width: 130;
+}
+
+.text-field, .text-area {
+    -fx-background-radius: 0;
+}
+
+#TS-rightside {
+    -fx-border-width: 0 0 0 1;
+    -fx-border-color: #c2c2c2;
+}
+
+#TS-leftside #stageTable .column-header .label {
+    -fx-text-fill: #fff;
+    -fx-background-color: #34C5E2;
+}
+
+#TS-leftside #stageTable .column-header {
+    -fx-background-color: #34C5E2;
+}
+
+#TS-leftside #stageTable {
+    -fx-border-width: 1;
+}
+
+#TS-leftside .text-field{
+    -fx-max-width: 250;
+}
+
+#TS-leftside .list-view{
+    -fx-max-width: 250;
+}
+
+#TS-leftside .grid {
+    -fx-max-width: 250;
+}
+
+#PS-leftside, #PS-center, #PS-rightside {
+    -fx-padding: 0 20 20 20;
+    -fx-border-width: 0 0 0 1;
+    -fx-border-color: #c2c2c2;
+}
+
+#PS-leftside {
+    -fx-padding: 0 20 20 20 !important;
+}
+
+#globalGrid {
+    -fx-padding: 0 20 0 20;
+    -fx-border-width: 0 0 0 1;
+    -fx-border-color: #c2c2c2;
+}
+
+/* Matches overview - Matches design */
+
+.match {
+    -fx-border-width: 1;
+    -fx-border-color: transparent;
+}
+
+.match:hover{
+    -fx-cursor: hand;
+    -fx-border-width: 1;
+    -fx-border-color: green;
+}
+
+.selectedMatch {
+    -fx-border-color: blue;
+}
+
+.triangle {
+    visibility: hidden;
+}
+
+.blue .color {
+    -fx-fill: #4271f9;
+}
+
+.orange .color {
+    -fx-fill: #f28542;
+}
+
+.scoreBg {
+    -fx-fill: white;
+    -fx-stroke-type: inside;
+    -fx-stroke-width: 1;
+    -fx-stroke: #c1c1c1;
+}
+
+#matchPlayed .winner .triangle {
+    visibility: visible;
+}
+
+#matchPlayed .winner .scoreNo {
+    -fx-fill: green;
+    -fx-font-weight: bold;
+}
+
+#matchPlayed .winner .teamName {
+	-fx-font-weight: bold;
+}
+
+#matchTBD .teamName {
+    -fx-font-style: italic;
+}
+
+
+
+/* Exit program overlay design */
+#exitPopup {
+    -fx-border-width: 1;
+    -fx-border-color: #c2c2c2;
+    -fx-background-color: white;
+}
+
+#exitPopup .cancelBtn {
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-background-radius: 0;
+    -fx-background-color: transparent;
+}
+
+#exitPopup .cancelBtn:focused {
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+}
+
+#exitPopup .cancelBtn:pressed {
+    -fx-background-color: black;
+    -fx-text-fill: white;
+}
+
+#exitPopup .optionBtn {
+    -fx-border-width: 0;
+}
+
+#exitPopup .optionBtn:focused {
+    -fx-border-width: 0;
+}
+
+#exitPopup .saveBtn {
+    -fx-background-color: #BAD26E;
+    -fx-text-fill: #FFFFFF;
+}
+
+#exitPopup .saveBtn:pressed {
+    -fx-background-color: #dfeabc;
+}
+
+#exitPopup .noSaveBtn {
+    -fx-background-color: #FE7065;
+    -fx-text-fill: #FFFFFF;
+}
+
+#exitPopup .noSaveBtn:pressed {
+    -fx-background-color: #feafa8;
+}
+
+#exitPopup .cancelBtn2 {
+    -fx-background-color: #bababa;
+    -fx-text-fill: #FFFFFF;
+}
+
+#exitPopup .cancelBtn2:pressed {
+    -fx-background-color: #d3d3d3;
+}
+
+/* Scrollpane bracket overview */
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+
+/* Tableview remove vertical scrollbar */
+#mainGrid .table-view *.increment-button,
+#mainGrid .table-view *.decrement-button,
+#mainGrid .table-view *.increment-arrow,
+#mainGrid .table-view *.decrement-arrow
+{
+    -fx-padding: 0;
+    -fx-shape: "";
+}
