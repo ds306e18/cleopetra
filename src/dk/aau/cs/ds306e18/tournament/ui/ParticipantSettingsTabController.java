@@ -100,6 +100,8 @@ public class ParticipantSettingsTabController {
             else
                 fileChooser.setInitialDirectory(null);
 
+            Bot selectedBot = botsListView.getSelectionModel().getSelectedItem();
+            selectedBot.setConfigPath(file.getAbsolutePath());
             updateConfigPathTextField();
         }
     }
