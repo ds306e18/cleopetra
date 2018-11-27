@@ -76,12 +76,16 @@ public class LauncherController {
         // TODO: Only be able to choose the correct file extension
         // TODO: Filechooser start directory
 
+        String extension = "rlts";
+
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open tournament file");
+        // Set extension filter
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Tournament format (*." + extension + ")", "*." + extension));
         File file = fileChooser.showOpenDialog(getLauncherStage());
 
         if (file != null){
-            Tournament.get().setTournament(FileOperations.readTournamentFromFilesystem(file.getAbsolutePath()));
+            Tournament.get().setTournament(FileOperations.readTournamentFromFilesystem(file));
             Stage systemStage = createSystemStage();
             getLauncherStage().hide();
             systemStage.show();

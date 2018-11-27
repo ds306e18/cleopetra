@@ -336,7 +336,10 @@ public class SwissFormat extends GroupFormat implements MatchPlayedListener, Mat
 
     @Override
     public void repair() {
-        for (Match match : getAllMatches()) match.registerMatchPlayedListener(this);
+        for (Match match : getAllMatches()) {
+            match.registerMatchPlayedListener(this);
+            match.registerMatchChangeListener(this);
+        }
     }
 
     @Override

@@ -7,6 +7,7 @@ import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreakerByGoalDiff;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreakerBySeed;
 import dk.aau.cs.ds306e18.tournament.ui.StageFormatOption;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -53,9 +54,22 @@ public class TournamentSettingsTabController {
 
         /* Retrieve and add choices to choicebox for the Tiebreaker box.
          * Also upon change sets the new tiebreaker rule to the tournament model. */
-        tieBreakerChoiceBox.setItems(FXCollections.observableArrayList(new TieBreakerBySeed(), new TieBreakerByGoalDiff()));
-        tieBreakerChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> Tournament.get().setTieBreaker(newValue));
-        tieBreakerChoiceBox.getSelectionModel().select(0);
+        ObservableList<TieBreaker> tieBreakers = FXCollections.observableArrayList(new TieBreakerBySeed(), new TieBreakerByGoalDiff());
+
+        tieBreakerChoiceBox.setItems(tieBreakers);
+        tieBreakerChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (!(Tournament.get().getTieBreaker().getClass().isInstance(newValue))) {
+                Tournament.get().setTieBreaker(newValue);
+            }
+        });
+        for (TieBreaker aTiebreaker : tieBreakers){
+            TieBreaker chosenTiebreaker = Tournament.get().getTieBreaker();
+            if (chosenTiebreaker.equals(aTiebreaker)){
+                tieBreakerChoiceBox.getSelectionModel().select(aTiebreaker);
+            } else {
+                tieBreakerChoiceBox.getSelectionModel().select(0);
+            }
+        }
 
         /* By default the stage settings are hidden.
          * This listener is used to show the stage settings when there is at least one Stage added.

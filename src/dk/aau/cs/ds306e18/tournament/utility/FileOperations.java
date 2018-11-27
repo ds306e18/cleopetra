@@ -2,6 +2,7 @@ package dk.aau.cs.ds306e18.tournament.utility;
 
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -111,8 +112,17 @@ public class FileOperations {
      * @return a Tournament object if successful, else null
      */
     public static Tournament readTournamentFromFilesystem(String fqn) {
-        //return readSerializedTournament(checkFilenameInString(checkTrailingSlash(fqn), stateFilename));
-        return readSerializedTournament(fqn);
+        return readSerializedTournament(checkFilenameInString(checkTrailingSlash(fqn), stateFilename));
+    }
+
+    /**
+     * Reads serialized Tournament object from filesystem, deserializes it, and returns it
+     *
+     * @param file the fully qualified file
+     * @return a Tournament object if successful, else null
+     */
+    public static Tournament readTournamentFromFilesystem(File file) {
+        return readSerializedTournament(file.getAbsolutePath());
     }
 
     /**
