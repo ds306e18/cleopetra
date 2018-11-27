@@ -28,9 +28,9 @@ public class LauncherController {
         systemStage.setMinHeight(650);
         systemStage.setTitle("DatTournament Runner");
 
+        // Set the correct scene for the system stage.
         try {
             AnchorPane systemRoot = FXMLLoader.load(LauncherController.class.getResource("layout/MainLayout.fxml"));
-
             systemStage.setScene(new Scene(systemRoot));
         } catch (IOException e) {
             System.out.println(e.getMessage());
@@ -73,18 +73,18 @@ public class LauncherController {
 
     @FXML
     void openLocalTournament(ActionEvent event) {
-        // TODO: Filechooser start directory
-
+        // Set file extension.
         String extension = "rlts";
 
+        // Create Filechooser and add extensionfilter and set initial directory to users documents folder.
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open tournament file");
-        // Set extension filter
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Tournament format (*." + extension + ")", "*." + extension));
         fileChooser.setInitialDirectory(new File(System.getProperty("user.home") + (File.separatorChar + "Documents")));
 
         File file = fileChooser.showOpenDialog(getLauncherStage());
 
+        // Deserialize and set the loaded tournament. Then show the main stage.
         if (file != null){
             Tournament.get().setTournament(FileOperations.readTournamentFromFilesystem(file));
             Stage systemStage = createSystemStage();
