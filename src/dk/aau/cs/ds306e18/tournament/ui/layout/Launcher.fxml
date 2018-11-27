@@ -27,16 +27,8 @@
                         <Rectangle2D />
                      </viewport>
                   </ImageView>
-                  <Button mnemonicParsing="false" onAction="#createNewTournament" prefHeight="27.0" prefWidth="200.0" text="Create new tournament">
-                     <font>
-                        <Font name="System Italic" size="12.0" />
-                     </font>
-                  </Button>
-                  <Button mnemonicParsing="false" onAction="#openLocalTournament" prefHeight="27.0" prefWidth="200.0" text="Open local tournament">
-                     <font>
-                        <Font name="System Italic" size="12.0" />
-                     </font>
-                  </Button>
+                  <Button mnemonicParsing="false" onAction="#createNewTournament" prefHeight="27.0" prefWidth="120.0" text="New" />
+                  <Button mnemonicParsing="false" onAction="#openLocalTournament" prefHeight="27.0" prefWidth="120.0" text="Open" />
                </children>
                <HBox.margin>
                   <Insets />
