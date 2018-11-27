@@ -32,7 +32,7 @@ public class FileOperationsTest {
             assertFalse(true);
         }
         Tournament reserializedTournament = FileOperations.readTournamentFromFilesystem("");
-        assertEquals(reserializedTournament, tournament);
+        assertEquals(tournament, reserializedTournament);
     }
 
     @Test
