@@ -45,7 +45,7 @@
                 </Tab>
             </tabs>
         </TabPane>
-      <ImageView fitHeight="25.0" fitWidth="25.0" layoutY="17.0" onMouseClicked="#onSaveIconClicked" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="10.0">
+      <ImageView id="mainSaveButton" fitHeight="20.0" fitWidth="20.0" layoutX="770.0" layoutY="20.0" onMouseClicked="#onSaveIconClicked" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="10.0">
          <image>
             <Image url="@images/save.png" />
          </image>
