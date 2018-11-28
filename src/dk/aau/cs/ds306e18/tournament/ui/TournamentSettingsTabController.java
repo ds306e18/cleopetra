@@ -5,7 +5,6 @@ import dk.aau.cs.ds306e18.tournament.model.format.SwissFormat;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreakerByGoalDiff;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreakerBySeed;
-import dk.aau.cs.ds306e18.tournament.ui.StageFormatOption;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
@@ -96,8 +95,13 @@ public class TournamentSettingsTabController {
 
         /* Setup teams wanted in stage spinner */
         teamsInStageSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(2, Integer.MAX_VALUE));
-        teamsInStageSpinner.getValueFactory().valueProperty().addListener((observable, oldValue, newValue) -> {
-            getSelectedStage().setNumberOfTeamsWanted(newValue);
+        teamsInStageSpinner.getEditor().textProperty().addListener((obs, oldValue, newValue) -> {
+            try {
+                int value = Integer.valueOf(newValue); //This will throw the exception if the value not only contains numbers
+                getSelectedStage().setNumberOfTeamsWanted(value);
+            } catch (NumberFormatException e) {
+                teamsInStageSpinner.getEditor().setText("2"); //Setting default value
+            }
         });
 
         /* Retrieve possible formats and add to a choicebox */
