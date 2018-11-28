@@ -15,6 +15,9 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainController {
 
     @FXML public GridPane tournamentSettingsTabContent;

@@ -3,6 +3,7 @@ package dk.aau.cs.ds306e18.tournament.utility;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dk.aau.cs.ds306e18.tournament.model.Stage;
+import dk.aau.cs.ds306e18.tournament.model.StageStatus;
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import dk.aau.cs.ds306e18.tournament.model.format.Format;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
@@ -41,7 +42,11 @@ public class Serializer {
      */
     public static Tournament deserialize(String json) {
         Tournament tournament = gson.fromJson(json, Tournament.class);
-        for (Stage stage : tournament.getStages()) stage.getFormat().repair();
+        for (Stage stage : tournament.getStages()) {
+            if (stage.getFormat().getStatus() != StageStatus.PENDING) {
+                stage.getFormat().repair();
+            }
+        }
         return tournament;
     }
 }

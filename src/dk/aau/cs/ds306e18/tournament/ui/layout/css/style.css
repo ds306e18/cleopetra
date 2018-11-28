@@ -238,3 +238,10 @@
 #mainSaveButton:pressed {
     -fx-opacity: 0.5;
 }
+
+/* Launcher specific styling */
+#launcerMain {
+    -fx-stroke-type: inside;
+    -fx-stroke-width: 1;
+    -fx-stroke: #c1c1c1;
+}

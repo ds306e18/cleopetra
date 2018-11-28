@@ -173,4 +173,8 @@ public class Tournament {
     public int hashCode() {
         return Objects.hash(getName(), getTeams(), getStages(), getTieBreaker(), started, currentStageIndex);
     }
+
+    public void setTournament (Tournament newTournament) {
+        instance = newTournament;
+    }
 }
