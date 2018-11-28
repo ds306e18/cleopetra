@@ -8,6 +8,7 @@ import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import dk.aau.cs.ds306e18.tournament.model.format.Format;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchChangeListener;
+import dk.aau.cs.ds306e18.tournament.model.match.MatchStatus;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.ModelCoupledUI;
@@ -88,6 +89,8 @@ public class BracketOverviewTabController implements MatchChangeListener {
             showFormat(tournament.getCurrentStage().getFormat());
             updateStageNavigationButtons();
         }
+
+        updateTeamViewer(selectedMatch == null ? null : selectedMatch.getShowedMatch());
     }
 
     public void showLeaderboard(boolean state) {
@@ -248,6 +251,19 @@ public class BracketOverviewTabController implements MatchChangeListener {
             orangeTeamScore.setText("");
             orangeTeamListView.setItems(null);
             orangeTeamListView.refresh();
+        }
+
+        updateMatchPlayAndEditButtons();
+    }
+
+    /** Disables/Enables the play and edit match buttons */
+    public void updateMatchPlayAndEditButtons() {
+        if (selectedMatch == null || selectedMatch.getShowedMatch().getStatus() == MatchStatus.NOT_PLAYABLE) {
+            editMatchBtn.setDisable(true);
+            playMatchBtn.setDisable(true);
+        } else {
+            editMatchBtn.setDisable(false);
+            playMatchBtn.setDisable(false); // If match can't be played an error popup is displayed explaining why
         }
     }
 
