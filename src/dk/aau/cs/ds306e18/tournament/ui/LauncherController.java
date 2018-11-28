@@ -2,6 +2,7 @@ package dk.aau.cs.ds306e18.tournament.ui;
 
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import dk.aau.cs.ds306e18.tournament.utility.FileOperations;
+import dk.aau.cs.ds306e18.tournament.utility.SaveLoad;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -87,6 +88,7 @@ public class LauncherController {
         // Deserialize and set the loaded tournament. Then show the main stage.
         if (file != null){
             Tournament.get().setTournament(FileOperations.readTournamentFromFilesystem(file));
+            SaveLoad.lastSavedDirectory = file.getParentFile();
             Stage systemStage = createSystemStage();
             getLauncherStage().hide();
             systemStage.show();
