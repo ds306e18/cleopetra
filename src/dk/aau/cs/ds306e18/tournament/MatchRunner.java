@@ -25,7 +25,7 @@ public class MatchRunner {
         }
 
         try {
-            // Set up config file
+            // Set up rlbot config file
             ConfigFileEditor.readConfig(settings.getConfigPath());
             ConfigFileEditor.configureMatch(match);
             ConfigFileEditor.writeConfig(settings.getConfigPath());
@@ -59,22 +59,34 @@ public class MatchRunner {
     /** Check the requirements for starting the match. Throws an IllegalStateException if anything is wrong.
      * Does nothing if everything is okay. */
     private static void checkMatch(RLBotSettings settings, Match match) {
-        if (!settings.isConfigValid()) {
-            throw new IllegalStateException("Error with RLBot config file.");
-        }
+        // These methods throws IllegalStageException if anything is wrong
+        checkRLBotSettings(settings);
+        checkBotConfigsInMatch(match);
+    }
 
-        checkBotConfigsInMatch(match); // throws IllegalStageException too
+    /** Checks rlbot settings. Throws an IllegalStateException if anything is wrong. Does nothing if everything is okay. */
+    private static void checkRLBotSettings(RLBotSettings settings) {
+        // Check if rlbot.cfg set
+        String configPath = settings.getConfigPath();
+        if (configPath == null || configPath.isEmpty())
+            throw new IllegalStateException("RLBot config file is not set.");
 
-        Path pathToDirectory = Paths.get(settings.getConfigPath()).getParent();
-        File runner = new File(pathToDirectory.toFile(), "run.py");
+        // Check if rlbot.cfg exists
+        File cfg = new File(configPath);
+        if (!cfg.exists() || !cfg.isFile() || cfg.isDirectory())
+            throw new IllegalStateException("Could not find rlbot config file (\"" + configPath + "\")");
+
+        // Check if run.py exists in same directory
+        File runner = new File(cfg.getParent(), "run.py");
         if (!runner.exists()) {
-            throw new IllegalStateException("Could not find: " + runner.getAbsolutePath());
+            throw new IllegalStateException("Could not find run.py next to the rlbot config file (\"" + runner.getAbsolutePath() + "\")");
         }
     }
 
     /** Throws an IllegalStateException if anything is wrong with the bots' config files for this match.
      * Does nothing if all the bots on both teams have a valid config file in a given match. */
     private static void checkBotConfigsInMatch(Match match) {
+        // Check if there are two teams
         if (match.getBlueTeam() == null) throw new IllegalStateException("There is no blue team for this match.");
         if (match.getOrangeTeam() == null) throw new IllegalStateException("There is no orange team for this match.");
 
@@ -85,11 +97,12 @@ public class MatchRunner {
         for (Bot bot : bots) {
             String path = bot.getConfigPath();
 
+            // Check if bot cfg is set
             if (path == null || path.isEmpty())
                 throw new IllegalStateException("The bot '" + bot.getName() + "' has no config file.");
 
+            // Check if bot cfg exists
             File file = new File(path);
-
             if (!file.exists() || !file.isFile() || file.isDirectory())
                 throw new IllegalStateException("The config file of the bot named '" + bot.getName()
                         + "' is not found (path: '" + path + ")'");
