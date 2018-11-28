@@ -11,10 +11,9 @@ public class Stage {
     private int numberOfTeamsWanted = 16;
     private int id;
 
-    public Stage(String name, Format format, int id) {
+    public Stage(String name, Format format) {
         this.name = name;
         this.format = format;
-        this.id = id;
     }
 
     public String getName() {
@@ -31,6 +30,12 @@ public class Stage {
 
     public int getId() {
         return id;
+    }
+
+    void setId(int id) {
+        if (this.format.getStatus() != StageStatus.PENDING)
+            throw new IllegalStateException("Stage has already started.");
+        this.id = id;
     }
 
     public void setFormat(Format format) {

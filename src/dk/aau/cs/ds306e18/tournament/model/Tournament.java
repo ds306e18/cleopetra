@@ -65,16 +65,25 @@ public class Tournament {
     public void addStage(Stage stage) {
         if (started) throw new IllegalStateException("Tournament has already started.");
         stages.add(stage);
+        stage.setId(stages.size());
     }
 
     public void removeStage(Stage stage) {
         if (started) throw new IllegalStateException("Tournament has already started.");
         stages.remove(stage);
+        recalculateStageIds();
     }
 
     public void removeStage(int index) {
         if (started) throw new IllegalStateException("Tournament has already started.");
         stages.remove(index);
+        recalculateStageIds();
+    }
+
+    private void recalculateStageIds() {
+        for (int i = 0; i < stages.size(); i++) {
+            stages.get(i).setId(i + 1);
+        }
     }
 
     public List<Stage> getStages() {
@@ -83,6 +92,7 @@ public class Tournament {
 
     public void swapStages(Stage primaryStage, Stage secondaryStage) {
         Collections.swap(stages, stages.indexOf(primaryStage), stages.indexOf(secondaryStage));
+        recalculateStageIds();
     }
 
     /** Returns the number of stages that has not started yet. */
