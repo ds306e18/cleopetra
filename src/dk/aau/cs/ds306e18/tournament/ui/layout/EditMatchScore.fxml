@@ -73,7 +73,7 @@
                <children>
                   <Button disable="true" mnemonicParsing="false" onAction="#FetchBtnPressed" text="Fetch from RL" />
                   <Pane minWidth="90.0" HBox.hgrow="ALWAYS" />
-                  <Button minWidth="65.0" mnemonicParsing="false" onAction="#onSaveBtnPressed" text="Save">
+                  <Button minWidth="65.0" mnemonicParsing="false" onAction="#onSaveBtnPressed" text="Save" fx:id="saveButton">
                      <HBox.margin>
                         <Insets right="8.0" />
                      </HBox.margin>

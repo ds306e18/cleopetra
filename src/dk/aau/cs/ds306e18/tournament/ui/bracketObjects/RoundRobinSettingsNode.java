@@ -20,12 +20,19 @@ public class RoundRobinSettingsNode extends BorderPane {
         setLeft(groupsLabel);
 
         // Groups spinner
-        Spinner<Integer> GroupsSpinner = new Spinner<>(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, Integer.MAX_VALUE));
-        GroupsSpinner.setEditable(true);
-        GroupsSpinner.getValueFactory().setValue(roundRobin.getNumberOfGroups());
-        GroupsSpinner.getValueFactory().valueProperty().addListener((observable, oldValue, newValue) -> {
-            roundRobin.setNumberOfGroups(newValue);
+        Spinner<Integer> groupsSpinner = new Spinner<>(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, Integer.MAX_VALUE));
+        groupsSpinner.setEditable(true);
+        groupsSpinner.getValueFactory().setValue(roundRobin.getNumberOfGroups());
+        groupsSpinner.getEditor().textProperty().addListener((obs, oldValue, newValue) -> {
+            try {
+                int value = Integer.valueOf(newValue); //This will throw the exception if the value not only contains numbers
+                roundRobin.setNumberOfGroups(value);
+
+            } catch (NumberFormatException e) {
+                groupsSpinner.getEditor().setText("1"); //Setting default value
+            }
         });
-        setRight(GroupsSpinner);
+
+        setRight(groupsSpinner);
     }
 }

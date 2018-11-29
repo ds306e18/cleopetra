@@ -8,15 +8,14 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-<AnchorPane id="launcherMain" fx:id="baseAnchorpane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="500.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.LauncherController">
+<AnchorPane id="launcherMain" fx:id="baseAnchorpane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="500.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/" fx:controller="dk.aau.cs.ds306e18.tournament.ui.LauncherController">
    <children>
       <HBox alignment="CENTER" prefHeight="350.0" prefWidth="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <VBox alignment="TOP_CENTER" prefHeight="350.0" prefWidth="300.0" spacing="10.0">
                <children>
-                  <ImageView fitHeight="120.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="115.0" fitWidth="398.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@images/logo.png" />
                      </image>
@@ -34,7 +33,7 @@
                   <Insets />
                </HBox.margin>
                <padding>
-                  <Insets bottom="20.0" top="20.0" />
+                  <Insets bottom="20.0" top="30.0" />
                </padding>
             </VBox>
          </children>

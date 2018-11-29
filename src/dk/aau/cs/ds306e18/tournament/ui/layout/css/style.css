@@ -34,7 +34,7 @@
 }
 #tabPane .tab:selected {
     -fx-background-color: #FFF;
-    -fx-border-width: 2 1 1 1;
+    -fx-border-width: 2 1 0 1;
     -fx-border-color: #34C5E2 #c2c2c2 #c2c2c2 #c2c2c2;
 }
 
@@ -227,6 +227,16 @@
 {
     -fx-padding: 0;
     -fx-shape: "";
+}
+
+/* TODO: Make the save button from icon-font instead of an .png. In order to change colors instead of opacity. */
+/* MainLayout -> Save button */
+#mainSaveButton:hover {
+    -fx-opacity: 0.8;
+}
+
+#mainSaveButton:pressed {
+    -fx-opacity: 0.5;
 }
 
 /* Launcher specific styling */

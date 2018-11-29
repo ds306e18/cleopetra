@@ -2,6 +2,7 @@ package dk.aau.cs.ds306e18.tournament.ui;
 
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import dk.aau.cs.ds306e18.tournament.utility.FileOperations;
+import dk.aau.cs.ds306e18.tournament.utility.SaveLoad;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -35,30 +36,12 @@ public class ExitProgramController {
     }
 
     @FXML
-    void saveTournament(ActionEvent event) {
+    public void saveTournament() {
         /* TODO: Handle if filechooser was closed during selection */
-
-        boolean writeStatus = false;
-        String extension = "rlts";
 
         Stage stage = (Stage) cancelBtn.getScene().getWindow();
 
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Choose file name and save destination");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Tournament format (*." + extension + ")", "*." + extension));
-        fileChooser.setInitialFileName(Tournament.get().getName() + "." + extension);
-
-        File file = fileChooser.showSaveDialog(stage);
-
-        if (file != null) {
-            try {
-                writeStatus = FileOperations.writeTournamentToFilesystem(file.getParent(), file.getName(), extension, Tournament.get());
-            } catch (IOException e) {
-                System.out.println("ERROR: Caught IOException when writing to " + file.getAbsolutePath() + ". " + e.getMessage());
-            }
-        }
-
-        if (writeStatus) {
+        if (SaveLoad.saveTournament(stage)) {
             System.exit(0);
         }
     }
