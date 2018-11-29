@@ -114,15 +114,21 @@ public class TournamentSettingsTabController {
                 selectedStage.setFormat(newValue.getNewInstance());
             }
 
-            // Show settings unique to format
-            formatUniqueSettingsHolder.getChildren().clear();
-            if (selectedStage != null) {
-                Node formatSettings = selectedStage.getFormat().getSettingsFXNode();
-                if (formatSettings != null) {
-                    formatUniqueSettingsHolder.getChildren().add(selectedStage.getFormat().getSettingsFXNode());
-                }
-            }
+            updateFormatUniqueSettings();
         });
+    }
+
+    /** Updates the settings unique to the selected stage's format */
+    public void updateFormatUniqueSettings() {
+
+        Stage selectedStage = getSelectedStage();
+        formatUniqueSettingsHolder.getChildren().clear();
+        if (selectedStage != null) {
+            Node formatSettings = selectedStage.getFormat().getSettingsFXNode();
+            if (formatSettings != null) {
+                formatUniqueSettingsHolder.getChildren().add(selectedStage.getFormat().getSettingsFXNode());
+            }
+        }
     }
 
     @FXML
@@ -177,6 +183,8 @@ public class TournamentSettingsTabController {
                 teamsInStageSpinner.setVisible(false);
             }
         }
+
+        updateFormatUniqueSettings();
     }
 
     /**
