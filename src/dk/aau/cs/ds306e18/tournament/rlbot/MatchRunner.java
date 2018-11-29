@@ -1,7 +1,8 @@
-package dk.aau.cs.ds306e18.tournament;
+package dk.aau.cs.ds306e18.tournament.rlbot;
 
 import dk.aau.cs.ds306e18.tournament.model.Bot;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import dk.aau.cs.ds306e18.tournament.utility.Alerts;
 import dk.aau.cs.ds306e18.tournament.utility.ConfigFileEditor;
 
 import java.io.File;
@@ -19,8 +20,7 @@ public class MatchRunner {
         try {
             checkMatch(settings, match);
         } catch (IllegalStateException e) {
-            // TODO Show error notification
-            System.err.println(e.getMessage());
+            Alerts.errorNotification("Error occurred while starting match", e.getMessage());
             return false;
         }
 
@@ -35,8 +35,9 @@ public class MatchRunner {
             // We assume that the runner is in the same folder as the rlbot.cfg
             Path pathToDirectory = Paths.get(settings.getConfigPath()).getParent();
             String command = String.format(COMMAND_FORMAT, pathToDirectory, pathToDirectory);
-            System.out.println(command);
+            System.out.println("Running command: " + command);
             Runtime.getRuntime().exec(command);
+            System.out.println("Started RLBot framework");
             return true;
 
         } catch (Exception err) {
@@ -69,17 +70,17 @@ public class MatchRunner {
         // Check if rlbot.cfg set
         String configPath = settings.getConfigPath();
         if (configPath == null || configPath.isEmpty())
-            throw new IllegalStateException("RLBot config file is not set.");
+            throw new IllegalStateException("The RLBot config file (rlbot.cfg) is not set in RLBot Settings.");
 
         // Check if rlbot.cfg exists
         File cfg = new File(configPath);
         if (!cfg.exists() || !cfg.isFile() || cfg.isDirectory())
-            throw new IllegalStateException("Could not find rlbot config file (\"" + configPath + "\")");
+            throw new IllegalStateException("Could not find RLBot config file (\"" + configPath + "\")");
 
         // Check if run.py exists in same directory
         File runner = new File(cfg.getParent(), "run.py");
         if (!runner.exists()) {
-            throw new IllegalStateException("Could not find run.py next to the rlbot config file (\"" + runner.getAbsolutePath() + "\")");
+            throw new IllegalStateException("Could not find run.py next to the RLBot config file (\"" + runner.getAbsolutePath() + "\")");
         }
     }
 
