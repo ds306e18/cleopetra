@@ -1,5 +1,6 @@
 package dk.aau.cs.ds306e18.tournament.ui;
 
+import dk.aau.cs.ds306e18.tournament.MatchRunner;
 import dk.aau.cs.ds306e18.tournament.model.Bot;
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.StageStatus;
@@ -7,6 +8,7 @@ import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import dk.aau.cs.ds306e18.tournament.model.format.Format;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchChangeListener;
+import dk.aau.cs.ds306e18.tournament.model.match.MatchStatus;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.ModelCoupledUI;
@@ -86,6 +88,8 @@ public class BracketOverviewTabController implements MatchChangeListener {
             showStage(tournament.getCurrentStage());
             updateStageNavigationButtons();
         }
+
+        updateTeamViewer(selectedMatch == null ? null : selectedMatch.getShowedMatch());
     }
 
     public void showLeaderboard(boolean state) {
@@ -250,6 +254,19 @@ public class BracketOverviewTabController implements MatchChangeListener {
             orangeTeamListView.setItems(null);
             orangeTeamListView.refresh();
         }
+
+        updateMatchPlayAndEditButtons();
+    }
+
+    /** Disables/Enables the play and edit match buttons */
+    public void updateMatchPlayAndEditButtons() {
+        if (selectedMatch == null || selectedMatch.getShowedMatch().getStatus() == MatchStatus.NOT_PLAYABLE) {
+            editMatchBtn.setDisable(true);
+            playMatchBtn.setDisable(true);
+        } else {
+            editMatchBtn.setDisable(false);
+            playMatchBtn.setDisable(false); // If match can't be played an error popup is displayed explaining why
+        }
     }
 
     /**
@@ -321,5 +338,9 @@ public class BracketOverviewTabController implements MatchChangeListener {
 
         setSelectedMatch(null);
         updateStageNavigationButtons();
+    }
+
+    public void onPlayMatchBtnAction(ActionEvent actionEvent) {
+        MatchRunner.startMatch(Tournament.get().getRlBotSettings(), selectedMatch.getShowedMatch());
     }
 }

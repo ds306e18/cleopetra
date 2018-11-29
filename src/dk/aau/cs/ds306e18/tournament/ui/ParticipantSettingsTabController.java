@@ -100,8 +100,9 @@ public class ParticipantSettingsTabController {
             else
                 fileChooser.setInitialDirectory(null);
 
-            List<File> files = Arrays.asList(file);
-            setConfigPathText(files);
+            Bot selectedBot = botsListView.getSelectionModel().getSelectedItem();
+            selectedBot.setConfigPath(file.getAbsolutePath());
+            updateConfigPathTextField();
         }
     }
 
@@ -205,7 +206,7 @@ public class ParticipantSettingsTabController {
             botNameTextField.setText(selectedBot.getName());
             developerTextField.setText(selectedBot.getDeveloper());
             botDescription.setText(selectedBot.getDescription());
-            configPathTextField.setText(selectedBot.getConfigPath());
+            updateConfigPathTextField();
 
         } else {
             //if no bot is selected clear the fields and hide the botsettgins box.
@@ -285,31 +286,18 @@ public class ParticipantSettingsTabController {
         }
     }
 
-    /** Sets the configPath text and changes the path for the selected bot */
-    private void setConfigPathText(List<File> files) {
-        if (files == null || files.isEmpty()) {
-            return;
+    /** Updates the text display by the config path text field. */
+    private void updateConfigPathTextField() {
+        Bot selectedBot = botsListView.getSelectionModel().getSelectedItem();
+        if (selectedBot != null) {
+            String path = selectedBot.getConfigPath();
+            if (path != null && !path.isEmpty()) {
+                File file = new File(selectedBot.getConfigPath());
+                String parentparent = file.getParentFile().getParent();
+                String shortPath = parentparent == null ? file.getPath() : file.getPath().replace(parentparent, "");
+                configPathTextField.setText(shortPath);
+            }
         }
-        for (File file : files) {
-            //Format path to be shown
-
-            //If there is more than two backslashes in string, then display shorter string
-            if (CharMatcher.is('\\').countIn(file.getAbsolutePath()) > 2)
-                configPathTextField.setText("." + getShortFilePath(file.getPath()));
-            else
-                configPathTextField.setText(file.getAbsolutePath());
-
-            botsListView.getSelectionModel().getSelectedItem().setConfigPath(file.getAbsolutePath());
-        }
-    }
-
-    /** @return a substring from the given string starting from the second last backslash. */
-    private String getShortFilePath(String path) {
-
-        String string = path.replace("\\", "/");
-        int lastSlashIndex = string.lastIndexOf("/");
-        int secondLastSlashIndex = string.lastIndexOf("/", lastSlashIndex - 1);
-        return string.substring(secondLastSlashIndex);
     }
 
     /** @return the given path as a string with one file and one folder removed. */

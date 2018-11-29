@@ -1,5 +1,6 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
+import dk.aau.cs.ds306e18.tournament.RLBotSettings;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreakerBySeed;
 
@@ -21,12 +22,17 @@ public class Tournament {
     public static final int START_REQUIREMENT_TEAMS = 2;
     public static final int START_REQUIREMENT_STAGES = 1;
 
+    private RLBotSettings rlBotSettings = new RLBotSettings();
     private String name = "Unnamed Tournament";
     private ArrayList<Team> teams = new ArrayList<>();
     private ArrayList<Stage> stages = new ArrayList<>();
     private TieBreaker tieBreaker = new TieBreakerBySeed();
     private boolean started = false;
     private int currentStageIndex = -1;
+
+    public RLBotSettings getRlBotSettings() {
+        return rlBotSettings;
+    }
 
     public String getName() {
         return name;
@@ -173,6 +179,7 @@ public class Tournament {
         Tournament that = (Tournament) o;
         return started == that.started &&
                 currentStageIndex == that.currentStageIndex &&
+                Objects.equals(getRlBotSettings(), that.getRlBotSettings()) &&
                 Objects.equals(getName(), that.getName()) &&
                 Objects.equals(getTeams(), that.getTeams()) &&
                 Objects.equals(getStages(), that.getStages()) &&
@@ -181,7 +188,7 @@ public class Tournament {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getName(), getTeams(), getStages(), getTieBreaker(), started, currentStageIndex);
+        return Objects.hash(getRlBotSettings(), getName(), getTeams(), getStages(), getTieBreaker(), started, currentStageIndex);
     }
 
     public void setTournament (Tournament newTournament) {
