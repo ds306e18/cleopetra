@@ -1,7 +1,5 @@
 package dk.aau.cs.ds306e18.tournament.ui;
 
-import com.google.common.base.CharMatcher;
-import dk.aau.cs.ds306e18.tournament.RLBotSettings;
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,8 +11,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.List;
 
 public class RLBotSettingsTabController {
 

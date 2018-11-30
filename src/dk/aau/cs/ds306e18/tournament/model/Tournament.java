@@ -1,6 +1,6 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
-import dk.aau.cs.ds306e18.tournament.RLBotSettings;
+import dk.aau.cs.ds306e18.tournament.rlbot.RLBotSettings;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreakerBySeed;
 
