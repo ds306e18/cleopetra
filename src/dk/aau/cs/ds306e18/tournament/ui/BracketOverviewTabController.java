@@ -343,4 +343,8 @@ public class BracketOverviewTabController implements MatchChangeListener {
     public void onPlayMatchBtnAction(ActionEvent actionEvent) {
         MatchRunner.startMatch(Tournament.get().getRlBotSettings(), selectedMatch.getShowedMatch());
     }
+
+    public void modifyConfigButtonOnAction(ActionEvent actionEvent) {
+        // TODO Add functionality
+    }
 }
