@@ -15,7 +15,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<GridPane id="mainGrid" fx:id="bracketOverviewTab" prefHeight="572.0" prefWidth="800.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.BracketOverviewTabController">
+<GridPane id="mainGrid" fx:id="bracketOverviewTab" prefHeight="572.0" prefWidth="800.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/" fx:controller="dk.aau.cs.ds306e18.tournament.ui.BracketOverviewTabController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="0.0" prefWidth="0.0" />
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -103,7 +103,7 @@
             </GridPane>
             <HBox alignment="TOP_CENTER">
                <children>
-                  <Button fx:id="playMatchBtn1" mnemonicParsing="false" onAction="#onPlayMatchBtnAction" prefHeight="27.0" prefWidth="236.0" text="Play using RLBot" />
+                  <Button fx:id="playMatchBtn" mnemonicParsing="false" onAction="#onPlayMatchBtnAction" prefHeight="27.0" prefWidth="236.0" text="Play using RLBot" />
                </children>
                <padding>
                   <Insets bottom="16.0" />
