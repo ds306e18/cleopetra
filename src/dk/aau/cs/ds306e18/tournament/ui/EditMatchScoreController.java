@@ -1,6 +1,7 @@
 package dk.aau.cs.ds306e18.tournament.ui;
 
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import dk.aau.cs.ds306e18.tournament.utility.Alerts;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -129,12 +130,21 @@ public class EditMatchScoreController {
 
     @FXML
     private void onSaveBtnPressed(ActionEvent actionEvent) {
-        // TODO Check if this cause problems (e.g. changing the winner if match when it was already played) and warn user
-        match.setScores(
-                Integer.parseInt(blueScoreSpinner.getEditor().getText()),
-                Integer.parseInt(orangeScoreSpinner.getEditor().getText()),
-                matchOverCheckBox.isSelected()
-        );
-        closeWindow();
+
+        int blueScore = Integer.parseInt(blueScoreSpinner.getEditor().getText());
+        int orangeScore = Integer.parseInt(orangeScoreSpinner.getEditor().getText());
+        boolean played = matchOverCheckBox.isSelected();
+        try {
+            match.setScores(blueScore, orangeScore, played);
+            closeWindow();
+
+        } catch (IllegalStateException e) {
+            // An IllegalStateException is thrown if the outcome has changed and subsequent matches depends on this outcome
+            boolean proceed = Alerts.confirmAlert("The outcome of this match has changed", "This change will reset the subsequent matches. Do you want to proceed?");
+            if (proceed) {
+                match.setResult(blueScore, orangeScore, played, true);
+                closeWindow();
+            }
+        }
     }
 }

@@ -369,22 +369,23 @@ public final class Match {
         setResult(blueScore, orangeScore, hasBeenPlayed, false);
     }
 
-    public void setResult(int blueScore, int orangeScore, boolean hasBeenPlayed, boolean forceResetOfFollowingMatches) {
+    public void setResult(int blueScore, int orangeScore, boolean hasBeenPlayed, boolean forceResetSubsequentMatches) {
 
         if (!isReadyToPlay()) throw new IllegalStateException("Match is not playable");
 
         if (willOutcomeChange(blueScore, orangeScore, hasBeenPlayed)) {
-            // Are there any following matches that has been played?
+            // Are there any subsequent matches that has been played?
             if ((winnerDestination != null && winnerDestination.hasBeenPlayed())
                     || (loserDestination != null && loserDestination.hasBeenPlayed())) {
-                // A following match has been played. Should it be reset?
-                if (forceResetOfFollowingMatches) {
+                // A subsequent match has been played. Should it be reset?
+                if (forceResetSubsequentMatches) {
                     if (winnerDestination != null) winnerDestination.forceReset();
                     if (loserDestination != null) loserDestination.forceReset();
                 } else {
-                    throw new IllegalStateException("Could not change result. A following match depends on current" +
-                            "result and that match has been played.");
+                    throw new MatchResultDependencyException();
                 }
+
+                // FIXME: Does not check if subsequent stages has started
             }
         }
 
