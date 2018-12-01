@@ -1,6 +1,7 @@
 package dk.aau.cs.ds306e18.tournament.ui;
 
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import dk.aau.cs.ds306e18.tournament.model.match.MatchResultDependencyException;
 import dk.aau.cs.ds306e18.tournament.utility.Alerts;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -138,8 +139,9 @@ public class EditMatchScoreController {
             match.setScores(blueScore, orangeScore, played);
             closeWindow();
 
-        } catch (IllegalStateException e) {
-            // An IllegalStateException is thrown if the outcome has changed and subsequent matches depends on this outcome
+        } catch (MatchResultDependencyException e) {
+            // An MatchResultDependencyException is thrown if the outcome has changed and subsequent matches depends on this outcome
+            // Ask if the user wants to proceed
             boolean proceed = Alerts.confirmAlert("The outcome of this match has changed", "This change will reset the subsequent matches. Do you want to proceed?");
             if (proceed) {
                 match.setResult(blueScore, orangeScore, played, true);
