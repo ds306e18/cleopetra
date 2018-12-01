@@ -350,26 +350,26 @@ public final class Match {
     }
 
     public void setHasBeenPlayed(boolean hasBeenPlayed) {
-        setResult(blueScore, orangeScore, hasBeenPlayed, false);
+        setScores(blueScore, orangeScore, hasBeenPlayed, false);
     }
 
     public void setBlueScore(int blueScore) {
-        setResult(blueScore, orangeScore, played, false);
+        setScores(blueScore, orangeScore, played, false);
     }
 
     public void setOrangeScore(int orangeScore) {
-        setResult(blueScore, orangeScore, played, false);
+        setScores(blueScore, orangeScore, played, false);
     }
 
     public void setScores(int blueScore, int orangeScore) {
-        setResult(blueScore, orangeScore, played, false);
+        setScores(blueScore, orangeScore, played, false);
     }
 
     public void setScores(int blueScore, int orangeScore, boolean hasBeenPlayed) {
-        setResult(blueScore, orangeScore, hasBeenPlayed, false);
+        setScores(blueScore, orangeScore, hasBeenPlayed, false);
     }
 
-    public void setResult(int blueScore, int orangeScore, boolean hasBeenPlayed, boolean forceResetSubsequentMatches) {
+    public void setScores(int blueScore, int orangeScore, boolean hasBeenPlayed, boolean forceResetSubsequentMatches) {
 
         if (!isReadyToPlay()) throw new IllegalStateException("Match is not playable");
 
@@ -390,7 +390,7 @@ public final class Match {
         }
 
         if (played) {
-            retractWinnerAndLoser(); // FIXME If a team had points at their destination, they still have those points. Same problem goes for transfer
+            retractWinnerAndLoser();
         }
 
         // Apply changes
@@ -408,7 +408,7 @@ public final class Match {
 
     /** Changes a match's result to be 0-0 and not played. If any matches depends on this match, those will also be reset. */
     public void forceReset() {
-        setResult(0, 0, false, true);
+        setScores(0, 0, false, true);
     }
 
     /** Returns true if the outcome and thus the state of this match change, if it had the given score instead. */
@@ -459,16 +459,17 @@ public final class Match {
 
     /**
      * Let the following matches know, that the winner or loser now found.
-     * Helper method to {@code setHasBeenPlayed(boolean)}
      */
     private void transferWinnerAndLoser() {
         if (getStatus() != MatchStatus.DRAW) {
             if (winnerDestination != null) {
+                if (winnerDestination.isReadyToPlay()) winnerDestination.setScores(0, 0); // There can be leftover scores
                 if (winnerGoesToBlue) winnerDestination.blueTeam = getWinner();
                 else winnerDestination.orangeTeam = getWinner();
                 winnerDestination.notifyMatchChangeListeners();
             }
             if (loserDestination != null) {
+                if (loserDestination.isReadyToPlay()) loserDestination.setScores(0, 0); // There can be leftover scores
                 if (loserGoesToBlue) loserDestination.blueTeam = getLoser();
                 else loserDestination.orangeTeam = getLoser();
                 loserDestination.notifyMatchChangeListeners();
@@ -478,15 +479,16 @@ public final class Match {
 
     /**
      * Let the following matches know, that the winner or loser is no longer defined.
-     * Helper method to {@code setHasBeenPlayed(boolean)}
      */
     private void retractWinnerAndLoser() {
         if (winnerDestination != null) {
+            if (winnerDestination.isReadyToPlay()) winnerDestination.setScores(0, 0);  // There can be leftover scores
             if (winnerGoesToBlue) winnerDestination.blueTeam = null;
             else winnerDestination.orangeTeam = null;
             winnerDestination.notifyMatchChangeListeners();
         }
         if (loserDestination != null) {
+            if (loserDestination.isReadyToPlay()) loserDestination.setScores(0, 0);  // There can be leftover scores
             if (loserGoesToBlue) loserDestination.blueTeam = null;
             else loserDestination.orangeTeam = null;
             loserDestination.notifyMatchChangeListeners();

@@ -144,7 +144,7 @@ public class EditMatchScoreController {
             // Ask if the user wants to proceed
             boolean proceed = Alerts.confirmAlert("The outcome of this match has changed", "This change will reset the subsequent matches. Do you want to proceed?");
             if (proceed) {
-                match.setResult(blueScore, orangeScore, played, true);
+                match.setScores(blueScore, orangeScore, played, true);
                 closeWindow();
             }
         }
