@@ -289,15 +289,21 @@ public class ParticipantSettingsTabController {
     /** Updates the text display by the config path text field. */
     private void updateConfigPathTextField() {
         Bot selectedBot = botsListView.getSelectionModel().getSelectedItem();
-        if (selectedBot != null) {
-            String path = selectedBot.getConfigPath();
-            if (path != null && !path.isEmpty()) {
-                File file = new File(selectedBot.getConfigPath());
-                String parentparent = file.getParentFile().getParent();
-                String shortPath = parentparent == null ? file.getPath() : file.getPath().replace(parentparent, "");
-                configPathTextField.setText(shortPath);
-            }
+        if (selectedBot == null) {
+            configPathTextField.setText("");
+            return;
         }
+
+        String path = selectedBot.getConfigPath();
+        if (path == null || path.isEmpty()) {
+            configPathTextField.setText("");
+            return;
+        }
+
+        File file = new File(selectedBot.getConfigPath());
+        String parentparent = file.getParentFile().getParent();
+        String shortPath = parentparent == null ? file.getPath() : file.getPath().replace(parentparent, "");
+        configPathTextField.setText(shortPath);
     }
 
     /** @return the given path as a string with one file and one folder removed. */
