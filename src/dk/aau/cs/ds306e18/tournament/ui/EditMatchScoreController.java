@@ -1,6 +1,7 @@
 package dk.aau.cs.ds306e18.tournament.ui;
 
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -45,7 +46,11 @@ public class EditMatchScoreController {
     private void setSpinnerListeners(){
         blueScoreSpinner.getEditor().textProperty().addListener((obs, oldValue, newValue) -> {
             try {
-                Integer.valueOf(newValue); //This will throw the exception if the value not only contains numbers
+                //This will throw the exception if the value not only contains numbers
+                if (Integer.valueOf(newValue) < 0){
+                    blueScoreSpinner.getEditor().textProperty().setValue("0");
+                }
+
                 isBlueScoreLegit = true;
                 isTeamScoresEqual();
                 if (isOrangeScoreLegit && isBlueScoreLegit){
@@ -60,7 +65,11 @@ public class EditMatchScoreController {
 
         orangeScoreSpinner.getEditor().textProperty().addListener((obs, oldValue, newValue) -> {
             try {
-                Integer.valueOf(newValue); //This will throw the exception if the value not only contains numbers
+                //This will throw the exception if the value not only contains numbers
+                if (Integer.valueOf(newValue) < 0){
+                    orangeScoreSpinner.getEditor().textProperty().setValue("0");
+                }
+
                 isOrangeScoreLegit = true;
                 isTeamScoresEqual();
                 if (isOrangeScoreLegit && isBlueScoreLegit){
@@ -72,6 +81,28 @@ public class EditMatchScoreController {
                 saveButton.setDisable(true);
             }
         });
+
+        // Have to call using Platform.Runlater because the spinner does something when it gains focus that interrupts.
+        blueScoreSpinner.getEditor().focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
+            if (isNowFocused){
+                Platform.runLater(blueScoreSpinner.getEditor()::selectAll);
+            }
+        });
+
+        orangeScoreSpinner.getEditor().focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
+            if (isNowFocused){
+                Platform.runLater(orangeScoreSpinner.getEditor()::selectAll);
+            }
+        });
+
+        blueScoreSpinner.valueProperty().addListener(((observable, oldValue, newValue) -> {
+            blueScoreSpinner.getEditor().selectAll();
+        }));
+
+        orangeScoreSpinner.valueProperty().addListener(((observable, oldValue, newValue) -> {
+            orangeScoreSpinner.getEditor().selectAll();
+        }));
+
     }
 
     public void setMatch(Match match) {
