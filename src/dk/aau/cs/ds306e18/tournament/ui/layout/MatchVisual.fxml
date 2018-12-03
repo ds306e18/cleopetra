@@ -10,7 +10,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Text?>
 
-<VBox id="matchPlayed" fx:id="matchRoot" maxHeight="46.0" maxWidth="124.0" onMouseClicked="#matchClicked" spacing="2.0" styleClass="match" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.MatchVisualController">
+<VBox id="matchPlayed" fx:id="matchRoot" maxHeight="46.0" maxWidth="124.0" onMouseClicked="#matchClicked" spacing="2.0" styleClass="match" xmlns="http://javafx.com/javafx/1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.MatchVisualController">
    <children>
       <HBox fx:id="hboxBlueTeam" alignment="CENTER_LEFT">
          <children>
