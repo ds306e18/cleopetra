@@ -18,7 +18,6 @@ public class Alerts {
      * @param text A short and precise explanation of the information wished to provide.
      */
     public static void infoNotification (String title, String text){
-        System.out.println(window);
         Notifications.create()
                 .title(title)
                 .text(text)

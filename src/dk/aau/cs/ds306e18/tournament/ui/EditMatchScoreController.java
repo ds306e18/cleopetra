@@ -96,6 +96,7 @@ public class EditMatchScoreController {
             matchOverCheckBox.setSelected(false);
         } else {
             matchOverCheckBox.setDisable(false);
+            matchOverCheckBox.setSelected(true);
         }
     }
 
