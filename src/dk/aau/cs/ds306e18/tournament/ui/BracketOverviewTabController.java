@@ -85,7 +85,7 @@ public class BracketOverviewTabController implements MatchChangeListener {
         } else {
             if (showedStageIndex == -1) showedStageIndex = 0;
             showStartTournamentInstructions(false);
-            showStage(tournament.getCurrentStage());
+            showStage(tournament.getStages().get(showedStageIndex));
             updateStageNavigationButtons();
         }
 
