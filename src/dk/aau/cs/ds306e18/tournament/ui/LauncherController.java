@@ -28,6 +28,7 @@ public class LauncherController {
         // Set min- width and height and title.
         systemStage.setMinWidth(800);
         systemStage.setMinHeight(650);
+        systemStage.setMaximized(true);
         systemStage.setTitle("DatTournament Runner");
 
         // Set the correct scene for the system stage.
