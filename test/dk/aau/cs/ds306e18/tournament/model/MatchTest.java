@@ -322,4 +322,80 @@ public class MatchTest {
         matchTwo.setOrangeToWinnerOf(matchThree);
         assertSame(tE, matchTwo.getOrangeTeam());
     }
+
+    @Test
+    public void teamScore01() {
+        Team teamA = new Team("A", null, 0, "a");
+        Team teamB = new Team("B", null, 0, "b");
+
+        Match matchOne = new Match(teamA, teamB);
+        matchOne.setScores(1, 3, false);
+
+        assertEquals(1, teamA.getGoalsScored());
+        assertEquals(3, teamA.getGoalsConceded());
+        assertEquals(3, teamB.getGoalsScored());
+        assertEquals(1, teamB.getGoalsConceded());
+    }
+
+    @Test
+    public void teamScore02() {
+        Team teamA = new Team("A", null, 0, "a");
+        Team teamB = new Team("B", null, 0, "b");
+
+        Match matchOne = new Match(teamA, teamB);
+        matchOne.setScores(5, 2, true);
+
+        assertEquals(5, teamA.getGoalsScored());
+        assertEquals(2, teamA.getGoalsConceded());
+        assertEquals(2, teamB.getGoalsScored());
+        assertEquals(5, teamB.getGoalsConceded());
+    }
+
+    @Test
+    public void teamScore03() {
+        Team teamA = new Team("A", null, 0, "a");
+        Team teamB = new Team("B", null, 0, "b");
+        Team teamC = new Team("C", null, 0, "c");
+
+        Match matchOne = new Match(teamA, teamB);
+        Match matchTwo = new Match().setBlue(teamC).setOrangeToWinnerOf(matchOne);
+        matchOne.setScores(2, 1, true);
+        matchTwo.setScores(4, 3, true);
+
+        assertEquals(5, teamA.getGoalsScored());
+        assertEquals(5, teamA.getGoalsConceded());
+        assertEquals(1, teamB.getGoalsScored());
+        assertEquals(2, teamB.getGoalsConceded());
+        assertEquals(4, teamC.getGoalsScored());
+        assertEquals(3, teamC.getGoalsConceded());
+    }
+
+    @Test
+    public void teamScore04() {
+        Team teamA = new Team("A", null, 0, "a");
+        Team teamB = new Team("B", null, 0, "b");
+        Team teamC = new Team("C", null, 0, "c");
+
+        Match matchOne = new Match(teamA, teamB);
+        Match matchTwo = new Match().setBlue(teamC).setOrangeToWinnerOf(matchOne);
+        matchOne.setScores(2, 1, true);
+        matchTwo.setScores(4, 3, false);
+
+        assertEquals(5, teamA.getGoalsScored());
+        assertEquals(5, teamA.getGoalsConceded());
+        assertEquals(1, teamB.getGoalsScored());
+        assertEquals(2, teamB.getGoalsConceded());
+        assertEquals(4, teamC.getGoalsScored());
+        assertEquals(3, teamC.getGoalsConceded());
+
+        // This reset should remove all scores. Also in match two that has not been played
+        matchOne.setScores(0, 0, false, true);
+
+        assertEquals(0, teamA.getGoalsScored());
+        assertEquals(0, teamA.getGoalsConceded());
+        assertEquals(0, teamB.getGoalsScored());
+        assertEquals(0, teamB.getGoalsConceded());
+        assertEquals(0, teamC.getGoalsScored());
+        assertEquals(0, teamC.getGoalsConceded());
+    }
 }
