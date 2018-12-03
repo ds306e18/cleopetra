@@ -1,6 +1,7 @@
 package dk.aau.cs.ds306e18.tournament.ui;
 
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
+import dk.aau.cs.ds306e18.tournament.utility.Alerts;
 import dk.aau.cs.ds306e18.tournament.utility.FileOperations;
 import dk.aau.cs.ds306e18.tournament.utility.SaveLoad;
 import javafx.event.ActionEvent;
@@ -32,6 +33,7 @@ public class LauncherController {
         // Set the correct scene for the system stage.
         try {
             AnchorPane systemRoot = FXMLLoader.load(LauncherController.class.getResource("layout/MainLayout.fxml"));
+            Alerts.window = systemRoot;
             systemStage.setScene(new Scene(systemRoot));
         } catch (IOException e) {
             System.out.println(e.getMessage());

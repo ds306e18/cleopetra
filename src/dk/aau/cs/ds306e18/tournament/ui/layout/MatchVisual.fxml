@@ -3,13 +3,14 @@
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Group?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Polygon?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Text?>
 
-<VBox id="matchPlayed" fx:id="matchRoot" maxHeight="46.0" maxWidth="124.0" onMouseClicked="#matchClicked" spacing="2.0" styleClass="match" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="dk.aau.cs.ds306e18.tournament.ui.MatchVisualController">
+<VBox id="matchPlayed" fx:id="matchRoot" maxHeight="46.0" maxWidth="124.0" onMouseClicked="#matchClicked" spacing="2.0" styleClass="match" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.MatchVisualController">
    <children>
       <HBox fx:id="hboxBlueTeam" alignment="CENTER_LEFT">
          <children>
@@ -20,7 +21,7 @@
                </HBox.margin>
                <children>
                   <Rectangle fill="#c1c1c1" height="20.0" layoutX="1.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="teamBg" width="85.0" />
-                  <Text fx:id="textBlueName" layoutX="5.0" layoutY="15.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="teamName" text="Team 1" wrappingWidth="80.63671875" />
+                  <Label fx:id="textBlueName" layoutX="5.0" layoutY="2.0" prefHeight="17.0" prefWidth="80.0" text="Team 1" />
                </children>
             </Group>
             <Group styleClass="score">
@@ -49,7 +50,7 @@
                </HBox.margin>
                <children>
                   <Rectangle fill="#c1c1c1" height="20.0" layoutX="1.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="teamBg" width="85.0" />
-                  <Text fx:id="textOrangeName" layoutX="5.0" layoutY="15.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="teamName" text="Team 2" wrappingWidth="80.63671875" />
+                  <Label fx:id="textOrangeName" layoutX="5.0" layoutY="2.0" prefHeight="17.0" prefWidth="80.0" text="Team 2" />
                </children>
             </Group>
             <Group styleClass="score">

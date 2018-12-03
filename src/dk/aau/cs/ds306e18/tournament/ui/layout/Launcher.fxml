@@ -6,37 +6,40 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="launcherMain" fx:id="baseAnchorpane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="500.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/" fx:controller="dk.aau.cs.ds306e18.tournament.ui.LauncherController">
+<AnchorPane id="launcherMain" fx:id="baseAnchorpane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="500.0" stylesheets="@css/stylesheet.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.LauncherController">
    <children>
-      <HBox alignment="CENTER" prefHeight="350.0" prefWidth="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <GridPane prefHeight="350.0" prefWidth="500.0">
+        <columnConstraints>
+          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="169.0" minHeight="10.0" prefHeight="153.0" valignment="TOP" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="197.0" minHeight="10.0" prefHeight="197.0" vgrow="SOMETIMES" />
+        </rowConstraints>
          <children>
-            <VBox alignment="TOP_CENTER" prefHeight="350.0" prefWidth="300.0" spacing="10.0">
+            <ImageView fitHeight="115.0" fitWidth="398.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/logo.png" />
+               </image>
+               <viewport>
+                  <Rectangle2D />
+               </viewport>
+               <GridPane.margin>
+                  <Insets top="30.0" />
+               </GridPane.margin>
+            </ImageView>
+            <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="1">
                <children>
-                  <ImageView fitHeight="115.0" fitWidth="398.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/logo.png" />
-                     </image>
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                     <viewport>
-                        <Rectangle2D />
-                     </viewport>
-                  </ImageView>
                   <Button mnemonicParsing="false" onAction="#createNewTournament" prefHeight="27.0" prefWidth="120.0" text="New" />
                   <Button mnemonicParsing="false" onAction="#openLocalTournament" prefHeight="27.0" prefWidth="120.0" text="Open" />
                </children>
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-               <padding>
-                  <Insets bottom="20.0" top="30.0" />
-               </padding>
             </VBox>
          </children>
-      </HBox>
+      </GridPane>
    </children>
 </AnchorPane>
