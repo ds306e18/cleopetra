@@ -21,7 +21,7 @@ public class MainController {
 
     @FXML
     private void initialize() {
-        System.out.println("Initialized UI");
+        System.out.println("Initialized ui");
     }
 
     public void onTabSelectionChanged(Event event) {

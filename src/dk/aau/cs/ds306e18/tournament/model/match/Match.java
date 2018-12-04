@@ -521,6 +521,18 @@ public final class Match {
         return orangeTeam;
     }
 
+    public Match getBlueFromMatch() {
+        return blueFromMatch;
+    }
+
+    public Match getOrangeFromMatch() {
+        return orangeFromMatch;
+    }
+
+    public Match getWinnerDestination() {
+        return winnerDestination;
+    }
+
     /** Listeners registered here will be notified when the match is played or reset. */
     public void registerMatchPlayedListener(MatchPlayedListener listener) {
         playedListeners.add(listener);
