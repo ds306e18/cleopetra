@@ -12,82 +12,66 @@ import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
 
-public class RoundRobinNode extends HBox implements ModelCoupledUI {
+public class RoundRobinNode extends VBox implements ModelCoupledUI {
 
     private final Insets MARGINS = new Insets(0, 0, 8, 0);
-    private final int COLUMN_WIDTH = 175;
+    private final Insets ROUND_PADDING = new Insets(10,0,10,0);
+    private final Insets LABEL_PADDING = new Insets(0,10,0,0);
+    private final int COLUMN_WIDTH = 500;
 
     private final RoundRobinFormat roundRobin;
     private final BracketOverviewTabController boc;
 
     private ArrayList<MatchVisualController> mvcs = new ArrayList<>();
+
     public RoundRobinNode(RoundRobinFormat roundRobin, BracketOverviewTabController boc) {
         this.roundRobin = roundRobin;
         this.boc = boc;
         update();
     }
 
-    /** Updates all UI elements for the swiss stage. */
+    /** Updates all UI elements for the round robin stage. */
     private void update() {
         removeElements();
 
         ArrayList<RoundRobinGroup> groups = roundRobin.getGroups();
-        int numberOfGroups = roundRobin.getNumberOfGroups();
 
-        // Create that amount of columns matching the number of groups.
-        for (int i = 0; i < numberOfGroups; i++) {
-            VBox column = new VBox();
-            column.setMinWidth(COLUMN_WIDTH);
-            column.setPrefWidth(COLUMN_WIDTH);
-
-            // Group Label
-            if(numberOfGroups != 1){
-                Label roundLabel = new Label("Group " + (i + 1));
-                VBox.setMargin(roundLabel, MARGINS);
-                column.getChildren().add(roundLabel);
-            }
-
-            // Get all matches from group and add them to the column
-            for (Match match : groups.get(i).getMatches()) {
-
-                MatchVisualController vmatch = boc.loadVisualMatch(match);
-                VBox.setMargin(vmatch.getRoot(), MARGINS);
-                column.getChildren().add(vmatch.getRoot());
-                mvcs.add(vmatch);
-            }
-
-            getChildren().add(column);
-        }
+        for(int i = 0; i < groups.size(); i++)
+            getChildren().add(getGroupBox(groups.get(i), i));
     }
 
     /** Creates a hbox containing a group with rounds of matches.
-     * @param rrgroup a RoundRobinGroup that the box should contain.
-     * @param groupName the name of the group.
+     * @param rrgroup the RoundRobinGroup that the box should contain.
+     * @param groupNumber the number of the group.
      * @return a hbox containing a group with rounds of matches. */
-    private HBox getGroupBox(RoundRobinGroup rrgroup, String groupName){
+    private HBox getGroupBox(RoundRobinGroup rrgroup, int groupNumber){
 
         HBox box = new HBox();
+        box.setMinWidth(COLUMN_WIDTH);
+        box.setPadding(ROUND_PADDING);
 
-        box.getChildren().add(new Label(groupName));
+        //Set up label and its box
+        Label groupLabel = new Label("Group " + (groupNumber + 1));
+        HBox labelBox = new HBox();
+        labelBox.setPadding(LABEL_PADDING);
+        labelBox.getChildren().add(groupLabel);
+        box.getChildren().add(labelBox);
 
-        /*
         //Add rounds to this group
-        for(int i = 0; i < rrgroup.getRound.size(); i++) {
-            box.getChildren().add(getRoundBox(rrgroup.getSDASD(i)));
-        }*/
+        for(int i = 0; i < rrgroup.getRounds().size(); i++)
+            box.getChildren().add(getRoundBox(rrgroup.getRounds().get(i), i));
 
         return box;
     }
 
     /** Returns a vbox that contains a round of matches.
      * @param matches the matches in the round.
-     * @param roundName the name of the round.
+     * @param roundNumber the number of the round.
      * @return a vbox that contains a round of matches. */
-    private VBox getRoundBox(ArrayList<Match> matches, String roundName){
+    private VBox getRoundBox(ArrayList<Match> matches, int roundNumber){
 
         VBox box = new VBox();
-
-        box.getChildren().add(new Label(roundName));
+        box.getChildren().add(new Label("Round " + (roundNumber + 1)));
 
         //Add matches
         for (Match match : matches) {
