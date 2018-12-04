@@ -60,6 +60,46 @@ public class RoundRobinNode extends HBox implements ModelCoupledUI {
         }
     }
 
+    /** Creates a hbox containing a group with rounds of matches.
+     * @param rrgroup a RoundRobinGroup that the box should contain.
+     * @param groupName the name of the group.
+     * @return a hbox containing a group with rounds of matches. */
+    private HBox getGroupBox(RoundRobinGroup rrgroup, String groupName){
+
+        HBox box = new HBox();
+
+        box.getChildren().add(new Label(groupName));
+
+        /*
+        //Add rounds to this group
+        for(int i = 0; i < rrgroup.getRound.size(); i++) {
+            box.getChildren().add(getRoundBox(rrgroup.getSDASD(i)));
+        }*/
+
+        return box;
+    }
+
+    /** Returns a vbox that contains a round of matches.
+     * @param matches the matches in the round.
+     * @param roundName the name of the round.
+     * @return a vbox that contains a round of matches. */
+    private VBox getRoundBox(ArrayList<Match> matches, String roundName){
+
+        VBox box = new VBox();
+
+        box.getChildren().add(new Label(roundName));
+
+        //Add matches
+        for (Match match : matches) {
+            MatchVisualController vmatch = boc.loadVisualMatch(match);
+            VBox.setMargin(vmatch.getRoot(), MARGINS);
+            box.getChildren().add(vmatch.getRoot());
+            mvcs.add(vmatch);
+        }
+
+        return box;
+    }
+
     @Override
     public void decoupleFromModel() {
         removeElements();
