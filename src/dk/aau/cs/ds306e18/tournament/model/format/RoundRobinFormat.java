@@ -24,11 +24,8 @@ public class RoundRobinFormat extends GroupFormat implements MatchPlayedListener
     //should be set before start() is called, to determine number of groups that should be created
     private int numberOfGroups = 1;
 
-    /**
-     * Constructor that automatically creates an arraylist of matches made on the principles of berger tables.
-     *
-     * @param seededTeams arraylist of all the teams in the bracket.
-     */
+    /** Constructor that automatically creates an arraylist of matches made on the principles of berger tables.
+     * @param seededTeams arraylist of all the teams in the bracket. */
     public void start(List<Team> seededTeams) {
         teams = new ArrayList<>(seededTeams);
         ArrayList<Team> teams = new ArrayList<>(seededTeams);
@@ -82,14 +79,12 @@ public class RoundRobinFormat extends GroupFormat implements MatchPlayedListener
             }
 
             RoundRobinGroup roundRobinGroup = new RoundRobinGroup(splitArray);
-            roundRobinGroup.setMatches(generateMatches(roundRobinGroup.getTeams()));
+            roundRobinGroup.setRounds(generateMatches(roundRobinGroup.getTeams()));
             groups.add(roundRobinGroup);
         }
     }
 
-    /**
-     * @return a list that contains each n'th (numberOfGroups) team.
-     */
+    /** @return a list that contains each n'th (numberOfGroups) team. */
     private ArrayList<Team> pickTeamsForGroup(ArrayList<Team> teams, int startingPoint) {
         ArrayList<Team> splitArray = new ArrayList<>();
 
@@ -99,14 +94,11 @@ public class RoundRobinFormat extends GroupFormat implements MatchPlayedListener
         return splitArray;
     }
 
-    /**
-     * Creates a list of matches, with each team changing color between each of their matches, algorithm based on
-     * berger tables
-     *
+    /** Creates all matches with each team changing color between each of their matches, algorithm based on
+     * berger tables.
      * @param teams arraylist of all teams in the bracket.
-     * @return returns a complete arraylist of matches.
-     */
-    private ArrayList<Match> generateMatches(ArrayList<Team> teams) {
+     * @return an arrayList, which represents rounds, of arrayLists with matches. */
+    private ArrayList<ArrayList<Match>> generateMatches(ArrayList<Team> teams) {
         int nextBlue, nextOrange;
         Match[][] tempMatches = new Match[teams.size() - 1][teams.size() / 2];
 
@@ -184,23 +176,25 @@ public class RoundRobinFormat extends GroupFormat implements MatchPlayedListener
         } else return id + (limit / 2);
     }
 
-    /**
-     * @return the given array with dummy teams removed.
-     */
-    private ArrayList<Match> removeDummyMatches(Match[][] tempMatches) {
+    /** @return the given arrayList with dummy teams removed. */
+    private ArrayList<ArrayList<Match>> removeDummyMatches(Match[][] tempMatches) {
 
-        ArrayList<Match> matches = new ArrayList<>();
+        ArrayList<ArrayList<Match>> matches = new ArrayList<>();
+
 
         for (int i = 0; i < tempMatches.length; i++) {
+            matches.add(new ArrayList<>());
             for (int j = 0; j < tempMatches[i].length; j++) {
                 if (tempMatches[i][j].getOrangeTeam().equals(DUMMY_TEAM) ||
                         tempMatches[i][j].getBlueTeam().equals(DUMMY_TEAM)) {
                     continue;
                 } else {
-                    matches.add(tempMatches[i][j]);
+                    matches.get(i).add(tempMatches[i][j]);
+                    //matches.add(tempMatches[i][j]);
                 }
             }
         }
+
         return matches;
     }
 

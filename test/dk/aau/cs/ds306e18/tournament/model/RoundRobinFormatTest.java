@@ -389,6 +389,48 @@ public class RoundRobinFormatTest {
         assertEquals(1, bracket.getGroups().size());
     }
 
+    @Test
+    public void testRounds01(){
+
+        int numberOfTeams = 12;
+        int numberOfGroups = 3;
+
+        RoundRobinFormat bracket = new RoundRobinFormat();
+        bracket.setNumberOfGroups(numberOfGroups);
+        bracket.start(generateTeams(numberOfTeams, 2));
+
+        ArrayList<RoundRobinGroup> groups = bracket.getGroups();
+
+        for (RoundRobinGroup group : groups) {
+            assertEquals(3, group.getRounds().size());
+
+            for (ArrayList<Match> round : group.getRounds()) {
+                assertEquals(2, round.size());
+            }
+        }
+    }
+
+    @Test
+    public void testRounds02(){
+
+        int numberOfTeams = 12;
+        int numberOfGroups = 2;
+
+        RoundRobinFormat bracket = new RoundRobinFormat();
+        bracket.setNumberOfGroups(numberOfGroups);
+        bracket.start(generateTeams(numberOfTeams, 2));
+
+        ArrayList<RoundRobinGroup> groups = bracket.getGroups();
+
+        for (RoundRobinGroup group : groups) {
+            assertEquals(5, group.getRounds().size());
+
+            for (ArrayList<Match> round : group.getRounds()) {
+                assertEquals(3, round.size());
+            }
+        }
+    }
+
     /**
      * sets all upcoming matches in the given format to have been played. The best seeded team wins.
      */
