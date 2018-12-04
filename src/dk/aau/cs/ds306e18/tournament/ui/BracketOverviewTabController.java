@@ -274,6 +274,13 @@ public class BracketOverviewTabController implements MatchChangeListener {
      */
     @FXML
     void editMatchBtnOnAction() {
+        openEditMatchPopup();
+    }
+
+    /**
+     * Creates a popup window allowing to change match score and state.
+     */
+    public void openEditMatchPopup(){
         try {
             Stage editMatchScoreStage = new Stage();
             editMatchScoreStage.initStyle(StageStyle.TRANSPARENT);

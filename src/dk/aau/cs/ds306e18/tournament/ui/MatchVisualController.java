@@ -31,7 +31,7 @@ public class MatchVisualController implements MatchChangeListener {
     void matchClicked(MouseEvent event) {
         if (event.getButton().equals(MouseButton.PRIMARY)){
             if (event.getClickCount() == 2){
-                boc.editMatchBtnOnAction();
+                boc.openEditMatchPopup();
             }
         }
 
