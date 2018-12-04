@@ -1,5 +1,6 @@
 package dk.aau.cs.ds306e18.tournament.ui;
 
+import dk.aau.cs.ds306e18.tournament.rlbot.MatchRunner;
 import dk.aau.cs.ds306e18.tournament.model.Bot;
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.StageStatus;
@@ -7,6 +8,7 @@ import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import dk.aau.cs.ds306e18.tournament.model.format.Format;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchChangeListener;
+import dk.aau.cs.ds306e18.tournament.model.match.MatchStatus;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.ModelCoupledUI;
@@ -36,8 +38,6 @@ public class BracketOverviewTabController implements MatchChangeListener {
     @FXML private GridPane bracketOverviewTab;
     @FXML private VBox selectedMatchVBox;
     @FXML private VBox overviewVBox;
-    @FXML private Button nextMatchBtn;
-    @FXML private Button prevMatchBtn;
     @FXML private Button playMatchBtn;
     @FXML private Button editMatchBtn;
     @FXML private Label blueTeamNameLabel;
@@ -56,6 +56,7 @@ public class BracketOverviewTabController implements MatchChangeListener {
     @FXML private Button startTournamentBtn;
     @FXML private VBox bracketLeaderboard;
     @FXML private TableView<Team> leaderboardTableview;
+    @FXML private Label stageNameLabel;
 
     private int showedStageIndex = -1;
     private ModelCoupledUI coupledBracket;
@@ -84,9 +85,11 @@ public class BracketOverviewTabController implements MatchChangeListener {
         } else {
             if (showedStageIndex == -1) showedStageIndex = 0;
             showStartTournamentInstructions(false);
-            showFormat(tournament.getCurrentStage().getFormat());
+            showStage(tournament.getStages().get(showedStageIndex));
             updateStageNavigationButtons();
         }
+
+        updateTeamViewer(selectedMatch == null ? null : selectedMatch.getShowedMatch());
     }
 
     public void showLeaderboard(boolean state) {
@@ -124,22 +127,25 @@ public class BracketOverviewTabController implements MatchChangeListener {
         startTournamentInstructionsHolder.setVisible(show);
         overviewScrollPane.setManaged(!show);
         overviewScrollPane.setVisible(!show);
+        stageNameLabel.setManaged(!show);
+        stageNameLabel.setVisible(!show);
     }
 
-    public void showFormat(Format format) {
+    public void showStage(dk.aau.cs.ds306e18.tournament.model.Stage stage) {
         if (coupledBracket != null) {
             coupledBracket.decoupleFromModel();
         }
-        showedFormat = format;
-        if (format != null) {
-            Node bracket = format.getBracketFXNode(this);
-            overviewScrollPane.setContent(bracket);
-            if (bracket instanceof ModelCoupledUI) {
-                coupledBracket = (ModelCoupledUI) bracket;
-            } else {
-                coupledBracket = null;
-                System.err.println("WARNING: " + bracket.getClass().toString() + " does not implement ModelCoupledUI.");
-            }
+
+        showedFormat = stage.getFormat();
+
+        stageNameLabel.setText(stage.getName());
+        Node bracket = showedFormat.getBracketFXNode(this);
+        overviewScrollPane.setContent(bracket);
+        if (bracket instanceof ModelCoupledUI) {
+            coupledBracket = (ModelCoupledUI) bracket;
+        } else {
+            coupledBracket = null;
+            System.err.println("WARNING: " + bracket.getClass().toString() + " does not implement ModelCoupledUI.");
         }
     }
 
@@ -248,13 +254,33 @@ public class BracketOverviewTabController implements MatchChangeListener {
             orangeTeamListView.setItems(null);
             orangeTeamListView.refresh();
         }
+
+        updateMatchPlayAndEditButtons();
+    }
+
+    /** Disables/Enables the play and edit match buttons */
+    public void updateMatchPlayAndEditButtons() {
+        if (selectedMatch == null || selectedMatch.getShowedMatch().getStatus() == MatchStatus.NOT_PLAYABLE) {
+            editMatchBtn.setDisable(true);
+            playMatchBtn.setDisable(true);
+        } else {
+            editMatchBtn.setDisable(false);
+            playMatchBtn.setDisable(false); // If match can't be played an error popup is displayed explaining why
+        }
     }
 
     /**
      * Toggles edit for match scores
      */
     @FXML
-    void editMatchBtnOnAction(ActionEvent event) {
+    void editMatchBtnOnAction() {
+        openEditMatchPopup();
+    }
+
+    /**
+     * Creates a popup window allowing to change match score and state.
+     */
+    public void openEditMatchPopup(){
         try {
             Stage editMatchScoreStage = new Stage();
             editMatchScoreStage.initStyle(StageStyle.TRANSPARENT);
@@ -283,22 +309,45 @@ public class BracketOverviewTabController implements MatchChangeListener {
     }
 
     private void updateStageNavigationButtons() {
-        System.out.println("Oi");
         if (showedStageIndex == -1 || showedFormat == null) {
             nextStageBtn.setDisable(true);
             prevStageBtn.setDisable(true);
         } else {
-            int stageCount = Tournament.get().getStages().size();
             prevStageBtn.setDisable(showedStageIndex == 0);
 
             boolean concluded = Tournament.get().getStages().get(showedStageIndex).getFormat().getStatus() == StageStatus.CONCLUDED;
-            nextStageBtn.setDisable(!concluded); // TODO Should also update onMatchPlayed
-            // TODO Swap next/prev stage button
+            boolean isLastStage = Tournament.get().getStages().size() - 1 == showedStageIndex;
+            nextStageBtn.setDisable(!concluded || isLastStage);
         }
     }
 
     @Override
     public void onMatchChanged(Match match) {
         updateTeamViewer(selectedMatch.getShowedMatch());
+        updateStageNavigationButtons();
+    }
+
+    public void prevStageBtnOnAction(ActionEvent actionEvent) {
+        showedStageIndex--;
+        showStage(Tournament.get().getStages().get(showedStageIndex));
+        setSelectedMatch(null);
+        updateStageNavigationButtons();
+    }
+
+    public void nextStageBtnOnAction(ActionEvent actionEvent) {
+        int latestStageIndex = Tournament.get().getCurrentStageIndex();
+        if (showedStageIndex == latestStageIndex) {
+            Tournament.get().startNextStage();
+        }
+
+        showedStageIndex++;
+        showStage(Tournament.get().getStages().get(showedStageIndex));
+
+        setSelectedMatch(null);
+        updateStageNavigationButtons();
+    }
+
+    public void onPlayMatchBtnAction(ActionEvent actionEvent) {
+        MatchRunner.startMatch(Tournament.get().getRlBotSettings(), selectedMatch.getShowedMatch());
     }
 }

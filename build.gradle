@@ -29,6 +29,9 @@ dependencies {
 
     // Use JUnit test framework
     testCompile 'junit:junit:4.12'
+
+    // Adding ControlsFX dependency. (Version 8.4 due to Java 8)
+    compile group: 'org.controlsfx', name: 'controlsfx', version: '8.40.14'
 }
 
 // In this section you declare where to find the dependencies of your project

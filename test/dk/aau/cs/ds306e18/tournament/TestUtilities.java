@@ -160,7 +160,7 @@ public class TestUtilities {
 
         RoundRobinFormat roundRobinFormat = new RoundRobinFormat();
 
-        Stage stage = new Stage("Round Robin stage", roundRobinFormat, 0);
+        Stage stage = new Stage("Round Robin stage", roundRobinFormat);
 
         tournament.addStage(stage);
         tournament.start();
@@ -182,7 +182,7 @@ public class TestUtilities {
 
         SingleEliminationFormat singleEliminationFormat = new SingleEliminationFormat();
 
-        Stage stage = new Stage("Single Elimination stage", singleEliminationFormat, 0);
+        Stage stage = new Stage("Single Elimination stage", singleEliminationFormat);
 
         tournament.addStage(stage);
         tournament.start();
@@ -204,28 +204,12 @@ public class TestUtilities {
 
         SwissFormat swissFormat = new SwissFormat();
 
-        Stage stage = new Stage("Swiss stage", swissFormat, 0);
+        Stage stage = new Stage("Swiss stage", swissFormat);
 
         tournament.addStage(stage);
         tournament.start();
 
         return tournament;
-    }
-
-
-    /**
-     * Generates an arrayList with the requested number of teams containing the requested number of bots with ascending seed values.
-     * <p>
-     * /** @return the given x factored. x!
-     */
-    public static int factorial(int x) {
-
-        int result = x;
-
-        for(int i = x-1; i > 0; i--)
-            result *= i;
-
-        return result;
     }
 
     public static int numberOfMatchesInRoundRobin(int x) {

@@ -1,23 +1,26 @@
 package dk.aau.cs.ds306e18.tournament.ui;
 
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import dk.aau.cs.ds306e18.tournament.model.match.MatchResultDependencyException;
+import dk.aau.cs.ds306e18.tournament.utility.Alerts;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 public class EditMatchScoreController {
 
     @FXML private CheckBox matchOverCheckBox;
-    @FXML private  Label blueTeamNameLabel;
-    @FXML private  Label orangeTeamNameLabel;
-    @FXML private  Spinner<Integer> blueScoreSpinner;
-    @FXML private  Spinner<Integer> orangeScoreSpinner;
+    @FXML private Label blueTeamNameLabel;
+    @FXML private Label orangeTeamNameLabel;
+    @FXML private Spinner<Integer> blueScoreSpinner;
+    @FXML private Spinner<Integer> orangeScoreSpinner;
+    @FXML private Button saveButton;
+
+    private boolean isBlueScoreLegit;
+    private boolean isOrangeScoreLegit;
 
     private Match match;
     private double x = 0;
@@ -25,14 +28,52 @@ public class EditMatchScoreController {
 
     @FXML
     private void initialize() {
-        blueScoreSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(Integer.MIN_VALUE, Integer.MAX_VALUE, 0, 1));
-        orangeScoreSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(Integer.MIN_VALUE, Integer.MAX_VALUE, 0, 1));
+        blueScoreSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE, 0, 1));
+        orangeScoreSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE, 0, 1));
 
-        //Add listeners to spinners to check if matchIsOver should be disabled
-        blueScoreSpinner.valueProperty().addListener(e -> isTeamScoresEqual());
-        orangeScoreSpinner.valueProperty().addListener(e -> isTeamScoresEqual());
+        blueScoreSpinner.setEditable(true);
+        orangeScoreSpinner.setEditable(true);
+
+        setSpinnerListeners();
 
         matchOverCheckBox.setDisable(true);
+
+        isBlueScoreLegit = true;
+        isOrangeScoreLegit = true;
+    }
+
+    /** Adds listeners to spinners to check if matchIsOver should be disabled or
+     * the save button should be disabled on invalid input.*/
+    private void setSpinnerListeners(){
+        blueScoreSpinner.getEditor().textProperty().addListener((obs, oldValue, newValue) -> {
+            try {
+                Integer.valueOf(newValue); //This will throw the exception if the value not only contains numbers
+                isBlueScoreLegit = true;
+                isTeamScoresEqual();
+                if (isOrangeScoreLegit && isBlueScoreLegit){
+                    saveButton.setDisable(false);
+                }
+            } catch (NumberFormatException e) {
+                isTeamScoresEqual();
+                isBlueScoreLegit = false;
+                saveButton.setDisable(true);
+            }
+        });
+
+        orangeScoreSpinner.getEditor().textProperty().addListener((obs, oldValue, newValue) -> {
+            try {
+                Integer.valueOf(newValue); //This will throw the exception if the value not only contains numbers
+                isOrangeScoreLegit = true;
+                isTeamScoresEqual();
+                if (isOrangeScoreLegit && isBlueScoreLegit){
+                    saveButton.setDisable(false);
+                }
+            } catch (NumberFormatException e) {
+                isTeamScoresEqual();
+                isOrangeScoreLegit = false;
+                saveButton.setDisable(true);
+            }
+        });
     }
 
     public void setMatch(Match match) {
@@ -52,11 +93,12 @@ public class EditMatchScoreController {
 
     /** Used to determine if the matchOverCheckBox should be disabled. */
     private void isTeamScoresEqual(){
-        if(blueScoreSpinner.getValue() == orangeScoreSpinner.getValue()){
+        if(blueScoreSpinner.getEditor().getText().equals(orangeScoreSpinner.getEditor().getText())){
             matchOverCheckBox.setDisable(true);
             matchOverCheckBox.setSelected(false);
-        } else
+        } else {
             matchOverCheckBox.setDisable(false);
+        }
     }
 
     @FXML
@@ -89,12 +131,22 @@ public class EditMatchScoreController {
 
     @FXML
     private void onSaveBtnPressed(ActionEvent actionEvent) {
-        // TODO Check if this cause problems (e.g. changing the winner if match when it was already played) and warn user
-        match.setScores(
-                blueScoreSpinner.getValue(),
-                orangeScoreSpinner.getValue(),
-                matchOverCheckBox.isSelected()
-        );
-        closeWindow();
+
+        int blueScore = Integer.parseInt(blueScoreSpinner.getEditor().getText());
+        int orangeScore = Integer.parseInt(orangeScoreSpinner.getEditor().getText());
+        boolean played = matchOverCheckBox.isSelected();
+        try {
+            match.setScores(blueScore, orangeScore, played);
+            closeWindow();
+
+        } catch (MatchResultDependencyException e) {
+            // An MatchResultDependencyException is thrown if the outcome has changed and subsequent matches depends on this outcome
+            // Ask if the user wants to proceed
+            boolean proceed = Alerts.confirmAlert("The outcome of this match has changed", "This change will reset the subsequent matches. Do you want to proceed?");
+            if (proceed) {
+                match.setScores(blueScore, orangeScore, played, true);
+                closeWindow();
+            }
+        }
     }
 }

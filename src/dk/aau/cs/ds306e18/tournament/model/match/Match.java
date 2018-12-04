@@ -349,12 +349,93 @@ public final class Match {
         return false;
     }
 
-    public int getBlueScore() {
-        return blueScore;
+    public void setHasBeenPlayed(boolean hasBeenPlayed) {
+        setScores(blueScore, orangeScore, hasBeenPlayed, false);
     }
 
     public void setBlueScore(int blueScore) {
+        setScores(blueScore, orangeScore, played, false);
+    }
+
+    public void setOrangeScore(int orangeScore) {
+        setScores(blueScore, orangeScore, played, false);
+    }
+
+    public void setScores(int blueScore, int orangeScore) {
+        setScores(blueScore, orangeScore, played, false);
+    }
+
+    public void setScores(int blueScore, int orangeScore, boolean hasBeenPlayed) {
+        setScores(blueScore, orangeScore, hasBeenPlayed, false);
+    }
+
+    public void setScores(int blueScore, int orangeScore, boolean hasBeenPlayed, boolean forceResetSubsequentMatches) {
+
         if (!isReadyToPlay()) throw new IllegalStateException("Match is not playable");
+
+        if (willOutcomeChange(blueScore, orangeScore, hasBeenPlayed)) {
+            // Are there any subsequent matches that has been played?
+            if ((winnerDestination != null && winnerDestination.hasBeenPlayed())
+                    || (loserDestination != null && loserDestination.hasBeenPlayed())) {
+                // A subsequent match has been played. Should it be reset?
+                if (forceResetSubsequentMatches) {
+                    if (winnerDestination != null) winnerDestination.forceReset();
+                    if (loserDestination != null) loserDestination.forceReset();
+                } else {
+                    throw new MatchResultDependencyException();
+                }
+
+                // FIXME: Does not check if subsequent stages has started
+            }
+        }
+
+        if (played) {
+            retractWinnerAndLoser();
+        }
+
+        // Apply changes
+        played = hasBeenPlayed;
+        _setBlueScore(blueScore);
+        _setOrangeScore(orangeScore);
+
+        if (played) {
+            transferWinnerAndLoser();
+        }
+
+        notifyMatchChangeListeners();
+        notifyMatchPlayedListeners();
+    }
+
+    /** Changes a match's result to be 0-0 and not played. If any matches depends on this match, those will also be reset. */
+    public void forceReset() {
+        setScores(0, 0, false, true);
+    }
+
+    /** Returns true if the outcome and thus the state of this match change, if it had the given score instead. */
+    public boolean willOutcomeChange(int altBlueScore, int altOrangeScore, boolean altHasBeenPlayed) {
+        if (this.played != altHasBeenPlayed) {
+            return true;
+        }
+
+        // Was not played before, and is not played now. In this case we don't care about score. Nothing changes
+        if (!altHasBeenPlayed) {
+            return false;
+        }
+
+        // Check if both old and new score is draw
+        if (blueScore == orangeScore && altBlueScore == altOrangeScore) {
+            return false;
+        }
+
+        // Check if winner stays the same
+        if ((blueScore > orangeScore) == (altBlueScore > altOrangeScore)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private void _setBlueScore(int blueScore) {
 
         //Update both teams goalsScored and goalsConceded
         blueTeam.addGoalsScored(-this.blueScore);
@@ -363,15 +444,9 @@ public final class Match {
         orangeTeam.addGoalsConceded(blueScore);
 
         this.blueScore = blueScore;
-        notifyMatchChangeListeners();
     }
 
-    public int getOrangeScore() {
-        return orangeScore;
-    }
-
-    public void setOrangeScore(int orangeScore) {
-        if (!isReadyToPlay()) throw new IllegalStateException("Match is not playable");
+    public void _setOrangeScore(int orangeScore) {
 
         //Update both teams goalsScored and goalsConceded
         orangeTeam.addGoalsScored(-this.orangeScore);
@@ -380,55 +455,21 @@ public final class Match {
         blueTeam.addGoalsConceded(orangeScore);
 
         this.orangeScore = orangeScore;
-        notifyMatchChangeListeners();
-    }
-
-    public void setScores(int blueScore, int orangeScore) {
-        if (!isReadyToPlay()) throw new IllegalStateException("Match is not playable");
-        setBlueScore(blueScore);
-        setOrangeScore(orangeScore);
-    }
-
-    public void setScores(int blueScore, int orangeScore, boolean hasBeenPlayed) {
-        if (!isReadyToPlay()) throw new IllegalStateException("Match is not playable");
-        setScores(blueScore, orangeScore);
-        setHasBeenPlayed(hasBeenPlayed);
-    }
-
-    public boolean hasBeenPlayed() {
-        return played;
-    }
-
-    public void setHasBeenPlayed(boolean played) {
-        if (!isReadyToPlay()) throw new IllegalStateException("Match is not playable");
-        if (this.played != played) {
-            if (played) {
-                this.played = true;
-                transferWinnerAndLoser();
-            } else {
-                if ((winnerDestination != null && winnerDestination.hasBeenPlayed()) || (loserDestination != null && loserDestination.hasBeenPlayed()))
-                    // TODO Does not check if a following stage has started
-                    throw new IllegalStateException("A following match has already been played.");
-                this.played = false;
-                retractWinnerAndLoser();
-            }
-            notifyMatchPlayedListeners();
-            notifyMatchChangeListeners();
-        }
     }
 
     /**
      * Let the following matches know, that the winner or loser now found.
-     * Helper method to {@code setHasBeenPlayed(boolean)}
      */
     private void transferWinnerAndLoser() {
         if (getStatus() != MatchStatus.DRAW) {
             if (winnerDestination != null) {
+                if (winnerDestination.isReadyToPlay()) winnerDestination.setScores(0, 0); // There can be leftover scores
                 if (winnerGoesToBlue) winnerDestination.blueTeam = getWinner();
                 else winnerDestination.orangeTeam = getWinner();
                 winnerDestination.notifyMatchChangeListeners();
             }
             if (loserDestination != null) {
+                if (loserDestination.isReadyToPlay()) loserDestination.setScores(0, 0); // There can be leftover scores
                 if (loserGoesToBlue) loserDestination.blueTeam = getLoser();
                 else loserDestination.orangeTeam = getLoser();
                 loserDestination.notifyMatchChangeListeners();
@@ -438,26 +479,32 @@ public final class Match {
 
     /**
      * Let the following matches know, that the winner or loser is no longer defined.
-     * Helper method to {@code setHasBeenPlayed(boolean)}
      */
     private void retractWinnerAndLoser() {
         if (winnerDestination != null) {
+            if (winnerDestination.isReadyToPlay()) winnerDestination.setScores(0, 0);  // There can be leftover scores
             if (winnerGoesToBlue) winnerDestination.blueTeam = null;
             else winnerDestination.orangeTeam = null;
             winnerDestination.notifyMatchChangeListeners();
         }
         if (loserDestination != null) {
+            if (loserDestination.isReadyToPlay()) loserDestination.setScores(0, 0);  // There can be leftover scores
             if (loserGoesToBlue) loserDestination.blueTeam = null;
             else loserDestination.orangeTeam = null;
             loserDestination.notifyMatchChangeListeners();
         }
     }
 
-    /**
-     * Sets both team scores to 0 and marks match as not played yet.
-     */
-    public void reset() {
-        setScores(0, 0, false);
+    public int getBlueScore() {
+        return blueScore;
+    }
+
+    public int getOrangeScore() {
+        return orangeScore;
+    }
+
+    public boolean hasBeenPlayed() {
+        return played;
     }
 
     /**

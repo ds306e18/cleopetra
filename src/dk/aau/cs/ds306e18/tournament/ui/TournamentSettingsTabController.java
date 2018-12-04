@@ -5,8 +5,9 @@ import dk.aau.cs.ds306e18.tournament.model.format.SwissFormat;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreakerByGoalDiff;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreakerBySeed;
-import dk.aau.cs.ds306e18.tournament.ui.StageFormatOption;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableArray;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -41,6 +42,9 @@ public class TournamentSettingsTabController {
 
     @FXML
     private void initialize() {
+        /* Assign items to the list in case of a tournament being loaded */
+        stagesListView.setItems(FXCollections.observableArrayList(Tournament.get().getStages()));
+
         /* Retrieve and set tournament name into textfield. */
         nameTextField.setText(Tournament.get().getName());
 
@@ -49,9 +53,22 @@ public class TournamentSettingsTabController {
 
         /* Retrieve and add choices to choicebox for the Tiebreaker box.
          * Also upon change sets the new tiebreaker rule to the tournament model. */
-        tieBreakerChoiceBox.setItems(FXCollections.observableArrayList(new TieBreakerBySeed(), new TieBreakerByGoalDiff()));
-        tieBreakerChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> Tournament.get().setTieBreaker(newValue));
-        tieBreakerChoiceBox.getSelectionModel().select(0);
+        ObservableList<TieBreaker> tieBreakers = FXCollections.observableArrayList(new TieBreakerBySeed(), new TieBreakerByGoalDiff());
+
+        tieBreakerChoiceBox.setItems(tieBreakers);
+        tieBreakerChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (!(Tournament.get().getTieBreaker().getClass().isInstance(newValue))) {
+                Tournament.get().setTieBreaker(newValue);
+            }
+        });
+        for (TieBreaker aTiebreaker : tieBreakers){
+            TieBreaker chosenTiebreaker = Tournament.get().getTieBreaker();
+            if (chosenTiebreaker.equals(aTiebreaker)){
+                tieBreakerChoiceBox.getSelectionModel().select(aTiebreaker);
+            } else {
+                tieBreakerChoiceBox.getSelectionModel().select(0);
+            }
+        }
 
         /* By default the stage settings are hidden.
          * This listener is used to show the stage settings when there is at least one Stage added.
@@ -78,8 +95,13 @@ public class TournamentSettingsTabController {
 
         /* Setup teams wanted in stage spinner */
         teamsInStageSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(2, Integer.MAX_VALUE));
-        teamsInStageSpinner.getValueFactory().valueProperty().addListener((observable, oldValue, newValue) -> {
-            getSelectedStage().setNumberOfTeamsWanted(newValue);
+        teamsInStageSpinner.getEditor().textProperty().addListener((obs, oldValue, newValue) -> {
+            try {
+                int value = Integer.valueOf(newValue); //This will throw the exception if the value not only contains numbers
+                getSelectedStage().setNumberOfTeamsWanted(value);
+            } catch (NumberFormatException e) {
+                teamsInStageSpinner.getEditor().setText("2"); //Setting default value
+            }
         });
 
         /* Retrieve possible formats and add to a choicebox */
@@ -92,15 +114,21 @@ public class TournamentSettingsTabController {
                 selectedStage.setFormat(newValue.getNewInstance());
             }
 
-            // Show settings unique to format
-            formatUniqueSettingsHolder.getChildren().clear();
-            if (selectedStage != null) {
-                Node formatSettings = selectedStage.getFormat().getSettingsFXNode();
-                if (formatSettings != null) {
-                    formatUniqueSettingsHolder.getChildren().add(selectedStage.getFormat().getSettingsFXNode());
-                }
-            }
+            updateFormatUniqueSettings();
         });
+    }
+
+    /** Updates the settings unique to the selected stage's format */
+    public void updateFormatUniqueSettings() {
+
+        Stage selectedStage = getSelectedStage();
+        formatUniqueSettingsHolder.getChildren().clear();
+        if (selectedStage != null) {
+            Node formatSettings = selectedStage.getFormat().getSettingsFXNode();
+            if (formatSettings != null) {
+                formatUniqueSettingsHolder.getChildren().add(selectedStage.getFormat().getSettingsFXNode());
+            }
+        }
     }
 
     @FXML
@@ -120,7 +148,7 @@ public class TournamentSettingsTabController {
     @FXML
     void addStageBtnOnAction(ActionEvent actionEvent) {
         // increments unique id
-        Tournament.get().addStage(new Stage("New Stage", new SwissFormat(), Tournament.get().getStages().size()+1));
+        Tournament.get().addStage(new Stage("New Stage", new SwissFormat()));
 
         stagesListView.setItems(FXCollections.observableArrayList(Tournament.get().getStages()));
         stagesListView.refresh();
@@ -155,6 +183,8 @@ public class TournamentSettingsTabController {
                 teamsInStageSpinner.setVisible(false);
             }
         }
+
+        updateFormatUniqueSettings();
     }
 
     /**
@@ -193,5 +223,4 @@ public class TournamentSettingsTabController {
     private int getSelectedIndex() {
         return stagesListView.getSelectionModel().getSelectedIndex();
     }
-
 }

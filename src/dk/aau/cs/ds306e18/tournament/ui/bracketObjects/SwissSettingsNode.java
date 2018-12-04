@@ -23,9 +23,16 @@ public class SwissSettingsNode extends BorderPane {
         Spinner<Integer> roundsSpinner = new Spinner<>(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, Integer.MAX_VALUE));
         roundsSpinner.setEditable(true);
         roundsSpinner.getValueFactory().setValue(swiss.getRoundCount());
-        roundsSpinner.getValueFactory().valueProperty().addListener((observable, oldValue, newValue) -> {
-            swiss.setRoundCount(newValue);
+        roundsSpinner.getEditor().textProperty().addListener((obs, oldValue, newValue) -> {
+            try {
+                int value = Integer.valueOf(newValue); //This will throw the exception if the value not only contains numbers
+                swiss.setRoundCount(value);
+
+            } catch (NumberFormatException e) {
+                roundsSpinner.getEditor().setText("1"); //Setting default value
+            }
         });
+
         setRight(roundsSpinner);
     }
 }

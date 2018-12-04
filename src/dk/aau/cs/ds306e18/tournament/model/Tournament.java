@@ -1,5 +1,6 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
+import dk.aau.cs.ds306e18.tournament.rlbot.RLBotSettings;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreakerBySeed;
 
@@ -21,12 +22,17 @@ public class Tournament {
     public static final int START_REQUIREMENT_TEAMS = 2;
     public static final int START_REQUIREMENT_STAGES = 1;
 
+    private RLBotSettings rlBotSettings = new RLBotSettings();
     private String name = "Unnamed Tournament";
     private ArrayList<Team> teams = new ArrayList<>();
     private ArrayList<Stage> stages = new ArrayList<>();
     private TieBreaker tieBreaker = new TieBreakerBySeed();
     private boolean started = false;
     private int currentStageIndex = -1;
+
+    public RLBotSettings getRlBotSettings() {
+        return rlBotSettings;
+    }
 
     public String getName() {
         return name;
@@ -65,16 +71,25 @@ public class Tournament {
     public void addStage(Stage stage) {
         if (started) throw new IllegalStateException("Tournament has already started.");
         stages.add(stage);
+        stage.setId(stages.size());
     }
 
     public void removeStage(Stage stage) {
         if (started) throw new IllegalStateException("Tournament has already started.");
         stages.remove(stage);
+        recalculateStageIds();
     }
 
     public void removeStage(int index) {
         if (started) throw new IllegalStateException("Tournament has already started.");
         stages.remove(index);
+        recalculateStageIds();
+    }
+
+    private void recalculateStageIds() {
+        for (int i = 0; i < stages.size(); i++) {
+            stages.get(i).setId(i + 1);
+        }
     }
 
     public List<Stage> getStages() {
@@ -83,6 +98,7 @@ public class Tournament {
 
     public void swapStages(Stage primaryStage, Stage secondaryStage) {
         Collections.swap(stages, stages.indexOf(primaryStage), stages.indexOf(secondaryStage));
+        recalculateStageIds();
     }
 
     /** Returns the number of stages that has not started yet. */
@@ -163,6 +179,7 @@ public class Tournament {
         Tournament that = (Tournament) o;
         return started == that.started &&
                 currentStageIndex == that.currentStageIndex &&
+                Objects.equals(getRlBotSettings(), that.getRlBotSettings()) &&
                 Objects.equals(getName(), that.getName()) &&
                 Objects.equals(getTeams(), that.getTeams()) &&
                 Objects.equals(getStages(), that.getStages()) &&
@@ -171,6 +188,10 @@ public class Tournament {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getName(), getTeams(), getStages(), getTieBreaker(), started, currentStageIndex);
+        return Objects.hash(getRlBotSettings(), getName(), getTeams(), getStages(), getTieBreaker(), started, currentStageIndex);
+    }
+
+    public void setTournament (Tournament newTournament) {
+        instance = newTournament;
     }
 }
