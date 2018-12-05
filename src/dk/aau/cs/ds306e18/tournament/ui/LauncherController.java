@@ -50,10 +50,22 @@ public class LauncherController {
 
             // Load exit program FXML file
             try {
+                // Calculate the center position of the main window.
+                double centerXPosition = systemStage.getX() + systemStage.getWidth()/2d;
+                double centerYPosition = systemStage.getY() + systemStage.getHeight()/2d;
+
                 AnchorPane exitRoot = FXMLLoader.load(LauncherController.class.getResource("layout/Exit.fxml"));
 
                 exitStage.setScene(new Scene(exitRoot));
-                exitStage.show();
+
+                // Assign the position of the popup window whenever it is shown.
+                exitStage.setOnShown(ev -> {
+                    exitStage.setX(centerXPosition - exitStage.getWidth()/2d);
+                    exitStage.setY(centerYPosition - exitStage.getHeight()/2d);
+                    exitStage.show();
+                });
+
+                exitStage.showAndWait();
             } catch (IOException error) {
                 error.printStackTrace();
             }
