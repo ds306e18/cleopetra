@@ -48,9 +48,15 @@ public class EditMatchScoreController {
     private void setSpinnerListeners(){
         blueScoreSpinner.getEditor().textProperty().addListener((obs, oldValue, newValue) -> {
             try {
-                //This will throw the exception if the value not only contains numbers
-                if (Integer.valueOf(newValue) < 0){
+                //This will throw an exception if the input does not only contain digits
+                int assignValue = Integer.parseInt(newValue);
+
+                if (assignValue < 0){
                     blueScoreSpinner.getEditor().textProperty().setValue("0");
+                }
+
+                if (assignValue > 99){
+                    blueScoreSpinner.getEditor().textProperty().setValue("99");
                 }
 
                 isBlueScoreLegit = true;
@@ -59,6 +65,7 @@ public class EditMatchScoreController {
                     saveButton.setDisable(false);
                 }
             } catch (NumberFormatException e) {
+                blueScoreSpinner.getEditor().textProperty().setValue("");
                 isTeamScoresEqual();
                 isBlueScoreLegit = false;
                 saveButton.setDisable(true);
@@ -67,9 +74,15 @@ public class EditMatchScoreController {
 
         orangeScoreSpinner.getEditor().textProperty().addListener((obs, oldValue, newValue) -> {
             try {
-                //This will throw the exception if the value not only contains numbers
-                if (Integer.valueOf(newValue) < 0){
+                //This will throw an exception if the input does not only contain digits
+                int assignValue = Integer.parseInt(newValue);
+
+                if (assignValue < 0){
                     orangeScoreSpinner.getEditor().textProperty().setValue("0");
+                }
+
+                if (assignValue > 99){
+                    orangeScoreSpinner.getEditor().textProperty().setValue("99");
                 }
 
                 isOrangeScoreLegit = true;
@@ -78,6 +91,7 @@ public class EditMatchScoreController {
                     saveButton.setDisable(false);
                 }
             } catch (NumberFormatException e) {
+                orangeScoreSpinner.getEditor().textProperty().setValue("");
                 isTeamScoresEqual();
                 isOrangeScoreLegit = false;
                 saveButton.setDisable(true);
