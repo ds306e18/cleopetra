@@ -135,12 +135,16 @@
     -fx-stroke: #c1c1c1;
 }
 
+#matchPlayed .winner .teamBg {
+    -fx-fill: #97af97;
+}
+
 #matchPlayed .winner .triangle {
     visibility: visible;
+    -fx-fill: #97af97;
 }
 
 #matchPlayed .winner .scoreNo {
-    -fx-fill: green;
     -fx-font-weight: bold;
 }
 
