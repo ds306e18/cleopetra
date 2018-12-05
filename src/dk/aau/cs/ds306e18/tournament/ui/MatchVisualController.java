@@ -5,6 +5,8 @@ import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -27,7 +29,13 @@ public class MatchVisualController implements MatchChangeListener {
 
     /** Gets called when a match is clicked. */
     @FXML
-    void matchClicked() {
+    void matchClicked(MouseEvent event) {
+        if (event.getButton().equals(MouseButton.PRIMARY)){
+            if (event.getClickCount() == 2){
+                boc.openEditMatchPopup();
+            }
+        }
+
         matchRoot.getStyleClass().add("selectedMatch");
         boc.setSelectedMatch(this);
     }

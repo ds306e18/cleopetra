@@ -73,7 +73,10 @@ public class Team {
     }
 
     public ArrayList<Bot> getBots() {
+        if (bots!=null){
         return new ArrayList<>(bots);
+    }
+    else return null;
     }
 
     public ArrayList<String> getConfigPaths() {

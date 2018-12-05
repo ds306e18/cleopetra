@@ -35,7 +35,7 @@ public class SwissNode extends HBox implements MatchPlayedListener, MatchChangeL
         update();
     }
 
-    /** Updates all UI elements for the swiss stage. */
+    /** Updates all ui elements for the swiss stage. */
     private void update() {
         removeElements();
 
@@ -83,7 +83,7 @@ public class SwissNode extends HBox implements MatchPlayedListener, MatchChangeL
         boc.showLeaderboard(false); // TODO Move leaderboard to swiss node
     }
 
-    /** Completely remove all UI elements. */
+    /** Completely remove all ui elements. */
     public void removeElements() {
         for (MatchVisualController mvc : mvcs) {
             mvc.decoupleFromModel();

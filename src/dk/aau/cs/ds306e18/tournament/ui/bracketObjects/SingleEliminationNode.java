@@ -30,7 +30,7 @@ public class SingleEliminationNode extends GridPane implements ModelCoupledUI {
         update();
     }
 
-    /** Updates all UI elements for the single elimination stage. */
+    /** Updates all ui elements for the single elimination stage. */
     private void update() {
         removeElements();
 
@@ -81,7 +81,7 @@ public class SingleEliminationNode extends GridPane implements ModelCoupledUI {
         removeElements();
     }
 
-    /** Completely remove all UI elements. */
+    /** Completely remove all ui elements. */
     public void removeElements() {
         getChildren().clear();
         for (MatchVisualController mvc : mvcs) {
