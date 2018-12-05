@@ -51,13 +51,8 @@ public class EditMatchScoreController {
                 //This will throw an exception if the input does not only contain digits
                 int assignValue = Integer.parseInt(newValue);
 
-                if (assignValue < 0){
-                    blueScoreSpinner.getEditor().textProperty().setValue("0");
-                }
-
-                if (assignValue > 99){
-                    blueScoreSpinner.getEditor().textProperty().setValue("99");
-                }
+                if (assignValue < 0){ blueScoreSpinner.getEditor().textProperty().setValue("0"); }
+                if (assignValue > 99){ blueScoreSpinner.getEditor().textProperty().setValue("99"); }
 
                 isBlueScoreLegit = true;
                 isTeamScoresEqual();
@@ -77,13 +72,8 @@ public class EditMatchScoreController {
                 //This will throw an exception if the input does not only contain digits
                 int assignValue = Integer.parseInt(newValue);
 
-                if (assignValue < 0){
-                    orangeScoreSpinner.getEditor().textProperty().setValue("0");
-                }
-
-                if (assignValue > 99){
-                    orangeScoreSpinner.getEditor().textProperty().setValue("99");
-                }
+                if (assignValue < 0){ orangeScoreSpinner.getEditor().textProperty().setValue("0"); }
+                if (assignValue > 99){ orangeScoreSpinner.getEditor().textProperty().setValue("99"); }
 
                 isOrangeScoreLegit = true;
                 isTeamScoresEqual();
