@@ -6,18 +6,20 @@ import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.ui.BracketOverviewTabController;
 import dk.aau.cs.ds306e18.tournament.ui.MatchVisualController;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 import java.util.ArrayList;
 
 public class RoundRobinNode extends VBox implements ModelCoupledUI {
 
-    private final Insets MARGINS = new Insets(0, 0, 8, 0);
-    private final Insets ROUND_PADDING = new Insets(10,0,10,0);
-    private final Insets LABEL_PADDING = new Insets(0,10,0,0);
-    private final int COLUMN_WIDTH = 500;
+    private final Insets MARGINS = new Insets(0, 8, 8, 0);
+    private final Insets ROUND_PADDING = new Insets(0,5,28,0);
+    private final Insets LABEL_PADDING = new Insets(0,16,0,0);
 
     private final RoundRobinFormat roundRobin;
     private final BracketOverviewTabController boc;
@@ -47,12 +49,14 @@ public class RoundRobinNode extends VBox implements ModelCoupledUI {
     private HBox getGroupBox(RoundRobinGroup rrgroup, int groupNumber){
 
         HBox box = new HBox();
-        box.setMinWidth(COLUMN_WIDTH);
         box.setPadding(ROUND_PADDING);
 
         //Set up label and its box
-        Label groupLabel = new Label("Group " + (groupNumber + 1));
+        Label groupLabel = new Label("G" + (groupNumber + 1));
+        groupLabel.setFont(new Font("Calibri", 28));
+        groupLabel.setTextFill(Color.valueOf("#C1C1C1"));
         HBox labelBox = new HBox();
+        labelBox.setAlignment(Pos.CENTER);
         labelBox.setPadding(LABEL_PADDING);
         labelBox.getChildren().add(groupLabel);
         box.getChildren().add(labelBox);
