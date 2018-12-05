@@ -272,7 +272,7 @@ public class RoundRobinFormat extends GroupFormat implements MatchPlayedListener
     }
 
     @Override
-    public Node getBracketFXNode(BracketOverviewTabController boc) {
+    public RoundRobinNode getBracketFXNode(BracketOverviewTabController boc) {
         return new RoundRobinNode(this, boc);
     }
 
