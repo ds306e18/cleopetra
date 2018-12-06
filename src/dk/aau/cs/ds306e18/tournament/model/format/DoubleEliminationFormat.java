@@ -40,14 +40,18 @@ public class DoubleEliminationFormat extends Elimination implements MatchPlayedL
     @Override
     public List<Team> getTopTeams(int count, TieBreaker tieBreaker) {
         List<Team> topTeamsList = new ArrayList<>(), tempWinnerList = new ArrayList<>(), tempLoserList = new ArrayList<>();
+
+        if(count > seededTeams.size()){ count = seededTeams.size(); }
+
         topTeamsList.add(finalMatch.getWinner());
         if(count > 1) { topTeamsList.add(finalMatch.getLoser()); }
 
         int matchIndex = lowerBracketMatches.size()-1;
         int upperBound = lowerBracketMatches.size()-2;
         int upperBoundReduction = 1, doubleUpperBound = 1;
+
         while(topTeamsList.size() < count){
-            while(matchIndex > upperBound){
+            while(matchIndex > upperBound && matchIndex >= 0){
                 if(!topTeamsList.contains(lowerBracketMatches.get(matchIndex).getWinner())){
                     tempWinnerList.add(lowerBracketMatches.get(matchIndex).getWinner());
                 }
