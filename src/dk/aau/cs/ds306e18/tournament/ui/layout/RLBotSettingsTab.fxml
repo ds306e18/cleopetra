@@ -8,7 +8,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox fx:id="tabRoot" maxWidth="-Infinity" minWidth="350.0" prefWidth="350.0" spacing="10.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/" fx:controller="dk.aau.cs.ds306e18.tournament.ui.RLBotSettingsTabController">
+<VBox fx:id="tabRoot" maxWidth="-Infinity" minWidth="350.0" prefWidth="350.0" spacing="10.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.RLBotSettingsTabController">
    <children>
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="RLBot Settings" wrappingWidth="370.58128547668457">
          <font>
@@ -18,6 +18,7 @@
             <Insets />
          </VBox.margin>
       </Text>
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="The tournament runner is able to start matches using the RLBot framework. To do that you must give it a path to a rlbot.cfg file. Note: this file will be modified to include the given bots in a match. But all other settings will stay the same." wrappingWidth="310.0" />
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Path to rlbot.cfg:">
          <font>
             <Font size="16.0" />

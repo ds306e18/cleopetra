@@ -9,6 +9,7 @@ import dk.aau.cs.ds306e18.tournament.model.format.Format;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchChangeListener;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchStatus;
+import dk.aau.cs.ds306e18.tournament.utility.Alerts;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.ModelCoupledUI;
@@ -349,5 +350,12 @@ public class BracketOverviewTabController implements MatchChangeListener {
 
     public void onPlayMatchBtnAction(ActionEvent actionEvent) {
         MatchRunner.startMatch(Tournament.get().getRlBotSettings(), selectedMatch.getShowedMatch());
+    }
+
+    public void modifyConfigButtonOnAction(ActionEvent actionEvent) {
+        boolean ready = MatchRunner.prepareMatch(Tournament.get().getRlBotSettings(), selectedMatch.getShowedMatch());
+        if (ready) {
+            Alerts.infoNotification("Modified config file", "The rlbot.cfg was successfully modified to the selected match.");
+        }
     }
 }
