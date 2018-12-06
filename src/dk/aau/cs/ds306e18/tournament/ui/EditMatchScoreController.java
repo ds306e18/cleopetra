@@ -60,7 +60,8 @@ public class EditMatchScoreController {
                     saveButton.setDisable(false);
                 }
             } catch (NumberFormatException e) {
-                blueScoreSpinner.getEditor().textProperty().setValue("");
+                //blueScoreSpinner.getEditor().textProperty().setValue("");
+                Platform.runLater(blueScoreSpinner.getEditor()::clear);
                 isTeamScoresEqual();
                 isBlueScoreLegit = false;
                 saveButton.setDisable(true);
@@ -81,7 +82,7 @@ public class EditMatchScoreController {
                     saveButton.setDisable(false);
                 }
             } catch (NumberFormatException e) {
-                orangeScoreSpinner.getEditor().textProperty().setValue("");
+                Platform.runLater(orangeScoreSpinner.getEditor()::clear);
                 isTeamScoresEqual();
                 isOrangeScoreLegit = false;
                 saveButton.setDisable(true);

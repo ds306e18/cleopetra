@@ -305,7 +305,7 @@ public class BracketOverviewTabController implements MatchChangeListener {
                 editMatchScoreStage.show();
             });
 
-            editMatchScoreStage.showAndWait();
+            editMatchScoreStage.show();
 
         } catch (IOException e) {
             e.printStackTrace();
