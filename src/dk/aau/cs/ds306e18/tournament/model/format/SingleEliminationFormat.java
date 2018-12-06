@@ -1,13 +1,12 @@
 package dk.aau.cs.ds306e18.tournament.model.format;
 
-import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.SingleEliminationNode;
-import dk.aau.cs.ds306e18.tournament.ui.BracketOverviewTabController;
-import dk.aau.cs.ds306e18.tournament.model.StageStatus;
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchPlayedListener;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchStatus;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
+import dk.aau.cs.ds306e18.tournament.ui.BracketOverviewTabController;
+import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.SingleEliminationNode;
 import javafx.scene.Node;
 
 import java.util.*;
@@ -15,7 +14,7 @@ import java.util.stream.Collectors;
 
 public class SingleEliminationFormat extends Elimination implements MatchPlayedListener {
 
-    transient private List<MatchPlayedListener> matchPlayedListeners = new LinkedList<>();
+    transient private List<StageStatusChangeListener> statusChangeListeners = new LinkedList<>();
 
     @Override
     public void start(List<Team> seededTeams) {
@@ -58,10 +57,34 @@ public class SingleEliminationFormat extends Elimination implements MatchPlayedL
 
     @Override
     public void onMatchPlayed(Match match) {
+        // Was it last match?
+        StageStatus oldStatus = status;
         if (finalMatch.hasBeenPlayed()) {
             status = StageStatus.CONCLUDED;
         } else {
             status = StageStatus.RUNNING;
+        }
+
+        // Notify listeners if status changed
+        if (oldStatus != status) {
+            nofityStatusListeners(oldStatus, status);
+        }
+    }
+
+    @Override
+    public void registerStatusChangedListener(StageStatusChangeListener listener) {
+        statusChangeListeners.add(listener);
+    }
+
+    @Override
+    public void unregisterStatusChangedListener(StageStatusChangeListener listener) {
+        statusChangeListeners.remove(listener);
+    }
+
+    /** Let listeners know, that the status has changed */
+    private void nofityStatusListeners(StageStatus oldStatus, StageStatus newStatus) {
+        for (StageStatusChangeListener listener : statusChangeListeners) {
+            listener.onStageStatusChanged(this, oldStatus, newStatus);
         }
     }
 
