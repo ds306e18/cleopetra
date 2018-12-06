@@ -9,11 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 abstract class Elimination implements Format, MatchPlayedListener {
-    StageStatus status = StageStatus.PENDING;
-    ArrayList<Team> seededTeams;
-    Match finalMatch;
-    Match[] upperBracketMatchesArray;
-    int rounds;
+    protected StageStatus status = StageStatus.PENDING;
+    protected ArrayList<Team> seededTeams;
+    protected transient Match finalMatch;
+    protected Match[] upperBracketMatchesArray;
+    protected int rounds;
 
     /**
      * Generates a single-elimination bracket structure. References between the empty matches are made by winnerOf and starterSlots.
@@ -116,8 +116,6 @@ abstract class Elimination implements Format, MatchPlayedListener {
             }
         }
     }
-
-
 
     int getParent(int i) {
         i = i + 1;

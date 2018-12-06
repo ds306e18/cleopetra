@@ -130,12 +130,32 @@ public class SingleEliminationFormat extends Elimination implements MatchPlayedL
      */
     @Override
     public void repair() {
-        // set final match to root of Match-tree
+
+        // Find final match
         this.finalMatch = this.upperBracketMatchesArray[0];
-        // register listener for each finalMatch
-        this.finalMatch.registerMatchPlayedListener(this);
-        // recursively call postDeserializationRepair
-        this.finalMatch.postDeserializationRepair();
+        finalMatch.registerMatchPlayedListener(this);
+
+        // Reconnect all matches
+        for (int i = 0; i < upperBracketMatchesArray.length; i++) {
+            if (upperBracketMatchesArray[i] != null) {
+                // Blue is winner from left match, if such a match exists
+                int leftIndex = getLeftSide(i);
+                if (leftIndex < upperBracketMatchesArray.length) {
+                    Match leftMatch = upperBracketMatchesArray[leftIndex];
+                    if (leftMatch != null) {
+                        upperBracketMatchesArray[i].setBlueToWinnerOf(leftMatch);
+                    }
+                }
+                // Orange is winner from right match, if such a match exists
+                int rightIndex = getRightSide(i);
+                if (rightIndex < upperBracketMatchesArray.length) {
+                    Match rightMatch = upperBracketMatchesArray[rightIndex];
+                    if (rightMatch != null) {
+                        upperBracketMatchesArray[i].setOrangeToWinnerOf(rightMatch);
+                    }
+                }
+            }
+        }
     }
 
     @Override
