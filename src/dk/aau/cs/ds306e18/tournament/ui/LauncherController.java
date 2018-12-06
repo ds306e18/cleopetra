@@ -1,6 +1,7 @@
 package dk.aau.cs.ds306e18.tournament.ui;
 
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
+import dk.aau.cs.ds306e18.tournament.utility.Alerts;
 import dk.aau.cs.ds306e18.tournament.utility.FileOperations;
 import dk.aau.cs.ds306e18.tournament.utility.SaveLoad;
 import javafx.event.ActionEvent;
@@ -27,11 +28,13 @@ public class LauncherController {
         // Set min- width and height and title.
         systemStage.setMinWidth(800);
         systemStage.setMinHeight(650);
+        systemStage.setMaximized(true);
         systemStage.setTitle("DatTournament Runner");
 
         // Set the correct scene for the system stage.
         try {
             AnchorPane systemRoot = FXMLLoader.load(LauncherController.class.getResource("layout/MainLayout.fxml"));
+            Alerts.window = systemRoot;
             systemStage.setScene(new Scene(systemRoot));
         } catch (IOException e) {
             System.out.println(e.getMessage());
@@ -47,10 +50,22 @@ public class LauncherController {
 
             // Load exit program FXML file
             try {
+                // Calculate the center position of the main window.
+                double centerXPosition = systemStage.getX() + systemStage.getWidth()/2d;
+                double centerYPosition = systemStage.getY() + systemStage.getHeight()/2d;
+
                 AnchorPane exitRoot = FXMLLoader.load(LauncherController.class.getResource("layout/Exit.fxml"));
 
                 exitStage.setScene(new Scene(exitRoot));
-                exitStage.show();
+
+                // Assign the position of the popup window whenever it is shown.
+                exitStage.setOnShown(ev -> {
+                    exitStage.setX(centerXPosition - exitStage.getWidth()/2d);
+                    exitStage.setY(centerYPosition - exitStage.getHeight()/2d);
+                    exitStage.show();
+                });
+
+                exitStage.showAndWait();
             } catch (IOException error) {
                 error.printStackTrace();
             }

@@ -5,6 +5,7 @@ import dk.aau.cs.ds306e18.tournament.model.format.SwissFormat;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreakerByGoalDiff;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreakerBySeed;
+import dk.aau.cs.ds306e18.tournament.utility.Alerts;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;

@@ -292,6 +292,20 @@ public class BracketOverviewTabController implements MatchChangeListener {
             EditMatchScoreController emsc = loader.getController();
             emsc.setMatch(selectedMatch.getShowedMatch());
             editMatchScoreStage.setScene(new Scene(editMatchStageRoot));
+
+            // Calculate the center position of the main window.
+            Stage mainWindow = (Stage) bracketOverviewTab.getScene().getWindow();
+            double centerXPosition = mainWindow.getX() + mainWindow.getWidth()/2d;
+            double centerYPosition = mainWindow.getY() + mainWindow.getHeight()/2d;
+
+            // Assign popup window to the center of the main window.
+            editMatchScoreStage.setOnShown(ev -> {
+                editMatchScoreStage.setX(centerXPosition - editMatchScoreStage.getWidth()/2d);
+                editMatchScoreStage.setY(centerYPosition - editMatchScoreStage.getHeight()/2d);
+
+                editMatchScoreStage.show();
+            });
+
             editMatchScoreStage.show();
 
         } catch (IOException e) {
