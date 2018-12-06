@@ -1,3 +1,13 @@
+#teamListView .scroll-bar:vertical{
+    -fx-scale-x: 0;
+    -fx-padding: -100;
+}
+
+#teamListView .scroll-bar:horizontal{
+    -fx-scale-x: 0;
+    -fx-padding: -100;
+}
+
 .button, .choice-box {
     -fx-background-color: #f8f8f8;
     -fx-background-radius: 0;

@@ -71,8 +71,8 @@
                         <Font name="System Bold" size="16.0" />
                      </font>
                   </Label>
-                  <ListView fx:id="blueTeamListView" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="117.0" minWidth="130.0" mouseTransparent="true" prefHeight="117.0" prefWidth="130.0" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-                  <ListView fx:id="orangeTeamListView" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="117.0" minWidth="130.0" mouseTransparent="true" prefHeight="117.0" prefWidth="130.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                  <ListView id="teamListView" fx:id="blueTeamListView" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="117.0" minWidth="130.0" mouseTransparent="true" prefHeight="117.0" prefWidth="130.0" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                  <ListView  id="teamListView" fx:id="orangeTeamListView" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="117.0" minWidth="130.0" mouseTransparent="true" prefHeight="117.0" prefWidth="130.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
                   <Label text=":" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                      <font>
                         <Font name="System Bold" size="20.0" />
