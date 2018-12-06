@@ -183,6 +183,7 @@ public class DoubleEliminationFormatTest {
         bracket.getAllMatches().get(bracket.getAllMatches().size()-1).setScores(2,0,true);
         assertEquals(3,bracket.getTopTeams(3, new TieBreakerBySeed()).size());
         assertEquals(6,bracket.getTopTeams(6, new TieBreakerBySeed()).size());
+        assertEquals(8,bracket.getTopTeams(15, new TieBreakerBySeed()).size());
     }
 
     @Test
@@ -198,5 +199,4 @@ public class DoubleEliminationFormatTest {
         bracket.getAllMatches().get(bracket.getAllMatches().size()-1).setScores(2,0,true);
         assertEquals(5, bracket.getTopTeams(5, new TieBreakerBySeed()).size());
     }
-
 }
