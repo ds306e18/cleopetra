@@ -213,7 +213,7 @@ public class BracketOverviewTabController implements MatchChangeListener {
             return new SimpleIntegerProperty(points).asObject();
         });
 
-        TableColumn<Team, Integer> goalDiffColumn = new TableColumn<>("GoalDiff");
+        TableColumn<Team, Integer> goalDiffColumn = new TableColumn<>("GoalDiff.");
         goalDiffColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getGoalDiff()).asObject());
 
         // Styling - Descending order and centering text.
@@ -222,7 +222,7 @@ public class BracketOverviewTabController implements MatchChangeListener {
         pointColumn.setStyle("-fx-alignment: CENTER;");
         goalDiffColumn.setStyle("-fx-alignment: CENTER;");
 
-        // Add sorting order and columns to the tableview.
+        // Add columns and sorting orders to the tableview.
         leaderboardTableview.getColumns().add(nameColumn);
         leaderboardTableview.getColumns().add(pointColumn);
         leaderboardTableview.getColumns().add(goalDiffColumn);
