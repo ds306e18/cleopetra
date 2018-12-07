@@ -1,30 +1,163 @@
 package dk.aau.cs.ds306e18.tournament.model.format;
 
-import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.SingleEliminationNode;
-import dk.aau.cs.ds306e18.tournament.ui.BracketOverviewTabController;
-import dk.aau.cs.ds306e18.tournament.model.StageStatus;
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchPlayedListener;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchStatus;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
+import dk.aau.cs.ds306e18.tournament.ui.BracketOverviewTabController;
+import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.SingleEliminationNode;
 import javafx.scene.Node;
 
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class SingleEliminationFormat extends Elimination implements MatchPlayedListener {
+public class SingleEliminationFormat implements Format, MatchPlayedListener {
 
-    transient private List<MatchPlayedListener> matchPlayedListeners = new LinkedList<>();
+    private StageStatus status = StageStatus.PENDING;
+    private ArrayList<Team> seededTeams;
+    private Match finalMatch;
+    private Match[] bracket;
+    private int rounds;
+
+    transient private List<StageStatusChangeListener> statusChangeListeners = new LinkedList<>();
 
     @Override
     public void start(List<Team> seededTeams) {
         this.seededTeams = new ArrayList<>(seededTeams);
         rounds = (int) Math.ceil(Math.log(seededTeams.size()) / Math.log(2));
-        generateUpperBracket(rounds);
-        seedUpperBracket(seededTeams, rounds);
+        generateBracket();
+        seedBracket(seededTeams);
         status = StageStatus.RUNNING;
         finalMatch.registerMatchPlayedListener(this);
+    }
+
+    /** Generates a single-elimination bracket structure. Matches are referenced by setting winner of from earlier matches.
+     * Matches are accessed through finalMatch (the root) or the array upperBracketMatchesArray.
+     */
+    private void generateBracket() {
+        int matchesInFstRound = (int) Math.pow(2, rounds - 1);
+        int amountOfMatches = (int) Math.pow(2,rounds)-1;
+        bracket = new Match[amountOfMatches];
+        for(int i = amountOfMatches - 1; i >= 0; i--) {
+            //Creates empty matches for first round
+            if(i >= amountOfMatches - matchesInFstRound) {
+                bracket[i] = new Match();
+            }
+            //Creates the remaining matches which contains winners from their left- and right child-indexes.
+            else {
+                bracket[i] = new Match()
+                        .setBlueToWinnerOf(bracket[getLeftIndex(i)])
+                        .setOrangeToWinnerOf(bracket[getRightIndex(i)]);
+            }
+        }
+        finalMatch = bracket[0];
+    }
+
+    /** Seeds the single-elimination bracket with teams to give better placements.
+     * If there are an insufficient amount of teams, the team(s) with the best seeding(s) will be placed in the next round instead.
+     * @param seededTeams a list containing the teams in the tournament */
+    private void seedBracket(List<Team> seededTeams) {
+        ArrayList<Team> seedList = new ArrayList<>(seededTeams);
+
+        //Create needed amount of byes to match with the empty matches
+        ArrayList<Team> byeList = addByes(seededTeams.size());
+        seedList.addAll(byeList);
+
+        //Reorders list with fair seeding method
+        fairSeeding(seedList);
+
+        //Places the teams in the bracket, and removes unnecessary matches
+        placeTeamsInBracket(seedList, byeList);
+    }
+
+    /** Places the teams in the bracket and removes unnecessary matches
+     * @param seedList a list of seeded teams in a fair seeding order
+     * @param byeList a list of dummy teams */
+    private void placeTeamsInBracket(ArrayList<Team> seedList, ArrayList<Team> byeList) {
+        int seedMatchIndex = finalMatch.getTreeAsListBFS().size() - 1;
+        int  amountOfTeams = seedList.size();
+        for (int teamIndex = 0; teamIndex < amountOfTeams; teamIndex = teamIndex + 2) {
+            // If the matchup would be between a team and a bye, the team will be placed at its parent match
+            // The match in the first round will be deleted(null)
+            if (byeList.contains(seedList.get(teamIndex)) || byeList.contains(seedList.get(teamIndex + 1))) {
+                int matchCheckIndex = getParentIndex(seedMatchIndex);
+                if (getLeftIndex(matchCheckIndex) == seedMatchIndex) {
+                    bracket[getParentIndex(seedMatchIndex)].setBlue(seedList.get(teamIndex));
+                }
+                else {
+                    bracket[getParentIndex(seedMatchIndex)].setOrange(seedList.get(teamIndex));
+                }
+                bracket[seedMatchIndex] = null;
+                seedMatchIndex--;
+            }
+            // If there are no byes in the match up, place the teams vs each other as intended
+            else {
+                bracket[seedMatchIndex].setBlue(seedList.get(teamIndex));
+                bracket[seedMatchIndex].setOrange(seedList.get(teamIndex+1));
+                seedMatchIndex--;
+            }
+        }
+    }
+
+    /** Reorders seedList to a fair list order for seeding
+     * @param seedList a list of seeded teams in ascending order */
+    private void fairSeeding(ArrayList<Team> seedList) {
+        //Variables used for seeding
+        int slice = 1;
+        int interactions = seedList.size() / 2;
+
+        //Order the teams in a seeded list
+        while (slice < interactions) {
+            ArrayList<Team> temp = new ArrayList<>(seedList);
+            seedList.clear();
+
+            while (temp.size() > 0) {
+                int lastIndex = temp.size();
+                seedList.addAll(temp.subList(0, slice));
+                seedList.addAll(temp.subList(lastIndex - slice, lastIndex));
+                temp.removeAll(temp.subList(lastIndex - slice, lastIndex));
+                temp.removeAll(temp.subList(0, slice));
+            }
+
+            slice *= 2;
+        }
+    }
+
+    /** Add the needed amount of byes
+     * @param amountOfTeams the amount of teams in the stage
+     * @return byeList, an arrayList containing dummy teams */
+    private ArrayList<Team> addByes(int amountOfTeams){
+        int amountOfByes = (int) Math.pow(2, rounds) - amountOfTeams;
+        ArrayList<Team> byeList = new ArrayList<>();
+        while (byeList.size() < amountOfByes) {
+            byeList.add(new Team("bye" + byeList.size(), new ArrayList<>(), 999, ""));
+        }
+        return byeList;
+    }
+
+    int getParentIndex(int i) {
+        i = i + 1;
+        if (i == 1) {
+            return -1;
+        } else {
+            return Math.floorDiv(i,2)-1;
+        }
+    }
+
+    int getLeftIndex(int i){
+        i = i + 1;
+        return 2 * i;
+    }
+
+    int getRightIndex(int i) {
+        i = i + 1;
+        return 2 * i - 1;
+    }
+
+    public int getRounds() {
+        return rounds;
     }
 
     @Override
@@ -53,15 +186,39 @@ public class SingleEliminationFormat extends Elimination implements MatchPlayedL
     }
 
     public Match[] getMatchesAsArray() {
-        return this.upperBracketMatchesArray;
+        return this.bracket;
     }
 
     @Override
     public void onMatchPlayed(Match match) {
+        // Was it last match?
+        StageStatus oldStatus = status;
         if (finalMatch.hasBeenPlayed()) {
             status = StageStatus.CONCLUDED;
         } else {
             status = StageStatus.RUNNING;
+        }
+
+        // Notify listeners if status changed
+        if (oldStatus != status) {
+            nofityStatusListeners(oldStatus, status);
+        }
+    }
+
+    @Override
+    public void registerStatusChangedListener(StageStatusChangeListener listener) {
+        statusChangeListeners.add(listener);
+    }
+
+    @Override
+    public void unregisterStatusChangedListener(StageStatusChangeListener listener) {
+        statusChangeListeners.remove(listener);
+    }
+
+    /** Let listeners know, that the status has changed */
+    private void nofityStatusListeners(StageStatus oldStatus, StageStatus newStatus) {
+        for (StageStatusChangeListener listener : statusChangeListeners) {
+            listener.onStageStatusChanged(this, oldStatus, newStatus);
         }
     }
 
@@ -74,14 +231,14 @@ public class SingleEliminationFormat extends Elimination implements MatchPlayedL
         List<Team> topTeams = new ArrayList<>();
         List<Team> tempWinnerTeams = new ArrayList<>();
         List<Team> tempLoserTeams = new ArrayList<>();
-        int roundUpperBoundIndex = 1, currentMatchIndex = 0;
+        int roundUpperBoundIndex = 1, currentMatchIndex = 0, amountOfMatches = finalMatch.getTreeAsListBFS().size();
 
         if(count > seededTeams.size()){ count = seededTeams.size();}
 
         //Will run until team size fits the count
         while (topTeams.size() < count) {
             //places the losers and winners of the round into two different temporary lists
-            while (currentMatchIndex < roundUpperBoundIndex) {
+            while (currentMatchIndex < roundUpperBoundIndex && currentMatchIndex < amountOfMatches) {
                 if (!topTeams.contains(finalMatch.getTreeAsListBFS().get(currentMatchIndex).getWinner())) {
                     tempWinnerTeams.add(finalMatch.getTreeAsListBFS().get(currentMatchIndex).getWinner());
                 }
@@ -106,7 +263,7 @@ public class SingleEliminationFormat extends Elimination implements MatchPlayedL
             tempLoserTeams.clear();
 
             //New round for the loop to iterate
-            roundUpperBoundIndex = getRightSide(roundUpperBoundIndex);
+            roundUpperBoundIndex = getRightIndex(roundUpperBoundIndex);
         }
 
         //If there are too many teams, remove teams
@@ -127,33 +284,30 @@ public class SingleEliminationFormat extends Elimination implements MatchPlayedL
         return null;
     }
 
-    /**
-     * Repairs match-structure after deserialization
-     */
+    /** Repairs match-structure after deserialization */
     @Override
     public void repair() {
-
         // Find final match
-        this.finalMatch = this.upperBracketMatchesArray[0];
+        this.finalMatch = this.bracket[0];
         finalMatch.registerMatchPlayedListener(this);
 
         // Reconnect all matches
-        for (int i = 0; i < upperBracketMatchesArray.length; i++) {
-            if (upperBracketMatchesArray[i] != null) {
+        for (int i = 0; i < bracket.length; i++) {
+            if (bracket[i] != null) {
                 // Blue is winner from left match, if such a match exists
-                int leftIndex = getLeftSide(i);
-                if (leftIndex < upperBracketMatchesArray.length) {
-                    Match leftMatch = upperBracketMatchesArray[leftIndex];
+                int leftIndex = getLeftIndex(i);
+                if (leftIndex < bracket.length) {
+                    Match leftMatch = bracket[leftIndex];
                     if (leftMatch != null) {
-                        upperBracketMatchesArray[i].setBlueToWinnerOf(leftMatch);
+                        bracket[i].setBlueToWinnerOf(leftMatch);
                     }
                 }
                 // Orange is winner from right match, if such a match exists
-                int rightIndex = getRightSide(i);
-                if (rightIndex < upperBracketMatchesArray.length) {
-                    Match rightMatch = upperBracketMatchesArray[rightIndex];
+                int rightIndex = getRightIndex(i);
+                if (rightIndex < bracket.length) {
+                    Match rightMatch = bracket[rightIndex];
                     if (rightMatch != null) {
-                        upperBracketMatchesArray[i].setOrangeToWinnerOf(rightMatch);
+                        bracket[i].setOrangeToWinnerOf(rightMatch);
                     }
                 }
             }
@@ -170,14 +324,14 @@ public class SingleEliminationFormat extends Elimination implements MatchPlayedL
                 getStatus() == that.getStatus() &&
                 Objects.equals(seededTeams, that.seededTeams);
 
-        equals = Arrays.equals(upperBracketMatchesArray, that.upperBracketMatchesArray);
+        equals = Arrays.equals(bracket, that.bracket);
         return equals;
     }
 
     @Override
     public int hashCode() {
         int result = Objects.hash(getStatus(), seededTeams, finalMatch, rounds);
-        result = 31 * result + Arrays.hashCode(upperBracketMatchesArray);
+        result = 31 * result + Arrays.hashCode(bracket);
         return result;
     }
 }
