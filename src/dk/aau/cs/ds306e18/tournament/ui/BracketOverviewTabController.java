@@ -20,6 +20,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -187,6 +189,16 @@ public class BracketOverviewTabController implements MatchChangeListener {
         this.selectedMatch = match;
         updateTeamViewer(match == null ? null : match.getShowedMatch());
         if(selectedMatch != null) { selectedMatch.getShowedMatch().registerMatchChangeListener(this); }
+    }
+
+    /**
+     * Deselects the match when a right click is registered within the scrollpane.
+     */
+    @FXML
+    void deselectOnRightClick(MouseEvent event) {
+        if (event.getButton().equals(MouseButton.SECONDARY)){
+            setSelectedMatch(null);
+        }
     }
 
     /**
