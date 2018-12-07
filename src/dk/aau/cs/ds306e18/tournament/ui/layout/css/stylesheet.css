@@ -148,11 +148,11 @@
     -fx-font-weight: bold;
 }
 
-#matchPlayed .winner .teamName {
+#matchPlayed .winner .team {
 	-fx-font-weight: bold;
 }
 
-#matchTBD .teamName {
+#matchTBD .team {
     -fx-font-style: italic;
 }
 
@@ -231,6 +231,11 @@
 {
     -fx-padding: 0;
     -fx-shape: "";
+}
+#mainGrid .table-view .arrow, #mainGrid .table-view .sort-order-dot {
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-shape: " ";
 }
 
 /* TODO: Make the save button from icon-font instead of an .png. In order to change colors instead of opacity. */

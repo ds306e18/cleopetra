@@ -206,14 +206,14 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
         List<Team> topTeams = new ArrayList<>();
         List<Team> tempWinnerTeams = new ArrayList<>();
         List<Team> tempLoserTeams = new ArrayList<>();
-        int roundUpperBoundIndex = 1, currentMatchIndex = 0;
+        int roundUpperBoundIndex = 1, currentMatchIndex = 0, amountOfMatches = finalMatch.getTreeAsListBFS().size();
 
         if(count > seededTeams.size()){ count = seededTeams.size();}
 
         //Will run until team size fits the count
         while (topTeams.size() < count) {
             //places the losers and winners of the round into two different temporary lists
-            while (currentMatchIndex < roundUpperBoundIndex) {
+            while (currentMatchIndex < roundUpperBoundIndex && currentMatchIndex < amountOfMatches) {
                 if (!topTeams.contains(finalMatch.getTreeAsListBFS().get(currentMatchIndex).getWinner())) {
                     tempWinnerTeams.add(finalMatch.getTreeAsListBFS().get(currentMatchIndex).getWinner());
                 }
@@ -262,12 +262,31 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
     /** Repairs match-structure after deserialization */
     @Override
     public void repair() {
-        // set final match to root of Match-tree
+        // Find final match
         this.finalMatch = this.bracket[0];
-        // register listener for each finalMatch
-        this.finalMatch.registerMatchPlayedListener(this);
-        // recursively call postDeserializationRepair
-        this.finalMatch.postDeserializationRepair();
+        finalMatch.registerMatchPlayedListener(this);
+
+        // Reconnect all matches
+        for (int i = 0; i < bracket.length; i++) {
+            if (bracket[i] != null) {
+                // Blue is winner from left match, if such a match exists
+                int leftIndex = getLeftIndex(i);
+                if (leftIndex < bracket.length) {
+                    Match leftMatch = bracket[leftIndex];
+                    if (leftMatch != null) {
+                        bracket[i].setBlueToWinnerOf(leftMatch);
+                    }
+                }
+                // Orange is winner from right match, if such a match exists
+                int rightIndex = getRightIndex(i);
+                if (rightIndex < bracket.length) {
+                    Match rightMatch = bracket[rightIndex];
+                    if (rightMatch != null) {
+                        bracket[i].setOrangeToWinnerOf(rightMatch);
+                    }
+                }
+            }
+        }
     }
 
     @Override
