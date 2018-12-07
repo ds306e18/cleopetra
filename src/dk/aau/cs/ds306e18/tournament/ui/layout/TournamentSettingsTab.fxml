@@ -67,7 +67,7 @@
                   </ChoiceBox>
                </children>
             </HBox>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Stages">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Stages (in play order)">
                <font>
                   <Font size="16.0" />
                </font>

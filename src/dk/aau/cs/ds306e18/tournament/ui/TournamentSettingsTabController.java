@@ -101,27 +101,12 @@ public class TournamentSettingsTabController {
         });
     }
 
-    /** Sets up the listview for stages. Setting items,
-     * adding listener and changing what is displayed. */
+    /** Sets up the listview for stages. Setting items
+     * and adding listener. */
     private void setUpStageListView(){
 
         /* Assign items to the list in case of a tournament being loaded */
         stagesListView.setItems(FXCollections.observableArrayList(Tournament.get().getStages()));
-
-        /* Formatting what is displayed in the listView: id + name. */
-        stagesListView.setCellFactory(lv -> new ListCell<Stage>(){
-            public void updateItem(Stage stage, boolean empty) {
-                super.updateItem(stage, empty);
-                if (empty) {
-                    setText(null);
-                } else {
-                    int index = stagesListView.getItems().indexOf(stage) + 1;
-                    String text = "#" + index + " " + stage.getName();
-                    setText(text);
-                    stagesListView.refresh();
-                }
-            }
-        });
 
         /* By default the stage settings are hidden.
          * This listener is used to show the stage settings when there is at least one Stage added.
