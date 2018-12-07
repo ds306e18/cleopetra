@@ -1,9 +1,11 @@
 package dk.aau.cs.ds306e18.tournament.ui;
 
+import dk.aau.cs.ds306e18.tournament.model.format.StageStatusChangeListener;
+import dk.aau.cs.ds306e18.tournament.model.match.MatchPlayedListener;
 import dk.aau.cs.ds306e18.tournament.rlbot.MatchRunner;
 import dk.aau.cs.ds306e18.tournament.model.Bot;
 import dk.aau.cs.ds306e18.tournament.model.Team;
-import dk.aau.cs.ds306e18.tournament.model.StageStatus;
+import dk.aau.cs.ds306e18.tournament.model.format.StageStatus;
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import dk.aau.cs.ds306e18.tournament.model.format.Format;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
@@ -33,7 +35,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 
-public class BracketOverviewTabController implements MatchChangeListener {
+public class BracketOverviewTabController implements StageStatusChangeListener, MatchChangeListener {
 
     public static BracketOverviewTabController instance;
 
@@ -137,9 +139,11 @@ public class BracketOverviewTabController implements MatchChangeListener {
     public void showStage(dk.aau.cs.ds306e18.tournament.model.Stage stage) {
         if (coupledBracket != null) {
             coupledBracket.decoupleFromModel();
+            showedFormat.unregisterStatusChangedListener(this);
         }
 
         showedFormat = stage.getFormat();
+        showedFormat.registerStatusChangedListener(this);
 
         stageNameLabel.setText(stage.getName());
         Node bracket = showedFormat.getBracketFXNode(this);
@@ -346,9 +350,13 @@ public class BracketOverviewTabController implements MatchChangeListener {
     }
 
     @Override
+    public void onStageStatusChanged(Format format, StageStatus oldStatus, StageStatus newStatus) {
+        updateStageNavigationButtons();
+    }
+
+    @Override
     public void onMatchChanged(Match match) {
         updateTeamViewer(selectedMatch.getShowedMatch());
-        updateStageNavigationButtons();
     }
 
     public void prevStageBtnOnAction(ActionEvent actionEvent) {

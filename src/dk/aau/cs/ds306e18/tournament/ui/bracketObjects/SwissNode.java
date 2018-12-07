@@ -29,8 +29,11 @@ public class SwissNode extends HBox implements MatchPlayedListener, MatchChangeL
     public SwissNode(SwissFormat swiss, BracketOverviewTabController boc) {
         this.boc = boc;
         this.swiss = swiss;
-        swiss.registerMatchPlayedListener(this);
-        swiss.registerMatchChangedListener(this);
+        // Register to events from all matches
+        for (Match match : swiss.getAllMatches()) {
+            match.registerMatchChangeListener(this);
+            match.registerMatchPlayedListener(this);
+        }
         boc.showLeaderboard(true);
         update();
     }
@@ -78,8 +81,11 @@ public class SwissNode extends HBox implements MatchPlayedListener, MatchChangeL
     @Override
     public void decoupleFromModel() {
         removeElements();
-        swiss.unregisterMatchPlayedListener(this);
-        swiss.unregisterMatchChangedListener(this);
+        // Unregister from events from all matches
+        for (Match m : swiss.getAllMatches()) {
+            m.unregisterMatchChangeListener(this);
+            m.unregisterMatchPlayedListener(this);
+        }
         boc.showLeaderboard(false);
     }
 
@@ -111,6 +117,11 @@ public class SwissNode extends HBox implements MatchPlayedListener, MatchChangeL
         generateRoundButton.setText("Generate Round");
         generateRoundButton.setOnMouseClicked(e -> {
             swiss.startNextRound();
+            // Register to events from newest round
+            for (Match m : swiss.getRounds().get(swiss.getRounds().size() - 1)) {
+                m.registerMatchPlayedListener(this);
+                m.registerMatchChangeListener(this);
+            }
             update();
         });
         column.getChildren().add(generateRoundButton);

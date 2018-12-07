@@ -3,7 +3,7 @@ package dk.aau.cs.ds306e18.tournament.utility;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dk.aau.cs.ds306e18.tournament.model.Stage;
-import dk.aau.cs.ds306e18.tournament.model.StageStatus;
+import dk.aau.cs.ds306e18.tournament.model.format.StageStatus;
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import dk.aau.cs.ds306e18.tournament.model.format.Format;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
