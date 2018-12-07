@@ -1,7 +1,6 @@
 package dk.aau.cs.ds306e18.tournament.ui;
 
 import dk.aau.cs.ds306e18.tournament.model.format.StageStatusChangeListener;
-import dk.aau.cs.ds306e18.tournament.model.match.MatchPlayedListener;
 import dk.aau.cs.ds306e18.tournament.rlbot.MatchRunner;
 import dk.aau.cs.ds306e18.tournament.model.Bot;
 import dk.aau.cs.ds306e18.tournament.model.Team;
@@ -33,8 +32,6 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 
 public class BracketOverviewTabController implements StageStatusChangeListener, MatchChangeListener {
@@ -65,6 +62,10 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
     @FXML private VBox bracketLeaderboard;
     @FXML private TableView<Team> leaderboardTableview;
     @FXML private Label stageNameLabel;
+    @FXML private Label botNameLabel;
+    @FXML private Label botDeveloperLabel;
+    @FXML private Label botDescriptionLabel;
+    @FXML private VBox botInfoBox;
 
     private int showedStageIndex = -1;
     private ModelCoupledUI coupledBracket;
@@ -74,13 +75,58 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
     @FXML
     private void initialize() {
         instance = this; // TODO Make references to other controllers work in MainController
+
+
+        // Listeners for the listviews. Handles the clear of selection of the other listview and updates the
+        // bot info box according to the selection.
+        blueTeamListView.getSelectionModel().selectedItemProperty().addListener(observable -> {
+            if (blueTeamListView.getItems() != null){
+                if (!(blueTeamListView.getItems().isEmpty())){
+                    if (getSelectedBot(blueTeamListView) != null){
+                        botInfoBox.setVisible(true);
+                        updateBotInfo(getSelectedBot(blueTeamListView));
+                        clearSelectionOfTableview(orangeTeamListView);
+                    }
+                }
+            }
+        });
+
+        orangeTeamListView.getSelectionModel().selectedItemProperty().addListener(observable -> {
+            if (orangeTeamListView.getItems() != null){
+                if (!(orangeTeamListView.getItems().isEmpty())){
+                    if (getSelectedBot(orangeTeamListView) != null){
+                        botInfoBox.setVisible(true);
+                        updateBotInfo(getSelectedBot(orangeTeamListView));
+                        clearSelectionOfTableview(blueTeamListView);
+                    }
+                }
+            }
+        });
+    }
+
+    /**
+     * Clears the selection of a given ListView.
+     */
+    private void clearSelectionOfTableview(ListView<Bot> listView){
+        if (getSelectedBot(listView) != null) {
+            listView.getSelectionModel().clearSelection();
+        }
+    }
+
+    /**
+     * Updates the labels on boxInfo according to a given bot.
+     * @param selectedBot The given bot wished to receive details from.
+     */
+    private void updateBotInfo(Bot selectedBot){
+        botNameLabel.setText(selectedBot.getName());
+        botDeveloperLabel.setText(selectedBot.getDeveloper());
+        botDescriptionLabel.setText(selectedBot.getDescription());
     }
 
     /**
      * Updates all elements depending on the state of the tournament and the shown stage.
      */
     public void update() {
-
         Tournament tournament = Tournament.get();
         showLeaderboard(false);
 
@@ -252,6 +298,7 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
      */
     private void updateTeamViewer(Match match) {
         boolean disable = (match == null);
+        botInfoBox.setVisible(false);
         selectedMatchInfo.setDisable(disable);
         selectedMatchButtonHolder.setDisable(disable);
 
@@ -403,5 +450,14 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
         if (ready) {
             Alerts.infoNotification("Modified config file", "The rlbot.cfg was successfully modified to the selected match.");
         }
+    }
+
+    /**
+     * Method to return the selected bot in a given Listview
+     * @param listView the listview to be checked for selection
+     * @return the bot that is selected.
+     */
+    private Bot getSelectedBot(ListView<Bot> listView) {
+        return listView.getSelectionModel().getSelectedItem();
     }
 }

@@ -81,8 +81,8 @@
                         <Font name="System Bold" size="16.0" />
                      </font>
                   </Label>
-                  <ListView id="teamListView" fx:id="blueTeamListView" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="117.0" minWidth="130.0" mouseTransparent="true" prefHeight="117.0" prefWidth="130.0" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-                  <ListView  id="teamListView" fx:id="orangeTeamListView" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="117.0" minWidth="130.0" mouseTransparent="true" prefHeight="117.0" prefWidth="130.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                  <ListView id="teamListView" fx:id="blueTeamListView" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="117.0" minWidth="130.0" prefHeight="117.0" prefWidth="130.0" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                  <ListView id="teamListView" fx:id="orangeTeamListView" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="117.0" minWidth="130.0" prefHeight="117.0" prefWidth="130.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
                   <Label text=":" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                      <font>
                         <Font name="System Bold" size="20.0" />
@@ -119,7 +119,52 @@
                   <Button fx:id="editMatchBtn" mnemonicParsing="false" onAction="#editMatchBtnOnAction" prefHeight="27.0" prefWidth="110.0" text="Edit scores" />
                </children>
             </HBox>
-            <Pane VBox.vgrow="ALWAYS" />
+            <VBox fx:id="botInfoBox" prefHeight="236.0" prefWidth="267.0">
+               <children>
+                  <GridPane alignment="CENTER_LEFT" minHeight="67.0" prefHeight="67.0">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="126.888916015625" minWidth="10.0" prefWidth="79.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="187.66666666666663" minWidth="10.0" prefWidth="187.66666666666663" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label text="Bot name:">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label text="Developer:" GridPane.rowIndex="1">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label text="Description:" GridPane.rowIndex="2">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="botNameLabel" GridPane.columnIndex="1" />
+                        <Label fx:id="botDeveloperLabel" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="5.0" />
+                     </VBox.margin>
+                  </GridPane>
+                  <Label fx:id="botDescriptionLabel" alignment="TOP_LEFT" minHeight="128.0" wrapText="true">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </Label>
+               </children>
+               <VBox.margin>
+                  <Insets bottom="16.0" top="32.0" />
+               </VBox.margin>
+            </VBox>
+            <Pane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
             <HBox fx:id="stageNavigationButtonsHolder" alignment="CENTER">
                <children>
                   <Button fx:id="prevStageBtn" mnemonicParsing="false" onAction="#prevStageBtnOnAction" prefHeight="27.0" prefWidth="110.0" text="&lt; Previous Stage">
