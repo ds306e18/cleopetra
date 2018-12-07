@@ -1,7 +1,6 @@
 package dk.aau.cs.ds306e18.tournament.ui;
 
 import dk.aau.cs.ds306e18.tournament.model.format.StageStatusChangeListener;
-import dk.aau.cs.ds306e18.tournament.model.match.MatchPlayedListener;
 import dk.aau.cs.ds306e18.tournament.rlbot.MatchRunner;
 import dk.aau.cs.ds306e18.tournament.model.Bot;
 import dk.aau.cs.ds306e18.tournament.model.Team;
@@ -108,12 +107,12 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
 
     /**
      * Updates the labels on boxInfo according to a given bot.
-     * @param selectecBot The given bot wished to receive details from.
+     * @param selectedBot The given bot wished to receive details from.
      */
-    private void updateBotInfo(Bot selectecBot){
-        botNameLabel.setText(selectecBot.getName());
-        botDeveloperLabel.setText(selectecBot.getDeveloper());
-        botDescriptionLabel.setText(selectecBot.getDescription());
+    private void updateBotInfo(Bot selectedBot){
+        botNameLabel.setText(selectedBot.getName());
+        botDeveloperLabel.setText(selectedBot.getDeveloper());
+        botDescriptionLabel.setText(selectedBot.getDescription());
     }
 
     /**
