@@ -2,6 +2,7 @@ package dk.aau.cs.ds306e18.tournament.model;
 
 import dk.aau.cs.ds306e18.tournament.TestUtilities;
 import dk.aau.cs.ds306e18.tournament.model.format.SingleEliminationFormat;
+import dk.aau.cs.ds306e18.tournament.model.format.StageStatus;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreakerBySeed;
 import org.junit.Test;
@@ -176,7 +177,7 @@ public class SingleEliminationFormatTest {
     //Tries to get top 10 teams in a 4 team stage, should only return 4 teams
     @Test
     public void getTopTeamTest03() {
-        SingleEliminationFormat bracket = generateBracketsAndWins(4);
+        SingleEliminationFormat bracket = generateBracketsAndWins(5);
         List<Team> teamList = new ArrayList<Team>(bracket.getTopTeams(10, new TieBreakerBySeed()));
         int seedValue = 1;
         for(int i = 0; i < 4; i++) {

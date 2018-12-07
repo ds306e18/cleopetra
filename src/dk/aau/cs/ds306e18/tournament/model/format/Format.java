@@ -1,8 +1,8 @@
 package dk.aau.cs.ds306e18.tournament.model.format;
 
-import dk.aau.cs.ds306e18.tournament.model.StageStatus;
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import dk.aau.cs.ds306e18.tournament.model.match.MatchChangeListener;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
 import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.ModelCoupledUI;
 import dk.aau.cs.ds306e18.tournament.ui.BracketOverviewTabController;
@@ -47,6 +47,12 @@ public interface Format {
      * Returns a list of all the matches that have been played.
      */
     List<Match> getCompletedMatches();
+
+    /**
+     * Listeners registered here will be notified when the status changes
+     */
+    void registerStatusChangedListener(StageStatusChangeListener listener);
+    void unregisterStatusChangedListener(StageStatusChangeListener listener);
 
     /**
      * Returns a Node of the stage. This node contains a reference to it self and other functionality to display the stage.

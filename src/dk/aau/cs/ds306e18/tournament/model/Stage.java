@@ -1,6 +1,7 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
 import dk.aau.cs.ds306e18.tournament.model.format.Format;
+import dk.aau.cs.ds306e18.tournament.model.format.StageStatus;
 
 import java.util.Objects;
 

@@ -67,10 +67,11 @@ public class TournamentSettingsTabController {
                 Tournament.get().setTieBreaker(newValue);
             }
         });
-        for (TieBreaker aTiebreaker : tieBreakers){
-            TieBreaker chosenTiebreaker = Tournament.get().getTieBreaker();
-            if (chosenTiebreaker.equals(aTiebreaker)){
-                tieBreakerChoiceBox.getSelectionModel().select(aTiebreaker);
+        TieBreaker savedTiebreaker = Tournament.get().getTieBreaker();
+        for (int i = 0; i < tieBreakers.size(); i++) {
+            TieBreaker tb = tieBreakers.get(i);
+            if (tb.getClass().isInstance(savedTiebreaker)) {
+                tieBreakerChoiceBox.getSelectionModel().select(i);
             } else {
                 tieBreakerChoiceBox.getSelectionModel().select(0);
             }

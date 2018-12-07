@@ -1,9 +1,7 @@
 package dk.aau.cs.ds306e18.tournament.model.format;
 
 import dk.aau.cs.ds306e18.tournament.model.GroupFormat;
-import dk.aau.cs.ds306e18.tournament.model.StageStatus;
 import dk.aau.cs.ds306e18.tournament.model.Team;
-import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchChangeListener;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchPlayedListener;
@@ -15,15 +13,14 @@ import javafx.scene.Node;
 
 import java.util.*;
 
-public class SwissFormat extends GroupFormat implements MatchPlayedListener, MatchChangeListener {
+public class SwissFormat extends GroupFormat implements MatchChangeListener, MatchPlayedListener {
 
     private ArrayList<ArrayList<Match>> rounds = new ArrayList<>();
     private int maxRoundsPossible;
     private int roundCount = 4;
     private HashMap<Team, Integer> teamPoints;
 
-    transient private List<MatchPlayedListener> matchPlayedListeners = new LinkedList<>();
-    transient private List<MatchChangeListener> matchChangedListeners = new LinkedList<>();
+    transient private List<StageStatusChangeListener> statusChangeListeners = new LinkedList<>();
 
     @Override
     public void start(List<Team> teams) {
@@ -273,32 +270,6 @@ public class SwissFormat extends GroupFormat implements MatchPlayedListener, Mat
     }
 
     /**
-     * Listeners registered here will be notified whenever a match is played or reset in this format.
-     */
-    public void registerMatchPlayedListener(MatchPlayedListener listener) {
-        // Can't add self
-        if (listener != this)
-            matchPlayedListeners.add(listener);
-    }
-
-    public void unregisterMatchPlayedListener(MatchPlayedListener listener) {
-        matchPlayedListeners.remove(listener);
-    }
-
-    /**
-     * Listeners registered here will be notified whenever a match has changed or reset in this format.
-     */
-    public void registerMatchChangedListener(MatchChangeListener listener) {
-        // Can't add self
-        if (listener != this)
-            matchChangedListeners.add(listener);
-    }
-
-    public void unregisterMatchChangedListener(MatchChangeListener listener) {
-        matchChangedListeners.remove(listener);
-    }
-
-    /**
      * Checks a given team for every completed match if they have been a loser or winner. Then assigning their points
      * based upon their win/loss ratio. A win gives 2 points and a loss reduces points by 2.
      * By going through all completed matches we can assure proper point giving due to recalculations.
@@ -324,13 +295,40 @@ public class SwissFormat extends GroupFormat implements MatchPlayedListener, Mat
     @Override
     public void onMatchPlayed(Match match) {
         // Has last possible match been played?
+        StageStatus oldStatus = status;
         if (!hasUnstartedRounds() && getUpcomingMatches().size() == 0) {
             status = StageStatus.CONCLUDED;
+        } else {
+            status = StageStatus.RUNNING;
         }
 
-        // Notify listeners
-        for (MatchPlayedListener listener : matchPlayedListeners) {
-            listener.onMatchPlayed(match);
+        // Notify listeners if status changed
+        if (oldStatus != status) {
+            nofityStatusListeners(status, oldStatus);
+        }
+    }
+
+    @Override
+    public void onMatchChanged(Match match) {
+        // Calculate and assign points for each team in the match.
+        calculateAndAssignTeamPoints(match.getBlueTeam());
+        calculateAndAssignTeamPoints(match.getOrangeTeam());
+    }
+
+    @Override
+    public void registerStatusChangedListener(StageStatusChangeListener listener) {
+        statusChangeListeners.add(listener);
+    }
+
+    @Override
+    public void unregisterStatusChangedListener(StageStatusChangeListener listener) {
+        statusChangeListeners.remove(listener);
+    }
+
+    /** Let listeners know, that the status has changed */
+    private void nofityStatusListeners(StageStatus oldStatus, StageStatus newStatus) {
+        for (StageStatusChangeListener listener : statusChangeListeners) {
+            listener.onStageStatusChanged(this, oldStatus, newStatus);
         }
     }
 
@@ -355,17 +353,5 @@ public class SwissFormat extends GroupFormat implements MatchPlayedListener, Mat
     @Override
     public int hashCode() {
         return Objects.hash(getRounds(), getMaxRoundsPossible(), teamPoints);
-    }
-
-    @Override
-    public void onMatchChanged(Match match) {
-        // Calculate and assign points for each team in the match.
-        calculateAndAssignTeamPoints(match.getBlueTeam());
-        calculateAndAssignTeamPoints(match.getOrangeTeam());
-
-        // Notify listeners
-        for (MatchChangeListener listener : matchChangedListeners) {
-            listener.onMatchChanged(match);
-        }
     }
 }
