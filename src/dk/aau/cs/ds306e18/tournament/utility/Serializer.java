@@ -7,7 +7,6 @@ import dk.aau.cs.ds306e18.tournament.model.format.StageStatus;
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import dk.aau.cs.ds306e18.tournament.model.format.Format;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
-import dk.aau.cs.ds306e18.tournament.utility.instanceCreators.TieBreakerInstanceCreator;
 
 /**
  * SerializeManager handles all methods associated with serializing and deserializing a Tournament object
@@ -18,8 +17,8 @@ public class Serializer {
             //TODO; enable versioning .setVersion(int)
             // enabling option to verbosely serialize round-map in SwissFormat
             .enableComplexMapKeySerialization()
-            // register custom InstanceCreator for TieBreakers as necessary for inheritance
-            .registerTypeAdapter(TieBreaker.class, new TieBreakerInstanceCreator())
+            // register custom TypeAdapter for the TieBreaker interface
+            .registerTypeAdapter(TieBreaker.class, new TiebreakerAdaptor())
             // register custom TypeAdapter for storing class-information on specific formats during serialization
             .registerTypeAdapter(Format.class, new FormatAdapter())
             .create();

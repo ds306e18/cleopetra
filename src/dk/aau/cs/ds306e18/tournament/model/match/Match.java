@@ -20,7 +20,7 @@ public final class Match {
     private int orangeScore = 0;
     private boolean played = false;
     private Team blueTeam, orangeTeam;
-    private Match blueFromMatch, orangeFromMatch;
+    transient private Match blueFromMatch, orangeFromMatch;
     private boolean blueWasWinnerInPreviousMatch, orangeWasWinnerInPreviousMatch;
     transient private Match winnerDestination, loserDestination;
     private boolean winnerGoesToBlue, loserGoesToBlue;
@@ -560,33 +560,6 @@ public final class Match {
     public void notifyMatchChangeListeners() {
         for (MatchChangeListener listener : changeListeners) {
             listener.onMatchChanged(this);
-        }
-    }
-
-    /**
-     * Repairs references to parents in Match-tree for deserialized objects
-     */
-    public void postDeserializationRepair() {
-        if (this.blueFromMatch != null) {
-            if (this.blueWasWinnerInPreviousMatch) {
-                this.blueFromMatch.winnerDestination = this;
-                this.blueFromMatch.winnerGoesToBlue = true;
-            } else {
-                this.blueFromMatch.loserDestination = this;
-                this.blueFromMatch.loserGoesToBlue = true;
-            }
-            blueFromMatch.postDeserializationRepair();
-        }
-
-        if (this.orangeFromMatch != null) {
-            if (this.orangeWasWinnerInPreviousMatch) {
-                this.orangeFromMatch.winnerDestination = this;
-                this.orangeFromMatch.winnerGoesToBlue = false;
-            } else {
-                this.orangeFromMatch.loserDestination = this;
-                this.orangeFromMatch.winnerGoesToBlue = false;
-            }
-            orangeFromMatch.postDeserializationRepair();
         }
     }
 

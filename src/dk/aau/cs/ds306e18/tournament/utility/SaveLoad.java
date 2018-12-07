@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 public class SaveLoad {
-    public static File lastSavedDirectory = new File(System.getProperty("user.home"));
+    public static File lastSavedDirectory = new File(System.getProperty("user.home") + (File.separatorChar + "Documents"));
 
 
     public static boolean saveTournament (Stage stage){

@@ -55,17 +55,23 @@ public class TournamentSettingsTabController {
         /* Retrieve and add choices to choicebox for the Tiebreaker box.
          * Also upon change sets the new tiebreaker rule to the tournament model. */
         ObservableList<TieBreaker> tieBreakers = FXCollections.observableArrayList(new TieBreakerBySeed(), new TieBreakerByGoalDiff());
-
         tieBreakerChoiceBox.setItems(tieBreakers);
+
+        /* Set the correct tieBreaker if a tournament was loaded */
+        if (Tournament.get().getTieBreaker() != null){
+            tieBreakerChoiceBox.getSelectionModel().select(Tournament.get().getTieBreaker());
+        }
+
         tieBreakerChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (!(Tournament.get().getTieBreaker().getClass().isInstance(newValue))) {
                 Tournament.get().setTieBreaker(newValue);
             }
         });
-        for (TieBreaker aTiebreaker : tieBreakers){
-            TieBreaker chosenTiebreaker = Tournament.get().getTieBreaker();
-            if (chosenTiebreaker.equals(aTiebreaker)){
-                tieBreakerChoiceBox.getSelectionModel().select(aTiebreaker);
+        TieBreaker savedTiebreaker = Tournament.get().getTieBreaker();
+        for (int i = 0; i < tieBreakers.size(); i++) {
+            TieBreaker tb = tieBreakers.get(i);
+            if (tb.getClass().isInstance(savedTiebreaker)) {
+                tieBreakerChoiceBox.getSelectionModel().select(i);
             } else {
                 tieBreakerChoiceBox.getSelectionModel().select(0);
             }

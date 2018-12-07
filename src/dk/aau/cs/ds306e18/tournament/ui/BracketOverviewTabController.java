@@ -31,6 +31,8 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 
 public class BracketOverviewTabController implements StageStatusChangeListener, MatchChangeListener {
@@ -97,7 +99,7 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
 
     public void showLeaderboard(boolean state) {
         bracketLeaderboard.setVisible(state);
-        bracketOverviewTab.getColumnConstraints().get(0).setMaxWidth(state ? 200 : 0);
+        bracketOverviewTab.getColumnConstraints().get(0).setMaxWidth(state ? 225 : 0);
     }
 
     /** @return a string that contains text describing the requirements for starting the tournament. */
@@ -215,14 +217,21 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
             return new SimpleIntegerProperty(points).asObject();
         });
 
+        TableColumn<Team, Integer> goalDiffColumn = new TableColumn<>("GoalDiff.");
+        goalDiffColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getGoalDiff()).asObject());
+
         // Styling - Descending order and centering text.
         pointColumn.setSortType(TableColumn.SortType.DESCENDING);
+        goalDiffColumn.setSortType(TableColumn.SortType.DESCENDING);
         pointColumn.setStyle("-fx-alignment: CENTER;");
+        goalDiffColumn.setStyle("-fx-alignment: CENTER;");
 
-        // Add sorting order and columns to the tableview.
+        // Add columns and sorting orders to the tableview.
         leaderboardTableview.getColumns().add(nameColumn);
         leaderboardTableview.getColumns().add(pointColumn);
+        leaderboardTableview.getColumns().add(goalDiffColumn);
         leaderboardTableview.getSortOrder().add(pointColumn);
+        leaderboardTableview.getSortOrder().add(goalDiffColumn);
     }
 
     /**
