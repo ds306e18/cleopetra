@@ -101,7 +101,7 @@ public class TournamentSettingsTabController {
         });
     }
 
-    /** Sets up the listview for stages. Settings items,
+    /** Sets up the listview for stages. Setting items,
      * adding listener and changing what is displayed. */
     private void setUpStageListView(){
 
