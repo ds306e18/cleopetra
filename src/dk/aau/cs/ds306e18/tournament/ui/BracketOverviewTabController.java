@@ -97,7 +97,7 @@ public class BracketOverviewTabController implements MatchChangeListener {
 
     public void showLeaderboard(boolean state) {
         bracketLeaderboard.setVisible(state);
-        bracketOverviewTab.getColumnConstraints().get(0).setMaxWidth(state ? 200 : 0);
+        bracketOverviewTab.getColumnConstraints().get(0).setMaxWidth(state ? 225 : 0);
     }
 
     /** @return a string that contains text describing the requirements for starting the tournament. */
