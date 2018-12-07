@@ -120,7 +120,6 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
      */
     public void update() {
         Tournament tournament = Tournament.get();
-        //botInfoBox.setVisible(false);
         showLeaderboard(false);
 
         if (!tournament.hasStarted()) {
