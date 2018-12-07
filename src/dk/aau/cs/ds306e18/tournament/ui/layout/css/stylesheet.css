@@ -148,11 +148,11 @@
     -fx-font-weight: bold;
 }
 
-#matchPlayed .winner .teamName {
+#matchPlayed .winner .team {
 	-fx-font-weight: bold;
 }
 
-#matchTBD .teamName {
+#matchTBD .team {
     -fx-font-style: italic;
 }
 
