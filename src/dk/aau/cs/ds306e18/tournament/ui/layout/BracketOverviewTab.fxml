@@ -153,9 +153,10 @@
                   </Label>
                </children>
                <VBox.margin>
-                  <Insets bottom="15.0" top="20.0" />
+                  <Insets bottom="16.0" top="32.0" />
                </VBox.margin>
             </VBox>
+            <Pane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
             <HBox fx:id="stageNavigationButtonsHolder" alignment="CENTER">
                <children>
                   <Button fx:id="prevStageBtn" mnemonicParsing="false" onAction="#prevStageBtnOnAction" prefHeight="27.0" prefWidth="110.0" text="&lt; Previous Stage">
