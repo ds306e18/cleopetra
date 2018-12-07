@@ -54,8 +54,8 @@ public class ParticipantSettingsTabController {
 
     @FXML
     private void initialize() {
-        /* Assign teams to the list in case of the tournament being loaded */
-        teamsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams()));
+
+        setUpTeamsListView();
 
         //Sets the VBox for team and bot as false, hiding them
         botSettingsVbox.setVisible(false);
@@ -66,20 +66,45 @@ public class ParticipantSettingsTabController {
         removeTeamBtn.setDisable(true);
         removeBotBtn.setDisable(true);
 
-        //Adds selectionslisteners to bot and team listviews
+        //Adds selectionslistener to bot ListView
         botsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             updateBotFields();
-            updateAddRemoveButtonsEnabling();
-            updateCopyPasteButtonsEnabling();
-        });
-        teamsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            updateTeamFields();
             updateAddRemoveButtonsEnabling();
             updateCopyPasteButtonsEnabling();
         });
 
         updateClipboardLabel();
         setFileChooserCfgFilter(fileChooser);
+    }
+
+    /** Sets up the listview for teams. Setting items,
+     * adding listener and changing what is displayed. */
+    private void setUpTeamsListView(){
+
+        //Assign teams to the list in case of the tournament being loaded
+        teamsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams()));
+
+        //Adds selectionsListener to team ListView
+        teamsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            updateTeamFields();
+            updateAddRemoveButtonsEnabling();
+            updateCopyPasteButtonsEnabling();
+        });
+
+        //Formatting what is displayed in the listView: id + name.
+        teamsListView.setCellFactory(lv -> new ListCell<Team>(){
+            public void updateItem(Team team, boolean empty) {
+                super.updateItem(team, empty);
+                if (empty) {
+                    setText(null);
+                } else {
+                    int index = teamsListView.getItems().indexOf(team) + 1;
+                    String text = index + ". " + team.getTeamName();
+                    setText(text);
+                    teamsListView.refresh();
+                }
+            }
+        });
     }
 
     private void setFileChooserCfgFilter(FileChooser fileChooser) {

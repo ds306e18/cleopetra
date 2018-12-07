@@ -43,8 +43,8 @@ public class TournamentSettingsTabController {
 
     @FXML
     private void initialize() {
-        /* Assign items to the list in case of a tournament being loaded */
-        stagesListView.setItems(FXCollections.observableArrayList(Tournament.get().getStages()));
+
+        setUpStageListView();
 
         /* Retrieve and set tournament name into textfield. */
         nameTextField.setText(Tournament.get().getName());
@@ -77,29 +77,6 @@ public class TournamentSettingsTabController {
             }
         }
 
-        /* By default the stage settings are hidden.
-         * This listener is used to show the stage settings when there is at least one Stage added.
-         * Also handles disabling and enabling of buttons for stages. */
-        stagesListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            stageSettingsVBox.setVisible(stagesListView.getItems().size() != 0);
-
-            /* Handle stage order button disabling / enabling */
-            int selectedIndex = getSelectedIndex();
-            swapUp.setDisable(selectedIndex == 0);
-            swapDown.setDisable(selectedIndex == stagesListView.getItems().size() - 1 && selectedIndex != -1);
-
-            /* Set content inside stage settings to show chosen stage */
-            showStageValues();
-
-            /* If the stageListView has no items. Then the remove, up and down buttons is disabled. */
-            if(stagesListView.getItems().size() == 0) {
-                removeStageBtn.setDisable(true);
-                swapUp.setDisable(true);
-                swapDown.setDisable(true);
-            } else
-                removeStageBtn.setDisable(false);
-        });
-
         /* Setup teams wanted in stage spinner */
         teamsInStageSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(2, Integer.MAX_VALUE));
         teamsInStageSpinner.getEditor().textProperty().addListener((obs, oldValue, newValue) -> {
@@ -122,6 +99,37 @@ public class TournamentSettingsTabController {
             }
 
             updateFormatUniqueSettings();
+        });
+    }
+
+    /** Sets up the listview for stages. Setting items
+     * and adding listener. */
+    private void setUpStageListView(){
+
+        /* Assign items to the list in case of a tournament being loaded */
+        stagesListView.setItems(FXCollections.observableArrayList(Tournament.get().getStages()));
+
+        /* By default the stage settings are hidden.
+         * This listener is used to show the stage settings when there is at least one Stage added.
+         * Also handles disabling and enabling of buttons for stages. */
+        stagesListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            stageSettingsVBox.setVisible(stagesListView.getItems().size() != 0);
+
+            /* Handle stage order button disabling / enabling */
+            int selectedIndex = getSelectedIndex();
+            swapUp.setDisable(selectedIndex == 0);
+            swapDown.setDisable(selectedIndex == stagesListView.getItems().size() - 1 && selectedIndex != -1);
+
+            /* Set content inside stage settings to show chosen stage */
+            showStageValues();
+
+            /* If the stageListView has no items. Then the remove, up and down buttons is disabled. */
+            if(stagesListView.getItems().size() == 0) {
+                removeStageBtn.setDisable(true);
+                swapUp.setDisable(true);
+                swapDown.setDisable(true);
+            } else
+                removeStageBtn.setDisable(false);
         });
     }
 
