@@ -1,6 +1,7 @@
 package dk.aau.cs.ds306e18.tournament.ui;
 
 import dk.aau.cs.ds306e18.tournament.model.*;
+import dk.aau.cs.ds306e18.tournament.model.format.SingleEliminationFormat;
 import dk.aau.cs.ds306e18.tournament.model.format.SwissFormat;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreakerByGoalDiff;
@@ -163,7 +164,7 @@ public class TournamentSettingsTabController {
     @FXML
     void addStageBtnOnAction(ActionEvent actionEvent) {
         // increments unique id
-        Tournament.get().addStage(new Stage("New Stage", new SwissFormat()));
+        Tournament.get().addStage(new Stage("New Stage", new SingleEliminationFormat()));
 
         stagesListView.setItems(FXCollections.observableArrayList(Tournament.get().getStages()));
         stagesListView.refresh();

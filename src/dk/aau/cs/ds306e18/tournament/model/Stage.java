@@ -9,7 +9,7 @@ public class Stage {
 
     private String name;
     private Format format;
-    private int numberOfTeamsWanted = 16;
+    private int numberOfTeamsWanted = 8;
     private int id;
 
     public Stage(String name, Format format) {

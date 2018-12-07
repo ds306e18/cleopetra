@@ -1,6 +1,7 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
 import dk.aau.cs.ds306e18.tournament.model.format.StageStatus;
+import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreakerByGoalDiff;
 import dk.aau.cs.ds306e18.tournament.rlbot.RLBotSettings;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreakerBySeed;
@@ -27,7 +28,7 @@ public class Tournament {
     private String name = "Unnamed Tournament";
     private ArrayList<Team> teams = new ArrayList<>();
     private ArrayList<Stage> stages = new ArrayList<>();
-    private TieBreaker tieBreaker = new TieBreakerBySeed();
+    private TieBreaker tieBreaker = new TieBreakerByGoalDiff();
     private boolean started = false;
     private int currentStageIndex = -1;
 
