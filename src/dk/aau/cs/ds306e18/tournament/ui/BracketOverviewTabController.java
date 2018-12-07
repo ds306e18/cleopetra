@@ -29,8 +29,6 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 
 public class BracketOverviewTabController implements MatchChangeListener {
@@ -60,6 +58,10 @@ public class BracketOverviewTabController implements MatchChangeListener {
     @FXML private VBox bracketLeaderboard;
     @FXML private TableView<Team> leaderboardTableview;
     @FXML private Label stageNameLabel;
+    @FXML private Label botNameLabel;
+    @FXML private Label botDeveloperLabel;
+    @FXML private Label botDescriptionLabel;
+    @FXML private VBox botInfoBox;
 
     private int showedStageIndex = -1;
     private ModelCoupledUI coupledBracket;
@@ -69,14 +71,55 @@ public class BracketOverviewTabController implements MatchChangeListener {
     @FXML
     private void initialize() {
         instance = this; // TODO Make references to other controllers work in MainController
+
+        // Listeners for the listviews. Handles the clear of selection of the other listview and updates the
+        // bot info box according to the selection.
+        blueTeamListView.getSelectionModel().selectedItemProperty().addListener(observable -> {
+            if (!(blueTeamListView.getItems().isEmpty())){
+                if (getSelectedBot(blueTeamListView) != null){
+                    botInfoBox.setVisible(true);
+                    updateBotInfo(getSelectedBot(blueTeamListView));
+                    clearSelectionOfTableview(orangeTeamListView);
+                }
+            }
+        });
+
+        orangeTeamListView.getSelectionModel().selectedItemProperty().addListener(observable -> {
+            if (!(blueTeamListView.getItems().isEmpty())){
+                if (getSelectedBot(orangeTeamListView) != null){
+                    botInfoBox.setVisible(true);
+                    updateBotInfo(getSelectedBot(orangeTeamListView));
+                    clearSelectionOfTableview(blueTeamListView);
+                }
+            }
+        });
+    }
+
+    /**
+     * Clears the selection of a given ListView.
+     */
+    private void clearSelectionOfTableview(ListView<Bot> listView){
+        if (getSelectedBot(listView) != null) {
+            listView.getSelectionModel().clearSelection();
+        }
+    }
+
+    /**
+     * Updates the labels on boxInfo according to a given bot.
+     * @param selectecBot The given bot wished to receive details from.
+     */
+    private void updateBotInfo(Bot selectecBot){
+        botNameLabel.setText(selectecBot.getName());
+        botDeveloperLabel.setText(selectecBot.getDeveloper());
+        botDescriptionLabel.setText(selectecBot.getDescription());
     }
 
     /**
      * Updates all elements depending on the state of the tournament and the shown stage.
      */
     public void update() {
-
         Tournament tournament = Tournament.get();
+        //botInfoBox.setVisible(false);
         showLeaderboard(false);
 
         if (!tournament.hasStarted()) {
@@ -235,6 +278,7 @@ public class BracketOverviewTabController implements MatchChangeListener {
      */
     private void updateTeamViewer(Match match) {
         boolean disable = (match == null);
+        botInfoBox.setVisible(false);
         selectedMatchInfo.setDisable(disable);
         selectedMatchButtonHolder.setDisable(disable);
 
@@ -380,5 +424,14 @@ public class BracketOverviewTabController implements MatchChangeListener {
         if (ready) {
             Alerts.infoNotification("Modified config file", "The rlbot.cfg was successfully modified to the selected match.");
         }
+    }
+
+    /**
+     * Method to return the selected bot in a given Listview
+     * @param listView the listview to be checked for selection
+     * @return the bot that is selected.
+     */
+    private Bot getSelectedBot(ListView<Bot> listView) {
+        return listView.getSelectionModel().getSelectedItem();
     }
 }
