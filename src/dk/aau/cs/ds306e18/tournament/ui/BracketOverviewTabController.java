@@ -73,24 +73,29 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
     private void initialize() {
         instance = this; // TODO Make references to other controllers work in MainController
 
+
         // Listeners for the listviews. Handles the clear of selection of the other listview and updates the
         // bot info box according to the selection.
         blueTeamListView.getSelectionModel().selectedItemProperty().addListener(observable -> {
-            if (!(blueTeamListView.getItems().isEmpty())){
-                if (getSelectedBot(blueTeamListView) != null){
-                    botInfoBox.setVisible(true);
-                    updateBotInfo(getSelectedBot(blueTeamListView));
-                    clearSelectionOfTableview(orangeTeamListView);
+            if (blueTeamListView.getItems() != null){
+                if (!(blueTeamListView.getItems().isEmpty())){
+                    if (getSelectedBot(blueTeamListView) != null){
+                        botInfoBox.setVisible(true);
+                        updateBotInfo(getSelectedBot(blueTeamListView));
+                        clearSelectionOfTableview(orangeTeamListView);
+                    }
                 }
             }
         });
 
         orangeTeamListView.getSelectionModel().selectedItemProperty().addListener(observable -> {
-            if (!(blueTeamListView.getItems().isEmpty())){
-                if (getSelectedBot(orangeTeamListView) != null){
-                    botInfoBox.setVisible(true);
-                    updateBotInfo(getSelectedBot(orangeTeamListView));
-                    clearSelectionOfTableview(blueTeamListView);
+            if (orangeTeamListView.getItems() != null){
+                if (!(orangeTeamListView.getItems().isEmpty())){
+                    if (getSelectedBot(orangeTeamListView) != null){
+                        botInfoBox.setVisible(true);
+                        updateBotInfo(getSelectedBot(orangeTeamListView));
+                        clearSelectionOfTableview(blueTeamListView);
+                    }
                 }
             }
         });
