@@ -20,7 +20,7 @@ public class Main extends Application {
         // Start program with the launcher
         AnchorPane launcherLoader = FXMLLoader.load(Main.class.getResource("ui/layout/Launcher.fxml"));
 
-        primaryStage.setTitle("DatTournament Launcher");
+        primaryStage.setTitle("CleoPetra Launcher");
         primaryStage.setScene(new Scene(launcherLoader));
         primaryStage.setResizable(false);
         primaryStage.show();

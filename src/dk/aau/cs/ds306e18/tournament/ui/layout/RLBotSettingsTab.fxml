@@ -18,7 +18,7 @@
             <Insets />
          </VBox.margin>
       </Text>
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="The tournament runner is able to start matches using the RLBot framework. To do that you must give it a path to a rlbot.cfg file. Note: this file will be modified to include the given bots in a match. But all other settings will stay the same." wrappingWidth="310.0" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="CleoPetra is able to start matches using the RLBot framework. To do that you must give it a path to a rlbot.cfg file. Note: this file will be modified to include the given bots in a match. But all other settings will stay the same." wrappingWidth="310.0" />
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Path to rlbot.cfg:">
          <font>
             <Font size="16.0" />

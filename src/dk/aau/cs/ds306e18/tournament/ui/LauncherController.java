@@ -29,7 +29,7 @@ public class LauncherController {
         systemStage.setMinWidth(800);
         systemStage.setMinHeight(650);
         systemStage.setMaximized(true);
-        systemStage.setTitle("DatTournament Runner");
+        systemStage.setTitle("CleoPetra");
 
         // Set the correct scene for the system stage.
         try {
