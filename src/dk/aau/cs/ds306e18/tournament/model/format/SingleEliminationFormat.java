@@ -76,6 +76,8 @@ public class SingleEliminationFormat extends Elimination implements MatchPlayedL
         List<Team> tempLoserTeams = new ArrayList<>();
         int roundUpperBoundIndex = 1, currentMatchIndex = 0;
 
+        if(count > seededTeams.size()){ count = seededTeams.size();}
+
         //Will run until team size fits the count
         while (topTeams.size() < count) {
             //places the losers and winners of the round into two different temporary lists

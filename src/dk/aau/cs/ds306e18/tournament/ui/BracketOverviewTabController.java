@@ -29,6 +29,8 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 
 public class BracketOverviewTabController implements MatchChangeListener {
@@ -211,14 +213,21 @@ public class BracketOverviewTabController implements MatchChangeListener {
             return new SimpleIntegerProperty(points).asObject();
         });
 
+        TableColumn<Team, Integer> goalDiffColumn = new TableColumn<>("GoalDiff.");
+        goalDiffColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getGoalDiff()).asObject());
+
         // Styling - Descending order and centering text.
         pointColumn.setSortType(TableColumn.SortType.DESCENDING);
+        goalDiffColumn.setSortType(TableColumn.SortType.DESCENDING);
         pointColumn.setStyle("-fx-alignment: CENTER;");
+        goalDiffColumn.setStyle("-fx-alignment: CENTER;");
 
-        // Add sorting order and columns to the tableview.
+        // Add columns and sorting orders to the tableview.
         leaderboardTableview.getColumns().add(nameColumn);
         leaderboardTableview.getColumns().add(pointColumn);
+        leaderboardTableview.getColumns().add(goalDiffColumn);
         leaderboardTableview.getSortOrder().add(pointColumn);
+        leaderboardTableview.getSortOrder().add(goalDiffColumn);
     }
 
     /**
@@ -292,6 +301,20 @@ public class BracketOverviewTabController implements MatchChangeListener {
             EditMatchScoreController emsc = loader.getController();
             emsc.setMatch(selectedMatch.getShowedMatch());
             editMatchScoreStage.setScene(new Scene(editMatchStageRoot));
+
+            // Calculate the center position of the main window.
+            Stage mainWindow = (Stage) bracketOverviewTab.getScene().getWindow();
+            double centerXPosition = mainWindow.getX() + mainWindow.getWidth()/2d;
+            double centerYPosition = mainWindow.getY() + mainWindow.getHeight()/2d;
+
+            // Assign popup window to the center of the main window.
+            editMatchScoreStage.setOnShown(ev -> {
+                editMatchScoreStage.setX(centerXPosition - editMatchScoreStage.getWidth()/2d);
+                editMatchScoreStage.setY(centerYPosition - editMatchScoreStage.getHeight()/2d);
+
+                editMatchScoreStage.show();
+            });
+
             editMatchScoreStage.show();
 
         } catch (IOException e) {

@@ -1,6 +1,7 @@
 package dk.aau.cs.ds306e18.tournament.ui;
 
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import javafx.application.Platform;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchResultDependencyException;
 import dk.aau.cs.ds306e18.tournament.utility.Alerts;
 import javafx.event.ActionEvent;
@@ -47,13 +48,20 @@ public class EditMatchScoreController {
     private void setSpinnerListeners(){
         blueScoreSpinner.getEditor().textProperty().addListener((obs, oldValue, newValue) -> {
             try {
-                Integer.valueOf(newValue); //This will throw the exception if the value not only contains numbers
+                //This will throw an exception if the input does not only contain digits
+                int assignValue = Integer.parseInt(newValue);
+
+                if (assignValue < 0){ blueScoreSpinner.getEditor().textProperty().setValue("0"); }
+                if (assignValue > 99){ blueScoreSpinner.getEditor().textProperty().setValue("99"); }
+
                 isBlueScoreLegit = true;
                 isTeamScoresEqual();
                 if (isOrangeScoreLegit && isBlueScoreLegit){
                     saveButton.setDisable(false);
                 }
             } catch (NumberFormatException e) {
+                //blueScoreSpinner.getEditor().textProperty().setValue("");
+                Platform.runLater(blueScoreSpinner.getEditor()::clear);
                 isTeamScoresEqual();
                 isBlueScoreLegit = false;
                 saveButton.setDisable(true);
@@ -62,18 +70,46 @@ public class EditMatchScoreController {
 
         orangeScoreSpinner.getEditor().textProperty().addListener((obs, oldValue, newValue) -> {
             try {
-                Integer.valueOf(newValue); //This will throw the exception if the value not only contains numbers
+                //This will throw an exception if the input does not only contain digits
+                int assignValue = Integer.parseInt(newValue);
+
+                if (assignValue < 0){ orangeScoreSpinner.getEditor().textProperty().setValue("0"); }
+                if (assignValue > 99){ orangeScoreSpinner.getEditor().textProperty().setValue("99"); }
+
                 isOrangeScoreLegit = true;
                 isTeamScoresEqual();
                 if (isOrangeScoreLegit && isBlueScoreLegit){
                     saveButton.setDisable(false);
                 }
             } catch (NumberFormatException e) {
+                Platform.runLater(orangeScoreSpinner.getEditor()::clear);
                 isTeamScoresEqual();
                 isOrangeScoreLegit = false;
                 saveButton.setDisable(true);
             }
         });
+
+        // Have to call using Platform.Runlater because the spinner does something when it gains focus that interrupts.
+        blueScoreSpinner.getEditor().focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
+            if (isNowFocused){
+                Platform.runLater(blueScoreSpinner.getEditor()::selectAll);
+            }
+        });
+
+        orangeScoreSpinner.getEditor().focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
+            if (isNowFocused){
+                Platform.runLater(orangeScoreSpinner.getEditor()::selectAll);
+            }
+        });
+
+        blueScoreSpinner.valueProperty().addListener(((observable, oldValue, newValue) -> {
+            blueScoreSpinner.getEditor().selectAll();
+        }));
+
+        orangeScoreSpinner.valueProperty().addListener(((observable, oldValue, newValue) -> {
+            orangeScoreSpinner.getEditor().selectAll();
+        }));
+
     }
 
     public void setMatch(Match match) {
@@ -98,6 +134,7 @@ public class EditMatchScoreController {
             matchOverCheckBox.setSelected(false);
         } else {
             matchOverCheckBox.setDisable(false);
+            matchOverCheckBox.setSelected(true);
         }
     }
 

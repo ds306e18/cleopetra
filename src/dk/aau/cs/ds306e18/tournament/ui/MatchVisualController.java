@@ -4,6 +4,7 @@ import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchChangeListener;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -13,9 +14,9 @@ import javafx.scene.text.Text;
 public class MatchVisualController implements MatchChangeListener {
 
     @FXML private VBox matchRoot;
-    @FXML private Text textOrangeName;
+    @FXML private Label textOrangeName;
     @FXML private Text teamOrangeScore;
-    @FXML private Text textBlueName;
+    @FXML private Label textBlueName;
     @FXML private Text teamBlueScore;
     @FXML private HBox hboxOrangeTeam;
     @FXML private HBox hboxBlueTeam;

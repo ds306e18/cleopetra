@@ -173,6 +173,18 @@ public class SingleEliminationFormatTest {
         }
     }
 
+    //Tries to get top 10 teams in a 4 team stage, should only return 4 teams
+    @Test
+    public void getTopTeamTest03() {
+        SingleEliminationFormat bracket = generateBracketsAndWins(4);
+        List<Team> teamList = new ArrayList<Team>(bracket.getTopTeams(10, new TieBreakerBySeed()));
+        int seedValue = 1;
+        for(int i = 0; i < 4; i++) {
+            assertEquals(seedValue, teamList.get(i).getInitialSeedValue());
+            seedValue++;
+        }
+    }
+
     //StageStatus test  pending-running-concluded
     @Test
     public void stageStatusTest01() {
