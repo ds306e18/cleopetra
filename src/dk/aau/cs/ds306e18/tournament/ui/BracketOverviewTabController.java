@@ -46,6 +46,7 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
     @FXML private VBox selectedMatchVBox;
     @FXML private VBox overviewVBox;
     @FXML private Button playMatchBtn;
+    @FXML private Button modifyConfigBtn;
     @FXML private Button editMatchBtn;
     @FXML private Label blueTeamNameLabel;
     @FXML private Label blueTeamScore;
@@ -289,9 +290,11 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
         if (selectedMatch == null || selectedMatch.getShowedMatch().getStatus() == MatchStatus.NOT_PLAYABLE) {
             editMatchBtn.setDisable(true);
             playMatchBtn.setDisable(true);
+            modifyConfigBtn.setDisable(true);
         } else {
             editMatchBtn.setDisable(false);
             playMatchBtn.setDisable(false); // If match can't be played an error popup is displayed explaining why
+            modifyConfigBtn.setDisable(false);
         }
     }
 
