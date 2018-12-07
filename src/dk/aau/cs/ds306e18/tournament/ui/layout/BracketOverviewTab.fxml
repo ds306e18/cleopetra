@@ -150,7 +150,7 @@
                   <Button fx:id="startTournamentBtn" mnemonicParsing="false" onAction="#onStartTournamentButtonPressed" prefHeight="68.0" prefWidth="156.0" text="Start Tournament" />
                </children>
             </VBox>
-            <ScrollPane fx:id="overviewScrollPane" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" pannable="true" style="-fx-background-color: transparent;" vbarPolicy="NEVER" VBox.vgrow="ALWAYS">
+            <ScrollPane fx:id="overviewScrollPane" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#deselectOnRightClick" pannable="true" style="-fx-background-color: transparent;" vbarPolicy="NEVER" VBox.vgrow="ALWAYS">
                <VBox.margin>
                   <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                </VBox.margin>
