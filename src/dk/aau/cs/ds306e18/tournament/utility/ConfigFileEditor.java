@@ -158,13 +158,18 @@ public class ConfigFileEditor {
         int numParticipantsBlue = 0;
         int numParticipantsOrange = 0;
 
+        // for blue team, edit numbered parameters by incremented count of blue bots
         for (Bot bot : match.getBlueTeam().getBots()) {
+            // edit participant_config parameter to current bot's config path
             editLine(PARAMETER_PARTICIPANT_CONFIG, numParticipantsBlue, bot.getConfigPath());
+            // edit participant_team parameter to blue-team constant
             editLine(PARAMETER_PARTICIPANT_TEAM, numParticipantsBlue, PARAMETER_BLUE_TEAM);
+            // edit participant_type parameter to RLBot-participant constant
             editLine(PARAMETER_PARTICIPANT_TYPE, numParticipantsBlue, PARAMETER_BOT_TYPE);
             numParticipantsBlue++;
         }
 
+        // for orange team, edit numbered parameters by incremented count of blue and orange bots
         for (Bot bot : match.getOrangeTeam().getBots()) {
             editLine(PARAMETER_PARTICIPANT_CONFIG, numParticipantsBlue + numParticipantsOrange, bot.getConfigPath());
             editLine(PARAMETER_PARTICIPANT_TEAM, numParticipantsBlue + numParticipantsOrange, PARAMETER_ORANGE_TEAM);
@@ -172,6 +177,7 @@ public class ConfigFileEditor {
             numParticipantsOrange++;
         }
 
+        // edit num_participants parameter to count of edited participants
         editLine(PARAMETER_PARTICIPANT_NUM, Integer.toString(numParticipantsBlue + numParticipantsOrange));
 
         // when finished, validate syntax and return boolean
@@ -199,7 +205,7 @@ public class ConfigFileEditor {
                     case '#':
                         break;
 
-                    // if none of the above, must be parameter-line, check for equals-symbol
+                    // if none of the above, must be parameter-line, check for existence of an equals-symbol
                     default:
                         if (line.contains("=")) break;
                         valid = false;
