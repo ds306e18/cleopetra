@@ -155,32 +155,31 @@ public class ConfigFileEditor {
      * @return the boolean of success
      */
     public static boolean configureMatch(Match match) {
-        int numParticipantsBlue = 0;
-        int numParticipantsOrange = 0;
+        int numParticipants = 0;
 
-        // for blue team, edit numbered parameters by incremented count of blue bots
+        // for blue team, edit numbered parameters by incremented count of participants
         for (Bot bot : match.getBlueTeam().getBots()) {
-            // edit participant_config parameter to current bot's config path
-            editLine(PARAMETER_PARTICIPANT_CONFIG, numParticipantsBlue, bot.getConfigPath());
+            // edit participant_config parameter to current bots config path
+            editLine(PARAMETER_PARTICIPANT_CONFIG, numParticipants, bot.getConfigPath());
             // edit participant_team parameter to blue-team constant
-            editLine(PARAMETER_PARTICIPANT_TEAM, numParticipantsBlue, PARAMETER_BLUE_TEAM);
+            editLine(PARAMETER_PARTICIPANT_TEAM, numParticipants, PARAMETER_BLUE_TEAM);
             // edit participant_type parameter to RLBot-participant constant
-            editLine(PARAMETER_PARTICIPANT_TYPE, numParticipantsBlue, PARAMETER_BOT_TYPE);
-            numParticipantsBlue++;
+            editLine(PARAMETER_PARTICIPANT_TYPE, numParticipants, PARAMETER_BOT_TYPE);
+            numParticipants++;
         }
 
-        // for orange team, edit numbered parameters by incremented count of blue and orange bots
+        // for orange team, edit numbered parameters by incremented count of participants
         for (Bot bot : match.getOrangeTeam().getBots()) {
-            editLine(PARAMETER_PARTICIPANT_CONFIG, numParticipantsBlue + numParticipantsOrange, bot.getConfigPath());
-            editLine(PARAMETER_PARTICIPANT_TEAM, numParticipantsBlue + numParticipantsOrange, PARAMETER_ORANGE_TEAM);
-            editLine(PARAMETER_PARTICIPANT_TYPE, numParticipantsBlue + numParticipantsOrange, PARAMETER_BOT_TYPE);
-            numParticipantsOrange++;
+            editLine(PARAMETER_PARTICIPANT_CONFIG, numParticipants, bot.getConfigPath());
+            editLine(PARAMETER_PARTICIPANT_TEAM, numParticipants, PARAMETER_ORANGE_TEAM);
+            editLine(PARAMETER_PARTICIPANT_TYPE, numParticipants, PARAMETER_BOT_TYPE);
+            numParticipants++;
         }
 
         // edit num_participants parameter to count of edited participants
-        editLine(PARAMETER_PARTICIPANT_NUM, Integer.toString(numParticipantsBlue + numParticipantsOrange));
+        editLine(PARAMETER_PARTICIPANT_NUM, Integer.toString(numParticipants));
 
-        // when finished, validate syntax and return boolean
+        // when finished, validate syntax and return boolean set by validateConfigSyntax
         validateConfigSyntax();
         return isValid();
     }
