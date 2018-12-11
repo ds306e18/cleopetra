@@ -12,8 +12,8 @@ import java.util.ArrayList;
 
 public class MatchRunner {
 
-    // both %s will be replaced with the directory of the rlbot.cfg
-    private static final String COMMAND_FORMAT = "cmd.exe /c start cmd.exe /c \"cd %s & python \"%s\\run.py\"\"";
+    // The %s will be replaced with the directory of the rlbot.cfg
+    private static final String COMMAND_FORMAT = "cmd.exe /c start cmd.exe /c \"cd %s & python run.py\"";
 
     /** Starts the given match in Rocket League. */
     public static boolean startMatch(RLBotSettings settings, Match match) {
@@ -25,11 +25,9 @@ public class MatchRunner {
         }
 
         try {
-            Thread.sleep(100);
-
             // We assume that the runner is in the same folder as the rlbot.cfg
             Path pathToDirectory = Paths.get(settings.getConfigPath()).getParent();
-            String command = String.format(COMMAND_FORMAT, pathToDirectory, pathToDirectory);
+            String command = String.format(COMMAND_FORMAT, pathToDirectory);
             System.out.println("Running command: " + command);
             Runtime.getRuntime().exec(command);
             System.out.println("Started RLBot framework");
