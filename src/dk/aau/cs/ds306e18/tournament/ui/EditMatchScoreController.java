@@ -163,7 +163,7 @@ public class EditMatchScoreController {
 
     @FXML
     private void FetchBtnPressed(ActionEvent actionEvent) {
-
+        // TODO Fetch the match result directly from the game using RLBotDLl
     }
 
     @FXML

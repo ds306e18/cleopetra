@@ -32,6 +32,7 @@ public class RLBotSettings {
         if (!file.getPath().endsWith(".cfg"))
             return false;
 
+        // TODO Other checks
 
         return true;
     }

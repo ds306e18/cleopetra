@@ -14,6 +14,7 @@ import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
 public class Serializer {
 
     private static Gson gson = new GsonBuilder()
+            //TODO; enable versioning .setVersion(int)
             // enabling option to verbosely serialize round-map in SwissFormat
             .enableComplexMapKeySerialization()
             // register custom TypeAdapter for the TieBreaker interface
