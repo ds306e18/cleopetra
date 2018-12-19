@@ -385,7 +385,7 @@ public final class Match {
                     throw new MatchResultDependencyException();
                 }
 
-                // FIXME: Does not check if subsequent stages has started
+
             }
         }
 

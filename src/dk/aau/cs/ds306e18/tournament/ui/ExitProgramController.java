@@ -37,7 +37,6 @@ public class ExitProgramController {
 
     @FXML
     public void saveTournament() {
-        /* TODO: Handle if filechooser was closed during selection */
 
         Stage stage = (Stage) cancelBtn.getScene().getWindow();
 

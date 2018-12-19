@@ -57,7 +57,7 @@ public class TestUtilities {
     public static Bot generateBot() {
         Random rand = new Random();
         return new Bot(botNames.get(rand.nextInt(botNames.size())),
-                devNames.get((rand.nextInt(devNames.size()))), null); //TODO should create path somehow
+                devNames.get((rand.nextInt(devNames.size()))), null);
     }
 
     /**
