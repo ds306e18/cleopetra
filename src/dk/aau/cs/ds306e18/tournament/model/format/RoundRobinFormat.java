@@ -263,7 +263,7 @@ public class RoundRobinFormat extends GroupFormat implements MatchPlayedListener
         for (Match match : completedMatches) {
             Team winningTeam = match.getWinner();
 
-            //+1 for winning //TODO Should we do more?
+            //+1 for winning //
             teamPoints.put(winningTeam, teamPoints.get(winningTeam) + 1);
         }
 

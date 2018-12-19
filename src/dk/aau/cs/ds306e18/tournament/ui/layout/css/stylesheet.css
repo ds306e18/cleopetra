@@ -248,7 +248,7 @@
     -fx-shape: " ";
 }
 
-/* TODO: Make the save button from icon-font instead of an .png. In order to change colors instead of opacity. */
+
 /* MainLayout -> Save button */
 #mainSaveButton:hover {
     -fx-opacity: 0.8;
