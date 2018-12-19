@@ -37,12 +37,12 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
      * Matches are accessed through finalMatch (the root) or the array upperBracketMatchesArray.
      */
     private void generateBracket() {
-        int matchesInFstRound = (int) Math.pow(2, rounds - 1);
-        int amountOfMatches = (int) Math.pow(2,rounds)-1;
-        bracket = new Match[amountOfMatches];
-        for(int i = amountOfMatches - 1; i >= 0; i--) {
+        int matchesInFirstRound = (int) Math.pow(2, rounds - 1);
+        int numberOfMatches = (int) Math.pow(2,rounds)-1;
+        bracket = new Match[numberOfMatches];
+        for(int i = numberOfMatches - 1; i >= 0; i--) {
             //Creates empty matches for first round
-            if(i >= amountOfMatches - matchesInFstRound) {
+            if(i >= numberOfMatches - matchesInFirstRound) {
                 bracket[i] = new Match();
             }
             //Creates the remaining matches which contains winners from their left- and right child-indexes.
@@ -77,8 +77,8 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
      * @param byeList a list of dummy teams */
     private void placeTeamsInBracket(ArrayList<Team> seedList, ArrayList<Team> byeList) {
         int seedMatchIndex = finalMatch.getTreeAsListBFS().size() - 1;
-        int  amountOfTeams = seedList.size();
-        for (int teamIndex = 0; teamIndex < amountOfTeams; teamIndex = teamIndex + 2) {
+        int  numberOfTeams = seedList.size();
+        for (int teamIndex = 0; teamIndex < numberOfTeams; teamIndex = teamIndex + 2) {
             // If the matchup would be between a team and a bye, the team will be placed at its parent match
             // The match in the first round will be deleted(null)
             if (byeList.contains(seedList.get(teamIndex)) || byeList.contains(seedList.get(teamIndex + 1))) {
@@ -126,12 +126,12 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
     }
 
     /** Add the needed amount of byes
-     * @param amountOfTeams the amount of teams in the stage
+     * @param numberOfTeams the amount of teams in the stage
      * @return byeList, an arrayList containing dummy teams */
-    private ArrayList<Team> addByes(int amountOfTeams){
-        int amountOfByes = (int) Math.pow(2, rounds) - amountOfTeams;
+    private ArrayList<Team> addByes(int numberOfTeams){
+        int numberOfByes = (int) Math.pow(2, rounds) - numberOfTeams;
         ArrayList<Team> byeList = new ArrayList<>();
-        while (byeList.size() < amountOfByes) {
+        while (byeList.size() < numberOfByes) {
             byeList.add(new Team("bye" + byeList.size(), new ArrayList<>(), 999, ""));
         }
         return byeList;
@@ -231,14 +231,14 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
         List<Team> topTeams = new ArrayList<>();
         List<Team> tempWinnerTeams = new ArrayList<>();
         List<Team> tempLoserTeams = new ArrayList<>();
-        int roundUpperBoundIndex = 1, currentMatchIndex = 0, amountOfMatches = finalMatch.getTreeAsListBFS().size();
+        int roundUpperBoundIndex = 1, currentMatchIndex = 0, numberOfMatches = finalMatch.getTreeAsListBFS().size();
 
         if(count > seededTeams.size()){ count = seededTeams.size();}
 
         //Will run until team size fits the count
         while (topTeams.size() < count) {
             //places the losers and winners of the round into two different temporary lists
-            while (currentMatchIndex < roundUpperBoundIndex && currentMatchIndex < amountOfMatches) {
+            while (currentMatchIndex < roundUpperBoundIndex && currentMatchIndex < numberOfMatches) {
                 if (!topTeams.contains(finalMatch.getTreeAsListBFS().get(currentMatchIndex).getWinner())) {
                     tempWinnerTeams.add(finalMatch.getTreeAsListBFS().get(currentMatchIndex).getWinner());
                 }
