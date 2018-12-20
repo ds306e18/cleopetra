@@ -2,7 +2,7 @@
 <p>
 <i>Computer Science project, 3rd semester AAU. [DS306e18]</i> <br>
 CleoPetra aims to create a custom tournament runner for the RLBot-community that help host, manage and run a tournament. The system supports multiple formats such as single elimination, Swiss-system and round robin. It also supports multiple stages and the seeding of participants, allowing for a easy transfer of the best participants within stages.
-Apart from these features the system also adds support specifically for the [RLBot-framework](https://github.com/RLBot/RLBot). It allows to generate the rlbot.cfg file based on the bots of a match and can also start a match using the framework.
+Apart from these features the system also adds support specifically for the [RLBot-framework](https://github.com/RLBot/RLBot). It can modify the rlbot.cfg file based on the bots of a match and can also start a match using the RLBot-framework.
 </p>
 
 ### Prerequisites
