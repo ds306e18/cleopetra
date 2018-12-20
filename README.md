@@ -7,7 +7,7 @@ Apart from these features the system also adds support specifically for the [RLB
 
 ### Preqreuiqsties
 ```
-Java 8 installed.
+Java 8 JRE installed.
 Optional: RLBot-framework installed.
 ```
 
@@ -21,6 +21,6 @@ For using the IDE-environment to compile, debug and build artifacts, the followi
 
 ## Run application and tests.
 The above setup is required in order to run the application using Gradle. The following functionality is accessed using the Gradle panel found in the right side of IntelliJ. 
-To run the program use the task: ``tournamentsystem -> Tasks -> application -> run``.
-To run the tests use the task: ``tournamentsystem -> Tasks -> verification -> test``.
-To build an executable use the task: ``tournamentsystem -> Task -> other -> fatJar``. The executable jar will now be located ``\tournamentsystem\build\libs\tournamentsystem.jar``.
+To **run the application** use the task: ``tournamentsystem -> Tasks -> application -> run``.
+To **run the tests** use the task: ``tournamentsystem -> Tasks -> verification -> test``.
+To **build an executable jar** use the task: ``tournamentsystem -> Task -> other -> fatJar``. The executable jar will now be located ``\tournamentsystem\build\libs\tournamentsystem.jar``.
