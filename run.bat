@@ -1,2 +1,2 @@
 @ECHO OFF
-call gradle run
+call gradlew.bat run
