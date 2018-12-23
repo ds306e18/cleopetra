@@ -7,7 +7,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="610.0" prefWidth="800.0" style="-fx-background-color: #fff;" stylesheets="@css/stylesheet.css" xmlns="http://javafx.com/javafx/1" xmlns:fx="http://javafx.com/fxml/" fx:controller="dk.aau.cs.ds306e18.tournament.ui.MainController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="610.0" prefWidth="800.0" style="-fx-background-color: #fff;" stylesheets="@css/stylesheet.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.MainController">
     <children>
         <TabPane id="tabPane" prefHeight="601.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <tabs>
@@ -31,7 +31,7 @@
                 </Tab>
                 <Tab text="RLBot Settings">
                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <AnchorPane minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: fff;">
                      <children>
                         <fx:include source="RLBotSettingsTab.fxml" />
                      </children></AnchorPane>
