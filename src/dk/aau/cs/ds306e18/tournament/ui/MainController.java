@@ -5,6 +5,7 @@ import dk.aau.cs.ds306e18.tournament.utility.SaveLoad;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Tab;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -12,13 +13,11 @@ import javafx.stage.Stage;
 
 public class MainController {
 
-    @FXML public GridPane tournamentSettingsTabContent;
-    @FXML public HBox participantSettingsTabContent;
-    @FXML public GridPane bracketOverviewTabContent;
     @FXML public TournamentSettingsTabController tournamentSettingsTabController;
     @FXML public ParticipantSettingsTabController participantSettingsTabController;
     @FXML public BracketOverviewTabController bracketOverviewTabController;
     @FXML public Tab bracketOverviewTab;
+    @FXML public ImageView saveTournamentBtn;
 
     @FXML
     private void initialize() {
@@ -35,7 +34,7 @@ public class MainController {
     @FXML
     void onSaveIconClicked(MouseEvent event) {
 
-        Stage stage = (Stage) participantSettingsTabContent.getScene().getWindow();
+        Stage stage = (Stage) saveTournamentBtn.getScene().getWindow();
 
         if (SaveLoad.saveTournament(stage)){
             Alerts.infoNotification("Saved", "Tournament was successfully saved.");
