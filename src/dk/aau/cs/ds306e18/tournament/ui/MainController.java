@@ -7,12 +7,13 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Tab;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 public class MainController {
 
     @FXML public GridPane tournamentSettingsTabContent;
-    @FXML public GridPane participantSettingsTabContent;
+    @FXML public HBox participantSettingsTabContent;
     @FXML public GridPane bracketOverviewTabContent;
     @FXML public TournamentSettingsTabController tournamentSettingsTabController;
     @FXML public ParticipantSettingsTabController participantSettingsTabController;
