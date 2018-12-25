@@ -16,7 +16,7 @@
 <?import javafx.scene.text.Text?>
 
 
-<HBox fx:id="participantSettingsTab" stylesheets="@css/stylesheet.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.ParticipantSettingsTabController">
+<HBox fx:id="participantSettingsTab" stylesheets="@css/stylesheet.css" xmlns="http://javafx.com/javafx/1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.ParticipantSettingsTabController">
    <children>
       <Pane minHeight="0.0" minWidth="0.0" prefHeight="0.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
       <VBox id="PS-leftside" maxWidth="360.0" minWidth="360.0" prefWidth="360.0" spacing="10.0">

@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Text?>
 
 
-<HBox stylesheets="@css/stylesheet.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.RLBotSettingsTabController">
+<HBox stylesheets="@css/stylesheet.css" xmlns="http://javafx.com/javafx/1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.RLBotSettingsTabController">
    <children>
       <Pane minHeight="0.0" minWidth="0.0" prefHeight="0.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
       <HBox minWidth="1000.0" prefWidth="1000.0">
