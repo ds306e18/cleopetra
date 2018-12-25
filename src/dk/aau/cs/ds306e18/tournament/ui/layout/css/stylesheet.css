@@ -32,7 +32,6 @@
     -fx-text-fill: #8e8e8e;
 }
 
-
 #tabPane .tab {
     -fx-background-color: #f8f8f8;
     -fx-border-color: #c2c2c2;
@@ -64,31 +63,6 @@
 #TS-rightside {
     -fx-border-width: 0 0 0 1;
     -fx-border-color: #c2c2c2;
-}
-
-#TS-leftside #stageTable .column-header .label {
-    -fx-text-fill: #fff;
-    -fx-background-color: #34C5E2;
-}
-
-#TS-leftside #stageTable .column-header {
-    -fx-background-color: #34C5E2;
-}
-
-#TS-leftside #stageTable {
-    -fx-border-width: 1;
-}
-
-#TS-leftside .text-field{
-    -fx-max-width: 250;
-}
-
-#TS-leftside .list-view{
-    -fx-max-width: 250;
-}
-
-#TS-leftside .grid {
-    -fx-max-width: 250;
 }
 
 #PS-leftside, #PS-center, #PS-rightside {
