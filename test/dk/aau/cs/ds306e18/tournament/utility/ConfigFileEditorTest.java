@@ -14,6 +14,8 @@ import static org.junit.Assert.assertFalse;
 
 public class ConfigFileEditorTest {
 
+    private final static String testDir = "test/";
+    private final static String testConfigFilename = "testconfig.cfg";
     private ArrayList<String> testConfig = new ArrayList<>();
 
     /**
@@ -60,9 +62,9 @@ public class ConfigFileEditorTest {
     public void readWriteConcurrencyTest() {
         setTestConfig();
         ConfigFileEditor.setConfig(testConfig);
-        ConfigFileEditor.writeConfig("dummyconfig.cfg");
+        ConfigFileEditor.writeConfig(testDir + "dummyconfig.cfg");
 
-        ConfigFileEditor.readConfig("dummyconfig.cfg");
+        ConfigFileEditor.readConfig(testDir + "dummyconfig.cfg");
         assertEquals(testConfig, ConfigFileEditor.getConfig());
     }
 
@@ -133,7 +135,7 @@ public class ConfigFileEditorTest {
 
     @Test
     public void configureMatchTest1() {
-        ConfigFileEditor.readConfig("testconfig.cfg");
+        ConfigFileEditor.readConfig(testDir + testConfigFilename);
         Match match = createTestMatch();
         ConfigFileEditor.configureMatch(match);
 
@@ -167,13 +169,13 @@ public class ConfigFileEditorTest {
 
     @Test
     public void validateConfigSyntax1() {
-        ConfigFileEditor.readConfig("testconfig.cfg");
+        ConfigFileEditor.readConfig(testDir + testConfigFilename);
         assertTrue(ConfigFileEditor.isValid());
     }
 
     @Test
     public void validateConfigSyntax2() {
-        ConfigFileEditor.readConfig("testconfig.cfg");
+        ConfigFileEditor.readConfig(testDir + testConfigFilename);
         ArrayList<String> config = ConfigFileEditor.getConfig();
         // remove trailing, closing square bracket from first header
         config.set(0, config.get(0).split("]")[0]);

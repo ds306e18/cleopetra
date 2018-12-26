@@ -12,11 +12,14 @@ import static org.junit.Assert.assertTrue;
 
 public class FileOperationsTest {
 
+    // set junk test-files dir to test dir
+    static private final String testdir = "test/";
+
     @Test
     public void writeToFilesystem() {
         Tournament tournament = generateTournamentOnlyTeams();
         try {
-            assertTrue(FileOperations.writeTournamentToFilesystem("", tournament));
+            assertTrue(FileOperations.writeTournamentToFilesystem(testdir, tournament));
         } catch (IOException e) {
             assertFalse(true);
         }
@@ -27,11 +30,11 @@ public class FileOperationsTest {
     public void readFromFilesystem1() {
         Tournament tournament = generateTournamentOnlyTeams();
         try {
-            assertTrue(FileOperations.writeTournamentToFilesystem("", tournament));
+            assertTrue(FileOperations.writeTournamentToFilesystem(testdir, tournament));
         } catch (IOException e) {
             assertFalse(true);
         }
-        Tournament reserializedTournament = FileOperations.readTournamentFromFilesystem("");
+        Tournament reserializedTournament = FileOperations.readTournamentFromFilesystem(testdir);
         assertEquals(tournament, reserializedTournament);
     }
 
@@ -39,11 +42,11 @@ public class FileOperationsTest {
     public void readFromFilesystem2() {
         Tournament tournament = generateTournamentOnlyTeams();
         try {
-            assertTrue(FileOperations.writeTournamentToFilesystem("", "filename", tournament));
+            assertTrue(FileOperations.writeTournamentToFilesystem(testdir, "filename", tournament));
         } catch (IOException e) {
             assertFalse(true);
         }
-        Tournament reserializedTournament = FileOperations.readTournamentFromFilesystem("", "filename");
+        Tournament reserializedTournament = FileOperations.readTournamentFromFilesystem(testdir, "filename");
         assertEquals(reserializedTournament, tournament);
     }
 
@@ -51,17 +54,17 @@ public class FileOperationsTest {
     public void readFromFilesystem3() {
         Tournament tournament = generateTournamentOnlyTeams();
         try {
-            assertTrue(FileOperations.writeTournamentToFilesystem("", "filename", "object", tournament));
+            assertTrue(FileOperations.writeTournamentToFilesystem(testdir, "filename", "object", tournament));
         } catch (IOException e) {
             assertFalse(true);
         }
-        Tournament reserializedTournament = FileOperations.readTournamentFromFilesystem("", "filename", "object");
+        Tournament reserializedTournament = FileOperations.readTournamentFromFilesystem(testdir, "filename", "object");
         assertEquals(tournament, reserializedTournament);
     }
 
     @Test
     public void checkTrailingSlash1() {
-        assertEquals("", FileOperations.checkTrailingSlash(""));
+        assertEquals(testdir, FileOperations.checkTrailingSlash(testdir));
     }
 
     @Test
