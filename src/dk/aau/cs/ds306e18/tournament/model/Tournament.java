@@ -4,7 +4,6 @@ import dk.aau.cs.ds306e18.tournament.model.format.StageStatus;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreakerByGoalDiff;
 import dk.aau.cs.ds306e18.tournament.rlbot.RLBotSettings;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
-import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreakerBySeed;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -73,24 +72,24 @@ public class Tournament {
     public void addStage(Stage stage) {
         if (started) throw new IllegalStateException("Tournament has already started.");
         stages.add(stage);
-        stage.setId(stages.size());
+        stage.setStageNumber(stages.size());
     }
 
     public void removeStage(Stage stage) {
         if (started) throw new IllegalStateException("Tournament has already started.");
         stages.remove(stage);
-        recalculateStageIds();
+        recalculateStageNumbers();
     }
 
     public void removeStage(int index) {
         if (started) throw new IllegalStateException("Tournament has already started.");
         stages.remove(index);
-        recalculateStageIds();
+        recalculateStageNumbers();
     }
 
-    private void recalculateStageIds() {
+    private void recalculateStageNumbers() {
         for (int i = 0; i < stages.size(); i++) {
-            stages.get(i).setId(i + 1);
+            stages.get(i).setStageNumber(i + 1);
         }
     }
 
@@ -100,7 +99,7 @@ public class Tournament {
 
     public void swapStages(Stage primaryStage, Stage secondaryStage) {
         Collections.swap(stages, stages.indexOf(primaryStage), stages.indexOf(secondaryStage));
-        recalculateStageIds();
+        recalculateStageNumbers();
     }
 
     /** Returns the number of stages that has not started yet. */

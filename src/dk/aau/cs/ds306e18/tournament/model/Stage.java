@@ -10,7 +10,7 @@ public class Stage {
     private String name;
     private Format format;
     private int numberOfTeamsWanted = 8;
-    private int id;
+    private int stageNumber;
 
     public Stage(String name, Format format) {
         this.name = name;
@@ -29,14 +29,14 @@ public class Stage {
         return format;
     }
 
-    public int getId() {
-        return id;
+    public int getStageNumber() {
+        return stageNumber;
     }
 
-    void setId(int id) {
+    void setStageNumber(int stageNumber) {
         if (this.format.getStatus() != StageStatus.PENDING)
             throw new IllegalStateException("Stage has already started.");
-        this.id = id;
+        this.stageNumber = stageNumber;
     }
 
     public void setFormat(Format format) {
@@ -65,7 +65,7 @@ public class Stage {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Stage stage = (Stage) o;
-        return getId() == stage.getId() &&
+        return getStageNumber() == stage.getStageNumber() &&
                 getNumberOfTeamsWanted() == stage.getNumberOfTeamsWanted() &&
                 Objects.equals(getName(), stage.getName()) &&
                 Objects.equals(getFormat(), stage.getFormat());
@@ -73,6 +73,6 @@ public class Stage {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getName(), getFormat(), getNumberOfTeamsWanted(), getId());
+        return Objects.hash(getName(), getFormat(), getNumberOfTeamsWanted(), getStageNumber());
     }
 }
