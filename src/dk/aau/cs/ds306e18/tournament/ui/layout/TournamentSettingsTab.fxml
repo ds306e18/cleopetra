@@ -45,23 +45,23 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </padding>
                 </TextField>
-                <HBox alignment="CENTER_LEFT" prefHeight="39.0" prefWidth="400.0">
-                    <children>
+            <GridPane>
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                  <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tiebreaker rule:">
                             <font>
                                 <Font size="16.0" />
                             </font>
-                            <HBox.margin>
-                                <Insets />
-                            </HBox.margin>
                         </Text>
-                        <ChoiceBox fx:id="tieBreakerChoiceBox" prefHeight="25.0" prefWidth="111.0">
-                            <HBox.margin>
-                                <Insets left="30.0" />
-                            </HBox.margin>
-                        </ChoiceBox>
-                    </children>
-                </HBox>
+                        <ChoiceBox fx:id="tieBreakerChoiceBox" prefHeight="25.0" prefWidth="160.0" GridPane.columnIndex="1" />
+               </children>
+            </GridPane>
                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Stages (in play order)">
                     <font>
                         <Font size="16.0" />
@@ -143,7 +143,7 @@
                                 <Font size="16.0" />
                             </font>
                         </Text>
-                        <Spinner fx:id="teamsInStageSpinner" editable="true" GridPane.columnIndex="1" />
+                        <Spinner fx:id="teamsInStageSpinner" editable="true" minWidth="70.0" prefWidth="70.0" GridPane.columnIndex="1" />
                         <Label fx:id="teamsInStageAll" text="All" visible="false" GridPane.columnIndex="1">
                             <font>
                                 <Font name="System Italic" size="16.0" />
@@ -168,7 +168,7 @@
                                 <Font size="16.0" />
                             </font>
                         </Text>
-                        <ChoiceBox fx:id="formatChoicebox" prefHeight="27.0" prefWidth="130.0" GridPane.columnIndex="1" />
+                        <ChoiceBox fx:id="formatChoicebox" prefHeight="27.0" prefWidth="160.0" GridPane.columnIndex="1" />
                     </children>
                     <VBox.margin>
                         <Insets />

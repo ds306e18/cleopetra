@@ -52,10 +52,6 @@
     -fx-alignment: center;
 }
 
-#TS-rightside .spinner {
-    -fx-max-width: 130;
-}
-
 .text-field, .text-area {
     -fx-background-radius: 0;
 }
