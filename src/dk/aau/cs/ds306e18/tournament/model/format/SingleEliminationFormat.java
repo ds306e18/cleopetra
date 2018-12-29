@@ -1,6 +1,8 @@
 package dk.aau.cs.ds306e18.tournament.model.format;
 
+import com.google.gson.annotations.JsonAdapter;
 import dk.aau.cs.ds306e18.tournament.model.Team;
+import dk.aau.cs.ds306e18.tournament.model.TeamIdListAdapter;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchPlayedListener;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchStatus;
@@ -16,6 +18,7 @@ import java.util.stream.Collectors;
 public class SingleEliminationFormat implements Format, MatchPlayedListener {
 
     private StageStatus status = StageStatus.PENDING;
+    @JsonAdapter(TeamIdListAdapter.class)
     private ArrayList<Team> seededTeams;
     private Match finalMatch;
     private Match[] bracket;

@@ -1,5 +1,6 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
+import com.google.gson.annotations.JsonAdapter;
 import dk.aau.cs.ds306e18.tournament.model.format.Format;
 import dk.aau.cs.ds306e18.tournament.model.format.StageStatus;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
@@ -12,6 +13,7 @@ import java.util.stream.Collectors;
 
 public abstract class GroupFormat implements Format {
 
+    @JsonAdapter(TeamIdListAdapter.class)
     protected ArrayList<Team> teams;
     protected StageStatus status = StageStatus.PENDING;
 
