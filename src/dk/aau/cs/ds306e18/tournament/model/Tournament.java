@@ -1,5 +1,6 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
+import com.google.gson.annotations.JsonAdapter;
 import dk.aau.cs.ds306e18.tournament.model.format.StageStatus;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreakerByGoalDiff;
 import dk.aau.cs.ds306e18.tournament.rlbot.RLBotSettings;
@@ -25,6 +26,7 @@ public class Tournament {
 
     private RLBotSettings rlBotSettings = new RLBotSettings();
     private String name = "Unnamed Tournament";
+    @JsonAdapter(TeamDeserializationCatcher.class)
     private ArrayList<Team> teams = new ArrayList<>();
     private ArrayList<Stage> stages = new ArrayList<>();
     private TieBreaker tieBreaker = new TieBreakerByGoalDiff();
