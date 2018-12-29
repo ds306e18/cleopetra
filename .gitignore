@@ -5,6 +5,8 @@
 # all serialized objects on disk should have this extension
 *.obj
 *.object
+# fileextension for serialised tournament
+*.rlts
 saves/
 
 # ConfigFileEditor-specific
