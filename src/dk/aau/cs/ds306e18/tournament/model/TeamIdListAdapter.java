@@ -28,15 +28,19 @@ public class TeamIdListAdapter extends TypeAdapter<ArrayList<Team>> {
 
     @Override
     public ArrayList<Team> read(JsonReader in) throws IOException {
+
         ArrayList<Team> teams = new ArrayList<>();
+        List<Team> allTeams = Tournament.get().getTeams();
+
         // Read array to re-construct list
         in.beginArray();
         while (!in.peek().equals(JsonToken.END_ARRAY)) {
             // Find team from index
             int id = in.nextInt();
-            teams.add(TeamDeserializationCatcher.teams.get(id));
+            teams.add(allTeams.get(id));
         }
         in.endArray();
+
         return teams;
     }
 }

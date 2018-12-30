@@ -35,6 +35,7 @@ public class TeamIdToPointMapAdapter extends TypeAdapter<HashMap<Team, Integer>>
     public HashMap<Team, Integer> read(JsonReader in) throws IOException {
 
         HashMap<Team, Integer> map = new HashMap<>();
+        List<Team> allTeams = Tournament.get().getTeams();
 
         // Re-construct map from array
         in.beginArray();
@@ -48,7 +49,7 @@ public class TeamIdToPointMapAdapter extends TypeAdapter<HashMap<Team, Integer>>
             in.endObject();
 
             // Put team in map
-            Team team = TeamDeserializationCatcher.teams.get(id);
+            Team team = allTeams.get(id);
             map.put(team, points);
         }
         in.endArray();

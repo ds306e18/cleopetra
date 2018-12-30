@@ -26,12 +26,15 @@ public class Tournament {
 
     private RLBotSettings rlBotSettings = new RLBotSettings();
     private String name = "Unnamed Tournament";
-    @JsonAdapter(TeamDeserializationCatcher.class)
     private ArrayList<Team> teams = new ArrayList<>();
     private ArrayList<Stage> stages = new ArrayList<>();
     private TieBreaker tieBreaker = new TieBreakerByGoalDiff();
     private boolean started = false;
     private int currentStageIndex = -1;
+
+    public Tournament() {
+        instance = this;
+    }
 
     public RLBotSettings getRlBotSettings() {
         return rlBotSettings;
