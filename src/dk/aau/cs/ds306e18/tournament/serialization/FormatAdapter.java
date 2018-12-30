@@ -1,4 +1,4 @@
-package dk.aau.cs.ds306e18.tournament.utility;
+package dk.aau.cs.ds306e18.tournament.serialization;
 
 import com.google.gson.*;
 import dk.aau.cs.ds306e18.tournament.model.format.Format;

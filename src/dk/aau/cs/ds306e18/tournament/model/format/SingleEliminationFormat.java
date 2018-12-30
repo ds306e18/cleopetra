@@ -9,7 +9,6 @@ import dk.aau.cs.ds306e18.tournament.ui.BracketOverviewTabController;
 import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.SingleEliminationNode;
 import javafx.scene.Node;
 
-import java.lang.reflect.Array;
 import java.util.*;
 import java.util.stream.Collectors;
 
