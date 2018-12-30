@@ -1,8 +1,6 @@
 package dk.aau.cs.ds306e18.tournament.model.format;
 
-import com.google.gson.annotations.JsonAdapter;
 import dk.aau.cs.ds306e18.tournament.model.Team;
-import dk.aau.cs.ds306e18.tournament.model.TeamIdListAdapter;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 
 import java.util.ArrayList;
@@ -10,7 +8,6 @@ import java.util.ArrayList;
 
 public class RoundRobinGroup {
 
-    @JsonAdapter(TeamIdListAdapter.class)
     private ArrayList<Team> teams;
     private ArrayList<ArrayList<Match>> rounds;
 

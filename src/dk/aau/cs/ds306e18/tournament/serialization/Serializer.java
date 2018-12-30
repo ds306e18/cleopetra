@@ -1,8 +1,9 @@
-package dk.aau.cs.ds306e18.tournament.utility;
+package dk.aau.cs.ds306e18.tournament.serialization;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dk.aau.cs.ds306e18.tournament.model.Stage;
+import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.format.StageStatus;
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import dk.aau.cs.ds306e18.tournament.model.format.Format;
@@ -15,12 +16,10 @@ public class Serializer {
 
     private static Gson gson = new GsonBuilder()
             //TODO; enable versioning .setVersion(int)
-            // enabling option to verbosely serialize round-map in SwissFormat
-            .enableComplexMapKeySerialization()
-            // register custom TypeAdapter for the TieBreaker interface
-            .registerTypeAdapter(TieBreaker.class, new TiebreakerAdaptor())
-            // register custom TypeAdapter for storing class-information on specific formats during serialization
-            .registerTypeAdapter(Format.class, new FormatAdapter())
+            .enableComplexMapKeySerialization() // Enabling option to verbosely serialize round-map in SwissFormat
+            .registerTypeAdapter(TieBreaker.class, new TiebreakerAdapter()) // Handles Tiebreaker inheritance
+            .registerTypeAdapter(Format.class, new FormatAdapter()) // Handles Format inheritance
+            .registerTypeAdapter(Team.class, new TeamIdAdapter()) // Stores teams by index based on list in Tournament class
             .create();
 
     /**

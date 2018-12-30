@@ -1,8 +1,6 @@
 package dk.aau.cs.ds306e18.tournament.model.match;
 
-import com.google.gson.annotations.JsonAdapter;
 import dk.aau.cs.ds306e18.tournament.model.Team;
-import dk.aau.cs.ds306e18.tournament.model.TeamIdAdapter;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -21,7 +19,6 @@ public final class Match {
     private int blueScore = 0;
     private int orangeScore = 0;
     private boolean played = false;
-    @JsonAdapter(TeamIdAdapter.class)
     private Team blueTeam, orangeTeam;
     transient private Match blueFromMatch, orangeFromMatch;
     private boolean blueWasWinnerInPreviousMatch, orangeWasWinnerInPreviousMatch;

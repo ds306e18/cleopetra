@@ -1,11 +1,18 @@
-package dk.aau.cs.ds306e18.tournament.model;
+package dk.aau.cs.ds306e18.tournament.serialization;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import dk.aau.cs.ds306e18.tournament.model.Team;
+import dk.aau.cs.ds306e18.tournament.model.Tournament;
 
 import java.io.IOException;
 
+/**
+ * This adapter changes how teams are serialized. Instead of storing a copy of the team, this will instead store
+ * the team's index based on the list of teams in the Tournament class. On deserialization the team in retrieved from
+ * the same list. The list in the Tournament class overrides this behaviour with a TrueTeamListAdapter.
+ */
 public class TeamIdAdapter extends TypeAdapter<Team> {
 
     @Override
@@ -18,20 +25,14 @@ public class TeamIdAdapter extends TypeAdapter<Team> {
         }
 
         // Store index
-        out.beginObject();
-        out.name("team");
         out.value(id);
-        out.endObject();
     }
 
     @Override
     public Team read(JsonReader in) throws IOException {
 
         // Read index
-        in.beginObject();
-        in.nextName();
         int id = in.nextInt();
-        in.endObject();
 
         // Get the team from index
         if (id == -1) {
