@@ -1,7 +1,9 @@
 package dk.aau.cs.ds306e18.tournament.model.format;
 
+import com.google.gson.annotations.JsonAdapter;
 import dk.aau.cs.ds306e18.tournament.model.GroupFormat;
 import dk.aau.cs.ds306e18.tournament.model.Team;
+import dk.aau.cs.ds306e18.tournament.model.TeamIdToPointMapAdapter;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchChangeListener;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchPlayedListener;
@@ -18,6 +20,7 @@ public class SwissFormat extends GroupFormat implements MatchChangeListener, Mat
     private ArrayList<ArrayList<Match>> rounds = new ArrayList<>();
     private int maxRoundsPossible;
     private int roundCount = 4;
+    @JsonAdapter(TeamIdToPointMapAdapter.class)
     private HashMap<Team, Integer> teamPoints;
 
     transient private List<StageStatusChangeListener> statusChangeListeners = new LinkedList<>();
