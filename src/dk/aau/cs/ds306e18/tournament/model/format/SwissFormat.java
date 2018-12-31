@@ -23,7 +23,7 @@ public class SwissFormat extends GroupFormat implements MatchChangeListener, Mat
     transient private List<StageStatusChangeListener> statusChangeListeners = new LinkedList<>();
 
     @Override
-    public void start(List<Team> teams) {
+    public void start(List<Team> teams, boolean doSeeding) {
         rounds = new ArrayList<>();
         maxRoundsPossible = getMaxRoundsPossible(teams.size());
         roundCount = maxRoundsPossible < roundCount ? maxRoundsPossible : roundCount;
@@ -133,9 +133,10 @@ public class SwissFormat extends GroupFormat implements MatchChangeListener, Mat
      */
     private void createNextRound() {
 
+        // TODO Consider seeding for first round
+
         // Create ordered list of team, based on points.
         ArrayList<Team> orderedTeamList = getOrderedTeamsListFromPoints(teams, teamPoints);
-
         ArrayList<Match> createdMatches = new ArrayList<>();
 
         // Create matches while there is more than 1 team in the list.

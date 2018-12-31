@@ -350,26 +350,15 @@ public class ParticipantSettingsTabController {
     /** Swaps a team upwards in the list of teams. Used to allow ordering of Team and thereby their seed. */
     @FXML
     private void swapTeamUpwards() {
-        swapTeamSeeds(Tournament.get().getTeams().get(getSelectedTeamIndex()),
-                Tournament.get().getTeams().get(getSelectedTeamIndex() - 1));
+        Tournament.get().swapTeams(getSelectedTeamIndex(), getSelectedTeamIndex() - 1);
+        teamsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams()));
+        teamsListView.refresh();
     }
 
     /** Swaps a team downwards in the list of teams. Used to allow ordering of Team and thereby their seed. */
     @FXML
     private void swapTeamDownwards() {
-        swapTeamSeeds(Tournament.get().getTeams().get(getSelectedTeamIndex()),
-                Tournament.get().getTeams().get(getSelectedTeamIndex() + 1));
-    }
-
-    /** Swaps seeds of the firsts given team with the second team. */
-    private void swapTeamSeeds(Team first, Team second){
-
-        int firstSeed = first.getInitialSeedValue();
-        first.setInitialSeedValue(second.getInitialSeedValue());
-        second.setInitialSeedValue(firstSeed);
-
-        Tournament.get().sortTeamsAfterInitialSeed();
-
+        Tournament.get().swapTeams(getSelectedTeamIndex(), getSelectedTeamIndex() + 1);
         teamsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams()));
         teamsListView.refresh();
     }
