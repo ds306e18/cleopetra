@@ -31,6 +31,7 @@ public class Tournament {
     private ArrayList<Team> teams = new ArrayList<>();
     private ArrayList<Stage> stages = new ArrayList<>();
     private TieBreaker tieBreaker = new TieBreakerByGoalDiff();
+    private SeedingOption seedingOption = SeedingOption.SEED_BY_ORDER;
     private boolean started = false;
     private int currentStageIndex = -1;
 
@@ -169,6 +170,14 @@ public class Tournament {
         if (stages.size() < START_REQUIREMENT_STAGES) throw new IllegalStateException("There must be at least one stage in the tournament.");
         started = true;
         startNextStage();
+    }
+
+    public SeedingOption getSeedingOption() {
+        return seedingOption;
+    }
+
+    public void setSeedingOption(SeedingOption seedingOption) {
+        this.seedingOption = seedingOption;
     }
 
     public TieBreaker getTieBreaker() {

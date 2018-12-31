@@ -2,8 +2,11 @@ package dk.aau.cs.ds306e18.tournament.ui;
 
 import com.google.common.base.CharMatcher;
 import dk.aau.cs.ds306e18.tournament.model.Bot;
+import dk.aau.cs.ds306e18.tournament.model.SeedingOption;
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -29,6 +32,7 @@ public class ParticipantSettingsTabController {
     private static final String CLIPBOARD_EMPTY_STRING = "<empty>";
 
     @FXML private GridPane participantSettingsTab;
+    @FXML private ChoiceBox<SeedingOption> seedingChoicebox;
     @FXML private TextField teamNameTextField;
     @FXML private TextField botNameTextField;
     @FXML private TextField developerTextField;
@@ -55,18 +59,23 @@ public class ParticipantSettingsTabController {
     @FXML
     private void initialize() {
 
+        // Seeding Option
+        seedingChoicebox.setItems(FXCollections.observableArrayList(SeedingOption.values()));
+        seedingChoicebox.getSelectionModel().select(Tournament.get().getSeedingOption());
+        seedingChoicebox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> Tournament.get().setSeedingOption(newValue));
+
         setUpTeamsListView();
 
-        //Sets the VBox for team and bot as false, hiding them
+        // Sets the VBox for team and bot as false, hiding them
         botSettingsVbox.setVisible(false);
         teamSettingsVbox.setVisible(false);
         configPathTextField.setEditable(false);
 
-        //By default the remove team and bot button is disabled
+        // By default the remove team and bot button is disabled
         removeTeamBtn.setDisable(true);
         removeBotBtn.setDisable(true);
 
-        //Adds selectionslistener to bot ListView
+        // Adds selectionslistener to bot ListView
         botsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             updateBotFields();
             updateAddRemoveButtonsEnabling();
