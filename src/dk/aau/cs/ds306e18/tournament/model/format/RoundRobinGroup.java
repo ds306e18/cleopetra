@@ -24,16 +24,6 @@ public class RoundRobinGroup {
         return teams;
     }
 
-    public ArrayList<Team> getTeamsWithoutDummy() {
-        ArrayList<Team> teams = new ArrayList<>();
-        for (Team team: this.teams) {
-            if (team.equals(RoundRobinFormat.getDummyTeam())) {
-                continue;
-            } else teams.add(team);
-        }
-        return teams;
-    }
-
     public ArrayList<Match> getMatches(){
 
         ArrayList<Match> matches = new ArrayList<>();

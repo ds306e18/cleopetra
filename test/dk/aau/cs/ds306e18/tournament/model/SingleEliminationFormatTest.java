@@ -18,7 +18,7 @@ public class SingleEliminationFormatTest {
     @Test
     public void amountOfMatchesTest01(){
         SingleEliminationFormat bracket = new SingleEliminationFormat();
-        bracket.start(TestUtilities.generateTeams(8,1), seeding);
+        bracket.start(TestUtilities.generateTeams(8,1), true);
         assertEquals(7, bracket.getAllMatches().size());
     }
 
@@ -26,7 +26,7 @@ public class SingleEliminationFormatTest {
     @Test
     public void amountOfMatchesTest02() {
         SingleEliminationFormat bracket = new SingleEliminationFormat();
-        bracket.start(TestUtilities.generateTeams(16,1), seeding);
+        bracket.start(TestUtilities.generateTeams(16,1), true);
         assertEquals(15, bracket.getAllMatches().size());
     }
 
@@ -34,7 +34,7 @@ public class SingleEliminationFormatTest {
     @Test
     public void dependsOnFinalMatch01() {
         SingleEliminationFormat bracket = new SingleEliminationFormat();
-        bracket.start(TestUtilities.generateTeams(8,1), seeding);
+        bracket.start(TestUtilities.generateTeams(8,1), true);
         List<Match> matches = bracket.getAllMatches();
         for(int n = 1; n < matches.size(); n++) {
             assertTrue(matches.get(0).dependsOn(matches.get(n)));
@@ -45,7 +45,7 @@ public class SingleEliminationFormatTest {
     @Test
     public void dependsOnFinalMatch02() {
         SingleEliminationFormat bracket = new SingleEliminationFormat();
-        bracket.start(TestUtilities.generateTeams(16,1), seeding);
+        bracket.start(TestUtilities.generateTeams(16,1), true);
         List<Match> matches = bracket.getAllMatches();
         for(int n = 1; n < matches.size(); n++) {
             assertTrue(matches.get(0).dependsOn(matches.get(n)));
@@ -56,7 +56,7 @@ public class SingleEliminationFormatTest {
     @Test
     public void dependsOnFinalMatch03() {
         SingleEliminationFormat bracket = new SingleEliminationFormat();
-        bracket.start(TestUtilities.generateSeededTeams(10,1), seeding);
+        bracket.start(TestUtilities.generateSeededTeams(10,1), true);
         List<Match> matches = bracket.getAllMatches();
         for(int n = 1; n < matches.size(); n++) {
             assertTrue(matches.get(0).dependsOn(matches.get(n)));
@@ -68,7 +68,7 @@ public class SingleEliminationFormatTest {
     public void seedTest01(){
         ArrayList<Team> teamList = TestUtilities.generateSeededTeams(8,1);
         SingleEliminationFormat bracket = new SingleEliminationFormat();
-        bracket.start(teamList, seeding);
+        bracket.start(teamList, true);
         assertEquals(1, bracket.getAllMatches().get(bracket.getAllMatches().size()-1).getBlueTeam().getInitialSeedValue());
         assertEquals(8, bracket.getAllMatches().get(bracket.getAllMatches().size()-1).getOrangeTeam().getInitialSeedValue());
         assertEquals(4, bracket.getAllMatches().get(bracket.getAllMatches().size()-2).getBlueTeam().getInitialSeedValue());
@@ -83,7 +83,7 @@ public class SingleEliminationFormatTest {
     @Test
     public void seedTest02(){
         SingleEliminationFormat bracket = new SingleEliminationFormat();
-        bracket.start(TestUtilities.generateSeededTeams(7,1), seeding);
+        bracket.start(TestUtilities.generateSeededTeams(7,1), true);
         assertNull(bracket.getMatchesAsArray()[6]);
         assertEquals(1,bracket.getMatchesAsArray()[2].getBlueTeam().getInitialSeedValue());
     }
@@ -92,7 +92,7 @@ public class SingleEliminationFormatTest {
     @Test
     public void seedTest03(){
         SingleEliminationFormat bracket = new SingleEliminationFormat();
-        bracket.start(TestUtilities.generateSeededTeams(6,1), seeding);
+        bracket.start(TestUtilities.generateSeededTeams(6,1), true);
         assertNull(bracket.getMatchesAsArray()[4]);
         assertEquals(2,bracket.getMatchesAsArray()[1].getBlueTeam().getInitialSeedValue());
     }
@@ -102,7 +102,7 @@ public class SingleEliminationFormatTest {
     @Test
     public void seedTest04(){
         SingleEliminationFormat bracket = new SingleEliminationFormat();
-        bracket.start(TestUtilities.generateSeededTeams(5,1), seeding);
+        bracket.start(TestUtilities.generateSeededTeams(5,1), true);
         assertNull(bracket.getMatchesAsArray()[6]);
         assertNull(bracket.getMatchesAsArray()[4]);
         assertNull(bracket.getMatchesAsArray()[3]);
@@ -114,7 +114,7 @@ public class SingleEliminationFormatTest {
     @Test
     public void upcomingMatchesTest01(){
         SingleEliminationFormat bracket = new SingleEliminationFormat();
-        bracket.start(TestUtilities.generateTeams(8,1), seeding);
+        bracket.start(TestUtilities.generateTeams(8,1), true);
         assertEquals(4, bracket.getUpcomingMatches().size());
         bracket.getUpcomingMatches().get(0).setHasBeenPlayed(true);
         assertEquals(3, bracket.getUpcomingMatches().size());
@@ -124,7 +124,7 @@ public class SingleEliminationFormatTest {
     @Test
     public void upcomingMatchesTest02(){
         SingleEliminationFormat bracket = new SingleEliminationFormat();
-        bracket.start(TestUtilities.generateTeams(6,1), seeding);
+        bracket.start(TestUtilities.generateTeams(6,1), true);
         assertEquals(2, bracket.getUpcomingMatches().size());
     }
 
@@ -132,7 +132,7 @@ public class SingleEliminationFormatTest {
     @Test
     public void pendingMatchesTest01(){
         SingleEliminationFormat bracket = new SingleEliminationFormat();
-        bracket.start(TestUtilities.generateTeams(8,1), seeding);
+        bracket.start(TestUtilities.generateTeams(8,1), true);
         assertEquals(3, bracket.getPendingMatches().size());
         bracket.getAllMatches().get(bracket.getAllMatches().size()-1).setScores(1, 2, true);
         bracket.getAllMatches().get(bracket.getAllMatches().size()-2).setScores(1, 2, true);
@@ -143,7 +143,7 @@ public class SingleEliminationFormatTest {
     @Test
     public void completedMatchesTest01(){
         SingleEliminationFormat bracket = new SingleEliminationFormat();
-        bracket.start(TestUtilities.generateTeams(8,1), seeding);
+        bracket.start(TestUtilities.generateTeams(8,1), true);
         assertEquals(0, bracket.getCompletedMatches().size());
         bracket.getAllMatches().get(bracket.getAllMatches().size()-1).setHasBeenPlayed(true);
         bracket.getAllMatches().get(bracket.getAllMatches().size()-2).setHasBeenPlayed(true);
@@ -191,7 +191,7 @@ public class SingleEliminationFormatTest {
     public void stageStatusTest01() {
         SingleEliminationFormat bracket = new SingleEliminationFormat();
         assertEquals(StageStatus.PENDING, bracket.getStatus());
-        bracket.start(TestUtilities.generateTeams(4, 1), seeding);
+        bracket.start(TestUtilities.generateTeams(4, 1), true);
         assertEquals(StageStatus.RUNNING, bracket.getStatus());
         bracket =  generateBracketsAndWins(4);
         assertEquals(StageStatus.CONCLUDED, bracket.getStatus());
@@ -201,7 +201,7 @@ public class SingleEliminationFormatTest {
     @Test
     public void stageStatusTest02() {
         SingleEliminationFormat bracket = new SingleEliminationFormat();
-        bracket.start(TestUtilities.generateTeams(8, 1), seeding);
+        bracket.start(TestUtilities.generateTeams(8, 1), true);
         List<Match> arrayList = bracket.getAllMatches();
         arrayList.get(arrayList.size()-1).setBlueScore(1);
         arrayList.get(arrayList.size()-1).setHasBeenPlayed(true);
@@ -214,7 +214,7 @@ public class SingleEliminationFormatTest {
     @Test(expected = IllegalStateException.class)
     public void unPlayableMatch() {
         SingleEliminationFormat bracket = new SingleEliminationFormat();
-        bracket.start(TestUtilities.generateTeams(8, 1), seeding);
+        bracket.start(TestUtilities.generateTeams(8, 1), true);
         bracket.getAllMatches().get(0).setBlueScore(1);
     }
 
@@ -222,7 +222,7 @@ public class SingleEliminationFormatTest {
     @Test(expected = IllegalStateException.class)
     public void unPlayableMatch02() {
         SingleEliminationFormat bracket = new SingleEliminationFormat();
-        bracket.start(TestUtilities.generateTeams(8, 1), seeding);
+        bracket.start(TestUtilities.generateTeams(8, 1), true);
         bracket.getAllMatches().get(2).setHasBeenPlayed(true);
     }
 
@@ -230,7 +230,7 @@ public class SingleEliminationFormatTest {
      * @param amountOfTeams the amount of teams */
     private SingleEliminationFormat generateBracketsAndWins(int amountOfTeams) {
         SingleEliminationFormat bracket = new SingleEliminationFormat();
-        bracket.start(TestUtilities.generateSeededTeams(amountOfTeams,1), seeding);
+        bracket.start(TestUtilities.generateSeededTeams(amountOfTeams,1), true);
 
         for(int matchIndex = bracket.getAllMatches().size()-1 ; matchIndex >= 0; matchIndex--){
             if(bracket.getAllMatches().get(matchIndex).getBlueTeam().getInitialSeedValue() < bracket.getAllMatches().get(matchIndex).getOrangeTeam().getInitialSeedValue()) {
