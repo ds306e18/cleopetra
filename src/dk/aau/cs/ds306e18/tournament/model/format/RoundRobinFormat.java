@@ -24,7 +24,7 @@ public class RoundRobinFormat extends GroupFormat implements MatchPlayedListener
 
     /** Constructor that automatically creates an arraylist of matches made on the principles of berger tables.
      * @param seededTeams arraylist of all the teams in the bracket.
-     * @param doSeeding*/
+     * @param doSeeding whether or not to group teams based on their seed. */
     public void start(List<Team> seededTeams, boolean doSeeding) {
         teams = new ArrayList<>(seededTeams);
         ArrayList<Team> teams = new ArrayList<>(seededTeams);
@@ -90,9 +90,10 @@ public class RoundRobinFormat extends GroupFormat implements MatchPlayedListener
             for (int i = 0; i < numberOfGroups; i++) {
 
                 // Some groups may be bigger if team count is not divisible by number of groups
+                // The first group(s) will be the small ones
                 int size = groupSize;
                 if (i >= numberOfGroups - leftoverTeams) {
-                    groupSize++;
+                    size++;
                 }
 
                 RoundRobinGroup group = new RoundRobinGroup(teams.subList(t, t + size));

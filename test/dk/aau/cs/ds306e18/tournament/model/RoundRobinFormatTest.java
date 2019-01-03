@@ -153,7 +153,7 @@ public class RoundRobinFormatTest {
         RoundRobinFormat bracket = new RoundRobinFormat();
         bracket.start(generateTeams(numberOfTeams, teamSize), true);
 
-        setAllUpcommingMatchesPlayed(bracket);
+        setAllUpcomingMatchesPlayed(bracket);
 
         assertEquals(numberOfMatchesInRoundRobin(numberOfTeams), bracket.getCompletedMatches().size());
     }
@@ -210,7 +210,7 @@ public class RoundRobinFormatTest {
         ArrayList<Team> inputTeams = generateSeededTeams(4, 2);
         bracket.start(inputTeams, true);
 
-        setAllUpcommingMatchesPlayed(bracket);
+        setAllUpcomingMatchesPlayed(bracket);
         //All teams now have the same amount of points.
 
         ArrayList<Team> top3Teams = new ArrayList<>(bracket.getTopTeams(3, new TieBreakerBySeed()));
@@ -257,7 +257,7 @@ public class RoundRobinFormatTest {
         bracket.start(generateTeams(2, 2), true);
 
         //Set all matches to played
-        setAllUpcommingMatchesPlayed(bracket);
+        setAllUpcomingMatchesPlayed(bracket);
 
         assertEquals(StageStatus.CONCLUDED, bracket.getStatus());
     }
@@ -427,10 +427,91 @@ public class RoundRobinFormatTest {
         }
     }
 
+    @Test
+    public void withSeeding01() {
+        int numberOfTeams = 6;
+        ArrayList<Team> teams = generateTeams(numberOfTeams, 1);
+
+        RoundRobinFormat roundrobin = new RoundRobinFormat();
+        roundrobin.setNumberOfGroups(2);
+        roundrobin.start(teams, true);
+
+        assertSame(teams.get(0), roundrobin.getGroups().get(0).getTeams().get(0));
+        assertSame(teams.get(2), roundrobin.getGroups().get(0).getTeams().get(1));
+        assertSame(teams.get(4), roundrobin.getGroups().get(0).getTeams().get(2));
+        assertSame(teams.get(1), roundrobin.getGroups().get(1).getTeams().get(0));
+        assertSame(teams.get(3), roundrobin.getGroups().get(1).getTeams().get(1));
+        assertSame(teams.get(5), roundrobin.getGroups().get(1).getTeams().get(2));
+    }
+
+    @Test
+    public void withSeeding02() {
+        // with seeding and number of teams is not divisible by group count
+
+        int numberOfTeams = 8;
+        ArrayList<Team> teams = generateTeams(numberOfTeams, 1);
+
+        RoundRobinFormat roundrobin = new RoundRobinFormat();
+        roundrobin.setNumberOfGroups(3);
+        roundrobin.start(teams, true);
+
+        // Group 1 is seed 1 and 4
+        assertSame(teams.get(0), roundrobin.getGroups().get(0).getTeams().get(0));
+        assertSame(teams.get(3), roundrobin.getGroups().get(0).getTeams().get(1));
+        // Group 2 is seed 2, 5, and 7
+        assertSame(teams.get(1), roundrobin.getGroups().get(1).getTeams().get(0));
+        assertSame(teams.get(4), roundrobin.getGroups().get(1).getTeams().get(1));
+        assertSame(teams.get(6), roundrobin.getGroups().get(1).getTeams().get(2));
+        // Group 3 is seed 3, 6, and 8
+        assertSame(teams.get(2), roundrobin.getGroups().get(2).getTeams().get(0));
+        assertSame(teams.get(5), roundrobin.getGroups().get(2).getTeams().get(1));
+        assertSame(teams.get(7), roundrobin.getGroups().get(2).getTeams().get(2));
+    }
+
+    @Test
+    public void withoutSeeding01() {
+        int numberOfTeams = 6;
+        ArrayList<Team> teams = generateTeams(numberOfTeams, 1);
+
+        RoundRobinFormat roundrobin = new RoundRobinFormat();
+        roundrobin.setNumberOfGroups(2);
+        roundrobin.start(teams, false);
+
+        assertSame(teams.get(0), roundrobin.getGroups().get(0).getTeams().get(0));
+        assertSame(teams.get(1), roundrobin.getGroups().get(0).getTeams().get(1));
+        assertSame(teams.get(2), roundrobin.getGroups().get(0).getTeams().get(2));
+        assertSame(teams.get(3), roundrobin.getGroups().get(1).getTeams().get(0));
+        assertSame(teams.get(4), roundrobin.getGroups().get(1).getTeams().get(1));
+        assertSame(teams.get(5), roundrobin.getGroups().get(1).getTeams().get(2));
+    }
+
+    @Test
+    public void withoutSeeding02() {
+        // without seeding and number of teams is not divisible by group count
+
+        int numberOfTeams = 8;
+        ArrayList<Team> teams = generateTeams(numberOfTeams, 1);
+
+        RoundRobinFormat roundrobin = new RoundRobinFormat();
+        roundrobin.setNumberOfGroups(3);
+        roundrobin.start(teams, false);
+
+        assertSame(teams.get(0), roundrobin.getGroups().get(0).getTeams().get(0));
+        assertSame(teams.get(1), roundrobin.getGroups().get(0).getTeams().get(1));
+
+        assertSame(teams.get(2), roundrobin.getGroups().get(1).getTeams().get(0));
+        assertSame(teams.get(3), roundrobin.getGroups().get(1).getTeams().get(1));
+        assertSame(teams.get(4), roundrobin.getGroups().get(1).getTeams().get(2));
+
+        assertSame(teams.get(5), roundrobin.getGroups().get(2).getTeams().get(0));
+        assertSame(teams.get(6), roundrobin.getGroups().get(2).getTeams().get(1));
+        assertSame(teams.get(7), roundrobin.getGroups().get(2).getTeams().get(2));
+    }
+
     /**
      * sets all upcoming matches in the given format to have been played. The best seeded team wins.
      */
-    private void setAllUpcommingMatchesPlayed(GroupFormat format) {
+    private void setAllUpcomingMatchesPlayed(GroupFormat format) {
 
         //Set all matches to played
         List<Match> matches = format.getUpcomingMatches();
