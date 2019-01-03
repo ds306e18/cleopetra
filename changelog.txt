@@ -4,7 +4,7 @@ Unreleased (dev branch)
 
 
 Version 1.0.1 - 29. Dec 2018
-- Added a run.bat for quickly running CleoPetra without install IntelliJ or Gradle. #19 #21 - NicEastvillage and tarehart
+- Added a run.bat for quickly running CleoPetra without having to install IntelliJ or Gradle. #19 #21 - NicEastvillage and tarehart
 - Running unit tests no longer creates junk in main folder. #17 #22 - cogitantium
 
 
