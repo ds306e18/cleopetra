@@ -38,6 +38,7 @@ public class LauncherController {
             systemStage.setScene(new Scene(systemRoot));
         } catch (IOException e) {
             System.out.println(e.getMessage());
+            System.out.println(e.getCause().toString());
         }
 
         // Create and load the exit popup when the user tries to close the system.

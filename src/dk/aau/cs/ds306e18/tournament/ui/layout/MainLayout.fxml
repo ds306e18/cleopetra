@@ -7,54 +7,37 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="610.0" prefWidth="800.0" style="-fx-background-color: #fff;" stylesheets="@css/stylesheet.css" xmlns="http://javafx.com/javafx/1" xmlns:fx="http://javafx.com/fxml/" fx:controller="dk.aau.cs.ds306e18.tournament.ui.MainController">
+<AnchorPane style="-fx-background-color: #fff;" stylesheets="@css/stylesheet.css" xmlns="http://javafx.com/javafx/1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.MainController">
     <children>
-        <TabPane id="tabPane" prefHeight="601.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <TabPane id="tabPane" tabClosingPolicy="UNAVAILABLE" tabMinHeight="400.0" tabMinWidth="1080.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <tabs>
                 <Tab text="Tournament Settings">
-                    <content>
-                        <AnchorPane>
-                            <children>
-                                <fx:include fx:id="tournamentSettingsTabContent" source="TournamentSettingsTab.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                            </children>
-                        </AnchorPane>
-                    </content>
+                    <AnchorPane>
+                        <fx:include source="TournamentSettingsTab.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                    </AnchorPane>
                 </Tab>
                 <Tab text="Participant Settings">
-                    <content>
-                        <AnchorPane>
-                            <children>
-                                <fx:include fx:id="participantSettingsTabContent" source="ParticipantSettingsTab.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                            </children>
-                        </AnchorPane>
-                    </content>
+                    <AnchorPane>
+                        <fx:include source="ParticipantSettingsTab.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                    </AnchorPane>
                 </Tab>
                 <Tab text="RLBot Settings">
-                    <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                        <fx:include source="RLBotSettingsTab.fxml" />
-                     </children></AnchorPane>
-                    </content>
+                    <AnchorPane>
+                        <fx:include source="RLBotSettingsTab.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                    </AnchorPane>
                 </Tab>
                 <Tab fx:id="bracketOverviewTab" onSelectionChanged="#onTabSelectionChanged" text="Bracket Overview">
-                    <content>
-                        <AnchorPane>
-                            <children>
-                                <fx:include fx:id="bracketOverviewTabContent" source="BracketOverviewTab.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                            </children>
-                        </AnchorPane>
-                    </content>
+                    <AnchorPane>
+                        <fx:include source="BracketOverviewTab.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                    </AnchorPane>
                 </Tab>
             </tabs>
         </TabPane>
-      <ImageView id="mainSaveButton" fitHeight="20.0" fitWidth="20.0" layoutX="770.0" layoutY="20.0" onMouseClicked="#onSaveIconClicked" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="20.0">
-         <image>
+        <ImageView id="mainSaveButton" fx:id="saveTournamentBtn" fitHeight="20.0" fitWidth="20.0" layoutX="770.0" layoutY="20.0" onMouseClicked="#onSaveIconClicked" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="20.0">
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
             <Image url="@images/save.png" />
-         </image>
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
-      </ImageView>
+        </ImageView>
     </children>
 </AnchorPane>
