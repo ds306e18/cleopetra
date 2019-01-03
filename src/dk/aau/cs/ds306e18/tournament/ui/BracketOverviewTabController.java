@@ -155,7 +155,7 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
     private String getRequirementsText(){
 
         //Are requirements met
-        if(Tournament.get().canStart()) return "You have met the requirement for starting a tournament.";
+        if(Tournament.get().canStart()) return "You have met the requirements for starting a tournament.";
 
         int numberOfStages = Tournament.get().getStages().size();
         int numberOfTeams = Tournament.get().getTeams().size();
