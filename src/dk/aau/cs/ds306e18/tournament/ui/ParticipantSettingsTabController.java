@@ -16,6 +16,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -31,7 +32,7 @@ public class ParticipantSettingsTabController {
     private static final String CLIPBOARD_PREFIX = "Clipboard: ";
     private static final String CLIPBOARD_EMPTY_STRING = "<empty>";
 
-    @FXML private GridPane participantSettingsTab;
+    @FXML private HBox participantSettingsTab;
     @FXML private ChoiceBox<SeedingOption> seedingChoicebox;
     @FXML private TextField teamNameTextField;
     @FXML private TextField botNameTextField;
