@@ -55,7 +55,7 @@ task fatJar(type: Jar) {
     manifest {
         attributes 'Main-Class': 'dk.aau.cs.ds306e18.tournament.Main'
     }
-    baseName = 'tournamentsystem'
+    baseName = 'cleopetra'
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
 }
