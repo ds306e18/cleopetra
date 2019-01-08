@@ -1,35 +1,73 @@
 package dk.aau.cs.ds306e18.tournament.model;
-import dk.aau.cs.ds306e18.tournament.model.format.SingleEliminationFormat;
+
+import dk.aau.cs.ds306e18.tournament.TestUtilities;
+import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertSame;
 
 public class TieBreakerTest {
 
-    //
     @Test
     public void goalDiff01() {
-        SingleEliminationFormat bracket = new SingleEliminationFormat();
-        ArrayList<Team> teamList = new ArrayList();
-        ArrayList<Bot> botList = new ArrayList();
-        for (int i = 0; i < 8; i++) {
-            botList.add(new Bot("bot" + Integer.toString(i), "botty" + Integer.toString(i)));
-            teamList.add(new Team("Team" + Integer.toString(i), botList, i+1, "team" + Integer.toString(i)));
-            botList.clear();
+
+        List<Team> teams = TestUtilities.generateTeams(6, 1);
+        Match matchOne = new Match(teams.get(0), teams.get(1));
+        Match matchTwo = new Match(teams.get(2), teams.get(3));
+        Match matchThree = new Match(teams.get(4), teams.get(5));
+
+        matchOne.setScores(9, 5, true);
+        matchTwo.setScores(4, 0, true);
+        matchThree.setScores(4, 3, true);
+
+        List<Team> ordered = TieBreaker.GOAL_DIFF.compareAll(teams, 6);
+
+        assertSame(ordered.get(0), teams.get(0)); // goal diff of 4, goals scored of 9
+        assertSame(ordered.get(1), teams.get(2)); // goal diff of 4, goals scored of 4
+        assertSame(ordered.get(2), teams.get(4)); // goal diff of 1, goals scored of 4
+        assertSame(ordered.get(3), teams.get(5)); // goal diff of -1, goals scored of 3
+        assertSame(ordered.get(4), teams.get(1)); // goal diff of -4, goals scored of 5
+        assertSame(ordered.get(5), teams.get(3)); // goal diff of -4, goals scored of 0
+    }
+
+    @Test
+    public void goalScored01() {
+        List<Team> teams = TestUtilities.generateTeams(4, 1);
+        Match matchOne = new Match(teams.get(0), teams.get(1));
+        Match matchTwo = new Match(teams.get(2), teams.get(3));
+
+        matchOne.setScores(5, 1, true);
+        matchTwo.setScores(4, 2, true);
+
+        List<Team> ordered = TieBreaker.GOALS_SCORED.compareAll(teams, 4);
+
+        assertSame(ordered.get(0), teams.get(0)); // goals scored of 5
+        assertSame(ordered.get(1), teams.get(2)); // goals scored of 4
+        assertSame(ordered.get(2), teams.get(3)); // goals scored of 2
+        assertSame(ordered.get(3), teams.get(1)); // goals scored of 1
+    }
+
+    @Test
+    public void bySeed01() {
+        List<Team> teams = TestUtilities.generateTeams(4, 1);
+        for (int i = 0; i < teams.size(); i++) {
+            teams.get(i).setInitialSeedValue(i + 1);
         }
-        bracket.start(teamList, true);
-        bracket.getAllMatches().get(6).setScores(2, 0, true);
-        bracket.getAllMatches().get(5).setScores(5, 0, true);
-        bracket.getAllMatches().get(4).setScores(3, 2, true);
-        bracket.getAllMatches().get(3).setScores(4, 2, true);
-        bracket.getAllMatches().get(2).setScores(1, 0, true);
-        bracket.getAllMatches().get(1).setScores(2, 4, true);
-        bracket.getAllMatches().get(0).setScores(2, 0, true);
-        List topTeams = bracket.getTopTeams(8, TieBreaker.GOAL_DIFF);
-        assertTrue(teamList.get(3).getGoalDiff() >= teamList.get(1).getGoalDiff());
-        assertTrue(teamList.get(6).getGoalDiff() >= teamList.get(5).getGoalDiff() && teamList.get(7).getGoalDiff() >= teamList.get(4).getGoalDiff());
+
+        Match matchOne = new Match(teams.get(0), teams.get(1));
+        Match matchTwo = new Match(teams.get(2), teams.get(3));
+
+        // Scores shouldn't matter
+        matchOne.setScores(2, 3, true);
+        matchTwo.setScores(4, 1, true);
+
+        List<Team> ordered = TieBreaker.SEED.compareAll(teams, 4);
+
+        assertSame(ordered.get(0), teams.get(0)); // seed 1
+        assertSame(ordered.get(1), teams.get(1)); // seed 2
+        assertSame(ordered.get(2), teams.get(2)); // seed 3
+        assertSame(ordered.get(3), teams.get(3)); // seed 4
     }
 }
