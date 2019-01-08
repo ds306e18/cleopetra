@@ -35,6 +35,7 @@ public class ParticipantSettingsTabController {
     @FXML private HBox participantSettingsTab;
     @FXML private ChoiceBox<SeedingOption> seedingChoicebox;
     @FXML private TextField teamNameTextField;
+    @FXML private Spinner<Integer> seedSpinner;
     @FXML private TextField botNameTextField;
     @FXML private TextField developerTextField;
     @FXML private TextArea botDescription;
@@ -63,9 +64,25 @@ public class ParticipantSettingsTabController {
         // Seeding Option
         seedingChoicebox.setItems(FXCollections.observableArrayList(SeedingOption.values()));
         seedingChoicebox.getSelectionModel().select(Tournament.get().getSeedingOption());
-        seedingChoicebox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> Tournament.get().setSeedingOption(newValue));
+        seedingChoicebox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            Tournament.get().setSeedingOption(newValue);
+            updateParticipantFields();
+            updateSeedSpinner();
+            teamsListView.refresh();
+        });
 
         setUpTeamsListView();
+
+        seedSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, Integer.MAX_VALUE));
+        seedSpinner.getValueFactory().valueProperty().addListener((observable, oldValue, newValue) -> {
+            Team selectedTeam = getSelectedTeam();
+            if (selectedTeam != null && Tournament.get().getSeedingOption() == SeedingOption.MANUALLY) {
+                selectedTeam.setInitialSeedValue(newValue);
+                Tournament.get().sortTeamsBySeed();
+                teamsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams()));
+                teamsListView.refresh();
+            }
+        });
 
         // Sets the VBox for team and bot as false, hiding them
         botSettingsVbox.setVisible(false);
@@ -96,6 +113,7 @@ public class ParticipantSettingsTabController {
 
         //Adds selectionsListener to team ListView
         teamsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            updateParticipantFields();
             updateTeamFields();
             updateAddRemoveButtonsEnabling();
             updateCopyPasteButtonsEnabling();
@@ -108,9 +126,23 @@ public class ParticipantSettingsTabController {
                 if (empty) {
                     setText(null);
                 } else {
-                    int index = teamsListView.getItems().indexOf(team) + 1;
-                    String text = index + ". " + team.getTeamName();
-                    setText(text);
+                    SeedingOption seedingOption = Tournament.get().getSeedingOption();
+
+                    switch (seedingOption) {
+                        case SEED_BY_ORDER:
+                            int index = teamsListView.getItems().indexOf(team) + 1;
+                            setText(index + ".    " + team.getTeamName());
+                            break;
+
+                        case MANUALLY:
+                            setText("Seed " + team.getInitialSeedValue() + ":    " + team.getTeamName());
+                            break;
+
+                        case NO_SEEDING: case RANDOM_SEEDING:
+                            setText(team.getTeamName());
+                            break;
+                    }
+
                     teamsListView.refresh();
                 }
             }
@@ -260,6 +292,20 @@ public class ParticipantSettingsTabController {
         botSettingsVbox.setVisible(false);
     }
 
+    private void updateParticipantFields() {
+
+        SeedingOption seedingOption = Tournament.get().getSeedingOption();
+        int selectedIndex = getSelectedTeamIndex();
+
+        // Handle team order button disabling / enabling
+        swapUpTeam.setDisable(seedingOption != SeedingOption.SEED_BY_ORDER || selectedIndex <= 0);
+        swapDownTeam.setDisable(seedingOption != SeedingOption.SEED_BY_ORDER || selectedIndex == teamsListView.getItems().size() - 1);
+
+        if (selectedIndex == -1) {
+            removeTeamBtn.setDisable(true);
+        }
+    }
+
     /** Updates the textfields with the values from the selected team. */
     void updateTeamFields() {
 
@@ -267,15 +313,12 @@ public class ParticipantSettingsTabController {
 
         if (getSelectedTeamIndex() != -1) {
 
-            // Handle team order button disabling / enabling
-            int selectedIndex = getSelectedTeamIndex();
-            swapUpTeam.setDisable(selectedIndex == 0);
-            swapDownTeam.setDisable(selectedIndex == teamsListView.getItems().size() - 1 && selectedIndex != - 1);
-
             Team selectedTeam = Tournament.get().getTeams().get(getSelectedTeamIndex());
 
-            botsListView.getSelectionModel().clearSelection();
             teamNameTextField.setText(selectedTeam.getTeamName());
+            updateSeedSpinner();
+
+            botsListView.getSelectionModel().clearSelection();
             botsListView.setItems(FXCollections.observableArrayList(selectedTeam.getBots()));
             botsListView.refresh();
 
@@ -283,22 +326,37 @@ public class ParticipantSettingsTabController {
             if(teamsListView.getItems().size() != 0)
                 removeTeamBtn.setDisable(false);
 
-        } else {
-            //if no bot is selected clear the fields and hide the teamsettings box and disable remove team button
-            removeTeamBtn.setDisable(true);
-            clearTeamFields();
         }
 
         //Check for empty names
         checkForEmptyTeamName();
     }
 
-    /** Clears bot fields and hides bot box. */
-    private void clearTeamFields() {
-        teamSettingsVbox.setVisible(false);
-        teamNameTextField.setText("");
-        botsListView.setItems(null);
-        botsListView.refresh();
+    private void updateSeedSpinner() {
+        Team selectedTeam = getSelectedTeam();
+        int selectedTeamIndex = getSelectedTeamIndex();
+        SeedingOption seedingOption = Tournament.get().getSeedingOption();
+
+        seedSpinner.setDisable(seedingOption != SeedingOption.MANUALLY);
+
+        int displayedValue = selectedTeam.getInitialSeedValue();
+
+        switch (seedingOption) {
+
+            case SEED_BY_ORDER:
+                displayedValue = selectedTeamIndex + 1;
+                break;
+
+            case MANUALLY:
+                break;
+
+            case NO_SEEDING: case RANDOM_SEEDING:
+                displayedValue = 0;
+                break;
+        }
+
+        seedSpinner.getValueFactory().valueProperty().setValue(displayedValue);
+
     }
 
     void checkForEmptyTeamName() {
