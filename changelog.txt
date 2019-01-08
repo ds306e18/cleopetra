@@ -1,6 +1,11 @@
 Unreleased (dev branch)
 - Teams are now serialized by index, which means teams and bots can be edited after saving and loading a tournament. #2 #25 - NicEastvillage
 - The content on settings tabs are now centered and scales less weirdly. More ui changes are planned. #23 - NicEastvillage
+- Added seeding options. #10 - NicEastvillage
+    - Seed by order in participant list: Normal seeding
+    - No seeding: The teams are placed directly into the bracket/groups
+    - Random seeding: Shuffles the teams
+    - The swiss algorithm is currently unaffected as it doesn't consider seeding at all right now.
 
 
 Version 1.0.1 - 29. Dec 2018
