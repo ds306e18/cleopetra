@@ -23,11 +23,11 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
     transient private List<StageStatusChangeListener> statusChangeListeners = new LinkedList<>();
 
     @Override
-    public void start(List<Team> seededTeams) {
+    public void start(List<Team> seededTeams, boolean doSeeding) {
         this.seededTeams = new ArrayList<>(seededTeams);
         rounds = (int) Math.ceil(Math.log(seededTeams.size()) / Math.log(2));
         generateBracket();
-        seedBracket(seededTeams);
+        seedBracket(seededTeams, doSeeding);
         status = StageStatus.RUNNING;
         finalMatch.registerMatchPlayedListener(this);
     }
@@ -56,16 +56,19 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
 
     /** Seeds the single-elimination bracket with teams to give better placements.
      * If there are an insufficient amount of teams, the team(s) with the best seeding(s) will be placed in the next round instead.
-     * @param seededTeams a list containing the teams in the tournament */
-    private void seedBracket(List<Team> seededTeams) {
+     * @param seededTeams a list containing the teams in the tournament
+     * @param doSeeding whether or not to use seeding. If false, the reordering of teams is skipped. */
+    private void seedBracket(List<Team> seededTeams, boolean doSeeding) {
         ArrayList<Team> seedList = new ArrayList<>(seededTeams);
 
         //Create needed amount of byes to match with the empty matches
         ArrayList<Team> byeList = addByes(seededTeams.size());
         seedList.addAll(byeList);
 
-        //Reorders list with fair seeding method
-        fairSeeding(seedList);
+        if (doSeeding) {
+            //Reorders list with fair seeding method
+            fairSeeding(seedList);
+        }
 
         //Places the teams in the bracket, and removes unnecessary matches
         placeTeamsInBracket(seedList, byeList);

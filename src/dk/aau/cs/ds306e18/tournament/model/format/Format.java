@@ -2,7 +2,6 @@ package dk.aau.cs.ds306e18.tournament.model.format;
 
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
-import dk.aau.cs.ds306e18.tournament.model.match.MatchChangeListener;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
 import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.ModelCoupledUI;
 import dk.aau.cs.ds306e18.tournament.ui.BracketOverviewTabController;
@@ -16,7 +15,7 @@ public interface Format {
     /**
      * Starts the stage with the given list of teams. The teams should seeded after the order in the list.
      */
-    void start(List<Team> seededTeams);
+    void start(List<Team> seededTeams, boolean doSeeding);
 
     /**
      * Returns the status of the format.

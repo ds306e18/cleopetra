@@ -3,7 +3,6 @@ package dk.aau.cs.ds306e18.tournament.model.format;
 import dk.aau.cs.ds306e18.tournament.model.GroupFormat;
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
-import dk.aau.cs.ds306e18.tournament.model.match.MatchChangeListener;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchPlayedListener;
 import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.RoundRobinNode;
 import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.RoundRobinSettingsNode;
@@ -17,15 +16,16 @@ public class RoundRobinFormat extends GroupFormat implements MatchPlayedListener
     private static final Team DUMMY_TEAM = new Team("Dummy", new ArrayList<>(), 0, "Dummy team description");
 
     private ArrayList<Match> matches;
-    private ArrayList<RoundRobinGroup> groups = new ArrayList<>();
+    private ArrayList<RoundRobinGroup> groups;
     //should be set before start() is called, to determine number of groups that should be created
     private int numberOfGroups = 1;
 
     transient private List<StageStatusChangeListener> statusChangeListeners = new LinkedList<>();
 
     /** Constructor that automatically creates an arraylist of matches made on the principles of berger tables.
-     * @param seededTeams arraylist of all the teams in the bracket. */
-    public void start(List<Team> seededTeams) {
+     * @param seededTeams arraylist of all the teams in the bracket.
+     * @param doSeeding whether or not to group teams based on their seed. */
+    public void start(List<Team> seededTeams, boolean doSeeding) {
         teams = new ArrayList<>(seededTeams);
         ArrayList<Team> teams = new ArrayList<>(seededTeams);
 
@@ -39,7 +39,7 @@ public class RoundRobinFormat extends GroupFormat implements MatchPlayedListener
             }
 
             status = StageStatus.RUNNING;
-            createGroupsWithMatches(teams);
+            createGroupsAndMatches(teams, doSeeding);
             matches = extractMatchesFromGroups();
         }
     }
@@ -55,51 +55,70 @@ public class RoundRobinFormat extends GroupFormat implements MatchPlayedListener
         } else return false;
     }
 
-    /**
-     * this function takes the teams input array, which is the list of all teams, and split this into sub arrays, and
-     * creates groups with matches based on these. These groups are added to the groups list in class.
-     */
-    private void createGroupsWithMatches(ArrayList<Team> teams) {
+    /** This function populates the groups list and generates the matches for each group. */
+    private void createGroupsAndMatches(ArrayList<Team> teams, boolean doSeeding) {
+        groups = new ArrayList<>();
+
+        int groupSize = teams.size() / numberOfGroups;
         int leftoverTeams = teams.size() % numberOfGroups;
 
-        for (int i = 0; i < numberOfGroups; i++) {
-            ArrayList<Team> splitArray = pickTeamsForGroup(teams, i);
+        if (doSeeding) {
 
-            //if there must be groups with more teams than others, add an extra team to the first groups, from the highest
-            //index of the teams array
-            if (leftoverTeams != 0) {
-                splitArray.add(teams.get(teams.size() - leftoverTeams));
-                leftoverTeams--;
+            // Pick teams evenly
+            for (int i = 0; i < numberOfGroups; i++) {
+
+                // Pick every numberOfGroups'th team
+                ArrayList<Team> teamsForGroup = new ArrayList<>();
+                for (int j = 0; j < groupSize; j++) {
+                    teamsForGroup.add(teams.get(i + j * numberOfGroups));
+                }
+
+                // When team count is not divisible by group count, the leftover teams are added to the lowest seeded groups
+                if (i >= numberOfGroups - leftoverTeams) {
+                    teamsForGroup.add(teams.get(teams.size() - numberOfGroups + i));
+                }
+
+                RoundRobinGroup group = new RoundRobinGroup(teamsForGroup);
+                group.setRounds(generateMatches(group.getTeams()));
+                groups.add(group);
             }
 
-            //if there is an uneven amount of teams in the group, add a dummy team and later remove matches that include the dummy team
-            if (splitArray.size() % 2 != 0) {
-                splitArray.add(DUMMY_TEAM);
-            }
+        } else {
 
-            RoundRobinGroup roundRobinGroup = new RoundRobinGroup(splitArray);
-            roundRobinGroup.setRounds(generateMatches(roundRobinGroup.getTeams()));
-            groups.add(roundRobinGroup);
+            // Pick clusters of teams
+            int t = 0;
+            for (int i = 0; i < numberOfGroups; i++) {
+
+                // Some groups may be bigger if team count is not divisible by number of groups
+                // The first group(s) will be the small ones
+                int size = groupSize;
+                if (i >= numberOfGroups - leftoverTeams) {
+                    size++;
+                }
+
+                RoundRobinGroup group = new RoundRobinGroup(teams.subList(t, t + size));
+                group.setRounds(generateMatches(group.getTeams()));
+                groups.add(group);
+
+                t += size;
+            }
         }
     }
 
-    /** @return a list that contains each n'th (numberOfGroups) team. */
-    private ArrayList<Team> pickTeamsForGroup(ArrayList<Team> teams, int startingPoint) {
-        ArrayList<Team> splitArray = new ArrayList<>();
+    /**
+     * Creates all matches with each team changing color between each of their matches, algorithm based on berger tables.
+     * @return an list of list of matches with the given teams. Each nested list is a round of matches.
+     */
+    private ArrayList<ArrayList<Match>> generateMatches(ArrayList<Team> t) {
+        // Add dummy team if team count is odd - berger tables only work for an even number.
+        // The matches with dummy teams are removed later
+        ArrayList<Team> teams = new ArrayList<>(t);
+        if (t.size() % 2 != 0) {
+            teams.add(DUMMY_TEAM);
+        }
 
-        int pickCount = teams.size() / numberOfGroups;
-        for (int i = 0; i < pickCount; i++)
-            splitArray.add(teams.get(startingPoint + numberOfGroups * i));
-        return splitArray;
-    }
-
-    /** Creates all matches with each team changing color between each of their matches, algorithm based on
-     * berger tables.
-     * @param teams arraylist of all teams in the bracket.
-     * @return an arrayList, which represents rounds, of arrayLists with matches. */
-    private ArrayList<ArrayList<Match>> generateMatches(ArrayList<Team> teams) {
         int nextBlue, nextOrange;
-        Match[][] tempMatches = new Match[teams.size() - 1][teams.size() / 2];
+        Match[][] table = new Match[teams.size() - 1][teams.size() / 2];
 
         HashMap<Team, Integer> map = createIdHashMap(teams);
 
@@ -109,7 +128,7 @@ public class RoundRobinFormat extends GroupFormat implements MatchPlayedListener
             for (int match = 0; match < teams.size() / 2; match++) {
                 //create first round, which is not based on previous rounds
                 if (round == 0) {
-                    tempMatches[round][match] = createNewMatch(teams.get(match), teams.get(teams.size() - (match + 1)));
+                    table[round][match] = createNewMatch(teams.get(match), teams.get(teams.size() - (match + 1)));
                 }
                 //hardcoding team with highest id (numberOfTeams - 1 ) to first match each round
                 //the other team is found by berger tables rules (findIdOfNextPlayer) on the id of the team in the same match,
@@ -117,24 +136,36 @@ public class RoundRobinFormat extends GroupFormat implements MatchPlayedListener
                 else if (match == 0) {
                     //else become orange team
                     if ((round % 2) == 0) {
-                        nextBlue = findIdOfNextPlayer(map.get(tempMatches[round - 1][match].getOrangeTeam()), teams.size());
-                        tempMatches[round][match] = createNewMatch(teams.get(nextBlue - 1), (teams.get(teams.size() - 1)));
+                        nextBlue = findIdOfNextPlayer(map.get(table[round - 1][match].getOrangeTeam()), teams.size());
+                        table[round][match] = createNewMatch(teams.get(nextBlue - 1), (teams.get(teams.size() - 1)));
                         //if uneven round, player with highest id becomes blue player
                     } else {
-                        nextOrange = findIdOfNextPlayer(map.get(tempMatches[round - 1][match].getBlueTeam()), teams.size());
-                        tempMatches[round][match] = createNewMatch((teams.get(teams.size() - 1)), teams.get(nextOrange - 1));
+                        nextOrange = findIdOfNextPlayer(map.get(table[round - 1][match].getBlueTeam()), teams.size());
+                        table[round][match] = createNewMatch((teams.get(teams.size() - 1)), teams.get(nextOrange - 1));
                     }
                 } else {
                     //if not the first round, or first match, find both players by findIdOfNextPlayer according to berger tables,
                     //on previous teams
-                    nextBlue = findIdOfNextPlayer(map.get(tempMatches[round - 1][match].getBlueTeam()), teams.size());
-                    nextOrange = findIdOfNextPlayer(map.get(tempMatches[round - 1][match].getOrangeTeam()), teams.size());
-                    tempMatches[round][match] = createNewMatch(teams.get(nextBlue - 1), (teams.get(nextOrange - 1)));
+                    nextBlue = findIdOfNextPlayer(map.get(table[round - 1][match].getBlueTeam()), teams.size());
+                    nextOrange = findIdOfNextPlayer(map.get(table[round - 1][match].getOrangeTeam()), teams.size());
+                    table[round][match] = createNewMatch(teams.get(nextBlue - 1), (teams.get(nextOrange - 1)));
                 }
             }
         }
 
-        return removeDummyMatches(tempMatches);
+        // Find matches that does not contain the dummy team
+        ArrayList<ArrayList<Match>> matches = new ArrayList<>();
+        for (int i = 0; i < table.length; i++) {
+            matches.add(new ArrayList<>());
+            for (int j = 0; j < table[i].length; j++) {
+                if (!table[i][j].getOrangeTeam().equals(DUMMY_TEAM) &&
+                        !table[i][j].getBlueTeam().equals(DUMMY_TEAM)) {
+                    matches.get(i).add(table[i][j]);
+                }
+            }
+        }
+
+        return matches;
     }
 
     /**
@@ -174,29 +205,6 @@ public class RoundRobinFormat extends GroupFormat implements MatchPlayedListener
             return id - ((limit / 2) - 1);
         } else return id + (limit / 2);
     }
-
-    /** @return the given arrayList with dummy teams removed. */
-    private ArrayList<ArrayList<Match>> removeDummyMatches(Match[][] tempMatches) {
-
-        ArrayList<ArrayList<Match>> matches = new ArrayList<>();
-
-
-        for (int i = 0; i < tempMatches.length; i++) {
-            matches.add(new ArrayList<>());
-            for (int j = 0; j < tempMatches[i].length; j++) {
-                if (tempMatches[i][j].getOrangeTeam().equals(DUMMY_TEAM) ||
-                        tempMatches[i][j].getBlueTeam().equals(DUMMY_TEAM)) {
-                    continue;
-                } else {
-                    matches.get(i).add(tempMatches[i][j]);
-                    //matches.add(tempMatches[i][j]);
-                }
-            }
-        }
-
-        return matches;
-    }
-
 
     /**
      * @return a list of all matches contained in the Round Robin Groups

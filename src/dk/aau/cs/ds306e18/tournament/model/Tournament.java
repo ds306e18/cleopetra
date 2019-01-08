@@ -7,11 +7,7 @@ import dk.aau.cs.ds306e18.tournament.rlbot.RLBotSettings;
 import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
 import dk.aau.cs.ds306e18.tournament.serialization.TrueTeamListAdapter;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class Tournament {
 
@@ -31,6 +27,7 @@ public class Tournament {
     private ArrayList<Team> teams = new ArrayList<>();
     private ArrayList<Stage> stages = new ArrayList<>();
     private TieBreaker tieBreaker = new TieBreakerByGoalDiff();
+    private SeedingOption seedingOption = SeedingOption.SEED_BY_ORDER;
     private boolean started = false;
     private int currentStageIndex = -1;
 
@@ -53,7 +50,6 @@ public class Tournament {
     public void addTeam(Team team) {
         if (started) throw new IllegalStateException("Tournament has already started.");
         teams.add(team);
-        sortTeamsAfterInitialSeed();
     }
 
     public void removeTeam(Team team) {
@@ -66,14 +62,23 @@ public class Tournament {
         teams.remove(index);
     }
 
-    public List<Team> getTeams() {
-        return new ArrayList<>(teams);
+    public void swapTeams(Team a, Team b) {
+        swapTeams(teams.indexOf(a), teams.indexOf(b));
     }
 
-    public void sortTeamsAfterInitialSeed() {
-        //TODO if (started) throw new IllegalStateException("Tournament has already started.");
-        // Sort teams by comparator and not data structure, since seed value is not final
-        teams.sort(Comparator.comparingInt(Team::getInitialSeedValue));
+    public void swapTeams(int a, int b) {
+        Collections.swap(teams, a, b);
+    }
+
+    /** Assigns initial seeds to the teams in the given list using their index in the given list */
+    public void assignInitialSeedValues(List<Team> teams) {
+        for (int i = 0; i < teams.size(); i++) {
+            teams.get(i).setInitialSeedValue(i + 1);
+        }
+    }
+
+    public List<Team> getTeams() {
+        return new ArrayList<>(teams);
     }
 
     public void addStage(Stage stage) {
@@ -140,19 +145,33 @@ public class Tournament {
 
         // State is ok
 
-        // Find best teams
-        List<Team> bestTeams;
+        // Find teams to transfer
+        List<Team> transferedTeams;
+        boolean seeding = seedingOption != SeedingOption.NO_SEEDING;
         if (currentStageIndex == -1) {
-            sortTeamsAfterInitialSeed();
-            bestTeams = new ArrayList<>(teams);
+
+            // This is the first stage, so all teams are transferred
+            transferedTeams = new ArrayList<>(teams);
+
+            // Random seeding. We shuffle the order and initial seeds, then tell the stage to use seeding
+            if (seedingOption == SeedingOption.RANDOM_SEEDING) {
+                Collections.shuffle(transferedTeams);
+            }
+
+            // Assign initial seeds based on this order
+            assignInitialSeedValues(transferedTeams);
+
         } else {
+
+            // Not the first stage, so we find the best teams of previous stage and use their order as seeding regardless of seeding option
             int wantedTeamCount = stages.get(currentStageIndex + 1).getNumberOfTeamsWanted();
-            bestTeams = getCurrentStage().getFormat().getTopTeams(wantedTeamCount, tieBreaker);
+            transferedTeams = getCurrentStage().getFormat().getTopTeams(wantedTeamCount, tieBreaker);
+            seeding = true;
         }
 
         // Proceed to next stage
         currentStageIndex++;
-        getCurrentStage().getFormat().start(bestTeams);
+        getCurrentStage().getFormat().start(transferedTeams, seeding);
     }
 
     public boolean hasStarted() {
@@ -169,6 +188,14 @@ public class Tournament {
         if (stages.size() < START_REQUIREMENT_STAGES) throw new IllegalStateException("There must be at least one stage in the tournament.");
         started = true;
         startNextStage();
+    }
+
+    public SeedingOption getSeedingOption() {
+        return seedingOption;
+    }
+
+    public void setSeedingOption(SeedingOption seedingOption) {
+        this.seedingOption = seedingOption;
     }
 
     public TieBreaker getTieBreaker() {
