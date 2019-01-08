@@ -4,7 +4,7 @@ import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchPlayedListener;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchStatus;
-import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
+import dk.aau.cs.ds306e18.tournament.model.TieBreaker;
 import dk.aau.cs.ds306e18.tournament.ui.BracketOverviewTabController;
 import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.SingleEliminationNode;
 import javafx.scene.Node;

@@ -1,6 +1,4 @@
-package dk.aau.cs.ds306e18.tournament.model.tiebreaker;
-import dk.aau.cs.ds306e18.tournament.model.Bot;
-import dk.aau.cs.ds306e18.tournament.model.Team;
+package dk.aau.cs.ds306e18.tournament.model;
 import dk.aau.cs.ds306e18.tournament.model.format.SingleEliminationFormat;
 import org.junit.Test;
 
@@ -9,11 +7,11 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class TieBreakerByGoalDiffTest {
+public class TieBreakerTest {
 
     //
     @Test
-    public void tieBreakerTest01() {
+    public void goalDiff01() {
         SingleEliminationFormat bracket = new SingleEliminationFormat();
         ArrayList<Team> teamList = new ArrayList();
         ArrayList<Bot> botList = new ArrayList();
@@ -30,7 +28,7 @@ public class TieBreakerByGoalDiffTest {
         bracket.getAllMatches().get(2).setScores(1, 0, true);
         bracket.getAllMatches().get(1).setScores(2, 4, true);
         bracket.getAllMatches().get(0).setScores(2, 0, true);
-        List topTeams = bracket.getTopTeams(8, new TieBreakerByGoalDiff());
+        List topTeams = bracket.getTopTeams(8, TieBreaker.GOAL_DIFF);
         assertTrue(teamList.get(3).getGoalDiff() >= teamList.get(1).getGoalDiff());
         assertTrue(teamList.get(6).getGoalDiff() >= teamList.get(5).getGoalDiff() && teamList.get(7).getGoalDiff() >= teamList.get(4).getGoalDiff());
     }
