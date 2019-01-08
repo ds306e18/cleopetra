@@ -22,7 +22,7 @@ public class TieBreakerByGoalDiffTest {
             teamList.add(new Team("Team" + Integer.toString(i), botList, i+1, "team" + Integer.toString(i)));
             botList.clear();
         }
-        bracket.start(teamList);
+        bracket.start(teamList, true);
         bracket.getAllMatches().get(6).setScores(2, 0, true);
         bracket.getAllMatches().get(5).setScores(5, 0, true);
         bracket.getAllMatches().get(4).setScores(3, 2, true);

@@ -2,8 +2,11 @@ package dk.aau.cs.ds306e18.tournament.ui;
 
 import com.google.common.base.CharMatcher;
 import dk.aau.cs.ds306e18.tournament.model.Bot;
+import dk.aau.cs.ds306e18.tournament.model.SeedingOption;
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,6 +16,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -28,7 +32,8 @@ public class ParticipantSettingsTabController {
     private static final String CLIPBOARD_PREFIX = "Clipboard: ";
     private static final String CLIPBOARD_EMPTY_STRING = "<empty>";
 
-    @FXML private GridPane participantSettingsTab;
+    @FXML private HBox participantSettingsTab;
+    @FXML private ChoiceBox<SeedingOption> seedingChoicebox;
     @FXML private TextField teamNameTextField;
     @FXML private TextField botNameTextField;
     @FXML private TextField developerTextField;
@@ -55,18 +60,23 @@ public class ParticipantSettingsTabController {
     @FXML
     private void initialize() {
 
+        // Seeding Option
+        seedingChoicebox.setItems(FXCollections.observableArrayList(SeedingOption.values()));
+        seedingChoicebox.getSelectionModel().select(Tournament.get().getSeedingOption());
+        seedingChoicebox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> Tournament.get().setSeedingOption(newValue));
+
         setUpTeamsListView();
 
-        //Sets the VBox for team and bot as false, hiding them
+        // Sets the VBox for team and bot as false, hiding them
         botSettingsVbox.setVisible(false);
         teamSettingsVbox.setVisible(false);
         configPathTextField.setEditable(false);
 
-        //By default the remove team and bot button is disabled
+        // By default the remove team and bot button is disabled
         removeTeamBtn.setDisable(true);
         removeBotBtn.setDisable(true);
 
-        //Adds selectionslistener to bot ListView
+        // Adds selectionslistener to bot ListView
         botsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             updateBotFields();
             updateAddRemoveButtonsEnabling();
@@ -341,26 +351,15 @@ public class ParticipantSettingsTabController {
     /** Swaps a team upwards in the list of teams. Used to allow ordering of Team and thereby their seed. */
     @FXML
     private void swapTeamUpwards() {
-        swapTeamSeeds(Tournament.get().getTeams().get(getSelectedTeamIndex()),
-                Tournament.get().getTeams().get(getSelectedTeamIndex() - 1));
+        Tournament.get().swapTeams(getSelectedTeamIndex(), getSelectedTeamIndex() - 1);
+        teamsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams()));
+        teamsListView.refresh();
     }
 
     /** Swaps a team downwards in the list of teams. Used to allow ordering of Team and thereby their seed. */
     @FXML
     private void swapTeamDownwards() {
-        swapTeamSeeds(Tournament.get().getTeams().get(getSelectedTeamIndex()),
-                Tournament.get().getTeams().get(getSelectedTeamIndex() + 1));
-    }
-
-    /** Swaps seeds of the firsts given team with the second team. */
-    private void swapTeamSeeds(Team first, Team second){
-
-        int firstSeed = first.getInitialSeedValue();
-        first.setInitialSeedValue(second.getInitialSeedValue());
-        second.setInitialSeedValue(firstSeed);
-
-        Tournament.get().sortTeamsAfterInitialSeed();
-
+        Tournament.get().swapTeams(getSelectedTeamIndex(), getSelectedTeamIndex() + 1);
         teamsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams()));
         teamsListView.refresh();
     }

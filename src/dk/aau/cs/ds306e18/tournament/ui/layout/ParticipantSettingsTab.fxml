@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextArea?>
@@ -9,22 +10,16 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<GridPane id="PS-mainGrid" fx:id="participantSettingsTab" prefHeight="572.0" prefWidth="800.0" stylesheets="@css/stylesheet.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="dk.aau.cs.ds306e18.tournament.ui.ParticipantSettingsTabController">
-  <columnConstraints>
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-  </columnConstraints>
-  <rowConstraints>
-    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-  </rowConstraints>
+<HBox fx:id="participantSettingsTab" stylesheets="@css/stylesheet.css" xmlns="http://javafx.com/javafx/1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.ParticipantSettingsTabController">
    <children>
-      <VBox id="PS-leftside" spacing="10.0">
+      <Pane minHeight="0.0" minWidth="0.0" prefHeight="0.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
+      <VBox id="PS-leftside" maxWidth="360.0" minWidth="360.0" prefWidth="360.0" spacing="10.0">
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Participant settings" wrappingWidth="221.80345344543457">
                <font>
@@ -34,7 +29,24 @@
                   <Insets top="15.0" />
                </VBox.margin>
             </Text>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Teams (sort by seeding)">
+            <GridPane>
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                  <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Seeding:">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Text>
+                  <ChoiceBox fx:id="seedingChoicebox" prefHeight="27.0" prefWidth="130.0" GridPane.columnIndex="1" />
+               </children>
+            </GridPane>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Teams">
                <font>
                   <Font size="16.0" />
                </font>
@@ -61,11 +73,13 @@
                   <Button fx:id="addTeamBtn" mnemonicParsing="false" onAction="#addTeamBtnOnAction" prefHeight="27.0" prefWidth="79.0" text="Add">
                      <GridPane.margin>
                         <Insets />
-                     </GridPane.margin></Button>
+                     </GridPane.margin>
+                  </Button>
                   <Button fx:id="removeTeamBtn" mnemonicParsing="false" onAction="#removeTeamBtnOnAction" prefHeight="27.0" prefWidth="81.0" text="Remove" GridPane.columnIndex="1">
                      <GridPane.margin>
                         <Insets />
-                     </GridPane.margin></Button>
+                     </GridPane.margin>
+                  </Button>
                   <Button fx:id="swapUpTeam" disable="true" minWidth="30.0" mnemonicParsing="false" onAction="#swapTeamUpwards" prefWidth="30.0" text="▲" GridPane.columnIndex="2">
                      <GridPane.margin>
                         <Insets />
@@ -78,14 +92,11 @@
                </VBox.margin>
             </GridPane>
                </children>
-               <GridPane.margin>
-                  <Insets />
-               </GridPane.margin>
          <padding>
             <Insets left="20.0" right="20.0" top="20.0" />
          </padding>
       </VBox>
-      <VBox id="PS-center" fx:id="teamSettingsVbox" spacing="10.0" GridPane.columnIndex="1">
+      <VBox id="PS-center" fx:id="teamSettingsVbox" maxWidth="360.0" minWidth="360.0" prefWidth="360.0" spacing="10.0" visible="false">
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Team Settings" wrappingWidth="180.80345344543457">
                <font>
@@ -147,14 +158,11 @@
             </GridPane>
             <Label fx:id="clipboardLabel" text="Clipboard:" />
          </children>
-         <GridPane.margin>
-            <Insets />
-         </GridPane.margin>
          <padding>
             <Insets bottom="16.0" />
          </padding>
       </VBox>
-      <VBox id="PS-rightside" fx:id="botSettingsVbox" spacing="10.0" GridPane.columnIndex="2">
+      <VBox id="PS-rightside" fx:id="botSettingsVbox" maxWidth="360.0" minWidth="360.0" prefWidth="360.0" spacing="10.0" visible="false">
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Bot Settings" wrappingWidth="208.8034381866455">
                <font>
@@ -213,5 +221,6 @@
             </TextArea>
          </children>
       </VBox>
+      <Pane layoutX="10.0" layoutY="10.0" minHeight="0.0" minWidth="0.0" prefHeight="0.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
    </children>
-</GridPane>
+</HBox>

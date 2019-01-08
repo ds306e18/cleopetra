@@ -155,7 +155,7 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
     private String getRequirementsText(){
 
         //Are requirements met
-        if(Tournament.get().canStart()) return "You have met the requirement for starting a tournament.";
+        if(Tournament.get().canStart()) return "You have met the requirements for starting a tournament.";
 
         int numberOfStages = Tournament.get().getStages().size();
         int numberOfTeams = Tournament.get().getTeams().size();
@@ -164,7 +164,7 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
         sb.append("Before you start, you need to have ");
 
         if (numberOfStages < Tournament.START_REQUIREMENT_STAGES) {
-            sb.append("atleast ").append(Tournament.START_REQUIREMENT_STAGES).append(Tournament.START_REQUIREMENT_STAGES > 1 ? " stages" : " stage");
+            sb.append("at least ").append(Tournament.START_REQUIREMENT_STAGES).append(Tournament.START_REQUIREMENT_STAGES > 1 ? " stages" : " stage");
             if(numberOfTeams < Tournament.START_REQUIREMENT_TEAMS) sb.append(" and ");
         }
 

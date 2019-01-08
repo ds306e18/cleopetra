@@ -1,6 +1,7 @@
 package dk.aau.cs.ds306e18.tournament.utility;
 
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
+import dk.aau.cs.ds306e18.tournament.serialization.Serializer;
 import org.junit.Test;
 
 import static dk.aau.cs.ds306e18.tournament.TestUtilities.*;
