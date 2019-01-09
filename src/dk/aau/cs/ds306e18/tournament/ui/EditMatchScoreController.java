@@ -29,13 +29,10 @@ public class EditMatchScoreController {
 
     @FXML
     private void initialize() {
-        blueScoreSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE, 0, 1));
-        orangeScoreSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE, 0, 1));
 
-        blueScoreSpinner.setEditable(true);
-        orangeScoreSpinner.setEditable(true);
-
-        setSpinnerListeners();
+        // Spinners
+        setupScoreSpinner(blueScoreSpinner);
+        setupScoreSpinner(orangeScoreSpinner);
 
         matchOverCheckBox.setDisable(true);
 
@@ -43,73 +40,62 @@ public class EditMatchScoreController {
         isOrangeScoreLegit = true;
     }
 
-    /** Adds listeners to spinners to check if matchIsOver should be disabled or
-     * the save button should be disabled on invalid input.*/
-    private void setSpinnerListeners(){
-        blueScoreSpinner.getEditor().textProperty().addListener((obs, oldValue, newValue) -> {
-            try {
-                //This will throw an exception if the input does not only contain digits
-                int assignValue = Integer.parseInt(newValue);
+    /** Adds behaviour to a score spinner. */
+    private void setupScoreSpinner(final Spinner<Integer> spinner) {
 
-                if (assignValue < 0){ blueScoreSpinner.getEditor().textProperty().setValue("0"); }
-                if (assignValue > 99){ blueScoreSpinner.getEditor().textProperty().setValue("99"); }
-
-                isBlueScoreLegit = true;
-                isTeamScoresEqual();
-                if (isOrangeScoreLegit && isBlueScoreLegit){
-                    saveButton.setDisable(false);
-                }
-            } catch (NumberFormatException e) {
-                //blueScoreSpinner.getEditor().textProperty().setValue("");
-                Platform.runLater(blueScoreSpinner.getEditor()::clear);
-                isTeamScoresEqual();
-                isBlueScoreLegit = false;
-                saveButton.setDisable(true);
+        // Values allowed in the spinner
+        spinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 99));
+        spinner.setEditable(true);
+        spinner.getEditor().textProperty().addListener((obs, oldText, newText) -> {
+            // We allow empty strings and all positive numbers below 100, including 0, to be in the text field
+            if (!(newText.equals("") || newText.matches("^([0-9]|[1-9][0-9])$"))) {
+                spinner.getEditor().setText(oldText);
+            } else {
+                matchOverCheckBox.setSelected(true);
             }
+            checkScoresAndUpdateUI();
         });
 
-        orangeScoreSpinner.getEditor().textProperty().addListener((obs, oldValue, newValue) -> {
-            try {
-                //This will throw an exception if the input does not only contain digits
-                int assignValue = Integer.parseInt(newValue);
-
-                if (assignValue < 0){ orangeScoreSpinner.getEditor().textProperty().setValue("0"); }
-                if (assignValue > 99){ orangeScoreSpinner.getEditor().textProperty().setValue("99"); }
-
-                isOrangeScoreLegit = true;
-                isTeamScoresEqual();
-                if (isOrangeScoreLegit && isBlueScoreLegit){
-                    saveButton.setDisable(false);
-                }
-            } catch (NumberFormatException e) {
-                Platform.runLater(orangeScoreSpinner.getEditor()::clear);
-                isTeamScoresEqual();
-                isOrangeScoreLegit = false;
-                saveButton.setDisable(true);
-            }
-        });
-
-        // Have to call using Platform.Runlater because the spinner does something when it gains focus that interrupts.
-        blueScoreSpinner.getEditor().focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
+        // Select all text in text field when focused or edited
+        spinner.getEditor().focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
             if (isNowFocused){
-                Platform.runLater(blueScoreSpinner.getEditor()::selectAll);
+                // Have to call using Platform.Runlater because the spinner does something when it gains focus that interrupts.
+                Platform.runLater(spinner.getEditor()::selectAll);
             }
         });
+        spinner.valueProperty().addListener(((observable, oldValue, newValue) -> {
+            spinner.getEditor().selectAll();
+        }));
+    }
 
-        orangeScoreSpinner.getEditor().focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
-            if (isNowFocused){
-                Platform.runLater(orangeScoreSpinner.getEditor()::selectAll);
+    /** Checks the scores in the spinners. If the are okay, save button is enabled, other match-is-over checkbox
+     * and save button is disabled accordingly. */
+    private void checkScoresAndUpdateUI() {
+
+        String blueScoreText = blueScoreSpinner.getEditor().getText();
+        String orangeScoreText = orangeScoreSpinner.getEditor().getText();
+
+        // Do we have two numbers or just empty strings?
+        if (!blueScoreText.equals("") && !orangeScoreText.equals("")) {
+
+            // Get the scores
+            int blueScore = Integer.parseInt(blueScoreText);
+            int orangeScore = Integer.parseInt(orangeScoreText);
+
+            saveButton.setDisable(false);
+
+            if (blueScore == orangeScore) {
+                // We won't allow the match to be over if the scores are equal
+                matchOverCheckBox.setSelected(false);
+                matchOverCheckBox.setDisable(true);
+            } else {
+                // Everything is good
+                matchOverCheckBox.setDisable(false);
             }
-        });
 
-        blueScoreSpinner.valueProperty().addListener(((observable, oldValue, newValue) -> {
-            blueScoreSpinner.getEditor().selectAll();
-        }));
-
-        orangeScoreSpinner.valueProperty().addListener(((observable, oldValue, newValue) -> {
-            orangeScoreSpinner.getEditor().selectAll();
-        }));
-
+        } else {
+            saveButton.setDisable(true);
+        }
     }
 
     public void setMatch(Match match) {
@@ -125,17 +111,6 @@ public class EditMatchScoreController {
         orangeScoreSpinner.getValueFactory().setValue(match.getOrangeScore());
 
         matchOverCheckBox.setSelected(match.hasBeenPlayed());
-    }
-
-    /** Used to determine if the matchOverCheckBox should be disabled. */
-    private void isTeamScoresEqual(){
-        if(blueScoreSpinner.getEditor().getText().equals(orangeScoreSpinner.getEditor().getText())){
-            matchOverCheckBox.setDisable(true);
-            matchOverCheckBox.setSelected(false);
-        } else {
-            matchOverCheckBox.setDisable(false);
-            matchOverCheckBox.setSelected(true);
-        }
     }
 
     @FXML

@@ -5,6 +5,7 @@ import dk.aau.cs.ds306e18.tournament.model.Bot;
 import dk.aau.cs.ds306e18.tournament.model.SeedingOption;
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -73,14 +74,42 @@ public class ParticipantSettingsTabController {
 
         setUpTeamsListView();
 
+        // Seed spinner behaviour
         seedSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, Integer.MAX_VALUE));
         seedSpinner.getValueFactory().valueProperty().addListener((observable, oldValue, newValue) -> {
+            // Seed spinner should only be enabled when seeding option is manual. When the value change
+            // we want to update the order in the team list view and the teams label in the list
             Team selectedTeam = getSelectedTeam();
             if (selectedTeam != null && Tournament.get().getSeedingOption() == SeedingOption.MANUALLY) {
                 selectedTeam.setInitialSeedValue(newValue);
                 Tournament.get().sortTeamsBySeed();
                 teamsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams()));
                 teamsListView.refresh();
+
+                // Select text to make it easy to edit
+                seedSpinner.getEditor().selectAll();
+            }
+        });
+        seedSpinner.setEditable(true);
+        seedSpinner.getEditor().textProperty().addListener((observable, oldText, newText) -> {
+            // We allow empty strings and all positive numbers. If the string is empty, the text goes
+            // back to saved seed value when focus is lost
+            if (newText.equals("") || newText.matches("^([1-9][0-9]*)$")) {
+                if (!newText.equals("")) {
+                    seedSpinner.getValueFactory().setValue(Integer.parseInt(newText));
+                }
+            } else {
+                seedSpinner.getEditor().setText(oldText);
+            }
+        });
+        seedSpinner.focusedProperty().addListener((observable, wasFocused, isNowFocused) -> {
+            // Select all text, because that is user friendly for this case
+            if (isNowFocused){
+                Platform.runLater(seedSpinner.getEditor()::selectAll);
+            }
+            // Focus lost and editor is currently empty, so set the text to the saved seed value
+            if (wasFocused && seedSpinner.getEditor().getText().equals("")) {
+                seedSpinner.getEditor().setText("" + getSelectedTeam().getInitialSeedValue());
             }
         });
 
