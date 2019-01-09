@@ -1,10 +1,9 @@
 package dk.aau.cs.ds306e18.tournament.ui;
 
-import dk.aau.cs.ds306e18.tournament.model.*;
+import dk.aau.cs.ds306e18.tournament.model.Stage;
+import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import dk.aau.cs.ds306e18.tournament.model.format.SingleEliminationFormat;
-import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
-import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreakerByGoalDiff;
-import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreakerBySeed;
+import dk.aau.cs.ds306e18.tournament.model.TieBreaker;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -52,7 +51,7 @@ public class TournamentSettingsTabController {
 
         /* Retrieve and add choices to choicebox for the Tiebreaker box.
          * Also upon change sets the new tiebreaker rule to the tournament model. */
-        ObservableList<TieBreaker> tieBreakers = FXCollections.observableArrayList(new TieBreakerBySeed(), new TieBreakerByGoalDiff());
+        ObservableList<TieBreaker> tieBreakers = FXCollections.observableArrayList(TieBreaker.values());
         tieBreakerChoiceBox.setItems(tieBreakers);
 
         /* Set the correct tieBreaker if a tournament was loaded */
@@ -60,20 +59,14 @@ public class TournamentSettingsTabController {
             tieBreakerChoiceBox.getSelectionModel().select(Tournament.get().getTieBreaker());
         }
 
+        // Tie breaker choice box
         tieBreakerChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (!(Tournament.get().getTieBreaker().getClass().isInstance(newValue))) {
+            if (oldValue != newValue) {
                 Tournament.get().setTieBreaker(newValue);
             }
         });
         TieBreaker savedTiebreaker = Tournament.get().getTieBreaker();
-        for (int i = 0; i < tieBreakers.size(); i++) {
-            TieBreaker tb = tieBreakers.get(i);
-            if (tb.getClass().isInstance(savedTiebreaker)) {
-                tieBreakerChoiceBox.getSelectionModel().select(i);
-            } else {
-                tieBreakerChoiceBox.getSelectionModel().select(0);
-            }
-        }
+        tieBreakerChoiceBox.getSelectionModel().select(savedTiebreaker);
 
         /* Setup teams wanted in stage spinner */
         teamsInStageSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(2, Integer.MAX_VALUE));
