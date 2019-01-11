@@ -237,6 +237,42 @@ public final class Match {
     }
 
     /**
+     * Set the blue Team of this Match to use the winner of another Match. This ignores any previous connections
+     * and states. Use with caution. TODO: Serialize connections in a way that does not require a call to this function.
+     */
+    public void reconnectBlueToWinnerOf(Match other) {
+        blueFromMatch = other;
+        blueWasWinnerInPreviousMatch = true;
+    }
+
+    /**
+     * Set the blue Team of this Match to use the loser of another Match. This ignores any previous connections
+     * and states. Use with caution. TODO: Serialize connections in a way that does not require a call to this function.
+     */
+    public void reconnectBlueToLoserOf(Match other) {
+        blueFromMatch = other;
+        blueWasWinnerInPreviousMatch = false;
+    }
+
+    /**
+     * Set the orange Team of this Match to use the winner of another Match. This ignores any previous connections
+     * and states. Use with caution. TODO: Serialize connections in a way that does not require a call to this function.
+     */
+    public void reconnectOrangeToWinnerOf(Match other) {
+        orangeFromMatch = other;
+        orangeWasWinnerInPreviousMatch = true;
+    }
+
+    /**
+     * Set the orange Team of this Match to use the loser of another Match. This ignores any previous connections
+     * and states. Use with caution. TODO: Serialize connections in a way that does not require a call to this function.
+     */
+    public void reconnectOrangeToLoserOf(Match other) {
+        orangeFromMatch = other;
+        orangeWasWinnerInPreviousMatch = false;
+    }
+
+    /**
      * Returns true when both Teams are known and ready, even if the Match has already been played.
      */
     public boolean isReadyToPlay() {

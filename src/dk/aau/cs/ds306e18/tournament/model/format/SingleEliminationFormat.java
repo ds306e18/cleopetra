@@ -301,7 +301,7 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
                 if (leftIndex < bracket.length) {
                     Match leftMatch = bracket[leftIndex];
                     if (leftMatch != null) {
-                        bracket[i].setBlueToWinnerOf(leftMatch);
+                        bracket[i].reconnectBlueToWinnerOf(leftMatch);
                     }
                 }
                 // Orange is winner from right match, if such a match exists
@@ -309,7 +309,7 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
                 if (rightIndex < bracket.length) {
                     Match rightMatch = bracket[rightIndex];
                     if (rightMatch != null) {
-                        bracket[i].setOrangeToWinnerOf(rightMatch);
+                        bracket[i].reconnectOrangeToWinnerOf(rightMatch);
                     }
                 }
             }
