@@ -4,7 +4,6 @@ import dk.aau.cs.ds306e18.tournament.TestUtilities;
 import dk.aau.cs.ds306e18.tournament.model.format.StageStatus;
 import dk.aau.cs.ds306e18.tournament.model.format.SwissFormat;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
-import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreakerBySeed;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -442,7 +441,7 @@ public class SwissFormatTest {
         SwissFormat bracket = new SwissFormat();
         bracket.start(new ArrayList<Team>(), true);
 
-        assertEquals(0, bracket.getTopTeams(10, new TieBreakerBySeed()).size());
+        assertEquals(0, bracket.getTopTeams(10, TieBreaker.SEED).size());
     }
 
     @Test
@@ -455,7 +454,7 @@ public class SwissFormatTest {
         setAllMatchesPlayed(bracket);
         //All teams now have the same amount of points.
 
-        ArrayList<Team> top3Teams = new ArrayList<>(bracket.getTopTeams(3, new TieBreakerBySeed()));
+        ArrayList<Team> top3Teams = new ArrayList<>(bracket.getTopTeams(3, TieBreaker.SEED));
 
         //The top teams should be the ones with the lowest seeds
 

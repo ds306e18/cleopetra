@@ -4,7 +4,7 @@ import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchPlayedListener;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchStatus;
-import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
+import dk.aau.cs.ds306e18.tournament.model.TieBreaker;
 import dk.aau.cs.ds306e18.tournament.ui.BracketOverviewTabController;
 import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.SingleEliminationNode;
 import javafx.scene.Node;
@@ -301,7 +301,7 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
                 if (leftIndex < bracket.length) {
                     Match leftMatch = bracket[leftIndex];
                     if (leftMatch != null) {
-                        bracket[i].setBlueToWinnerOf(leftMatch);
+                        bracket[i].reconnectBlueToWinnerOf(leftMatch);
                     }
                 }
                 // Orange is winner from right match, if such a match exists
@@ -309,7 +309,7 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
                 if (rightIndex < bracket.length) {
                     Match rightMatch = bracket[rightIndex];
                     if (rightMatch != null) {
-                        bracket[i].setOrangeToWinnerOf(rightMatch);
+                        bracket[i].reconnectOrangeToWinnerOf(rightMatch);
                     }
                 }
             }

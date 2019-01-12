@@ -2,12 +2,13 @@ package dk.aau.cs.ds306e18.tournament.model;
 
 import com.google.gson.annotations.JsonAdapter;
 import dk.aau.cs.ds306e18.tournament.model.format.StageStatus;
-import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreakerByGoalDiff;
 import dk.aau.cs.ds306e18.tournament.rlbot.RLBotSettings;
-import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
 import dk.aau.cs.ds306e18.tournament.serialization.TrueTeamListAdapter;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 public class Tournament {
 
@@ -26,7 +27,7 @@ public class Tournament {
     @JsonAdapter(TrueTeamListAdapter.class) // Teams in this list are serialized as actual teams, other instances of teams will be their index in this list
     private ArrayList<Team> teams = new ArrayList<>();
     private ArrayList<Stage> stages = new ArrayList<>();
-    private TieBreaker tieBreaker = new TieBreakerByGoalDiff();
+    private TieBreaker tieBreaker = TieBreaker.GOAL_DIFF;
     private SeedingOption seedingOption = SeedingOption.SEED_BY_ORDER;
     private boolean started = false;
     private int currentStageIndex = -1;
