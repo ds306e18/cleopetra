@@ -1,4 +1,5 @@
 Unreleased changes (dev branch)
+- Added a manual seeding option, that allow the user to give multiple teams the same seed. #33 - NicEastvillage
 - Tie breakers are now enums, which fixes serialization of tie breakers. #32 - NicEastvillage
 - Loading a tournament with played single-elimination matches is now possible, because deseralizing bypasses some behaviour. #35 - NicEastvillage
 

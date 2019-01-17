@@ -56,6 +56,15 @@
     -fx-background-radius: 0;
 }
 
+.spinner {
+	-fx-min-height: 27px;
+}
+
+.spinner {
+	-fx-min-width: 70px;
+	-fx-pref-width: 70px;
+}
+
 #TS-rightside {
     -fx-border-width: 0 0 0 1;
     -fx-border-color: #c2c2c2;
