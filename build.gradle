@@ -27,6 +27,9 @@ dependencies {
     // Using GSON for serializing objects for transfer and storage
     compile 'com.google.code.gson:gson:2.8.5'
 
+    // Using ini4j for parsing INI-files
+    compile group: 'org.ini4j', name: 'ini4j', version: 'latest.release'
+
     // Use JUnit test framework
     testCompile 'junit:junit:4.12'
 
