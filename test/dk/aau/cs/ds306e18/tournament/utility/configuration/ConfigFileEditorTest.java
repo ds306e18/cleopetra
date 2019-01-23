@@ -46,7 +46,7 @@ public class ConfigFileEditorTest {
     public void getLineTest1() {
         setTestConfig();
         ConfigFileEditor.setConfig(testConfig);
-        assertEquals(null, ConfigFileEditor.getLine("NAN"));
+        assertNull(ConfigFileEditor.getLine("NAN"));
     }
 
     @Test
