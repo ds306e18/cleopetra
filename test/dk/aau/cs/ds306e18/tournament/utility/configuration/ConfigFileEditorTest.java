@@ -10,7 +10,8 @@ import static org.junit.Assert.assertFalse;
 public class ConfigFileEditorTest {
 
     final static String testDir = "test/";
-    final static String testConfigFilename = "testconfig.cfg";
+    final static String testRLBotConfigFilename = "test_rlbot.cfg";
+    final static String testRLBotConfigTargetFilename = "dummy_rlbot.cfg";
     private ArrayList<String> testConfig = new ArrayList<>();
 
     /**
@@ -26,9 +27,9 @@ public class ConfigFileEditorTest {
     public void readWriteConcurrencyTest() {
         setTestConfig();
         ConfigFileEditor.setConfig(testConfig);
-        ConfigFileEditor.write(testDir + "dummyconfig.cfg");
+        ConfigFileEditor.write(testDir + testRLBotConfigTargetFilename);
 
-        ConfigFileEditor.read(testDir + "dummyconfig.cfg");
+        ConfigFileEditor.read(testDir + testRLBotConfigTargetFilename);
         assertEquals(testConfig, ConfigFileEditor.getConfig());
     }
 
@@ -99,13 +100,13 @@ public class ConfigFileEditorTest {
 
     @Test
     public void validateConfigSyntax1() {
-        ConfigFileEditor.read(testDir + testConfigFilename);
+        ConfigFileEditor.read(testDir + testRLBotConfigFilename);
         assertTrue(ConfigFileEditor.isValid());
     }
 
     @Test
     public void validateConfigSyntax2() {
-        ConfigFileEditor.read(testDir + testConfigFilename);
+        ConfigFileEditor.read(testDir + testRLBotConfigFilename);
         ArrayList<String> config = ConfigFileEditor.getConfig();
         // remove trailing, closing square bracket from first header
         config.set(0, config.get(0).split("]")[0]);
