@@ -1,8 +1,5 @@
 package dk.aau.cs.ds306e18.tournament.utility.configuration;
 
-import dk.aau.cs.ds306e18.tournament.model.Bot;
-import dk.aau.cs.ds306e18.tournament.model.match.Match;
-
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -10,28 +7,28 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
-public class ConfigFileEditor {
+abstract class ConfigFileEditor {
 
     private static boolean valid = false;
     private static ArrayList<String> config;
 
     private final static String REMOVE_VALUE_PATTERN = "= .*$";
 
-    private final static String PARAMETER_PARTICIPANT_CONFIG = "participant_config_";
-    private final static String PARAMETER_PARTICIPANT_TEAM = "participant_team_";
-    private final static String PARAMETER_PARTICIPANT_TYPE = "participant_type_";
-    private final static String PARAMETER_PARTICIPANT_NUM = "num_participant";
+    final static String PARAMETER_PARTICIPANT_CONFIG = "participant_config_";
+    final static String PARAMETER_PARTICIPANT_TEAM = "participant_team_";
+    final static String PARAMETER_PARTICIPANT_TYPE = "participant_type_";
+    final static String PARAMETER_PARTICIPANT_NUM = "num_participant";
 
-    private final static String PARAMETER_BLUE_TEAM = "0";
-    private final static String PARAMETER_ORANGE_TEAM = "1";
-    private final static String PARAMETER_BOT_TYPE = "rlbot";
+    final static String PARAMETER_BLUE_TEAM = "0";
+    final static String PARAMETER_ORANGE_TEAM = "1";
+    final static String PARAMETER_BOT_TYPE = "rlbot";
 
     /**
      * Reads all lines from a given file and puts them in ArrayList config. Throws ISE if read config is invalid and
      * sets valid-flag if file is read.
      * @param filename the filename to read
      */
-    public static void readConfig(String filename) {
+    static void read(String filename) {
         Path in = Paths.get(filename);
         try {
             config = (ArrayList<String>) Files.readAllLines(in);
@@ -47,9 +44,9 @@ public class ConfigFileEditor {
     /**
      * Writes all lines from config to a file with system-default charset. Throws ISE if config is not valid. Not
      * possible through ordinary usage of methods on config.
-     * @param filename the filename to write to
+     * @param filename the filename to be written to
      */
-    public static void writeConfig(String filename) {
+    static void write(String filename) {
         if (!isValid())
             throw new IllegalStateException("Warning: RLBot config-file to write: " + filename + "'s syntax is not valid!");
         Path out = Paths.get(filename);
@@ -65,7 +62,7 @@ public class ConfigFileEditor {
      * @param parameter the given parameter to edit
      * @param value     the value to edit given parameter with
      */
-    private static void editLine(String parameter, String value) {
+    static void editLine(String parameter, String value) {
         for (int i = 0; i < config.size(); i++) {
             String line = config.get(i);
             if (line.startsWith(parameter)) {
@@ -149,40 +146,6 @@ public class ConfigFileEditor {
         return line.replaceAll(REMOVE_VALUE_PATTERN, "= ");
     }
 
-    /**
-     * Configures the config based on the state of a given Match
-     * @param match the match to configure the config for
-     * @return the boolean of success
-     */
-    public static boolean configureMatch(Match match) {
-        int numParticipants = 0;
-
-        // for blue team, edit numbered parameters by incremented count of participants
-        for (Bot bot : match.getBlueTeam().getBots()) {
-            // edit participant_config parameter to current bots config path
-            editLine(PARAMETER_PARTICIPANT_CONFIG, numParticipants, bot.getConfigPath());
-            // edit participant_team parameter to blue-team constant
-            editLine(PARAMETER_PARTICIPANT_TEAM, numParticipants, PARAMETER_BLUE_TEAM);
-            // edit participant_type parameter to RLBot-participant constant
-            editLine(PARAMETER_PARTICIPANT_TYPE, numParticipants, PARAMETER_BOT_TYPE);
-            numParticipants++;
-        }
-
-        // for orange team, edit numbered parameters by incremented count of participants
-        for (Bot bot : match.getOrangeTeam().getBots()) {
-            editLine(PARAMETER_PARTICIPANT_CONFIG, numParticipants, bot.getConfigPath());
-            editLine(PARAMETER_PARTICIPANT_TEAM, numParticipants, PARAMETER_ORANGE_TEAM);
-            editLine(PARAMETER_PARTICIPANT_TYPE, numParticipants, PARAMETER_BOT_TYPE);
-            numParticipants++;
-        }
-
-        // edit num_participants parameter to count of edited participants
-        editLine(PARAMETER_PARTICIPANT_NUM, Integer.toString(numParticipants));
-
-        // when finished, validate syntax and return boolean set by validateConfigSyntax
-        validateConfigSyntax();
-        return isValid();
-    }
 
     /**
      * Checks loaded config for valid syntax by iterating through each line. Allows empty lines, and checks for three
@@ -224,7 +187,7 @@ public class ConfigFileEditor {
         validateConfigSyntax();
     }
 
-    public static boolean isValid() {
+    static boolean isValid() {
         return valid;
     }
 }

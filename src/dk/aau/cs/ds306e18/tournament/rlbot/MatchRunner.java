@@ -3,7 +3,7 @@ package dk.aau.cs.ds306e18.tournament.rlbot;
 import dk.aau.cs.ds306e18.tournament.model.Bot;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.utility.Alerts;
-import dk.aau.cs.ds306e18.tournament.utility.configuration.ConfigFileEditor;
+import dk.aau.cs.ds306e18.tournament.utility.configuration.RLBotConfig;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -50,8 +50,10 @@ public class MatchRunner {
         }
     }
 
-    /** Check the requirements for starting the match. Throws an IllegalStateException if anything is wrong.
-     * Does nothing if everything is okay. */
+    /**
+     * Check the requirements for starting the match. Throws an IllegalStateException if anything is wrong. Does nothing
+     * if everything is okay.
+     */
     private static void checkMatch(RLBotSettings settings, Match match) {
         // These methods throws IllegalStageException if anything is wrong
         checkRLBotSettings(settings);
@@ -77,8 +79,10 @@ public class MatchRunner {
         }
     }
 
-    /** Throws an IllegalStateException if anything is wrong with the bots' config files for this match.
-     * Does nothing if all the bots on both teams have a valid config file in a given match. */
+    /**
+     * Throws an IllegalStateException if anything is wrong with the bots' config files for this match. Does nothing if
+     * all the bots on both teams have a valid config file in a given match.
+     */
     private static void checkBotConfigsInMatch(Match match) {
         // Check if there are two teams
         if (match.getBlueTeam() == null) throw new IllegalStateException("There is no blue team for this match.");
@@ -103,18 +107,20 @@ public class MatchRunner {
         }
     }
 
-    /** A pre-process for starting a match. This method will check if all config files are available and then modify
-     * the rlbot.cfg to start the given match when rlbot is run. Returns false and shows an alert if
-     * something went wrong during preparation. */
+    /**
+     * A pre-process for starting a match. This method will check if all config files are available and then modify the
+     * rlbot.cfg to start the given match when rlbot is run. Returns false and shows an alert if something went wrong
+     * during preparation.
+     */
     public static boolean prepareMatch(RLBotSettings settings, Match match) {
         try {
             // Check settings and config files
             checkMatch(settings, match);
 
             // Set up rlbot config file
-            ConfigFileEditor.readConfig(settings.getConfigPath());
-            ConfigFileEditor.configureMatch(match);
-            ConfigFileEditor.writeConfig(settings.getConfigPath());
+            RLBotConfig.readConfig(settings.getConfigPath());
+            RLBotConfig.setupMatch(match);
+            RLBotConfig.writeConfig(settings.getConfigPath());
             return true;
 
         } catch (IllegalStateException e) {
