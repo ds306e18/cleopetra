@@ -54,6 +54,7 @@ public class SingleEliminationNode extends GridPane implements ModelCoupledUI {
                     MatchVisualController mvc = boc.loadVisualMatch(match);
                     mvcs.add(mvc);
                     box.getChildren().add(mvc.getRoot());
+                    mvc.setShowIdentifier(true);
                 }
 
                 box.setAlignment(Pos.CENTER);

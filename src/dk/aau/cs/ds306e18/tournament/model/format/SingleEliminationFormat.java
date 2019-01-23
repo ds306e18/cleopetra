@@ -145,7 +145,7 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
         List<Match> treeAsListBFS = finalMatch.getTreeAsListBFS();
         int index = 1;
         for (int i = treeAsListBFS.size() - 1; i >= 0; i--) {
-            treeAsListBFS.get(i).setIndex(index++);
+            treeAsListBFS.get(i).setIdentifier(index++);
         }
     }
 

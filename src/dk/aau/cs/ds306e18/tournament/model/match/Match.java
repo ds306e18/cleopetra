@@ -17,9 +17,7 @@ import java.util.Objects;
  */
 public final class Match {
 
-    public static final int NO_INDEX = -1;
-
-    private int index = NO_INDEX;
+    private int identifier = 0;
     private int blueScore = 0;
     private int orangeScore = 0;
     private boolean played = false;
@@ -46,20 +44,15 @@ public final class Match {
         orangeTeam = orange;
     }
 
-    /** Set the index. The match is referenced to by that index. E.g. "Winner of 5". */
-    public void setIndex(int index) {
-        this.index = index;
+    /** Set the identifier. The match is referenced to by that identifier. E.g. "Winner of 5", where 5 is the identifier. */
+    public void setIdentifier(int identifier) {
+        this.identifier = identifier;
         notifyMatchChangeListeners();
     }
 
-    /** Get the index. The match is referenced to by that index. E.g. "Winner of 5". */
-    public int getIndex() {
-        return index;
-    }
-
-    /** Returns whether this match has an index. */
-    public boolean hasIndex() {
-        return index != NO_INDEX;
+    /** Get the identifier. The match is referenced to by that identifier. E.g. "Winner of 5", where 5 is the identifier. */
+    public int getIdentifier() {
+        return identifier;
     }
 
     /**
@@ -580,8 +573,8 @@ public final class Match {
     /** Returns the blue team's name. If blue team is null, then "Winner/Loser of .." or "TBD" is returned. */
     public String getBlueTeamAsString() {
         if (blueTeam == null) {
-            if (blueFromMatch != null && blueFromMatch.hasIndex()) {
-                return (blueWasWinnerInPreviousMatch ? "Winner of " : "Loser of ") + blueFromMatch.getIndex();
+            if (blueFromMatch != null) {
+                return (blueWasWinnerInPreviousMatch ? "Winner of " : "Loser of ") + blueFromMatch.getIdentifier();
             }
             return "TBD";
         }
@@ -591,8 +584,8 @@ public final class Match {
     /** Returns the orange team's name. If orange team is null, then "Winner/Loser of .." or "TBD" is returned. */
     public String getOrangeTeamAsString() {
         if (orangeTeam == null) {
-            if (orangeFromMatch != null && orangeFromMatch.hasIndex()) {
-                return (orangeWasWinnerInPreviousMatch ? "Winner of " : "Loser of ") + orangeFromMatch.getIndex();
+            if (orangeFromMatch != null) {
+                return (orangeWasWinnerInPreviousMatch ? "Winner of " : "Loser of ") + orangeFromMatch.getIdentifier();
             }
             return "TBD";
         }

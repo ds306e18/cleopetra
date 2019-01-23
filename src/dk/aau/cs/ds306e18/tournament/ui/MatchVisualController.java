@@ -4,7 +4,6 @@ import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchChangeListener;
 import javafx.fxml.FXML;
-import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -15,8 +14,8 @@ import javafx.scene.text.Text;
 public class MatchVisualController implements MatchChangeListener {
 
     @FXML private HBox matchRoot;
-    @FXML private Label indexLabel;
-    @FXML private AnchorPane indexHolder;
+    @FXML private Label identifierLabel;
+    @FXML private AnchorPane identifierHolder;
     @FXML private Label textOrangeName;
     @FXML private Text teamOrangeScore;
     @FXML private Label textBlueName;
@@ -26,6 +25,7 @@ public class MatchVisualController implements MatchChangeListener {
 
     private BracketOverviewTabController boc;
     private Match showedMatch;
+    private boolean showIdentifier = false;
 
     @FXML
     private void initialize() { }
@@ -86,14 +86,14 @@ public class MatchVisualController implements MatchChangeListener {
             return;
         }
 
-        // Show index
-        if (showedMatch.hasIndex()) {
-            indexHolder.setVisible(true);
-            indexHolder.setManaged(true);
-            indexLabel.setText("" + showedMatch.getIndex());
+        // Show identifier
+        if (showIdentifier) {
+            identifierHolder.setVisible(true);
+            identifierHolder.setManaged(true);
+            identifierLabel.setText("" + showedMatch.getIdentifier());
         } else {
-            indexHolder.setVisible(false);
-            indexHolder.setManaged(false);
+            identifierHolder.setVisible(false);
+            identifierHolder.setManaged(false);
         }
 
         Team blueTeam = showedMatch.getBlueTeam();
@@ -153,6 +153,15 @@ public class MatchVisualController implements MatchChangeListener {
 
     public HBox getRoot() {
         return matchRoot;
+    }
+
+    public boolean isIdentifierShown() {
+        return showIdentifier;
+    }
+
+    public void setShowIdentifier(boolean showIdentifier) {
+        this.showIdentifier = showIdentifier;
+        updateFields();
     }
 
     /** Decouples the controller from the model, allowing the controller to be thrown to the garbage collector. */

@@ -14,9 +14,9 @@
 
 <HBox id="matchPlayed" fx:id="matchRoot" alignment="CENTER_RIGHT" spacing="2.0" styleClass="match" stylesheets="@css/visualmatch.css" xmlns="http://javafx.com/javafx/1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.MatchVisualController">
    <children>
-      <AnchorPane fx:id="indexHolder" prefHeight="50.0" prefWidth="22.0">
+      <AnchorPane fx:id="identifierHolder" prefHeight="50.0" prefWidth="22.0">
          <children>
-            <Label fx:id="indexLabel" alignment="CENTER" prefHeight="17.0" prefWidth="18.0" text="12" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <Label fx:id="identifierLabel" alignment="CENTER" prefHeight="17.0" prefWidth="18.0" text="12" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font></Label>

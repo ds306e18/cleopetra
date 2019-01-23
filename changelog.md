@@ -1,5 +1,10 @@
 # Changelog
 
+#### Unreleased (dev branch)
+- Matches are now displayed slightly bigger
+- Matches now has an identifier and pending matches will display which matches they depend on. E.g. "Winner of X" vs "Loser of Y"
+
+
 #### Version 1.1.1 - 23. Jan 2019
 - Added a manual seeding option, that allow the user to give multiple teams the same seed. #33 - NicEastvillage
 - Tie breakers are now enums, which fixes serialization of tie breakers. #32 - NicEastvillage
