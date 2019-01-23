@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
-import static dk.aau.cs.ds306e18.tournament.utility.configuration.ConfigFileEditorTest.testConfigFilename;
+import static dk.aau.cs.ds306e18.tournament.utility.configuration.ConfigFileEditorTest.testRLBotConfigFilename;
 import static dk.aau.cs.ds306e18.tournament.utility.configuration.ConfigFileEditorTest.testDir;
 import static junit.framework.TestCase.assertEquals;
 
@@ -45,9 +45,9 @@ public class RLBotConfigTest {
 
     @Test
     public void setupMatchTest() {
-        RLBotConfig.read(testDir + testConfigFilename);
+        RLBotConfig rlBotConfig = new RLBotConfig(testDir + testRLBotConfigFilename);
         Match match = createTestMatch();
-        RLBotConfig.setupMatch(match);
+        rlBotConfig.setupMatch(match);
 
         assertEquals("6", ConfigFileEditor.getValueOfLine("num_participant"));
 

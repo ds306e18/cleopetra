@@ -9,7 +9,7 @@ public class RLBotConfig extends ConfigFileEditor {
      * Calls the read-function of CFE
      * @param filename the filename to be read
      */
-    public static void readConfig(String filename) {
+    public RLBotConfig(String filename) {
         read(filename);
     }
 
@@ -17,7 +17,7 @@ public class RLBotConfig extends ConfigFileEditor {
      * Calls the write-function of CFE
      * @param filename the filename to be written to
      */
-    public static void writeConfig(String filename) {
+    public void writeConfig(String filename) {
         write(filename);
     }
 
@@ -26,7 +26,7 @@ public class RLBotConfig extends ConfigFileEditor {
      * @param match the match to configure the config for
      * @return the boolean of success
      */
-    public static boolean setupMatch(Match match) {
+    public boolean setupMatch(Match match) {
         int numParticipants = 0;
 
         // for blue team, edit numbered parameters by incremented count of participants
