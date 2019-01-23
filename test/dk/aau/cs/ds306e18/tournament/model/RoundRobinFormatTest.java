@@ -43,7 +43,7 @@ public class RoundRobinFormatTest {
     @Test
     public void testRoundRobinBracket03() {
 
-        int numberOfTeams = 1234;
+        int numberOfTeams = 256;
         int teamSize = 1;
 
         RoundRobinFormat bracket = new RoundRobinFormat();
