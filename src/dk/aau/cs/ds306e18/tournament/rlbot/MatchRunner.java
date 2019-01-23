@@ -118,9 +118,13 @@ public class MatchRunner {
             checkMatch(settings, match);
 
             // Set up rlbot config file
-            RLBotConfig.readConfig(settings.getConfigPath());
-            RLBotConfig.setupMatch(match);
-            RLBotConfig.writeConfig(settings.getConfigPath());
+            RLBotConfig rlBotConfig = new RLBotConfig(settings.getConfigPath());
+            // Utilise return of setupMatch for syntax validation
+            if (!rlBotConfig.setupMatch(match)) {
+                Alerts.errorNotification("Error occurred while configuring match", "Syntax of config file is not valid!");
+                return false;
+            }
+            rlBotConfig.writeConfig(settings.getConfigPath());
             return true;
 
         } catch (IllegalStateException e) {
