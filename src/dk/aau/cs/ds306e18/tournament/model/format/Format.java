@@ -2,7 +2,7 @@ package dk.aau.cs.ds306e18.tournament.model.format;
 
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
-import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
+import dk.aau.cs.ds306e18.tournament.model.TieBreaker;
 import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.ModelCoupledUI;
 import dk.aau.cs.ds306e18.tournament.ui.BracketOverviewTabController;
 

@@ -1,4 +1,12 @@
-Version 1.1 - 8. Jan 2019
+# Changelog
+
+#### Version 1.1.1 - 23. Jan 2019
+- Added a manual seeding option, that allow the user to give multiple teams the same seed. #33 - NicEastvillage
+- Tie breakers are now enums, which fixes serialization of tie breakers. #32 - NicEastvillage
+- Loading a tournament with played single-elimination matches is now possible, because deseralizing bypasses some behaviour. #35 - NicEastvillage
+
+
+#### Version 1.1 - 8. Jan 2019
 - Teams are now serialized by index, which means teams and bots can be edited after saving and loading a tournament. #2 #25 - NicEastvillage
 - The content on settings tabs are now centered and scales less weirdly. #23 - NicEastvillage
 - Added seeding options. #10 - NicEastvillage
@@ -8,13 +16,13 @@ Version 1.1 - 8. Jan 2019
     - The swiss algorithm is currently unaffected as it doesn't consider seeding at all right now.
 
 
-Version 1.0.1 - 29. Dec 2018
-- Added a run.bat for quickly running CleoPetra without having to install IntelliJ or Gradle. #19 #21 - NicEastvillage and tarehart
+#### Version 1.0.1 - 29. Dec 2018
+- Added a `run.bat` for quickly running CleoPetra without having to install IntelliJ or Gradle. #19 #21 - NicEastvillage and tarehart
 - Running unit tests no longer creates junk in main folder. #17 #22 - cogitantium
 
 
-Version 1.0.0 - 21. Dec 2018
-Features:
+#### Version 1.0.0 - 21. Dec 2018
+**Features:**
 - Tournament Formats:
     - Single elimination
     - Swiss system

@@ -4,7 +4,6 @@ import dk.aau.cs.ds306e18.tournament.TestUtilities;
 import dk.aau.cs.ds306e18.tournament.model.format.SingleEliminationFormat;
 import dk.aau.cs.ds306e18.tournament.model.format.StageStatus;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
-import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreakerBySeed;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -154,7 +153,7 @@ public class SingleEliminationFormatTest {
     @Test
     public void getTopTeamsTest01(){
         SingleEliminationFormat bracket = generateBracketsAndWins(8);
-        List <Team> teamList = new ArrayList<>(bracket.getTopTeams(4, new TieBreakerBySeed()));
+        List <Team> teamList = new ArrayList<>(bracket.getTopTeams(4, TieBreaker.SEED));
         int seedValue = 1;
         for(int i = 0; i < 4; i++) {
             assertEquals(seedValue, teamList.get(i).getInitialSeedValue());
@@ -166,7 +165,7 @@ public class SingleEliminationFormatTest {
     @Test
     public void getTopTeamTest02() {
         SingleEliminationFormat bracket = generateBracketsAndWins(10);
-        List<Team> teamList = new ArrayList<Team>(bracket.getTopTeams(6, new TieBreakerBySeed()));
+        List<Team> teamList = new ArrayList<Team>(bracket.getTopTeams(6, TieBreaker.SEED));
         int seedValue = 1;
         for(int i = 0; i < 6; i++) {
             assertEquals(seedValue, teamList.get(i).getInitialSeedValue());
@@ -178,7 +177,7 @@ public class SingleEliminationFormatTest {
     @Test
     public void getTopTeamTest03() {
         SingleEliminationFormat bracket = generateBracketsAndWins(5);
-        List<Team> teamList = new ArrayList<Team>(bracket.getTopTeams(10, new TieBreakerBySeed()));
+        List<Team> teamList = new ArrayList<Team>(bracket.getTopTeams(10, TieBreaker.SEED));
         int seedValue = 1;
         for(int i = 0; i < 4; i++) {
             assertEquals(seedValue, teamList.get(i).getInitialSeedValue());

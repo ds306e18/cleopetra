@@ -2,6 +2,7 @@ package dk.aau.cs.ds306e18.tournament.model;
 
 public enum SeedingOption {
     SEED_BY_ORDER("By order in list"),
+    MANUALLY("Manually"),
     NO_SEEDING("No seeding"),
     RANDOM_SEEDING("Random seeding");
 

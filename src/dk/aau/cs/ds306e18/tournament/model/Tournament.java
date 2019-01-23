@@ -2,9 +2,7 @@ package dk.aau.cs.ds306e18.tournament.model;
 
 import com.google.gson.annotations.JsonAdapter;
 import dk.aau.cs.ds306e18.tournament.model.format.StageStatus;
-import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreakerByGoalDiff;
 import dk.aau.cs.ds306e18.tournament.rlbot.RLBotSettings;
-import dk.aau.cs.ds306e18.tournament.model.tiebreaker.TieBreaker;
 import dk.aau.cs.ds306e18.tournament.serialization.TrueTeamListAdapter;
 
 import java.util.*;
@@ -26,7 +24,7 @@ public class Tournament {
     @JsonAdapter(TrueTeamListAdapter.class) // Teams in this list are serialized as actual teams, other instances of teams will be their index in this list
     private ArrayList<Team> teams = new ArrayList<>();
     private ArrayList<Stage> stages = new ArrayList<>();
-    private TieBreaker tieBreaker = new TieBreakerByGoalDiff();
+    private TieBreaker tieBreaker = TieBreaker.GOAL_DIFF;
     private SeedingOption seedingOption = SeedingOption.SEED_BY_ORDER;
     private boolean started = false;
     private int currentStageIndex = -1;
@@ -70,11 +68,8 @@ public class Tournament {
         Collections.swap(teams, a, b);
     }
 
-    /** Assigns initial seeds to the teams in the given list using their index in the given list */
-    public void assignInitialSeedValues(List<Team> teams) {
-        for (int i = 0; i < teams.size(); i++) {
-            teams.get(i).setInitialSeedValue(i + 1);
-        }
+    public void sortTeamsBySeed() {
+        teams.sort(Comparator.comparingInt(Team::getInitialSeedValue));
     }
 
     public List<Team> getTeams() {
@@ -153,13 +148,38 @@ public class Tournament {
             // This is the first stage, so all teams are transferred
             transferedTeams = new ArrayList<>(teams);
 
-            // Random seeding. We shuffle the order and initial seeds, then tell the stage to use seeding
-            if (seedingOption == SeedingOption.RANDOM_SEEDING) {
-                Collections.shuffle(transferedTeams);
-            }
+            if (seedingOption == SeedingOption.SEED_BY_ORDER) {
+                // Assign seeds based on order
+                for (int i = 0; i < teams.size(); i++) {
+                    teams.get(i).setInitialSeedValue(i + 1);
+                }
+                transferedTeams.sort((a, b) -> Integer.compare(b.getInitialSeedValue(), a.getInitialSeedValue()));
 
-            // Assign initial seeds based on this order
-            assignInitialSeedValues(transferedTeams);
+            } else if (seedingOption == SeedingOption.MANUALLY) {
+                // Seeds was assigned ny user. If some teams have the same seed value, shuffle those
+                final Random random = new Random();
+                transferedTeams.sort((a, b) -> {
+                    if (a == b) return 0;
+                    int comparison = Integer.compare(b.getInitialSeedValue(), a.getInitialSeedValue());
+                    if (comparison == 0) {
+                        return random.nextBoolean() ? 1 : -1;
+                    }
+                    return comparison;
+                });
+
+            } else if (seedingOption == SeedingOption.RANDOM_SEEDING) {
+                // Random seeding. We give everyone a seed value of 0 and shuffle the order
+                for (Team team : teams) {
+                    team.setInitialSeedValue(0);
+                }
+                Collections.shuffle(transferedTeams);
+
+            } else if (seedingOption == SeedingOption.NO_SEEDING) {
+                // Give everyone a seed value of zero, but no change to the order
+                for (Team team : teams) {
+                    team.setInitialSeedValue(0);
+                }
+            }
 
         } else {
 
