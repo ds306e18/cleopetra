@@ -4,16 +4,19 @@ import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchChangeListener;
 import javafx.fxml.FXML;
+import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 public class MatchVisualController implements MatchChangeListener {
 
-    @FXML private VBox matchRoot;
+    @FXML private HBox matchRoot;
+    @FXML private Label indexLabel;
+    @FXML private AnchorPane indexHolder;
     @FXML private Label textOrangeName;
     @FXML private Text teamOrangeScore;
     @FXML private Label textBlueName;
@@ -81,20 +84,28 @@ public class MatchVisualController implements MatchChangeListener {
             return;
         }
 
+        // Show index
+        if (showedMatch.hasIndex()) {
+            indexHolder.setVisible(true);
+            indexHolder.setManaged(true);
+            indexLabel.setText("" + showedMatch.getIndex());
+        } else {
+            indexHolder.setVisible(false);
+            indexHolder.setManaged(false);
+        }
+
         Team blueTeam = showedMatch.getBlueTeam();
         Team orangeTeam = showedMatch.getOrangeTeam();
 
         //Set tags and id based on the given match and its status
         switch (showedMatch.getStatus()) {
             case NOT_PLAYABLE:
-                //CSS
+                // css id
                 matchRoot.setId("matchTBD");
 
-                //DATA
-                if(blueTeam != null)
-                    textBlueName.setText(showedMatch.getBlueTeam().getTeamName());
-                if(orangeTeam != null)
-                    textOrangeName.setText(showedMatch.getOrangeTeam().getTeamName());
+                // Show known team or where they come from
+                textBlueName.setText(showedMatch.getBlueTeamAsString());
+                textOrangeName.setText(showedMatch.getOrangeTeamAsString());
 
                 break;
             case READY_TO_BE_PLAYED: case DRAW:
@@ -139,7 +150,7 @@ public class MatchVisualController implements MatchChangeListener {
         }
     }
 
-    public VBox getRoot() {
+    public HBox getRoot() {
         return matchRoot;
     }
 

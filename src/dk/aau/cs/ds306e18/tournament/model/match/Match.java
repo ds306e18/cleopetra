@@ -16,6 +16,10 @@ import java.util.Objects;
  * the winner and the loser of the match.</p>
  */
 public final class Match {
+
+    public static final int NO_INDEX = -1;
+
+    private int index = NO_INDEX;
     private int blueScore = 0;
     private int orangeScore = 0;
     private boolean played = false;
@@ -40,6 +44,22 @@ public final class Match {
     public Match(Team blue, Team orange) {
         blueTeam = blue;
         orangeTeam = orange;
+    }
+
+    /** Set the index. The match is referenced to by that index. E.g. "Winner of 5". */
+    public void setIndex(int index) {
+        this.index = index;
+        notifyMatchChangeListeners();
+    }
+
+    /** Get the index. The match is referenced to by that index. E.g. "Winner of 5". */
+    public int getIndex() {
+        return index;
+    }
+
+    /** Returns whether this match has an index. */
+    public boolean hasIndex() {
+        return index != NO_INDEX;
     }
 
     /**
@@ -555,6 +575,28 @@ public final class Match {
      */
     public Team getOrangeTeam() {
         return orangeTeam;
+    }
+
+    /** Returns the blue team's name. If blue team is null, then "Winner/Loser of .." or "TBD" is returned. */
+    public String getBlueTeamAsString() {
+        if (blueTeam == null) {
+            if (blueFromMatch != null && blueFromMatch.hasIndex()) {
+                return (blueWasWinnerInPreviousMatch ? "Winner of " : "Loser of ") + blueFromMatch.getIndex();
+            }
+            return "TBD";
+        }
+        return blueTeam.getTeamName();
+    }
+
+    /** Returns the orange team's name. If orange team is null, then "Winner/Loser of .." or "TBD" is returned. */
+    public String getOrangeTeamAsString() {
+        if (orangeTeam == null) {
+            if (orangeFromMatch != null && orangeFromMatch.hasIndex()) {
+                return (orangeWasWinnerInPreviousMatch ? "Winner of " : "Loser of ") + orangeFromMatch.getIndex();
+            }
+            return "TBD";
+        }
+        return orangeTeam.getTeamName();
     }
 
     public Match getBlueFromMatch() {
