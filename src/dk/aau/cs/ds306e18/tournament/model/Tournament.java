@@ -153,14 +153,14 @@ public class Tournament {
                 for (int i = 0; i < teams.size(); i++) {
                     teams.get(i).setInitialSeedValue(i + 1);
                 }
-                transferedTeams.sort((a, b) -> Integer.compare(b.getInitialSeedValue(), a.getInitialSeedValue()));
+                transferedTeams.sort(Comparator.comparingInt(Team::getInitialSeedValue));
 
             } else if (seedingOption == SeedingOption.MANUALLY) {
                 // Seeds was assigned ny user. If some teams have the same seed value, shuffle those
                 final Random random = new Random();
                 transferedTeams.sort((a, b) -> {
                     if (a == b) return 0;
-                    int comparison = Integer.compare(b.getInitialSeedValue(), a.getInitialSeedValue());
+                    int comparison = Integer.compare(a.getInitialSeedValue(), b.getInitialSeedValue());
                     if (comparison == 0) {
                         return random.nextBoolean() ? 1 : -1;
                     }

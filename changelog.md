@@ -1,5 +1,8 @@
 # Changelog
 
+#### Version 1.1.2 - 23. Jan 2019
+- Hotfix: Fixed seeding being backwards in some seeding options. - NicEastvillage
+
 #### Version 1.1.1 - 23. Jan 2019
 - Added a manual seeding option, that allow the user to give multiple teams the same seed. #33 - NicEastvillage
 - Tie breakers are now enums, which fixes serialization of tie breakers. #32 - NicEastvillage
