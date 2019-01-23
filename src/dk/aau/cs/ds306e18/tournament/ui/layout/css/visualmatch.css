@@ -13,6 +13,10 @@
     -fx-border-color: blue;
 }
 
+.teamName, .scoreNo {
+    -fx-font-size: 14px;
+}
+
 .triangle {
     visibility: hidden;
 }
@@ -25,6 +29,10 @@
     -fx-fill: #f28542;
 }
 
+#pending .color {
+    -fx-fill: #494949;
+}
+
 .scoreBg {
     -fx-fill: white;
     -fx-stroke-type: inside;
@@ -32,27 +40,28 @@
     -fx-stroke: #c1c1c1;
 }
 
-#matchPlayed .winner .teamBg {
+#played .winner .team .teamBg {
     -fx-fill: #97af97;
 }
 
-#matchPlayed .winner .triangle {
+#played .winner .triangle {
     visibility: visible;
     -fx-fill: #97af97;
 }
 
-#matchPlayed .winner .scoreBg {
+#played .winner .score .scoreBg {
     -fx-stroke: #97af97;
 }
 
-#matchPlayed .winner .scoreNo {
+#played .winner .score .scoreNo {
     -fx-font-weight: bold;
 }
 
-#matchPlayed .winner .team {
+#played .winner .team .teamName {
     -fx-font-weight: bold;
 }
 
-#matchTBD .team {
+#pending .tbd .team .teamName {
     -fx-font-style: italic;
+    -fx-text-fill: #7f7f7f;
 }

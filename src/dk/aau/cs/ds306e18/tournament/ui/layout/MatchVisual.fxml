@@ -12,11 +12,11 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<HBox id="matchPlayed" fx:id="matchRoot" alignment="CENTER_RIGHT" spacing="2.0" styleClass="match" stylesheets="@css/visualmatch.css" xmlns="http://javafx.com/javafx/1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.MatchVisualController">
+<HBox id="matchPlayed" fx:id="matchRoot" alignment="CENTER_RIGHT" spacing="2.0" styleClass="match" stylesheets="@css/visualmatch.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.MatchVisualController">
    <children>
-      <AnchorPane fx:id="indexHolder" prefHeight="50.0" prefWidth="18.0">
+      <AnchorPane fx:id="indexHolder" prefHeight="50.0" prefWidth="22.0">
          <children>
-            <Label fx:id="indexLabel" alignment="CENTER" prefHeight="17.0" prefWidth="18.0" text="99" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <Label fx:id="indexLabel" alignment="CENTER" prefHeight="17.0" prefWidth="18.0" text="12" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font></Label>
@@ -33,16 +33,14 @@
                      </HBox.margin>
                      <children>
                         <Rectangle fill="#c1c1c1" height="24.0" layoutX="1.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="teamBg" width="104.0" />
-                        <Label fx:id="textBlueName" layoutX="5.0" layoutY="2.0" prefHeight="17.0" prefWidth="100.0" text="Team 1">
-                           <font>
-                              <Font size="14.0" />
-                           </font></Label>
+                        <Label fx:id="textBlueName" layoutX="5.0" layoutY="2.0" prefHeight="17.0" prefWidth="100.0" styleClass="teamName" text="Team 1"/>
                      </children>
                   </Group>
                   <Group styleClass="score">
                      <children>
                         <Rectangle fill="WHITE" height="24.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="scoreBg" width="24.0" />
-                        <Text fx:id="teamBlueScore" layoutY="15.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="scoreNo" text="5" textAlignment="CENTER" wrappingWidth="20.0" />
+                        <Text fx:id="teamBlueScore" layoutX="2.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0"
+                              styleClass="scoreNo" text="5" textAlignment="CENTER" wrappingWidth="20.0"/>
                      </children>
                   </Group>
                   <Polygon fill="#c1c1c1" points="0.0, 0.0, 0.0, 24.0, 18.0, 12.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="triangle" />
@@ -64,20 +62,18 @@
                      </HBox.margin>
                      <children>
                         <Rectangle fill="#c1c1c1" height="24.0" layoutX="1.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="teamBg" width="104.0" />
-                        <Label fx:id="textOrangeName" layoutX="5.0" layoutY="2.0" prefHeight="17.0" prefWidth="100.0" text="Team 2">
-                           <font>
-                              <Font size="14.0" />
-                           </font></Label>
+                        <Label fx:id="textOrangeName" layoutX="5.0" layoutY="2.0" prefHeight="17.0" prefWidth="100.0" styleClass="teamName" text="Team 2"/>
                      </children>
                   </Group>
                   <Group styleClass="score">
                      <children>
                         <Rectangle fill="WHITE" height="24.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="scoreBg" width="24.0" />
-                        <Text fx:id="teamOrangeScore" layoutY="15.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="scoreNo" text="2" textAlignment="CENTER" wrappingWidth="20.0">
-                  </Text>
+                        <Text fx:id="teamOrangeScore" layoutX="2.0" layoutY="17.0" strokeType="OUTSIDE"
+                              strokeWidth="0.0" styleClass="scoreNo" text="2" textAlignment="CENTER"
+                              wrappingWidth="20.0"/>
                      </children>
                   </Group>
-                  <Polygon fill="#c1c1c1" points="0.0, 0.0, 0.0, 24.0, 18.0, 12.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="triangle" />
+                  <Polygon fill="#c1c1c1" points="0.0, 0.0, 0.0, 24.0, 18.0, 12.0" strokeWidth="0.0" styleClass="triangle" />
                </children>
                <styleClass>
                   <String fx:value="orange" />

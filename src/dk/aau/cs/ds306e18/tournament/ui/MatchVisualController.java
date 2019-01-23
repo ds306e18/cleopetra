@@ -53,8 +53,10 @@ public class MatchVisualController implements MatchChangeListener {
         matchRoot.setId("");
         hboxBlueTeam.getStyleClass().clear();
         hboxOrangeTeam.getStyleClass().clear();
-        textBlueName.setText("TBD");
-        textOrangeName.setText("TBD");
+        hboxBlueTeam.getStyleClass().add("blue");
+        hboxOrangeTeam.getStyleClass().add("orange");
+        textBlueName.setText("");
+        textOrangeName.setText("");
         teamOrangeScore.setText("");
         teamBlueScore.setText("");
     }
@@ -97,55 +99,54 @@ public class MatchVisualController implements MatchChangeListener {
         Team blueTeam = showedMatch.getBlueTeam();
         Team orangeTeam = showedMatch.getOrangeTeam();
 
-        //Set tags and id based on the given match and its status
+        // Set tags and id based on the given match and its status
         switch (showedMatch.getStatus()) {
             case NOT_PLAYABLE:
                 // css id
-                matchRoot.setId("matchTBD");
+                matchRoot.setId("pending");
 
                 // Show known team or where they come from
                 textBlueName.setText(showedMatch.getBlueTeamAsString());
                 textOrangeName.setText(showedMatch.getOrangeTeamAsString());
-
+                if (blueTeam == null) hboxBlueTeam.getStyleClass().add("tbd");
+                if (orangeTeam == null) hboxOrangeTeam.getStyleClass().add("tbd");
                 break;
+
             case READY_TO_BE_PLAYED: case DRAW:
-                //CSS
-                matchRoot.setId("matchUpcoming");
-                hboxBlueTeam.getStyleClass().add("blue");
-                hboxOrangeTeam.getStyleClass().add("orange");
+                // css id
+                matchRoot.setId("ready");
 
-                //Data
+                // Names and scores
                 textBlueName.setText(showedMatch.getBlueTeam().getTeamName());
                 textOrangeName.setText(showedMatch.getOrangeTeam().getTeamName());
                 teamBlueScore.setText(String.valueOf(showedMatch.getBlueScore()));
                 teamOrangeScore.setText(String.valueOf(showedMatch.getOrangeScore()));
                 break;
+
             case BLUE_WINS:
-                //CSS
-                matchRoot.setId("matchPlayed");
-                hboxBlueTeam.getStyleClass().add("blue");
+                // css id
+                matchRoot.setId("played");
                 hboxBlueTeam.getStyleClass().add("winner");
-                hboxOrangeTeam.getStyleClass().add("orange");
 
-                //Data
+                // Names and scores
                 textBlueName.setText(showedMatch.getBlueTeam().getTeamName());
                 textOrangeName.setText(showedMatch.getOrangeTeam().getTeamName());
                 teamBlueScore.setText(String.valueOf(showedMatch.getBlueScore()));
                 teamOrangeScore.setText(String.valueOf(showedMatch.getOrangeScore()));
                 break;
+
             case ORANGE_WINS:
-                //CSS
-                matchRoot.setId("matchPlayed");
-                hboxBlueTeam.getStyleClass().add("blue");
-                hboxOrangeTeam.getStyleClass().add("orange");
+                // css id
+                matchRoot.setId("played");
                 hboxOrangeTeam.getStyleClass().add("winner");
 
-                //Data
+                // Names and scores
                 textBlueName.setText(showedMatch.getBlueTeam().getTeamName());
                 textOrangeName.setText(showedMatch.getOrangeTeam().getTeamName());
                 teamBlueScore.setText(String.valueOf(showedMatch.getBlueScore()));
                 teamOrangeScore.setText(String.valueOf(showedMatch.getOrangeScore()));
                 break;
+
             default: throw new IllegalStateException();
         }
     }
