@@ -3,7 +3,7 @@ package dk.aau.cs.ds306e18.tournament.rlbot;
 import dk.aau.cs.ds306e18.tournament.model.Bot;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.utility.Alerts;
-import dk.aau.cs.ds306e18.tournament.utility.ConfigFileEditor;
+import dk.aau.cs.ds306e18.tournament.utility.configuration.ConfigFileEditor;
 
 import java.io.File;
 import java.nio.file.Path;

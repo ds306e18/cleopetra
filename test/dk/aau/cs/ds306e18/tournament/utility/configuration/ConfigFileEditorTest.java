@@ -1,8 +1,9 @@
-package dk.aau.cs.ds306e18.tournament.utility;
+package dk.aau.cs.ds306e18.tournament.utility.configuration;
 
 import dk.aau.cs.ds306e18.tournament.model.Bot;
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import dk.aau.cs.ds306e18.tournament.utility.configuration.ConfigFileEditor;
 import org.junit.Test;
 
 import java.util.ArrayList;
