@@ -2,6 +2,7 @@ package dk.aau.cs.ds306e18.tournament.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public enum TieBreaker {
     // Goal diff -> goals scored -> seed
@@ -47,6 +48,23 @@ public enum TieBreaker {
     public List<Team> compareAll(List<Team> teams, int count) {
         ArrayList<Team> sorted = new ArrayList<>(teams);
         sorted.sort((a, b) -> a == b ? 0 : compare(a, b) ? -1 : 1);
+        return sorted.subList(0, count);
+    }
+
+    /** Returns a list of teams sorted by their points, and if two teams' points are equal, this tiebreaker has been used
+     * to determine the better team of the two. */
+    public List<Team> compareWithPoints(List<Team> teams, int count, Map<Team, Integer> pointsMap) {
+        List<Team> sorted = new ArrayList<>(teams);
+        sorted.sort((a, b) -> {
+            if (a == b) return 0;
+            int comparison = Integer.compare(pointsMap.get(b), pointsMap.get(a));
+            if (comparison == 0) {
+                return compare(a, b) ? -1 : 1;
+            }
+            return comparison;
+        });
+
+        count = Math.min(count, teams.size());
         return sorted.subList(0, count);
     }
 
