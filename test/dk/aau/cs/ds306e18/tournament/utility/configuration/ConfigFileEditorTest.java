@@ -11,7 +11,7 @@ public class ConfigFileEditorTest {
 
     final static String testDir = "test/";
     final static String testRLBotConfigFilename = "test_rlbot.cfg";
-    final static String testRLBotConfigTargetFilename = "dummy_rlbot.cfg";
+    private final static String testRLBotConfigTargetFilename = "dummy_rlbot.cfg";
     private ArrayList<String> testConfig = new ArrayList<>();
 
     /**
@@ -46,7 +46,7 @@ public class ConfigFileEditorTest {
     public void getLineTest1() {
         setTestConfig();
         ConfigFileEditor.setConfig(testConfig);
-        assertNull(ConfigFileEditor.getLine("NAN"));
+        assertNull(ConfigFileEditor.getValueOfLine("NAN"));
     }
 
     @Test
