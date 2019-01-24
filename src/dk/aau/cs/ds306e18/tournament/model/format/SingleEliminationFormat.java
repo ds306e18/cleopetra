@@ -233,24 +233,27 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
         List<Team> topTeams = new ArrayList<>();
         List<Team> tempWinnerTeams = new ArrayList<>();
         List<Team> tempLoserTeams = new ArrayList<>();
-        int roundUpperBoundIndex = 1, currentMatchIndex = 0, numberOfMatches = finalMatch.getTreeAsListBFS().size();
+        List<Match> matchesBFS = finalMatch.getTreeAsListBFS();
+        int numberOfMatches = matchesBFS.size();
+        int roundUpperBoundIndex = 1, currentMatchIndex = 0;
 
         if(count > seededTeams.size()){ count = seededTeams.size();}
 
-        //Will run until team size fits the count
+        // Will run until enough teams has been found the count
         while (topTeams.size() < count) {
-            //places the losers and winners of the round into two different temporary lists
+            // places the losers and winners of the round into two different temporary lists
             while (currentMatchIndex < roundUpperBoundIndex && currentMatchIndex < numberOfMatches) {
-                if (!topTeams.contains(finalMatch.getTreeAsListBFS().get(currentMatchIndex).getWinner())) {
-                    tempWinnerTeams.add(finalMatch.getTreeAsListBFS().get(currentMatchIndex).getWinner());
+                Match current = matchesBFS.get(currentMatchIndex);
+                if (!topTeams.contains(current.getWinner())) {
+                    tempWinnerTeams.add(current.getWinner());
                 }
-                if (!topTeams.contains(finalMatch.getTreeAsListBFS().get(currentMatchIndex).getLoser())) {
-                    tempLoserTeams.add(finalMatch.getTreeAsListBFS().get(currentMatchIndex).getLoser());
+                if (!topTeams.contains(current.getLoser())) {
+                    tempLoserTeams.add(current.getLoser());
                 }
                 currentMatchIndex++;
             }
 
-            //Sorts the teams accordingly to the tiebreaker
+            // Sorts the teams accordingly to the tiebreaker
             if (tempWinnerTeams.size() > 1) {
                 tempWinnerTeams = tieBreaker.compareAll(tempWinnerTeams, tempWinnerTeams.size());
             }
@@ -258,17 +261,17 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
                 tempLoserTeams = tieBreaker.compareAll(tempLoserTeams, tempLoserTeams.size());
             }
 
-            //Winners will be placed before the losers, and the lists will be cleared
+            // Winners will be placed before the losers, and the lists will be cleared
             topTeams.addAll(tempWinnerTeams);
             tempWinnerTeams.clear();
             topTeams.addAll(tempLoserTeams);
             tempLoserTeams.clear();
 
-            //New round for the loop to iterate
+            // New round for the loop to iterate
             roundUpperBoundIndex = getRightIndex(roundUpperBoundIndex);
         }
 
-        //If there are too many teams, remove teams
+        // If there are too many teams, remove teams
         while (topTeams.size() > count) {
             topTeams.remove(topTeams.size() - 1);
         }

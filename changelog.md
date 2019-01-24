@@ -1,7 +1,12 @@
 # Changelog
 
+#### Unreleased changes
+- Round robin and swiss now uses tiebreaker to rank all teams before transferring teams to the next stage.
+
+
 #### Version 1.1.2 - 23. Jan 2019
 - Hotfix: Fixed seeding being backwards in some seeding options. - NicEastvillage
+
 
 #### Version 1.1.1 - 23. Jan 2019
 - Added a manual seeding option, that allow the user to give multiple teams the same seed. #33 - NicEastvillage
