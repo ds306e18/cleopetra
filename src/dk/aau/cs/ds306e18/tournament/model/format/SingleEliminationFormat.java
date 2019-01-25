@@ -40,11 +40,11 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
         int numberOfMatches = (int) Math.pow(2,rounds)-1;
         bracket = new Match[numberOfMatches];
         for(int i = numberOfMatches - 1; i >= 0; i--) {
-            //Creates empty matches for first round
+            // Creates empty matches for first round
             if(i >= numberOfMatches - matchesInFirstRound) {
                 bracket[i] = new Match();
             }
-            //Creates the remaining matches which contains winners from their left- and right child-indexes.
+            // Creates the remaining matches which contains winners from their left- and right child-indexes.
             else {
                 bracket[i] = new Match()
                         .setBlueToWinnerOf(bracket[getLeftIndex(i)])
@@ -59,7 +59,7 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
      * @param seededTeams a list containing the teams in the tournament
      * @param doSeeding whether or not to use seeding. If false, the reordering of teams is skipped. */
     private void seedBracket(List<Team> seededTeams, boolean doSeeding) {
-        ArrayList<Team> seedList = new ArrayList<>(seededTeams);
+        List<Team> seedList = new ArrayList<>(seededTeams);
 
         //Create needed amount of byes to match with the empty matches
         ArrayList<Team> byeList = addByes(seededTeams.size());
@@ -67,7 +67,7 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
 
         if (doSeeding) {
             //Reorders list with fair seeding method
-            fairSeeding(seedList);
+            seedList = Seeding.fairSeedList(seedList);
         }
 
         //Places the teams in the bracket, and removes unnecessary matches
@@ -77,7 +77,7 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
     /** Places the teams in the bracket and removes unnecessary matches
      * @param seedList a list of seeded teams in a fair seeding order
      * @param byeList a list of dummy teams */
-    private void placeTeamsInBracket(ArrayList<Team> seedList, ArrayList<Team> byeList) {
+    private void placeTeamsInBracket(List<Team> seedList, ArrayList<Team> byeList) {
         int seedMatchIndex = finalMatch.getTreeAsListBFS().size() - 1;
         int  numberOfTeams = seedList.size();
         for (int teamIndex = 0; teamIndex < numberOfTeams; teamIndex = teamIndex + 2) {
@@ -103,30 +103,6 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
         }
     }
 
-    /** Reorders seedList to a fair list order for seeding
-     * @param seedList a list of seeded teams in ascending order */
-    private void fairSeeding(ArrayList<Team> seedList) {
-        //Variables used for seeding
-        int slice = 1;
-        int interactions = seedList.size() / 2;
-
-        //Order the teams in a seeded list
-        while (slice < interactions) {
-            ArrayList<Team> temp = new ArrayList<>(seedList);
-            seedList.clear();
-
-            while (temp.size() > 0) {
-                int lastIndex = temp.size();
-                seedList.addAll(temp.subList(0, slice));
-                seedList.addAll(temp.subList(lastIndex - slice, lastIndex));
-                temp.removeAll(temp.subList(lastIndex - slice, lastIndex));
-                temp.removeAll(temp.subList(0, slice));
-            }
-
-            slice *= 2;
-        }
-    }
-
     /** Add the needed amount of byes
      * @param numberOfTeams the amount of teams in the stage
      * @return byeList, an arrayList containing dummy teams */
@@ -139,23 +115,20 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
         return byeList;
     }
 
-    int getParentIndex(int i) {
-        i = i + 1;
-        if (i == 1) {
+    private int getParentIndex(int i) {
+        if (i == 0) {
             return -1;
         } else {
-            return Math.floorDiv(i,2)-1;
+            return Math.floorDiv(i + 1, 2) - 1;
         }
     }
 
-    int getLeftIndex(int i){
-        i = i + 1;
-        return 2 * i;
+    private int getLeftIndex(int i){
+        return 2 * (i + 1);
     }
 
-    int getRightIndex(int i) {
-        i = i + 1;
-        return 2 * i - 1;
+    private int getRightIndex(int i) {
+        return 2 * (i + 1) - 1;
     }
 
     public int getRounds() {
@@ -184,7 +157,7 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
 
     @Override
     public List<Match> getCompletedMatches() {
-        return finalMatch.getTreeAsListBFS().stream().filter(c -> c.hasBeenPlayed()).collect(Collectors.toList());
+        return finalMatch.getTreeAsListBFS().stream().filter(Match::hasBeenPlayed).collect(Collectors.toList());
     }
 
     public Match[] getMatchesAsArray() {

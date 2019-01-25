@@ -569,6 +569,26 @@ public final class Match {
         return winnerDestination;
     }
 
+    public Match getLoserDestination() {
+        return loserDestination;
+    }
+
+    public boolean wasBlueWinnerInPreviousMatch() {
+        return blueWasWinnerInPreviousMatch;
+    }
+
+    public boolean wasOrangeWinnerInPreviousMatch() {
+        return orangeWasWinnerInPreviousMatch;
+    }
+
+    public boolean doesWinnerGoToBlue() {
+        return winnerGoesToBlue;
+    }
+
+    public boolean doesLoserGoToBlue() {
+        return loserGoesToBlue;
+    }
+
     /** Listeners registered here will be notified when the match is played or reset. */
     public void registerMatchPlayedListener(MatchPlayedListener listener) {
         playedListeners.add(listener);
