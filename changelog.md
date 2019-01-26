@@ -1,7 +1,13 @@
 # Changelog
 
+#### Unreleased (dev branch)
+- Matches are now displayed slightly bigger
+- Matches now has an identifier and pending matches will display which matches they depend on. E.g. "Winner of X" vs "Loser of Y"
+
+
 #### Version 1.1.2 - 23. Jan 2019
 - Hotfix: Fixed seeding being backwards in some seeding options. - NicEastvillage
+
 
 #### Version 1.1.1 - 23. Jan 2019
 - Added a manual seeding option, that allow the user to give multiple teams the same seed. #33 - NicEastvillage

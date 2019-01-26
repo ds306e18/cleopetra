@@ -19,6 +19,7 @@ public final class Match {
     private static int nextId = 0;
 
     private final int id;
+    private int identifier = 0;
     private int blueScore = 0;
     private int orangeScore = 0;
     private boolean played = false;
@@ -45,6 +46,17 @@ public final class Match {
         id = nextId++;
         blueTeam = blue;
         orangeTeam = orange;
+    }
+
+    /** Set the identifier. The match is referenced to by that identifier. E.g. "Winner of 5", where 5 is the identifier. */
+    public void setIdentifier(int identifier) {
+        this.identifier = identifier;
+        notifyMatchChangeListeners();
+    }
+
+    /** Get the identifier. The match is referenced to by that identifier. E.g. "Winner of 5", where 5 is the identifier. */
+    public int getIdentifier() {
+        return identifier;
     }
 
     /**
@@ -573,6 +585,28 @@ public final class Match {
      */
     public Team getOrangeTeam() {
         return orangeTeam;
+    }
+
+    /** Returns the blue team's name. If blue team is null, then "Winner/Loser of .." or "TBD" is returned. */
+    public String getBlueTeamAsString() {
+        if (blueTeam == null) {
+            if (blueFromMatch != null) {
+                return (blueWasWinnerInPreviousMatch ? "Winner of " : "Loser of ") + blueFromMatch.getIdentifier();
+            }
+            return "TBD";
+        }
+        return blueTeam.getTeamName();
+    }
+
+    /** Returns the orange team's name. If orange team is null, then "Winner/Loser of .." or "TBD" is returned. */
+    public String getOrangeTeamAsString() {
+        if (orangeTeam == null) {
+            if (orangeFromMatch != null) {
+                return (orangeWasWinnerInPreviousMatch ? "Winner of " : "Loser of ") + orangeFromMatch.getIdentifier();
+            }
+            return "TBD";
+        }
+        return orangeTeam.getTeamName();
     }
 
     public Match getBlueFromMatch() {

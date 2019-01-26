@@ -28,6 +28,7 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
         rounds = (int) Math.ceil(Math.log(seededTeams.size()) / Math.log(2));
         generateBracket();
         seedBracket(seededTeams, doSeeding);
+        giveMatchesLabels();
         status = StageStatus.RUNNING;
         finalMatch.registerMatchPlayedListener(this);
     }
@@ -113,6 +114,15 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
             byeList.add(new Team("bye" + byeList.size(), new ArrayList<>(), 999, ""));
         }
         return byeList;
+    }
+
+    /** Gives the matches identifiers. */
+    private void giveMatchesLabels() {
+        List<Match> treeAsListBFS = finalMatch.getTreeAsListBFS();
+        int index = 1;
+        for (int i = treeAsListBFS.size() - 1; i >= 0; i--) {
+            treeAsListBFS.get(i).setIdentifier(index++);
+        }
     }
 
     private int getParentIndex(int i) {
