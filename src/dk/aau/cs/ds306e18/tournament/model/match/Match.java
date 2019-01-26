@@ -2,10 +2,9 @@ package dk.aau.cs.ds306e18.tournament.model.match;
 
 import dk.aau.cs.ds306e18.tournament.model.Team;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * <p>A Match consists of two Slots, which holds the Teams participating in the Match, and each Team's
@@ -318,7 +317,20 @@ public final class Match {
         // Breadth-first search can be performed using a queue
         LinkedList<Match> queue = new LinkedList<>();
         ArrayList<Match> list = new ArrayList<>();
+        Set<Match> marked = new HashSet<>();
         queue.add(this);
+        marked.add(this);
+
+        Consumer<Match> addFunction = (m) -> {
+            if (m != null && !marked.contains(m)) {
+                // We check if both parent matches are marked (or null) to be sure we create the correct order
+                if ((m.winnerDestination == null || marked.contains(m.winnerDestination))
+                        && (m.loserDestination == null || marked.contains(m.loserDestination))) {
+                    queue.add(m);
+                    marked.add(m);
+                }
+            }
+        };
 
         // Matches are polled from the queue until it is empty
         while (!queue.isEmpty()) {
@@ -328,8 +340,8 @@ public final class Match {
             // Enqueue child matches, if any
             // Orange is added first - this means the final order will be the reverse of the logical
             // order of playing matches
-            if (match.orangeFromMatch != null) queue.add(match.orangeFromMatch);
-            if (match.blueFromMatch != null) queue.add(match.blueFromMatch);
+            addFunction.accept(match.orangeFromMatch);
+            addFunction.accept(match.blueFromMatch);
         }
 
         return list;

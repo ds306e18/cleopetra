@@ -22,7 +22,6 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
     private Match finalMatch;
     private Match[] upperBracket;
     private Match[] lowerBracket;
-    transient private ArrayList<Match> lowerBracketMatches;
 
     transient private List<StageStatusChangeListener> statusChangeListeners = new LinkedList<>();
 
@@ -77,7 +76,7 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
     private void generateLowerBracket() {
         int matchesInCurrentRound = (int) Math.pow(2, upperBracketRounds - 2);
         int ubLoserIndex = upperBracket.length - 1;
-        lowerBracketMatches = new ArrayList<>();
+        List<Match> lowerBracketMatches = new ArrayList<>();
 
         // For the first lower bracket round, use losers from first round in upper bracket
         for (int i = 0; i < matchesInCurrentRound; i++) {
@@ -227,49 +226,12 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
     @Override
     public List<Team> getTopTeams(int count, TieBreaker tieBreaker) {
         // TODO
-
-        List<Team> topTeamsList = new ArrayList<>(), tempWinnerList = new ArrayList<>(), tempLoserList = new ArrayList<>();
-        topTeamsList.add(finalMatch.getWinner());
-        if(count > 1) { topTeamsList.add(finalMatch.getLoser()); }
-
-        int matchIndex = lowerBracketMatches.size()-1;
-        int upperBound = lowerBracketMatches.size()-2;
-        int upperBoundReduction = 1, doubleUpperBound = 1;
-        while(topTeamsList.size() < count){
-            while(matchIndex > upperBound){
-                if(!topTeamsList.contains(lowerBracketMatches.get(matchIndex).getWinner())){
-                    tempWinnerList.add(lowerBracketMatches.get(matchIndex).getWinner());
-                }
-                if(!topTeamsList.contains(lowerBracketMatches.get(matchIndex).getLoser())){
-                    tempLoserList.add(lowerBracketMatches.get(matchIndex).getLoser());
-                }
-                matchIndex--;
-            }
-
-            upperBound = upperBound - upperBoundReduction;
-            if(upperBound == 1){ upperBound += 1; }
-            if(doubleUpperBound % 2 == 0){ upperBoundReduction = upperBoundReduction * 2; }
-            doubleUpperBound++;
-
-            if(tempWinnerList.size() > 1){ tempWinnerList = tieBreaker.compareAll(tempWinnerList, tempWinnerList.size()); }
-            if(tempLoserList.size() > 1){ tempLoserList = tieBreaker.compareAll(tempLoserList, tempLoserList.size()); }
-            topTeamsList.addAll(tempWinnerList);
-            tempWinnerList.clear();
-            topTeamsList.addAll(tempLoserList);
-            tempLoserList.clear();
-        }
-
-        while(topTeamsList.size() > count){ topTeamsList.remove(topTeamsList.size()-1); }
-
-        return topTeamsList;
+        return new ArrayList<>();
     }
 
     @Override
     public List<Match> getAllMatches() {
-        List<Match> allMatches = Arrays.asList(upperBracket);
-        allMatches.addAll(lowerBracketMatches);
-        allMatches.add(finalMatch);
-        return allMatches;
+        return finalMatch.getTreeAsListBFS();
     }
 
     @Override
