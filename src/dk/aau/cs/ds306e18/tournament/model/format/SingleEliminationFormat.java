@@ -176,7 +176,7 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
 
         // Notify listeners if status changed
         if (oldStatus != status) {
-            nofityStatusListeners(oldStatus, status);
+            notifyStatusListeners(oldStatus, status);
         }
     }
 
@@ -191,7 +191,7 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
     }
 
     /** Let listeners know, that the status has changed */
-    private void nofityStatusListeners(StageStatus oldStatus, StageStatus newStatus) {
+    private void notifyStatusListeners(StageStatus oldStatus, StageStatus newStatus) {
         for (StageStatusChangeListener listener : statusChangeListeners) {
             listener.onStageStatusChanged(this, oldStatus, newStatus);
         }

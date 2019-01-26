@@ -10,6 +10,7 @@ import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.ModelCoupledUI;
 import javafx.scene.Node;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,7 +22,6 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
     private Match finalMatch;
     private Match[] upperBracket;
     private Match[] lowerBracket;
-    transient private ArrayList<Match> upperBracketMatches;
     transient private ArrayList<Match> lowerBracketMatches;
 
     transient private List<StageStatusChangeListener> statusChangeListeners = new LinkedList<>();
@@ -33,6 +33,8 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
         finalMatch.registerMatchPlayedListener(this);
     }
 
+    /** Generates the complete double elimination bracket given a list of teams ordered by seed. If doSeeding is false
+     * the teams will just be insert without taking their seed into account. */
     private void generateBracket(List<Team> seededTeams, boolean doSeeding) {
         upperBracketRounds = (int) Math.ceil(Math.log(seededTeams.size()) / Math.log(2));
         generateUpperBracket();
@@ -51,6 +53,7 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
         removeByes(byes);
     }
 
+    /** Generates the matches in the upper bracket and connects them. All the matches will be empty. */
     private void generateUpperBracket() {
         int matchesInFirstRound = (int) Math.pow(2, upperBracketRounds - 1);
         int numberOfMatches = (int) Math.pow(2, upperBracketRounds) - 1;
@@ -69,6 +72,8 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
         }
     }
 
+    /** Generates all the matches in the lower bracket and connects them to the upper bracket matches. Also creates
+     * the final match. */
     private void generateLowerBracket() {
         int matchesInCurrentRound = (int) Math.pow(2, upperBracketRounds - 2);
         int ubLoserIndex = upperBracket.length - 1;
@@ -126,15 +131,17 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
             }
         }
 
+        // Creates an array of lower bracket matches
+        lowerBracket = lowerBracketMatches.toArray(new Match[0]);
+
         // The final is the winner of upper bracket versus winner of lower bracket
         finalMatch = new Match()
                 .setBlueToWinnerOf(upperBracket[0])
                 .setOrangeToWinnerOf(lowerBracketMatches.get(lowerBracketMatches.size() - 1));
-
-        // Creates an array of lower bracket matches
-        lowerBracket = lowerBracketMatches.toArray(new Match[0]);
     }
 
+    /** Inserts the teams in the correct starting positions. If doSeeding is false
+     * the teams will just be insert without taking their seed into account. */
     private void insertTeams(List<Team> teams, boolean doSeeding) {
 
         // Create byes
@@ -154,6 +161,7 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
         }
     }
 
+    /** Removes matches containing byes. */
     private void removeByes(List<Team> byes) {
 
         // Remove byes from upper bracket
@@ -181,7 +189,7 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
         int lbFirstRoundMatchCount = (int) Math.pow(2, upperBracketRounds - 2);
         for (int i = 0; i < lbFirstRoundMatchCount; i++) {
             Match m = lowerBracket[i];
-            // Team orange can only be a bye if blue also is a bye
+            // Team orange can only be a bye if blue also is a bye, so we test orange first
             if (byes.contains(m.getOrangeTeam())) {
                 // Both teams are byes
                 // Remove matches from bracket
@@ -211,59 +219,6 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
         }
     }
 
-    private void removeByesInLowerBracketRecursive(List<Team> byes, Match m) {
-        if (m != null) {
-            if (byes.contains(m.getBlueTeam()) || byes.contains(m.getOrangeTeam())) {
-                // This is a bye match
-
-                if (byes.contains(m.getBlueTeam())) {
-                    // Blue is a bye. Orange is either a team or comes from another match
-                    if (m.getOrangeFromMatch() == null) {
-                        // Orange is a team
-
-
-                    } else {
-                        // Orange is not yet determined, but comes from another match
-
-                        if (m.doesWinnerGoToBlue()) {
-                            m.getWinnerDestination().setBlueToLoserOf(m.getOrangeFromMatch());
-                        }
-                    }
-                }
-
-                removeByeMatchFromLowerBracket(m);
-            }
-        }
-    }
-
-    private void resolveByeMatch(Match m) {
-        Match wd = m.getWinnerDestination();
-        if (wd != null) {
-            if (m.doesWinnerGoToBlue()) {
-                wd.setBlue(m.getBlueTeam());
-            } else {
-                wd.setOrange(m.getBlueTeam());
-            }
-        }
-
-        Match ld = m.getWinnerDestination();
-        if (ld != null) {
-            if (m.doesLoserGoToBlue()) {
-                ld.setBlue(m.getOrangeTeam());
-            } else {
-                ld.setOrange(m.getOrangeTeam());
-            }
-        }
-    }
-
-    private void removeByeMatchFromLowerBracket(Match match) {
-        for (int i = 0; i < lowerBracket.length; i++) {
-            if (lowerBracket[i] == match) {
-                lowerBracket[i] = null;
-            }
-        }
-    }
-
     @Override
     public StageStatus getStatus() {
         return status;
@@ -271,6 +226,8 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
 
     @Override
     public List<Team> getTopTeams(int count, TieBreaker tieBreaker) {
+        // TODO
+
         List<Team> topTeamsList = new ArrayList<>(), tempWinnerList = new ArrayList<>(), tempLoserList = new ArrayList<>();
         topTeamsList.add(finalMatch.getWinner());
         if(count > 1) { topTeamsList.add(finalMatch.getLoser()); }
@@ -307,13 +264,9 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
         return topTeamsList;
     }
 
-    public int getUpperBracketRounds() {
-        return upperBracketRounds;
-    }
-
     @Override
     public List<Match> getAllMatches() {
-        ArrayList<Match> allMatches = new ArrayList<>(upperBracketMatches);
+        List<Match> allMatches = Arrays.asList(upperBracket);
         allMatches.addAll(lowerBracketMatches);
         allMatches.add(finalMatch);
         return allMatches;
@@ -345,7 +298,7 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
     }
 
     /** Let listeners know, that the status has changed */
-    private void nofityStatusListeners(StageStatus oldStatus, StageStatus newStatus) {
+    private void notifyStatusListeners(StageStatus oldStatus, StageStatus newStatus) {
         for (StageStatusChangeListener listener : statusChangeListeners) {
             listener.onStageStatusChanged(this, oldStatus, newStatus);
         }
@@ -369,6 +322,17 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
 
     @Override
     public void onMatchPlayed(Match match) {
-        // TODO
+        // Was it last match?
+        StageStatus oldStatus = status;
+        if (finalMatch.hasBeenPlayed()) {
+            status = StageStatus.CONCLUDED;
+        } else {
+            status = StageStatus.RUNNING;
+        }
+
+        // Notify listeners if status changed
+        if (oldStatus != status) {
+            notifyStatusListeners(oldStatus, status);
+        }
     }
 }
