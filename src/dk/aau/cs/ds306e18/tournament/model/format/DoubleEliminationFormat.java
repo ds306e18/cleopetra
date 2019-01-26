@@ -50,6 +50,7 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
 
         insertTeams(teams, doSeeding);
         removeByes(byes);
+        giveMatchesLabels();
     }
 
     /** Generates the matches in the upper bracket and connects them. All the matches will be empty. */
@@ -216,6 +217,26 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
                 m.getWinnerDestination().setBlueToLoserOf(m.getOrangeFromMatch());
             }
         }
+    }
+
+    /** Gives the matches identifiers. */
+    private void giveMatchesLabels() {
+
+        int nextIdentifier = 1;
+
+        // We give upper bracket the small identifiers as those matches always can be played first
+        for (int i = upperBracket.length - 1; i >= 0; i--) {
+            if (upperBracket[i] != null) {
+                upperBracket[i].setIdentifier(nextIdentifier++);
+            }
+        }
+        for (int i = 0; i < lowerBracket.length; i++) {
+            if (lowerBracket[i] != null) {
+                lowerBracket[i].setIdentifier(nextIdentifier++);
+            }
+        }
+        finalMatch.setIdentifier(nextIdentifier++);
+        // TODO give the extra match an identifier
     }
 
     @Override
