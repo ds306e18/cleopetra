@@ -15,6 +15,10 @@ import java.util.function.Function;
  * the winner and the loser of the match.</p>
  */
 public final class Match {
+
+    private static int nextId = 0;
+
+    private final int id;
     private int blueScore = 0;
     private int orangeScore = 0;
     private boolean played = false;
@@ -31,12 +35,14 @@ public final class Match {
      * Construct an empty Match.
      */
     public Match() {
+        id = nextId++;
     }
 
     /**
      * Construct a Match where both Teams are known from the start.
      */
     public Match(Team blue, Team orange) {
+        id = nextId++;
         blueTeam = blue;
         orangeTeam = orange;
     }
@@ -636,7 +642,8 @@ public final class Match {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Match match = (Match) o;
-        return getBlueScore() == match.getBlueScore() &&
+        return id == match.id &&
+                getBlueScore() == match.getBlueScore() &&
                 getOrangeScore() == match.getOrangeScore() &&
                 played == match.played &&
                 blueWasWinnerInPreviousMatch == match.blueWasWinnerInPreviousMatch &&
@@ -649,7 +656,7 @@ public final class Match {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getBlueScore(), getOrangeScore(), played, getBlueTeam(), getOrangeTeam(), blueWasWinnerInPreviousMatch, orangeWasWinnerInPreviousMatch, winnerGoesToBlue, loserGoesToBlue);
+        return Objects.hash(id, getBlueScore(), getOrangeScore(), played, getBlueTeam(), getOrangeTeam(), blueWasWinnerInPreviousMatch, orangeWasWinnerInPreviousMatch, winnerGoesToBlue, loserGoesToBlue);
     }
 
     @Override
