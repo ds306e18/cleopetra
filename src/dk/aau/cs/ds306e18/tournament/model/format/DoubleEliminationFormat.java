@@ -6,6 +6,7 @@ import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchPlayedListener;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchStatus;
 import dk.aau.cs.ds306e18.tournament.ui.BracketOverviewTabController;
+import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.DoubleEliminationNode;
 import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.ModelCoupledUI;
 import javafx.scene.Node;
 
@@ -14,6 +15,9 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static dk.aau.cs.ds306e18.tournament.utility.PowMath.log2;
+import static dk.aau.cs.ds306e18.tournament.utility.PowMath.pow2;
 
 public class DoubleEliminationFormat implements Format, MatchPlayedListener {
 
@@ -35,12 +39,12 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
     /** Generates the complete double elimination bracket given a list of teams ordered by seed. If doSeeding is false
      * the teams will just be insert without taking their seed into account. */
     private void generateBracket(List<Team> seededTeams, boolean doSeeding) {
-        upperBracketRounds = (int) Math.ceil(Math.log(seededTeams.size()) / Math.log(2));
+        upperBracketRounds = log2(seededTeams.size());
         generateUpperBracket();
         generateLowerBracket();
 
         // Create byes
-        int teamCount = (int) Math.pow(2, upperBracketRounds);
+        int teamCount = pow2(upperBracketRounds);
         List<Team> teams = new ArrayList<>(seededTeams);
         List<Team> byes = new ArrayList<>();
         while (byes.size() + teams.size() < teamCount) {
@@ -55,8 +59,8 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
 
     /** Generates the matches in the upper bracket and connects them. All the matches will be empty. */
     private void generateUpperBracket() {
-        int matchesInFirstRound = (int) Math.pow(2, upperBracketRounds - 1);
-        int numberOfMatches = (int) Math.pow(2, upperBracketRounds) - 1;
+        int matchesInFirstRound = pow2(upperBracketRounds - 1);
+        int numberOfMatches = pow2(upperBracketRounds) - 1;
         upperBracket = new Match[numberOfMatches];
         for(int i = numberOfMatches - 1; i >= 0; i--) {
             // Creates empty matches for first round
@@ -75,7 +79,7 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
     /** Generates all the matches in the lower bracket and connects them to the upper bracket matches. Also creates
      * the final match. */
     private void generateLowerBracket() {
-        int matchesInCurrentRound = (int) Math.pow(2, upperBracketRounds - 2);
+        int matchesInCurrentRound = pow2(upperBracketRounds - 2);
         int ubLoserIndex = upperBracket.length - 1;
         List<Match> lowerBracketMatches = new ArrayList<>();
 
@@ -145,7 +149,7 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
     private void insertTeams(List<Team> teams, boolean doSeeding) {
 
         // Create byes
-        int teamCount = (int) Math.pow(2, upperBracketRounds);
+        int teamCount = pow2(upperBracketRounds);
 
         // Seeding
         if (doSeeding) {
@@ -165,7 +169,7 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
     private void removeByes(List<Team> byes) {
 
         // Remove byes from upper bracket
-        int ubFirstRoundMatchCount = (int) Math.pow(2, upperBracketRounds - 1);
+        int ubFirstRoundMatchCount = pow2(upperBracketRounds - 1);
         for (int i = 0; i < ubFirstRoundMatchCount; i++) {
             int ubIndex =  upperBracket.length - i - 1;
             Match m = upperBracket[ubIndex];
@@ -186,7 +190,7 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
         }
 
         // Remove byes from lower bracket
-        int lbFirstRoundMatchCount = (int) Math.pow(2, upperBracketRounds - 2);
+        int lbFirstRoundMatchCount = pow2(upperBracketRounds - 2);
         for (int i = 0; i < lbFirstRoundMatchCount; i++) {
             Match m = lowerBracket[i];
             // Team orange can only be a bye if blue also is a bye, so we test orange first
@@ -270,6 +274,22 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
         return getAllMatches().stream().filter(Match::hasBeenPlayed).collect(Collectors.toList());
     }
 
+    public Match getFinalMatch() {
+        return finalMatch;
+    }
+
+    public int getUpperBracketRounds() {
+        return upperBracketRounds;
+    }
+
+    public Match[] getUpperBracket() {
+        return upperBracket;
+    }
+
+    public Match[] getLowerBracket() {
+        return lowerBracket;
+    }
+
     @Override
     public void registerStatusChangedListener(StageStatusChangeListener listener) {
         statusChangeListeners.add(listener);
@@ -288,8 +308,8 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
     }
 
     @Override
-    public <T extends Node & ModelCoupledUI> T getBracketFXNode(BracketOverviewTabController bracketOverview) {
-        return null;
+    public DoubleEliminationNode getBracketFXNode(BracketOverviewTabController bracketOverview) {
+        return new DoubleEliminationNode(this, bracketOverview);
     }
 
     @Override

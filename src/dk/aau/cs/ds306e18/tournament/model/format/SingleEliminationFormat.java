@@ -12,6 +12,9 @@ import javafx.scene.Node;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static dk.aau.cs.ds306e18.tournament.utility.PowMath.log2;
+import static dk.aau.cs.ds306e18.tournament.utility.PowMath.pow2;
+
 public class SingleEliminationFormat implements Format, MatchPlayedListener {
 
     private StageStatus status = StageStatus.PENDING;
@@ -25,7 +28,7 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
     @Override
     public void start(List<Team> seededTeams, boolean doSeeding) {
         this.seededTeams = new ArrayList<>(seededTeams);
-        rounds = (int) Math.ceil(Math.log(seededTeams.size()) / Math.log(2));
+        rounds = log2(seededTeams.size());
         generateBracket();
         seedBracket(seededTeams, doSeeding);
         giveMatchesLabels();
@@ -37,8 +40,8 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
      * Matches are accessed through finalMatch (the root) or the array upperBracketMatchesArray.
      */
     private void generateBracket() {
-        int matchesInFirstRound = (int) Math.pow(2, rounds - 1);
-        int numberOfMatches = (int) Math.pow(2,rounds)-1;
+        int matchesInFirstRound = pow2(rounds - 1);
+        int numberOfMatches = pow2(rounds) - 1;
         bracket = new Match[numberOfMatches];
         for(int i = numberOfMatches - 1; i >= 0; i--) {
             // Creates empty matches for first round
@@ -108,7 +111,7 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
      * @param numberOfTeams the amount of teams in the stage
      * @return byeList, an arrayList containing dummy teams */
     private ArrayList<Team> addByes(int numberOfTeams){
-        int numberOfByes = (int) Math.pow(2, rounds) - numberOfTeams;
+        int numberOfByes = pow2(rounds) - numberOfTeams;
         ArrayList<Team> byeList = new ArrayList<>();
         while (byeList.size() < numberOfByes) {
             byeList.add(new Team("bye" + byeList.size(), new ArrayList<>(), 999, ""));
