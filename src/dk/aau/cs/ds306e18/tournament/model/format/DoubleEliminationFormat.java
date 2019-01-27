@@ -10,10 +10,7 @@ import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.DoubleEliminationNode;
 import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.ModelCoupledUI;
 import javafx.scene.Node;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static dk.aau.cs.ds306e18.tournament.utility.PowMath.log2;
@@ -22,6 +19,7 @@ import static dk.aau.cs.ds306e18.tournament.utility.PowMath.pow2;
 public class DoubleEliminationFormat implements Format, MatchPlayedListener {
 
     private StageStatus status = StageStatus.PENDING;
+    private List<Team> teams;
     private int upperBracketRounds;
     private Match finalMatch;
     private Match[] upperBracket;
@@ -31,6 +29,7 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
 
     @Override
     public void start(List<Team> seededTeams, boolean doSeeding) {
+        teams = new ArrayList<>(seededTeams);
         generateBracket(seededTeams, doSeeding);
         status = StageStatus.RUNNING;
         finalMatch.registerMatchPlayedListener(this);
@@ -250,8 +249,31 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
 
     @Override
     public List<Team> getTopTeams(int count, TieBreaker tieBreaker) {
-        // TODO
-        return new ArrayList<>();
+
+        // The easiest way to find the best performing teams in double elimination is to count how many wins and loses
+        // each team has and then use the tie breaker to rank them based on that
+        HashMap<Team, Integer> pointsMap = new HashMap<>();
+        for (Match match : getAllMatches()) {
+            if (match.hasBeenPlayed()) {
+                // +1 point to the winner
+                Team winner = match.getWinner();
+                int wins = 0;
+                if (pointsMap.containsKey(winner)) {
+                    wins = pointsMap.get(winner);
+                }
+                pointsMap.put(winner, wins + 1);
+
+                // -1 point to the loser
+                Team loser = match.getLoser();
+                int loses = 0;
+                if (pointsMap.containsKey(loser)) {
+                    loses = pointsMap.get(loser);
+                }
+                pointsMap.put(loser, loses - 1);
+            }
+        }
+
+        return tieBreaker.compareWithPoints(teams, count, pointsMap);
     }
 
     @Override
