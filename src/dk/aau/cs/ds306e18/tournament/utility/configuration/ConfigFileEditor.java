@@ -23,9 +23,6 @@ abstract class ConfigFileEditor {
     final static String PARAMETER_ORANGE_TEAM = "1";
     final static String PARAMETER_BOT_TYPE = "rlbot";
 
-    ConfigFileEditor() {
-    }
-
     /**
      * Reads all lines from a given file and puts them in ArrayList config. Throws ISE if read config is invalid and
      * sets valid-flag if file is read.
@@ -192,15 +189,5 @@ abstract class ConfigFileEditor {
 
     boolean isValid() {
         return valid;
-    }
-
-    @Override
-    public final boolean equals(Object o) {
-        if (o instanceof ConfigFileEditor) {
-            ConfigFileEditor c = (ConfigFileEditor) o;
-            return (c.getConfig().equals(this.getConfig()) && c.isValid() == this.isValid());
-        } else {
-            return false;
-        }
     }
 }
