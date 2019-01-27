@@ -14,15 +14,6 @@ abstract class ConfigFileEditor {
 
     private final static String REMOVE_VALUE_PATTERN = "= .*$";
 
-    final static String PARAMETER_PARTICIPANT_CONFIG = "participant_config_";
-    final static String PARAMETER_PARTICIPANT_TEAM = "participant_team_";
-    final static String PARAMETER_PARTICIPANT_TYPE = "participant_type_";
-    final static String PARAMETER_PARTICIPANT_NUM = "num_participant";
-
-    final static String PARAMETER_BLUE_TEAM = "0";
-    final static String PARAMETER_ORANGE_TEAM = "1";
-    final static String PARAMETER_BOT_TYPE = "rlbot";
-
     /**
      * Reads all lines from a given file and puts them in ArrayList config. Throws ISE if read config is invalid and
      * sets valid-flag if file is read.
