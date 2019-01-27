@@ -1,7 +1,11 @@
 # Changelog
 
+
 #### Unreleased (dev branch)
 - Expanded, separated, and reworked functionality of ConfigFileEditor. #3 - cogitantium
+
+#### Version 1.1.2 - 23. Jan 2019
+- Hotfix: Fixed seeding being backwards in some seeding options. - NicEastvillage
 
 #### Version 1.1.1 - 23. Jan 2019
 - Added a manual seeding option, that allow the user to give multiple teams the same seed. #33 - NicEastvillage
