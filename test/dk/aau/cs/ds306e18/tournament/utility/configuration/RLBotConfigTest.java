@@ -7,11 +7,17 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
-import static dk.aau.cs.ds306e18.tournament.utility.configuration.ConfigFileEditorTest.testRLBotConfigFilename;
-import static dk.aau.cs.ds306e18.tournament.utility.configuration.ConfigFileEditorTest.testDir;
+import static dk.aau.cs.ds306e18.tournament.utility.configuration.ConfigFileEditorTest.*;
 import static junit.framework.TestCase.assertEquals;
 
 public class RLBotConfigTest {
+
+    /** Reads in test_rlbot.cfg, edits one parameter, and returns it for easy testing */
+    private static RLBotConfig setupEditedRLBotConfig() {
+        RLBotConfig rlBotConfig = new RLBotConfig(testDir + testRLBotConfigFilename);
+        rlBotConfig.editLine("num_participants", "42");
+        return rlBotConfig;
+    }
 
     /**
      * Creates a simple Match with three bots on each team
@@ -74,5 +80,19 @@ public class RLBotConfigTest {
         for (int i = match.getBlueTeam().size(); i < match.getOrangeTeam().size(); i++) {
             assertEquals("1", rlBotConfig.getValueOfLine("participant_team_" + i));
         }
+    }
+
+    /**
+     * Tests whether a newly written, and read config is identical to the written config. Redundant but tests call to
+     * CFE write-method. Does not show up as coverage though.
+     */
+    @Test
+    public void readWriteConcurrencyRLBotConfigTest() {
+        // get and write edited RLBotConfig to filesystem
+        RLBotConfig rlBotConfig = setupEditedRLBotConfig();
+        rlBotConfig.writeConfig(testDir + testRLBotConfigTargetFilename);
+
+        // assert that expected, edited config is equal to read config from filesystem
+        assertEquals(setupEditedRLBotConfig().getConfig(), new RLBotConfig(testDir + testRLBotConfigTargetFilename).getConfig());
     }
 }
