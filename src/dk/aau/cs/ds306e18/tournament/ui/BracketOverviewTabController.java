@@ -213,7 +213,7 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
 
         //Load the fxml document into the Controller and JavaFx node.
         FXMLLoader loader = new FXMLLoader(BracketOverviewTabController.class.getResource("layout/MatchVisual.fxml"));
-        VBox root = null;
+        HBox root = null;
         MatchVisualController mvc = null;
 
         try {
