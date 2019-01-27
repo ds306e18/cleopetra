@@ -6,6 +6,12 @@ import dk.aau.cs.ds306e18.tournament.model.match.Match;
 public class RLBotConfig extends ConfigFileEditor {
 
     /**
+     * No-args constructor for unit-testing
+     */
+    RLBotConfig() {
+    }
+
+    /**
      * Calls the read-function of CFE
      * @param filename the filename to be read
      */
