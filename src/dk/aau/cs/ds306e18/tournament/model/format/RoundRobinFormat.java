@@ -1,7 +1,7 @@
 package dk.aau.cs.ds306e18.tournament.model.format;
 
-import dk.aau.cs.ds306e18.tournament.model.GroupFormat;
 import dk.aau.cs.ds306e18.tournament.model.Team;
+import dk.aau.cs.ds306e18.tournament.model.TieBreaker;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchPlayedListener;
 import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.RoundRobinNode;
@@ -10,20 +10,22 @@ import dk.aau.cs.ds306e18.tournament.ui.BracketOverviewTabController;
 import javafx.scene.Node;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
-public class RoundRobinFormat extends GroupFormat implements MatchPlayedListener {
+public class RoundRobinFormat implements Format, MatchPlayedListener {
 
     private static final Team DUMMY_TEAM = new Team("Dummy", new ArrayList<>(), 0, "Dummy team description");
 
+    private StageStatus status = StageStatus.PENDING;
+    private ArrayList<Team> teams;
     private ArrayList<Match> matches;
     private ArrayList<RoundRobinGroup> groups;
-    //should be set before start() is called, to determine number of groups that should be created
     private int numberOfGroups = 1;
 
     transient private List<StageStatusChangeListener> statusChangeListeners = new LinkedList<>();
 
-    /** Constructor that automatically creates an arraylist of matches made on the principles of berger tables.
-     * @param seededTeams arraylist of all the teams in the bracket.
+    /** Start the round robin format.
+     * @param seededTeams arraylist of all the teams in the round robin.
      * @param doSeeding whether or not to group teams based on their seed. */
     public void start(List<Team> seededTeams, boolean doSeeding) {
         teams = new ArrayList<>(seededTeams);
@@ -32,11 +34,12 @@ public class RoundRobinFormat extends GroupFormat implements MatchPlayedListener
         if (seededTeams.size() <= 1) {
             matches = new ArrayList<>();
             status = StageStatus.CONCLUDED;
+
         } else {
-            // If the number of groups is not okay set the number of groups to the maximum allowed (2 teams per group)
-            if (!numberOfGroupsAllowed()) {
-                setNumberOfGroups(maxNumberOfGroups());
-            }
+
+            // Clamp the number of groups to something that is okay (at least 2 teams per group)
+            if (numberOfGroups < 1) numberOfGroups = 1;
+            else if (numberOfGroups > teams.size() / 2) numberOfGroups = teams.size() / 2;
 
             status = StageStatus.RUNNING;
             createGroupsAndMatches(teams, doSeeding);
@@ -44,15 +47,14 @@ public class RoundRobinFormat extends GroupFormat implements MatchPlayedListener
         }
     }
 
-    private int maxNumberOfGroups() {
-        return teams.size() / 2;
+    @Override
+    public StageStatus getStatus() {
+        return status;
     }
 
-    //there must be at least 2 teams per group
-    private boolean numberOfGroupsAllowed() {
-        if ((teams.size() / numberOfGroups) >= 2) {
-            return true;
-        } else return false;
+    @Override
+    public List<Team> getTopTeams(int count, TieBreaker tieBreaker) {
+        return tieBreaker.compareWithPoints(teams, count, getTeamPointsMap());
     }
 
     /** This function populates the groups list and generates the matches for each group. */
@@ -64,6 +66,7 @@ public class RoundRobinFormat extends GroupFormat implements MatchPlayedListener
 
         if (doSeeding) {
 
+            // With seeding
             // Pick teams evenly
             for (int i = 0; i < numberOfGroups; i++) {
 
@@ -85,6 +88,7 @@ public class RoundRobinFormat extends GroupFormat implements MatchPlayedListener
 
         } else {
 
+            // Without seeding
             // Pick clusters of teams
             int t = 0;
             for (int i = 0; i < numberOfGroups; i++) {
@@ -177,8 +181,8 @@ public class RoundRobinFormat extends GroupFormat implements MatchPlayedListener
      */
     private HashMap<Team, Integer> createIdHashMap(ArrayList<Team> teams) {
         HashMap<Team, Integer> map = new HashMap<>();
-        for (int m = 1; m <= teams.size(); m++) {
-            map.put(teams.get(m - 1), m);
+        for (int m = 0; m < teams.size(); m++) {
+            map.put(teams.get(m), m + 1);
         }
         return map;
     }
@@ -220,6 +224,21 @@ public class RoundRobinFormat extends GroupFormat implements MatchPlayedListener
     @Override
     public List<Match> getAllMatches() {
         return matches;
+    }
+
+    @Override
+    public List<Match> getUpcomingMatches() {
+        return getAllMatches().stream().filter(match -> !match.hasBeenPlayed()).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Match> getPendingMatches() {
+        return new ArrayList<>(); // Round robin never has pending matches
+    }
+
+    @Override
+    public List<Match> getCompletedMatches() {
+        return getAllMatches().stream().filter(Match::hasBeenPlayed).collect(Collectors.toList());
     }
 
     @Override
@@ -279,15 +298,11 @@ public class RoundRobinFormat extends GroupFormat implements MatchPlayedListener
     }
 
     /**
-     * @param numberOfGroups sets the number of groups in the format. Sanity check for atleast 1 group
+     * @param numberOfGroups sets the number of groups in the format. Sanity check for at least 1 group
      */
     public void setNumberOfGroups(int numberOfGroups) {
         if (status != StageStatus.PENDING) throw new IllegalStateException("The matches are already generated.");
-        if (numberOfGroups >= 1) {
-            this.numberOfGroups = numberOfGroups;
-        } else {
-            this.numberOfGroups = 1;
-        }
+        this.numberOfGroups = Math.max(numberOfGroups, 1);
     }
 
     public int getNumberOfGroups() {
