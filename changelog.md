@@ -1,6 +1,5 @@
 # Changelog
 
-
 #### Unreleased (dev branch)
 - Expanded, separated, and reworked functionality of ConfigFileEditor. #3 - cogitantium
 
