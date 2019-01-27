@@ -23,95 +23,94 @@ public class ConfigFileEditorTest {
         testConfig.add("participant_team_1 = 1");
     }
 
-    @Test
-    public void readWriteConcurrencyTest() {
+    private ConfigFileEditor setupRLBotCFE() {
+        ConfigFileEditor configFileEditor = new RLBotConfig();
         setTestConfig();
-        ConfigFileEditor.setConfig(testConfig);
-        ConfigFileEditor.write(testDir + testRLBotConfigTargetFilename);
-
-        ConfigFileEditor.read(testDir + testRLBotConfigTargetFilename);
-        assertEquals(testConfig, ConfigFileEditor.getConfig());
+        configFileEditor.setConfig(testConfig);
+        return configFileEditor;
     }
 
     @Test
-    public void editLineTest() {
-        setTestConfig();
-        ConfigFileEditor.setConfig(testConfig);
+    public void readWriteConcurrencyTest() {
+        ConfigFileEditor configFileEditor = setupRLBotCFE();
+        configFileEditor.write(testDir + testRLBotConfigTargetFilename);
 
-        ConfigFileEditor.editLine("participant_team_", 0, "42");
-        assertEquals("participant_team_0 = 42", ConfigFileEditor.getConfig().get(1));
+        configFileEditor.read(testDir + testRLBotConfigTargetFilename);
+        assertEquals(testConfig, configFileEditor.getConfig());
+    }
+
+
+    @Test
+    public void editLineTest() {
+        ConfigFileEditor configFileEditor = setupRLBotCFE();
+
+        configFileEditor.editLine("participant_team_", 0, "42");
+        assertEquals("participant_team_0 = 42", configFileEditor.getConfig().get(1));
     }
 
     @Test
     public void getLineTest1() {
-        setTestConfig();
-        ConfigFileEditor.setConfig(testConfig);
-        assertNull(ConfigFileEditor.getValueOfLine("NAN"));
+        ConfigFileEditor configFileEditor = setupRLBotCFE();
+        assertNull(configFileEditor.getValueOfLine("NAN"));
     }
 
     @Test
     public void getLineTest2() {
-        setTestConfig();
-        ConfigFileEditor.setConfig(testConfig);
-        assertEquals("participant_team_0 = 0", ConfigFileEditor.getLine("participant_team_0"));
+        ConfigFileEditor configFileEditor = setupRLBotCFE();
+        assertEquals("participant_team_0 = 0", configFileEditor.getLine("participant_team_0"));
     }
 
     @Test
     public void getLineTest3() {
-        setTestConfig();
-        ConfigFileEditor.setConfig(testConfig);
-        assertEquals("participant_team_1 = 1", ConfigFileEditor.getLine("participant_team_1"));
+        ConfigFileEditor configFileEditor = setupRLBotCFE();
+        assertEquals("participant_team_1 = 1", configFileEditor.getLine("participant_team_1"));
     }
 
     @Test
     public void getLineTest4() {
-        setTestConfig();
-        ConfigFileEditor.setConfig(testConfig);
-        assertEquals("[Participant Configuration]", ConfigFileEditor.getLine(0));
+        ConfigFileEditor configFileEditor = setupRLBotCFE();
+        assertEquals("[Participant Configuration]", configFileEditor.getLine(0));
     }
 
     @Test
     public void getValueTest1() {
-        setTestConfig();
-        ConfigFileEditor.setConfig(testConfig);
-        assertEquals("1", ConfigFileEditor.getValueOfLine("participant_team_1"));
+        ConfigFileEditor configFileEditor = setupRLBotCFE();
+        assertEquals("1", configFileEditor.getValueOfLine("participant_team_1"));
     }
 
     @Test
     public void getValueTest2() {
-        setTestConfig();
-        ConfigFileEditor.setConfig(testConfig);
-        assertEquals("0", ConfigFileEditor.getValueOfLine("participant_team_0"));
+        ConfigFileEditor configFileEditor = setupRLBotCFE();
+        assertEquals("0", configFileEditor.getValueOfLine("participant_team_0"));
     }
 
     @Test
     public void getValueTest3() {
-        setTestConfig();
-        ConfigFileEditor.setConfig(testConfig);
-        assertEquals("[Participant Configuration]", ConfigFileEditor.getValueOfLine("[Particip"));
+        ConfigFileEditor configFileEditor = setupRLBotCFE();
+        assertEquals("[Participant Configuration]", configFileEditor.getValueOfLine("[Particip"));
     }
 
     @Test
     public void getValueOfLineTest1() {
-        setTestConfig();
-        ConfigFileEditor.setConfig(testConfig);
-        assertNull(ConfigFileEditor.getValueOfLine("notavailable"));
+        ConfigFileEditor configFileEditor = setupRLBotCFE();
+        assertNull(configFileEditor.getValueOfLine("notavailable"));
     }
 
     @Test
     public void validateConfigSyntax1() {
-        ConfigFileEditor.read(testDir + testRLBotConfigFilename);
-        assertTrue(ConfigFileEditor.isValid());
+        ConfigFileEditor configFileEditor = new RLBotConfig(testDir + testRLBotConfigFilename);
+        assertTrue(configFileEditor.isValid());
     }
 
     @Test
     public void validateConfigSyntax2() {
-        ConfigFileEditor.read(testDir + testRLBotConfigFilename);
-        ArrayList<String> config = ConfigFileEditor.getConfig();
+        ConfigFileEditor configFileEditor = new RLBotConfig(testDir + testRLBotConfigFilename);
+        ArrayList<String> config = configFileEditor.getConfig();
         // remove trailing, closing square bracket from first header
         config.set(0, config.get(0).split("]")[0]);
-        ConfigFileEditor.setConfig(config);
-        ConfigFileEditor.validateConfigSyntax();
-        assertFalse(ConfigFileEditor.isValid());
+        configFileEditor.setConfig(config);
+        configFileEditor.validateConfigSyntax();
+        assertFalse(configFileEditor.isValid());
     }
+
 }
