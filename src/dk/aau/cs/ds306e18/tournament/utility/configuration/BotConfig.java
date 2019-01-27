@@ -6,7 +6,6 @@ public class BotConfig extends ConfigFileEditor {
     private final static String PARAMETER_PYTHON = "python_file";
     private final static String PARAMETER_NAME = "name";
 
-
     private final static String PARAMETER_DEVELOPER = "developer";
     private final static String PARAMETER_DESCRIPTION = "description";
     private final static String PARAMETER_FUNFACT = "fun_fact";
@@ -30,21 +29,34 @@ public class BotConfig extends ConfigFileEditor {
     }
 
     public String getAppearanceConfigPath() {
-        return getLine(PARAMETER_APPEARANCE);
+        return getValueOfLine(PARAMETER_APPEARANCE);
     }
 
     public String getPythonFile() {
-        return getLine(PARAMETER_PYTHON);
+        return getValueOfLine(PARAMETER_PYTHON);
     }
 
     public String getName() {
-        return getLine(PARAMETER_NAME);
+        return getValueOfLine(PARAMETER_NAME);
     }
 
     public String getDeveloper() {
-        return getLine(PARAMETER_DEVELOPER);
+        return getValueOfLine(PARAMETER_DEVELOPER);
     }
 
-    public String
+    public String getDescription() {
+        return getValueOfLine(PARAMETER_DESCRIPTION);
+    }
 
+    public String getFunFact() {
+        return getValueOfLine(PARAMETER_FUNFACT);
+    }
+
+    public String getGithub() {
+        return getValueOfLine(PARAMETER_GITHUB);
+    }
+
+    public String getLanguage() {
+        return getValueOfLine(PARAMETER_LANGUAGE);
+    }
 }
