@@ -23,17 +23,20 @@ abstract class ConfigFileEditor {
     final static String PARAMETER_ORANGE_TEAM = "1";
     final static String PARAMETER_BOT_TYPE = "rlbot";
 
+    ConfigFileEditor() {
+    }
+
     /**
      * Reads all lines from a given file and puts them in ArrayList config. Throws ISE if read config is invalid and
      * sets valid-flag if file is read.
      * @param filename the filename to read
      */
-    static void read(String filename) {
+    void read(String filename) {
         Path in = Paths.get(filename);
         try {
             config = (ArrayList<String>) Files.readAllLines(in);
             validateConfigSyntax();
-            if (!isValid()) {
+            if (!this.isValid()) {
                 throw new IllegalStateException("Warning: RLBot config-file read: " + filename + "'s syntax is not valid!");
             }
         } catch (IOException e) {
@@ -46,8 +49,8 @@ abstract class ConfigFileEditor {
      * possible through ordinary usage of methods on config.
      * @param filename the filename to be written to
      */
-    static void write(String filename) {
-        if (!isValid())
+    void write(String filename) {
+        if (!this.isValid())
             throw new IllegalStateException("Warning: RLBot config-file to write: " + filename + "'s syntax is not valid!");
         Path out = Paths.get(filename);
         try {
@@ -62,7 +65,7 @@ abstract class ConfigFileEditor {
      * @param parameter the given parameter to edit
      * @param value     the value to edit given parameter with
      */
-    static void editLine(String parameter, String value) {
+    void editLine(String parameter, String value) {
         for (int i = 0; i < config.size(); i++) {
             String line = config.get(i);
             if (line.startsWith(parameter)) {
@@ -78,7 +81,7 @@ abstract class ConfigFileEditor {
      * @param num       the number of a numbered parameter
      * @param value     the value to edit given parameter with
      */
-    static void editLine(String parameter, int num, String value) {
+    void editLine(String parameter, int num, String value) {
         for (int i = 0; i < config.size(); i++) {
             String line = config.get(i);
             if (line.startsWith(parameter + num)) {
@@ -93,7 +96,7 @@ abstract class ConfigFileEditor {
      * @param i index of line
      * @return line on index i
      */
-    static String getLine(int i) {
+    String getLine(int i) {
         return config.get(i);
     }
 
@@ -102,7 +105,7 @@ abstract class ConfigFileEditor {
      * @param parameter is beginning of line
      * @return first line which starts with parameter
      */
-    static String getLine(String parameter) {
+    String getLine(String parameter) {
         for (String line : config) {
             if (line.startsWith(parameter)) {
                 return line;
@@ -117,7 +120,7 @@ abstract class ConfigFileEditor {
      * @param line is the line to extract value from
      * @return value found, trimmed for whitespace
      */
-    private static String getValue(String line) {
+    private String getValue(String line) {
         String[] value = line.split("=");
         return value[value.length - 1].trim();
     }
@@ -127,7 +130,7 @@ abstract class ConfigFileEditor {
      * @param parameter the given parameter
      * @return the value at first line with parameter
      */
-    static String getValueOfLine(String parameter) {
+    String getValueOfLine(String parameter) {
         for (String line : config) {
             if (line.startsWith(parameter)) {
                 return getValue(line);
@@ -142,7 +145,7 @@ abstract class ConfigFileEditor {
      * @param line the given line to remove value from
      * @return the given line with value removed
      */
-    private static String removeValue(String line) {
+    private String removeValue(String line) {
         return line.replaceAll(REMOVE_VALUE_PATTERN, "= ");
     }
 
@@ -152,7 +155,7 @@ abstract class ConfigFileEditor {
      * cases; square bracketed headers, hashtag-comments, and parameters with equals-symbols
      * @return the boolean of valid syntax in config
      */
-    static void validateConfigSyntax() {
+    void validateConfigSyntax() {
         for (String line : config) {
             // if line is not whitespace, check syntax
             if (!(line.isEmpty())) {
@@ -178,16 +181,26 @@ abstract class ConfigFileEditor {
         valid = true;
     }
 
-    static ArrayList<String> getConfig() {
+    ArrayList<String> getConfig() {
         return config;
     }
 
-    static void setConfig(ArrayList<String> config) {
+    void setConfig(ArrayList<String> config) {
         ConfigFileEditor.config = config;
         validateConfigSyntax();
     }
 
-    static boolean isValid() {
+    boolean isValid() {
         return valid;
+    }
+
+    @Override
+    public final boolean equals(Object o) {
+        if (o instanceof ConfigFileEditor) {
+            ConfigFileEditor c = (ConfigFileEditor) o;
+            return (c.getConfig().equals(this.getConfig()) && c.isValid() == this.isValid());
+        } else {
+            return false;
+        }
     }
 }
