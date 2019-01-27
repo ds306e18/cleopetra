@@ -1,5 +1,8 @@
 # Changelog
 
+#### Unreleased (dev branch)
+- Expanded, separated, and reworked functionality of ConfigFileEditor. #3 - cogitantium
+
 #### Version 1.1.1 - 23. Jan 2019
 - Added a manual seeding option, that allow the user to give multiple teams the same seed. #33 - NicEastvillage
 - Tie breakers are now enums, which fixes serialization of tie breakers. #32 - NicEastvillage
