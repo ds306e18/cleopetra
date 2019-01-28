@@ -248,7 +248,7 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
             }
         }
         finalMatch.setIdentifier(nextIdentifier++);
-        finalMatch.setIdentifier(nextIdentifier);
+        extraMatch.setIdentifier(nextIdentifier);
     }
 
     @Override
