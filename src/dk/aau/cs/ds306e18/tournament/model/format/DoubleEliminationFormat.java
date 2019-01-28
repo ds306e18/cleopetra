@@ -188,7 +188,11 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
 
                 // Resolve match and remove references to this match
                 upperBracket[ubIndex] = null;
-                m.getWinnerDestination().setBlue(m.getBlueTeam());
+                if (m.doesWinnerGoToBlue()) {
+                    m.getWinnerDestination(). setBlue(m.getBlueTeam());
+                } else {
+                    m.getWinnerDestination().setOrange(m.getBlueTeam());
+                }
                 if (m.doesLoserGoToBlue()) {
                     m.getLoserDestination().setBlue(m.getOrangeTeam());
                 } else {
