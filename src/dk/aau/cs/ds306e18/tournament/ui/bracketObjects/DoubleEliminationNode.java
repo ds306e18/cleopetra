@@ -1,8 +1,8 @@
 package dk.aau.cs.ds306e18.tournament.ui.bracketObjects;
 
-import dk.aau.cs.ds306e18.tournament.model.format.DoubleEliminationFormat;
-import dk.aau.cs.ds306e18.tournament.model.format.SingleEliminationFormat;
+import dk.aau.cs.ds306e18.tournament.model.format.*;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import dk.aau.cs.ds306e18.tournament.model.match.MatchChangeListener;
 import dk.aau.cs.ds306e18.tournament.ui.BracketOverviewTabController;
 import dk.aau.cs.ds306e18.tournament.ui.MatchVisualController;
 import javafx.geometry.Insets;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 import static dk.aau.cs.ds306e18.tournament.utility.PowMath.pow2;
 
-public class DoubleEliminationNode extends VBox implements ModelCoupledUI {
+public class DoubleEliminationNode extends VBox implements ModelCoupledUI, StageStatusChangeListener {
 
     private final Insets MARGINS = new Insets(0, 0, 16, 0);
     private final int SPACE_BETWEEN_BRACKETS = 48;
@@ -25,6 +25,7 @@ public class DoubleEliminationNode extends VBox implements ModelCoupledUI {
     private final BracketOverviewTabController boc;
     private final GridPane upperGrid = new GridPane();
     private final GridPane lowerGrid = new GridPane();
+    private VBox extraMatchVBox;
 
     private ArrayList<MatchVisualController> mvcs = new ArrayList<>();
 
@@ -32,6 +33,8 @@ public class DoubleEliminationNode extends VBox implements ModelCoupledUI {
     public DoubleEliminationNode(DoubleEliminationFormat doubleElimination, BracketOverviewTabController boc){
         this.doubleElimination = doubleElimination;
         this.boc = boc;
+
+        doubleElimination.registerStatusChangedListener(this);
 
         getChildren().add(upperGrid);
         getChildren().add(lowerGrid);
@@ -65,6 +68,11 @@ public class DoubleEliminationNode extends VBox implements ModelCoupledUI {
         VBox finalsBox = createMatchBox(doubleElimination.getFinalMatch(), pow2(rounds - 1));
         upperGrid.add(finalsBox, rounds, 0);
 
+        // Extra match is only shown when needed
+        extraMatchVBox = createMatchBox(doubleElimination.getExtraMatch(), pow2(rounds - 1));
+        upperGrid.add(extraMatchVBox, rounds + 1, 0);
+        updateDisplayOfExtraMatch();
+
         // Lower bracket
         Match[] lowerBracket = doubleElimination.getLowerBracket();
         int matchesInCurrentRound = pow2(rounds - 2);
@@ -96,6 +104,7 @@ public class DoubleEliminationNode extends VBox implements ModelCoupledUI {
 
         VBox box = new VBox();
 
+        // Some matches are null because of byes. In those cases the VBox will just be empty
         if (match != null) {
             MatchVisualController mvc = boc.loadVisualMatch(match);
             mvcs.add(mvc);
@@ -116,6 +125,7 @@ public class DoubleEliminationNode extends VBox implements ModelCoupledUI {
     @Override
     public void decoupleFromModel() {
         removeElements();
+        doubleElimination.unregisterStatusChangedListener(this);
     }
 
     /** Completely remove all ui elements. */
@@ -126,5 +136,14 @@ public class DoubleEliminationNode extends VBox implements ModelCoupledUI {
             mvc.decoupleFromModel();
         }
         mvcs.clear();
+    }
+
+    private void updateDisplayOfExtraMatch() {
+        extraMatchVBox.setVisible(doubleElimination.isExtraMatchNeeded());
+    }
+
+    @Override
+    public void onStageStatusChanged(Format format, StageStatus oldStatus, StageStatus newStatus) {
+        updateDisplayOfExtraMatch();
     }
 }

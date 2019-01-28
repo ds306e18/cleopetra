@@ -22,8 +22,10 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
     private List<Team> teams;
     private int upperBracketRounds;
     private Match finalMatch;
+    private Match extraMatch;
     private Match[] upperBracket;
     private Match[] lowerBracket;
+    private boolean isExtraMatchNeeded;
 
     transient private List<StageStatusChangeListener> statusChangeListeners = new LinkedList<>();
 
@@ -33,6 +35,7 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
         generateBracket(seededTeams, doSeeding);
         status = StageStatus.RUNNING;
         finalMatch.registerMatchPlayedListener(this);
+        extraMatch.registerMatchPlayedListener(this);
     }
 
     /** Generates the complete double elimination bracket given a list of teams ordered by seed. If doSeeding is false
@@ -76,7 +79,7 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
     }
 
     /** Generates all the matches in the lower bracket and connects them to the upper bracket matches. Also creates
-     * the final match. */
+     * the final match and the extra match. */
     private void generateLowerBracket() {
         int matchesInCurrentRound = pow2(upperBracketRounds - 2);
         int ubLoserIndex = upperBracket.length - 1;
@@ -141,6 +144,12 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
         finalMatch = new Match()
                 .setBlueToWinnerOf(upperBracket[0])
                 .setOrangeToWinnerOf(lowerBracketMatches.get(lowerBracketMatches.size() - 1));
+
+        // The extra is takes the winner and loser of the final match, but it should not be played if the loser of
+        // the final match has already lost twice
+        extraMatch = new Match()
+                .setBlueToLoserOf(finalMatch)
+                .setOrangeToWinnerOf(finalMatch);
     }
 
     /** Inserts the teams in the correct starting positions. If doSeeding is false
@@ -239,7 +248,7 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
             }
         }
         finalMatch.setIdentifier(nextIdentifier++);
-        // TODO give the extra match an identifier
+        finalMatch.setIdentifier(nextIdentifier);
     }
 
     @Override
@@ -276,6 +285,47 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
         return tieBreaker.compareWithPoints(teams, count, pointsMap);
     }
 
+    /** Recalculates the isExtraMatchNeeded boolean. The extra match is needed if the loser of the final match has only
+     * lost once. It will always be set to false if the final match has not been played. */
+    public void determineIfExtraMatchNeeded() {
+        if (!finalMatch.hasBeenPlayed()) {
+            isExtraMatchNeeded = false;
+            return;
+        }
+
+        HashMap<Team, Integer> loses = getLosesMap();
+        Team finalMatchLoser = finalMatch.getLoser();
+        if (loses.containsKey(finalMatchLoser)) {
+            // The team has either lost once or twice
+            // If it is only once, we need an extra match
+            isExtraMatchNeeded = loses.get(finalMatchLoser) == 1;
+        } else {
+            isExtraMatchNeeded = false;
+        }
+    }
+
+    public boolean isExtraMatchNeeded() {
+        return isExtraMatchNeeded;
+    }
+
+    /** Returns a hash that maps teams to an integers describing how many times they have lost in this stage. */
+    public HashMap<Team, Integer> getLosesMap() {
+        HashMap<Team, Integer> losesMap = new HashMap<>();
+
+        for (Match match : getAllMatches()) {
+            if (match.hasBeenPlayed()) {
+                Team loser = match.getLoser();
+                int loses = 0;
+                if (losesMap.containsKey(loser)) {
+                    loses = losesMap.get(loser);
+                }
+                losesMap.put(loser, loses + 1);
+            }
+        }
+
+        return losesMap;
+    }
+
     @Override
     public List<Match> getAllMatches() {
         return finalMatch.getTreeAsListBFS();
@@ -298,6 +348,10 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
 
     public Match getFinalMatch() {
         return finalMatch;
+    }
+
+    public Match getExtraMatch() {
+        return extraMatch;
     }
 
     public int getUpperBracketRounds() {
@@ -347,16 +401,27 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
 
     @Override
     public void onMatchPlayed(Match match) {
-        // Was it last match?
+
         StageStatus oldStatus = status;
-        if (finalMatch.hasBeenPlayed()) {
+        boolean oldExtraMatchNeeded = isExtraMatchNeeded;
+        if (match == finalMatch) {
+            // This event was a change to the final. Determine if we need an extra match and set status accordingly
+            determineIfExtraMatchNeeded();
+            if (!finalMatch.hasBeenPlayed() || isExtraMatchNeeded) {
+                status = StageStatus.RUNNING;
+            } else {
+                status = StageStatus.CONCLUDED;
+            }
+        } else if (match == extraMatch && extraMatch.hasBeenPlayed() && isExtraMatchNeeded) {
+            // The extra match has been played
             status = StageStatus.CONCLUDED;
         } else {
+            // The final or extra match has not been played
             status = StageStatus.RUNNING;
         }
 
         // Notify listeners if status changed
-        if (oldStatus != status) {
+        if (oldStatus != status || oldExtraMatchNeeded != isExtraMatchNeeded) {
             notifyStatusListeners(oldStatus, status);
         }
     }
