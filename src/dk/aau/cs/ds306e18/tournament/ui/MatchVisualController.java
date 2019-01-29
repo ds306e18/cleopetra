@@ -33,14 +33,15 @@ public class MatchVisualController implements MatchChangeListener {
     /** Gets called when a match is clicked. */
     @FXML
     void matchClicked(MouseEvent event) {
-        if (event.getButton().equals(MouseButton.PRIMARY)){
-            if (event.getClickCount() == 2){
-                boc.openEditMatchPopup();
-            }
-        }
-
         matchRoot.getStyleClass().add("selectedMatch");
         boc.setSelectedMatch(this);
+
+        if (showedMatch.isReadyToPlay()
+                && event.getButton().equals(MouseButton.PRIMARY)
+                && event.getClickCount() == 2) {
+
+            boc.openEditMatchPopup();
+        }
     }
 
     /** Used to set the BracketOverviewController. Is used to ref that this is clicked/Selected. */
