@@ -2,7 +2,6 @@ package dk.aau.cs.ds306e18.tournament.ui.bracketObjects;
 
 import dk.aau.cs.ds306e18.tournament.model.format.*;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
-import dk.aau.cs.ds306e18.tournament.model.match.MatchChangeListener;
 import dk.aau.cs.ds306e18.tournament.ui.BracketOverviewTabController;
 import dk.aau.cs.ds306e18.tournament.ui.MatchVisualController;
 import javafx.geometry.Insets;
@@ -143,7 +142,7 @@ public class DoubleEliminationNode extends VBox implements ModelCoupledUI, Stage
     }
 
     private void updateDisplayOfExtraMatch() {
-        extraMatchMVC.setDoubleEliminationExtra(!doubleElimination.isExtraMatchNeeded());
+        extraMatchMVC.setDisabled(!doubleElimination.isExtraMatchNeeded());
     }
 
     @Override

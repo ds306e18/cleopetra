@@ -27,7 +27,7 @@ public class MatchVisualController implements MatchChangeListener {
     private BracketOverviewTabController boc;
     private Match showedMatch;
     private boolean showIdentifier = false;
-    private boolean isDoubleEliminationExtra = false;
+    private boolean disabled = false;
 
     @FXML
     private void initialize() { }
@@ -35,14 +35,16 @@ public class MatchVisualController implements MatchChangeListener {
     /** Gets called when a match is clicked. */
     @FXML
     void matchClicked(MouseEvent event) {
-        if (event.getButton().equals(MouseButton.PRIMARY)){
-            if (event.getClickCount() == 2){
-                boc.openEditMatchPopup();
+        if (!disabled) {
+            if (event.getButton().equals(MouseButton.PRIMARY)) {
+                if (event.getClickCount() == 2) {
+                    boc.openEditMatchPopup();
+                }
             }
-        }
 
-        matchRoot.getStyleClass().add("selectedMatch");
-        boc.setSelectedMatch(this);
+            matchRoot.getStyleClass().add("selectedMatch");
+            boc.setSelectedMatch(this);
+        }
     }
 
     /** Used to set the BracketOverviewController. Is used to ref that this is clicked/Selected. */
@@ -103,10 +105,10 @@ public class MatchVisualController implements MatchChangeListener {
         Team orangeTeam = showedMatch.getOrangeTeam();
 
         // Set tags and id based on the given match and its status
-        if (isDoubleEliminationExtra) {
+        if (disabled) {
 
             // css id
-            matchRoot.setId("de-extra");
+            matchRoot.setId("disabled");
 
         } else if (status == MatchStatus.NOT_PLAYABLE) {
             // css id
@@ -152,14 +154,19 @@ public class MatchVisualController implements MatchChangeListener {
         updateFields();
     }
 
-    public boolean isDoubleEliminationExtra() {
-        return isDoubleEliminationExtra;
+    public boolean isDisabled() {
+        return disabled;
     }
 
-    /** As an extra it will be disabled unless needed. */
-    public void setDoubleEliminationExtra(boolean doubleEliminationExtra) {
-        isDoubleEliminationExtra = doubleEliminationExtra;
+    /** When disabled the match is visible but blank and cannot be interacted with. */
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
         updateFields();
+        if (disabled) {
+            matchRoot.getStyleClass().remove("selectable");
+        } else {
+            matchRoot.getStyleClass().add("selectable");
+        }
     }
 
     /** Decouples the controller from the model, allowing the controller to be thrown to the garbage collector. */

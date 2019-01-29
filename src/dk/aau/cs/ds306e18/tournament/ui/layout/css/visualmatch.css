@@ -70,11 +70,11 @@
     -fx-fill: #494949;
 }
 
-#de-extra .color {
+#disabled .color {
     -fx-fill: #c1c1c1;
 }
 
-#de-extra .teamBg {
+#disabled .teamBg {
     -fx-fill: white;
     -fx-stroke-type: inside;
     -fx-stroke-width: 1;

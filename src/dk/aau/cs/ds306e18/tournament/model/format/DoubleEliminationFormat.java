@@ -189,7 +189,7 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
                 // Resolve match and remove references to this match
                 upperBracket[ubIndex] = null;
                 if (m.doesWinnerGoToBlue()) {
-                    m.getWinnerDestination(). setBlue(m.getBlueTeam());
+                    m.getWinnerDestination().setBlue(m.getBlueTeam());
                 } else {
                     m.getWinnerDestination().setOrange(m.getBlueTeam());
                 }
@@ -266,7 +266,8 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
         // The easiest way to find the best performing teams in double elimination is to count how many wins and loses
         // each team has and then use the tie breaker to rank them based on that
         HashMap<Team, Integer> pointsMap = new HashMap<>();
-        for (Match match : getAllMatches()) {
+        List<Match> allMatches = getAllMatches();
+        for (Match match : allMatches) {
             if (match.hasBeenPlayed()) {
                 // +1 point to the winner
                 Team winner = match.getWinner();
@@ -332,7 +333,11 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
 
     @Override
     public List<Match> getAllMatches() {
-        return finalMatch.getTreeAsListBFS();
+        if (isExtraMatchNeeded) {
+            return extraMatch.getTreeAsListBFS();
+        } else {
+            return finalMatch.getTreeAsListBFS();
+        }
     }
 
     @Override
