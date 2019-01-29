@@ -74,28 +74,30 @@ public class DoubleEliminationNode extends VBox implements ModelCoupledUI, Stage
 
         // Lower bracket
         Match[] lowerBracket = doubleElimination.getLowerBracket();
-        int matchesInCurrentRound = pow2(rounds - 2);
-        int column = 0;
-        int rowSpan = 1;
-        m = 0; // match index
-        while (true) {
+        if (lowerBracket.length > 0) {
+            int matchesInCurrentRound = pow2(rounds - 2);
+            int column = 0;
+            int rowSpan = 1;
+            m = 0; // match index
+            while (true) {
 
-            for (int i = 0; i < matchesInCurrentRound; i++) {
-                Match match = lowerBracket[m++];
-                VBox box = createMatchBox(match, rowSpan, false);
-                lowerGrid.add(box, column, i * rowSpan);
-            }
-
-            // Half the number of matches in a round every other round
-            if (column % 2 == 1) {
-                if (matchesInCurrentRound == 1) {
-                    break; // We can't do more halving
+                for (int i = 0; i < matchesInCurrentRound; i++) {
+                    Match match = lowerBracket[m++];
+                    VBox box = createMatchBox(match, rowSpan, false);
+                    lowerGrid.add(box, column, i * rowSpan);
                 }
-                matchesInCurrentRound /= 2;
-                rowSpan *= 2;
-            }
 
-            column ++;
+                // Half the number of matches in a round every other round
+                if (column % 2 == 1) {
+                    if (matchesInCurrentRound == 1) {
+                        break; // We can't do more halving
+                    }
+                    matchesInCurrentRound /= 2;
+                    rowSpan *= 2;
+                }
+
+                column++;
+            }
         }
     }
 

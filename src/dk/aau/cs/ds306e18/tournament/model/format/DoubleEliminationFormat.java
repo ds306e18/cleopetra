@@ -44,6 +44,7 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
         upperBracketRounds = log2(seededTeams.size());
         generateUpperBracket();
         generateLowerBracket();
+        generateGrandFinals();
 
         // Create byes
         int teamCount = pow2(upperBracketRounds);
@@ -81,6 +82,13 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
     /** Generates all the matches in the lower bracket and connects them to the upper bracket matches. Also creates
      * the final match and the extra match. */
     private void generateLowerBracket() {
+
+        // When theres only one match in upper bracket, because there are only two teams, then we cannot make a lower bracket
+        if (upperBracket.length == 1)  {
+            lowerBracket = new Match[0];
+            return;
+        }
+
         int matchesInCurrentRound = pow2(upperBracketRounds - 2);
         int ubLoserIndex = upperBracket.length - 1;
         List<Match> lowerBracketMatches = new ArrayList<>();
@@ -139,11 +147,24 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
 
         // Creates an array of lower bracket matches
         lowerBracket = lowerBracketMatches.toArray(new Match[0]);
+    }
 
-        // The final is the winner of upper bracket versus winner of lower bracket
-        finalMatch = new Match()
-                .setBlueToWinnerOf(upperBracket[0])
-                .setOrangeToWinnerOf(lowerBracketMatches.get(lowerBracketMatches.size() - 1));
+    private void generateGrandFinals() {
+
+        // If there are two teams, then there is no lower bracket
+        if (lowerBracket.length == 0) {
+            // The final is just a rematch
+            finalMatch = new Match()
+                    .setBlueToLoserOf(upperBracket[0])
+                    .setOrangeToWinnerOf(upperBracket[0]);
+
+        } else {
+            // The final is the winner of upper bracket versus winner of lower bracket
+            finalMatch = new Match()
+                    .setBlueToWinnerOf(upperBracket[0])
+                    .setOrangeToWinnerOf(lowerBracket[lowerBracket.length-1]);
+        }
+
 
         // The extra is takes the winner and loser of the final match, but it should not be played if the loser of
         // the final match has already lost twice
@@ -201,36 +222,38 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
             }
         }
 
-        // Remove byes from lower bracket
-        int lbFirstRoundMatchCount = pow2(upperBracketRounds - 2);
-        for (int i = 0; i < lbFirstRoundMatchCount; i++) {
-            Match m = lowerBracket[i];
-            // Team orange can only be a bye if blue also is a bye, so we test orange first
-            if (byes.contains(m.getOrangeTeam())) {
-                // Both teams are byes
-                // Remove matches from bracket
-                lowerBracket[i] = null;
-                for (int j = 0; j < lbFirstRoundMatchCount * 2; j++) {
-                    if (lowerBracket[j] == m.getWinnerDestination()) {
-                        lowerBracket[j] = null;
-                        break;
+        if (lowerBracket.length > 0) {
+            // Remove byes from lower bracket
+            int lbFirstRoundMatchCount = pow2(upperBracketRounds - 2);
+            for (int i = 0; i < lbFirstRoundMatchCount; i++) {
+                Match m = lowerBracket[i];
+                // Team orange can only be a bye if blue also is a bye, so we test orange first
+                if (byes.contains(m.getOrangeTeam())) {
+                    // Both teams are byes
+                    // Remove matches from bracket
+                    lowerBracket[i] = null;
+                    for (int j = 0; j < lbFirstRoundMatchCount * 2; j++) {
+                        if (lowerBracket[j] == m.getWinnerDestination()) {
+                            lowerBracket[j] = null;
+                            break;
+                        }
                     }
-                }
 
-                // Sets the winner destination of m's winner destination to receive the loser that m's
-                // winner destination should have received
-                Match wd = m.getWinnerDestination();
-                if (wd.doesWinnerGoToBlue()) {
-                    wd.getWinnerDestination().setBlueToLoserOf(wd.getOrangeFromMatch());
-                } else {
-                    wd.getWinnerDestination().setOrangeToLoserOf(wd.getOrangeFromMatch());
-                }
+                    // Sets the winner destination of m's winner destination to receive the loser that m's
+                    // winner destination should have received
+                    Match wd = m.getWinnerDestination();
+                    if (wd.doesWinnerGoToBlue()) {
+                        wd.getWinnerDestination().setBlueToLoserOf(wd.getOrangeFromMatch());
+                    } else {
+                        wd.getWinnerDestination().setOrangeToLoserOf(wd.getOrangeFromMatch());
+                    }
 
-            } else if (byes.contains(m.getBlueTeam())) {
-                // Only blue is a bye. Orange is the loser of a match in upper bracket.
-                // Resolve match and remove references to this match
-                lowerBracket[i] = null;
-                m.getWinnerDestination().setBlueToLoserOf(m.getOrangeFromMatch());
+                } else if (byes.contains(m.getBlueTeam())) {
+                    // Only blue is a bye. Orange is the loser of a match in upper bracket.
+                    // Resolve match and remove references to this match
+                    lowerBracket[i] = null;
+                    m.getWinnerDestination().setBlueToLoserOf(m.getOrangeFromMatch());
+                }
             }
         }
     }
@@ -333,21 +356,24 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
 
     @Override
     public List<Match> getAllMatches() {
-        if (isExtraMatchNeeded) {
-            return extraMatch.getTreeAsListBFS();
-        } else {
-            return finalMatch.getTreeAsListBFS();
-        }
+        return extraMatch.getTreeAsListBFS();
     }
 
     @Override
     public List<Match> getUpcomingMatches() {
-        return getAllMatches().stream().filter(c -> c.getStatus().equals(MatchStatus.READY_TO_BE_PLAYED) && !c.hasBeenPlayed()).collect(Collectors.toList());
+        return getAllMatches().stream().filter(m ->
+                        m.getStatus().equals(MatchStatus.READY_TO_BE_PLAYED)
+                        && !m.hasBeenPlayed()
+                        && (m != extraMatch || isExtraMatchNeeded)) // extra match is only an upcoming match if needed
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<Match> getPendingMatches() {
-        return getAllMatches().stream().filter(c -> c.getStatus().equals(MatchStatus.NOT_PLAYABLE)).collect(Collectors.toList());
+        return getAllMatches().stream().filter(m ->
+                        m.getStatus().equals(MatchStatus.NOT_PLAYABLE)
+                        && m != extraMatch) // extra match is never pending. It is either not needed, or needed AND playable
+                .collect(Collectors.toList());
     }
 
     @Override
