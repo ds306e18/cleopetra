@@ -36,14 +36,15 @@ public class MatchVisualController implements MatchChangeListener {
     @FXML
     void matchClicked(MouseEvent event) {
         if (!disabled) {
-            if (event.getButton().equals(MouseButton.PRIMARY)) {
-                if (event.getClickCount() == 2) {
-                    boc.openEditMatchPopup();
-                }
-            }
-
             matchRoot.getStyleClass().add("selectedMatch");
             boc.setSelectedMatch(this);
+
+            if (showedMatch.isReadyToPlay()
+                    && event.getButton().equals(MouseButton.PRIMARY)
+                    && event.getClickCount() == 2) {
+
+                boc.openEditMatchPopup();
+            }
         }
     }
 
