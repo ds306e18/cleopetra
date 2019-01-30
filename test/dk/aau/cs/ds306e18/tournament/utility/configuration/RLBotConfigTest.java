@@ -94,5 +94,7 @@ public class RLBotConfigTest {
 
         // assert that expected, edited config is equal to read config from filesystem
         assertEquals(setupEditedRLBotConfig().getConfig(), new RLBotConfig(testDir + testRLBotConfigTargetFilename).getConfig());
+
+        deleteConfig(testDir + testRLBotConfigTargetFilename);
     }
 }

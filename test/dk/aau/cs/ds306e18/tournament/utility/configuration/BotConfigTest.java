@@ -2,6 +2,7 @@ package dk.aau.cs.ds306e18.tournament.utility.configuration;
 
 import org.junit.Test;
 
+import static dk.aau.cs.ds306e18.tournament.utility.configuration.ConfigFileEditorTest.deleteConfig;
 import static dk.aau.cs.ds306e18.tournament.utility.configuration.ConfigFileEditorTest.testDir;
 import static org.junit.Assert.assertEquals;
 
@@ -34,6 +35,8 @@ public class BotConfigTest {
 
         // assert that expected, edited config is equal to read config from filesystem
         assertEquals(setupEditedBotConfig().getConfig(), new BotConfig(testDir + testBotConfigTargetFilename).getConfig());
+
+        deleteConfig(testDir + testBotConfigTargetFilename);
     }
 
     /** Tests if getters return expected value from test_bot.cfg */

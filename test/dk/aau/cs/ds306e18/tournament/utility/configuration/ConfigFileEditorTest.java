@@ -2,6 +2,9 @@ package dk.aau.cs.ds306e18.tournament.utility.configuration;
 
 import org.junit.Test;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import static junit.framework.TestCase.*;
@@ -13,6 +16,18 @@ public class ConfigFileEditorTest {
     final static String testRLBotConfigFilename = "test_rlbot.cfg";
     final static String testRLBotConfigTargetFilename = "dummy_rlbot.cfg";
     private ArrayList<String> testConfig = new ArrayList<>();
+
+    /**
+     * Removes file at given path. Useful for cleaning up after testing.
+     * @param path to file to be deleted
+     */
+    static public void deleteConfig(String path) {
+        try {
+            Files.delete(Paths.get(path));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     /** Sets a simple testConfig for passing ConfigFileEditor for test-cases */
     private void setTestConfig() {
@@ -37,6 +52,7 @@ public class ConfigFileEditorTest {
         configFileEditor.write(testDir + testRLBotConfigTargetFilename);
         configFileEditor.read(testDir + testRLBotConfigTargetFilename);
         assertEquals(testConfig, configFileEditor.getConfig());
+        deleteConfig(testDir + testRLBotConfigTargetFilename);
     }
 
     /** Tests if editLine applies the desired change to the config */
