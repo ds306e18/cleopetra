@@ -94,4 +94,12 @@ public class BotConfigTest {
         BotConfig botConfig = setupConfig();
         assertEquals("programminglanguage", botConfig.getLanguage());
     }
+
+    /** Tests if CFE supports extended charset */
+    @Test
+    public void characterTest() {
+        BotConfig botConfig = setupConfig();
+        botConfig.editLine("name", "øæåâèî");
+        assertEquals("øæåâèî", botConfig.getName());
+    }
 }
