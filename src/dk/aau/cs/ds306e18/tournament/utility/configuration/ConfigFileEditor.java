@@ -19,7 +19,7 @@ abstract class ConfigFileEditor {
      * sets valid-flag if file is read.
      * @param filename the filename to read
      */
-    void read(String filename) {
+    protected void read(String filename) {
         Path in = Paths.get(filename);
         try {
             config = (ArrayList<String>) Files.readAllLines(in);
@@ -37,7 +37,7 @@ abstract class ConfigFileEditor {
      * possible through ordinary usage of methods on config.
      * @param filename the filename to be written to
      */
-    void write(String filename) {
+    protected void write(String filename) {
         if (!this.isValid())
             throw new IllegalStateException("Warning: RLBot config-file to write: " + filename + "'s syntax is not valid!");
         Path out = Paths.get(filename);
@@ -53,7 +53,7 @@ abstract class ConfigFileEditor {
      * @param parameter the given parameter to edit
      * @param value     the value to edit given parameter with
      */
-    void editLine(String parameter, String value) {
+    protected void editLine(String parameter, String value) {
         for (int i = 0; i < config.size(); i++) {
             String line = config.get(i);
             if (line.startsWith(parameter)) {
@@ -69,7 +69,7 @@ abstract class ConfigFileEditor {
      * @param num       the number of a numbered parameter
      * @param value     the value to edit given parameter with
      */
-    void editLine(String parameter, int num, String value) {
+    protected void editLine(String parameter, int num, String value) {
         for (int i = 0; i < config.size(); i++) {
             String line = config.get(i);
             if (line.startsWith(parameter + num)) {
@@ -84,7 +84,7 @@ abstract class ConfigFileEditor {
      * @param i index of line
      * @return line on index i
      */
-    String getLine(int i) {
+    protected String getLine(int i) {
         return config.get(i);
     }
 
@@ -93,7 +93,7 @@ abstract class ConfigFileEditor {
      * @param parameter is beginning of line
      * @return first line which starts with parameter
      */
-    String getLine(String parameter) {
+    protected String getLine(String parameter) {
         for (String line : config) {
             if (line.startsWith(parameter)) {
                 return line;
@@ -118,7 +118,7 @@ abstract class ConfigFileEditor {
      * @param parameter the given parameter
      * @return the value at first line with parameter
      */
-    String getValueOfLine(String parameter) {
+    protected String getValueOfLine(String parameter) {
         for (String line : config) {
             if (line.startsWith(parameter)) {
                 return getValue(line);
@@ -128,7 +128,7 @@ abstract class ConfigFileEditor {
     }
 
     /**
-     * Takes a parameter-line and regex-substitutes equals and everyting after with an equals and a space for easy
+     * Takes a parameter-line and regex-substitutes equals and everything after with an equals and a space for easy
      * appending of value
      * @param line the given line to remove value from
      * @return the given line with value removed
@@ -137,12 +137,11 @@ abstract class ConfigFileEditor {
         return line.replaceAll(REMOVE_VALUE_PATTERN, "= ");
     }
 
-
     /**
      * Checks loaded config for valid syntax by iterating through each line. Allows empty lines, and checks for three
      * cases; square bracketed headers, hashtag-comments, and parameters with equals-symbols
      */
-    void validateConfigSyntax() {
+    protected void validateConfigSyntax() {
         for (String line : config) {
             // if line is not whitespace, check syntax
             if (!(line.isEmpty())) {
@@ -168,16 +167,17 @@ abstract class ConfigFileEditor {
         valid = true;
     }
 
-    ArrayList<String> getConfig() {
-        return config;
+    protected boolean isValid() {
+        return valid;
     }
 
+    /** Setter for config. Only used for unit tests */
     void setConfig(ArrayList<String> config) {
         ConfigFileEditor.config = config;
         validateConfigSyntax();
     }
 
-    boolean isValid() {
-        return valid;
+    ArrayList<String> getConfig() {
+        return config;
     }
 }
