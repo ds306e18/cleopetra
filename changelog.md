@@ -2,6 +2,9 @@
 
 #### Unreleased (dev branch)
 - Expanded, separated, and reworked functionality of ConfigFileEditor. #3 - cogitantium
+- Matches are now displayed slightly bigger. - NicEastvillage
+- Matches now has an identifier and pending matches will display which matches they depend on. E.g. "Winner of X" vs "Loser of Y". - NicEastvillage
+- Fixed a bug that occurred when matches with to-be-determined players were double-clicked. #51 - NicEastvillage
 
 #### Version 1.1.2 - 23. Jan 2019
 - Hotfix: Fixed seeding being backwards in some seeding options. - NicEastvillage
