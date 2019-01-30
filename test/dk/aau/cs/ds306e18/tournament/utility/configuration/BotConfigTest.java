@@ -5,6 +5,7 @@ import org.junit.Test;
 import static dk.aau.cs.ds306e18.tournament.utility.configuration.ConfigFileEditorTest.deleteConfig;
 import static dk.aau.cs.ds306e18.tournament.utility.configuration.ConfigFileEditorTest.testDir;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class BotConfigTest {
 
@@ -93,6 +94,15 @@ public class BotConfigTest {
     public void getLanguage() {
         BotConfig botConfig = setupConfig();
         assertEquals("programminglanguage", botConfig.getLanguage());
+    }
+
+    /** Tests that empty String is returned for empty value */
+    @Test
+    public void getNullValue() {
+        BotConfig botConfig = setupConfig();
+        botConfig.editLine("language", "");
+        System.out.println(botConfig.getLanguage());
+        assertEquals("", botConfig.getLanguage());
     }
 
     /** Tests if CFE supports extended charset by editing line, writing config, reading config, and reading name */
