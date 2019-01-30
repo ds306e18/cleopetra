@@ -7,7 +7,6 @@ import dk.aau.cs.ds306e18.tournament.model.match.MatchPlayedListener;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchStatus;
 import dk.aau.cs.ds306e18.tournament.ui.BracketOverviewTabController;
 import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.DoubleEliminationNode;
-import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.ModelCoupledUI;
 import javafx.scene.Node;
 
 import java.util.*;
@@ -57,7 +56,7 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
 
         insertTeams(teams, doSeeding);
         removeByes(byes);
-        giveMatchesLabels();
+        giveMatchesIdentifiers();
     }
 
     /** Generates the matches in the upper bracket and connects them. All the matches will be empty. */
@@ -259,7 +258,7 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
     }
 
     /** Gives the matches identifiers. */
-    private void giveMatchesLabels() {
+    private void giveMatchesIdentifiers() {
 
         int nextIdentifier = 1;
 

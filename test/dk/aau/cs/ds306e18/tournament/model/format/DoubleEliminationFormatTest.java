@@ -2,10 +2,12 @@ package dk.aau.cs.ds306e18.tournament.model.format;
 
 import dk.aau.cs.ds306e18.tournament.TestUtilities;
 import dk.aau.cs.ds306e18.tournament.model.Team;
+import dk.aau.cs.ds306e18.tournament.model.TieBreaker;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -103,5 +105,133 @@ public class DoubleEliminationFormatTest {
         de.start(TestUtilities.generateTeams(2, 1), true);
         assertEquals(3, de.getAllMatches().size());
         assertEquals(0, de.getLowerBracket().length);
+    }
+
+    @Test
+    public void isExtraMatchNeeded01() {
+        DoubleEliminationFormat de = new DoubleEliminationFormat();
+        de.start(TestUtilities.generateTeams(4, 1), true);
+
+        assertFalse(de.isExtraMatchNeeded());
+
+        // Play all matches except the last (the extra match)
+        List<Match> matches = de.getAllMatches();
+        for (int i = matches.size() - 1; i > 0; i--) {
+            matches.get(i).setScores(1, 0, true);
+        }
+
+        assertFalse(de.isExtraMatchNeeded());
+    }
+
+    @Test
+    public void isExtraMatchNeeded02() {
+        DoubleEliminationFormat de = new DoubleEliminationFormat();
+        de.start(TestUtilities.generateTeams(4, 1), true);
+
+        // Play all matches except the last (the extra match)
+        List<Match> matches = de.getAllMatches();
+        for (int i = matches.size() - 1; i > 0; i--) {
+            matches.get(i).setScores(1, 0, true);
+        }
+
+        assertFalse(de.isExtraMatchNeeded());
+
+        // Change result of final match so lower bracket winner wins
+        matches.get(1).setScores(0, 1, true);
+
+        assertTrue(de.isExtraMatchNeeded());
+    }
+
+    @Test
+    public void upcomingAndPendingMatches01() {
+        DoubleEliminationFormat de = new DoubleEliminationFormat();
+        de.start(TestUtilities.generateTeams(4, 1), true);
+        assertEquals(2, de.getUpcomingMatches().size());
+        assertEquals(4, de.getPendingMatches().size());
+    }
+
+    @Test
+    public void upcomingAndPendingMatches02() {
+        DoubleEliminationFormat de = new DoubleEliminationFormat();
+        de.start(TestUtilities.generateTeams(7, 1), true);
+        assertEquals(3, de.getUpcomingMatches().size());
+        assertEquals(9, de.getPendingMatches().size());
+    }
+
+    @Test
+    public void upcomingAndPendingMatches03() {
+        DoubleEliminationFormat de = new DoubleEliminationFormat();
+        de.start(TestUtilities.generateTeams(13, 1), true);
+        assertEquals(5, de.getUpcomingMatches().size());
+        assertEquals(19, de.getPendingMatches().size());
+    }
+
+    @Test
+    public void losesMap01() {
+        ArrayList<Team> teams = TestUtilities.generateSeededTeams(14, 1);
+        DoubleEliminationFormat de = new DoubleEliminationFormat();
+        de.start(teams, true);
+
+        // Play all matches except the last (the extra match)
+        List<Match> matches = de.getAllMatches();
+        for (int i = matches.size() - 1; i > 0; i--) {
+            matches.get(i).setScores(1, 0, true);
+        }
+
+        // All matches have now been played, so all teams has 2 loses, except the winner
+        HashMap<Team, Integer> losesMap = de.getLosesMap();
+        for (Team team : losesMap.keySet()) {
+            if (team.getInitialSeedValue() == 1) {
+                assertEquals(0, (int)losesMap.get(team));
+            } else {
+                assertEquals(2, (int)losesMap.get(team));
+            }
+        }
+    }
+
+    @Test
+    public void topTeams01() {
+        ArrayList<Team> teams = TestUtilities.generateSeededTeams(4, 1);
+        DoubleEliminationFormat de = new DoubleEliminationFormat();
+        de.start(teams, true);
+
+        // Play all matches except the last (the extra match)
+        List<Match> matches = de.getAllMatches();
+        for (int i = matches.size() - 1; i > 0; i--) {
+            Match match = matches.get(i);
+            if (match.getBlueTeam().getInitialSeedValue() < match.getOrangeTeam().getInitialSeedValue()) {
+                match.setScores(1, 0, true);
+            } else {
+                match.setScores(0, 1, true);
+            }
+        }
+
+        List<Team> topTeams = de.getTopTeams(4, TieBreaker.GOALS_SCORED);
+        for (int i = 0; i < topTeams.size(); i++) {
+            assertSame(teams.get(i), topTeams.get(i));
+        }
+    }
+
+    @Test
+    public void topTeams02() {
+        ArrayList<Team> teams = TestUtilities.generateSeededTeams(32, 1);
+        DoubleEliminationFormat de = new DoubleEliminationFormat();
+        de.start(teams, true);
+
+        // Play all matches except the last (the extra match)
+        List<Match> matches = de.getAllMatches();
+        for (int i = matches.size() - 1; i > 0; i--) {
+            Match match = matches.get(i);
+            if (match.getBlueTeam().getInitialSeedValue() < match.getOrangeTeam().getInitialSeedValue()) {
+                match.setScores(1, 0, true);
+            } else {
+                match.setScores(0, 1, true);
+            }
+        }
+
+        List<Team> topTeams = de.getTopTeams(8, TieBreaker.GOALS_SCORED);
+        for (int i = 0; i < topTeams.size(); i++) {
+            assertSame(teams.get(i), topTeams.get(i));
+        }
     }
 }
