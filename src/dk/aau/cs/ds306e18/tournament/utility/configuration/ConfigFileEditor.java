@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
+/** Class for editing configuration files of the INI-format. Does not support multiline values. */
 abstract class ConfigFileEditor {
 
     private static boolean valid = false;
