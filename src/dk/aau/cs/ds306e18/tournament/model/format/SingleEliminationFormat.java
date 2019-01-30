@@ -277,7 +277,7 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
 
     /** Repairs match-structure after deserialization */
     @Override
-    public void repair() {
+    public void postDeserializationRepair() {
         // Find final match
         this.finalMatch = this.bracket[0];
         finalMatch.registerMatchPlayedListener(this);
@@ -310,18 +310,16 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SingleEliminationFormat that = (SingleEliminationFormat) o;
-        boolean equals;
-        equals = rounds == that.rounds &&
-                getStatus() == that.getStatus() &&
-                Objects.equals(seededTeams, that.seededTeams);
-
-        equals = Arrays.equals(bracket, that.bracket);
-        return equals;
+        return rounds == that.rounds &&
+                status == that.status &&
+                Objects.equals(seededTeams, that.seededTeams) &&
+                Objects.equals(finalMatch, that.finalMatch) &&
+                Arrays.equals(bracket, that.bracket);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(getStatus(), seededTeams, finalMatch, rounds);
+        int result = Objects.hash(status, seededTeams, finalMatch, rounds);
         result = 31 * result + Arrays.hashCode(bracket);
         return result;
     }

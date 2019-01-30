@@ -324,7 +324,7 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
     }
 
     @Override
-    public void repair() {
+    public void postDeserializationRepair() {
         for (Match match : getAllMatches()) {
             match.registerMatchPlayedListener(this);
             match.registerMatchChangeListener(this);

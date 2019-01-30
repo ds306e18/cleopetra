@@ -260,6 +260,8 @@ public final class Match {
     public void reconnectBlueToWinnerOf(Match other) {
         blueFromMatch = other;
         blueWasWinnerInPreviousMatch = true;
+        other.winnerDestination = this;
+        other.winnerGoesToBlue = true;
     }
 
     /**
@@ -269,6 +271,8 @@ public final class Match {
     public void reconnectBlueToLoserOf(Match other) {
         blueFromMatch = other;
         blueWasWinnerInPreviousMatch = false;
+        other.loserDestination = this;
+        other.loserGoesToBlue = true;
     }
 
     /**
@@ -278,6 +282,8 @@ public final class Match {
     public void reconnectOrangeToWinnerOf(Match other) {
         orangeFromMatch = other;
         orangeWasWinnerInPreviousMatch = true;
+        other.winnerDestination = this;
+        other.winnerGoesToBlue = false;
     }
 
     /**
@@ -287,6 +293,8 @@ public final class Match {
     public void reconnectOrangeToLoserOf(Match other) {
         orangeFromMatch = other;
         orangeWasWinnerInPreviousMatch = false;
+        other.loserDestination = this;
+        other.loserGoesToBlue = false;
     }
 
     /**

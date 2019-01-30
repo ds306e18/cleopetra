@@ -328,7 +328,7 @@ public class RoundRobinFormat implements Format, MatchPlayedListener {
     }
 
     @Override
-    public void repair() {
+    public void postDeserializationRepair() {
         for (Match match : this.getAllMatches()) match.registerMatchPlayedListener(this);
     }
 

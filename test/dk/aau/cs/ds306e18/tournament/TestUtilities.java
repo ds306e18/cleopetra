@@ -4,10 +4,7 @@ import dk.aau.cs.ds306e18.tournament.model.Bot;
 import dk.aau.cs.ds306e18.tournament.model.Stage;
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
-import dk.aau.cs.ds306e18.tournament.model.format.Format;
-import dk.aau.cs.ds306e18.tournament.model.format.RoundRobinFormat;
-import dk.aau.cs.ds306e18.tournament.model.format.SingleEliminationFormat;
-import dk.aau.cs.ds306e18.tournament.model.format.SwissFormat;
+import dk.aau.cs.ds306e18.tournament.model.format.*;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 
 import java.util.ArrayList;
@@ -21,7 +18,7 @@ public class TestUtilities {
 
     private static int minNumPlayers = 2;
     private static int maxNumPlayers = 5;
-    private static int numTeams = randomIntInRange(2, 5);
+    private static int numTeams = randomIntInRange(4, 10);
 
     /**
      * Returns a random int between lower and upper
@@ -191,7 +188,7 @@ public class TestUtilities {
     }
 
     /**
-     * Generates a random Single Elimination tournament with numTeams teams, with between minNumPlayers and maxNumPlayers players each
+     * Generates a random Swiss tournament with numTeams teams, with between minNumPlayers and maxNumPlayers players each
      *
      * @return random Tournament object
      */
@@ -205,6 +202,27 @@ public class TestUtilities {
         SwissFormat swissFormat = new SwissFormat();
 
         Stage stage = new Stage("Swiss stage", swissFormat);
+
+        tournament.addStage(stage);
+        tournament.start();
+
+        return tournament;
+    }
+
+    /**
+     * Generates a random Double Elimination tournament with numTeams teams, with between minNumPlayers and maxNumPlayers players each
+     * @return random Tournament object
+     */
+    public static Tournament generateDoubleEliminationTournament() {
+        Tournament tournament = new Tournament();
+        tournament.setName("DatTournament");
+
+        for (int i = 0; i < numTeams; i++)
+            tournament.addTeam(generateTeam(randomIntInRange(minNumPlayers, maxNumPlayers)));
+
+        DoubleEliminationFormat doubleElim = new DoubleEliminationFormat();
+
+        Stage stage = new Stage("Double elimination stage", doubleElim);
 
         tournament.addStage(stage);
         tournament.start();

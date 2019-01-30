@@ -60,4 +60,17 @@ public class SerializerTest {
 
         assertEquals(tournament, deserializedTournament);
     }
+
+    /**
+     * Test-class for serialising a randomly generated Swiss Tournament object, serializes it to a JSON-string,
+     * deserializes it to a Tournament object, and checks equality between the original object and the resuscitated object
+     */
+    @Test
+    public void serializingDoubleEliminationConcurrencyTest() {
+        Tournament tournament = generateDoubleEliminationTournament();
+        String jsonObject = Serializer.serialize(tournament);
+        Tournament deserializedTournament = Serializer.deserialize(jsonObject);
+
+        assertEquals(tournament, deserializedTournament);
+    }
 }
