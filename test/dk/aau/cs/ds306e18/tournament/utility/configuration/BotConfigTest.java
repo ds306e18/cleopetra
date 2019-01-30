@@ -95,11 +95,12 @@ public class BotConfigTest {
         assertEquals("programminglanguage", botConfig.getLanguage());
     }
 
-    /** Tests if CFE supports extended charset */
+    /** Tests if CFE supports extended charset by editing line, writing config, reading config, and reading name */
     @Test
     public void characterTest() {
         BotConfig botConfig = setupConfig();
         botConfig.editLine("name", "øæåâèî");
-        assertEquals("øæåâèî", botConfig.getName());
+        botConfig.writeConfig(testDir + testBotConfigTargetFilename);
+        assertEquals("øæåâèî", new BotConfig(testDir + testBotConfigTargetFilename).getName());
     }
 }
