@@ -1,7 +1,10 @@
 # Changelog
 
+
+
 #### Unreleased (dev branch)
 - Expanded, separated, and reworked functionality of ConfigFileEditor. #3 - cogitantium
+- Round robin and swiss now uses tiebreaker to rank all teams before transferring teams to the next stage. - NicEastvillage
 - Matches are now displayed slightly bigger. - NicEastvillage
 - Matches now has an identifier and pending matches will display which matches they depend on. E.g. "Winner of X" vs "Loser of Y". - NicEastvillage
 - Fixed a bug that occurred when matches with to-be-determined players were double-clicked. #51 - NicEastvillage

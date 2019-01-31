@@ -216,11 +216,18 @@ public class TestUtilities {
         return x * (x-1) / 2;
     }
 
-    /** sets all upcoming matches in the given swissStage to have been played.*/
-    public static void setAllMatchesPlayed(Format stage) {
-        List<Match> matches = stage.getUpcomingMatches();
+    /**
+     * sets all matches in the given list to have been played. The best seeded team wins.
+     */
+    public static void setAllMatchesToPlayed(List<Match> matches) {
         for (Match match : matches) {
-            match.setHasBeenPlayed(true);
+            Team blue = match.getBlueTeam();
+            Team orange = match.getOrangeTeam();
+            if (blue.getInitialSeedValue() < orange.getInitialSeedValue()) {
+                match.setScores(1, 0, true);
+            } else {
+                match.setScores(0, 1, true);
+            }
         }
     }
 

@@ -1,7 +1,8 @@
 package dk.aau.cs.ds306e18.tournament.model.format;
 
-import dk.aau.cs.ds306e18.tournament.model.GroupFormat;
 import dk.aau.cs.ds306e18.tournament.model.Team;
+import dk.aau.cs.ds306e18.tournament.model.TieBreaker;
+import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchChangeListener;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchPlayedListener;
@@ -12,9 +13,12 @@ import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.SwissSettingsNode;
 import javafx.scene.Node;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
-public class SwissFormat extends GroupFormat implements MatchChangeListener, MatchPlayedListener {
+public class SwissFormat implements Format, MatchChangeListener, MatchPlayedListener {
 
+    private StageStatus status = StageStatus.PENDING;
+    private ArrayList<Team> teams;
     private ArrayList<ArrayList<Match>> rounds = new ArrayList<>();
     private int maxRoundsPossible;
     private int roundCount = 4;
@@ -32,6 +36,16 @@ public class SwissFormat extends GroupFormat implements MatchChangeListener, Mat
         status = StageStatus.RUNNING;
 
         startNextRound(); // Generate the first round
+    }
+
+    @Override
+    public StageStatus getStatus() {
+        return status;
+    }
+
+    @Override
+    public List<Team> getTopTeams(int count, TieBreaker tieBreaker) {
+        return tieBreaker.compareWithPoints(teams, count, getTeamPointsMap());
     }
 
     /**
@@ -55,12 +69,7 @@ public class SwissFormat extends GroupFormat implements MatchChangeListener, Mat
     public boolean startNextRound() {
         if (!canStartNextRound())
             return false;
-
-        /*
-        if (rounds.size() != 0) // Assign points for played matches
-            assignPointsForLatestRound();*/
         createNextRound();
-
         return true;
     }
 
@@ -81,49 +90,15 @@ public class SwissFormat extends GroupFormat implements MatchChangeListener, Mat
     }
 
     /**
-     * Used when a round has been played to assign points to the teams based on the played matches.
-     * Teams will get 2 points for winning and -2 for loosing.
-     */
-    private void assignPointsForLatestRound() {
-        ArrayList<Match> finishedRoundMatches = rounds.get(rounds.size() - 1);
-
-        for (Match match : finishedRoundMatches) {
-            Team winnerTeam = match.getWinner();
-            Team loserTeam = match.getLoser();
-
-            teamPoints.put(winnerTeam, teamPoints.get(winnerTeam) + 2);
-            teamPoints.put(loserTeam, teamPoints.get(loserTeam) - 2);
-        }
-    }
-
-    /**
      * Takes a list of teams and sorts it based on their points in the given hashMap.
      *
      * @param teamList   a list of teams.
      * @param teamPoints a hashMap containing teams as key and their points as value.
      * @return the given list sorted based on the given points.
      */
-    private ArrayList<Team> getOrderedTeamsListFromPoints(ArrayList<Team> teamList, HashMap<Team, Integer> teamPoints) {
-        ArrayList<Team> tempTeams = new ArrayList<>(teamList);
-        ArrayList<Team> orderedTeams = new ArrayList<>();
-
-        while (tempTeams.size() != 0) {
-            int teamCount = tempTeams.size();
-            Team teamWithMostPoints = tempTeams.get(0);
-
-            //Find the team with the most points.
-            for (int i = 1; i < teamCount; i++) {
-
-                if (teamPoints.get(tempTeams.get(i)) < teamPoints.get(teamWithMostPoints))
-                    teamWithMostPoints = tempTeams.get(i);
-            }
-
-            //Remove that team from the tempList and add it to the ordered list.
-            tempTeams.remove(teamWithMostPoints);
-            orderedTeams.add(teamWithMostPoints);
-        }
-
-        return orderedTeams;
+    private List<Team> getOrderedTeamsListFromPoints(ArrayList<Team> teamList, HashMap<Team, Integer> teamPoints) {
+        if (rounds.size() == 0) return new ArrayList<>(teamList);
+        else return Tournament.get().getTieBreaker().compareWithPoints(teamList, teamList.size(), teamPoints);
     }
 
     /**
@@ -136,7 +111,7 @@ public class SwissFormat extends GroupFormat implements MatchChangeListener, Mat
         // TODO Consider seeding for first round
 
         // Create ordered list of team, based on points.
-        ArrayList<Team> orderedTeamList = getOrderedTeamsListFromPoints(teams, teamPoints);
+        List<Team> orderedTeamList = getOrderedTeamsListFromPoints(teams, teamPoints);
         ArrayList<Match> createdMatches = new ArrayList<>();
 
         // Create matches while there is more than 1 team in the list.
@@ -203,6 +178,21 @@ public class SwissFormat extends GroupFormat implements MatchChangeListener, Mat
         }
 
         return matches;
+    }
+
+    @Override
+    public List<Match> getUpcomingMatches() {
+        return getAllMatches().stream().filter(match -> !match.hasBeenPlayed()).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Match> getPendingMatches() {
+        return getAllMatches().stream().filter(match -> match.getStatus() == MatchStatus.NOT_PLAYABLE).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Match> getCompletedMatches() {
+        return getAllMatches().stream().filter(Match::hasBeenPlayed).collect(Collectors.toList());
     }
 
     public int getMaxRoundsPossible() {

@@ -4,8 +4,10 @@ import dk.aau.cs.ds306e18.tournament.TestUtilities;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import org.junit.Test;
 
+import java.util.HashMap;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
 public class TieBreakerTest {
@@ -69,5 +71,61 @@ public class TieBreakerTest {
         assertSame(ordered.get(1), teams.get(1)); // seed 2
         assertSame(ordered.get(2), teams.get(2)); // seed 3
         assertSame(ordered.get(3), teams.get(3)); // seed 4
+    }
+
+    @Test
+    public void compareWithPoints01() {
+        List<Team> teams = TestUtilities.generateTeams(6, 1);
+        teams.get(0).addGoalsScored(2);
+        teams.get(1).addGoalsScored(3);
+        teams.get(2).addGoalsScored(4);
+        teams.get(3).addGoalsScored(2);
+        teams.get(4).addGoalsScored(3);
+        teams.get(5).addGoalsScored(4);
+
+        HashMap<Team, Integer> pointsMap = new HashMap<>();
+        pointsMap.put(teams.get(0), 1);
+        pointsMap.put(teams.get(1), 0);
+        pointsMap.put(teams.get(2), 1);
+        pointsMap.put(teams.get(3), 0);
+        pointsMap.put(teams.get(4), 1);
+        pointsMap.put(teams.get(5), 0);
+
+        List<Team> best = TieBreaker.GOALS_SCORED.compareWithPoints(teams, 5, pointsMap);
+
+        assertSame(teams.get(2), best.get(0));
+        assertSame(teams.get(4), best.get(1));
+        assertSame(teams.get(0), best.get(2));
+        assertSame(teams.get(5), best.get(3));
+        assertSame(teams.get(1), best.get(4));
+        assertEquals(5, best.size());
+    }
+
+    @Test
+    public void compareWithPoints02() {
+        List<Team> teams = TestUtilities.generateTeams(6, 1);
+        teams.get(0).addGoalsScored(1);
+        teams.get(1).addGoalsScored(3);
+        teams.get(2).addGoalsScored(2);
+        teams.get(3).addGoalsScored(5);
+        teams.get(4).addGoalsScored(4);
+        teams.get(5).addGoalsScored(0);
+
+        HashMap<Team, Integer> pointsMap = new HashMap<>();
+        pointsMap.put(teams.get(0), 0);
+        pointsMap.put(teams.get(1), 0);
+        pointsMap.put(teams.get(2), 1);
+        pointsMap.put(teams.get(3), 0);
+        pointsMap.put(teams.get(4), 1);
+        pointsMap.put(teams.get(5), 1);
+
+        List<Team> best = TieBreaker.GOALS_SCORED.compareWithPoints(teams, 5, pointsMap);
+
+        assertSame(teams.get(4), best.get(0));
+        assertSame(teams.get(2), best.get(1));
+        assertSame(teams.get(5), best.get(2));
+        assertSame(teams.get(3), best.get(3));
+        assertSame(teams.get(1), best.get(4));
+        assertEquals(5, best.size());
     }
 }
