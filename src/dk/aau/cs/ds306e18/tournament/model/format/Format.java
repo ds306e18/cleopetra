@@ -66,5 +66,5 @@ public interface Format {
     /**
      * Repairs structure of matches after deserialization.
      */
-    void repair();
+    void postDeserializationRepair();
 }

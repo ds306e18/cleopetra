@@ -12,6 +12,9 @@ import javafx.scene.Node;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static dk.aau.cs.ds306e18.tournament.utility.PowMath.log2;
+import static dk.aau.cs.ds306e18.tournament.utility.PowMath.pow2;
+
 public class SingleEliminationFormat implements Format, MatchPlayedListener {
 
     private StageStatus status = StageStatus.PENDING;
@@ -25,9 +28,10 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
     @Override
     public void start(List<Team> seededTeams, boolean doSeeding) {
         this.seededTeams = new ArrayList<>(seededTeams);
-        rounds = (int) Math.ceil(Math.log(seededTeams.size()) / Math.log(2));
+        rounds = log2(seededTeams.size());
         generateBracket();
         seedBracket(seededTeams, doSeeding);
+        giveMatchesIdentifiers();
         status = StageStatus.RUNNING;
         finalMatch.registerMatchPlayedListener(this);
     }
@@ -36,15 +40,15 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
      * Matches are accessed through finalMatch (the root) or the array upperBracketMatchesArray.
      */
     private void generateBracket() {
-        int matchesInFirstRound = (int) Math.pow(2, rounds - 1);
-        int numberOfMatches = (int) Math.pow(2,rounds)-1;
+        int matchesInFirstRound = pow2(rounds - 1);
+        int numberOfMatches = pow2(rounds) - 1;
         bracket = new Match[numberOfMatches];
         for(int i = numberOfMatches - 1; i >= 0; i--) {
-            //Creates empty matches for first round
+            // Creates empty matches for first round
             if(i >= numberOfMatches - matchesInFirstRound) {
                 bracket[i] = new Match();
             }
-            //Creates the remaining matches which contains winners from their left- and right child-indexes.
+            // Creates the remaining matches which contains winners from their left- and right child-indexes.
             else {
                 bracket[i] = new Match()
                         .setBlueToWinnerOf(bracket[getLeftIndex(i)])
@@ -59,7 +63,7 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
      * @param seededTeams a list containing the teams in the tournament
      * @param doSeeding whether or not to use seeding. If false, the reordering of teams is skipped. */
     private void seedBracket(List<Team> seededTeams, boolean doSeeding) {
-        ArrayList<Team> seedList = new ArrayList<>(seededTeams);
+        List<Team> seedList = new ArrayList<>(seededTeams);
 
         //Create needed amount of byes to match with the empty matches
         ArrayList<Team> byeList = addByes(seededTeams.size());
@@ -67,7 +71,7 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
 
         if (doSeeding) {
             //Reorders list with fair seeding method
-            fairSeeding(seedList);
+            seedList = Seeding.fairSeedList(seedList);
         }
 
         //Places the teams in the bracket, and removes unnecessary matches
@@ -77,7 +81,7 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
     /** Places the teams in the bracket and removes unnecessary matches
      * @param seedList a list of seeded teams in a fair seeding order
      * @param byeList a list of dummy teams */
-    private void placeTeamsInBracket(ArrayList<Team> seedList, ArrayList<Team> byeList) {
+    private void placeTeamsInBracket(List<Team> seedList, ArrayList<Team> byeList) {
         int seedMatchIndex = finalMatch.getTreeAsListBFS().size() - 1;
         int  numberOfTeams = seedList.size();
         for (int teamIndex = 0; teamIndex < numberOfTeams; teamIndex = teamIndex + 2) {
@@ -103,35 +107,11 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
         }
     }
 
-    /** Reorders seedList to a fair list order for seeding
-     * @param seedList a list of seeded teams in ascending order */
-    private void fairSeeding(ArrayList<Team> seedList) {
-        //Variables used for seeding
-        int slice = 1;
-        int interactions = seedList.size() / 2;
-
-        //Order the teams in a seeded list
-        while (slice < interactions) {
-            ArrayList<Team> temp = new ArrayList<>(seedList);
-            seedList.clear();
-
-            while (temp.size() > 0) {
-                int lastIndex = temp.size();
-                seedList.addAll(temp.subList(0, slice));
-                seedList.addAll(temp.subList(lastIndex - slice, lastIndex));
-                temp.removeAll(temp.subList(lastIndex - slice, lastIndex));
-                temp.removeAll(temp.subList(0, slice));
-            }
-
-            slice *= 2;
-        }
-    }
-
     /** Add the needed amount of byes
      * @param numberOfTeams the amount of teams in the stage
      * @return byeList, an arrayList containing dummy teams */
     private ArrayList<Team> addByes(int numberOfTeams){
-        int numberOfByes = (int) Math.pow(2, rounds) - numberOfTeams;
+        int numberOfByes = pow2(rounds) - numberOfTeams;
         ArrayList<Team> byeList = new ArrayList<>();
         while (byeList.size() < numberOfByes) {
             byeList.add(new Team("bye" + byeList.size(), new ArrayList<>(), 999, ""));
@@ -139,23 +119,29 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
         return byeList;
     }
 
-    int getParentIndex(int i) {
-        i = i + 1;
-        if (i == 1) {
-            return -1;
-        } else {
-            return Math.floorDiv(i,2)-1;
+    /** Gives the matches identifiers. */
+    private void giveMatchesIdentifiers() {
+        List<Match> treeAsListBFS = finalMatch.getTreeAsListBFS();
+        int index = 1;
+        for (int i = treeAsListBFS.size() - 1; i >= 0; i--) {
+            treeAsListBFS.get(i).setIdentifier(index++);
         }
     }
 
-    int getLeftIndex(int i){
-        i = i + 1;
-        return 2 * i;
+    private int getParentIndex(int i) {
+        if (i == 0) {
+            return -1;
+        } else {
+            return Math.floorDiv(i + 1, 2) - 1;
+        }
     }
 
-    int getRightIndex(int i) {
-        i = i + 1;
-        return 2 * i - 1;
+    private int getLeftIndex(int i){
+        return 2 * (i + 1);
+    }
+
+    private int getRightIndex(int i) {
+        return 2 * (i + 1) - 1;
     }
 
     public int getRounds() {
@@ -184,7 +170,7 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
 
     @Override
     public List<Match> getCompletedMatches() {
-        return finalMatch.getTreeAsListBFS().stream().filter(c -> c.hasBeenPlayed()).collect(Collectors.toList());
+        return finalMatch.getTreeAsListBFS().stream().filter(Match::hasBeenPlayed).collect(Collectors.toList());
     }
 
     public Match[] getMatchesAsArray() {
@@ -203,7 +189,7 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
 
         // Notify listeners if status changed
         if (oldStatus != status) {
-            nofityStatusListeners(oldStatus, status);
+            notifyStatusListeners(oldStatus, status);
         }
     }
 
@@ -218,7 +204,7 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
     }
 
     /** Let listeners know, that the status has changed */
-    private void nofityStatusListeners(StageStatus oldStatus, StageStatus newStatus) {
+    private void notifyStatusListeners(StageStatus oldStatus, StageStatus newStatus) {
         for (StageStatusChangeListener listener : statusChangeListeners) {
             listener.onStageStatusChanged(this, oldStatus, newStatus);
         }
@@ -233,24 +219,27 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
         List<Team> topTeams = new ArrayList<>();
         List<Team> tempWinnerTeams = new ArrayList<>();
         List<Team> tempLoserTeams = new ArrayList<>();
-        int roundUpperBoundIndex = 1, currentMatchIndex = 0, numberOfMatches = finalMatch.getTreeAsListBFS().size();
+        List<Match> matchesBFS = finalMatch.getTreeAsListBFS();
+        int numberOfMatches = matchesBFS.size();
+        int roundUpperBoundIndex = 1, currentMatchIndex = 0;
 
         if(count > seededTeams.size()){ count = seededTeams.size();}
 
-        //Will run until team size fits the count
+        // Will run until enough teams has been found
         while (topTeams.size() < count) {
-            //places the losers and winners of the round into two different temporary lists
+            // places the losers and winners of the round into two different temporary lists
             while (currentMatchIndex < roundUpperBoundIndex && currentMatchIndex < numberOfMatches) {
-                if (!topTeams.contains(finalMatch.getTreeAsListBFS().get(currentMatchIndex).getWinner())) {
-                    tempWinnerTeams.add(finalMatch.getTreeAsListBFS().get(currentMatchIndex).getWinner());
+                Match current = matchesBFS.get(currentMatchIndex);
+                if (!topTeams.contains(current.getWinner())) {
+                    tempWinnerTeams.add(current.getWinner());
                 }
-                if (!topTeams.contains(finalMatch.getTreeAsListBFS().get(currentMatchIndex).getLoser())) {
-                    tempLoserTeams.add(finalMatch.getTreeAsListBFS().get(currentMatchIndex).getLoser());
+                if (!topTeams.contains(current.getLoser())) {
+                    tempLoserTeams.add(current.getLoser());
                 }
                 currentMatchIndex++;
             }
 
-            //Sorts the teams accordingly to the tiebreaker
+            // Sorts the teams accordingly to the tiebreaker
             if (tempWinnerTeams.size() > 1) {
                 tempWinnerTeams = tieBreaker.compareAll(tempWinnerTeams, tempWinnerTeams.size());
             }
@@ -258,17 +247,17 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
                 tempLoserTeams = tieBreaker.compareAll(tempLoserTeams, tempLoserTeams.size());
             }
 
-            //Winners will be placed before the losers, and the lists will be cleared
+            // Winners will be placed before the losers, and the lists will be cleared
             topTeams.addAll(tempWinnerTeams);
             tempWinnerTeams.clear();
             topTeams.addAll(tempLoserTeams);
             tempLoserTeams.clear();
 
-            //New round for the loop to iterate
+            // New round for the loop to iterate
             roundUpperBoundIndex = getRightIndex(roundUpperBoundIndex);
         }
 
-        //If there are too many teams, remove teams
+        // If there are too many teams, remove teams
         while (topTeams.size() > count) {
             topTeams.remove(topTeams.size() - 1);
         }
@@ -288,7 +277,7 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
 
     /** Repairs match-structure after deserialization */
     @Override
-    public void repair() {
+    public void postDeserializationRepair() {
         // Find final match
         this.finalMatch = this.bracket[0];
         finalMatch.registerMatchPlayedListener(this);
@@ -321,18 +310,16 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SingleEliminationFormat that = (SingleEliminationFormat) o;
-        boolean equals;
-        equals = rounds == that.rounds &&
-                getStatus() == that.getStatus() &&
-                Objects.equals(seededTeams, that.seededTeams);
-
-        equals = Arrays.equals(bracket, that.bracket);
-        return equals;
+        return rounds == that.rounds &&
+                status == that.status &&
+                Objects.equals(seededTeams, that.seededTeams) &&
+                Objects.equals(finalMatch, that.finalMatch) &&
+                Arrays.equals(bracket, that.bracket);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(getStatus(), seededTeams, finalMatch, rounds);
+        int result = Objects.hash(status, seededTeams, finalMatch, rounds);
         result = 31 * result + Arrays.hashCode(bracket);
         return result;
     }

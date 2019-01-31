@@ -2,10 +2,9 @@ package dk.aau.cs.ds306e18.tournament.model.match;
 
 import dk.aau.cs.ds306e18.tournament.model.Team;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * <p>A Match consists of two Slots, which holds the Teams participating in the Match, and each Team's
@@ -16,6 +15,11 @@ import java.util.Objects;
  * the winner and the loser of the match.</p>
  */
 public final class Match {
+
+    private static int nextId = 0;
+
+    private final int id;
+    private int identifier = 0;
     private int blueScore = 0;
     private int orangeScore = 0;
     private boolean played = false;
@@ -32,14 +36,27 @@ public final class Match {
      * Construct an empty Match.
      */
     public Match() {
+        id = nextId++;
     }
 
     /**
      * Construct a Match where both Teams are known from the start.
      */
     public Match(Team blue, Team orange) {
+        id = nextId++;
         blueTeam = blue;
         orangeTeam = orange;
+    }
+
+    /** Set the identifier. The match is referenced to by that identifier. E.g. "Winner of 5", where 5 is the identifier. */
+    public void setIdentifier(int identifier) {
+        this.identifier = identifier;
+        notifyMatchChangeListeners();
+    }
+
+    /** Get the identifier. The match is referenced to by that identifier. E.g. "Winner of 5", where 5 is the identifier. */
+    public int getIdentifier() {
+        return identifier;
     }
 
     /**
@@ -243,6 +260,8 @@ public final class Match {
     public void reconnectBlueToWinnerOf(Match other) {
         blueFromMatch = other;
         blueWasWinnerInPreviousMatch = true;
+        other.winnerDestination = this;
+        other.winnerGoesToBlue = true;
     }
 
     /**
@@ -252,6 +271,8 @@ public final class Match {
     public void reconnectBlueToLoserOf(Match other) {
         blueFromMatch = other;
         blueWasWinnerInPreviousMatch = false;
+        other.loserDestination = this;
+        other.loserGoesToBlue = true;
     }
 
     /**
@@ -261,6 +282,8 @@ public final class Match {
     public void reconnectOrangeToWinnerOf(Match other) {
         orangeFromMatch = other;
         orangeWasWinnerInPreviousMatch = true;
+        other.winnerDestination = this;
+        other.winnerGoesToBlue = false;
     }
 
     /**
@@ -270,6 +293,8 @@ public final class Match {
     public void reconnectOrangeToLoserOf(Match other) {
         orangeFromMatch = other;
         orangeWasWinnerInPreviousMatch = false;
+        other.loserDestination = this;
+        other.loserGoesToBlue = false;
     }
 
     /**
@@ -318,7 +343,20 @@ public final class Match {
         // Breadth-first search can be performed using a queue
         LinkedList<Match> queue = new LinkedList<>();
         ArrayList<Match> list = new ArrayList<>();
+        Set<Match> marked = new HashSet<>();
         queue.add(this);
+        marked.add(this);
+
+        Consumer<Match> addFunction = (m) -> {
+            if (m != null && !marked.contains(m)) {
+                // We check if both parent matches are marked (or null) to be sure we create the correct order
+                if ((m.winnerDestination == null || marked.contains(m.winnerDestination))
+                        && (m.loserDestination == null || marked.contains(m.loserDestination))) {
+                    queue.add(m);
+                    marked.add(m);
+                }
+            }
+        };
 
         // Matches are polled from the queue until it is empty
         while (!queue.isEmpty()) {
@@ -328,8 +366,8 @@ public final class Match {
             // Enqueue child matches, if any
             // Orange is added first - this means the final order will be the reverse of the logical
             // order of playing matches
-            if (match.orangeFromMatch != null) queue.add(match.orangeFromMatch);
-            if (match.blueFromMatch != null) queue.add(match.blueFromMatch);
+            addFunction.accept(match.orangeFromMatch);
+            addFunction.accept(match.blueFromMatch);
         }
 
         return list;
@@ -557,6 +595,28 @@ public final class Match {
         return orangeTeam;
     }
 
+    /** Returns the blue team's name. If blue team is null, then "Winner/Loser of .." or "TBD" is returned. */
+    public String getBlueTeamAsString() {
+        if (blueTeam == null) {
+            if (blueFromMatch != null) {
+                return (blueWasWinnerInPreviousMatch ? "Winner of " : "Loser of ") + blueFromMatch.getIdentifier();
+            }
+            return "TBD";
+        }
+        return blueTeam.getTeamName();
+    }
+
+    /** Returns the orange team's name. If orange team is null, then "Winner/Loser of .." or "TBD" is returned. */
+    public String getOrangeTeamAsString() {
+        if (orangeTeam == null) {
+            if (orangeFromMatch != null) {
+                return (orangeWasWinnerInPreviousMatch ? "Winner of " : "Loser of ") + orangeFromMatch.getIdentifier();
+            }
+            return "TBD";
+        }
+        return orangeTeam.getTeamName();
+    }
+
     public Match getBlueFromMatch() {
         return blueFromMatch;
     }
@@ -567,6 +627,26 @@ public final class Match {
 
     public Match getWinnerDestination() {
         return winnerDestination;
+    }
+
+    public Match getLoserDestination() {
+        return loserDestination;
+    }
+
+    public boolean wasBlueWinnerInPreviousMatch() {
+        return blueWasWinnerInPreviousMatch;
+    }
+
+    public boolean wasOrangeWinnerInPreviousMatch() {
+        return orangeWasWinnerInPreviousMatch;
+    }
+
+    public boolean doesWinnerGoToBlue() {
+        return winnerGoesToBlue;
+    }
+
+    public boolean doesLoserGoToBlue() {
+        return loserGoesToBlue;
     }
 
     /** Listeners registered here will be notified when the match is played or reset. */
@@ -604,7 +684,8 @@ public final class Match {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Match match = (Match) o;
-        return getBlueScore() == match.getBlueScore() &&
+        return id == match.id &&
+                getBlueScore() == match.getBlueScore() &&
                 getOrangeScore() == match.getOrangeScore() &&
                 played == match.played &&
                 blueWasWinnerInPreviousMatch == match.blueWasWinnerInPreviousMatch &&
@@ -617,7 +698,7 @@ public final class Match {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getBlueScore(), getOrangeScore(), played, getBlueTeam(), getOrangeTeam(), blueWasWinnerInPreviousMatch, orangeWasWinnerInPreviousMatch, winnerGoesToBlue, loserGoesToBlue);
+        return Objects.hash(id, getBlueScore(), getOrangeScore(), played, getBlueTeam(), getOrangeTeam(), blueWasWinnerInPreviousMatch, orangeWasWinnerInPreviousMatch, winnerGoesToBlue, loserGoesToBlue);
     }
 
     @Override

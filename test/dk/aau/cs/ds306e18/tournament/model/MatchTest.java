@@ -398,4 +398,25 @@ public class MatchTest {
         assertEquals(0, teamC.getGoalsScored());
         assertEquals(0, teamC.getGoalsConceded());
     }
+
+    @Test
+    public void identifier01() {
+        Team teamA = new Team("A", null, 0, "a");
+        Team teamB = new Team("B", null, 0, "b");
+        Team teamC = new Team("C", null, 0, "c");
+        Team teamD = new Team("D", null, 0, "d");
+
+        Match matchOne = new Match(teamA, teamB);
+        Match matchTwo = new Match().setBlue(teamC).setOrangeToWinnerOf(matchOne);
+        Match matchThree = new Match().setOrange(teamD).setBlueToLoserOf(matchOne);
+
+        matchOne.setIdentifier(1);
+        matchTwo.setIdentifier(2);
+        matchThree.setIdentifier(3);
+
+        assertEquals("Winner of 1", matchTwo.getOrangeTeamAsString());
+        assertEquals("C", matchTwo.getBlueTeamAsString());
+        assertEquals("Loser of 1", matchThree.getBlueTeamAsString());
+        assertEquals("D", matchThree.getOrangeTeamAsString());
+    }
 }

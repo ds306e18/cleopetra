@@ -312,6 +312,34 @@ public class SingleEliminationFormatTest {
         assertSame(teams.get(7), matchFour.getOrangeTeam());
     }
 
+    @Test
+    public void matchIdentifiers01() {
+        ArrayList<Team> teams = TestUtilities.generateTeams(4, 1);
+        SingleEliminationFormat singleElimination = new SingleEliminationFormat();
+        singleElimination.start(teams, true);
+
+        List<Match> allMatches = singleElimination.getAllMatches();
+
+        assertEquals(3, allMatches.get(0).getIdentifier());
+        assertEquals(2, allMatches.get(1).getIdentifier());
+        assertEquals(1, allMatches.get(2).getIdentifier());
+    }
+
+    @Test
+    public void matchIdentifiers02() {
+        ArrayList<Team> teams = TestUtilities.generateTeams(6, 1);
+        SingleEliminationFormat singleElimination = new SingleEliminationFormat();
+        singleElimination.start(teams, true);
+
+        List<Match> allMatches = singleElimination.getAllMatches();
+
+        assertEquals(5, allMatches.get(0).getIdentifier());
+        assertEquals(4, allMatches.get(1).getIdentifier());
+        assertEquals(3, allMatches.get(2).getIdentifier());
+        assertEquals(2, allMatches.get(3).getIdentifier());
+        assertEquals(1, allMatches.get(4).getIdentifier());
+    }
+
     /** Generates a bracket and sets wins according to the best seed
      * @param amountOfTeams the amount of teams */
     private SingleEliminationFormat generateBracketsAndWins(int amountOfTeams) {
