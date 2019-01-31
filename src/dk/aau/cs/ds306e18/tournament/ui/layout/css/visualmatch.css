@@ -1,0 +1,67 @@
+.match {
+    -fx-border-width: 1;
+    -fx-border-color: transparent;
+}
+
+.match:hover{
+    -fx-cursor: hand;
+    -fx-border-width: 1;
+    -fx-border-color: green;
+}
+
+.selectedMatch {
+    -fx-border-color: blue;
+}
+
+.teamName, .scoreNo {
+    -fx-font-size: 14px;
+}
+
+.triangle {
+    visibility: hidden;
+}
+
+.blue .color {
+    -fx-fill: #4271f9;
+}
+
+.orange .color {
+    -fx-fill: #f28542;
+}
+
+#pending .color {
+    -fx-fill: #494949;
+}
+
+.scoreBg {
+    -fx-fill: white;
+    -fx-stroke-type: inside;
+    -fx-stroke-width: 1;
+    -fx-stroke: #c1c1c1;
+}
+
+#played .winner .team .teamBg {
+    -fx-fill: #97af97;
+}
+
+#played .winner .triangle {
+    visibility: visible;
+    -fx-fill: #97af97;
+}
+
+#played .winner .score .scoreBg {
+    -fx-stroke: #97af97;
+}
+
+#played .winner .score .scoreNo {
+    -fx-font-weight: bold;
+}
+
+#played .winner .team .teamName {
+    -fx-font-weight: bold;
+}
+
+#pending .tbd .team .teamName {
+    -fx-font-style: italic;
+    -fx-text-fill: #7f7f7f;
+}

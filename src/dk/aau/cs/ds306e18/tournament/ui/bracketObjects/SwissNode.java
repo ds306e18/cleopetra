@@ -17,7 +17,7 @@ import java.util.ArrayList;
 /** Used to display the a swiss stage. */
 public class SwissNode extends HBox implements MatchPlayedListener, MatchChangeListener, ModelCoupledUI {
 
-    private final Insets MARGINS = new Insets(0, 0, 8, 0);
+    private final Insets MARGINS = new Insets(0, 8, 8, 0);
     private final int COLUMN_WIDTH = 175;
 
     private final SwissFormat swiss;
