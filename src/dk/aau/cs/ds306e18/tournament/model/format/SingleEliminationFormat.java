@@ -31,7 +31,7 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
         rounds = log2(seededTeams.size());
         generateBracket();
         seedBracket(seededTeams, doSeeding);
-        giveMatchesLabels();
+        giveMatchesIdentifiers();
         status = StageStatus.RUNNING;
         finalMatch.registerMatchPlayedListener(this);
     }
@@ -120,7 +120,7 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
     }
 
     /** Gives the matches identifiers. */
-    private void giveMatchesLabels() {
+    private void giveMatchesIdentifiers() {
         List<Match> treeAsListBFS = finalMatch.getTreeAsListBFS();
         int index = 1;
         for (int i = treeAsListBFS.size() - 1; i >= 0; i--) {
@@ -225,7 +225,7 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
 
         if(count > seededTeams.size()){ count = seededTeams.size();}
 
-        // Will run until enough teams has been found the count
+        // Will run until enough teams has been found
         while (topTeams.size() < count) {
             // places the losers and winners of the round into two different temporary lists
             while (currentMatchIndex < roundUpperBoundIndex && currentMatchIndex < numberOfMatches) {

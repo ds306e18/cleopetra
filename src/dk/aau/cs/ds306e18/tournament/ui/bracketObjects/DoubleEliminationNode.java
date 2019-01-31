@@ -134,7 +134,8 @@ public class DoubleEliminationNode extends VBox implements ModelCoupledUI, Stage
 
     /** Creates the line between upper and lower bracket */
     private Node getLine() {
-        Line line = new Line(0, 0, 1000, 0);
+        int width = 180 * (doubleElimination.getUpperBracketRounds() + 2);
+        Line line = new Line(0, 0, width, 0);
         line.setStroke(Paint.valueOf("#c1c1c1"));
 
         VBox box = new VBox();

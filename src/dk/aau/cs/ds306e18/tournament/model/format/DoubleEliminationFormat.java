@@ -166,8 +166,8 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
         // The extra is takes the winner and loser of the final match, but it should not be played if the loser of
         // the final match has already lost twice
         extraMatch = new Match()
-                .setBlueToLoserOf(finalMatch)
-                .setOrangeToWinnerOf(finalMatch);
+                .setBlueToWinnerOf(finalMatch)
+                .setOrangeToLoserOf(finalMatch);
 
         finalMatch.registerMatchPlayedListener(this);
         extraMatch.registerMatchPlayedListener(this);
@@ -570,8 +570,8 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
             finalMatch.reconnectBlueToWinnerOf(upperBracket[0]);
             finalMatch.reconnectOrangeToWinnerOf(lowerBracket[lowerBracket.length - 1]);
         }
-        extraMatch.reconnectBlueToLoserOf(finalMatch);
-        extraMatch.reconnectOrangeToWinnerOf(finalMatch);
+        extraMatch.reconnectBlueToWinnerOf(finalMatch);
+        extraMatch.reconnectOrangeToLoserOf(finalMatch);
 
         // Listeners
         finalMatch.registerMatchPlayedListener(this);
