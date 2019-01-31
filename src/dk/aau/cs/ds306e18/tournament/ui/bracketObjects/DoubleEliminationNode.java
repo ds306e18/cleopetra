@@ -7,9 +7,13 @@ import dk.aau.cs.ds306e18.tournament.ui.MatchVisualController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
+import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Line;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 import static dk.aau.cs.ds306e18.tournament.utility.PowMath.pow2;
@@ -17,8 +21,8 @@ import static dk.aau.cs.ds306e18.tournament.utility.PowMath.pow2;
 public class DoubleEliminationNode extends VBox implements ModelCoupledUI, StageStatusChangeListener {
 
     private final Insets MARGINS = new Insets(0, 0, 16, 0);
-    private final int SPACE_BETWEEN_BRACKETS = 48;
-    private final int CELL_HEIGHT = 50;
+    private final int SPACE_BETWEEN_BRACKETS_AND_LINE = 32;
+    private final int CELL_HEIGHT = 48;
 
     private final DoubleEliminationFormat doubleElimination;
     private final BracketOverviewTabController boc;
@@ -36,8 +40,9 @@ public class DoubleEliminationNode extends VBox implements ModelCoupledUI, Stage
         doubleElimination.registerStatusChangedListener(this);
 
         getChildren().add(upperGrid);
+        getChildren().add(getLine());
         getChildren().add(lowerGrid);
-        setSpacing(SPACE_BETWEEN_BRACKETS);
+        setSpacing(SPACE_BETWEEN_BRACKETS_AND_LINE);
 
         update();
     }
@@ -123,6 +128,18 @@ public class DoubleEliminationNode extends VBox implements ModelCoupledUI, Stage
         GridPane.setRowSpan(box, rowSpan);
         GridPane.setMargin(box, MARGINS);
         GridPane.setValignment(box, VPos.CENTER);
+
+        return box;
+    }
+
+    /** Creates the line between upper and lower bracket */
+    private Node getLine() {
+        Line line = new Line(0, 0, 1000, 0);
+        line.setStroke(Paint.valueOf("#c1c1c1"));
+
+        VBox box = new VBox();
+        box.getChildren().add(line);
+        VBox.setMargin(line, MARGINS);
 
         return box;
     }

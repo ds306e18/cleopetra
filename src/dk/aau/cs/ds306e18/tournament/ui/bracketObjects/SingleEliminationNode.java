@@ -18,7 +18,7 @@ import static dk.aau.cs.ds306e18.tournament.utility.PowMath.pow2;
 public class SingleEliminationNode extends GridPane implements ModelCoupledUI {
 
     private final Insets MARGINS = new Insets(0, 0, 16, 0);
-    private final int CELL_HEIGHT = 50;
+    private final int CELL_HEIGHT = 48;
 
     private final SingleEliminationFormat singleElimination;
     private final BracketOverviewTabController boc;
