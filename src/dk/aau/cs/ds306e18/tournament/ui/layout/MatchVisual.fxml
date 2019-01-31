@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<HBox id="matchPlayed" fx:id="matchRoot" alignment="CENTER_RIGHT" spacing="2.0" styleClass="match" stylesheets="@css/visualmatch.css" xmlns="http://javafx.com/javafx/1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.MatchVisualController">
+<HBox id="played" fx:id="matchRoot" alignment="CENTER_RIGHT" spacing="2.0" stylesheets="@css/visualmatch.css" xmlns="http://javafx.com/javafx/1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.MatchVisualController">
    <children>
       <AnchorPane fx:id="identifierHolder" prefHeight="50.0" prefWidth="22.0">
          <children>
@@ -33,14 +33,13 @@
                      </HBox.margin>
                      <children>
                         <Rectangle fill="#c1c1c1" height="24.0" layoutX="1.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="teamBg" width="104.0" />
-                        <Label fx:id="textBlueName" layoutX="5.0" layoutY="2.0" prefHeight="17.0" prefWidth="100.0" styleClass="teamName" text="Team 1"/>
+                        <Label fx:id="textBlueName" layoutX="5.0" layoutY="2.0" prefHeight="17.0" prefWidth="100.0" styleClass="teamName" text="Team 1" />
                      </children>
                   </Group>
                   <Group styleClass="score">
                      <children>
                         <Rectangle fill="WHITE" height="24.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="scoreBg" width="24.0" />
-                        <Text fx:id="teamBlueScore" layoutX="2.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0"
-                              styleClass="scoreNo" text="5" textAlignment="CENTER" wrappingWidth="20.0"/>
+                        <Text fx:id="teamBlueScore" layoutX="2.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="scoreNo" text="5" textAlignment="CENTER" wrappingWidth="20.0" />
                      </children>
                   </Group>
                   <Polygon fill="#c1c1c1" points="0.0, 0.0, 0.0, 24.0, 18.0, 12.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="triangle" />
@@ -62,15 +61,13 @@
                      </HBox.margin>
                      <children>
                         <Rectangle fill="#c1c1c1" height="24.0" layoutX="1.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="teamBg" width="104.0" />
-                        <Label fx:id="textOrangeName" layoutX="5.0" layoutY="2.0" prefHeight="17.0" prefWidth="100.0" styleClass="teamName" text="Team 2"/>
+                        <Label fx:id="textOrangeName" layoutX="5.0" layoutY="2.0" prefHeight="17.0" prefWidth="100.0" styleClass="teamName" text="Team 2" />
                      </children>
                   </Group>
                   <Group styleClass="score">
                      <children>
                         <Rectangle fill="WHITE" height="24.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="scoreBg" width="24.0" />
-                        <Text fx:id="teamOrangeScore" layoutX="2.0" layoutY="17.0" strokeType="OUTSIDE"
-                              strokeWidth="0.0" styleClass="scoreNo" text="2" textAlignment="CENTER"
-                              wrappingWidth="20.0"/>
+                        <Text fx:id="teamOrangeScore" layoutX="2.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="scoreNo" text="2" textAlignment="CENTER" wrappingWidth="20.0" />
                      </children>
                   </Group>
                   <Polygon fill="#c1c1c1" points="0.0, 0.0, 0.0, 24.0, 18.0, 12.0" strokeWidth="0.0" styleClass="triangle" />
@@ -85,4 +82,8 @@
    <padding>
       <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
    </padding>
+   <styleClass>
+      <String fx:value="match" />
+      <String fx:value="selectable" />
+   </styleClass>
 </HBox>

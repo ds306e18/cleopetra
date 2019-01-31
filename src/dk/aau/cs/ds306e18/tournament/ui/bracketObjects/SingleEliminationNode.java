@@ -12,11 +12,13 @@ import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
 
+import static dk.aau.cs.ds306e18.tournament.utility.PowMath.pow2;
+
 /** Used to display the a single elimination stage. */
 public class SingleEliminationNode extends GridPane implements ModelCoupledUI {
 
     private final Insets MARGINS = new Insets(0, 0, 16, 0);
-    private final int CELL_SIZE = 50;
+    private final int CELL_HEIGHT = 48;
 
     private final SingleEliminationFormat singleElimination;
     private final BracketOverviewTabController boc;
@@ -58,7 +60,7 @@ public class SingleEliminationNode extends GridPane implements ModelCoupledUI {
                 }
 
                 box.setAlignment(Pos.CENTER);
-                box.setMinHeight(CELL_SIZE * cellSpan);
+                box.setMinHeight(CELL_HEIGHT * cellSpan);
 
                 add(box, column, (matchesInRound - 1 - i) * cellSpan);
                 setRowSpan(box, cellSpan);
@@ -66,15 +68,6 @@ public class SingleEliminationNode extends GridPane implements ModelCoupledUI {
                 setValignment(box, VPos.CENTER);
             }
         }
-    }
-
-    /** Returns 2 to the power of n. */
-    private int pow2(int n) {
-        int res = 1;
-        for (int i = 0; i < n; i++) {
-            res *= 2;
-        }
-        return res;
     }
 
     @Override

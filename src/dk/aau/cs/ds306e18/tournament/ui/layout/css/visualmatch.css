@@ -3,7 +3,7 @@
     -fx-border-color: transparent;
 }
 
-.match:hover{
+.selectable:hover {
     -fx-cursor: hand;
     -fx-border-width: 1;
     -fx-border-color: green;
@@ -29,8 +29,8 @@
     -fx-fill: #f28542;
 }
 
-#pending .color {
-    -fx-fill: #494949;
+.teamBg {
+    -fx-background-color: #c1c1c1;
 }
 
 .scoreBg {
@@ -40,7 +40,7 @@
     -fx-stroke: #c1c1c1;
 }
 
-#played .winner .team .teamBg {
+#played .winner .teamBg {
     -fx-fill: #97af97;
 }
 
@@ -49,19 +49,34 @@
     -fx-fill: #97af97;
 }
 
-#played .winner .score .scoreBg {
+#played .winner .scoreBg {
     -fx-stroke: #97af97;
 }
 
-#played .winner .score .scoreNo {
+#played .winner .scoreNo {
     -fx-font-weight: bold;
 }
 
-#played .winner .team .teamName {
+#played .winner .teamName {
     -fx-font-weight: bold;
 }
 
-#pending .tbd .team .teamName {
+#pending .tbd .teamName {
     -fx-font-style: italic;
     -fx-text-fill: #7f7f7f;
+}
+
+#pending .color {
+    -fx-fill: #494949;
+}
+
+#disabled .color {
+    -fx-fill: #c1c1c1;
+}
+
+#disabled .teamBg {
+    -fx-fill: white;
+    -fx-stroke-type: inside;
+    -fx-stroke-width: 1;
+    -fx-stroke: #c1c1c1 white white white;
 }

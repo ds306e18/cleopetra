@@ -40,7 +40,7 @@ public class Serializer {
         Tournament tournament = gson.fromJson(json, Tournament.class);
         for (Stage stage : tournament.getStages()) {
             if (stage.getFormat().getStatus() != StageStatus.PENDING) {
-                stage.getFormat().repair();
+                stage.getFormat().postDeserializationRepair();
             }
         }
         return tournament;

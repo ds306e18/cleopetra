@@ -3,6 +3,7 @@ package dk.aau.cs.ds306e18.tournament.ui;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchChangeListener;
+import dk.aau.cs.ds306e18.tournament.model.match.MatchStatus;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
@@ -26,6 +27,7 @@ public class MatchVisualController implements MatchChangeListener {
     private BracketOverviewTabController boc;
     private Match showedMatch;
     private boolean showIdentifier = false;
+    private boolean disabled = false;
 
     @FXML
     private void initialize() { }
@@ -33,14 +35,16 @@ public class MatchVisualController implements MatchChangeListener {
     /** Gets called when a match is clicked. */
     @FXML
     void matchClicked(MouseEvent event) {
-        matchRoot.getStyleClass().add("selectedMatch");
-        boc.setSelectedMatch(this);
+        if (!disabled) {
+            matchRoot.getStyleClass().add("selectedMatch");
+            boc.setSelectedMatch(this);
 
-        if (showedMatch.isReadyToPlay()
-                && event.getButton().equals(MouseButton.PRIMARY)
-                && event.getClickCount() == 2) {
+            if (showedMatch.isReadyToPlay()
+                    && event.getButton().equals(MouseButton.PRIMARY)
+                    && event.getClickCount() == 2) {
 
-            boc.openEditMatchPopup();
+                boc.openEditMatchPopup();
+            }
         }
     }
 
@@ -52,14 +56,14 @@ public class MatchVisualController implements MatchChangeListener {
     /** Clears the visuals match for both text and css. */
     private void clearFields(){
         matchRoot.setId("");
-        hboxBlueTeam.getStyleClass().clear();
-        hboxOrangeTeam.getStyleClass().clear();
-        hboxBlueTeam.getStyleClass().add("blue");
-        hboxOrangeTeam.getStyleClass().add("orange");
-        textBlueName.setText("");
-        textOrangeName.setText("");
-        teamOrangeScore.setText("");
-        teamBlueScore.setText("");
+        hboxBlueTeam.getStyleClass().remove("winner");
+        hboxOrangeTeam.getStyleClass().remove("winner");
+        hboxBlueTeam.getStyleClass().remove("tbd");
+        hboxOrangeTeam.getStyleClass().remove("tbd");
+        textBlueName.setText(" ");
+        textOrangeName.setText(" ");
+        teamOrangeScore.setText(" ");
+        teamBlueScore.setText(" ");
     }
 
     /** Updates the state/ui of this match. */
@@ -97,58 +101,44 @@ public class MatchVisualController implements MatchChangeListener {
             identifierHolder.setManaged(false);
         }
 
+        MatchStatus status = showedMatch.getStatus();
         Team blueTeam = showedMatch.getBlueTeam();
         Team orangeTeam = showedMatch.getOrangeTeam();
 
         // Set tags and id based on the given match and its status
-        switch (showedMatch.getStatus()) {
-            case NOT_PLAYABLE:
-                // css id
-                matchRoot.setId("pending");
+        if (disabled) {
 
-                // Show known team or where they come from
-                textBlueName.setText(showedMatch.getBlueTeamAsString());
-                textOrangeName.setText(showedMatch.getOrangeTeamAsString());
-                if (blueTeam == null) hboxBlueTeam.getStyleClass().add("tbd");
-                if (orangeTeam == null) hboxOrangeTeam.getStyleClass().add("tbd");
-                break;
+            // css id
+            matchRoot.setId("disabled");
 
-            case READY_TO_BE_PLAYED: case DRAW:
-                // css id
+        } else if (status == MatchStatus.NOT_PLAYABLE) {
+            // css id
+            matchRoot.setId("pending");
+
+            // Show known team or where they come from
+            textBlueName.setText(showedMatch.getBlueTeamAsString());
+            textOrangeName.setText(showedMatch.getOrangeTeamAsString());
+            if (blueTeam == null) hboxBlueTeam.getStyleClass().add("tbd");
+            if (orangeTeam == null) hboxOrangeTeam.getStyleClass().add("tbd");
+
+        } else {
+
+            // Names and scores
+            textBlueName.setText(showedMatch.getBlueTeam().getTeamName());
+            textOrangeName.setText(showedMatch.getOrangeTeam().getTeamName());
+            teamBlueScore.setText(String.valueOf(showedMatch.getBlueScore()));
+            teamOrangeScore.setText(String.valueOf(showedMatch.getOrangeScore()));
+
+            // css ids
+            if (status == MatchStatus.READY_TO_BE_PLAYED || status == MatchStatus.DRAW) {
                 matchRoot.setId("ready");
-
-                // Names and scores
-                textBlueName.setText(showedMatch.getBlueTeam().getTeamName());
-                textOrangeName.setText(showedMatch.getOrangeTeam().getTeamName());
-                teamBlueScore.setText(String.valueOf(showedMatch.getBlueScore()));
-                teamOrangeScore.setText(String.valueOf(showedMatch.getOrangeScore()));
-                break;
-
-            case BLUE_WINS:
-                // css id
+            } else if (status == MatchStatus.BLUE_WINS) {
                 matchRoot.setId("played");
                 hboxBlueTeam.getStyleClass().add("winner");
-
-                // Names and scores
-                textBlueName.setText(showedMatch.getBlueTeam().getTeamName());
-                textOrangeName.setText(showedMatch.getOrangeTeam().getTeamName());
-                teamBlueScore.setText(String.valueOf(showedMatch.getBlueScore()));
-                teamOrangeScore.setText(String.valueOf(showedMatch.getOrangeScore()));
-                break;
-
-            case ORANGE_WINS:
-                // css id
+            } else if (status == MatchStatus.ORANGE_WINS) {
                 matchRoot.setId("played");
                 hboxOrangeTeam.getStyleClass().add("winner");
-
-                // Names and scores
-                textBlueName.setText(showedMatch.getBlueTeam().getTeamName());
-                textOrangeName.setText(showedMatch.getOrangeTeam().getTeamName());
-                teamBlueScore.setText(String.valueOf(showedMatch.getBlueScore()));
-                teamOrangeScore.setText(String.valueOf(showedMatch.getOrangeScore()));
-                break;
-
-            default: throw new IllegalStateException();
+            }
         }
     }
 
@@ -163,6 +153,21 @@ public class MatchVisualController implements MatchChangeListener {
     public void setShowIdentifier(boolean showIdentifier) {
         this.showIdentifier = showIdentifier;
         updateFields();
+    }
+
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    /** When disabled the match is visible but blank and cannot be interacted with. */
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
+        updateFields();
+        if (disabled) {
+            matchRoot.getStyleClass().remove("selectable");
+        } else {
+            matchRoot.getStyleClass().add("selectable");
+        }
     }
 
     /** Decouples the controller from the model, allowing the controller to be thrown to the garbage collector. */
