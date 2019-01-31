@@ -1,8 +1,6 @@
 # Changelog
 
-
-
-#### Unreleased (dev branch)
+#### Version 1.2.0 - 31. Jan 2019
 - Double elimination. #9 - NicEastvillage
     - Supports any number of teams and byes
     - Supports bracket reset (an extra grand final match if the lower-bracket winner wins against upper-bracket winner)
