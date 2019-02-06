@@ -125,8 +125,8 @@ public class MatchVisualController implements MatchChangeListener {
             // Names and scores
             textBlueName.setText(showedMatch.getBlueTeam().getTeamName());
             textOrangeName.setText(showedMatch.getOrangeTeam().getTeamName());
-            teamBlueScore.setText(String.valueOf(showedMatch.getTeamOneScore()));
-            teamOrangeScore.setText(String.valueOf(showedMatch.getTeamTwoScore()));
+            teamBlueScore.setText(String.valueOf(showedMatch.getBlueScore()));
+            teamOrangeScore.setText(String.valueOf(showedMatch.getOrangeScore()));
 
             Match.OutcomeColored outcome = showedMatch.getOutcomeColored();
 

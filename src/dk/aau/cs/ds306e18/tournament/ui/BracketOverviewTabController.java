@@ -44,6 +44,7 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
     @FXML private Button playMatchBtn;
     @FXML private Button modifyConfigBtn;
     @FXML private Button editMatchBtn;
+    @FXML private Button switchColorsBtn;
     @FXML private Label blueTeamNameLabel;
     @FXML private Label blueTeamScore;
     @FXML private ListView<Bot> blueTeamListView;
@@ -458,5 +459,9 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
      */
     private Bot getSelectedBot(ListView<Bot> listView) {
         return listView.getSelectionModel().getSelectedItem();
+    }
+
+    public void onSwitchColorsBtnAction(ActionEvent actionEvent) {
+        selectedMatch.getShowedMatch().setTeamOneToBlue(!selectedMatch.getShowedMatch().isTeamOneBlue());
     }
 }

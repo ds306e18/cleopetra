@@ -101,22 +101,27 @@
                   </Label>
                </children>
             </GridPane>
-            <HBox alignment="TOP_CENTER">
+            <HBox alignment="TOP_CENTER" spacing="16.0">
                <children>
-                  <Button fx:id="playMatchBtn" mnemonicParsing="false" onAction="#onPlayMatchBtnAction" prefHeight="27.0" prefWidth="236.0" text="Modify config and play" />
+                  <Button fx:id="playMatchBtn" mnemonicParsing="false" onAction="#onPlayMatchBtnAction" prefHeight="27.0" prefWidth="110.0" text="Start match">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="modifyConfigBtn" mnemonicParsing="false" onAction="#modifyConfigButtonOnAction" prefHeight="27.0" prefWidth="110.0" text="Modify config">
+                  <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Button>
                </children>
                <padding>
                   <Insets bottom="16.0" />
                </padding>
             </HBox>
-            <HBox fx:id="selectedMatchButtonHolder" alignment="CENTER">
+            <HBox fx:id="selectedMatchButtonHolder" alignment="CENTER" spacing="16.0">
                <children>
-                  <Button fx:id="modifyConfigBtn" mnemonicParsing="false" onAction="#modifyConfigButtonOnAction" prefHeight="27.0" prefWidth="110.0" text="Modify config">
-                  <HBox.margin>
-                        <Insets right="16.0" />
-                     </HBox.margin>
-                  </Button>
                   <Button fx:id="editMatchBtn" mnemonicParsing="false" onAction="#editMatchBtnOnAction" prefHeight="27.0" prefWidth="110.0" text="Edit scores" />
+                  <Button fx:id="switchColorsBtn" layoutX="89.0" layoutY="10.0" mnemonicParsing="false" onAction="#onSwitchColorsBtnAction" prefHeight="27.0" prefWidth="110.0" text="Switch colors" />
                </children>
             </HBox>
             <VBox fx:id="botInfoBox" prefHeight="236.0" prefWidth="267.0">

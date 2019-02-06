@@ -658,7 +658,7 @@ public final class Match {
      * Returns orange team or null if orange team is unknown.
      */
     public Team getOrangeTeam() {
-        return teamOneIsBlue ? getTeamOne() : getTeamTwo();
+        return teamOneIsBlue ? getTeamTwo() : getTeamOne();
     }
 
     /** Returns team one's name. If team one is null, then "Winner/Loser of .." or "TBD" is returned. */
