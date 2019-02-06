@@ -6,7 +6,6 @@ import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchChangeListener;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchPlayedListener;
-import dk.aau.cs.ds306e18.tournament.model.match.MatchStatus;
 import dk.aau.cs.ds306e18.tournament.ui.BracketOverviewTabController;
 import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.SwissNode;
 import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.SwissSettingsNode;
@@ -157,11 +156,11 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
 
         for (Match match : matches) {
 
-            Team blueTeam = match.getBlueTeam();
-            Team orangeTeam = match.getOrangeTeam();
+            Team teamOne = match.getTeamOne();
+            Team teamTwo = match.getTeamTwo();
 
             //Compare the current match's teams with the two given teams.
-            if (team1 == blueTeam && team2 == orangeTeam || team1 == orangeTeam && team2 == blueTeam)
+            if (team1 == teamOne && team2 == teamTwo || team1 == teamTwo && team2 == teamOne)
                 return true;
         }
 
@@ -187,7 +186,7 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
 
     @Override
     public List<Match> getPendingMatches() {
-        return getAllMatches().stream().filter(match -> match.getStatus() == MatchStatus.NOT_PLAYABLE).collect(Collectors.toList());
+        return getAllMatches().stream().filter(match -> match.getStatus() == Match.Status.NOT_PLAYABLE).collect(Collectors.toList());
     }
 
     @Override
@@ -271,12 +270,10 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
         int points = 0;
 
         for (Match match : getCompletedMatches()) {
-            if (match.getStatus() != MatchStatus.DRAW) {
-                if (match.getWinner().equals(team)) {
-                    points += 2;
-                } else if (match.getLoser().equals(team)) {
-                    points -= 2;
-                }
+            if (match.getWinner().equals(team)) {
+                points += 2;
+            } else if (match.getLoser().equals(team)) {
+                points -= 2;
             }
         }
 
@@ -302,8 +299,8 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
     @Override
     public void onMatchChanged(Match match) {
         // Calculate and assign points for each team in the match.
-        calculateAndAssignTeamPoints(match.getBlueTeam());
-        calculateAndAssignTeamPoints(match.getOrangeTeam());
+        calculateAndAssignTeamPoints(match.getTeamOne());
+        calculateAndAssignTeamPoints(match.getTeamTwo());
     }
 
     @Override

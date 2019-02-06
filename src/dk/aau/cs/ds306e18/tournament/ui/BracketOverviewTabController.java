@@ -9,7 +9,6 @@ import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import dk.aau.cs.ds306e18.tournament.model.format.Format;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchChangeListener;
-import dk.aau.cs.ds306e18.tournament.model.match.MatchStatus;
 import dk.aau.cs.ds306e18.tournament.utility.Alerts;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -305,7 +304,7 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
         if (match != null && match.getBlueTeam() != null) {
             // Blue team
             blueTeamNameLabel.setText(match.getBlueTeam().getTeamName());
-            blueTeamScore.setText(Integer.toString(match.getBlueScore()));
+            blueTeamScore.setText(Integer.toString(match.getTeamOneScore()));
             blueTeamListView.setItems(FXCollections.observableArrayList(match.getBlueTeam().getBots()));
             blueTeamListView.refresh();
         } else {
@@ -318,7 +317,7 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
         if (match != null && match.getOrangeTeam() != null) {
             // Orange team
             orangeTeamNameLabel.setText(match.getOrangeTeam().getTeamName());
-            orangeTeamScore.setText(Integer.toString(match.getOrangeScore()));
+            orangeTeamScore.setText(Integer.toString(match.getTeamTwoScore()));
             orangeTeamListView.setItems(FXCollections.observableArrayList(match.getOrangeTeam().getBots()));
             orangeTeamListView.refresh();
         } else {
@@ -334,7 +333,7 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
 
     /** Disables/Enables the play and edit match buttons */
     public void updateMatchPlayAndEditButtons() {
-        if (selectedMatch == null || selectedMatch.getShowedMatch().getStatus() == MatchStatus.NOT_PLAYABLE) {
+        if (selectedMatch == null || selectedMatch.getShowedMatch().getStatus() == Match.Status.NOT_PLAYABLE) {
             editMatchBtn.setDisable(true);
             playMatchBtn.setDisable(true);
             modifyConfigBtn.setDisable(true);

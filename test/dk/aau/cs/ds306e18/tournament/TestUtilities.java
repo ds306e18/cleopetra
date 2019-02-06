@@ -239,9 +239,9 @@ public class TestUtilities {
      */
     public static void setAllMatchesToPlayed(List<Match> matches) {
         for (Match match : matches) {
-            Team blue = match.getBlueTeam();
-            Team orange = match.getOrangeTeam();
-            if (blue.getInitialSeedValue() < orange.getInitialSeedValue()) {
+            Team teamOne = match.getTeamOne();
+            Team teamTwo = match.getTeamTwo();
+            if (teamOne.getInitialSeedValue() < teamTwo.getInitialSeedValue()) {
                 match.setScores(1, 0, true);
             } else {
                 match.setScores(0, 1, true);

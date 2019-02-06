@@ -3,7 +3,6 @@ package dk.aau.cs.ds306e18.tournament.ui;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchChangeListener;
-import dk.aau.cs.ds306e18.tournament.model.match.MatchStatus;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
@@ -101,7 +100,7 @@ public class MatchVisualController implements MatchChangeListener {
             identifierHolder.setManaged(false);
         }
 
-        MatchStatus status = showedMatch.getStatus();
+        Match.Status status = showedMatch.getStatus();
         Team blueTeam = showedMatch.getBlueTeam();
         Team orangeTeam = showedMatch.getOrangeTeam();
 
@@ -111,7 +110,7 @@ public class MatchVisualController implements MatchChangeListener {
             // css id
             matchRoot.setId("disabled");
 
-        } else if (status == MatchStatus.NOT_PLAYABLE) {
+        } else if (status == Match.Status.NOT_PLAYABLE) {
             // css id
             matchRoot.setId("pending");
 
@@ -126,16 +125,18 @@ public class MatchVisualController implements MatchChangeListener {
             // Names and scores
             textBlueName.setText(showedMatch.getBlueTeam().getTeamName());
             textOrangeName.setText(showedMatch.getOrangeTeam().getTeamName());
-            teamBlueScore.setText(String.valueOf(showedMatch.getBlueScore()));
-            teamOrangeScore.setText(String.valueOf(showedMatch.getOrangeScore()));
+            teamBlueScore.setText(String.valueOf(showedMatch.getTeamOneScore()));
+            teamOrangeScore.setText(String.valueOf(showedMatch.getTeamTwoScore()));
+
+            Match.OutcomeColored outcome = showedMatch.getOutcomeColored();
 
             // css ids
-            if (status == MatchStatus.READY_TO_BE_PLAYED || status == MatchStatus.DRAW) {
+            if (status == Match.Status.READY_TO_BE_PLAYED || outcome == Match.OutcomeColored.DRAW) {
                 matchRoot.setId("ready");
-            } else if (status == MatchStatus.BLUE_WINS) {
+            } else if (outcome == Match.OutcomeColored.BLUE_WINS) {
                 matchRoot.setId("played");
                 hboxBlueTeam.getStyleClass().add("winner");
-            } else if (status == MatchStatus.ORANGE_WINS) {
+            } else if (outcome == Match.OutcomeColored.ORANGE_WINS) {
                 matchRoot.setId("played");
                 hboxOrangeTeam.getStyleClass().add("winner");
             }

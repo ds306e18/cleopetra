@@ -148,7 +148,11 @@ public class EditMatchScoreController {
         int orangeScore = Integer.parseInt(orangeScoreSpinner.getEditor().getText());
         boolean played = matchOverCheckBox.isSelected();
         try {
-            match.setScores(blueScore, orangeScore, played);
+            if (match.isTeamOneBlue()) {
+                match.setScores(blueScore, orangeScore, played);
+            } else {
+                match.setScores(orangeScore, blueScore, played);
+            }
             closeWindow();
 
         } catch (MatchResultDependencyException e) {
