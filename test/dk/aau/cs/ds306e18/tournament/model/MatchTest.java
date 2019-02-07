@@ -417,4 +417,66 @@ public class MatchTest {
         assertEquals("Loser of 1", matchThree.getTeamOneAsString());
         assertEquals("D", matchThree.getTeamTwoAsString());
     }
+
+    @Test
+    public void switchingColors01() {
+        Team teamA = new Team("A", null, 0, "a");
+        Team teamB = new Team("B", null, 0, "b");
+
+        Match match = new Match(teamA, teamB);
+
+        assertSame(teamA, match.getTeamOne());
+        assertSame(teamB, match.getTeamTwo());
+        assertSame(teamA, match.getBlueTeam());
+        assertSame(teamB, match.getOrangeTeam());
+
+        match.setTeamOneToBlue(false);
+
+        assertSame(teamA, match.getTeamOne());
+        assertSame(teamB, match.getTeamTwo());
+        assertSame(teamB, match.getBlueTeam());
+        assertSame(teamA, match.getOrangeTeam());
+    }
+
+    @Test
+    public void switchingColors02() {
+        Team teamA = new Team("A", null, 0, "a");
+        Team teamB = new Team("B", null, 0, "b");
+
+        Match match = new Match(teamA, teamB);
+        match.setScores(2, 0, true);
+
+        assertSame(2, match.getTeamOneScore());
+        assertSame(0, match.getTeamTwoScore());
+        assertSame(2, match.getBlueScore());
+        assertSame(0, match.getOrangeScore());
+
+        match.setTeamOneToBlue(false);
+
+        assertEquals(2, match.getTeamOneScore());
+        assertEquals(0, match.getTeamTwoScore());
+        assertEquals(0, match.getBlueScore());
+        assertEquals(2, match.getOrangeScore());
+    }
+
+    @Test
+    public void switchingColors03() {
+        Team teamA = new Team("A", null, 0, "a");
+        Team teamB = new Team("B", null, 0, "b");
+
+        Match match = new Match(teamA, teamB);
+        match.setScores(2, 0, true);
+
+        assertEquals("A", match.getTeamOneAsString());
+        assertEquals("B", match.getTeamTwoAsString());
+        assertEquals("A", match.getBlueTeamAsString());
+        assertEquals("B", match.getOrangeTeamAsString());
+
+        match.setTeamOneToBlue(false);
+
+        assertEquals("A", match.getTeamOneAsString());
+        assertEquals("B", match.getTeamTwoAsString());
+        assertEquals("B", match.getBlueTeamAsString());
+        assertEquals("A", match.getOrangeTeamAsString());
+    }
 }
