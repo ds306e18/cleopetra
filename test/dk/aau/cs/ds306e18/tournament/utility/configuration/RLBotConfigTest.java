@@ -15,7 +15,7 @@ public class RLBotConfigTest {
     /** Reads in test_rlbot.cfg, edits one parameter, and returns it for easy testing */
     private static RLBotConfig setupEditedRLBotConfig() {
         RLBotConfig rlBotConfig = new RLBotConfig(testDir + testRLBotConfigFilename);
-        rlBotConfig.editLine("num_participants", "42");
+        rlBotConfig.editLine("Match Configuration","num_participants", "42");
         return rlBotConfig;
     }
 
@@ -55,30 +55,30 @@ public class RLBotConfigTest {
         Match match = createTestMatch();
         rlBotConfig.setupMatch(match);
 
-        assertEquals("6", rlBotConfig.getValueOfLine("num_participant"));
+        assertEquals("6", rlBotConfig.getValueOfLine("Match Configuration","num_participants"));
 
         // checking correctly set paths
         assertEquals(match.getBlueTeam().getBots().get(0).getConfigPath(),
-                rlBotConfig.getValueOfLine("participant_config_0"));
+                rlBotConfig.getValueOfLine("Participant Configuration","participant_config_0"));
         assertEquals(match.getBlueTeam().getBots().get(1).getConfigPath(),
-                rlBotConfig.getValueOfLine("participant_config_1"));
+                rlBotConfig.getValueOfLine("Participant Configuration","participant_config_1"));
         assertEquals(match.getBlueTeam().getBots().get(2).getConfigPath(),
-                rlBotConfig.getValueOfLine("participant_config_2"));
+                rlBotConfig.getValueOfLine("Participant Configuration","participant_config_2"));
 
         assertEquals(match.getOrangeTeam().getBots().get(0).getConfigPath(),
-                rlBotConfig.getValueOfLine("participant_config_3"));
+                rlBotConfig.getValueOfLine("Participant Configuration","participant_config_3"));
         assertEquals(match.getOrangeTeam().getBots().get(1).getConfigPath(),
-                rlBotConfig.getValueOfLine("participant_config_4"));
+                rlBotConfig.getValueOfLine("Participant Configuration","participant_config_4"));
         assertEquals(match.getOrangeTeam().getBots().get(2).getConfigPath(),
-                rlBotConfig.getValueOfLine("participant_config_5"));
+                rlBotConfig.getValueOfLine("Participant Configuration","participant_config_5"));
 
         // checking correctly set team positions
         for (int i = 0; i < match.getBlueTeam().size(); i++) {
-            assertEquals("0", rlBotConfig.getValueOfLine("participant_team_" + i));
+            assertEquals("0", rlBotConfig.getValueOfLine("Participant Configuration","participant_team_" + i));
         }
 
         for (int i = match.getBlueTeam().size(); i < match.getOrangeTeam().size(); i++) {
-            assertEquals("1", rlBotConfig.getValueOfLine("participant_team_" + i));
+            assertEquals("1", rlBotConfig.getValueOfLine("Participant Configuration","participant_team_" + i));
         }
     }
 
