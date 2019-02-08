@@ -20,7 +20,7 @@ public class BotConfigTest {
     /** Reads in test_bot.cfg, edits one parameter, and returns it for easy testing */
     private static BotConfig setupEditedBotConfig() {
         BotConfig botConfig = new BotConfig(testDir + testBotConfigFilename);
-        botConfig.editLine("name", "Testing bot");
+        botConfig.editLine("Locations", "name", "Testing bot");
         return botConfig;
     }
 
@@ -100,7 +100,7 @@ public class BotConfigTest {
     @Test
     public void getNullValue() {
         BotConfig botConfig = setupConfig();
-        botConfig.editLine("language", "");
+        botConfig.editLine("Details","language", "");
         System.out.println(botConfig.getLanguage());
         assertEquals("", botConfig.getLanguage());
     }
@@ -109,7 +109,7 @@ public class BotConfigTest {
     @Test
     public void characterTest() {
         BotConfig botConfig = setupConfig();
-        botConfig.editLine("name", "øæåâèî");
+        botConfig.editLine("Locations","name", "øæåâèî");
         botConfig.writeConfig(testDir + testBotConfigTargetFilename);
         assertEquals("øæåâèî", new BotConfig(testDir + testBotConfigTargetFilename).getName());
     }
