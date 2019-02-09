@@ -47,18 +47,18 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label fx:id="blueTeamNameLabel" alignment="CENTER" minWidth="160.0" prefWidth="160.0" text="Blue" textFill="#6a82fc">
+                  <Label fx:id="teamOneNameLabel" alignment="CENTER" minWidth="160.0" prefWidth="160.0" text="Blue" textFill="#6a82fc">
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font>
                   </Label>
-                  <Label fx:id="orangeTeamNameLabel" alignment="CENTER" minWidth="160.0" prefWidth="160.0" text="Orange" textFill="#f5af18" GridPane.rowIndex="1">
+                  <Label fx:id="teamTwoNameLabel" alignment="CENTER" minWidth="160.0" prefWidth="160.0" text="Orange" textFill="#f5af18" GridPane.rowIndex="1">
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font>
                   </Label>
-                  <Spinner fx:id="blueScoreSpinner" editable="true" minWidth="70.0" prefWidth="70.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
-                  <Spinner fx:id="orangeScoreSpinner" editable="true" minWidth="70.0" prefWidth="70.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                  <Spinner fx:id="teamOneScoreSpinner" editable="true" minWidth="70.0" prefWidth="70.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+                  <Spinner fx:id="teamTwoScoreSpinner" editable="true" minWidth="70.0" prefWidth="70.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
                </children>
                <VBox.margin>
                   <Insets bottom="16.0" />
