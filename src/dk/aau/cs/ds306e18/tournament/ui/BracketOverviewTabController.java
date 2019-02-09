@@ -338,10 +338,14 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
             editMatchBtn.setDisable(true);
             playMatchBtn.setDisable(true);
             modifyConfigBtn.setDisable(true);
+            switchColorsBtn.setDisable(true);
         } else {
             editMatchBtn.setDisable(false);
-            playMatchBtn.setDisable(false); // If match can't be played an error popup is displayed explaining why
+            // If match can't be played an error popup is displayed explaining why
+            playMatchBtn.setDisable(false);
             modifyConfigBtn.setDisable(false);
+            // color switching is disabled when match has been played to avoid confusion when comparing replays and bracket
+            switchColorsBtn.setDisable(selectedMatch.getShowedMatch().hasBeenPlayed());
         }
     }
 
