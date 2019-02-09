@@ -24,7 +24,7 @@
       </AnchorPane>
       <VBox maxHeight="46.0" maxWidth="124.0" onMouseClicked="#matchClicked" spacing="2.0">
          <children>
-            <HBox fx:id="hboxBlueTeam" alignment="CENTER_LEFT">
+            <HBox fx:id="hboxTeamOne" alignment="CENTER_LEFT">
                <children>
                   <Rectangle fill="#404040" height="24.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="color" width="4.0" />
                   <Group styleClass="team">
@@ -33,13 +33,13 @@
                      </HBox.margin>
                      <children>
                         <Rectangle fill="#c1c1c1" height="24.0" layoutX="1.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="teamBg" width="104.0" />
-                        <Label fx:id="textBlueName" layoutX="5.0" layoutY="2.0" prefHeight="17.0" prefWidth="100.0" styleClass="teamName" text="Team 1" />
+                        <Label fx:id="textTeamOneName" layoutX="5.0" layoutY="2.0" prefHeight="17.0" prefWidth="100.0" styleClass="teamName" text="Team 1" />
                      </children>
                   </Group>
                   <Group styleClass="score">
                      <children>
                         <Rectangle fill="WHITE" height="24.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="scoreBg" width="24.0" />
-                        <Text fx:id="teamBlueScore" layoutX="2.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="scoreNo" text="5" textAlignment="CENTER" wrappingWidth="20.0" />
+                        <Text fx:id="textTeamOneScore" layoutX="2.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="scoreNo" text="5" textAlignment="CENTER" wrappingWidth="20.0" />
                      </children>
                   </Group>
                   <Polygon fill="#c1c1c1" points="0.0, 0.0, 0.0, 24.0, 18.0, 12.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="triangle" />
@@ -52,7 +52,7 @@
                   <String fx:value="winner" />
                </styleClass>
             </HBox>
-            <HBox fx:id="hboxOrangeTeam" alignment="CENTER_LEFT">
+            <HBox fx:id="hboxTeamTwo" alignment="CENTER_LEFT">
                <children>
                   <Rectangle fill="#404040" height="24.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="color" width="4.0" />
                   <Group styleClass="team">
@@ -61,13 +61,13 @@
                      </HBox.margin>
                      <children>
                         <Rectangle fill="#c1c1c1" height="24.0" layoutX="1.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="teamBg" width="104.0" />
-                        <Label fx:id="textOrangeName" layoutX="5.0" layoutY="2.0" prefHeight="17.0" prefWidth="100.0" styleClass="teamName" text="Team 2" />
+                        <Label fx:id="textTeamTwoName" layoutX="5.0" layoutY="2.0" prefHeight="17.0" prefWidth="100.0" styleClass="teamName" text="Team 2" />
                      </children>
                   </Group>
                   <Group styleClass="score">
                      <children>
                         <Rectangle fill="WHITE" height="24.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="scoreBg" width="24.0" />
-                        <Text fx:id="teamOrangeScore" layoutX="2.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="scoreNo" text="2" textAlignment="CENTER" wrappingWidth="20.0" />
+                        <Text fx:id="textTeamTwoScore" layoutX="2.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="scoreNo" text="2" textAlignment="CENTER" wrappingWidth="20.0" />
                      </children>
                   </Group>
                   <Polygon fill="#c1c1c1" points="0.0, 0.0, 0.0, 24.0, 18.0, 12.0" strokeWidth="0.0" styleClass="triangle" />

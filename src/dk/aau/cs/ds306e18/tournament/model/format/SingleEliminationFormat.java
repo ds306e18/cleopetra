@@ -3,7 +3,6 @@ package dk.aau.cs.ds306e18.tournament.model.format;
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchPlayedListener;
-import dk.aau.cs.ds306e18.tournament.model.match.MatchStatus;
 import dk.aau.cs.ds306e18.tournament.model.TieBreaker;
 import dk.aau.cs.ds306e18.tournament.ui.BracketOverviewTabController;
 import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.SingleEliminationNode;
@@ -51,8 +50,8 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
             // Creates the remaining matches which contains winners from their left- and right child-indexes.
             else {
                 bracket[i] = new Match()
-                        .setBlueToWinnerOf(bracket[getLeftIndex(i)])
-                        .setOrangeToWinnerOf(bracket[getRightIndex(i)]);
+                        .setTeamOneToWinnerOf(bracket[getLeftIndex(i)])
+                        .setTeamTwoToWinnerOf(bracket[getRightIndex(i)]);
             }
         }
         finalMatch = bracket[0];
@@ -90,18 +89,18 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
             if (byeList.contains(seedList.get(teamIndex)) || byeList.contains(seedList.get(teamIndex + 1))) {
                 int matchCheckIndex = getParentIndex(seedMatchIndex);
                 if (getLeftIndex(matchCheckIndex) == seedMatchIndex) {
-                    bracket[getParentIndex(seedMatchIndex)].setBlue(seedList.get(teamIndex));
+                    bracket[getParentIndex(seedMatchIndex)].setTeamOne(seedList.get(teamIndex));
                 }
                 else {
-                    bracket[getParentIndex(seedMatchIndex)].setOrange(seedList.get(teamIndex));
+                    bracket[getParentIndex(seedMatchIndex)].setTeamTwo(seedList.get(teamIndex));
                 }
                 bracket[seedMatchIndex] = null;
                 seedMatchIndex--;
             }
             // If there are no byes in the match up, place the teams vs each other as intended
             else {
-                bracket[seedMatchIndex].setBlue(seedList.get(teamIndex));
-                bracket[seedMatchIndex].setOrange(seedList.get(teamIndex+1));
+                bracket[seedMatchIndex].setTeamOne(seedList.get(teamIndex));
+                bracket[seedMatchIndex].setTeamTwo(seedList.get(teamIndex+1));
                 seedMatchIndex--;
             }
         }
@@ -160,12 +159,12 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
 
     @Override
     public List<Match> getUpcomingMatches() {
-        return finalMatch.getTreeAsListBFS().stream().filter(c -> c.getStatus().equals(MatchStatus.READY_TO_BE_PLAYED) && !c.hasBeenPlayed()).collect(Collectors.toList());
+        return finalMatch.getTreeAsListBFS().stream().filter(c -> c.getStatus().equals(Match.Status.READY_TO_BE_PLAYED) && !c.hasBeenPlayed()).collect(Collectors.toList());
     }
 
     @Override
     public List<Match> getPendingMatches() {
-        return finalMatch.getTreeAsListBFS().stream().filter(c -> c.getStatus().equals(MatchStatus.NOT_PLAYABLE)).collect(Collectors.toList());
+        return finalMatch.getTreeAsListBFS().stream().filter(c -> c.getStatus().equals(Match.Status.NOT_PLAYABLE)).collect(Collectors.toList());
     }
 
     @Override
@@ -290,7 +289,7 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
                 if (leftIndex < bracket.length) {
                     Match leftMatch = bracket[leftIndex];
                     if (leftMatch != null) {
-                        bracket[i].reconnectBlueToWinnerOf(leftMatch);
+                        bracket[i].reconnectTeamOneToWinnerOf(leftMatch);
                     }
                 }
                 // Orange is winner from right match, if such a match exists
@@ -298,7 +297,7 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
                 if (rightIndex < bracket.length) {
                     Match rightMatch = bracket[rightIndex];
                     if (rightMatch != null) {
-                        bracket[i].reconnectOrangeToWinnerOf(rightMatch);
+                        bracket[i].reconnectTeamTwoToWinnerOf(rightMatch);
                     }
                 }
             }

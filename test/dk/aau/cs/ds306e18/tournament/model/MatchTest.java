@@ -1,10 +1,8 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
-import dk.aau.cs.ds306e18.tournament.model.match.MatchStatus;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -20,8 +18,8 @@ public class MatchTest {
     @Test
     public void isReadyToPlay02() {
         Match firstMatch = new Match(new Team("A", null, 0, "a"), new Team("B", null, 0, "b"));
-        Match secondMatch = new Match().setBlue(new Team("C", null, 0, "c")).setOrangeToWinnerOf(firstMatch);
-        secondMatch.setOrangeToWinnerOf(firstMatch);
+        Match secondMatch = new Match().setTeamOne(new Team("C", null, 0, "c")).setTeamTwoToWinnerOf(firstMatch);
+        secondMatch.setTeamTwoToWinnerOf(firstMatch);
         assertFalse(secondMatch.isReadyToPlay());
 
         firstMatch.setScores(4, 2, true);
@@ -30,7 +28,7 @@ public class MatchTest {
 
     @Test
     public void getWinnerAndLoser01() {
-        // team blue wins
+        // team one wins
         Team expectedWinner = new Team("A", null, 0, "a");
         Team expectedLoser = new Team("B", null, 0, "b");
         Match match = new Match(expectedWinner, expectedLoser);
@@ -41,7 +39,7 @@ public class MatchTest {
 
     @Test
     public void getWinnerAndLoser02() {
-        // team orange wins
+        // team two wins
         Team expectedWinner = new Team("A", null, 0, "a");
         Team expectedLoser = new Team("B", null, 0, "b");
         Match match = new Match(expectedLoser, expectedWinner);
@@ -67,23 +65,23 @@ public class MatchTest {
     @Test
     public void getStatus01() {
         Match firstMatch = new Match(new Team("A", null, 0, "a"), new Team("B", null, 0, "b"));
-        Match secondMatch = new Match().setBlue(new Team("C", null, 0, "c")).setOrangeToWinnerOf(firstMatch);
-        assertSame(secondMatch.getStatus(), MatchStatus.NOT_PLAYABLE);
+        Match secondMatch = new Match().setTeamOne(new Team("C", null, 0, "c")).setTeamTwoToWinnerOf(firstMatch);
+        assertSame(secondMatch.getStatus(), Match.Status.NOT_PLAYABLE);
     }
 
     @Test
     public void getStatus02() {
         Match firstMatch = new Match(new Team("A", null, 0, "a"), new Team("B", null, 0, "b"));
-        Match secondMatch = new Match().setBlue(new Team("C", null, 0, "c")).setOrangeToWinnerOf(firstMatch);
+        Match secondMatch = new Match().setTeamOne(new Team("C", null, 0, "c")).setTeamTwoToWinnerOf(firstMatch);
         firstMatch.setScores(0, 2, true);
-        assertSame(secondMatch.getStatus(), MatchStatus.READY_TO_BE_PLAYED);
+        assertSame(secondMatch.getStatus(), Match.Status.READY_TO_BE_PLAYED);
     }
 
     @Test
     public void getStatus03() {
         Match match = new Match(new Team("A", null, 0, "a"), new Team("B", null, 0, "b"));
         match.setScores(0, 0, true);
-        assertSame(match.getStatus(), MatchStatus.DRAW);
+        assertSame(match.getOutcome(), Match.Outcome.DRAW);
     }
 
 
@@ -91,41 +89,41 @@ public class MatchTest {
     public void getStatus04() {
         Match match = new Match(new Team("A", null, 0, "a"), new Team("B", null, 0, "b"));
         match.setScores(2, 0, true);
-        assertSame(match.getStatus(), MatchStatus.BLUE_WINS);
+        assertSame(match.getOutcome(), Match.Outcome.TEAM_ONE_WINS);
     }
 
     @Test
     public void getStatus05() {
         Match match = new Match(new Team("A", null, 0, "a"), new Team("B", null, 0, "b"));
         match.setScores(0, 2, true);
-        assertSame(match.getStatus(), MatchStatus.ORANGE_WINS);
+        assertSame(match.getOutcome(), Match.Outcome.TEAM_TWO_WINS);
     }
 
     @Test
     public void dependsOn01() {
         Match firstMatch = new Match(new Team("A", null, 0, "a"), new Team("B", null, 0, "b"));
-        Match secondMatch = new Match().setBlue(new Team("C", null, 0, "c")).setOrangeToWinnerOf(firstMatch);
+        Match secondMatch = new Match().setTeamOne(new Team("C", null, 0, "c")).setTeamTwoToWinnerOf(firstMatch);
         assertTrue(secondMatch.dependsOn(firstMatch));
     }
 
     @Test
     public void dependsOn02() {
         Match firstMatch = new Match(new Team("A", null, 0, "a"), new Team("B", null, 0, "b"));
-        Match secondMatch = new Match().setBlue(new Team("C", null, 0, "c")).setOrangeToLoserOf(firstMatch);
+        Match secondMatch = new Match().setTeamOne(new Team("C", null, 0, "c")).setTeamTwoToLoserOf(firstMatch);
         assertTrue(secondMatch.dependsOn(firstMatch));
     }
 
     @Test
     public void dependsOn03() {
         Match firstMatch = new Match(new Team("A", null, 0, "a"), new Team("B", null, 0, "b"));
-        Match secondMatch = new Match().setBlue(new Team("C", null, 0, "c")).setOrangeToWinnerOf(firstMatch);
+        Match secondMatch = new Match().setTeamOne(new Team("C", null, 0, "c")).setTeamTwoToWinnerOf(firstMatch);
         assertFalse(firstMatch.dependsOn(secondMatch));
     }
 
     @Test
     public void dependsOn04() {
         Match firstMatch = new Match(new Team("A", null, 0, "a"), new Team("B", null, 0, "b"));
-        Match secondMatch = new Match().setBlue(new Team("C", null, 0, "c")).setOrangeToLoserOf(firstMatch);
+        Match secondMatch = new Match().setTeamOne(new Team("C", null, 0, "c")).setTeamTwoToLoserOf(firstMatch);
         assertFalse(firstMatch.dependsOn(secondMatch));
     }
 
@@ -133,7 +131,7 @@ public class MatchTest {
     public void dependsOn05() {
         Match firstMatch = new Match(new Team("A", null, 0, "a"), new Team("B", null, 0, "b"));
         Match secondMatch = new Match(new Team("C", null, 0, "c"), new Team("D", null, 0, "d"));
-        Match thirdMatch = new Match().setBlueToWinnerOf(firstMatch).setOrangeToLoserOf(secondMatch);
+        Match thirdMatch = new Match().setTeamOneToWinnerOf(firstMatch).setTeamTwoToLoserOf(secondMatch);
 
         assertFalse(firstMatch.dependsOn(secondMatch));
         assertFalse(secondMatch.dependsOn(firstMatch));
@@ -148,9 +146,9 @@ public class MatchTest {
         Match secondMatch = new Match(new Team("C", null, 0, "c"), new Team("D", null, 0, "d"));
         Match thirdMatch = new Match(new Team("E", null, 0, "e"), new Team("F", null, 0, "f"));
         Match fourthMatch = new Match(new Team("G", null, 0, "g"), new Team("H", null, 0, "h"));
-        Match firstSemiFinal = new Match().setBlueToWinnerOf(firstMatch).setOrangeToWinnerOf(secondMatch);
-        Match secondSemiFinal = new Match().setBlueToWinnerOf(thirdMatch).setOrangeToWinnerOf(fourthMatch);
-        Match finalMatch = new Match().setBlueToWinnerOf(firstSemiFinal).setOrangeToWinnerOf(secondSemiFinal);
+        Match firstSemiFinal = new Match().setTeamOneToWinnerOf(firstMatch).setTeamTwoToWinnerOf(secondMatch);
+        Match secondSemiFinal = new Match().setTeamOneToWinnerOf(thirdMatch).setTeamTwoToWinnerOf(fourthMatch);
+        Match finalMatch = new Match().setTeamOneToWinnerOf(firstSemiFinal).setTeamTwoToWinnerOf(secondSemiFinal);
 
         List<Match> bfs = finalMatch.getTreeAsListBFS();
 
@@ -166,8 +164,8 @@ public class MatchTest {
     @Test
     public void getTreeAsListBFS02() {
         Match firstMatch = new Match(new Team("A", null, 0, "a"), new Team("B", null, 0, "b"));
-        Match secondMatch = new Match().setBlueToWinnerOf(firstMatch).setOrange(new Team("C", null, 0, "c"));
-        Match thirdMatch = new Match().setBlueToWinnerOf(secondMatch).setOrange(new Team("D", null, 0, "d"));
+        Match secondMatch = new Match().setTeamOneToWinnerOf(firstMatch).setTeamTwo(new Team("C", null, 0, "c"));
+        Match thirdMatch = new Match().setTeamOneToWinnerOf(secondMatch).setTeamTwo(new Team("D", null, 0, "d"));
 
         List<Match> bfs = thirdMatch.getTreeAsListBFS();
 
@@ -181,126 +179,126 @@ public class MatchTest {
     public void reconnect01() {
         Team expectedWinner = new Team("A", null, 0, "a");
         Match matchOne = new Match(expectedWinner, new Team("B", null, 0, "b"));
-        Match matchTwo = new Match().setBlue(new Team("C", null, 0, "c")).setOrangeToWinnerOf(matchOne);
+        Match matchTwo = new Match().setTeamOne(new Team("C", null, 0, "c")).setTeamTwoToWinnerOf(matchOne);
         matchOne.setScores(4, 2, true);
 
-        assertSame(expectedWinner, matchTwo.getOrangeTeam());
+        assertSame(expectedWinner, matchTwo.getTeamTwo());
 
         // change match one winner now goes to third match instead
-        Match matchThree = new Match().setBlue(new Team("D", null, 0, "d")).setOrangeToWinnerOf(matchOne);
+        Match matchThree = new Match().setTeamOne(new Team("D", null, 0, "d")).setTeamTwoToWinnerOf(matchOne);
 
         assertFalse(matchTwo.dependsOn(matchOne));
-        assertNull(matchTwo.getOrangeTeam());
-        assertSame(expectedWinner, matchThree.getOrangeTeam());
+        assertNull(matchTwo.getTeamTwo());
+        assertSame(expectedWinner, matchThree.getTeamTwo());
     }
 
     @Test
     public void reconnect02() {
         Team expectedWinner = new Team("A", null, 0, "a");
         Match matchOne = new Match(expectedWinner, new Team("B", null, 0, "b"));
-        Match matchTwo = new Match().setBlue(new Team("C", null, 0, "c")).setOrangeToWinnerOf(matchOne);
+        Match matchTwo = new Match().setTeamOne(new Team("C", null, 0, "c")).setTeamTwoToWinnerOf(matchOne);
         matchOne.setScores(4, 2, true);
 
-        assertSame(expectedWinner, matchTwo.getOrangeTeam());
+        assertSame(expectedWinner, matchTwo.getTeamTwo());
 
-        // change match two's orange to be winner of match three
+        // change match two's team two to be winner of match three
         Match matchThree = new Match(new Team("D", null, 0, "d"), new Team("E", null, 0, "e"));
-        matchTwo.setOrangeToWinnerOf(matchThree);
+        matchTwo.setTeamTwoToWinnerOf(matchThree);
 
         assertFalse(matchTwo.dependsOn(matchOne));
         assertTrue(matchTwo.dependsOn(matchThree));
-        assertNull(matchTwo.getOrangeTeam());
+        assertNull(matchTwo.getTeamTwo());
     }
 
     @Test
     public void reconnect03() {
         Team expectedLoser = new Team("A", null, 0, "a");
         Match matchOne = new Match(expectedLoser, new Team("B", null, 0, "b"));
-        Match matchTwo = new Match().setBlue(new Team("C", null, 0, "c")).setOrangeToLoserOf(matchOne);
+        Match matchTwo = new Match().setTeamOne(new Team("C", null, 0, "c")).setTeamTwoToLoserOf(matchOne);
         matchOne.setScores(0, 3, true);
 
-        assertSame(expectedLoser, matchTwo.getOrangeTeam());
+        assertSame(expectedLoser, matchTwo.getTeamTwo());
 
         // change match one loser now goes to third match instead
-        Match matchThree = new Match().setBlue(new Team("D", null, 0, "d")).setOrangeToLoserOf(matchOne);
+        Match matchThree = new Match().setTeamOne(new Team("D", null, 0, "d")).setTeamTwoToLoserOf(matchOne);
 
         assertFalse(matchTwo.dependsOn(matchOne));
-        assertNull(matchTwo.getOrangeTeam());
-        assertSame(expectedLoser, matchThree.getOrangeTeam());
+        assertNull(matchTwo.getTeamTwo());
+        assertSame(expectedLoser, matchThree.getTeamTwo());
     }
 
     @Test
     public void reconnect04() {
         Team expectedLoser = new Team("A", null, 0, "a");
         Match matchOne = new Match(expectedLoser, new Team("B", null, 0, "b"));
-        Match matchTwo = new Match().setBlue(new Team("C", null, 0, "c")).setOrangeToLoserOf(matchOne);
+        Match matchTwo = new Match().setTeamOne(new Team("C", null, 0, "c")).setTeamTwoToLoserOf(matchOne);
         matchOne.setScores(0, 3, true);
 
-        assertSame(expectedLoser, matchTwo.getOrangeTeam());
+        assertSame(expectedLoser, matchTwo.getTeamTwo());
 
-        // change match two's orange to be loser of match three
+        // change match two's team two to be loser of match three
         Match matchThree = new Match(new Team("D", null, 0, "d"), new Team("E", null, 0, "e"));
-        matchTwo.setOrangeToLoserOf(matchThree);
+        matchTwo.setTeamTwoToLoserOf(matchThree);
 
         assertFalse(matchTwo.dependsOn(matchOne));
         assertTrue(matchTwo.dependsOn(matchThree));
-        assertNull(matchTwo.getOrangeTeam());
+        assertNull(matchTwo.getTeamTwo());
     }
 
     @Test
     public void setScores01(){
 
-        Team teamBlue = new Team(null, null, 1, null);
-        Team teamOrange = new Team(null, null, 1, null);
-        Match match = new Match(teamBlue, teamOrange);
+        Team teamOne = new Team(null, null, 1, null);
+        Team teamTwo = new Team(null, null, 1, null);
+        Match match = new Match(teamOne, teamTwo);
 
-        int blueScore = 5;
-        int orangeScore = 2;
-        match.setScores(blueScore, orangeScore, true);
+        int teamOneScore = 5;
+        int teamTwoScore = 2;
+        match.setScores(teamOneScore, teamTwoScore, true);
 
-        assertEquals(blueScore, teamBlue.getGoalsScored());
-        assertEquals(orangeScore, teamBlue.getGoalsConceded());
-        assertEquals(orangeScore, teamOrange.getGoalsScored());
-        assertEquals(blueScore, teamOrange.getGoalsConceded());
+        assertEquals(teamOneScore, teamOne.getGoalsScored());
+        assertEquals(teamTwoScore, teamOne.getGoalsConceded());
+        assertEquals(teamTwoScore, teamTwo.getGoalsScored());
+        assertEquals(teamOneScore, teamTwo.getGoalsConceded());
     }
 
     @Test
     public void setScores02(){
 
-        Team teamBlue = new Team(null, null, 1, null);
-        Team teamOrange = new Team(null, null, 1, null);
-        Match match = new Match(teamBlue, teamOrange);
+        Team teamOne = new Team(null, null, 1, null);
+        Team teamTwo = new Team(null, null, 1, null);
+        Match match = new Match(teamOne, teamTwo);
 
-        int blueScore1 = 5;
-        int orangeScore1 = 2;
-        int blueScore2 = 2;
-        int orangeScore2 = 2;
-        match.setScores(blueScore1, orangeScore1, true);
-        match.setScores(blueScore2, orangeScore2, true);
+        int teamOneScore1 = 5;
+        int teamTwoScore1 = 2;
+        int teamOneScore2 = 2;
+        int teamTwoScore2 = 2;
+        match.setScores(teamOneScore1, teamTwoScore1, true);
+        match.setScores(teamOneScore2, teamTwoScore2, true);
 
-        assertEquals(blueScore2, teamBlue.getGoalsScored());
-        assertEquals(orangeScore2, teamOrange.getGoalsScored());
-        assertEquals(orangeScore2, teamBlue.getGoalsConceded());
-        assertEquals(blueScore2, teamOrange.getGoalsConceded());
+        assertEquals(teamOneScore2, teamOne.getGoalsScored());
+        assertEquals(teamTwoScore2, teamTwo.getGoalsScored());
+        assertEquals(teamTwoScore2, teamOne.getGoalsConceded());
+        assertEquals(teamOneScore2, teamTwo.getGoalsConceded());
     }
 
     @Test
     public void setScores03(){ //Multiple matches
 
-        Team teamBlue = new Team(null, null, 1, null);
-        Team teamOrange = new Team(null, null, 1, null);
-        Match match1 = new Match(teamBlue, teamOrange);
-        Match match2 = new Match(teamBlue, teamOrange);
+        Team teamOne = new Team(null, null, 1, null);
+        Team teamTwo = new Team(null, null, 1, null);
+        Match match1 = new Match(teamOne, teamTwo);
+        Match match2 = new Match(teamOne, teamTwo);
 
-        int blueScore = 5;
-        int orangeScore = 2;
-        match1.setScores(blueScore, orangeScore, true);
-        match2.setScores(blueScore, orangeScore, true);
+        int teamOneScore = 5;
+        int teamTwoScore = 2;
+        match1.setScores(teamOneScore, teamTwoScore, true);
+        match2.setScores(teamOneScore, teamTwoScore, true);
 
-        assertEquals(blueScore*2, teamBlue.getGoalsScored());
-        assertEquals(orangeScore*2, teamBlue.getGoalsConceded());
-        assertEquals(orangeScore*2, teamOrange.getGoalsScored());
-        assertEquals(blueScore*2, teamOrange.getGoalsConceded());
+        assertEquals(teamOneScore*2, teamOne.getGoalsScored());
+        assertEquals(teamTwoScore*2, teamOne.getGoalsConceded());
+        assertEquals(teamTwoScore*2, teamTwo.getGoalsScored());
+        assertEquals(teamOneScore*2, teamTwo.getGoalsConceded());
     }
 
     @Test
@@ -308,19 +306,19 @@ public class MatchTest {
         Team tA = new Team("A", null, 0, "a");
         Team tE = new Team("E", null, 0, "e");
         Match matchOne = new Match(tA, new Team("B", null, 0, "b"));
-        Match matchTwo = new Match().setBlue(new Team("C", null, 0, "c")).setOrangeToWinnerOf(matchOne);
+        Match matchTwo = new Match().setTeamOne(new Team("C", null, 0, "c")).setTeamTwoToWinnerOf(matchOne);
         Match matchThree = new Match(tE, new Team("D", null, 0, "d"));
 
         // Team A and E wins
         matchOne.setScores(1, 0, true);
         matchThree.setScores(1, 0, true);
 
-        // Match two's orange team should be A
-        assertSame(tA, matchTwo.getOrangeTeam());
+        // Match two's team two should be A
+        assertSame(tA, matchTwo.getTeamTwo());
 
-        // Match two's orange team should be E, if we change it to be winner of match three
-        matchTwo.setOrangeToWinnerOf(matchThree);
-        assertSame(tE, matchTwo.getOrangeTeam());
+        // Match two's team two should be E, if we change it to be winner of match three
+        matchTwo.setTeamTwoToWinnerOf(matchThree);
+        assertSame(tE, matchTwo.getTeamTwo());
     }
 
     @Test
@@ -358,7 +356,7 @@ public class MatchTest {
         Team teamC = new Team("C", null, 0, "c");
 
         Match matchOne = new Match(teamA, teamB);
-        Match matchTwo = new Match().setBlue(teamC).setOrangeToWinnerOf(matchOne);
+        Match matchTwo = new Match().setTeamOne(teamC).setTeamTwoToWinnerOf(matchOne);
         matchOne.setScores(2, 1, true);
         matchTwo.setScores(4, 3, true);
 
@@ -377,7 +375,7 @@ public class MatchTest {
         Team teamC = new Team("C", null, 0, "c");
 
         Match matchOne = new Match(teamA, teamB);
-        Match matchTwo = new Match().setBlue(teamC).setOrangeToWinnerOf(matchOne);
+        Match matchTwo = new Match().setTeamOne(teamC).setTeamTwoToWinnerOf(matchOne);
         matchOne.setScores(2, 1, true);
         matchTwo.setScores(4, 3, false);
 
@@ -407,16 +405,78 @@ public class MatchTest {
         Team teamD = new Team("D", null, 0, "d");
 
         Match matchOne = new Match(teamA, teamB);
-        Match matchTwo = new Match().setBlue(teamC).setOrangeToWinnerOf(matchOne);
-        Match matchThree = new Match().setOrange(teamD).setBlueToLoserOf(matchOne);
+        Match matchTwo = new Match().setTeamOne(teamC).setTeamTwoToWinnerOf(matchOne);
+        Match matchThree = new Match().setTeamTwo(teamD).setTeamOneToLoserOf(matchOne);
 
         matchOne.setIdentifier(1);
         matchTwo.setIdentifier(2);
         matchThree.setIdentifier(3);
 
-        assertEquals("Winner of 1", matchTwo.getOrangeTeamAsString());
-        assertEquals("C", matchTwo.getBlueTeamAsString());
-        assertEquals("Loser of 1", matchThree.getBlueTeamAsString());
-        assertEquals("D", matchThree.getOrangeTeamAsString());
+        assertEquals("Winner of 1", matchTwo.getTeamTwoAsString());
+        assertEquals("C", matchTwo.getTeamOneAsString());
+        assertEquals("Loser of 1", matchThree.getTeamOneAsString());
+        assertEquals("D", matchThree.getTeamTwoAsString());
+    }
+
+    @Test
+    public void switchingColors01() {
+        Team teamA = new Team("A", null, 0, "a");
+        Team teamB = new Team("B", null, 0, "b");
+
+        Match match = new Match(teamA, teamB);
+
+        assertSame(teamA, match.getTeamOne());
+        assertSame(teamB, match.getTeamTwo());
+        assertSame(teamA, match.getBlueTeam());
+        assertSame(teamB, match.getOrangeTeam());
+
+        match.setTeamOneToBlue(false);
+
+        assertSame(teamA, match.getTeamOne());
+        assertSame(teamB, match.getTeamTwo());
+        assertSame(teamB, match.getBlueTeam());
+        assertSame(teamA, match.getOrangeTeam());
+    }
+
+    @Test
+    public void switchingColors02() {
+        Team teamA = new Team("A", null, 0, "a");
+        Team teamB = new Team("B", null, 0, "b");
+
+        Match match = new Match(teamA, teamB);
+        match.setScores(2, 0, true);
+
+        assertSame(2, match.getTeamOneScore());
+        assertSame(0, match.getTeamTwoScore());
+        assertSame(2, match.getBlueScore());
+        assertSame(0, match.getOrangeScore());
+
+        match.setTeamOneToBlue(false);
+
+        assertEquals(2, match.getTeamOneScore());
+        assertEquals(0, match.getTeamTwoScore());
+        assertEquals(0, match.getBlueScore());
+        assertEquals(2, match.getOrangeScore());
+    }
+
+    @Test
+    public void switchingColors03() {
+        Team teamA = new Team("A", null, 0, "a");
+        Team teamB = new Team("B", null, 0, "b");
+
+        Match match = new Match(teamA, teamB);
+        match.setScores(2, 0, true);
+
+        assertEquals("A", match.getTeamOneAsString());
+        assertEquals("B", match.getTeamTwoAsString());
+        assertEquals("A", match.getBlueTeamAsString());
+        assertEquals("B", match.getOrangeTeamAsString());
+
+        match.setTeamOneToBlue(false);
+
+        assertEquals("A", match.getTeamOneAsString());
+        assertEquals("B", match.getTeamTwoAsString());
+        assertEquals("B", match.getBlueTeamAsString());
+        assertEquals("A", match.getOrangeTeamAsString());
     }
 }

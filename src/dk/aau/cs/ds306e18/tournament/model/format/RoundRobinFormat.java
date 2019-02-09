@@ -121,7 +121,7 @@ public class RoundRobinFormat implements Format, MatchPlayedListener {
             teams.add(DUMMY_TEAM);
         }
 
-        int nextBlue, nextOrange;
+        int nextTeamOneIndex, nextTeamTwoIndex;
         Match[][] table = new Match[teams.size() - 1][teams.size() / 2];
 
         HashMap<Team, Integer> map = createIdHashMap(teams);
@@ -135,24 +135,24 @@ public class RoundRobinFormat implements Format, MatchPlayedListener {
                     table[round][match] = createNewMatch(teams.get(match), teams.get(teams.size() - (match + 1)));
                 }
                 //hardcoding team with highest id (numberOfTeams - 1 ) to first match each round
-                //the other team is found by berger tables rules (findIdOfNextPlayer) on the id of the team in the same match,
+                //the other team is found by berger tables rules (findIdOfNextTeam) on the id of the team in the same match,
                 //but previous round
                 else if (match == 0) {
-                    //else become orange team
+                    //else become team two
                     if ((round % 2) == 0) {
-                        nextBlue = findIdOfNextPlayer(map.get(table[round - 1][match].getOrangeTeam()), teams.size());
-                        table[round][match] = createNewMatch(teams.get(nextBlue - 1), (teams.get(teams.size() - 1)));
-                        //if uneven round, player with highest id becomes blue player
+                        nextTeamOneIndex = findIdOfNextTeam(map.get(table[round - 1][match].getTeamTwo()), teams.size());
+                        table[round][match] = createNewMatch(teams.get(nextTeamOneIndex - 1), (teams.get(teams.size() - 1)));
+                        //if uneven round, team with highest id becomes team one
                     } else {
-                        nextOrange = findIdOfNextPlayer(map.get(table[round - 1][match].getBlueTeam()), teams.size());
-                        table[round][match] = createNewMatch((teams.get(teams.size() - 1)), teams.get(nextOrange - 1));
+                        nextTeamTwoIndex = findIdOfNextTeam(map.get(table[round - 1][match].getTeamOne()), teams.size());
+                        table[round][match] = createNewMatch((teams.get(teams.size() - 1)), teams.get(nextTeamTwoIndex - 1));
                     }
                 } else {
-                    //if not the first round, or first match, find both players by findIdOfNextPlayer according to berger tables,
+                    //if not the first round, or first match, find both teams by findIdOfNextTeam according to berger tables,
                     //on previous teams
-                    nextBlue = findIdOfNextPlayer(map.get(table[round - 1][match].getBlueTeam()), teams.size());
-                    nextOrange = findIdOfNextPlayer(map.get(table[round - 1][match].getOrangeTeam()), teams.size());
-                    table[round][match] = createNewMatch(teams.get(nextBlue - 1), (teams.get(nextOrange - 1)));
+                    nextTeamOneIndex = findIdOfNextTeam(map.get(table[round - 1][match].getTeamOne()), teams.size());
+                    nextTeamTwoIndex = findIdOfNextTeam(map.get(table[round - 1][match].getTeamTwo()), teams.size());
+                    table[round][match] = createNewMatch(teams.get(nextTeamOneIndex - 1), (teams.get(nextTeamTwoIndex - 1)));
                 }
             }
         }
@@ -162,8 +162,8 @@ public class RoundRobinFormat implements Format, MatchPlayedListener {
         for (int i = 0; i < table.length; i++) {
             matches.add(new ArrayList<>());
             for (int j = 0; j < table[i].length; j++) {
-                if (!table[i][j].getOrangeTeam().equals(DUMMY_TEAM) &&
-                        !table[i][j].getBlueTeam().equals(DUMMY_TEAM)) {
+                if (!table[i][j].getTeamTwo().equals(DUMMY_TEAM) &&
+                        !table[i][j].getTeamOne().equals(DUMMY_TEAM)) {
                     matches.get(i).add(table[i][j]);
                 }
             }
@@ -204,7 +204,7 @@ public class RoundRobinFormat implements Format, MatchPlayedListener {
      * @param id of the team in the match in the previous round.
      * @return the id of the team that should be in this match, according to last.
      */
-    public int findIdOfNextPlayer(int id, int limit) {
+    public int findIdOfNextTeam(int id, int limit) {
         if ((id + (limit / 2)) > (limit - 1)) {
             return id - ((limit / 2) - 1);
         } else return id + (limit / 2);
