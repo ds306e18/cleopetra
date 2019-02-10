@@ -51,22 +51,12 @@ abstract class ConfigFileEditor {
     /**
      * Edits value of first occurrence of line with given parameter
      *
-     * @param key   the given parameter to edit
-     * @param value the value to edit given parameter with
+     * @param section the section of the given parameter
+     * @param key     the given parameter to edit
+     * @param value   the value to edit given parameter with
      */
     void editLine(String section, String key, String value) {
         config.get(section).replace(key, value);
-    }
-
-    /**
-     * Edits value of first occurrence of line with given numbered parameter
-     *
-     * @param key   the given parameter to edit
-     * @param num   the number of a numbered parameter
-     * @param value the value to edit given parameter with
-     */
-    void editLine(String section, String key, int num, String value) {
-        config.get(section).replace(key + num, value);
     }
 
     /**

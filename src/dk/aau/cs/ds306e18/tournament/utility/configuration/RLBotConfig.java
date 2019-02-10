@@ -47,21 +47,21 @@ public class RLBotConfig extends ConfigFileEditor {
      * Set path of given participantIndex in RLBotConfig to supplied path-parameter
      */
     private void setParticipantConfigPath(String path, int participantIndex) {
-        editLine(SECTION_PARTICIPANT_CONFIGURATION, PARAMETER_PARTICIPANT_CONFIG, participantIndex, path);
+        editLine(SECTION_PARTICIPANT_CONFIGURATION, PARAMETER_PARTICIPANT_CONFIG + participantIndex, path);
     }
 
     /**
      * Sets team-index of given participantIndex in RLBotConfig to supplied teamIndex, converting int to String
      */
     private void setParticipantTeam(int teamIndex, int participantIndex) {
-        editLine(SECTION_PARTICIPANT_CONFIGURATION, PARAMETER_PARTICIPANT_TEAM, participantIndex, Integer.toString(teamIndex));
+        editLine(SECTION_PARTICIPANT_CONFIGURATION, PARAMETER_PARTICIPANT_TEAM + participantIndex, Integer.toString(teamIndex));
     }
 
     /**
      * Sets participant type of given participantIndex in RLBotConfig to the config value of the given BotType
      */
     private void setParticipantType(BotType botType, int participantIndex) {
-        editLine(SECTION_PARTICIPANT_CONFIGURATION, PARAMETER_PARTICIPANT_TYPE, participantIndex, botType.getConfigValue());
+        editLine(SECTION_PARTICIPANT_CONFIGURATION, PARAMETER_PARTICIPANT_TYPE + participantIndex, botType.getConfigValue());
     }
 
     /**

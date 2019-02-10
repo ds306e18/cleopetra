@@ -5,6 +5,7 @@ import dk.aau.cs.ds306e18.tournament.model.Bot;
 import dk.aau.cs.ds306e18.tournament.model.SeedingOption;
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
+import dk.aau.cs.ds306e18.tournament.utility.Alerts;
 import dk.aau.cs.ds306e18.tournament.utility.configuration.BotConfig;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -221,8 +222,12 @@ public class ParticipantSettingsTabController {
                 selectedBot.setDeveloper(botInfo.getDeveloper());
                 selectedBot.setDescription(botInfo.getDescription());
                 selectedBot.setConfigPath(file.getAbsolutePath());
-                updateBotFields();
+            } else {
+                Alerts.errorNotification("The config is not valid!", "Try to load the a bot config file," +
+                        "or check whether yours is valid");
             }
+            updateBotFields();
+            botsListView.refresh();
         }
     }
 
@@ -474,9 +479,7 @@ public class ParticipantSettingsTabController {
         File file = new File(selectedBot.getConfigPath());
         String parentparent = file.getParentFile().getParent();
         String shortPath = parentparent == null ? file.getPath() : file.getPath().replace(parentparent, "");
-        configPathTextField.setText
-
-                (shortPath);
+        configPathTextField.setText(shortPath);
     }
 
     /**

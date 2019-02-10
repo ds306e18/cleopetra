@@ -1,6 +1,7 @@
 package dk.aau.cs.ds306e18.tournament.ui;
 
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
+import dk.aau.cs.ds306e18.tournament.utility.Alerts;
 import dk.aau.cs.ds306e18.tournament.utility.configuration.RLBotConfig;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -53,12 +54,15 @@ public class RLBotSettingsTabController {
 
             // Next file chooser will now start in the folder of last selected file
             fileChooser.setInitialDirectory(file.getParentFile());
-            RLBotConfig RLBotInfo = new RLBotConfig(file.getAbsolutePath());
+            RLBotConfig rlBotInfo = new RLBotConfig(file.getAbsolutePath());
             // Update settings
-            if (RLBotInfo.isValid()) {
+            if (rlBotInfo.isValid()) {
                 Tournament.get().getRlBotSettings().setConfigPath(file.getAbsolutePath());
-                updateConfigPathTextField();
+            } else {
+                Alerts.errorNotification("The config is not valid!", "Try to load the RLBot.cfg file," +
+                        " or check whether yours is valid");
             }
+            updateConfigPathTextField();
         }
     }
 }
