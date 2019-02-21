@@ -484,23 +484,25 @@ public final class Match {
 
         if (!isReadyToPlay()) throw new IllegalStateException("Match is not playable");
 
-        if (willOutcomeChange(teamOneScore, teamTwoScore, hasBeenPlayed)) {
+        boolean outcomeChanging = willOutcomeChange(teamOneScore, teamTwoScore, hasBeenPlayed);
+
+        if (outcomeChanging) {
             // Are there any subsequent matches that has been played?
-            if ((winnerDestination != null && winnerDestination.hasBeenPlayed())
-                    || (loserDestination != null && loserDestination.hasBeenPlayed())) {
-                // A subsequent match has been played. Should it be reset?
+            if ((winnerDestination != null && (winnerDestination.teamOneScore != 0 || winnerDestination.teamTwoScore != 0))
+                    || (loserDestination != null && (loserDestination.teamOneScore != 0 || loserDestination.teamTwoScore != 0))) {
+
+                // A subsequent match has scores that are not 0. We can only proceed with force
                 if (forceResetSubsequentMatches) {
                     if (winnerDestination != null) winnerDestination.forceReset();
                     if (loserDestination != null) loserDestination.forceReset();
                 } else {
                     throw new MatchResultDependencyException();
                 }
-
-                // FIXME: Does not check if subsequent stages has started
             }
         }
 
-        if (played) {
+        // Retract if there might be a new winner/loser
+        if (played && outcomeChanging) {
             retractWinnerAndLoser();
         }
 
@@ -509,7 +511,8 @@ public final class Match {
         _setTeamOneScore(teamOneScore);
         _setTeamTwoScore(teamTwoScore);
 
-        if (played) {
+        // Transfer because there might be a new winner/loser
+        if (played && outcomeChanging) {
             transferWinnerAndLoser();
         }
 

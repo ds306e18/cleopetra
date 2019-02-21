@@ -1,6 +1,7 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import dk.aau.cs.ds306e18.tournament.model.match.MatchResultDependencyException;
 import org.junit.Test;
 
 import java.util.List;
@@ -369,7 +370,7 @@ public class MatchTest {
     }
 
     @Test
-    public void teamScore04() {
+    public void reset01() {
         Team teamA = new Team("A", null, 0, "a");
         Team teamB = new Team("B", null, 0, "b");
         Team teamC = new Team("C", null, 0, "c");
@@ -386,7 +387,7 @@ public class MatchTest {
         assertEquals(4, teamC.getGoalsScored());
         assertEquals(3, teamC.getGoalsConceded());
 
-        // This reset should remove all scores. Also in match two that has not been played
+        // This forced reset should remove all scores. Also in match two that has not been played
         matchOne.setScores(0, 0, false, true);
 
         assertEquals(0, teamA.getGoalsScored());
@@ -395,6 +396,108 @@ public class MatchTest {
         assertEquals(0, teamB.getGoalsConceded());
         assertEquals(0, teamC.getGoalsScored());
         assertEquals(0, teamC.getGoalsConceded());
+    }
+
+    @Test(expected = MatchResultDependencyException.class)
+    public void reset02() {
+        Team teamA = new Team("A", null, 0, "a");
+        Team teamB = new Team("B", null, 0, "b");
+        Team teamC = new Team("C", null, 0, "c");
+
+        Match matchOne = new Match(teamA, teamB);
+        Match matchTwo = new Match().setTeamOne(teamC).setTeamTwoToWinnerOf(matchOne);
+        matchOne.setScores(2, 1, true);
+        matchTwo.setScores(4, 3, false);
+
+        assertEquals(5, teamA.getGoalsScored());
+        assertEquals(5, teamA.getGoalsConceded());
+        assertEquals(1, teamB.getGoalsScored());
+        assertEquals(2, teamB.getGoalsConceded());
+        assertEquals(4, teamC.getGoalsScored());
+        assertEquals(3, teamC.getGoalsConceded());
+
+        // This reset should not be legal as match two has entered scores
+        matchOne.setScores(0, 0, false, false);
+    }
+
+    @Test(expected = MatchResultDependencyException.class)
+    public void reset03() {
+        Team teamA = new Team("A", null, 0, "a");
+        Team teamB = new Team("B", null, 0, "b");
+        Team teamC = new Team("C", null, 0, "c");
+
+        Match matchOne = new Match(teamA, teamB);
+        Match matchTwo = new Match().setTeamOne(teamC).setTeamTwoToWinnerOf(matchOne);
+        matchOne.setScores(2, 1, true);
+        matchTwo.setScores(4, 3, true);
+
+        assertEquals(5, teamA.getGoalsScored());
+        assertEquals(5, teamA.getGoalsConceded());
+        assertEquals(1, teamB.getGoalsScored());
+        assertEquals(2, teamB.getGoalsConceded());
+        assertEquals(4, teamC.getGoalsScored());
+        assertEquals(3, teamC.getGoalsConceded());
+
+        // This reset should not be legal as match two has been played
+        matchOne.setScores(0, 0, false, false);
+    }
+
+    @Test
+    public void reset04() {
+        Team teamA = new Team("A", null, 0, "a");
+        Team teamB = new Team("B", null, 0, "b");
+        Team teamC = new Team("C", null, 0, "c");
+
+        Match matchOne = new Match(teamA, teamB);
+        Match matchTwo = new Match().setTeamOne(teamC).setTeamTwoToWinnerOf(matchOne);
+        matchOne.setScores(2, 1, true);
+        matchTwo.setScores(4, 3, false);
+
+        assertEquals(5, teamA.getGoalsScored());
+        assertEquals(5, teamA.getGoalsConceded());
+        assertEquals(1, teamB.getGoalsScored());
+        assertEquals(2, teamB.getGoalsConceded());
+        assertEquals(4, teamC.getGoalsScored());
+        assertEquals(3, teamC.getGoalsConceded());
+
+        // This reset should be legal as it doesn't change the outcome of match one
+        matchOne.setScores(4, 1, true, false);
+
+        assertEquals(7, teamA.getGoalsScored());
+        assertEquals(5, teamA.getGoalsConceded());
+        assertEquals(1, teamB.getGoalsScored());
+        assertEquals(4, teamB.getGoalsConceded());
+        assertEquals(4, teamC.getGoalsScored());
+        assertEquals(3, teamC.getGoalsConceded());
+    }
+
+    @Test
+    public void reset05() {
+        Team teamA = new Team("A", null, 0, "a");
+        Team teamB = new Team("B", null, 0, "b");
+        Team teamC = new Team("C", null, 0, "c");
+
+        Match matchOne = new Match(teamA, teamB);
+        Match matchTwo = new Match().setTeamOne(teamC).setTeamTwoToWinnerOf(matchOne);
+        matchOne.setScores(2, 1, true);
+        matchTwo.setScores(4, 3, true);
+
+        assertEquals(5, teamA.getGoalsScored());
+        assertEquals(5, teamA.getGoalsConceded());
+        assertEquals(1, teamB.getGoalsScored());
+        assertEquals(2, teamB.getGoalsConceded());
+        assertEquals(4, teamC.getGoalsScored());
+        assertEquals(3, teamC.getGoalsConceded());
+
+        // This reset should be legal as it doesn't change the outcome of match one, even when match two has been played
+        matchOne.setScores(4, 1, true, false);
+
+        assertEquals(7, teamA.getGoalsScored());
+        assertEquals(5, teamA.getGoalsConceded());
+        assertEquals(1, teamB.getGoalsScored());
+        assertEquals(4, teamB.getGoalsConceded());
+        assertEquals(4, teamC.getGoalsScored());
+        assertEquals(3, teamC.getGoalsConceded());
     }
 
     @Test

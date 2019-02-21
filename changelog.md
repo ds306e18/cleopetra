@@ -2,6 +2,7 @@
 
 ### Unreleased changes (dev)
 - Added ability to swap team colors in a match. #49 - NicEastvillage
+- Fixed a bug where changing the score of a match without affecting the outcome would reset subsequent matches. #53 - NicEastvillage
 
 #### Version 1.2.0 - 31. Jan 2019
 - Double elimination. #9 - NicEastvillage
