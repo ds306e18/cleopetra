@@ -31,11 +31,11 @@ public class MainController {
     public void onTabSelectionChanged(Event event) {
         // TODO Make references to other controllers work so we can avoid using singleton instances. Might require newer version of java
         if (tournamentSettingsTab.isSelected()) {
-
+            TournamentSettingsTabController.instance.update();
         } else if (participantSettingsTab.isSelected()) {
-
+            ParticipantSettingsTabController.instance.update();
         } else if (rlbotSettingsTab.isSelected()) {
-
+            RLBotSettingsTabController.instance.update();
         } else if (bracketOverviewTab.isSelected()) {
             BracketOverviewTabController.instance.update();
         }

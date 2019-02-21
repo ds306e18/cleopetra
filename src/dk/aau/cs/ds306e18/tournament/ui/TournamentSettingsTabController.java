@@ -133,6 +133,7 @@ public class TournamentSettingsTabController {
         Tournament tournament = Tournament.get();
         nameTextField.setText(tournament.getName());
         tieBreakerChoiceBox.getSelectionModel().select(tournament.getTieBreaker());
+        tieBreakerChoiceBox.setDisable(tournament.hasStarted());
 
         stagesListView.refresh();
         updateStageListButtons();
@@ -140,26 +141,31 @@ public class TournamentSettingsTabController {
 
     /** Updates the buttons under the stage list */
     public void updateStageListButtons() {
-        if(stagesListView.getItems().size() == 0) {
+        boolean started = Tournament.get().hasStarted();
+        if (stagesListView.getItems().size() == 0) {
             // If the stageListView has no items. Then the remove, up and down buttons is disabled.
             swapUp.setDisable(true);
             swapDown.setDisable(true);
             removeStageBtn.setDisable(true);
         } else {
-            // Swap up and down depends on selected index. Remove is always enabled
+            // Swap up and down depends on selected index. Remove is always enabled unless tournament has started
             int selectedIndex = getSelectedIndex();
-            swapUp.setDisable(selectedIndex == 0);
-            swapDown.setDisable(selectedIndex == stagesListView.getItems().size() - 1 && selectedIndex != -1);
-            removeStageBtn.setDisable(false);
+            swapUp.setDisable(selectedIndex == 0 || started);
+            swapDown.setDisable(selectedIndex == stagesListView.getItems().size() - 1 && selectedIndex != -1 || started);
+            removeStageBtn.setDisable(started);
         }
+        addStageBtn.setDisable(started);
     }
 
     /** Updates all general stage settings like name and teams in stage. */
     public void updateStageSettings() {
+        boolean started = Tournament.get().hasStarted();
         Stage selectedStage = getSelectedStage();
         if (selectedStage != null) {
             stageNameTextfield.setText(selectedStage.getName());
             formatChoicebox.getSelectionModel().select(StageFormatOption.getOption(selectedStage.getFormat()));
+            formatChoicebox.setDisable(started);
+
             if (selectedStage.getStageNumber() != 1) {
                 teamsInStageAll.setVisible(false);
                 teamsInStageSpinner.setVisible(true);
@@ -168,9 +174,11 @@ public class TournamentSettingsTabController {
                 teamsInStageAll.setVisible(true);
                 teamsInStageSpinner.setVisible(false);
             }
+            teamsInStageSpinner.setDisable(started);
         }
 
         updateFormatUniqueSettings();
+        formatUniqueSettingsHolder.setDisable(started);
     }
 
     @FXML

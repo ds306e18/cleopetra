@@ -6,8 +6,6 @@ import dk.aau.cs.ds306e18.tournament.model.SeedingOption;
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,7 +14,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -24,8 +21,6 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 
 public class ParticipantSettingsTabController {
@@ -128,7 +123,7 @@ public class ParticipantSettingsTabController {
         // Adds selectionslistener to bot ListView
         botsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             updateBotFields();
-            updateAddRemoveButtonsEnabling();
+            updateAddRemoveBotButtonsEnabling();
             updateCopyPasteButtonsEnabling();
         });
 
@@ -140,13 +135,12 @@ public class ParticipantSettingsTabController {
     public void update() {
         teamsListView.refresh();
         botsListView.refresh();
-        updateSeedSpinner();
-        updateAddRemoveButtonsEnabling();
+        updateAddRemoveBotButtonsEnabling();
         updateCopyPasteButtonsEnabling();
         updateClipboardLabel();
-        updateBotFields();
         updateParticipantFields();
         updateTeamFields();
+        updateBotFields();
     }
 
     /** Sets up the listview for teams. Setting items,
@@ -160,7 +154,7 @@ public class ParticipantSettingsTabController {
         teamsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             updateParticipantFields();
             updateTeamFields();
-            updateAddRemoveButtonsEnabling();
+            updateAddRemoveBotButtonsEnabling();
             updateCopyPasteButtonsEnabling();
         });
 
@@ -339,23 +333,25 @@ public class ParticipantSettingsTabController {
 
     private void updateParticipantFields() {
 
+        boolean started = Tournament.get().hasStarted();
+
         SeedingOption seedingOption = Tournament.get().getSeedingOption();
+        seedingChoicebox.setDisable(started);
+
         int selectedIndex = getSelectedTeamIndex();
 
         // Handle team order button disabling / enabling
-        swapUpTeam.setDisable(seedingOption != SeedingOption.SEED_BY_ORDER || selectedIndex <= 0);
-        swapDownTeam.setDisable(seedingOption != SeedingOption.SEED_BY_ORDER || selectedIndex == teamsListView.getItems().size() - 1);
+        swapUpTeam.setDisable(seedingOption != SeedingOption.SEED_BY_ORDER || selectedIndex <= 0 || started);
+        swapDownTeam.setDisable(seedingOption != SeedingOption.SEED_BY_ORDER || selectedIndex == teamsListView.getItems().size() - 1 || started);
 
-        if (selectedIndex == -1) {
-            removeTeamBtn.setDisable(true);
-        }
+        removeTeamBtn.setDisable(selectedIndex == -1 || started);
+        addTeamBtn.setDisable(started);
     }
 
     /** Updates the textfields with the values from the selected team. */
     void updateTeamFields() {
 
         teamSettingsVbox.setVisible(teamsListView.getItems().size() != 0);
-
         if (getSelectedTeamIndex() != -1) {
 
             Team selectedTeam = Tournament.get().getTeams().get(getSelectedTeamIndex());
@@ -366,11 +362,6 @@ public class ParticipantSettingsTabController {
             botsListView.getSelectionModel().clearSelection();
             botsListView.setItems(FXCollections.observableArrayList(selectedTeam.getBots()));
             botsListView.refresh();
-
-            //If the teamListView has items, then the enable remove button
-            if(teamsListView.getItems().size() != 0)
-                removeTeamBtn.setDisable(false);
-
         }
 
         //Check for empty names
@@ -379,29 +370,31 @@ public class ParticipantSettingsTabController {
 
     private void updateSeedSpinner() {
         Team selectedTeam = getSelectedTeam();
-        int selectedTeamIndex = getSelectedTeamIndex();
-        SeedingOption seedingOption = Tournament.get().getSeedingOption();
+        if (selectedTeam != null) {
+            int selectedTeamIndex = getSelectedTeamIndex();
+            SeedingOption seedingOption = Tournament.get().getSeedingOption();
 
-        seedSpinner.setDisable(seedingOption != SeedingOption.MANUALLY);
+            seedSpinner.setDisable(seedingOption != SeedingOption.MANUALLY);
 
-        int displayedValue = selectedTeam.getInitialSeedValue();
+            int displayedValue = selectedTeam.getInitialSeedValue();
 
-        switch (seedingOption) {
+            switch (seedingOption) {
 
-            case SEED_BY_ORDER:
-                displayedValue = selectedTeamIndex + 1;
-                break;
+                case SEED_BY_ORDER:
+                    displayedValue = selectedTeamIndex + 1;
+                    break;
 
-            case MANUALLY:
-                break;
+                case MANUALLY:
+                    break;
 
-            case NO_SEEDING: case RANDOM_SEEDING:
-                displayedValue = 0;
-                break;
+                case NO_SEEDING:
+                case RANDOM_SEEDING:
+                    displayedValue = 0;
+                    break;
+            }
+
+            seedSpinner.getValueFactory().valueProperty().setValue(displayedValue);
         }
-
-        seedSpinner.getValueFactory().valueProperty().setValue(displayedValue);
-
     }
 
     void checkForEmptyTeamName() {
@@ -513,7 +506,7 @@ public class ParticipantSettingsTabController {
         pasteBotBtn.setDisable(clipboardBot == null || spaceOnSelectedTeam);
     }
 
-    public void updateAddRemoveButtonsEnabling() {
+    public void updateAddRemoveBotButtonsEnabling() {
         Team selectedTeam = getSelectedTeam();
         Bot selectedBot = botsListView.getSelectionModel().getSelectedItem();
 
