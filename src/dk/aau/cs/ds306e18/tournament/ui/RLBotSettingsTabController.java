@@ -14,6 +14,8 @@ import java.io.File;
 
 public class RLBotSettingsTabController {
 
+    public static RLBotSettingsTabController instance;
+
     @FXML private VBox tabRoot;
     @FXML private Button configPathBtn;
     @FXML private TextField configPathTextField;
@@ -23,6 +25,8 @@ public class RLBotSettingsTabController {
 
     @FXML
     private void initialize() {
+        instance = this;
+
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CFG files (*.cfg)", "*.cfg"));
         updateConfigPathTextField();
     }
@@ -52,5 +56,10 @@ public class RLBotSettingsTabController {
 
             updateConfigPathTextField();
         }
+    }
+
+    /** Updates all ui elements */
+    public void update() {
+        updateConfigPathTextField();
     }
 }

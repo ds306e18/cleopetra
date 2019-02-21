@@ -33,6 +33,8 @@ public class ParticipantSettingsTabController {
     private static final String CLIPBOARD_PREFIX = "Clipboard: ";
     private static final String CLIPBOARD_EMPTY_STRING = "<empty>";
 
+    public static ParticipantSettingsTabController instance;
+
     @FXML private HBox participantSettingsTab;
     @FXML private ChoiceBox<SeedingOption> seedingChoicebox;
     @FXML private TextField teamNameTextField;
@@ -61,6 +63,7 @@ public class ParticipantSettingsTabController {
 
     @FXML
     private void initialize() {
+        instance = this;
 
         // Seeding Option
         seedingChoicebox.setItems(FXCollections.observableArrayList(SeedingOption.values()));
@@ -131,6 +134,19 @@ public class ParticipantSettingsTabController {
 
         updateClipboardLabel();
         setFileChooserCfgFilter(fileChooser);
+    }
+
+    /** Updates all ui elements */
+    public void update() {
+        teamsListView.refresh();
+        botsListView.refresh();
+        updateSeedSpinner();
+        updateAddRemoveButtonsEnabling();
+        updateCopyPasteButtonsEnabling();
+        updateClipboardLabel();
+        updateBotFields();
+        updateParticipantFields();
+        updateTeamFields();
     }
 
     /** Sets up the listview for teams. Setting items,

@@ -15,9 +15,13 @@ public class MainController {
 
     @FXML public TournamentSettingsTabController tournamentSettingsTabController;
     @FXML public ParticipantSettingsTabController participantSettingsTabController;
+    @FXML public RLBotSettingsTabController rlBotSettingsTabController;
     @FXML public BracketOverviewTabController bracketOverviewTabController;
-    @FXML public Tab bracketOverviewTab;
     @FXML public ImageView saveTournamentBtn;
+    @FXML public Tab tournamentSettingsTab;
+    @FXML public Tab participantSettingsTab;
+    @FXML public Tab rlbotSettingsTab;
+    @FXML public Tab bracketOverviewTab;
 
     @FXML
     private void initialize() {
@@ -25,8 +29,14 @@ public class MainController {
     }
 
     public void onTabSelectionChanged(Event event) {
-        if (bracketOverviewTab.isSelected()) {
+        // TODO Make references to other controllers work so we can avoid using singleton instances. Might require newer version of java
+        if (tournamentSettingsTab.isSelected()) {
 
+        } else if (participantSettingsTab.isSelected()) {
+
+        } else if (rlbotSettingsTab.isSelected()) {
+
+        } else if (bracketOverviewTab.isSelected()) {
             BracketOverviewTabController.instance.update();
         }
     }
