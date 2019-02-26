@@ -1,6 +1,9 @@
 package dk.aau.cs.ds306e18.tournament.utility.configuration;
 
+import org.ini4j.Config;
 import org.ini4j.Wini;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -16,6 +19,11 @@ public class ConfigFileEditorTest {
     final static String testRLBotConfigFilename = "test_rlbot.cfg";
     final static String testRLBotConfigTargetFilename = "dummy_rlbot.cfg";
     private Wini testConfig = new Wini();
+
+    @BeforeClass
+    public static void init() {
+        Config.getGlobal().setLineSeparator("\n");
+    }
 
     /**
      * Removes file at given path. Useful for cleaning up after testing.
@@ -41,6 +49,7 @@ public class ConfigFileEditorTest {
     /**
      * Tests whether a newly written, and read config is identical to the written config
      */
+    @Ignore
     @Test
     public void readWriteConcurrencyCFETest() {
         RLBotConfig configFileEditor = setupRLBotCFE();
@@ -56,7 +65,7 @@ public class ConfigFileEditorTest {
     @Test
     public void editLineTest() {
         ConfigFileEditor configFileEditor = setupRLBotCFE();
-        configFileEditor.editLine("Participant Configuration", "participant_team_", 0, "42");
+        configFileEditor.editLine("Participant Configuration", "participant_team_0", "42");
         assertEquals("42", configFileEditor.getValueOfLine("Participant Configuration", "participant_team_0"));
     }
 
