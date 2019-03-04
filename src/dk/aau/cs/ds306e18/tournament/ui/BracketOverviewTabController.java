@@ -9,7 +9,6 @@ import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import dk.aau.cs.ds306e18.tournament.model.format.Format;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchChangeListener;
-import dk.aau.cs.ds306e18.tournament.model.match.MatchStatus;
 import dk.aau.cs.ds306e18.tournament.utility.Alerts;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -45,6 +44,7 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
     @FXML private Button playMatchBtn;
     @FXML private Button modifyConfigBtn;
     @FXML private Button editMatchBtn;
+    @FXML private Button switchColorsBtn;
     @FXML private Label blueTeamNameLabel;
     @FXML private Label blueTeamScore;
     @FXML private ListView<Bot> blueTeamListView;
@@ -74,7 +74,7 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
 
     @FXML
     private void initialize() {
-        instance = this; // TODO Make references to other controllers work in MainController
+        instance = this;
 
 
         // Listeners for the listviews. Handles the clear of selection of the other listview and updates the
@@ -305,7 +305,7 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
         if (match != null && match.getBlueTeam() != null) {
             // Blue team
             blueTeamNameLabel.setText(match.getBlueTeam().getTeamName());
-            blueTeamScore.setText(Integer.toString(match.getBlueScore()));
+            blueTeamScore.setText(Integer.toString(match.getTeamOneScore()));
             blueTeamListView.setItems(FXCollections.observableArrayList(match.getBlueTeam().getBots()));
             blueTeamListView.refresh();
         } else {
@@ -318,7 +318,7 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
         if (match != null && match.getOrangeTeam() != null) {
             // Orange team
             orangeTeamNameLabel.setText(match.getOrangeTeam().getTeamName());
-            orangeTeamScore.setText(Integer.toString(match.getOrangeScore()));
+            orangeTeamScore.setText(Integer.toString(match.getTeamTwoScore()));
             orangeTeamListView.setItems(FXCollections.observableArrayList(match.getOrangeTeam().getBots()));
             orangeTeamListView.refresh();
         } else {
@@ -334,14 +334,18 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
 
     /** Disables/Enables the play and edit match buttons */
     public void updateMatchPlayAndEditButtons() {
-        if (selectedMatch == null || selectedMatch.getShowedMatch().getStatus() == MatchStatus.NOT_PLAYABLE) {
+        if (selectedMatch == null || selectedMatch.getShowedMatch().getStatus() == Match.Status.NOT_PLAYABLE) {
             editMatchBtn.setDisable(true);
             playMatchBtn.setDisable(true);
             modifyConfigBtn.setDisable(true);
+            switchColorsBtn.setDisable(true);
         } else {
             editMatchBtn.setDisable(false);
-            playMatchBtn.setDisable(false); // If match can't be played an error popup is displayed explaining why
+            // If match can't be played an error popup is displayed explaining why
+            playMatchBtn.setDisable(false);
             modifyConfigBtn.setDisable(false);
+            // color switching is disabled when match has been played to avoid confusion when comparing replays and bracket
+            switchColorsBtn.setDisable(selectedMatch.getShowedMatch().hasBeenPlayed());
         }
     }
 
@@ -459,5 +463,9 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
      */
     private Bot getSelectedBot(ListView<Bot> listView) {
         return listView.getSelectionModel().getSelectedItem();
+    }
+
+    public void onSwitchColorsBtnAction(ActionEvent actionEvent) {
+        selectedMatch.getShowedMatch().setTeamOneToBlue(!selectedMatch.getShowedMatch().isTeamOneBlue());
     }
 }

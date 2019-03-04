@@ -9,19 +9,21 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 
 public class EditMatchScoreController {
 
-    @FXML private CheckBox matchOverCheckBox;
-    @FXML private Label blueTeamNameLabel;
-    @FXML private Label orangeTeamNameLabel;
-    @FXML private Spinner<Integer> blueScoreSpinner;
-    @FXML private Spinner<Integer> orangeScoreSpinner;
-    @FXML private Button saveButton;
+    private static final Paint BLUE_FILL = Paint.valueOf("#6a82fc");
+    private static final Paint ORANGE_FILL = Paint.valueOf("#f5af18");
 
-    private boolean isBlueScoreLegit;
-    private boolean isOrangeScoreLegit;
+    @FXML private CheckBox matchOverCheckBox;
+    @FXML private Label teamOneNameLabel;
+    @FXML private Label teamTwoNameLabel;
+    @FXML private Spinner<Integer> teamOneScoreSpinner;
+    @FXML private Spinner<Integer> teamTwoScoreSpinner;
+    @FXML private Button saveButton;
 
     private Match match;
     private double x = 0;
@@ -31,13 +33,10 @@ public class EditMatchScoreController {
     private void initialize() {
 
         // Spinners
-        setupScoreSpinner(blueScoreSpinner);
-        setupScoreSpinner(orangeScoreSpinner);
+        setupScoreSpinner(teamOneScoreSpinner);
+        setupScoreSpinner(teamTwoScoreSpinner);
 
         matchOverCheckBox.setDisable(true);
-
-        isBlueScoreLegit = true;
-        isOrangeScoreLegit = true;
     }
 
     /** Adds behaviour to a score spinner. */
@@ -72,19 +71,19 @@ public class EditMatchScoreController {
      * and save button is disabled accordingly. */
     private void checkScoresAndUpdateUI() {
 
-        String blueScoreText = blueScoreSpinner.getEditor().getText();
-        String orangeScoreText = orangeScoreSpinner.getEditor().getText();
+        String teamOneScoreText = teamOneScoreSpinner.getEditor().getText();
+        String teamTwoScoreText = teamTwoScoreSpinner.getEditor().getText();
 
         // Do we have two numbers or just empty strings?
-        if (!blueScoreText.equals("") && !orangeScoreText.equals("")) {
+        if (!teamOneScoreText.equals("") && !teamTwoScoreText.equals("")) {
 
             // Get the scores
-            int blueScore = Integer.parseInt(blueScoreText);
-            int orangeScore = Integer.parseInt(orangeScoreText);
+            int teamOneScore = Integer.parseInt(teamOneScoreText);
+            int teamTwoScore = Integer.parseInt(teamTwoScoreText);
 
             saveButton.setDisable(false);
 
-            if (blueScore == orangeScore) {
+            if (teamOneScore == teamTwoScore) {
                 // We won't allow the match to be over if the scores are equal
                 matchOverCheckBox.setSelected(false);
                 matchOverCheckBox.setDisable(true);
@@ -104,11 +103,18 @@ public class EditMatchScoreController {
         }
         this.match = match;
 
-        blueTeamNameLabel.setText(match.getBlueTeam().getTeamName());
-        orangeTeamNameLabel.setText(match.getOrangeTeam().getTeamName());
+        teamOneNameLabel.setText(match.getTeamOne().getTeamName());
+        teamTwoNameLabel.setText(match.getTeamTwo().getTeamName());
+        if (match.isTeamOneBlue()) {
+            teamOneNameLabel.setTextFill(BLUE_FILL);
+            teamTwoNameLabel.setTextFill(ORANGE_FILL);
+        } else {
+            teamOneNameLabel.setTextFill(ORANGE_FILL);
+            teamTwoNameLabel.setTextFill(BLUE_FILL);
+        }
 
-        blueScoreSpinner.getValueFactory().setValue(match.getBlueScore());
-        orangeScoreSpinner.getValueFactory().setValue(match.getOrangeScore());
+        teamOneScoreSpinner.getValueFactory().setValue(match.getTeamOneScore());
+        teamTwoScoreSpinner.getValueFactory().setValue(match.getTeamTwoScore());
 
         matchOverCheckBox.setSelected(match.hasBeenPlayed());
     }
@@ -132,7 +138,7 @@ public class EditMatchScoreController {
     }
 
     private void closeWindow() {
-        Stage window = (Stage) blueTeamNameLabel.getScene().getWindow();
+        Stage window = (Stage) teamOneNameLabel.getScene().getWindow();
         window.close();
     }
 
@@ -144,20 +150,22 @@ public class EditMatchScoreController {
     @FXML
     private void onSaveBtnPressed(ActionEvent actionEvent) {
 
-        int blueScore = Integer.parseInt(blueScoreSpinner.getEditor().getText());
-        int orangeScore = Integer.parseInt(orangeScoreSpinner.getEditor().getText());
+        int teamOneScore = Integer.parseInt(teamOneScoreSpinner.getEditor().getText());
+        int teamTwoScore = Integer.parseInt(teamTwoScoreSpinner.getEditor().getText());
         boolean played = matchOverCheckBox.isSelected();
-        try {
-            match.setScores(blueScore, orangeScore, played);
-            closeWindow();
 
-        } catch (MatchResultDependencyException e) {
-            // An MatchResultDependencyException is thrown if the outcome has changed and subsequent matches depends on this outcome
-            // Ask if the user wants to proceed
-            boolean proceed = Alerts.confirmAlert("The outcome of this match has changed", "This change will reset the subsequent matches. Do you want to proceed?");
-            if (proceed) {
-                match.setScores(blueScore, orangeScore, played, true);
+        boolean force = false;
+        while (true) {
+            try {
+
+                match.setScores(teamOneScore, teamTwoScore, played, force);
                 closeWindow();
+                break;
+
+            } catch (MatchResultDependencyException e) {
+                // An MatchResultDependencyException is thrown if the outcome has changed and subsequent matches depends on this outcome
+                // Ask if the user wants to proceed
+                force = Alerts.confirmAlert("The outcome of this match has changed", "This change will reset the subsequent matches. Do you want to proceed?");
             }
         }
     }

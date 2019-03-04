@@ -1,6 +1,5 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
-import dk.aau.cs.ds306e18.tournament.TestUtilities;
 import dk.aau.cs.ds306e18.tournament.model.format.RoundRobinFormat;
 import dk.aau.cs.ds306e18.tournament.model.format.RoundRobinGroup;
 import dk.aau.cs.ds306e18.tournament.model.format.StageStatus;
@@ -9,7 +8,6 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import static dk.aau.cs.ds306e18.tournament.TestUtilities.*;
 import static org.junit.Assert.*;
@@ -60,15 +58,15 @@ public class RoundRobinFormatTest {
         RoundRobinFormat rr = new RoundRobinFormat();
         rr.start(generateTeams(numberOfTeams, teamSize), true);
 
-        assertEquals((rr.findIdOfNextPlayer(3,numberOfTeams)), 13);
-        assertEquals((rr.findIdOfNextPlayer(1,numberOfTeams)), 11);
+        assertEquals((rr.findIdOfNextTeam(3,numberOfTeams)), 13);
+        assertEquals((rr.findIdOfNextTeam(1,numberOfTeams)), 11);
 
         for (int i = 1; i <= numberOfTeams; i++) {
-            assertTrue(rr.findIdOfNextPlayer(i,numberOfTeams) < numberOfTeams);
-            assertTrue(rr.findIdOfNextPlayer(i,numberOfTeams) > 0);
+            assertTrue(rr.findIdOfNextTeam(i,numberOfTeams) < numberOfTeams);
+            assertTrue(rr.findIdOfNextTeam(i,numberOfTeams) > 0);
             if (i >= (numberOfTeams / 2)) {
-                assertTrue(rr.findIdOfNextPlayer(i, numberOfTeams) < i);
-            } else assertTrue(rr.findIdOfNextPlayer(i, numberOfTeams) > i);
+                assertTrue(rr.findIdOfNextTeam(i, numberOfTeams) < i);
+            } else assertTrue(rr.findIdOfNextTeam(i, numberOfTeams) > i);
         }
     }
 
@@ -264,8 +262,8 @@ public class RoundRobinFormatTest {
         }
 
         for (Match match : rr.getAllMatches()) {
-            assertTrue(match.getBlueTeam() != RoundRobinFormat.getDummyTeam() &&
-                    match.getOrangeTeam() != RoundRobinFormat.getDummyTeam());
+            assertTrue(match.getTeamOne() != RoundRobinFormat.getDummyTeam() &&
+                    match.getTeamTwo() != RoundRobinFormat.getDummyTeam());
         }
 
         assertEquals(30,rr.getAllMatches().size());
@@ -287,8 +285,8 @@ public class RoundRobinFormatTest {
         }
 
         for (Match match : rr.getAllMatches()) {
-            assertTrue(match.getBlueTeam() != RoundRobinFormat.getDummyTeam() &&
-                    match.getOrangeTeam() != RoundRobinFormat.getDummyTeam());
+            assertTrue(match.getTeamOne() != RoundRobinFormat.getDummyTeam() &&
+                    match.getTeamTwo() != RoundRobinFormat.getDummyTeam());
         }
 
         assertEquals(20,rr.getAllMatches().size());
@@ -308,8 +306,8 @@ public class RoundRobinFormatTest {
             assertEquals(15,group.getMatches().size());
         }
         for (Match match : rr.getAllMatches()) {
-            assertTrue(match.getBlueTeam() != RoundRobinFormat.getDummyTeam() &&
-                    match.getOrangeTeam() != RoundRobinFormat.getDummyTeam());
+            assertTrue(match.getTeamOne() != RoundRobinFormat.getDummyTeam() &&
+                    match.getTeamTwo() != RoundRobinFormat.getDummyTeam());
         }
 
         assertEquals(45,rr.getAllMatches().size());
@@ -335,8 +333,8 @@ public class RoundRobinFormatTest {
         }
 
         for (Match match : rr.getAllMatches()) {
-            assertTrue(match.getBlueTeam() != RoundRobinFormat.getDummyTeam() &&
-                    match.getOrangeTeam() != RoundRobinFormat.getDummyTeam());
+            assertTrue(match.getTeamOne() != RoundRobinFormat.getDummyTeam() &&
+                    match.getTeamTwo() != RoundRobinFormat.getDummyTeam());
         }
 
         assertEquals(12,rr.getAllMatches().size());

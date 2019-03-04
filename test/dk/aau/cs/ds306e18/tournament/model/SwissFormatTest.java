@@ -1,6 +1,5 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
-import dk.aau.cs.ds306e18.tournament.TestUtilities;
 import dk.aau.cs.ds306e18.tournament.model.format.StageStatus;
 import dk.aau.cs.ds306e18.tournament.model.format.SwissFormat;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
@@ -273,7 +272,7 @@ public class SwissFormatTest {
         do{
             List<Match> matches = sw.getUpcomingMatches();
             for(Match match : matches)
-                match.setHasBeenPlayed(true);
+                match.setScores(1, 0, true);
 
             sw.startNextRound();
         }while(!sw.hasUnstartedRounds());
@@ -288,13 +287,13 @@ public class SwissFormatTest {
                 Match match1 = allMatches.get(i);
                 Match match2 = allMatches.get(j);
 
-                //System.out.println("Match Comp 1: Match1B: " + match1.getBlueTeam().getTeamName() + " Match1O " + match1.getOrangeTeam().getTeamName()
-                // + " Match2B " + match2.getBlueTeam().getTeamName() + " Match2O " + match2.getOrangeTeam().getTeamName());
+                //System.out.println("Match Comp 1: Match1B: " + match1.getTeamOne().getTeamName() + " Match1O " + match1.getTeamTwo().getTeamName()
+                // + " Match2B " + match2.getTeamOne().getTeamName() + " Match2O " + match2.getTeamTwo().getTeamName());
 
-                assertFalse(match1.getBlueTeam().getTeamName().equals(match2.getBlueTeam().getTeamName()) &&
-                        match1.getOrangeTeam().getTeamName().equals(match2.getOrangeTeam().getTeamName()));
-                assertFalse(match1.getBlueTeam().getTeamName().equals(match2.getOrangeTeam().getTeamName()) &&
-                        match1.getOrangeTeam().getTeamName().equals(match2.getBlueTeam().getTeamName()));
+                assertFalse(match1.getTeamOne().getTeamName().equals(match2.getTeamOne().getTeamName()) &&
+                        match1.getTeamTwo().getTeamName().equals(match2.getTeamTwo().getTeamName()));
+                assertFalse(match1.getTeamOne().getTeamName().equals(match2.getTeamTwo().getTeamName()) &&
+                        match1.getTeamTwo().getTeamName().equals(match2.getTeamOne().getTeamName()));
             }
         }
     }
@@ -460,17 +459,17 @@ public class SwissFormatTest {
         //The top teams should be the ones with the lowest seeds
 
         //Sort the input teams by seed
-        Team teamWithHighestSeed = inputTeams.get(0);
+        Team teamWithWorstSeed = inputTeams.get(0);
 
         //Find team with highest seed
         for(Team team : inputTeams){
-            if(team.getInitialSeedValue() > teamWithHighestSeed.getInitialSeedValue()){
-                teamWithHighestSeed = team;
+            if(team.getInitialSeedValue() > teamWithWorstSeed.getInitialSeedValue()){
+                teamWithWorstSeed = team;
             }
         }
 
         //Make sure that that team is not a part of the top 3
         for(Team team : top3Teams)
-            assertNotSame(team, teamWithHighestSeed);
+            assertNotSame(team, teamWithWorstSeed);
     }
 }

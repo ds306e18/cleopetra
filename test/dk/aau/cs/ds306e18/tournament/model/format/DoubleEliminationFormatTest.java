@@ -75,14 +75,14 @@ public class DoubleEliminationFormatTest {
         de.start(teams, true);
         Match[] upperBracket = de.getUpperBracket();
         int len = upperBracket.length;
-        assertSame(1, upperBracket[len-1].getBlueTeam().getInitialSeedValue());
-        assertSame(8, upperBracket[len-1].getOrangeTeam().getInitialSeedValue());
-        assertSame(4, upperBracket[len-2].getBlueTeam().getInitialSeedValue());
-        assertSame(5, upperBracket[len-2].getOrangeTeam().getInitialSeedValue());
-        assertSame(2, upperBracket[len-3].getBlueTeam().getInitialSeedValue());
-        assertSame(7, upperBracket[len-3].getOrangeTeam().getInitialSeedValue());
-        assertSame(3, upperBracket[len-4].getBlueTeam().getInitialSeedValue());
-        assertSame(6, upperBracket[len-4].getOrangeTeam().getInitialSeedValue());
+        assertSame(1, upperBracket[len-1].getTeamOne().getInitialSeedValue());
+        assertSame(8, upperBracket[len-1].getTeamTwo().getInitialSeedValue());
+        assertSame(4, upperBracket[len-2].getTeamOne().getInitialSeedValue());
+        assertSame(5, upperBracket[len-2].getTeamTwo().getInitialSeedValue());
+        assertSame(2, upperBracket[len-3].getTeamOne().getInitialSeedValue());
+        assertSame(7, upperBracket[len-3].getTeamTwo().getInitialSeedValue());
+        assertSame(3, upperBracket[len-4].getTeamOne().getInitialSeedValue());
+        assertSame(6, upperBracket[len-4].getTeamTwo().getInitialSeedValue());
     }
 
     @Test
@@ -92,11 +92,11 @@ public class DoubleEliminationFormatTest {
         de.start(teams, true);
         Match[] upperBracket = de.getUpperBracket();
         int len = upperBracket.length;
-        assertSame(1, upperBracket[len-5].getBlueTeam().getInitialSeedValue());
-        assertSame(2, upperBracket[len-6].getBlueTeam().getInitialSeedValue());
-        assertSame(3, upperBracket[len-6].getOrangeTeam().getInitialSeedValue());
-        assertSame(4, upperBracket[len-2].getBlueTeam().getInitialSeedValue());
-        assertSame(5, upperBracket[len-2].getOrangeTeam().getInitialSeedValue());
+        assertSame(1, upperBracket[len-5].getTeamOne().getInitialSeedValue());
+        assertSame(2, upperBracket[len-6].getTeamOne().getInitialSeedValue());
+        assertSame(3, upperBracket[len-6].getTeamTwo().getInitialSeedValue());
+        assertSame(4, upperBracket[len-2].getTeamOne().getInitialSeedValue());
+        assertSame(5, upperBracket[len-2].getTeamTwo().getInitialSeedValue());
     }
 
     @Test
@@ -199,7 +199,7 @@ public class DoubleEliminationFormatTest {
         List<Match> matches = de.getAllMatches();
         for (int i = matches.size() - 1; i > 0; i--) {
             Match match = matches.get(i);
-            if (match.getBlueTeam().getInitialSeedValue() < match.getOrangeTeam().getInitialSeedValue()) {
+            if (match.getTeamOne().getInitialSeedValue() < match.getTeamTwo().getInitialSeedValue()) {
                 match.setScores(1, 0, true);
             } else {
                 match.setScores(0, 1, true);
@@ -222,7 +222,7 @@ public class DoubleEliminationFormatTest {
         List<Match> matches = de.getAllMatches();
         for (int i = matches.size() - 1; i > 0; i--) {
             Match match = matches.get(i);
-            if (match.getBlueTeam().getInitialSeedValue() < match.getOrangeTeam().getInitialSeedValue()) {
+            if (match.getTeamOne().getInitialSeedValue() < match.getTeamTwo().getInitialSeedValue()) {
                 match.setScores(1, 0, true);
             } else {
                 match.setScores(0, 1, true);

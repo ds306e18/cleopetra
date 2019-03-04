@@ -4,7 +4,6 @@ import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.TieBreaker;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchPlayedListener;
-import dk.aau.cs.ds306e18.tournament.model.match.MatchStatus;
 import dk.aau.cs.ds306e18.tournament.ui.BracketOverviewTabController;
 import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.DoubleEliminationNode;
 import javafx.scene.Node;
@@ -70,8 +69,8 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
             // Creates the remaining matches which contains winners from their left- and right child-indexes.
             else {
                 upperBracket[i] = new Match()
-                        .setBlueToWinnerOf(upperBracket[getUpperBracketLeftIndex(i)])
-                        .setOrangeToWinnerOf(upperBracket[getUpperBracketRightIndex(i)]);
+                        .setTeamOneToWinnerOf(upperBracket[getUpperBracketLeftIndex(i)])
+                        .setTeamTwoToWinnerOf(upperBracket[getUpperBracketRightIndex(i)]);
             }
         }
     }
@@ -93,8 +92,8 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
         // For the first lower bracket round, use losers from first round in upper bracket
         for (int i = 0; i < matchesInCurrentRound; i++) {
             lowerBracketMatches.add(new Match()
-                    .setBlueToLoserOf(upperBracket[ubLoserIndex--])
-                    .setOrangeToLoserOf(upperBracket[ubLoserIndex--]));
+                    .setTeamOneToLoserOf(upperBracket[ubLoserIndex--])
+                    .setTeamTwoToLoserOf(upperBracket[ubLoserIndex--]));
         }
 
         int lbWinnerIndex = 0;
@@ -117,8 +116,8 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
 
                 for (int j = 0; j < matchesInCurrentRound; j++) {
                     lowerBracketMatches.add(new Match()
-                            .setBlueToWinnerOf(lowerBracketMatches.get(lbWinnerIndex++))
-                            .setOrangeToLoserOf(upperBracket[ubLoserIndex]));
+                            .setTeamOneToWinnerOf(lowerBracketMatches.get(lbWinnerIndex++))
+                            .setTeamTwoToLoserOf(upperBracket[ubLoserIndex]));
 
                     ubLoserIndex += dir;
                 }
@@ -136,8 +135,8 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
 
                 for (int j = 0; j < matchesInCurrentRound; j++) {
                     lowerBracketMatches.add(new Match()
-                            .setBlueToWinnerOf(lowerBracketMatches.get(lbWinnerIndex++))
-                            .setOrangeToWinnerOf(lowerBracketMatches.get(lbWinnerIndex++)));
+                            .setTeamOneToWinnerOf(lowerBracketMatches.get(lbWinnerIndex++))
+                            .setTeamTwoToWinnerOf(lowerBracketMatches.get(lbWinnerIndex++)));
                 }
             }
         }
@@ -152,22 +151,22 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
         if (lowerBracket.length == 0) {
             // The final is just a rematch
             finalMatch = new Match()
-                    .setBlueToLoserOf(upperBracket[0])
-                    .setOrangeToWinnerOf(upperBracket[0]);
+                    .setTeamOneToLoserOf(upperBracket[0])
+                    .setTeamTwoToWinnerOf(upperBracket[0]);
 
         } else {
             // The final is the winner of upper bracket versus winner of lower bracket
             finalMatch = new Match()
-                    .setBlueToWinnerOf(upperBracket[0])
-                    .setOrangeToWinnerOf(lowerBracket[lowerBracket.length-1]);
+                    .setTeamOneToWinnerOf(upperBracket[0])
+                    .setTeamTwoToWinnerOf(lowerBracket[lowerBracket.length-1]);
         }
 
 
         // The extra is takes the winner and loser of the final match, but it should not be played if the loser of
         // the final match has already lost twice
         extraMatch = new Match()
-                .setBlueToWinnerOf(finalMatch)
-                .setOrangeToLoserOf(finalMatch);
+                .setTeamOneToWinnerOf(finalMatch)
+                .setTeamTwoToLoserOf(finalMatch);
 
         finalMatch.registerMatchPlayedListener(this);
         extraMatch.registerMatchPlayedListener(this);
@@ -189,8 +188,8 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
         int matchIndex = upperBracket.length - 1;
         for (int i = 0; i < teamCount; i += 2, matchIndex--) {
             upperBracket[matchIndex]
-                    .setBlue(teams.get(i))
-                    .setOrange(teams.get(i + 1));
+                    .setTeamOne(teams.get(i))
+                    .setTeamTwo(teams.get(i + 1));
         }
     }
 
@@ -203,21 +202,21 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
             int ubIndex =  upperBracket.length - i - 1;
             Match m = upperBracket[ubIndex];
 
-            // We know orange is the bye, if there is any
-            if (byes.contains(m.getOrangeTeam())) {
+            // We know team two is the bye, if there is any
+            if (byes.contains(m.getTeamTwo())) {
                 // This is a bye match in upper bracket
 
                 // Resolve match and remove references to this match
                 upperBracket[ubIndex] = null;
-                if (m.doesWinnerGoToBlue()) {
-                    m.getWinnerDestination().setBlue(m.getBlueTeam());
+                if (m.doesWinnerGoToTeamOne()) {
+                    m.getWinnerDestination().setTeamOne(m.getTeamOne());
                 } else {
-                    m.getWinnerDestination().setOrange(m.getBlueTeam());
+                    m.getWinnerDestination().setTeamTwo(m.getTeamOne());
                 }
-                if (m.doesLoserGoToBlue()) {
-                    m.getLoserDestination().setBlue(m.getOrangeTeam());
+                if (m.doesLoserGoToTeamOne()) {
+                    m.getLoserDestination().setTeamOne(m.getTeamTwo());
                 } else {
-                    m.getLoserDestination().setOrange(m.getOrangeTeam());
+                    m.getLoserDestination().setTeamTwo(m.getTeamTwo());
                 }
             }
         }
@@ -227,8 +226,8 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
             int lbFirstRoundMatchCount = pow2(upperBracketRounds - 2);
             for (int i = 0; i < lbFirstRoundMatchCount; i++) {
                 Match m = lowerBracket[i];
-                // Team orange can only be a bye if blue also is a bye, so we test orange first
-                if (byes.contains(m.getOrangeTeam())) {
+                // Team two can only be a bye if team one also is a bye, so we test team two first
+                if (byes.contains(m.getTeamTwo())) {
                     // Both teams are byes
                     // Remove matches from bracket
                     lowerBracket[i] = null;
@@ -242,17 +241,17 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
                     // Sets the winner destination of m's winner destination to receive the loser that m's
                     // winner destination should have received
                     Match wd = m.getWinnerDestination();
-                    if (wd.doesWinnerGoToBlue()) {
-                        wd.getWinnerDestination().setBlueToLoserOf(wd.getOrangeFromMatch());
+                    if (wd.doesWinnerGoToTeamOne()) {
+                        wd.getWinnerDestination().setTeamOneToLoserOf(wd.getTeamTwoFromMatch());
                     } else {
-                        wd.getWinnerDestination().setOrangeToLoserOf(wd.getOrangeFromMatch());
+                        wd.getWinnerDestination().setTeamTwoToLoserOf(wd.getTeamTwoFromMatch());
                     }
 
-                } else if (byes.contains(m.getBlueTeam())) {
-                    // Only blue is a bye. Orange is the loser of a match in upper bracket.
+                } else if (byes.contains(m.getTeamOne())) {
+                    // Only team one is a bye. Team two is the loser of a match in upper bracket.
                     // Resolve match and remove references to this match
                     lowerBracket[i] = null;
-                    m.getWinnerDestination().setBlueToLoserOf(m.getOrangeFromMatch());
+                    m.getWinnerDestination().setTeamOneToLoserOf(m.getTeamTwoFromMatch());
                 }
             }
         }
@@ -362,7 +361,7 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
     @Override
     public List<Match> getUpcomingMatches() {
         return getAllMatches().stream().filter(m ->
-                        m.getStatus().equals(MatchStatus.READY_TO_BE_PLAYED)
+                        m.getStatus().equals(Match.Status.READY_TO_BE_PLAYED)
                         && !m.hasBeenPlayed()
                         && (m != extraMatch || isExtraMatchNeeded)) // extra match is only an upcoming match if needed
                 .collect(Collectors.toList());
@@ -371,7 +370,7 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
     @Override
     public List<Match> getPendingMatches() {
         return getAllMatches().stream().filter(m ->
-                        m.getStatus().equals(MatchStatus.NOT_PLAYABLE)
+                        m.getStatus().equals(Match.Status.NOT_PLAYABLE)
                         && m != extraMatch) // extra match is never pending. It is either not needed, or needed AND playable
                 .collect(Collectors.toList());
     }
@@ -440,20 +439,20 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
     private void repairUpperBracket() {
         for (int i = 0; i < upperBracket.length; i++) {
             if (upperBracket[i] != null) {
-                // Blue is winner from left match, if such a match exists
+                // Team one is winner from left match, if such a match exists
                 int leftIndex = getUpperBracketLeftIndex(i);
                 if (leftIndex < upperBracket.length) {
                     Match leftMatch = upperBracket[leftIndex];
                     if (leftMatch != null) {
-                        upperBracket[i].reconnectBlueToWinnerOf(leftMatch);
+                        upperBracket[i].reconnectTeamOneToWinnerOf(leftMatch);
                     }
                 }
-                // Orange is winner from right match, if such a match exists
+                // Team two is winner from right match, if such a match exists
                 int rightIndex = getUpperBracketRightIndex(i);
                 if (rightIndex < upperBracket.length) {
                     Match rightMatch = upperBracket[rightIndex];
                     if (rightMatch != null) {
-                        upperBracket[i].reconnectOrangeToWinnerOf(rightMatch);
+                        upperBracket[i].reconnectTeamTwoToWinnerOf(rightMatch);
                     }
                 }
             }
@@ -473,8 +472,8 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
         // For the first lower bracket round, use losers from first round in upper bracket
         while (next < matchesInCurrentRound) {
             if (lowerBracket[next] != null) {
-                lowerBracket[next].reconnectBlueToLoserOf(upperBracket[ubLoserIndex]);
-                lowerBracket[next].reconnectOrangeToLoserOf(upperBracket[ubLoserIndex - 1]);
+                lowerBracket[next].reconnectTeamOneToLoserOf(upperBracket[ubLoserIndex]);
+                lowerBracket[next].reconnectTeamTwoToLoserOf(upperBracket[ubLoserIndex - 1]);
             }
             next++;
             ubLoserIndex -= 2;
@@ -509,15 +508,15 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
 
                     } else if (lowerBracket[lbWinnerIndex] == null && r == 1) {
 
-                        // The prior lower-bracket round one match is gone due to a bye. We know the orange team was the bye
-                        // and we can calculate which upper-bracket match the blue team should come from
+                        // The prior lower-bracket round one match is gone due to a bye. We know the team two was the bye
+                        // and we can calculate which upper-bracket match team one should come from
                         int ubAltLoser = upperBracket.length - (lbWinnerIndex * 2 + 2);
-                        lowerBracket[next].reconnectBlueToLoserOf(upperBracket[ubAltLoser]);
-                        lowerBracket[next].reconnectOrangeToLoserOf(upperBracket[ubLoserIndex]);
+                        lowerBracket[next].reconnectTeamOneToLoserOf(upperBracket[ubAltLoser]);
+                        lowerBracket[next].reconnectTeamTwoToLoserOf(upperBracket[ubLoserIndex]);
 
                     } else {
-                        lowerBracket[next].reconnectBlueToWinnerOf(lowerBracket[lbWinnerIndex]);
-                        lowerBracket[next].reconnectOrangeToLoserOf(upperBracket[ubLoserIndex]);
+                        lowerBracket[next].reconnectTeamOneToWinnerOf(lowerBracket[lbWinnerIndex]);
+                        lowerBracket[next].reconnectTeamTwoToLoserOf(upperBracket[ubLoserIndex]);
                     }
 
                     lbWinnerIndex++;
@@ -540,17 +539,17 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
                     if (lowerBracket[lbWinnerIndex] == null) {
                         // This branch had two byes, so we calculate which loser from upper bracket we need
                         int ubAltLoser = lbWinnerIndex - 1;
-                        lowerBracket[next].reconnectBlueToLoserOf(upperBracket[ubAltLoser]);
+                        lowerBracket[next].reconnectTeamOneToLoserOf(upperBracket[ubAltLoser]);
                     } else {
-                        lowerBracket[next].reconnectBlueToWinnerOf(lowerBracket[lbWinnerIndex]);
+                        lowerBracket[next].reconnectTeamOneToWinnerOf(lowerBracket[lbWinnerIndex]);
                     }
 
                     if (lowerBracket[lbWinnerIndex + 1] == null) {
                         // This branch had two byes, so we calculate which loser from upper bracket we need
                         int ubAltLoser = lbWinnerIndex;
-                        lowerBracket[next].reconnectOrangeToLoserOf(upperBracket[ubAltLoser]);
+                        lowerBracket[next].reconnectTeamTwoToLoserOf(upperBracket[ubAltLoser]);
                     } else {
-                        lowerBracket[next].reconnectOrangeToWinnerOf(lowerBracket[lbWinnerIndex + 1]);
+                        lowerBracket[next].reconnectTeamTwoToWinnerOf(lowerBracket[lbWinnerIndex + 1]);
                     }
 
                     lbWinnerIndex += 2;
@@ -564,14 +563,14 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
     private void repairGrandFinals() {
         if (lowerBracket.length == 0) {
             // If there is no lower bracket, there are only two teams and final match is just a rematch of upper bracket
-            finalMatch.reconnectBlueToLoserOf(upperBracket[0]);
-            finalMatch.reconnectOrangeToWinnerOf(upperBracket[0]);
+            finalMatch.reconnectTeamOneToLoserOf(upperBracket[0]);
+            finalMatch.reconnectTeamTwoToWinnerOf(upperBracket[0]);
         } else {
-            finalMatch.reconnectBlueToWinnerOf(upperBracket[0]);
-            finalMatch.reconnectOrangeToWinnerOf(lowerBracket[lowerBracket.length - 1]);
+            finalMatch.reconnectTeamOneToWinnerOf(upperBracket[0]);
+            finalMatch.reconnectTeamTwoToWinnerOf(lowerBracket[lowerBracket.length - 1]);
         }
-        extraMatch.reconnectBlueToWinnerOf(finalMatch);
-        extraMatch.reconnectOrangeToLoserOf(finalMatch);
+        extraMatch.reconnectTeamOneToWinnerOf(finalMatch);
+        extraMatch.reconnectTeamTwoToLoserOf(finalMatch);
 
         // Listeners
         finalMatch.registerMatchPlayedListener(this);
