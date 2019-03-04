@@ -5,14 +5,13 @@ import dk.aau.cs.ds306e18.tournament.model.Bot;
 import dk.aau.cs.ds306e18.tournament.model.SeedingOption;
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
+import dk.aau.cs.ds306e18.tournament.utility.Alerts;
+import dk.aau.cs.ds306e18.tournament.utility.configuration.BotConfig;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -52,6 +51,7 @@ public class ParticipantSettingsTabController {
     @FXML private Button copyBotBtn;
     @FXML private Button pasteBotBtn;
     @FXML private Label clipboardLabel;
+
     final private FileChooser fileChooser = new FileChooser();
 
     private Bot clipboardBot;
@@ -102,7 +102,7 @@ public class ParticipantSettingsTabController {
         });
         seedSpinner.focusedProperty().addListener((observable, wasFocused, isNowFocused) -> {
             // Select all text, because that is user friendly for this case
-            if (isNowFocused){
+            if (isNowFocused) {
                 Platform.runLater(seedSpinner.getEditor()::selectAll);
             }
             // Focus lost and editor is currently empty, so set the text to the saved seed value
@@ -159,7 +159,7 @@ public class ParticipantSettingsTabController {
         });
 
         //Formatting what is displayed in the listView: id + name.
-        teamsListView.setCellFactory(lv -> new ListCell<Team>(){
+        teamsListView.setCellFactory(lv -> new ListCell<Team>() {
             public void updateItem(Team team, boolean empty) {
                 super.updateItem(team, empty);
                 if (empty) {
@@ -177,7 +177,8 @@ public class ParticipantSettingsTabController {
                             setText("Seed " + team.getInitialSeedValue() + ":    " + team.getTeamName());
                             break;
 
-                        case NO_SEEDING: case RANDOM_SEEDING:
+                        case NO_SEEDING:
+                        case RANDOM_SEEDING:
                             setText(team.getTeamName());
                             break;
                     }
@@ -201,32 +202,48 @@ public class ParticipantSettingsTabController {
         if (file != null) {
 
             //If the path contains more than 1 backslash, make the filechoosers next start be one folder above the selected
-            if(CharMatcher.is('\\').countIn(file.getAbsolutePath()) > 1)
+            if (CharMatcher.is('\\').countIn(file.getAbsolutePath()) > 1)
                 fileChooser.setInitialDirectory(new File(getPathOneFolderAbove(file.getAbsolutePath())));
             else
                 fileChooser.setInitialDirectory(null);
 
             Bot selectedBot = botsListView.getSelectionModel().getSelectedItem();
-            selectedBot.setConfigPath(file.getAbsolutePath());
-            updateConfigPathTextField();
+            BotConfig botInfo = new BotConfig(file.getAbsolutePath());
+            if (botInfo.isValid()) {
+                selectedBot.setName(botInfo.getName());
+                selectedBot.setDeveloper(botInfo.getDeveloper());
+                selectedBot.setDescription(botInfo.getDescription());
+                selectedBot.setConfigPath(file.getAbsolutePath());
+            } else {
+                Alerts.errorNotification("The config is not valid!", "Try to load the a bot config file," +
+                        "or check whether yours is valid");
+            }
+            updateBotFields();
+            botsListView.refresh();
         }
     }
 
-    /** Updates tournament values from fields when key released */
+    /**
+     * Updates tournament values from fields when key released
+     */
     @FXML
     void botDesscriptionTextAreaOnKeyReleased(KeyEvent event) {
         Tournament.get().getTeams().get(getSelectedTeamIndex()).getBots().get(botsListView.getSelectionModel().getSelectedIndex())
                 .setDescription(botDescription.getText());
     }
 
-    /** Updates tournament values from fields when key released. */
+    /**
+     * Updates tournament values from fields when key released.
+     */
     @FXML
     void developerTextFieldOnKeyReleased(KeyEvent event) {
         Tournament.get().getTeams().get(getSelectedTeamIndex()).getBots().get(botsListView.getSelectionModel().getSelectedIndex())
                 .setDeveloper(developerTextField.getText());
     }
 
-    /** Updates tournament values from fields when key released. */
+    /**
+     * Updates tournament values from fields when key released.
+     */
     @FXML
     void botNameTextFieldOnKeyReleased(KeyEvent event) {
         Tournament.get().getTeams().get(getSelectedTeamIndex()).getBots().get(botsListView.getSelectionModel().getSelectedIndex())
@@ -234,14 +251,18 @@ public class ParticipantSettingsTabController {
         botsListView.refresh();
     }
 
-    /** Updates tournament values from fields when key released. */
+    /**
+     * Updates tournament values from fields when key released.
+     */
     @FXML
     void teamNameTextFieldOnKeyReleased(KeyEvent event) {
         Tournament.get().getTeams().get(getSelectedTeamIndex()).setTeamName(teamNameTextField.getText());
         teamsListView.refresh();
     }
 
-    /** Updates the lists on button press action. */
+    /**
+     * Updates the lists on button press action.
+     */
     @FXML
     void addBotBtnOnAction(ActionEvent actionEvent) {
         if (teamsListView.getSelectionModel().getSelectedIndex() != -1) {
@@ -254,7 +275,9 @@ public class ParticipantSettingsTabController {
         }
     }
 
-    /** Updates the lists on button press action */
+    /**
+     * Updates the lists on button press action
+     */
     @FXML
     void removeBotBtnOnAction(ActionEvent actionEvent) {
         int selectedIndex = botsListView.getSelectionModel().getSelectedIndex();
@@ -269,12 +292,14 @@ public class ParticipantSettingsTabController {
         }
     }
 
-    /** Updates the lists on button press action */
+    /**
+     * Updates the lists on button press action
+     */
     @FXML
     void addTeamBtnOnAction(ActionEvent actionEvent) {
 
         //Create a team with a bot and add the team to the tournament
-        Team team = new Team("Team " + (Tournament.get().getTeams().size() + 1), new ArrayList<Bot>(), teamsListView.getItems().size()+1, "");
+        Team team = new Team("Team " + (Tournament.get().getTeams().size() + 1), new ArrayList<Bot>(), teamsListView.getItems().size() + 1, "");
         team.addBot(new Bot("Bot 1", "Dev 1", ""));
         Tournament.get().addTeam(team);
 
@@ -286,7 +311,9 @@ public class ParticipantSettingsTabController {
         botsListView.refresh();
     }
 
-    /** Updates the lists on button press action */
+    /**
+     * Updates the lists on button press action
+     */
     @FXML
     void removeTeamBtnOnAction(ActionEvent actionEvent) {
         botsListView.getSelectionModel().clearSelection();
@@ -302,8 +329,10 @@ public class ParticipantSettingsTabController {
         }
     }
 
-    /** Updates the textfields with the values from the selected bot. */
-    void updateBotFields() {
+    /**
+     * Updates the textfields with the values from the selected bot.
+     */
+    private void updateBotFields() {
 
         if (botsListView.getSelectionModel().getSelectedIndex() != -1) {
 
@@ -322,7 +351,9 @@ public class ParticipantSettingsTabController {
         Tournament.get().getTeams().forEach(this::checkForEmptyBotName);
     }
 
-    /** Clears bot fields and hides bot box. */
+    /**
+     * Clears bot fields and hides bot box.
+     */
     private void clearBotFields() {
         configPathTextField.setText("");
         botDescription.setText("");
@@ -344,11 +375,14 @@ public class ParticipantSettingsTabController {
         swapUpTeam.setDisable(seedingOption != SeedingOption.SEED_BY_ORDER || selectedIndex <= 0 || started);
         swapDownTeam.setDisable(seedingOption != SeedingOption.SEED_BY_ORDER || selectedIndex == teamsListView.getItems().size() - 1 || started);
 
+        System.out.println("TEST: " + (selectedIndex == -1 || started));
         removeTeamBtn.setDisable(selectedIndex == -1 || started);
         addTeamBtn.setDisable(started);
     }
 
-    /** Updates the textfields with the values from the selected team. */
+    /**
+     * Updates the textfields with the values from the selected team.
+     */
     void updateTeamFields() {
 
         teamSettingsVbox.setVisible(teamsListView.getItems().size() != 0);
@@ -417,7 +451,9 @@ public class ParticipantSettingsTabController {
         }
     }
 
-    /** Updates the text display by the config path text field. */
+    /**
+     * Updates the text display by the config path text field.
+     */
     private void updateConfigPathTextField() {
         Bot selectedBot = botsListView.getSelectionModel().getSelectedItem();
         if (selectedBot == null) {
@@ -437,14 +473,18 @@ public class ParticipantSettingsTabController {
         configPathTextField.setText(shortPath);
     }
 
-    /** @return the given path as a string with one file and one folder removed. */
+    /**
+     * @return the given path as a string with one file and one folder removed.
+     */
     private String getPathOneFolderAbove(String path) {
 
         String pathFinal = path.substring(0, path.lastIndexOf("\\"));
         return pathFinal.substring(0, pathFinal.lastIndexOf("\\")) + "\\";
     }
 
-    /** Swaps a team upwards in the list of teams. Used to allow ordering of Team and thereby their seed. */
+    /**
+     * Swaps a team upwards in the list of teams. Used to allow ordering of Team and thereby their seed.
+     */
     @FXML
     private void swapTeamUpwards() {
         Tournament.get().swapTeams(getSelectedTeamIndex(), getSelectedTeamIndex() - 1);
@@ -452,7 +492,9 @@ public class ParticipantSettingsTabController {
         teamsListView.refresh();
     }
 
-    /** Swaps a team downwards in the list of teams. Used to allow ordering of Team and thereby their seed. */
+    /**
+     * Swaps a team downwards in the list of teams. Used to allow ordering of Team and thereby their seed.
+     */
     @FXML
     private void swapTeamDownwards() {
         Tournament.get().swapTeams(getSelectedTeamIndex(), getSelectedTeamIndex() + 1);
@@ -460,7 +502,7 @@ public class ParticipantSettingsTabController {
         teamsListView.refresh();
     }
 
-    private Team getSelectedTeam(){
+    private Team getSelectedTeam() {
         return teamsListView.getSelectionModel().getSelectedItem();
     }
 
@@ -489,7 +531,7 @@ public class ParticipantSettingsTabController {
         }
     }
 
-    public void updateClipboardLabel() {
+    private void updateClipboardLabel() {
         if (clipboardBot == null) {
             clipboardLabel.setText(CLIPBOARD_PREFIX + CLIPBOARD_EMPTY_STRING);
         } else {
@@ -497,7 +539,7 @@ public class ParticipantSettingsTabController {
         }
     }
 
-    public void updateCopyPasteButtonsEnabling() {
+    private void updateCopyPasteButtonsEnabling() {
         Bot selectedBot = botsListView.getSelectionModel().getSelectedItem();
         copyBotBtn.setDisable(selectedBot == null);
 
@@ -506,7 +548,7 @@ public class ParticipantSettingsTabController {
         pasteBotBtn.setDisable(clipboardBot == null || spaceOnSelectedTeam);
     }
 
-    public void updateAddRemoveBotButtonsEnabling() {
+    private void updateAddRemoveBotButtonsEnabling() {
         Team selectedTeam = getSelectedTeam();
         Bot selectedBot = botsListView.getSelectionModel().getSelectedItem();
 

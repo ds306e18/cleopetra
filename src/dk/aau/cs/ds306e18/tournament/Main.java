@@ -8,6 +8,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.ini4j.Config;
 
 import java.io.IOException;
 import java.net.URL;
@@ -19,7 +20,7 @@ public class Main extends Application {
 
         // Start program with the launcher
         AnchorPane launcherLoader = FXMLLoader.load(Main.class.getResource("ui/layout/Launcher.fxml"));
-
+        Config.getGlobal().setLineSeparator("\n");
         primaryStage.setTitle("CleoPetra Launcher");
         primaryStage.setScene(new Scene(launcherLoader));
         primaryStage.setResizable(false);

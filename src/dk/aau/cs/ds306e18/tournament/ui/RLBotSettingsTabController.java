@@ -1,6 +1,8 @@
 package dk.aau.cs.ds306e18.tournament.ui;
 
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
+import dk.aau.cs.ds306e18.tournament.utility.Alerts;
+import dk.aau.cs.ds306e18.tournament.utility.configuration.RLBotConfig;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -21,6 +23,7 @@ public class RLBotSettingsTabController {
     @FXML private TextField configPathTextField;
     @FXML private CheckBox autoCloseRLBotCheckBox;
 
+
     final private FileChooser fileChooser = new FileChooser();
 
     @FXML
@@ -31,7 +34,9 @@ public class RLBotSettingsTabController {
         updateConfigPathTextField();
     }
 
-    /** Updates the text shown in the config path text field. */
+    /**
+     * Updates the text shown in the config path text field.
+     */
     private void updateConfigPathTextField() {
         String path = Tournament.get().getRlBotSettings().getConfigPath();
         if (path != null && !path.isEmpty()) {
@@ -50,10 +55,14 @@ public class RLBotSettingsTabController {
 
             // Next file chooser will now start in the folder of last selected file
             fileChooser.setInitialDirectory(file.getParentFile());
-
+            RLBotConfig rlBotInfo = new RLBotConfig(file.getAbsolutePath());
             // Update settings
-            Tournament.get().getRlBotSettings().setConfigPath(file.getAbsolutePath());
-
+            if (rlBotInfo.isValid()) {
+                Tournament.get().getRlBotSettings().setConfigPath(file.getAbsolutePath());
+            } else {
+                Alerts.errorNotification("The config is not valid!", "Try to load the RLBot.cfg file," +
+                        " or check whether yours is valid");
+            }
             updateConfigPathTextField();
         }
     }
