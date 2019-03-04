@@ -1,5 +1,6 @@
 package dk.aau.cs.ds306e18.tournament.ui;
 
+import dk.aau.cs.ds306e18.tournament.Main;
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import dk.aau.cs.ds306e18.tournament.utility.Alerts;
 import dk.aau.cs.ds306e18.tournament.utility.FileOperations;
@@ -9,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
@@ -30,6 +32,7 @@ public class LauncherController {
         systemStage.setMinHeight(650);
         systemStage.setMaximized(true);
         systemStage.setTitle("CleoPetra");
+        systemStage.getIcons().add(new Image(Main.class.getResourceAsStream("ui/layout/images/logo.png")));
 
         // Set the correct scene for the system stage.
         try {
