@@ -375,7 +375,6 @@ public class ParticipantSettingsTabController {
         swapUpTeam.setDisable(seedingOption != SeedingOption.SEED_BY_ORDER || selectedIndex <= 0 || started);
         swapDownTeam.setDisable(seedingOption != SeedingOption.SEED_BY_ORDER || selectedIndex == teamsListView.getItems().size() - 1 || started);
 
-        System.out.println("TEST: " + (selectedIndex == -1 || started));
         removeTeamBtn.setDisable(selectedIndex == -1 || started);
         addTeamBtn.setDisable(started);
     }
