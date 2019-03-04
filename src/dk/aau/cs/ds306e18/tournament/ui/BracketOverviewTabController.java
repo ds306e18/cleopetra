@@ -74,7 +74,7 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
 
     @FXML
     private void initialize() {
-        instance = this; // TODO Make references to other controllers work in MainController
+        instance = this;
 
 
         // Listeners for the listviews. Handles the clear of selection of the other listview and updates the

@@ -20,6 +20,8 @@ import java.util.Collections;
 
 public class TournamentSettingsTabController {
 
+    public static TournamentSettingsTabController instance;
+
     @FXML private GridPane tournamentSettingsTab;
     @FXML private TextField nameTextField;
     @FXML private ChoiceBox<TieBreaker> tieBreakerChoiceBox;
@@ -40,14 +42,9 @@ public class TournamentSettingsTabController {
 
     @FXML
     private void initialize() {
+        instance = this;
 
         setUpStageListView();
-
-        /* Retrieve and set tournament name into textfield. */
-        nameTextField.setText(Tournament.get().getName());
-
-        /* By default the remove stage button is disabled. */
-        removeStageBtn.setDisable(true);
 
         /* Retrieve and add choices to choicebox for the Tiebreaker box.
          * Also upon change sets the new tiebreaker rule to the tournament model. */
@@ -65,8 +62,7 @@ public class TournamentSettingsTabController {
                 Tournament.get().setTieBreaker(newValue);
             }
         });
-        TieBreaker savedTiebreaker = Tournament.get().getTieBreaker();
-        tieBreakerChoiceBox.getSelectionModel().select(savedTiebreaker);
+        updateGeneralTournamentSettings();
 
         /* Setup teams wanted in stage spinner */
         teamsInStageSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(2, Integer.MAX_VALUE));
@@ -106,21 +102,10 @@ public class TournamentSettingsTabController {
         stagesListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             stageSettingsVBox.setVisible(stagesListView.getItems().size() != 0);
 
-            /* Handle stage order button disabling / enabling */
-            int selectedIndex = getSelectedIndex();
-            swapUp.setDisable(selectedIndex == 0);
-            swapDown.setDisable(selectedIndex == stagesListView.getItems().size() - 1 && selectedIndex != -1);
-
             /* Set content inside stage settings to show chosen stage */
-            showStageValues();
+            updateStageSettings();
 
-            /* If the stageListView has no items. Then the remove, up and down buttons is disabled. */
-            if(stagesListView.getItems().size() == 0) {
-                removeStageBtn.setDisable(true);
-                swapUp.setDisable(true);
-                swapDown.setDisable(true);
-            } else
-                removeStageBtn.setDisable(false);
+            updateStageListButtons();
         });
     }
 
@@ -135,6 +120,65 @@ public class TournamentSettingsTabController {
                 formatUniqueSettingsHolder.getChildren().add(selectedStage.getFormat().getSettingsFXNode());
             }
         }
+    }
+
+    /** Updates all ui elements */
+    public void update() {
+        updateGeneralTournamentSettings();
+        updateStageSettings();
+    }
+
+    /** Updates all general tournament settings like tournament name, tiebreaker rule, and stage list*/
+    public void updateGeneralTournamentSettings() {
+        Tournament tournament = Tournament.get();
+        nameTextField.setText(tournament.getName());
+        tieBreakerChoiceBox.getSelectionModel().select(tournament.getTieBreaker());
+        tieBreakerChoiceBox.setDisable(tournament.hasStarted());
+
+        stagesListView.refresh();
+        updateStageListButtons();
+    }
+
+    /** Updates the buttons under the stage list */
+    public void updateStageListButtons() {
+        boolean started = Tournament.get().hasStarted();
+        if (stagesListView.getItems().size() == 0) {
+            // If the stageListView has no items. Then the remove, up and down buttons is disabled.
+            swapUp.setDisable(true);
+            swapDown.setDisable(true);
+            removeStageBtn.setDisable(true);
+        } else {
+            // Swap up and down depends on selected index. Remove is always enabled unless tournament has started
+            int selectedIndex = getSelectedIndex();
+            swapUp.setDisable(selectedIndex == 0 || started);
+            swapDown.setDisable(selectedIndex == stagesListView.getItems().size() - 1 && selectedIndex != -1 || started);
+            removeStageBtn.setDisable(started);
+        }
+        addStageBtn.setDisable(started);
+    }
+
+    /** Updates all general stage settings like name and teams in stage. */
+    public void updateStageSettings() {
+        boolean started = Tournament.get().hasStarted();
+        Stage selectedStage = getSelectedStage();
+        if (selectedStage != null) {
+            stageNameTextfield.setText(selectedStage.getName());
+            formatChoicebox.getSelectionModel().select(StageFormatOption.getOption(selectedStage.getFormat()));
+            formatChoicebox.setDisable(started);
+
+            if (selectedStage.getStageNumber() != 1) {
+                teamsInStageAll.setVisible(false);
+                teamsInStageSpinner.setVisible(true);
+                teamsInStageSpinner.getValueFactory().setValue(selectedStage.getNumberOfTeamsWanted());
+            } else {
+                teamsInStageAll.setVisible(true);
+                teamsInStageSpinner.setVisible(false);
+            }
+            teamsInStageSpinner.setDisable(started);
+        }
+
+        updateFormatUniqueSettings();
+        formatUniqueSettingsHolder.setDisable(started);
     }
 
     @FXML
@@ -170,27 +214,6 @@ public class TournamentSettingsTabController {
             Tournament.get().removeStage(getSelectedIndex());
             stagesListView.getItems().remove(getSelectedIndex());
         }
-    }
-
-    /**
-     * Show the correct values in the stage settings panel.
-     */
-    private void showStageValues() {
-        Stage selectedStage = getSelectedStage();
-        if (selectedStage != null) {
-            stageNameTextfield.setText(selectedStage.getName());
-            formatChoicebox.getSelectionModel().select(StageFormatOption.getOption(selectedStage.getFormat()));
-            if (selectedStage.getStageNumber() != 1) {
-                teamsInStageAll.setVisible(false);
-                teamsInStageSpinner.setVisible(true);
-                teamsInStageSpinner.getValueFactory().setValue(selectedStage.getNumberOfTeamsWanted());
-            } else {
-                teamsInStageAll.setVisible(true);
-                teamsInStageSpinner.setVisible(false);
-            }
-        }
-
-        updateFormatUniqueSettings();
     }
 
     /**

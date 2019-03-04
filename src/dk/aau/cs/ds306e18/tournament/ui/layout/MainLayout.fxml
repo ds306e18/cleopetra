@@ -11,17 +11,17 @@
     <children>
         <TabPane id="tabPane" tabClosingPolicy="UNAVAILABLE" tabMinHeight="400.0" tabMinWidth="1080.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <tabs>
-                <Tab text="Tournament Settings">
+                <Tab fx:id="tournamentSettingsTab" onSelectionChanged="#onTabSelectionChanged" text="Tournament Settings">
                     <AnchorPane>
                         <fx:include source="TournamentSettingsTab.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                     </AnchorPane>
                 </Tab>
-                <Tab text="Participant Settings">
+                <Tab fx:id="participantSettingsTab" onSelectionChanged="#onTabSelectionChanged" text="Participant Settings">
                     <AnchorPane>
                         <fx:include source="ParticipantSettingsTab.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                     </AnchorPane>
                 </Tab>
-                <Tab text="RLBot Settings">
+                <Tab fx:id="rlbotSettingsTab" onSelectionChanged="#onTabSelectionChanged" text="RLBot Settings">
                     <AnchorPane>
                         <fx:include source="RLBotSettingsTab.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                     </AnchorPane>
