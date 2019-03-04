@@ -1,9 +1,12 @@
 # Changelog
 
-### Unreleased changes (dev)
+#### Version 1.2.1 - 4. March 2019
 - Added ability to swap team colors in a match. #49 - NicEastvillage
 - Fixed a bug where changing the score of a match without affecting the outcome would reset subsequent matches. #53 - NicEastvillage
 - Made some settings UI disable when the tournament start as those cannot be changed anymore. #15 - NicEastvillage
+- Values are now read from a bot's config file when it is selected in participant settings. #4 - jeroen11dijk
+- The Ini4j library is now used for config files. - jeroen11dijk
+- Added a new logo and updated title image. - NicEastvillage
 
 #### Version 1.2.0 - 31. Jan 2019
 - Double elimination. #9 - NicEastvillage
