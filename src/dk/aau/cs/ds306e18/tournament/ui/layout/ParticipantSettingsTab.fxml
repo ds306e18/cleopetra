@@ -5,9 +5,11 @@
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.Blend?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -178,7 +180,7 @@
             <Insets bottom="16.0" />
          </padding>
       </VBox>
-      <VBox id="PS-rightside" fx:id="botSettingsVbox" maxWidth="360.0" minWidth="360.0" prefWidth="360.0" spacing="10.0" visible="false">
+      <VBox id="PS-rightside" fx:id="botSettingsVbox" maxWidth="360.0" minWidth="360.0" prefWidth="360.0" spacing="10.0">
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Bot Settings" wrappingWidth="208.8034381866455">
                <font>
@@ -201,6 +203,11 @@
                   <Insets />
                </VBox.margin>
             </TextField>
+            <RadioButton fx:id="isPsyonixCheckbox" mnemonicParsing="false" onAction="#onActionPsyonixToggled" text=" Psyonix Allstar (you must set a config path anyway)">
+               <effect>
+                  <Blend />
+               </effect>
+            </RadioButton>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Developer:">
                <font>
                   <Font size="16.0" />

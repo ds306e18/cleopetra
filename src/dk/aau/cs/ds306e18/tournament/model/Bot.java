@@ -8,6 +8,15 @@ public class Bot implements Cloneable {
     private String developer;
     private String description;
     private String configPath;
+    private boolean isPsyonixBot;
+
+    public Bot(String name, String developer, String configPath, String description, boolean isPsyonixBot) {
+        this.name = name;
+        this.developer = developer;
+        this.configPath = configPath;
+        this.description = description;
+        this.isPsyonixBot = isPsyonixBot;
+    }
 
     public Bot(String name, String developer, String configPath, String description) {
         this.name = name;
@@ -59,13 +68,21 @@ public class Bot implements Cloneable {
         this.configPath = configPath;
     }
 
+    public boolean isPsyonixBot() {
+        return isPsyonixBot;
+    }
+
+    public void setPsyonixBot(boolean psyonixBot) {
+        isPsyonixBot = psyonixBot;
+    }
+
     public String toString() {
         return name;
     }
 
     @Override
     public Bot clone() {
-        return new Bot(name, developer, configPath, description);
+        return new Bot(name, developer, configPath, description, isPsyonixBot);
     }
 
     @Override

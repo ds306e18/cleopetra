@@ -34,6 +34,7 @@ public class ParticipantSettingsTabController {
     @FXML private TextField teamNameTextField;
     @FXML private Spinner<Integer> seedSpinner;
     @FXML private TextField botNameTextField;
+    @FXML private RadioButton isPsyonixCheckbox;
     @FXML private TextField developerTextField;
     @FXML private TextArea botDescription;
     @FXML private Button configPathBtn;
@@ -339,12 +340,13 @@ public class ParticipantSettingsTabController {
             botSettingsVbox.setVisible(true);
             Bot selectedBot = Tournament.get().getTeams().get(getSelectedTeamIndex()).getBots().get(botsListView.getSelectionModel().getSelectedIndex());
             botNameTextField.setText(selectedBot.getName());
+            isPsyonixCheckbox.setSelected(selectedBot.isPsyonixBot());
             developerTextField.setText(selectedBot.getDeveloper());
             botDescription.setText(selectedBot.getDescription());
             updateConfigPathTextField();
 
         } else {
-            //if no bot is selected clear the fields and hide the botsettgins box.
+            // If no bot is selected clear the fields and hide the bot settings box.
             clearBotFields();
         }
         //Check for empty names
@@ -553,5 +555,10 @@ public class ParticipantSettingsTabController {
 
         addBotBtn.setDisable(selectedTeam != null && selectedTeam.getBots().size() >= Team.MAX_SIZE);
         removeBotBtn.setDisable(selectedBot == null);
+    }
+
+    public void onActionPsyonixToggled(ActionEvent actionEvent) {
+        Bot selectedBot = botsListView.getSelectionModel().getSelectedItem();
+        selectedBot.setPsyonixBot(isPsyonixCheckbox.isSelected());
     }
 }
