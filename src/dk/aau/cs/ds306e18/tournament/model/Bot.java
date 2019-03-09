@@ -92,12 +92,14 @@ public class Bot implements Cloneable {
         Bot bot = (Bot) o;
         return Objects.equals(getName(), bot.getName()) &&
                 Objects.equals(getDeveloper(), bot.getDeveloper()) &&
-                Objects.equals(getConfigPath(), bot.getConfigPath());
+                Objects.equals(getConfigPath(), bot.getConfigPath()) &&
+                Objects.equals(getDescription(), bot.getDescription()) &&
+                Objects.equals(isPsyonixBot(), bot.isPsyonixBot());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getName(), getDeveloper(), getConfigPath());
+        return Objects.hash(getName(), getDeveloper(), getConfigPath(), getDescription(), isPsyonixBot());
     }
 
 }
