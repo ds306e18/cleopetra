@@ -1,5 +1,8 @@
 # Changelog
 
+#### Unreleased changes (dev branch)
+- Added support for Psyonix Allstar bot. #13 - NicEastvillage
+
 #### Version 1.2.1 - 4. March 2019
 - Added ability to swap team colors in a match. #49 - NicEastvillage
 - Fixed a bug where changing the score of a match without affecting the outcome would reset subsequent matches. #53 - NicEastvillage
