@@ -118,7 +118,7 @@ public class RLBotConfig extends ConfigFileEditor {
     public void setupParticipant(Bot bot, int index, int team) {
         setParticipantConfigPath(bot.getConfigPath(), index);
         setParticipantTeam(team, index);
-        setParticipantType(bot.isPsyonixBot() ? BotType.PSYONIX : BotType.RLBOT, index);
-        setParticipantSkill(BotSkill.ALLSTAR, index);
+        setParticipantType(bot.getBotType(), index);
+        setParticipantSkill(bot.getBotSkill(), index);
     }
 }

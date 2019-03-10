@@ -4,11 +4,11 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class BotTest {
+public class CustomBotTest {
 
     @Test
     public void clone01() {
-        Bot bot = new Bot("name", "dev", "path", "desc", true);
+        CustomBot bot = new CustomBot("name", "dev", "path", "desc", true);
         assertEquals(bot, bot.clone());
     }
 }

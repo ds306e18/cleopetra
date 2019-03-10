@@ -28,20 +28,11 @@ public class BotConfig extends ConfigFileEditor {
         valid = (config.get("Locations") != null);
     }
 
-    /**
-     * Calls the write-function of CFE
-     *
-     * @param filename the filename to be written to
-     */
-    void writeConfig(String filename) {
-        write(filename);
-    }
-
-    String getAppearanceConfigPath() {
+    public String getAppearanceConfigPath() {
         return getValueOfLine(SECTION_LOCATIONS, PARAMETER_APPEARANCE);
     }
 
-    String getPythonFile() {
+    public String getPythonFile() {
         return getValueOfLine(SECTION_LOCATIONS, PARAMETER_PYTHON);
     }
 
@@ -57,15 +48,15 @@ public class BotConfig extends ConfigFileEditor {
         return getValueOfLine(SECTION_DETAILS, PARAMETER_DESCRIPTION);
     }
 
-    String getFunFact() {
+    public String getFunFact() {
         return getValueOfLine(SECTION_DETAILS, PARAMETER_FUNFACT);
     }
 
-    String getGithub() {
+    public String getGithub() {
         return getValueOfLine(SECTION_DETAILS, PARAMETER_GITHUB);
     }
 
-    String getLanguage() {
+    public String getLanguage() {
         return getValueOfLine(SECTION_DETAILS, PARAMETER_LANGUAGE);
     }
 }
