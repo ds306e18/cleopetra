@@ -1,8 +1,13 @@
-package dk.aau.cs.ds306e18.tournament.utility.configuration;
+package dk.aau.cs.ds306e18.tournament.model;
 
 /** Enum over supported bot-types in the rlbot.cfg */
 public enum BotType {
-    HUMAN("human"), RLBOT("rlbot"), PSYONIX("psyonix"), PARTY_MEMBER_BOT("party_member_bot"), CONTROLLER_PASSTHROUGH("controller_passthrough"), SPECTATOR("");
+    HUMAN("human"),
+    RLBOT("rlbot"),
+    PSYONIX("psyonix"),
+    PARTY_MEMBER_BOT("party_member_bot"),
+    CONTROLLER_PASSTHROUGH("controller_passthrough"),
+    SPECTATOR("");
 
     private String configValue;
 
