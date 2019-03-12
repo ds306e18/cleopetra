@@ -3,13 +3,9 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Spinner?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.effect.Blend?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -73,12 +69,12 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <Button fx:id="addTeamBtn" mnemonicParsing="false" onAction="#addTeamBtnOnAction" prefHeight="27.0" prefWidth="79.0" text="Add">
+                  <Button fx:id="addTeamBtn" mnemonicParsing="false" onAction="#addTeamBtnOnAction" prefHeight="27.0" prefWidth="101.0" text="Add">
                      <GridPane.margin>
                         <Insets />
                      </GridPane.margin>
                   </Button>
-                  <Button fx:id="removeTeamBtn" mnemonicParsing="false" onAction="#removeTeamBtnOnAction" prefHeight="27.0" prefWidth="81.0" text="Remove" GridPane.columnIndex="1">
+                  <Button fx:id="removeTeamBtn" mnemonicParsing="false" onAction="#removeTeamBtnOnAction" prefHeight="27.0" prefWidth="101.0" text="Remove" GridPane.columnIndex="1">
                      <GridPane.margin>
                         <Insets />
                      </GridPane.margin>
@@ -150,31 +146,7 @@
                   <Insets />
                </VBox.margin>
             </ListView>
-            <GridPane hgap="8.0" maxHeight="-Infinity" maxWidth="-Infinity" vgap="8.0">
-               <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints vgrow="SOMETIMES" />
-                  <RowConstraints vgrow="SOMETIMES" />
-               </rowConstraints>
-               <children>
-                  <Button fx:id="addBotBtn" mnemonicParsing="false" onAction="#addBotBtnOnAction" prefHeight="27.0" prefWidth="100.0" text="Add">
-                     <GridPane.margin>
-                        <Insets />
-                     </GridPane.margin>
-                  </Button>
-                  <Button fx:id="removeBotBtn" mnemonicParsing="false" onAction="#removeBotBtnOnAction" prefHeight="27.0" prefWidth="100.0" text="Remove" GridPane.columnIndex="1">
-                     <GridPane.margin>
-                        <Insets />
-                     </GridPane.margin>
-                  </Button>
-                  <Button fx:id="copyBotBtn" mnemonicParsing="false" onAction="#onCopyBotButtonAction" prefHeight="27.0" prefWidth="100.0" text="Copy" GridPane.rowIndex="1" />
-                  <Button fx:id="pasteBotBtn" mnemonicParsing="false" onAction="#onPasteBotButtonAction" prefHeight="27.0" prefWidth="100.0" text="Paste" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-               </children>
-            </GridPane>
-            <Label fx:id="clipboardLabel" text="Clipboard:" />
+            <Button fx:id="removeBotBtn" mnemonicParsing="false" onAction="#removeBotBtnOnAction" prefHeight="27.0" prefWidth="101.0" text="Remove" />
          </children>
          <padding>
             <Insets bottom="16.0" />
@@ -182,7 +154,7 @@
       </VBox>
       <VBox id="PS-rightside" fx:id="botSettingsVbox" maxWidth="360.0" minWidth="360.0" prefWidth="360.0" spacing="10.0">
          <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Bot Settings" wrappingWidth="208.8034381866455">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Bot Collection" wrappingWidth="208.8034381866455">
                <font>
                   <Font name="System Bold" size="24.0" />
                </font>
@@ -190,58 +162,37 @@
                   <Insets top="15.0" />
                </VBox.margin>
             </Text>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" Bot name:">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Text>
-            <TextField fx:id="botNameTextField" onKeyReleased="#botNameTextFieldOnKeyReleased">
-               <padding>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </padding>
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-            </TextField>
-            <RadioButton fx:id="isPsyonixCheckbox" mnemonicParsing="false" onAction="#onActionPsyonixToggled" text=" Psyonix Allstar (you must set a config path anyway)">
-               <effect>
-                  <Blend />
-               </effect>
-            </RadioButton>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Developer:">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Text>
-            <TextField fx:id="developerTextField" onKeyReleased="#developerTextFieldOnKeyReleased">
-               <padding>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </padding>
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-            </TextField>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Config path:">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Text>
-            <HBox maxHeight="40.0" prefHeight="27.0">
+            <GridPane hgap="8.0" layoutX="31.0" layoutY="635.0" maxHeight="-Infinity" maxWidth="-Infinity" vgap="8.0">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
                <children>
-                  <Button fx:id="configPathBtn" mnemonicParsing="false" onAction="#configPathBtnOnAction" prefHeight="27.0" prefWidth="60.0" text="Browse" />
-                  <TextField fx:id="configPathTextField" prefHeight="27.0" promptText="Set path here" HBox.hgrow="ALWAYS" />
+                  <Button fx:id="addTeamBtn11" mnemonicParsing="false" onAction="#addTeamBtnOnAction" prefHeight="27.0" prefWidth="101.0" text="Add to team">
+                     <GridPane.margin>
+                        <Insets />
+                     </GridPane.margin>
+                  </Button>
+                  <Button fx:id="removeTeamBtn11" mnemonicParsing="false" onAction="#removeTeamBtnOnAction" prefHeight="27.0" prefWidth="101.0" text="Load config" GridPane.rowIndex="1">
+                     <GridPane.margin>
+                        <Insets />
+                     </GridPane.margin>
+                  </Button>
+                  <Button fx:id="removeTeamBtn111" layoutX="103.0" layoutY="12.0" mnemonicParsing="false" onAction="#removeTeamBtnOnAction" prefHeight="27.0" prefWidth="101.0" text="Unload" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <Button fx:id="removeTeamBtn112" layoutX="10.0" layoutY="50.0" mnemonicParsing="false" onAction="#removeTeamBtnOnAction" prefHeight="27.0" prefWidth="101.0" text="Load folder" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Button fx:id="addTeamBtn111" layoutX="10.0" layoutY="12.0" mnemonicParsing="false" onAction="#addTeamBtnOnAction" prefHeight="27.0" prefWidth="101.0" text="Info" GridPane.columnIndex="1" />
                </children>
-            </HBox>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Description / Comment">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Text>
-            <TextArea fx:id="botDescription" onKeyReleased="#botDesscriptionTextAreaOnKeyReleased" wrapText="true">
-               <VBox.margin>
+            </GridPane>
+            <ListView fx:id="botCollectionListView" VBox.vgrow="ALWAYS">
+               <opaqueInsets>
                   <Insets />
-               </VBox.margin>
-            </TextArea>
+               </opaqueInsets>
+            </ListView>
          </children>
       </VBox>
       <Pane layoutX="10.0" layoutY="10.0" minHeight="0.0" minWidth="0.0" prefHeight="0.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
