@@ -69,12 +69,12 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <Button fx:id="addTeamBtn" mnemonicParsing="false" onAction="#addTeamBtnOnAction" prefHeight="27.0" prefWidth="101.0" text="Add">
+                  <Button fx:id="addTeamBtn" mnemonicParsing="false" onAction="#onActionAddTeam" prefHeight="27.0" prefWidth="101.0" text="Add">
                      <GridPane.margin>
                         <Insets />
                      </GridPane.margin>
                   </Button>
-                  <Button fx:id="removeTeamBtn" mnemonicParsing="false" onAction="#removeTeamBtnOnAction" prefHeight="27.0" prefWidth="101.0" text="Remove" GridPane.columnIndex="1">
+                  <Button fx:id="removeTeamBtn" mnemonicParsing="false" onAction="#onActionRemoveTeam" prefHeight="27.0" prefWidth="101.0" text="Remove" GridPane.columnIndex="1">
                      <GridPane.margin>
                         <Insets />
                      </GridPane.margin>
@@ -95,7 +95,7 @@
             <Insets left="20.0" right="20.0" top="20.0" />
          </padding>
       </VBox>
-      <VBox id="PS-center" fx:id="teamSettingsVbox" maxWidth="360.0" minWidth="360.0" prefWidth="360.0" spacing="10.0">
+      <VBox id="PS-center" fx:id="teamSettingsColumnVbox" maxWidth="360.0" minWidth="360.0" prefWidth="360.0" spacing="10.0">
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Team Settings" wrappingWidth="180.80345344543457">
                <font>
@@ -138,7 +138,7 @@
                   <Font name="System" size="16.0" />
                </font>
             </Text>
-            <ListView fx:id="botsListView" VBox.vgrow="ALWAYS">
+            <ListView fx:id="rosterListView" VBox.vgrow="ALWAYS">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
@@ -146,13 +146,12 @@
                   <Insets />
                </VBox.margin>
             </ListView>
-            <Button fx:id="removeBotBtn" mnemonicParsing="false" onAction="#removeBotBtnOnAction" prefHeight="27.0" prefWidth="101.0" text="Remove" />
          </children>
          <padding>
             <Insets bottom="16.0" />
          </padding>
       </VBox>
-      <VBox id="PS-rightside" fx:id="botSettingsVbox" maxWidth="360.0" minWidth="360.0" prefWidth="360.0" spacing="10.0">
+      <VBox id="PS-rightside" fx:id="botCollectionColumnVBox" maxWidth="360.0" minWidth="360.0" prefWidth="360.0" spacing="10.0">
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Bot Collection" wrappingWidth="208.8034381866455">
                <font>
@@ -170,22 +169,15 @@
                </columnConstraints>
                <rowConstraints>
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <Button fx:id="addTeamBtn11" mnemonicParsing="false" onAction="#addTeamBtnOnAction" prefHeight="27.0" prefWidth="101.0" text="Add to team">
+                  <Button fx:id="loadConfigButton" mnemonicParsing="false" onAction="#onActionLoadConfig" prefHeight="27.0" prefWidth="101.0" text="Load config">
                      <GridPane.margin>
                         <Insets />
                      </GridPane.margin>
                   </Button>
-                  <Button fx:id="removeTeamBtn11" mnemonicParsing="false" onAction="#removeTeamBtnOnAction" prefHeight="27.0" prefWidth="101.0" text="Load config" GridPane.rowIndex="1">
-                     <GridPane.margin>
-                        <Insets />
-                     </GridPane.margin>
-                  </Button>
-                  <Button fx:id="removeTeamBtn111" layoutX="103.0" layoutY="12.0" mnemonicParsing="false" onAction="#removeTeamBtnOnAction" prefHeight="27.0" prefWidth="101.0" text="Unload" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                  <Button fx:id="removeTeamBtn112" layoutX="10.0" layoutY="50.0" mnemonicParsing="false" onAction="#removeTeamBtnOnAction" prefHeight="27.0" prefWidth="101.0" text="Load folder" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <Button fx:id="addTeamBtn111" layoutX="10.0" layoutY="12.0" mnemonicParsing="false" onAction="#addTeamBtnOnAction" prefHeight="27.0" prefWidth="101.0" text="Info" GridPane.columnIndex="1" />
+                  <Button fx:id="addCustomButton" layoutX="103.0" layoutY="12.0" mnemonicParsing="false" onAction="#onActionAddCustomBot" prefHeight="27.0" prefWidth="101.0" text="Add custom" GridPane.columnIndex="2" />
+                  <Button fx:id="loadFolderButton" layoutX="10.0" layoutY="50.0" mnemonicParsing="false" onAction="#onActionLoadFolder" prefHeight="27.0" prefWidth="101.0" text="Load folder" GridPane.columnIndex="1" />
                </children>
             </GridPane>
             <ListView fx:id="botCollectionListView" VBox.vgrow="ALWAYS">
