@@ -1,9 +1,6 @@
 package dk.aau.cs.ds306e18.tournament.ui;
 
-import dk.aau.cs.ds306e18.tournament.model.Bot;
-import dk.aau.cs.ds306e18.tournament.model.SeedingOption;
-import dk.aau.cs.ds306e18.tournament.model.Team;
-import dk.aau.cs.ds306e18.tournament.model.Tournament;
+import dk.aau.cs.ds306e18.tournament.model.*;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -13,6 +10,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import javafx.util.Callback;
 
 import java.util.ArrayList;
 
@@ -93,7 +91,14 @@ public class ParticipantSettingsTabController {
             }
         });
 
-        // Things are not setup
+        botCollectionListView.setCellFactory(listView -> new BotCollectionCellController());
+        botCollectionListView.setItems(FXCollections.observableArrayList(
+                new CustomBot("C Skybot", "Skyborg", null, "desc", BotType.RLBOT),
+                new CustomBot("BotTwo", "Unnamed", null, "description", BotType.PSYONIX),
+                new CustomBot("Crazybot", "Madman", null, "desc-desc", BotType.RLBOT)
+        ));
+
+        // Things are now setup
         // Update everything
         update();
     }

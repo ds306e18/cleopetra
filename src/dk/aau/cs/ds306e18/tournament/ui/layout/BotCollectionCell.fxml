@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+
+<HBox fx:id="hbox" spacing="4.0" xmlns="http://javafx.com/javafx/1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Button fx:id="addToTeamButton" mnemonicParsing="false" onAction="#onActionAddToTeam" prefWidth="28.0" text="&lt;" />
+      <Label fx:id="botNameLabel" prefHeight="27.0" prefWidth="51.0" text="bot name" HBox.hgrow="ALWAYS" />
+      <Pane prefHeight="25.0" HBox.hgrow="ALWAYS" />
+      <Button fx:id="infoButton" mnemonicParsing="false" onAction="#onActionInfo" prefWidth="28.0" text="i" />
+      <Button fx:id="removeBotButton" mnemonicParsing="false" onAction="#onActionRemoveButton" prefWidth="28.0" text="X" />
+   </children>
+</HBox>
