@@ -91,7 +91,7 @@ public class ParticipantSettingsTabController {
             }
         });
 
-        botCollectionListView.setCellFactory(listView -> new BotCollectionCellController());
+        botCollectionListView.setCellFactory(listView -> new BotCollectionCellController(this));
         botCollectionListView.setItems(FXCollections.observableArrayList(
                 new CustomBot("C Skybot", "Skyborg", null, "desc", BotType.RLBOT),
                 new CustomBot("BotTwo", "Unnamed", null, "description", BotType.PSYONIX),

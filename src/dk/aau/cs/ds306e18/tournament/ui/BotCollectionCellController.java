@@ -19,7 +19,22 @@ public class BotCollectionCellController extends ListCell<Bot> {
     @FXML public Button infoButton;
     @FXML public Button removeBotButton;
 
-    private FXMLLoader fxmlLoader;
+    private ParticipantSettingsTabController participantSettingsTabController;
+
+    public BotCollectionCellController(ParticipantSettingsTabController participantSettingsTabController) {
+        this.participantSettingsTabController = participantSettingsTabController;
+
+        try {
+
+            // Load the layout of the cell from the fxml file. The controller will be this class
+            FXMLLoader fxmlLoader = new FXMLLoader(BotCollectionCellController.class.getResource("layout/BotCollectionCell.fxml"));
+            fxmlLoader.setController(this);
+            fxmlLoader.load();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     protected void updateItem(Bot bot, boolean empty) {
@@ -34,21 +49,9 @@ public class BotCollectionCellController extends ListCell<Bot> {
             setGraphic(null);
 
         } else {
-            // If we haven't loaded the layout yet, not is the time. We load the layout of the cell with the fxml loader
-            if (fxmlLoader == null) {
-                fxmlLoader = new FXMLLoader(BotCollectionCellController.class.getResource("layout/BotCollectionCell.fxml"));
-                fxmlLoader.setController(this);
-
-                try {
-                    fxmlLoader.load();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
 
             // Display the bot name
             botNameLabel.setText(bot.getName());
-
             setGraphic(hbox);
         }
     }
