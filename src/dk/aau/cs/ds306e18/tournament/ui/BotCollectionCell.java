@@ -1,6 +1,7 @@
 package dk.aau.cs.ds306e18.tournament.ui;
 
 import dk.aau.cs.ds306e18.tournament.model.Bot;
+import dk.aau.cs.ds306e18.tournament.model.Team;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,7 +12,7 @@ import javafx.scene.layout.HBox;
 
 import java.io.IOException;
 
-public class BotCollectionCellController extends ListCell<Bot> {
+public class BotCollectionCell extends ListCell<Bot> {
 
     @FXML public HBox hbox;
     @FXML public Button addToTeamButton;
@@ -21,13 +22,13 @@ public class BotCollectionCellController extends ListCell<Bot> {
 
     private ParticipantSettingsTabController participantSettingsTabController;
 
-    public BotCollectionCellController(ParticipantSettingsTabController participantSettingsTabController) {
+    public BotCollectionCell(ParticipantSettingsTabController participantSettingsTabController) {
         this.participantSettingsTabController = participantSettingsTabController;
 
         try {
 
             // Load the layout of the cell from the fxml file. The controller will be this class
-            FXMLLoader fxmlLoader = new FXMLLoader(BotCollectionCellController.class.getResource("layout/BotCollectionCell.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(BotCollectionCell.class.getResource("layout/BotCollectionCell.fxml"));
             fxmlLoader.setController(this);
             fxmlLoader.load();
 
@@ -58,7 +59,7 @@ public class BotCollectionCellController extends ListCell<Bot> {
 
     @FXML
     public void onActionAddToTeam(ActionEvent actionEvent) {
-
+        participantSettingsTabController.addBotToSelectedTeamRoster(getItem());
     }
 
     @FXML
@@ -67,7 +68,7 @@ public class BotCollectionCellController extends ListCell<Bot> {
     }
 
     @FXML
-    public void onActionRemoveButton(ActionEvent actionEvent) {
+    public void onActionRemove(ActionEvent actionEvent) {
 
     }
 }

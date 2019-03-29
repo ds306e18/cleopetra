@@ -9,8 +9,6 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
-import javafx.util.Callback;
 
 import java.util.ArrayList;
 
@@ -95,7 +93,7 @@ public class ParticipantSettingsTabController {
         rosterListView.setCellFactory(listView -> new TeamRosterCell(this));
 
         // Bot collection list setup
-        botCollectionListView.setCellFactory(listView -> new BotCollectionCellController(this));
+        botCollectionListView.setCellFactory(listView -> new BotCollectionCell(this));
         botCollectionListView.setItems(FXCollections.observableArrayList(
                 new CustomBot("C Skybot", "Skyborg", null, "desc", BotType.RLBOT),
                 new CustomBot("BotTwo", "Unnamed", null, "description", BotType.PSYONIX),
@@ -282,6 +280,30 @@ public class ParticipantSettingsTabController {
             if (nameCheck.compareTo("") == 0) {
                 team.setTeamName("Team ?");
             }
+        }
+    }
+
+    /**
+     * Add a bot to the selected team roster and update the rosterListView
+     */
+    public void addBotToSelectedTeamRoster(Bot bot) {
+        Team selectedTeam = getSelectedTeam();
+        if (selectedTeam != null) {
+            selectedTeam.addBot(bot);
+            rosterListView.setItems(FXCollections.observableArrayList(selectedTeam.getBots()));
+            rosterListView.refresh();
+        }
+    }
+
+    /**
+     * Remove a bot to the selected team roster and update the rosterListView
+     */
+    public void removeBotToSelectedTeamRoster(Bot bot) {
+        Team selectedTeam = getSelectedTeam();
+        if (selectedTeam != null) {
+            selectedTeam.removeBot(bot);
+            rosterListView.setItems(FXCollections.observableArrayList(selectedTeam.getBots()));
+            rosterListView.refresh();
         }
     }
 

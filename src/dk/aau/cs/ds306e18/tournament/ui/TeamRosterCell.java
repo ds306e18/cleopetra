@@ -26,7 +26,7 @@ public class TeamRosterCell extends ListCell<Bot> {
         try {
 
             // Load the layout of the cell from the fxml file. The controller will be this class
-            FXMLLoader fxmlLoader = new FXMLLoader(BotCollectionCellController.class.getResource("layout/TeamRosterCell.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(BotCollectionCell.class.getResource("layout/TeamRosterCell.fxml"));
             fxmlLoader.setController(this);
             fxmlLoader.load();
 
@@ -61,7 +61,7 @@ public class TeamRosterCell extends ListCell<Bot> {
     }
 
     @FXML
-    public void onActionRemoveButton(ActionEvent actionEvent) {
-
+    public void onActionRemove(ActionEvent actionEvent) {
+        participantSettingsTabController.removeBotToSelectedTeamRoster(getItem());
     }
 }

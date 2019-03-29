@@ -6,10 +6,10 @@
 <?import javafx.scene.layout.Pane?>
 
 
-<HBox fx:id="hbox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="4.0" xmlns="http://javafx.com/javafx/1" xmlns:fx="http://javafx.com/fxml/1">
+<HBox fx:id="hbox" spacing="4.0" xmlns="http://javafx.com/javafx/1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Label fx:id="botNameLabel" alignment="CENTER_RIGHT" prefHeight="27.0" text="bot name" />
-      <Pane HBox.hgrow="ALWAYS" />
+      <Pane prefHeight="25.0" HBox.hgrow="ALWAYS" />
       <Button fx:id="infoButton" mnemonicParsing="false" onAction="#onActionInfo" prefWidth="28.0" text="i" />
       <Button fx:id="removeButton" mnemonicParsing="false" onAction="#onActionRemove" prefWidth="28.0" text="X" />
    </children>

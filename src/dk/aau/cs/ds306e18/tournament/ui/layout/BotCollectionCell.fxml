@@ -11,6 +11,6 @@
       <Label fx:id="botNameLabel" prefHeight="27.0" text="bot name" HBox.hgrow="ALWAYS" />
       <Pane prefHeight="25.0" HBox.hgrow="ALWAYS" />
       <Button fx:id="infoButton" mnemonicParsing="false" onAction="#onActionInfo" prefWidth="28.0" text="i" />
-      <Button fx:id="removeBotButton" mnemonicParsing="false" onAction="#onActionRemoveButton" prefWidth="28.0" text="X" />
+      <Button fx:id="removeBotButton" mnemonicParsing="false" onAction="#onActionRemove" prefWidth="28.0" text="X" />
    </children>
 </HBox>
