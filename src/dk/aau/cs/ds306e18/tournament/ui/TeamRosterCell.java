@@ -11,23 +11,22 @@ import javafx.scene.layout.HBox;
 
 import java.io.IOException;
 
-public class BotCollectionCellController extends ListCell<Bot> {
+public class TeamRosterCell extends ListCell<Bot> {
 
     @FXML public HBox hbox;
-    @FXML public Button addToTeamButton;
     @FXML public Label botNameLabel;
     @FXML public Button infoButton;
     @FXML public Button removeBotButton;
 
     private ParticipantSettingsTabController participantSettingsTabController;
 
-    public BotCollectionCellController(ParticipantSettingsTabController participantSettingsTabController) {
+    public TeamRosterCell(ParticipantSettingsTabController participantSettingsTabController) {
         this.participantSettingsTabController = participantSettingsTabController;
 
         try {
 
             // Load the layout of the cell from the fxml file. The controller will be this class
-            FXMLLoader fxmlLoader = new FXMLLoader(BotCollectionCellController.class.getResource("layout/BotCollectionCell.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(BotCollectionCellController.class.getResource("layout/TeamRosterCell.fxml"));
             fxmlLoader.setController(this);
             fxmlLoader.load();
 
@@ -54,11 +53,6 @@ public class BotCollectionCellController extends ListCell<Bot> {
             botNameLabel.setText(bot.getName());
             setGraphic(hbox);
         }
-    }
-
-    @FXML
-    public void onActionAddToTeam(ActionEvent actionEvent) {
-
     }
 
     @FXML

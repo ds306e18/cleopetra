@@ -91,6 +91,10 @@ public class ParticipantSettingsTabController {
             }
         });
 
+        // Team roster list setup
+        rosterListView.setCellFactory(listView -> new TeamRosterCell(this));
+
+        // Bot collection list setup
         botCollectionListView.setCellFactory(listView -> new BotCollectionCellController(this));
         botCollectionListView.setItems(FXCollections.observableArrayList(
                 new CustomBot("C Skybot", "Skyborg", null, "desc", BotType.RLBOT),
@@ -301,11 +305,11 @@ public class ParticipantSettingsTabController {
         teamsListView.refresh();
     }
 
-    private Team getSelectedTeam() {
+    public Team getSelectedTeam() {
         return teamsListView.getSelectionModel().getSelectedItem();
     }
 
-    private int getSelectedTeamIndex() {
+    public int getSelectedTeamIndex() {
         return teamsListView.getSelectionModel().getSelectedIndex();
     }
 
