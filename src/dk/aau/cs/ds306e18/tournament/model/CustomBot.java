@@ -2,6 +2,9 @@ package dk.aau.cs.ds306e18.tournament.model;
 
 import java.util.Objects;
 
+/**
+ * A CustomBot is a bot that is based on a config file, but can be edited by the user in the info window.
+ */
 public class CustomBot implements EditableBot, Cloneable {
 
     private String name;

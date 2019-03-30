@@ -23,7 +23,9 @@ public class BotCollection extends TreeSet<Bot> {
 
         // Bots starting in the bot collection
         addAll(Arrays.asList(
-                new CustomBot("AllStar", "Psyonix", null, "The AllStar bot", BotType.PSYONIX)
+                new CustomBot("Psyonix All-Star", "Psyonix", null, "All-Star is the only difficulty level where the bots will seek out boost.", BotType.PSYONIX),
+                new CustomBot("Psyonix Pro", "Psyonix", null, "The bots wiggle their tires during the countdown just to add some personality. Unfortunately we didn't have time to give them different personalities.", BotType.PSYONIX),
+                new CustomBot("Psyonix Rookie", "Psyonix", null, "Rocket League's bots are implemented with a single behavior tree.", BotType.PSYONIX)
         ));
     }
 }

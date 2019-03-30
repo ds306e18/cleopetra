@@ -369,16 +369,18 @@ public class ParticipantSettingsTabController {
 
     @FXML
     public void onActionLoadConfig(ActionEvent actionEvent) {
+        // Open file chooser
         botConfigFileChooser.setInitialDirectory(Main.lastSavedDirectory);
         Window window = loadConfigButton.getScene().getWindow();
         List<File> files = botConfigFileChooser.showOpenMultipleDialog(window);
 
         if (files != null) {
+            // Add all selected bots to bot collection
             botCollection.addAll(files.stream().map(file -> new BotFromConfig(file.toString())).collect(Collectors.toList()));
-            Main.lastSavedDirectory = files.get(0).getParentFile();
-
             botCollectionListView.setItems(FXCollections.observableArrayList(botCollection));
             botCollectionListView.refresh();
+
+            Main.lastSavedDirectory = files.get(0).getParentFile();
         }
     }
 
@@ -389,15 +391,16 @@ public class ParticipantSettingsTabController {
 
     @FXML
     public void onActionLoadFolder(ActionEvent actionEvent) {
+        // Open directory chooser
         botFolderChooser.setInitialDirectory(Main.lastSavedDirectory);
         Window window = loadFolderButton.getScene().getWindow();
         File folder = botFolderChooser.showDialog(window);
 
         if (folder != null) {
+            // Find all bots in the folder and add them to bot collection
             ArrayList<Bot> bots = new ArrayList<>();
             findBotsInFolderRecursively(folder, bots, 10);
             botCollection.addAll(bots);
-
             botCollectionListView.setItems(FXCollections.observableArrayList(botCollection));
             botCollectionListView.refresh();
 
@@ -405,6 +408,14 @@ public class ParticipantSettingsTabController {
         }
     }
 
+    /**
+     * Looks through a folder and all its sub-folders and add all bots found to the given bots. The bot must be a
+     * bot config file that is a valid BotFromConfig bot. The method also provides a max depth that in can go in
+     * sub-folders which ensures the search doesn't take too long.
+     * @param folder The folder to be checked.
+     * @param bots the list of bots that found bots will be added to.
+     * @param maxDepth the maximum depth that method can go in folders.
+     */
     private void findBotsInFolderRecursively(File folder, List<Bot> bots, int maxDepth) {
         File[] files = folder.listFiles();
         if (files != null) {
