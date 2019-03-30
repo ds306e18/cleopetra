@@ -1,5 +1,6 @@
 package dk.aau.cs.ds306e18.tournament.ui;
 
+import dk.aau.cs.ds306e18.tournament.Main;
 import dk.aau.cs.ds306e18.tournament.model.*;
 import dk.aau.cs.ds306e18.tournament.utility.BotCollection;
 import javafx.application.Platform;
@@ -10,9 +11,16 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
+import javafx.stage.Window;
 
+import java.io.File;
+import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class ParticipantSettingsTabController {
@@ -37,6 +45,8 @@ public class ParticipantSettingsTabController {
     @FXML private ListView<Bot> botCollectionListView;
 
     public BotCollection botCollection;
+    private FileChooser botConfigFileChooser;
+    private DirectoryChooser botFolderChooser;
 
     @FXML
     private void initialize() {
@@ -105,6 +115,13 @@ public class ParticipantSettingsTabController {
         ));
         botCollectionListView.setCellFactory(listView -> new BotCollectionCell(this));
         botCollectionListView.setItems(FXCollections.observableArrayList(botCollection));
+
+        // Setup file chooser
+        botConfigFileChooser = new FileChooser();
+        botConfigFileChooser.setTitle("Choose a bot config file");
+        botConfigFileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Config (*.cfg)", "*.cfg"));
+        botFolderChooser = new DirectoryChooser();
+        botFolderChooser.setTitle("Choose a folder with bots");
 
         // Things are now setup
         // Update everything
@@ -352,7 +369,17 @@ public class ParticipantSettingsTabController {
 
     @FXML
     public void onActionLoadConfig(ActionEvent actionEvent) {
+        botConfigFileChooser.setInitialDirectory(Main.lastSavedDirectory);
+        Window window = loadConfigButton.getScene().getWindow();
+        List<File> files = botConfigFileChooser.showOpenMultipleDialog(window);
 
+        if (files != null) {
+            botCollection.addAll(files.stream().map(file -> new BotFromConfig(file.toString())).collect(Collectors.toList()));
+            Main.lastSavedDirectory = files.get(0).getParentFile();
+
+            botCollectionListView.setItems(FXCollections.observableArrayList(botCollection));
+            botCollectionListView.refresh();
+        }
     }
 
     @FXML
@@ -362,6 +389,60 @@ public class ParticipantSettingsTabController {
 
     @FXML
     public void onActionLoadFolder(ActionEvent actionEvent) {
+        botFolderChooser.setInitialDirectory(Main.lastSavedDirectory);
+        Window window = loadFolderButton.getScene().getWindow();
+        File folder = botFolderChooser.showDialog(window);
 
+        if (folder != null) {
+            ArrayList<Bot> bots = new ArrayList<>();
+            findBotsInFolderRecursively(folder, bots, 10);
+            botCollection.addAll(bots);
+
+            botCollectionListView.setItems(FXCollections.observableArrayList(botCollection));
+            botCollectionListView.refresh();
+
+            Main.lastSavedDirectory = folder;
+        }
+    }
+
+    private void findBotsInFolderRecursively(File folder, List<Bot> bots, int maxDepth) {
+        File[] files = folder.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (file.isDirectory() && maxDepth > 0) {
+                    // Check sub-folders
+                    findBotsInFolderRecursively(file, bots, maxDepth - 1);
+
+                } else if ("cfg".equals(getFileExtension(file))) {
+                    try {
+                        // Try to read bot
+                        BotFromConfig bot = new BotFromConfig(file.getAbsolutePath());
+                        if (bot.isValidConfig()) {
+                            bots.add(bot);
+                        }
+
+                    } catch (Exception e) {
+                        // Failed
+                        System.out.println("Could not parse " + file.getName() + " as a bot.");
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Returns the file extension of a file. E.g. "folder/botname.cfg" returns "cfg". The method should also support
+     * folders with dots in their name.
+     */
+    private String getFileExtension(File file) {
+        String name = file.getName();
+        int i = name.lastIndexOf('.');
+        int p = Math.max(name.lastIndexOf('/'), name.lastIndexOf('\\'));
+
+        if (i > p) {
+            return name.substring(i+1);
+        } else {
+            return "";
+        }
     }
 }

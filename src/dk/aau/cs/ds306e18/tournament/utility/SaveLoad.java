@@ -1,5 +1,6 @@
 package dk.aau.cs.ds306e18.tournament.utility;
 
+import dk.aau.cs.ds306e18.tournament.Main;
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -9,8 +10,6 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 public class SaveLoad {
-    public static File lastSavedDirectory = new File(System.getProperty("user.home") + (File.separatorChar + "Documents"));
-
 
     public static boolean saveTournament (Stage stage){
         boolean saveStatus = false;
@@ -21,7 +20,7 @@ public class SaveLoad {
         fileChooser.setTitle("Choose file name and save destination");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Tournament format (*." + extension + ")", "*." + extension));
         fileChooser.setInitialFileName(Tournament.get().getName() + "." + extension);
-        fileChooser.setInitialDirectory(lastSavedDirectory);
+        fileChooser.setInitialDirectory(Main.lastSavedDirectory);
 
         File file = fileChooser.showSaveDialog(stage);
 
@@ -34,7 +33,7 @@ public class SaveLoad {
         }
 
         if (saveStatus){
-            lastSavedDirectory = file.getParentFile();
+            Main.lastSavedDirectory = file.getParentFile();
         }
 
         return saveStatus;

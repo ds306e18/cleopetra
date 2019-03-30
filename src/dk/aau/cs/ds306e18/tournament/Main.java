@@ -11,12 +11,16 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.ini4j.Config;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
 
 public class Main extends Application {
+
+    public static File lastSavedDirectory = new File(System.getProperty("user.home"));
+
     @Override
     public void start(Stage primaryStage) throws Exception {
 

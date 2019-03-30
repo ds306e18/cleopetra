@@ -107,7 +107,7 @@ public class LauncherController {
         // Deserialize and set the loaded tournament. Then show the main stage.
         if (file != null){
             Tournament.get().setTournament(FileOperations.readTournamentFromFilesystem(file));
-            SaveLoad.lastSavedDirectory = file.getParentFile();
+            Main.lastSavedDirectory = file.getParentFile();
             Stage systemStage = createSystemStage();
             getLauncherStage().hide();
             systemStage.show();

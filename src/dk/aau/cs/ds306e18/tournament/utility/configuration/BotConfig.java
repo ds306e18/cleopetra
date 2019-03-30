@@ -25,7 +25,13 @@ public class BotConfig extends ConfigFileEditor {
 
     @Override
     void validateConfigSyntax() {
-        valid = (config.get("Locations") != null);
+        // valid if the PARAMETER_APPEARANCE and PARAMETER_NAME is present. The PARAMETER_PYTHON is not
+        // required for psyonix bots so the config can be valid without
+        valid = (
+                config.get(SECTION_LOCATIONS) != null
+                && config.get(SECTION_LOCATIONS).get(PARAMETER_APPEARANCE) != null
+                && config.get(SECTION_LOCATIONS).get(PARAMETER_NAME) != null
+        );
     }
 
     public String getAppearanceConfigPath() {

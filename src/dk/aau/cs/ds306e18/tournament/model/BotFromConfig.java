@@ -14,6 +14,13 @@ public class BotFromConfig implements Bot {
         this.config = new BotConfig(pathToConfig);
     }
 
+    /**
+     * Returns true if the config file that this bot is based on is valid. False otherwise.
+     */
+    public boolean isValidConfig() {
+        return config.isValid();
+    }
+
     @Override
     public String getDescription() {
         return config.getDescription();
