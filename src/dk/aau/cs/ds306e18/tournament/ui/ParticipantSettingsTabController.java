@@ -298,10 +298,10 @@ public class ParticipantSettingsTabController {
     /**
      * Remove a bot to the selected team roster and update the rosterListView
      */
-    public void removeBotToSelectedTeamRoster(Bot bot) {
+    public void removeBotFromSelectedTeamRoster(int index) {
         Team selectedTeam = getSelectedTeam();
         if (selectedTeam != null) {
-            selectedTeam.removeBot(bot);
+            selectedTeam.removeBot(index);
             rosterListView.setItems(FXCollections.observableArrayList(selectedTeam.getBots()));
             rosterListView.refresh();
         }

@@ -62,6 +62,6 @@ public class TeamRosterCell extends ListCell<Bot> {
 
     @FXML
     public void onActionRemove(ActionEvent actionEvent) {
-        participantSettingsTabController.removeBotToSelectedTeamRoster(getItem());
+        participantSettingsTabController.removeBotFromSelectedTeamRoster(getIndex());
     }
 }
