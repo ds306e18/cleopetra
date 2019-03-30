@@ -69,6 +69,6 @@ public class BotCollectionCell extends ListCell<Bot> {
 
     @FXML
     public void onActionRemove(ActionEvent actionEvent) {
-
+        participantSettingsTabController.removeBotFromBotCollection(getItem());
     }
 }

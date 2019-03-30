@@ -1,6 +1,7 @@
 package dk.aau.cs.ds306e18.tournament.ui;
 
 import dk.aau.cs.ds306e18.tournament.model.*;
+import dk.aau.cs.ds306e18.tournament.utility.BotCollection;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -11,6 +12,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class ParticipantSettingsTabController {
@@ -33,6 +35,8 @@ public class ParticipantSettingsTabController {
     @FXML private Button addCustomButton;
     @FXML private Button loadFolderButton;
     @FXML private ListView<Bot> botCollectionListView;
+
+    public BotCollection botCollection;
 
     @FXML
     private void initialize() {
@@ -93,12 +97,14 @@ public class ParticipantSettingsTabController {
         rosterListView.setCellFactory(listView -> new TeamRosterCell(this));
 
         // Bot collection list setup
-        botCollectionListView.setCellFactory(listView -> new BotCollectionCell(this));
-        botCollectionListView.setItems(FXCollections.observableArrayList(
+        botCollection = new BotCollection();
+        botCollection.addAll(Arrays.asList(
                 new CustomBot("C Skybot", "Skyborg", null, "desc", BotType.RLBOT),
-                new CustomBot("BotTwo", "Unnamed", null, "description", BotType.PSYONIX),
+                new CustomBot("Psyonix Unnamed", "Unnamed", null, "description", BotType.PSYONIX),
                 new CustomBot("Crazybot", "Madman", null, "desc-desc", BotType.RLBOT)
         ));
+        botCollectionListView.setCellFactory(listView -> new BotCollectionCell(this));
+        botCollectionListView.setItems(FXCollections.observableArrayList(botCollection));
 
         // Things are now setup
         // Update everything
@@ -305,6 +311,15 @@ public class ParticipantSettingsTabController {
             rosterListView.setItems(FXCollections.observableArrayList(selectedTeam.getBots()));
             rosterListView.refresh();
         }
+    }
+
+    /**
+     * Remove a bot from the bot collection and update the bot collection list view
+     */
+    public void removeBotFromBotCollection(Bot bot) {
+        botCollection.remove(bot);
+        botCollectionListView.setItems(FXCollections.observableArrayList(botCollection));
+        botCollectionListView.refresh();
     }
 
     /**
