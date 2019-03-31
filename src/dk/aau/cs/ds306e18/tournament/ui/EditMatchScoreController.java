@@ -13,7 +13,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 
-public class EditMatchScoreController {
+public class EditMatchScoreController extends DraggablePopupWindow {
 
     private static final Paint BLUE_FILL = Paint.valueOf("#6a82fc");
     private static final Paint ORANGE_FILL = Paint.valueOf("#f5af18");
@@ -26,8 +26,6 @@ public class EditMatchScoreController {
     @FXML private Button saveButton;
 
     private Match match;
-    private double x = 0;
-    private double y = 0;
 
     @FXML
     private void initialize() {
@@ -120,16 +118,13 @@ public class EditMatchScoreController {
     }
 
     @FXML
-    private void windowDragged(MouseEvent event) {
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setX(event.getScreenX() - x);
-        stage.setY(event.getScreenY() - y);
+    public void windowDragged(MouseEvent mouseEvent) {
+        super.windowDragged(mouseEvent);
     }
 
     @FXML
-    private void windowPressed(MouseEvent event) {
-        x = event.getSceneX();
-        y = event.getSceneY();
+    public void windowPressed(MouseEvent mouseEvent) {
+        super.windowPressed(mouseEvent);
     }
 
     @FXML

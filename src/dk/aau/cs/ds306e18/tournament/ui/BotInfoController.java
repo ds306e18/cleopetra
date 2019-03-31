@@ -16,7 +16,7 @@ import javafx.stage.Window;
 
 import java.io.IOException;
 
-public class BotInfoController {
+public class BotInfoController extends DraggablePopupWindow {
 
 
     @FXML public Text botNameText;
@@ -60,12 +60,12 @@ public class BotInfoController {
 
     @FXML
     public void windowDragged(MouseEvent mouseEvent) {
-
+        super.windowDragged(mouseEvent);
     }
 
     @FXML
     public void windowPressed(MouseEvent mouseEvent) {
-        
+        super.windowPressed(mouseEvent);
     }
 
     /**

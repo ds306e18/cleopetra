@@ -16,10 +16,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class ExitProgramController {
-
-    private double x = 0;
-    private double y = 0;
+public class ExitProgramController extends DraggablePopupWindow {
 
     @FXML
     private Button cancelBtn;
@@ -47,15 +44,12 @@ public class ExitProgramController {
     }
 
     @FXML
-    void windowDragged(MouseEvent event) {
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setX(event.getScreenX() - x);
-        stage.setY(event.getScreenY() - y);
+    public void windowDragged(MouseEvent mouseEvent) {
+        super.windowDragged(mouseEvent);
     }
 
     @FXML
-    void windowPressed(MouseEvent event) {
-        x = event.getSceneX();
-        y = event.getSceneY();
+    public void windowPressed(MouseEvent mouseEvent) {
+        super.windowPressed(mouseEvent);
     }
 }
