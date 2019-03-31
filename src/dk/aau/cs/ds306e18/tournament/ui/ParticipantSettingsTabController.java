@@ -16,7 +16,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Window;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -40,7 +39,6 @@ public class ParticipantSettingsTabController {
     @FXML private Button swapDownTeam;
     @FXML private ListView<Bot> rosterListView;
     @FXML private Button loadConfigButton;
-    @FXML private Button addCustomButton;
     @FXML private Button loadFolderButton;
     @FXML private ListView<Bot> botCollectionListView;
 
@@ -108,11 +106,6 @@ public class ParticipantSettingsTabController {
 
         // Bot collection list setup
         botCollection = new BotCollection();
-        botCollection.addAll(Arrays.asList(
-                new CustomBot("C Skybot", "Skyborg", null, "desc", BotType.RLBOT),
-                new CustomBot("Psyonix Unnamed", "Unnamed", null, "description", BotType.PSYONIX),
-                new CustomBot("Crazybot", "Madman", null, "desc-desc", BotType.RLBOT)
-        ));
         botCollectionListView.setCellFactory(listView -> new BotCollectionCell(this));
         botCollectionListView.setItems(FXCollections.observableArrayList(botCollection));
 
@@ -382,11 +375,6 @@ public class ParticipantSettingsTabController {
 
             Main.lastSavedDirectory = files.get(0).getParentFile();
         }
-    }
-
-    @FXML
-    public void onActionAddCustomBot(ActionEvent actionEvent) {
-
     }
 
     @FXML

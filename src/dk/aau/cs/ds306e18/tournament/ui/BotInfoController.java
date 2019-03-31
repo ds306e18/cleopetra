@@ -36,6 +36,7 @@ public class BotInfoController extends DraggablePopupWindow {
         this.bot = bot;
 
         botNameText.setText(bot.getName());
+        botConfigPathText.setText(bot.getConfigPath());
         developersText.setText(bot.getDeveloper());
         descriptionText.setText(bot.getDescription());
         funFactText.setText(bot.getFunFact());

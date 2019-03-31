@@ -11,7 +11,12 @@ public class BotFromConfig implements Bot {
 
     public BotFromConfig(String pathToConfig) {
         this.pathToConfig = pathToConfig;
-        this.config = new BotConfig(pathToConfig);
+        try {
+            this.config = new BotConfig(pathToConfig);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Could not load bot from config: " + pathToConfig);
+        }
     }
 
     /**
@@ -64,6 +69,11 @@ public class BotFromConfig implements Bot {
     @Override
     public BotSkill getBotSkill() {
         return BotSkill.ALLSTAR;
+    }
+
+    @Override
+    public String toString() {
+        return getName();
     }
 
     @Override
