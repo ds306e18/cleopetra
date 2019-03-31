@@ -5,6 +5,9 @@ public interface Bot {
     String getName();
     String getDeveloper();
     String getConfigPath();
+    String getFunFact();
+    String getGitHub();
+    String getLanguage();
     BotType getBotType();
     BotSkill getBotSkill();
 }

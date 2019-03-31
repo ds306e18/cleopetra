@@ -57,7 +57,7 @@ public class TeamRosterCell extends ListCell<Bot> {
 
     @FXML
     public void onActionInfo(ActionEvent actionEvent) {
-
+        BotInfoController.showInfoForBot(getItem(), getScene().getWindow());
     }
 
     @FXML

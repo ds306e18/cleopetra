@@ -8,6 +8,9 @@ public interface EditableBot extends Bot {
     void setName(String name);
     void setDeveloper(String developer);
     void setConfigPath(String configPath);
+    void setFunFact(String funFact);
+    void setGitHub(String github);
+    void setLanguage(String language);
     void setBotType(BotType type);
     void setBotSkill(BotSkill skill);
 }

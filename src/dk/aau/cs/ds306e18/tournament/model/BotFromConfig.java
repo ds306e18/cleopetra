@@ -42,6 +42,21 @@ public class BotFromConfig implements Bot {
     }
 
     @Override
+    public String getFunFact() {
+        return config.getFunFact();
+    }
+
+    @Override
+    public String getGitHub() {
+        return config.getGithub();
+    }
+
+    @Override
+    public String getLanguage() {
+        return config.getLanguage();
+    }
+
+    @Override
     public BotType getBotType() {
         return BotType.RLBOT;
     }

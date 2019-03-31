@@ -11,6 +11,9 @@ public class CustomBot implements EditableBot, Cloneable {
     private String developer;
     private String description;
     private String configPath;
+    private String funFact;
+    private String github;
+    private String language;
     private BotType botType;
     private BotSkill botSkill;
 
@@ -73,10 +76,41 @@ public class CustomBot implements EditableBot, Cloneable {
     }
 
     @Override
+    public String getFunFact() {
+        return funFact;
+    }
+
+    @Override
+    public void setFunFact(String funFact) {
+        this.funFact = funFact;
+    }
+
+    @Override
+    public String getGitHub() {
+        return github;
+    }
+
+    @Override
+    public void setGitHub(String github) {
+        this.github = github;
+    }
+
+    @Override
+    public String getLanguage() {
+        return language;
+    }
+
+    @Override
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    @Override
     public BotType getBotType() {
         return botType;
     }
 
+    @Override
     public void setBotType(BotType botType) {
         this.botType = botType;
     }
