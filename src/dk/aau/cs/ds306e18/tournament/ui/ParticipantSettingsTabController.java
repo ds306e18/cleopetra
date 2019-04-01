@@ -386,62 +386,11 @@ public class ParticipantSettingsTabController {
 
         if (folder != null) {
             // Find all bots in the folder and add them to bot collection
-            ArrayList<Bot> bots = new ArrayList<>();
-            findBotsInFolderRecursively(folder, bots, 10);
-            botCollection.addAll(bots);
+            botCollection.addAllBotsFromFolder(folder, 10);
             botCollectionListView.setItems(FXCollections.observableArrayList(botCollection));
             botCollectionListView.refresh();
 
             Main.lastSavedDirectory = folder;
-        }
-    }
-
-    /**
-     * Looks through a folder and all its sub-folders and add all bots found to the given bots. The bot must be a
-     * bot config file that is a valid BotFromConfig bot. The method also provides a max depth that in can go in
-     * sub-folders which ensures the search doesn't take too long.
-     * @param folder The folder to be checked.
-     * @param bots the list of bots that found bots will be added to.
-     * @param maxDepth the maximum depth that method can go in folders.
-     */
-    private void findBotsInFolderRecursively(File folder, List<Bot> bots, int maxDepth) {
-        File[] files = folder.listFiles();
-        if (files != null) {
-            for (File file : files) {
-                if (file.isDirectory() && maxDepth > 0) {
-                    // Check sub-folders
-                    findBotsInFolderRecursively(file, bots, maxDepth - 1);
-
-                } else if ("cfg".equals(getFileExtension(file))) {
-                    try {
-                        // Try to read bot
-                        BotFromConfig bot = new BotFromConfig(file.getAbsolutePath());
-                        if (bot.isValidConfig()) {
-                            bots.add(bot);
-                        }
-
-                    } catch (Exception e) {
-                        // Failed
-                        System.out.println("Could not parse " + file.getName() + " as a bot.");
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Returns the file extension of a file. E.g. "folder/botname.cfg" returns "cfg". The method should also support
-     * folders with dots in their name.
-     */
-    private String getFileExtension(File file) {
-        String name = file.getName();
-        int i = name.lastIndexOf('.');
-        int p = Math.max(name.lastIndexOf('/'), name.lastIndexOf('\\'));
-
-        if (i > p) {
-            return name.substring(i+1);
-        } else {
-            return "";
         }
     }
 }
