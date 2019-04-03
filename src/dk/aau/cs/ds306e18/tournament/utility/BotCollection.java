@@ -1,16 +1,17 @@
 package dk.aau.cs.ds306e18.tournament.utility;
 
-import dk.aau.cs.ds306e18.tournament.Main;
 import dk.aau.cs.ds306e18.tournament.model.Bot;
 import dk.aau.cs.ds306e18.tournament.model.BotFromConfig;
 import dk.aau.cs.ds306e18.tournament.model.BotSkill;
 import dk.aau.cs.ds306e18.tournament.model.PsyonixBot;
 
 import java.io.File;
-import java.net.URL;
-import java.nio.file.Paths;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.TreeSet;
+
+import static dk.aau.cs.ds306e18.tournament.CleoPetraSettings.*;
 
 public class BotCollection extends TreeSet<Bot> {
 
@@ -28,19 +29,21 @@ public class BotCollection extends TreeSet<Bot> {
     }
 
     /**
-     * Add the default Psyonix bots to the bot collection.
+     * Add the default Psyonix bots to the bot collection. The bots will be loaded from the CleoPetra settings folder.
      *
      * @return returns true if succeeded.
      */
     public boolean addPsyonixBots() {
         try {
+            copyPsyonixBotsToSettingsFolder();
+
             // Bots starting in the bot collection
-            URL allstarURL = Main.class.getResource("rlbot/psyonix_allstar.cfg");
-            PsyonixBot allstar = new PsyonixBot(Paths.get(allstarURL.toURI()).toString(), BotSkill.ALLSTAR);
-            URL proURL = Main.class.getResource("rlbot/psyonix_pro.cfg");
-            PsyonixBot pro = new PsyonixBot(Paths.get(proURL.toURI()).toString(), BotSkill.PRO);
-            URL rookieURL = Main.class.getResource("rlbot/psyonix_rookie.cfg");
-            PsyonixBot rookie = new PsyonixBot(Paths.get(rookieURL.toURI()).toString(), BotSkill.ROOKIE);
+            Path allStarPath = getPathToSettingsFolder().resolve(PSYONIX_BOTS_FOLDER).resolve(PSYONIX_ALLSTAR_FILE_NAME);
+            PsyonixBot allstar = new PsyonixBot(allStarPath.toString(), BotSkill.ALLSTAR);
+            Path proPath = getPathToSettingsFolder().resolve(PSYONIX_BOTS_FOLDER).resolve(PSYONIX_PRO_FILE_NAME);
+            PsyonixBot pro = new PsyonixBot(proPath.toString(), BotSkill.PRO);
+            Path rookiePath = getPathToSettingsFolder().resolve(PSYONIX_BOTS_FOLDER).resolve(PSYONIX_ROOKIE_FILE_NAME);
+            PsyonixBot rookie = new PsyonixBot(rookiePath.toString(), BotSkill.ROOKIE);
 
             addAll(Arrays.asList(
                     allstar, pro, rookie
@@ -65,14 +68,14 @@ public class BotCollection extends TreeSet<Bot> {
     public boolean addRLBotPackIfPresent() {
         try {
             // Get path to BotPack and try to load bots
-            File rlbotpack = Paths.get(System.getenv("APPDATA")).getParent().resolve("Local\\RLBotGUI\\RLBotPack").toFile();
-            if (rlbotpack.exists()) {
+            Path rlbotpackPath = getPathToRLBotPack();
+            if (rlbotpackPath != null && Files.exists(rlbotpackPath)) {
                 System.out.println("Loading bots from RLBotGUI's BotPack.");
-                return addAllBotsFromFolder(rlbotpack, 10);
+                return addAllBotsFromFolder(rlbotpackPath.toFile(), 10);
             }
         } catch (Exception e) {
             // Something went wrong. Report it, but continue
-            System.err.println("Could not load bots for RLBotGUI's BotPack.");
+            System.err.println("Could not load bots for RLBotGUI's BotPack. Something went wrong.");
         }
 
         return false;
