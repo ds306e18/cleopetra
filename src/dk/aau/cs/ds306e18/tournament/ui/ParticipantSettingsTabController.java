@@ -2,6 +2,7 @@ package dk.aau.cs.ds306e18.tournament.ui;
 
 import dk.aau.cs.ds306e18.tournament.Main;
 import dk.aau.cs.ds306e18.tournament.model.*;
+import dk.aau.cs.ds306e18.tournament.utility.Alerts;
 import dk.aau.cs.ds306e18.tournament.utility.BotCollection;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -106,6 +107,12 @@ public class ParticipantSettingsTabController {
 
         // Bot collection list setup
         botCollection = new BotCollection();
+        botCollection.addPsyonixBots();
+        boolean rlbotPackLoaded = botCollection.addRLBotPackIfPresent();
+        if (rlbotPackLoaded) {
+            // When the javafx window is done loaded, show notification
+            Platform.runLater(() -> Alerts.infoNotification("RLBot loaded", "Found the RLBotPack and loaded the bots from it."));
+        }
         botCollectionListView.setCellFactory(listView -> new BotCollectionCell(this));
         botCollectionListView.setItems(FXCollections.observableArrayList(botCollection));
 

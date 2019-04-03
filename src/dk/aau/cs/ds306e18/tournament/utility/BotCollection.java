@@ -25,15 +25,14 @@ public class BotCollection extends TreeSet<Bot> {
             }
             return diff;
         });
-
-        addPsyonixBots();
-        addRLBotPackIfPresent();
     }
 
     /**
      * Add the default Psyonix bots to the bot collection.
+     *
+     * @return returns true if succeeded.
      */
-    private void addPsyonixBots() {
+    public boolean addPsyonixBots() {
         try {
             // Bots starting in the bot collection
             URL allstarURL = Main.class.getResource("rlbot/psyonix_allstar.cfg");
@@ -47,28 +46,36 @@ public class BotCollection extends TreeSet<Bot> {
                     allstar, pro, rookie
             ));
 
+            return true;
+
         } catch (Exception e) {
             // Something went wrong. Report it, but continue
             System.err.println("Could not load default bots.");
+
+            return false;
         }
     }
 
     /**
      * The RLBotGUI is able to download a pack filled with bots. If that pack is present, load it into the
      * bot collection.
+     *
+     * @return returns true if succeeded.
      */
-    private void addRLBotPackIfPresent() {
+    public boolean addRLBotPackIfPresent() {
         try {
             // Get path to BotPack and try to load bots
             File rlbotpack = Paths.get(System.getenv("APPDATA")).getParent().resolve("Local\\RLBotGUI\\RLBotPack").toFile();
             if (rlbotpack.exists()) {
                 System.out.println("Loading bots from RLBotGUI's BotPack.");
-                addAllBotsFromFolder(rlbotpack, 10);
+                return addAllBotsFromFolder(rlbotpack, 10);
             }
         } catch (Exception e) {
             // Something went wrong. Report it, but continue
             System.err.println("Could not load bots for RLBotGUI's BotPack.");
         }
+
+        return false;
     }
 
     /**
@@ -77,15 +84,18 @@ public class BotCollection extends TreeSet<Bot> {
      * sub-folders which ensures the search doesn't take too long.
      * @param folder The folder to be checked.
      * @param maxDepth the maximum depth that method can go in folders.
+     *
+     * @return returns true if a bot was found and added to the bot collection.
      */
-    public void addAllBotsFromFolder(File folder, int maxDepth) {
+    public boolean addAllBotsFromFolder(File folder, int maxDepth) {
+        boolean addedSomething = false;
         if (folder.isDirectory()) {
             File[] files = folder.listFiles();
             if (files != null) {
                 for (File file : files) {
                     if (file.isDirectory() && maxDepth > 0) {
                         // Check sub-folders using recursion
-                        addAllBotsFromFolder(file, maxDepth - 1);
+                        addedSomething = addAllBotsFromFolder(file, maxDepth - 1) || addedSomething;
 
                     } else if ("cfg".equals(getFileExtension(file))) {
                         try {
@@ -93,6 +103,7 @@ public class BotCollection extends TreeSet<Bot> {
                             BotFromConfig bot = new BotFromConfig(file.getAbsolutePath());
                             if (bot.isValidConfig()) {
                                 this.add(bot);
+                                addedSomething = true;
                             }
 
                         } catch (Exception e) {
@@ -103,6 +114,7 @@ public class BotCollection extends TreeSet<Bot> {
                 }
             }
         }
+        return addedSomething;
     }
 
     /**
