@@ -1,6 +1,7 @@
 package dk.aau.cs.ds306e18.tournament.rlbot;
 
 import dk.aau.cs.ds306e18.tournament.model.Bot;
+import dk.aau.cs.ds306e18.tournament.model.BotFromConfig;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.utility.Alerts;
 import dk.aau.cs.ds306e18.tournament.utility.configuration.RLBotConfig;
@@ -94,6 +95,10 @@ public class MatchRunner {
 
         for (Bot bot : bots) {
             String path = bot.getConfigPath();
+
+            // Check if BotFromConfig bots are loaded correctly
+            if (bot instanceof BotFromConfig && !((BotFromConfig) bot).loadedCorrectly())
+                throw new IllegalStateException("The bot could not load from config: " + bot.getConfigPath());
 
             // Check if bot cfg is set
             if (path == null || path.isEmpty())

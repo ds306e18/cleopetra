@@ -20,6 +20,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 
@@ -376,7 +377,18 @@ public class ParticipantSettingsTabController {
 
         if (files != null) {
             // Add all selected bots to bot collection
-            botCollection.addAll(files.stream().map(file -> new BotFromConfig(file.toString())).collect(Collectors.toList()));
+            botCollection.addAll(files.stream()
+                    .map(file -> {
+                        BotFromConfig bot = new BotFromConfig(file.toString());
+                        if (bot.loadedCorrectly()) {
+                            return bot;
+                        }
+                        System.err.println("Could not load bot from: " + file.toString());
+                        Alerts.errorNotification("Loading failed", "Could not load bot from: " + file.toString());
+                        return null;
+                    })
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList()));
             botCollectionListView.setItems(FXCollections.observableArrayList(botCollection));
             botCollectionListView.refresh();
 

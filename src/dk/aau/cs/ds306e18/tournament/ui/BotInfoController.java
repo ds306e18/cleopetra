@@ -1,6 +1,8 @@
 package dk.aau.cs.ds306e18.tournament.ui;
 
 import dk.aau.cs.ds306e18.tournament.model.Bot;
+import dk.aau.cs.ds306e18.tournament.model.BotFromConfig;
+import dk.aau.cs.ds306e18.tournament.utility.Alerts;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,6 +16,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
 
+import java.io.File;
 import java.io.IOException;
 
 public class BotInfoController extends DraggablePopupWindow {
@@ -29,6 +32,7 @@ public class BotInfoController extends DraggablePopupWindow {
     @FXML public Text botTypeText;
     @FXML public Button showFilesButton;
     @FXML public Button closeButton;
+    @FXML public Button reloadBot;
 
     private Bot bot;
 
@@ -56,7 +60,21 @@ public class BotInfoController extends DraggablePopupWindow {
 
     @FXML
     public void onActionShowFiles(ActionEvent actionEvent) {
+        File file = new File(bot.getConfigPath());
+        boolean showFailed = true;
+        if (file.exists()) {
+            try {
+                Runtime.getRuntime().exec("explorer.exe /select," + file.toString());
+                showFailed = false;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
+        // If something failed, let the user know
+        if (showFailed) {
+            Alerts.errorNotification("Could not show files.", "Could not open a file explorer that shows the config file. Does it exist?");
+        }
     }
 
     @FXML
@@ -101,6 +119,13 @@ public class BotInfoController extends DraggablePopupWindow {
 
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void onActionReloadBot(ActionEvent actionEvent) {
+        if (bot instanceof BotFromConfig) {
+            ((BotFromConfig) bot).reload();
+            setBot(bot); // Updates all fields
         }
     }
 }

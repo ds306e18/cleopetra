@@ -104,7 +104,7 @@ public class BotCollection extends TreeSet<Bot> {
                         try {
                             // Try to read bot
                             BotFromConfig bot = new BotFromConfig(file.getAbsolutePath());
-                            if (bot.isValidConfig()) {
+                            if (bot.loadedCorrectly()) {
                                 this.add(bot);
                                 addedSomething = true;
                             }

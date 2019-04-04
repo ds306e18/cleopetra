@@ -142,6 +142,11 @@
             <HBox>
                <children>
                   <Pane minWidth="90.0" HBox.hgrow="ALWAYS" />
+                  <Button fx:id="reloadBot" layoutX="313.0" layoutY="18.0" minWidth="65.0" mnemonicParsing="false" onAction="#onActionReloadBot" text="Reload">
+                     <HBox.margin>
+                        <Insets right="8.0" />
+                     </HBox.margin>
+                  </Button>
                   <Button fx:id="showFilesButton" minWidth="65.0" mnemonicParsing="false" onAction="#onActionShowFiles" text="Show files">
                      <HBox.margin>
                         <Insets right="8.0" />
