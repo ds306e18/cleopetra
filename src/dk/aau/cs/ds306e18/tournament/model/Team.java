@@ -16,7 +16,7 @@ public class Team {
 
     public Team(String teamName, ArrayList<Bot> bots, int initialSeedValue, String description) {
         this.teamName = teamName;
-        this.bots = bots;
+        this.bots = bots == null ? new ArrayList<>() : bots;
         this.initialSeedValue = initialSeedValue;
         this.description = description;
         this.goalsScored = 0;

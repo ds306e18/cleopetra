@@ -11,8 +11,15 @@ import static org.junit.Assert.assertEquals;
 
 public class BotConfigTest {
 
-    private final static String testBotConfigFilename = "test_bot.cfg";
-    private final static String testBotConfigTargetFilename = "dummy_bot.cfg";
+    public final static String testBotConfigFilename = "test_bot.cfg";
+    public final static String testBotConfigFilename2 = "test_bot_2.cfg";
+    public final static String testBotConfigFilename3 = "test_bot_3.cfg";
+    public final static String[] testBotConfigFilenames = {
+            testBotConfigFilename,
+            testBotConfigFilename2,
+            testBotConfigFilename3
+    };
+    public final static String testBotConfigTargetFilename = "dummy_bot.cfg";
 
     @BeforeClass
     public static void init() {
@@ -45,7 +52,7 @@ public class BotConfigTest {
     public void readWriteConcurrencyBotConfigTest() {
         // get and write edited BotConfig to filesystem
         BotConfig botConfig = setupEditedBotConfig();
-        botConfig.writeConfig(testDir + testBotConfigTargetFilename);
+        botConfig.write(testDir + testBotConfigTargetFilename);
 
         // assert that expected, edited config is equal to read config from filesystem
         assertEquals(setupEditedBotConfig().getConfig(), new BotConfig(testDir + testBotConfigTargetFilename).getConfig());
@@ -143,7 +150,7 @@ public class BotConfigTest {
     public void characterTest() {
         BotConfig botConfig = setupConfig();
         botConfig.editLine("Locations", "name", "øæåâèî");
-        botConfig.writeConfig(testDir + testBotConfigTargetFilename);
+        botConfig.write(testDir + testBotConfigTargetFilename);
         assertEquals("øæåâèî", new BotConfig(testDir + testBotConfigTargetFilename).getName());
     }
 }

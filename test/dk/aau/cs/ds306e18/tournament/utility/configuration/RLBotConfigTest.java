@@ -1,6 +1,8 @@
 package dk.aau.cs.ds306e18.tournament.utility.configuration;
 
+import dk.aau.cs.ds306e18.tournament.TestUtilities;
 import dk.aau.cs.ds306e18.tournament.model.Bot;
+import dk.aau.cs.ds306e18.tournament.model.BotFromConfig;
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import org.ini4j.Config;
@@ -32,9 +34,9 @@ public class RLBotConfigTest {
      * @return created match
      */
     private static Match createTestMatch() {
-        Bot blueBot1 = new Bot("Blue1", "BlueDev1", "path/blue/1");
-        Bot blueBot2 = new Bot("Blue2", "BlueDev2", "path/blue/2");
-        Bot blueBot3 = new Bot("Blue3", "BlueDev3", "path/blue/3");
+        Bot blueBot1 = TestUtilities.generateBot();
+        Bot blueBot2 = TestUtilities.generateBot();
+        Bot blueBot3 = TestUtilities.generateBot();
 
         ArrayList<Bot> blueBots = new ArrayList<>();
         blueBots.add(blueBot1);
@@ -43,9 +45,9 @@ public class RLBotConfigTest {
 
         Team blueTeam = new Team("BlueTeam", blueBots, 0, "BlueDescription");
 
-        Bot orangeBot1 = new Bot("Orange1", "OrangeDev1", "path/orange/1");
-        Bot orangeBot2 = new Bot("Orange2", "OrangeDev2", "path/orange/2");
-        Bot orangeBot3 = new Bot("Orange3", "OrangeDev3", "path/orange/3");
+        Bot orangeBot1 = TestUtilities.generateBot();
+        Bot orangeBot2 = TestUtilities.generateBot();
+        Bot orangeBot3 = TestUtilities.generateBot();
 
         ArrayList<Bot> orangeBots = new ArrayList<>();
         orangeBots.add(orangeBot1);
