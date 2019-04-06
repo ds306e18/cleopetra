@@ -43,14 +43,15 @@ public class BotAdapter extends TypeAdapter<Bot> {
     public Bot read(JsonReader in) throws IOException {
 
         in.beginObject();
-        String clazz = in.nextName();
+        in.nextName();
+        String clazz = in.nextString();
 
         if (PsyonixBotFromConfig.class.getSimpleName().equals(clazz)) {
 
             // Construct psyonix bot
             in.nextName();
             String config = in.nextString();
-            in.nextString();
+            in.nextName();
             double skill = in.nextDouble();
             in.endObject();
             PsyonixBotFromConfig bot = new PsyonixBotFromConfig(config, BotSkill.getSkillFromNumber(skill));
@@ -72,6 +73,7 @@ public class BotAdapter extends TypeAdapter<Bot> {
             return bot;
         }
 
+        in.endObject();
         return null; // Unknown bot type
     }
 }

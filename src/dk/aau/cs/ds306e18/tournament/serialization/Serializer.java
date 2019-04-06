@@ -14,8 +14,9 @@ import dk.aau.cs.ds306e18.tournament.model.format.Format;
  */
 public class Serializer {
 
-    private static Gson gson = new GsonBuilder()
+    public static Gson gson = new GsonBuilder()
             //TODO; enable versioning .setVersion(int)
+            .setPrettyPrinting()
             .enableComplexMapKeySerialization() // Enabling option to verbosely serialize round-map in SwissFormat
             .registerTypeAdapter(Format.class, new FormatAdapter()) // Handles Format inheritance
             .registerTypeAdapter(Team.class, new TeamIdAdapter()) // Stores teams by index based on list in Tournament class

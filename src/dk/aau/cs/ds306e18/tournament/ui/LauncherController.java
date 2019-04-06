@@ -100,7 +100,7 @@ public class LauncherController {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open tournament file");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Tournament format (*." + extension + ")", "*." + extension));
-        fileChooser.setInitialDirectory(new File(System.getProperty("user.home") + (File.separatorChar + "Documents")));
+        fileChooser.setInitialDirectory(Main.lastSavedDirectory);
 
         File file = fileChooser.showOpenDialog(getLauncherStage());
 
