@@ -1,9 +1,9 @@
-package dk.aau.cs.ds306e18.tournament.utility;
+package dk.aau.cs.ds306e18.tournament.rlbot;
 
 import dk.aau.cs.ds306e18.tournament.model.Bot;
 import dk.aau.cs.ds306e18.tournament.model.BotFromConfig;
 import dk.aau.cs.ds306e18.tournament.model.BotSkill;
-import dk.aau.cs.ds306e18.tournament.model.PsyonixBot;
+import dk.aau.cs.ds306e18.tournament.model.PsyonixBotFromConfig;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -14,6 +14,8 @@ import java.util.TreeSet;
 import static dk.aau.cs.ds306e18.tournament.CleoPetraSettings.*;
 
 public class BotCollection extends TreeSet<Bot> {
+
+    public static BotCollection global = new BotCollection();
 
     public BotCollection() {
         super((a, b) -> {
@@ -39,11 +41,11 @@ public class BotCollection extends TreeSet<Bot> {
 
             // Bots starting in the bot collection
             Path allStarPath = getPathToSettingsFolder().resolve(PSYONIX_BOTS_FOLDER).resolve(PSYONIX_ALLSTAR_FILE_NAME);
-            PsyonixBot allstar = new PsyonixBot(allStarPath.toString(), BotSkill.ALLSTAR);
+            PsyonixBotFromConfig allstar = new PsyonixBotFromConfig(allStarPath.toString(), BotSkill.ALLSTAR);
             Path proPath = getPathToSettingsFolder().resolve(PSYONIX_BOTS_FOLDER).resolve(PSYONIX_PRO_FILE_NAME);
-            PsyonixBot pro = new PsyonixBot(proPath.toString(), BotSkill.PRO);
+            PsyonixBotFromConfig pro = new PsyonixBotFromConfig(proPath.toString(), BotSkill.PRO);
             Path rookiePath = getPathToSettingsFolder().resolve(PSYONIX_BOTS_FOLDER).resolve(PSYONIX_ROOKIE_FILE_NAME);
-            PsyonixBot rookie = new PsyonixBot(rookiePath.toString(), BotSkill.ROOKIE);
+            PsyonixBotFromConfig rookie = new PsyonixBotFromConfig(rookiePath.toString(), BotSkill.ROOKIE);
 
             addAll(Arrays.asList(
                     allstar, pro, rookie

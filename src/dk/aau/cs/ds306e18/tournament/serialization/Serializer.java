@@ -2,6 +2,7 @@ package dk.aau.cs.ds306e18.tournament.serialization;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import dk.aau.cs.ds306e18.tournament.model.Bot;
 import dk.aau.cs.ds306e18.tournament.model.Stage;
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.format.StageStatus;
@@ -18,6 +19,7 @@ public class Serializer {
             .enableComplexMapKeySerialization() // Enabling option to verbosely serialize round-map in SwissFormat
             .registerTypeAdapter(Format.class, new FormatAdapter()) // Handles Format inheritance
             .registerTypeAdapter(Team.class, new TeamIdAdapter()) // Stores teams by index based on list in Tournament class
+            .registerTypeAdapter(Bot.class, new BotAdapter()) // Handles Bot inheritance and bot collection
             .create();
 
     /**

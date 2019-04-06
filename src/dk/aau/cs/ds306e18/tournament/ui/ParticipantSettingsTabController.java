@@ -3,7 +3,7 @@ package dk.aau.cs.ds306e18.tournament.ui;
 import dk.aau.cs.ds306e18.tournament.Main;
 import dk.aau.cs.ds306e18.tournament.model.*;
 import dk.aau.cs.ds306e18.tournament.utility.Alerts;
-import dk.aau.cs.ds306e18.tournament.utility.BotCollection;
+import dk.aau.cs.ds306e18.tournament.rlbot.BotCollection;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -18,7 +18,6 @@ import javafx.stage.Window;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -44,7 +43,6 @@ public class ParticipantSettingsTabController {
     @FXML private Button loadFolderButton;
     @FXML private ListView<Bot> botCollectionListView;
 
-    public BotCollection botCollection;
     private FileChooser botConfigFileChooser;
     private DirectoryChooser botFolderChooser;
 
@@ -107,15 +105,14 @@ public class ParticipantSettingsTabController {
         rosterListView.setCellFactory(listView -> new TeamRosterCell(this));
 
         // Bot collection list setup
-        botCollection = new BotCollection();
-        botCollection.addPsyonixBots();
-        boolean rlbotPackLoaded = botCollection.addRLBotPackIfPresent();
+        BotCollection.global.addPsyonixBots();
+        boolean rlbotPackLoaded = BotCollection.global.addRLBotPackIfPresent();
         if (rlbotPackLoaded) {
             // When the javafx window is done loaded, show notification
             Platform.runLater(() -> Alerts.infoNotification("RLBot loaded", "Found the RLBotPack and loaded the bots from it."));
         }
         botCollectionListView.setCellFactory(listView -> new BotCollectionCell(this));
-        botCollectionListView.setItems(FXCollections.observableArrayList(botCollection));
+        botCollectionListView.setItems(FXCollections.observableArrayList(BotCollection.global));
 
         // Setup file chooser
         botConfigFileChooser = new FileChooser();
@@ -335,8 +332,8 @@ public class ParticipantSettingsTabController {
      * Remove a bot from the bot collection and update the bot collection list view
      */
     public void removeBotFromBotCollection(Bot bot) {
-        botCollection.remove(bot);
-        botCollectionListView.setItems(FXCollections.observableArrayList(botCollection));
+        BotCollection.global.remove(bot);
+        botCollectionListView.setItems(FXCollections.observableArrayList(BotCollection.global));
         botCollectionListView.refresh();
     }
 
@@ -377,7 +374,7 @@ public class ParticipantSettingsTabController {
 
         if (files != null) {
             // Add all selected bots to bot collection
-            botCollection.addAll(files.stream()
+            BotCollection.global.addAll(files.stream()
                     .map(file -> {
                         BotFromConfig bot = new BotFromConfig(file.toString());
                         if (bot.loadedCorrectly()) {
@@ -389,7 +386,7 @@ public class ParticipantSettingsTabController {
                     })
                     .filter(Objects::nonNull)
                     .collect(Collectors.toList()));
-            botCollectionListView.setItems(FXCollections.observableArrayList(botCollection));
+            botCollectionListView.setItems(FXCollections.observableArrayList(BotCollection.global));
             botCollectionListView.refresh();
 
             Main.lastSavedDirectory = files.get(0).getParentFile();
@@ -405,8 +402,8 @@ public class ParticipantSettingsTabController {
 
         if (folder != null) {
             // Find all bots in the folder and add them to bot collection
-            botCollection.addAllBotsFromFolder(folder, 10);
-            botCollectionListView.setItems(FXCollections.observableArrayList(botCollection));
+            BotCollection.global.addAllBotsFromFolder(folder, 10);
+            botCollectionListView.setItems(FXCollections.observableArrayList(BotCollection.global));
             botCollectionListView.refresh();
 
             Main.lastSavedDirectory = folder;

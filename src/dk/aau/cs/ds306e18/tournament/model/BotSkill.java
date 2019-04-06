@@ -14,4 +14,10 @@ public enum BotSkill {
     public String getConfigValue() {
         return configValue;
     }
+
+    public static BotSkill getSkillFromNumber(double skill) {
+        if (skill <= 0.0) return ROOKIE;
+        if (skill <= 0.5) return PRO;
+        return ALLSTAR;
+    }
 }
