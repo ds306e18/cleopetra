@@ -13,6 +13,9 @@ import javafx.scene.layout.HBox;
 
 import java.io.IOException;
 
+/**
+ * This is a custom ListCell used to display bots in a team's list of bots in the participant settings tab.
+ */
 public class TeamRosterCell extends ListCell<Bot> {
 
     @FXML public HBox hbox;

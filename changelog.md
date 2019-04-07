@@ -10,7 +10,7 @@
     - Psyonix bots also come preloaded (they are located at `<user>/.cleopetra/psyonix_bots/`)
     - Info about bots are now displayed in a pop-up and must be loaded from the bot's config
         - a "Show files" button will open a file explorer showing the bot's config file
-    - Psyonix bots and RLBot bots are different icons
+    - Psyonix bots and RLBot bots have different icons
 
 #### Version 1.2.1 - 4. March 2019
 - Added ability to swap team colors in a match. #49 - NicEastvillage

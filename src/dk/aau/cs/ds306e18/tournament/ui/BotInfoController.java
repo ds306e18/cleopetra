@@ -21,7 +21,6 @@ import java.io.IOException;
 
 public class BotInfoController extends DraggablePopupWindow {
 
-
     @FXML public Text botNameText;
     @FXML public Text botConfigPathText;
     @FXML public Text developersText;
@@ -36,6 +35,9 @@ public class BotInfoController extends DraggablePopupWindow {
 
     private Bot bot;
 
+    /**
+     * Set which bot is shown. This is update all the information displayed.
+     */
     public void setBot(Bot bot) {
         this.bot = bot;
 
@@ -49,6 +51,9 @@ public class BotInfoController extends DraggablePopupWindow {
         botTypeText.setText(bot.getBotType().toString());
     }
 
+    /**
+     * Returns the displayed bot.
+     */
     public Bot getBot() {
         return bot;
     }
@@ -60,20 +65,27 @@ public class BotInfoController extends DraggablePopupWindow {
 
     @FXML
     public void onActionShowFiles(ActionEvent actionEvent) {
-        File file = new File(bot.getConfigPath());
-        boolean showFailed = true;
-        if (file.exists()) {
-            try {
-                Runtime.getRuntime().exec("explorer.exe /select," + file.toString());
-                showFailed = false;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        // Check OS. We can only open the file explorer on Windows.
+        if (System.getProperty("os.name").contains("Windows")) {
 
-        // If something failed, let the user know
-        if (showFailed) {
-            Alerts.errorNotification("Could not show files.", "Could not open a file explorer that shows the config file. Does it exist?");
+            // Try to show file explorer showing the bot's config file
+            File file = new File(bot.getConfigPath());
+            boolean showFailed = true;
+            if (file.exists()) {
+                try {
+                    Runtime.getRuntime().exec("explorer.exe /select," + file.toString());
+                    showFailed = false;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            // If something failed, let the user know
+            if (showFailed) {
+                Alerts.errorNotification("Could not show files.", "Could not open a file explorer that shows the config file. Does the file exist?");
+            }
+        } else {
+            Alerts.errorNotification("Could not show files.", "Could not open a file explorer since OS is not Windows.");
         }
     }
 
@@ -122,6 +134,7 @@ public class BotInfoController extends DraggablePopupWindow {
         }
     }
 
+    @FXML
     public void onActionReloadBot(ActionEvent actionEvent) {
         if (bot instanceof BotFromConfig) {
             ((BotFromConfig) bot).reload();

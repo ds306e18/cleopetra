@@ -4,6 +4,9 @@ import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
+/**
+ * This abstract class is used to make pop-up windows draggable.
+ */
 public abstract class DraggablePopupWindow {
 
     private double x = 0;
