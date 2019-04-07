@@ -130,6 +130,7 @@ public class ParticipantSettingsTabController {
     public void update() {
         teamsListView.refresh();
         rosterListView.refresh();
+        botCollectionListView.refresh();
         updateParticipantFields();
         updateTeamFields();
     }

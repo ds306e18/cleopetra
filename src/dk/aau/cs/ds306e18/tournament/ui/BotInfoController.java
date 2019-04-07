@@ -126,6 +126,7 @@ public class BotInfoController extends DraggablePopupWindow {
         if (bot instanceof BotFromConfig) {
             ((BotFromConfig) bot).reload();
             setBot(bot); // Updates all fields
+            ParticipantSettingsTabController.instance.update();
         }
     }
 }

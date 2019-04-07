@@ -31,7 +31,7 @@
                 </Text>
                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tournament name:">
                     <VBox.margin>
-                        <Insets top="10.0" />
+                        <Insets />
                     </VBox.margin>
                     <font>
                         <Font size="16.0" />
@@ -181,7 +181,7 @@
                 </VBox>
             </children>
             <padding>
-                <Insets left="20.0" right="40.0" />
+                <Insets left="20.0" right="20.0" />
             </padding>
         </VBox>
         <Pane minHeight="0.0" minWidth="0.0" prefHeight="0.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />

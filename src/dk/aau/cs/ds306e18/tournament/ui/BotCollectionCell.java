@@ -1,12 +1,15 @@
 package dk.aau.cs.ds306e18.tournament.ui;
 
 import dk.aau.cs.ds306e18.tournament.model.Bot;
+import dk.aau.cs.ds306e18.tournament.model.BotType;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
 import java.io.IOException;
@@ -18,6 +21,7 @@ public class BotCollectionCell extends ListCell<Bot> {
     @FXML public Label botNameLabel;
     @FXML public Button infoButton;
     @FXML public Button removeBotButton;
+    @FXML public ImageView botTypeIcon;
 
     private ParticipantSettingsTabController participantSettingsTabController;
 
@@ -50,8 +54,9 @@ public class BotCollectionCell extends ListCell<Bot> {
 
         } else {
 
-            // Display the bot name
+            // Display the bot name and a fitting icon
             botNameLabel.setText(bot.getName());
+            botTypeIcon.setImage(BotIcons.getIconForBot(bot));
             setGraphic(hbox);
         }
     }

@@ -7,6 +7,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
 import java.io.IOException;
@@ -17,6 +19,10 @@ public class TeamRosterCell extends ListCell<Bot> {
     @FXML public Label botNameLabel;
     @FXML public Button infoButton;
     @FXML public Button removeBotButton;
+    @FXML public ImageView botTypeIcon;
+
+    private Image rlbotIcon = new Image(TeamRosterCell.class.getResourceAsStream("layout/images/rlbot small square logo.png"));
+    private Image psyonixIcon = new Image(TeamRosterCell.class.getResourceAsStream("layout/images/psyonix small square logo.png"));
 
     private ParticipantSettingsTabController participantSettingsTabController;
 
@@ -49,8 +55,9 @@ public class TeamRosterCell extends ListCell<Bot> {
 
         } else {
 
-            // Display the bot name
+            // Display the bot name and a fitting icon
             botNameLabel.setText(bot.getName());
+            botTypeIcon.setImage(BotIcons.getIconForBot(bot));
             setGraphic(hbox);
         }
     }
