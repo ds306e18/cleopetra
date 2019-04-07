@@ -2,16 +2,15 @@
 
 #### Unreleased changes (dev branch)
 - Support for Psyonix bots. #13 - NicEastvillage
-- Completely reworked how bots are added to teams. Bots are now stored in a bot collection, from which you can pick bots to add to a team. This includes the following features:
+- Completely reworked how bots are added to teams. Bots are now stored in a bot collection, from which you can pick bots to add to a team. - NicEastvillage
+- The addition of the bot collection includes the following features:
     - No more copy-pasting then the same bots appear multiple times
     - A single bot config, or a whole folder of bots can loaded and added to the bot collection
     - If the RLBotPack is present, it will be loaded automatically on startup
-    - Psyonix bots also come preloaded (they are located at `~/.cleopetra/psyonix_bots/`)
+    - Psyonix bots also come preloaded (they are located at `<user>/.cleopetra/psyonix_bots/`)
     - Info about bots are now displayed in a pop-up and must be loaded from the bot's config
-    
-Todo:
-- Make save-load feature work
-- Update UI so bot collection looks different than other panels
+        - a "Show files" button will open a file explorer showing the bot's config file
+    - Psyonix bots and RLBot bots are different icons
 
 #### Version 1.2.1 - 4. March 2019
 - Added ability to swap team colors in a match. #49 - NicEastvillage
