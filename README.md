@@ -11,7 +11,7 @@ Apart from these features the system also adds support specifically for the [RLB
 
 #### Quick Start
 
-If you just want to use the tournament runner, see the jar file in the latest release.
+If you just want to use the tournament runner, see the jar file in the [latest release](https://github.com/ds306e18/cleopetra/releases).
 
 ## Setup IntelliJ project
 For using the IDE-environment to compile, debug and build artifacts, the following setup must be carried out. The project is running with Gradle and this will be used to build and run both the tests and the project.
