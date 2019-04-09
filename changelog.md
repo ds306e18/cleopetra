@@ -1,6 +1,6 @@
 # Changelog
 
-#### Unreleased changes (dev branch)
+#### Version 1.3 - 9. April 2019
 - Support for Psyonix bots. #13 - NicEastvillage
 - Completely reworked how bots are added to teams. Bots are now stored in a bot collection, from which you can pick bots to add to a team. - NicEastvillage
 - The addition of the bot collection includes the following features:
