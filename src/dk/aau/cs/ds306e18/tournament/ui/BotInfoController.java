@@ -65,7 +65,7 @@ public class BotInfoController extends DraggablePopupWindow {
 
     @FXML
     public void onActionShowFiles(ActionEvent actionEvent) {
-        // Check OS. We can only open the file explorer on Windows.
+        // Check OS. We can only open File Explorer on Windows.
         if (System.getProperty("os.name").contains("Windows")) {
 
             // Try to show file explorer showing the bot's config file
@@ -82,10 +82,10 @@ public class BotInfoController extends DraggablePopupWindow {
 
             // If something failed, let the user know
             if (showFailed) {
-                Alerts.errorNotification("Could not show files.", "Could not open a file explorer that shows the config file. Does the file exist?");
+                Alerts.errorNotification("Could not show files.", "Could not open File Explorer showing the config file. Does the file exist?");
             }
         } else {
-            Alerts.errorNotification("Could not show files.", "Could not open a file explorer since OS is not Windows.");
+            Alerts.errorNotification("Could not show files.", "Could not open File Explorer since OS is not Windows.");
         }
     }
 

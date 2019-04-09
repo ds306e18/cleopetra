@@ -43,7 +43,7 @@ public class BotAdapter extends TypeAdapter<Bot> {
     public Bot read(JsonReader in) throws IOException {
 
         in.beginObject();
-        in.nextName();
+        in.nextName(); // This consumes the value's name, i.e. "class" in "class: BotFromConfig"
         String clazz = in.nextString();
 
         if (PsyonixBotFromConfig.class.getSimpleName().equals(clazz)) {

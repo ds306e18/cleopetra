@@ -16,7 +16,7 @@ public class Team {
 
     public Team(String teamName, ArrayList<Bot> bots, int initialSeedValue, String description) {
         this.teamName = teamName;
-        this.bots = bots == null ? new ArrayList<>() : bots;
+        this.bots = bots == null ? new ArrayList<>() : bots; // List can't be null to avoid NullPointerExceptions
         this.initialSeedValue = initialSeedValue;
         this.description = description;
         this.goalsScored = 0;

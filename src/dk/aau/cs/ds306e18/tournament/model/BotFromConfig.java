@@ -19,7 +19,7 @@ public class BotFromConfig implements Bot {
      * Returns true if the config file that this bot is based on was loaded correctly and is valid. False otherwise.
      */
     public boolean loadedCorrectly() {
-        return configLoadedCorrectly || config == null;
+        return configLoadedCorrectly && config != null;
     }
 
     /**
