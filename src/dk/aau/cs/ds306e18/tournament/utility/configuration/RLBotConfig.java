@@ -1,6 +1,8 @@
 package dk.aau.cs.ds306e18.tournament.utility.configuration;
 
 import dk.aau.cs.ds306e18.tournament.model.Bot;
+import dk.aau.cs.ds306e18.tournament.model.BotSkill;
+import dk.aau.cs.ds306e18.tournament.model.BotType;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 
 public class RLBotConfig extends ConfigFileEditor {
@@ -15,6 +17,7 @@ public class RLBotConfig extends ConfigFileEditor {
     private final static String PARAMETER_PARTICIPANT_CONFIG = "participant_config_";
     private final static String PARAMETER_PARTICIPANT_TEAM = "participant_team_";
     private final static String PARAMETER_PARTICIPANT_TYPE = "participant_type_";
+    private final static String PARAMETER_PARTICIPANT_SKILL = "participant_bot_skill_";
 
 
     private final static int PARAMETER_BLUE_TEAM = 0;
@@ -65,6 +68,13 @@ public class RLBotConfig extends ConfigFileEditor {
     }
 
     /**
+     * Sets participant skill of given participantIndex in RLBotConfig
+     */
+    private void setParticipantSkill(BotSkill skill, int participantIndex) {
+        editLine(SECTION_PARTICIPANT_CONFIGURATION, PARAMETER_PARTICIPANT_SKILL + participantIndex, skill.getConfigValue());
+    }
+
+    /**
      * Sets the number of participants for the RLBotConfig, converting int to String
      */
     private void setNumberOfParticipants(int participantIndex) {
@@ -86,20 +96,13 @@ public class RLBotConfig extends ConfigFileEditor {
 
         // for blue team, edit numbered parameters by incremented count of participants
         for (Bot bot : match.getBlueTeam().getBots()) {
-            // edit participant_config parameter to current bots config path
-            setParticipantConfigPath(bot.getConfigPath(), numParticipants);
-            // edit participant_team parameter to blue-team constant
-            setParticipantTeam(PARAMETER_BLUE_TEAM, numParticipants);
-            // edit participant_type parameter to RLBot-participant constant
-            setParticipantType(BotType.RLBOT, numParticipants);
+            setupParticipant(bot, numParticipants, PARAMETER_BLUE_TEAM);
             numParticipants++;
         }
 
         // for orange team, edit numbered parameters by incremented count of participants
         for (Bot bot : match.getOrangeTeam().getBots()) {
-            setParticipantConfigPath(bot.getConfigPath(), numParticipants);
-            setParticipantTeam(PARAMETER_ORANGE_TEAM, numParticipants);
-            setParticipantType(BotType.RLBOT, numParticipants);
+            setupParticipant(bot, numParticipants, PARAMETER_ORANGE_TEAM);
             numParticipants++;
         }
 
@@ -109,5 +112,13 @@ public class RLBotConfig extends ConfigFileEditor {
         // when configured, validate syntax and return boolean set by validateConfigSyntax
         validateConfigSyntax();
         return isValid();
+    }
+
+    /** Setup the parameters for a bot in the config file */
+    public void setupParticipant(Bot bot, int index, int team) {
+        setParticipantConfigPath(bot.getConfigPath(), index);
+        setParticipantTeam(team, index);
+        setParticipantType(bot.getBotType(), index);
+        setParticipantSkill(bot.getBotSkill(), index);
     }
 }

@@ -100,14 +100,14 @@ public class LauncherController {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open tournament file");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Tournament format (*." + extension + ")", "*." + extension));
-        fileChooser.setInitialDirectory(new File(System.getProperty("user.home") + (File.separatorChar + "Documents")));
+        fileChooser.setInitialDirectory(Main.lastSavedDirectory);
 
         File file = fileChooser.showOpenDialog(getLauncherStage());
 
         // Deserialize and set the loaded tournament. Then show the main stage.
         if (file != null){
             Tournament.get().setTournament(FileOperations.readTournamentFromFilesystem(file));
-            SaveLoad.lastSavedDirectory = file.getParentFile();
+            Main.lastSavedDirectory = file.getParentFile();
             Stage systemStage = createSystemStage();
             getLauncherStage().hide();
             systemStage.show();

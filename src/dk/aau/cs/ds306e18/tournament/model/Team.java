@@ -5,7 +5,7 @@ import java.util.Objects;
 
 public class Team {
 
-    public static final int MAX_SIZE = 5;
+    public static final int MAX_SIZE = 32;
 
     private String teamName;
     private ArrayList<Bot> bots;
@@ -16,7 +16,7 @@ public class Team {
 
     public Team(String teamName, ArrayList<Bot> bots, int initialSeedValue, String description) {
         this.teamName = teamName;
-        this.bots = bots;
+        this.bots = bots == null ? new ArrayList<>() : bots; // List can't be null to avoid NullPointerExceptions
         this.initialSeedValue = initialSeedValue;
         this.description = description;
         this.goalsScored = 0;
@@ -59,24 +59,18 @@ public class Team {
     }
 
     public boolean removeBot(Bot bot) {
-        if (bots.size() > 1) {
-            return bots.remove(bot);
-        }
-        throw new IllegalStateException("Can't remove the last bot from a team.");
+        return bots.remove(bot);
     }
 
     public Bot removeBot(int index) {
-        if (bots.size() > 1) {
+        if (0 <= index && index < bots.size()) {
             return bots.remove(index);
         }
-        throw new IllegalStateException("Can't remove the last bot from a team.");
+        return null;
     }
 
     public ArrayList<Bot> getBots() {
-        if (bots!=null){
         return new ArrayList<>(bots);
-    }
-    else return null;
     }
 
     public ArrayList<String> getConfigPaths() {

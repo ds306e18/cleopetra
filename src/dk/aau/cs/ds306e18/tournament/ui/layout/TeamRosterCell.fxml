@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+
+<HBox fx:id="hbox" spacing="4.0" xmlns="http://javafx.com/javafx/1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <AnchorPane prefHeight="20.0" prefWidth="22.0">
+         <children>
+            <ImageView fx:id="botTypeIcon" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="4.0">
+               <image>
+                  <Image url="@images/rlbot small square logo.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+      <Label fx:id="botNameLabel" alignment="CENTER_RIGHT" prefHeight="27.0" text="bot name" />
+      <Pane prefHeight="25.0" HBox.hgrow="ALWAYS" />
+      <Button fx:id="infoButton" mnemonicParsing="false" onAction="#onActionInfo" prefWidth="28.0" text="i" />
+      <Button fx:id="removeButton" mnemonicParsing="false" onAction="#onActionRemove" prefWidth="28.0" text="X" />
+   </children>
+</HBox>

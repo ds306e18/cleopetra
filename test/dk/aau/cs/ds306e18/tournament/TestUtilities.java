@@ -1,11 +1,10 @@
 package dk.aau.cs.ds306e18.tournament;
 
-import dk.aau.cs.ds306e18.tournament.model.Bot;
-import dk.aau.cs.ds306e18.tournament.model.Stage;
-import dk.aau.cs.ds306e18.tournament.model.Team;
-import dk.aau.cs.ds306e18.tournament.model.Tournament;
+import dk.aau.cs.ds306e18.tournament.model.*;
 import dk.aau.cs.ds306e18.tournament.model.format.*;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import dk.aau.cs.ds306e18.tournament.utility.configuration.BotConfigTest;
+import dk.aau.cs.ds306e18.tournament.utility.configuration.ConfigFileEditorTest;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,8 +52,9 @@ public class TestUtilities {
      */
     public static Bot generateBot() {
         Random rand = new Random();
-        return new Bot(botNames.get(rand.nextInt(botNames.size())),
-                devNames.get((rand.nextInt(devNames.size()))), null); //TODO should create path somehow
+        return new BotFromConfig(
+                "test/" + BotConfigTest.testBotConfigFilenames[rand.nextInt(BotConfigTest.testBotConfigFilenames.length)]
+        );
     }
 
     /**
