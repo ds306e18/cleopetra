@@ -1,6 +1,9 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
+import com.google.flatbuffers.FlatBufferBuilder;
 import dk.aau.cs.ds306e18.tournament.utility.configuration.BotConfig;
+import rlbot.flat.PlayerInfo;
+import rlbot.flat.RLBotPlayer;
 
 import java.util.Objects;
 
@@ -87,6 +90,11 @@ public class BotFromConfig implements Bot {
     @Override
     public BotSkill getBotSkill() {
         return BotSkill.ALLSTAR;
+    }
+
+    @Override
+    public int getFlatBufferBotTypeInfo(FlatBufferBuilder builder) {
+        return 0; // Return 0 as rlbot.flat.RLBotPlayer has no extra info
     }
 
     @Override

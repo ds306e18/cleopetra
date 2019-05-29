@@ -20,7 +20,15 @@ targetCompatibility = 8
 // Define the main class for the application
 mainClassName = 'dk.aau.cs.ds306e18.tournament.Main'
 
+// This directory will be created and the interface dll copied into it at runtime.
+// The end result is that the interface dll will be available for loading.
+def dllDirectory = 'build/dll'
+applicationDefaultJvmArgs = ["-Djna.library.path=" + dllDirectory]
+
 dependencies {
+    // The RLBot framework and interace
+    compile 'org.rlbot.commons:framework:1.+'
+
     // This dependency is found on compile classpath of this component and consumers.
     compile 'com.google.guava:guava:23.0'
 

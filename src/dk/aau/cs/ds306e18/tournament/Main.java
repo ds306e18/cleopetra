@@ -1,5 +1,6 @@
 package dk.aau.cs.ds306e18.tournament;
 
+import dk.aau.cs.ds306e18.tournament.rlbot.RLBotCommunication;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

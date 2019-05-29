@@ -1,36 +1,121 @@
 package dk.aau.cs.ds306e18.tournament.rlbot;
 
+import com.google.flatbuffers.FlatBufferBuilder;
+import dk.aau.cs.ds306e18.tournament.Main;
 import dk.aau.cs.ds306e18.tournament.model.Bot;
 import dk.aau.cs.ds306e18.tournament.model.BotFromConfig;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.utility.Alerts;
 import dk.aau.cs.ds306e18.tournament.utility.configuration.RLBotConfig;
+import rlbot.cppinterop.RLBotDll;
+import rlbot.flat.*;
 
+import java.io.BufferedReader;
 import java.io.File;
-import java.nio.file.Path;
+import java.io.InputStreamReader;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class MatchRunner {
 
-    // The %s will be replaced with the directory of the rlbot.cfg
-    private static final String COMMAND_FORMAT = "cmd.exe /c start cmd.exe /c \"cd %s & python run.py\"";
+    private static boolean dllInitialized = false;
+
+    /**
+     * Setup and prepare communication with the RLBotDll.
+     */
+    public static void setupRLBotFramework() {
+        if (!dllInitialized) {
+            try {
+                // The DllPathFetcher.py script prints the location of the RLBot interface dll
+                // A python process runs the script, and the result is read from the associated input stream
+                String dllFetcher = Paths.get(Main.class.getResource("rlbot/DllPathFetcher.py").toURI()).toString();
+                ProcessBuilder pb = new ProcessBuilder("python", dllFetcher);
+                Process process = pb.start();
+                BufferedReader in = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                String pathToDll = in.readLine();
+
+                // Init the RLBot interface
+                RLBotDll.initialize(pathToDll);
+
+                dllInitialized = true;
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     /** Starts the given match in Rocket League. */
     public static boolean startMatch(RLBotSettings settings, Match match) {
 
         // Checks settings and modifies rlbot.cfg file if everything is okay
-        boolean ready = prepareMatch(settings, match);
+        boolean ready = true;//prepareMatch(settings, match);
         if (!ready) {
             return false;
         }
 
         try {
-            // We assume that the runner is in the same folder as the rlbot.cfg
-            Path pathToDirectory = Paths.get(settings.getConfigPath()).getParent();
-            String command = String.format(COMMAND_FORMAT, pathToDirectory);
-            System.out.println("Running command: " + command);
-            Runtime.getRuntime().exec(command);
+            setupRLBotFramework();
+
+            // Build a flatbuffer packet with the info needed
+            FlatBufferBuilder builder = new FlatBufferBuilder();
+            int bluePlayers = match.getBlueTeam().size();
+            int orangePlayers = match.getOrangeTeam().size();
+            int playerCount = bluePlayers + orangePlayers;
+            int[] players = new int[playerCount];
+            for (int i = 0; i < playerCount; i++) {
+                boolean isBlue = i < bluePlayers;
+                Bot bot = isBlue ?
+                        match.getBlueTeam().getBots().get(i) :
+                        match.getOrangeTeam().getBots().get(i - bluePlayers);
+
+                // TODO Loadout and paint will just be all 0's for now. Should be config from appearance.cfg
+                int loadoutPaintOffset = LoadoutPaint.createLoadoutPaint(builder,
+                        0, 0, 0, 0, 0, 0, 0, 0);
+                int loadoutOffset = PlayerLoadout.createPlayerLoadout(builder,
+                        0,0,0,0,0,0,0,0,0,0,0,0,0,loadoutPaintOffset);
+
+                players[i] = PlayerConfiguration.createPlayerConfiguration(
+                        builder,
+                        bot.getBotType().getFlatBufferBotType(),
+                        bot.getFlatBufferBotTypeInfo(builder),
+                        builder.createString(bot.getName()),
+                        isBlue ? 1 : 0,
+                        loadoutOffset
+                );
+            }
+
+            // Default mutators
+            int mutatorsOffset = MutatorSettings.createMutatorSettings(
+                    builder,
+                    MatchLength.Five_Minutes,
+                    MaxScore.Unlimited,
+                    OvertimeOption.Unlimited,
+                    SeriesLengthOption.Unlimited,
+                    GameSpeedOption.Default,
+                    BallMaxSpeedOption.Default,
+                    BallTypeOption.Default,
+                    BallWeightOption.Default,
+                    BallSizeOption.Default,
+                    BallBouncinessOption.Default,
+                    BoostOption.Normal_Boost,
+                    RumbleOption.None,
+                    BoostStrengthOption.One,
+                    GravityOption.Default,
+                    DemolishOption.Default,
+                    RespawnTimeOption.Three_Seconds);
+
+            int root = MatchSettings.createMatchSettings(builder,
+                    MatchSettings.createPlayerConfigurationsVector(builder, players),
+                    GameMode.Soccer,
+                    GameMap.DFHStadium,
+                    false,
+                    false,
+                    mutatorsOffset,
+                    ExistingMatchBehavior.Restart);
+
+            builder.finish(root);
+            RLBotDll.startMatch(builder);
             System.out.println("Started RLBot framework");
             return true;
 
@@ -63,21 +148,7 @@ public class MatchRunner {
 
     /** Checks rlbot settings. Throws an IllegalStateException if anything is wrong. Does nothing if everything is okay. */
     private static void checkRLBotSettings(RLBotSettings settings) {
-        // Check if rlbot.cfg set
-        String configPath = settings.getConfigPath();
-        if (configPath == null || configPath.isEmpty())
-            throw new IllegalStateException("The RLBot config file (rlbot.cfg) is not set in RLBot Settings.");
-
-        // Check if rlbot.cfg exists
-        File cfg = new File(configPath);
-        if (!cfg.exists() || !cfg.isFile() || cfg.isDirectory())
-            throw new IllegalStateException("Could not find RLBot config file (\"" + configPath + "\")");
-
-        // Check if run.py exists in same directory
-        File runner = new File(cfg.getParent(), "run.py");
-        if (!runner.exists()) {
-            throw new IllegalStateException("Could not find run.py next to the RLBot config file (\"" + runner.getAbsolutePath() + "\")");
-        }
+        // Settings are always okay right now
     }
 
     /**
