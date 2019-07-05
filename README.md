@@ -2,7 +2,7 @@
 
 ![](demo.png)
 
-CleoPetra aims to create a custom tournament runner for the [RLBot-community](www.rlbot.org) that help host, manage and run a tournament. The system supports multiple formats such as single elimination, double elimination, Swiss-system and round robin. It supports multiple stages and seeding of participants, allowing for a easy transfer of the best participants within stages.
+CleoPetra aims to create a custom tournament runner for the [RLBot-community](https://www.rlbot.org) that help host, manage and run a tournament. The system supports multiple formats such as single elimination, double elimination, Swiss-system and round robin. It supports multiple stages and seeding of participants, allowing for a easy transfer of the best participants within stages.
 Apart from these features the system also adds support specifically for the [RLBot-framework](https://github.com/RLBot/RLBot). It can modify the `rlbot.cfg` file based on the bots of a match and can also start a match using the RLBot-framework.
 
 #### Prerequisites
