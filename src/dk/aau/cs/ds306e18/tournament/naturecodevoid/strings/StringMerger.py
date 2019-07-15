@@ -11,6 +11,9 @@ class StringMerger:
             string: str = self._strings[i]
             stringSplit: list = string.split(" ")
             if len(stringSplit) >= 2:
+                if "bot" in string.lower():
+                    if string.lower().endswith("bot"):
+                        string -= "bot" or "Bot"
                 self._combined += stringSplit[0]  # Use the first part of the string
             else:
                 self._combined += string
