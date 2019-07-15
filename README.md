@@ -19,7 +19,7 @@ For using the IDE-environment to compile, debug and build artifacts, the followi
 1. Install [IntelliJ](https://www.jetbrains.com/idea/). The community edition is free.
 2. Clone repository to your computer.
 3. Start IntelliJ and open the CleoPetra project folder.
-4. When the project has been loaded a pop-up message will appear in the lower right corner og the screen. Click the *Import Gradle Project*.
+4. When the project has been loaded a pop-up message will appear in the lower right corner of the screen. Click the *Import Gradle Project*.
 5. Keep the default settings and press *OK* and wait for the import to finish.
 6. The project is now imported and can be run within IntelliJ through Gradle.
 
