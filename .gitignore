@@ -9,6 +9,9 @@
 *.rlts
 saves/
 
+# Pycache
+__pycache__
+
 # ConfigFileEditor-specific
 dummy_rlbot.cfg
 dummy_bot.cfg
