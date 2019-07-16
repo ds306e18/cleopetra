@@ -25,5 +25,5 @@ class StringMerger:
                 # print(newString)
                 self._combined += newString
 
-        # TODO: make something to take away extra spaces at the end of the string
+        self._combined = self._combined.strip()
         return self._combined
