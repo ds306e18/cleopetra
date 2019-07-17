@@ -13,17 +13,26 @@ class StringMerger:
             newString: str = ""
             stringSplit: list = string.split(" ")
             if len(stringSplit) >= 2:
-                newString = stringSplit[0] + " "  # Use the first part of the string
+                newString = stringSplit[0] + "-"  # Use the first part of the string
                 if "bot" in newString:
                     newString = newString.replace("bot", "")
+                elif "Bot" in newString:
+                    newString = newString.replace("Bot", "")
+                elif "BOT" in newString:
+                    newString = newString.replace("BOT", "")
                 # print(newString)
                 self._combined += newString
             else:
-                newString = string + " "
+                newString = string + "-"
                 if "bot" in newString:
                     newString = newString.replace("bot", "")
+                elif "Bot" in newString:
+                    newString = newString.replace("Bot", "")
+                elif "BOT" in newString:
+                    newString = newString.replace("BOT", "")
                 # print(newString)
                 self._combined += newString
 
-        self._combined = self._combined.strip()
+        # This is so the trailing whitespace and '-' will be removed
+        self._combined = self._combined.strip()[:-1]
         return self._combined

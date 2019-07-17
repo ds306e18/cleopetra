@@ -9,6 +9,9 @@
 *.rlts
 saves/
 
+# Atom java autocomplete
+.classpath
+
 # Pycache
 __pycache__
 
