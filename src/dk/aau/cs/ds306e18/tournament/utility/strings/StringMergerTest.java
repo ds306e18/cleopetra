@@ -8,7 +8,7 @@ public class StringMergerTest {
         a.add("Duibot");
         a.add("Sky");
         a.add("TreeBot");
-        a.add("Botimus");
+        a.add("Botimus Prime");
         StringMerger b = new StringMerger(a);
         System.out.printIn(b.MergeStrings());
     }

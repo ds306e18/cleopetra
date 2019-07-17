@@ -21,13 +21,25 @@ public class StringMerger {
             if (stringSplit.length >= 2) {
                 newString = stringSplit[0] + "-";
 
-                if (newString.contains("bot")) {
+                if (newString.contains("bot") && !(
+                newString.charAt(0).toString().toLowerCase() == 'b' &&
+                newString.charAt(1).toString().toLowerCase() == 'o' &&
+                newString.charAt(2).toString().toLowerCase() == 't')
+                ) {
                     newString = newString.replace("bot", "");
 
-                } else if (newString.contains("Bot")) {
+                } else if (newString.contains("Bot") && !(
+                newString.charAt(0).toString().toLowerCase() == 'b' &&
+                newString.charAt(1).toString().toLowerCase() == 'o' &&
+                newString.charAt(2).toString().toLowerCase() == 't')
+                ) {
                     newString = newString.replace("Bot", "");
 
-                } else if (newString.contains("BOT")) {
+                } else if (newString.contains("BOT") && !(
+                newString.charAt(0).toString().toLowerCase() == 'b' &&
+                newString.charAt(1).toString().toLowerCase() == 'o' &&
+                newString.charAt(2).toString().toLowerCase() == 't')
+                ) {
                     newString = newString.replace("BOT", "");
 
                 }
