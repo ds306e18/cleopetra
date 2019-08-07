@@ -12,5 +12,5 @@ public interface Bot {
     String getLanguage();
     BotType getBotType();
     BotSkill getBotSkill();
-    int getFlatBufferBotTypeInfo(FlatBufferBuilder builder);
+    int getFlatBufferBotInfo(FlatBufferBuilder builder);
 }

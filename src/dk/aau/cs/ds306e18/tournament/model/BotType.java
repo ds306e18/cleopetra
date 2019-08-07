@@ -1,15 +1,15 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
-import rlbot.flat.PlayerType;
+import rlbot.flat.PlayerClass;
 
 /** Enum over supported bot-types in the rlbot.cfg */
 public enum BotType {
-    HUMAN("human", PlayerType.HumanPlayer),
-    RLBOT("rlbot", PlayerType.RLBotPlayer),
-    PSYONIX("psyonix", PlayerType.PsyonixBotPlayer),
-    PARTY_MEMBER_BOT("party_member_bot", PlayerType.PartyMemberBotPlayer),
-    CONTROLLER_PASSTHROUGH("controller_passthrough", PlayerType.NONE),
-    SPECTATOR("", PlayerType.NONE);
+    HUMAN("human", PlayerClass.HumanPlayer),
+    RLBOT("rlbot", PlayerClass.RLBotPlayer),
+    PSYONIX("psyonix", PlayerClass.PsyonixBotPlayer),
+    PARTY_MEMBER_BOT("party_member_bot", PlayerClass.PartyMemberBotPlayer),
+    CONTROLLER_PASSTHROUGH("controller_passthrough", PlayerClass.NONE)
+    ;
 
     private String configValue;
     private byte flatBufferValue;

@@ -78,7 +78,7 @@ public class MatchRunner {
                 players[i] = PlayerConfiguration.createPlayerConfiguration(
                         builder,
                         bot.getBotType().getFlatBufferBotType(),
-                        bot.getFlatBufferBotTypeInfo(builder),
+                        bot.getFlatBufferBotInfo(builder),
                         builder.createString(bot.getName()),
                         isBlue ? 1 : 0,
                         loadoutOffset
@@ -99,7 +99,7 @@ public class MatchRunner {
                     BallSizeOption.Default,
                     BallBouncinessOption.Default,
                     BoostOption.Normal_Boost,
-                    RumbleOption.None,
+                    RumbleOption.No_Rumble,
                     BoostStrengthOption.One,
                     GravityOption.Default,
                     DemolishOption.Default,

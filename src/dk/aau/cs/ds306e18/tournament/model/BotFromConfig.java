@@ -93,7 +93,7 @@ public class BotFromConfig implements Bot {
     }
 
     @Override
-    public int getFlatBufferBotTypeInfo(FlatBufferBuilder builder) {
+    public int getFlatBufferBotInfo(FlatBufferBuilder builder) {
         return 0; // Return 0 as rlbot.flat.RLBotPlayer has no extra info
     }
 

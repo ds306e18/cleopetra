@@ -23,7 +23,7 @@ public class PsyonixBotFromConfig extends BotFromConfig {
     }
 
     @Override
-    public int getFlatBufferBotTypeInfo(FlatBufferBuilder builder) {
+    public int getFlatBufferBotInfo(FlatBufferBuilder builder) {
         return PsyonixBotPlayer.createPsyonixBotPlayer(builder, skill.getFlatBufferValue());
     }
 }
