@@ -25,6 +25,8 @@ mainClassName = 'dk.aau.cs.ds306e18.tournament.Main'
 def dllDirectory = 'build/dll'
 applicationDefaultJvmArgs = ["-Djna.library.path=" + dllDirectory]
 
+applicationDistribution.exclude(dllDirectory)
+
 dependencies {
     // The RLBot framework and interace
     compile 'org.rlbot.commons:framework:1.+'
