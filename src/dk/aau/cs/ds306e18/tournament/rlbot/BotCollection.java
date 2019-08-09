@@ -102,7 +102,9 @@ public class BotCollection extends TreeSet<Bot> {
                         // Check sub-folders using recursion
                         addedSomething = addAllBotsFromFolder(file, maxDepth - 1) || addedSomething;
 
-                    } else if ("cfg".equals(getFileExtension(file))) {
+                    } else if ("cfg".equals(getFileExtension(file))
+                            && !"port.cfg".equals(file.getName())
+                            && !"appearance.cfg".equals(file.getName())) {
                         try {
                             // Try to read bot
                             BotFromConfig bot = new BotFromConfig(file.getAbsolutePath());

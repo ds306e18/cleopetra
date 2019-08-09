@@ -12,4 +12,8 @@ public enum TeamColor {
     public int getConfigValue() {
         return configValue;
     }
+
+    public static TeamColor getFromInt(int index) {
+        return index == 1 ? ORANGE : BLUE;
+    }
 }

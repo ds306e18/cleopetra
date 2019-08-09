@@ -2,6 +2,7 @@ package dk.aau.cs.ds306e18.tournament.rlbot.configuration;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * Class for reading from a bots config file.
@@ -33,6 +34,13 @@ public class BotConfig {
     public BotConfig(File configFile) throws IOException {
         this.configFile = configFile;
         ConfigFile config = new ConfigFile(configFile);
+
+        if (!config.hasSection(LOCATIONS_CONFIGURATION_HEADER) ||
+                !config.hasValue(LOCATIONS_CONFIGURATION_HEADER, NAME) ||
+                !config.hasValue(LOCATIONS_CONFIGURATION_HEADER, PYTHON_FILE) ||
+                !config.hasValue(LOCATIONS_CONFIGURATION_HEADER, LOOKS_CONFIG)) {
+            throw new IOException(configFile.toString() + " is missing fields in the " + LOCATIONS_CONFIGURATION_HEADER + " section and is probably not a bot.");
+        }
 
         name = config.getString(LOCATIONS_CONFIGURATION_HEADER, NAME, "");
         pythonFile = new File(config.getString(LOCATIONS_CONFIGURATION_HEADER, PYTHON_FILE, ""));
@@ -78,5 +86,26 @@ public class BotConfig {
 
     public String getLanguage() {
         return language;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BotConfig botConfig = (BotConfig) o;
+        return Objects.equals(configFile, botConfig.configFile) &&
+                Objects.equals(name, botConfig.name) &&
+                Objects.equals(pythonFile, botConfig.pythonFile) &&
+                Objects.equals(looksConfig, botConfig.looksConfig) &&
+                Objects.equals(developer, botConfig.developer) &&
+                Objects.equals(description, botConfig.description) &&
+                Objects.equals(funFact, botConfig.funFact) &&
+                Objects.equals(github, botConfig.github) &&
+                Objects.equals(language, botConfig.language);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(configFile, name, pythonFile, looksConfig, developer, description, funFact, github, language);
     }
 }

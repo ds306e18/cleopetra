@@ -446,11 +446,11 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
     }
 
     public void onPlayMatchBtnAction(ActionEvent actionEvent) {
-        MatchRunner.startMatch(Tournament.get().getRlBotSettings(), selectedMatch.getShowedMatch());
+        MatchRunner.startMatch(Tournament.get().getRlBotSettings().getMatchConfig(), selectedMatch.getShowedMatch());
     }
 
     public void modifyConfigButtonOnAction(ActionEvent actionEvent) {
-        boolean ready = MatchRunner.prepareMatch(Tournament.get().getRlBotSettings(), selectedMatch.getShowedMatch());
+        boolean ready = MatchRunner.prepareMatch(Tournament.get().getRlBotSettings().getMatchConfig(), selectedMatch.getShowedMatch());
         if (ready) {
             Alerts.infoNotification("Modified config file", "The rlbot.cfg was successfully modified to the selected match.");
         }

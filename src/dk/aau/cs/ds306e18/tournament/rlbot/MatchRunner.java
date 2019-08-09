@@ -3,13 +3,16 @@ package dk.aau.cs.ds306e18.tournament.rlbot;
 import dk.aau.cs.ds306e18.tournament.model.Bot;
 import dk.aau.cs.ds306e18.tournament.model.BotFromConfig;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import dk.aau.cs.ds306e18.tournament.rlbot.configuration.MatchConfig;
 import dk.aau.cs.ds306e18.tournament.utility.Alerts;
-import dk.aau.cs.ds306e18.tournament.utility.configuration.RLBotConfig;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
+
+import static dk.aau.cs.ds306e18.tournament.CleoPetraSettings.getPathToMatchConfig;
+import static dk.aau.cs.ds306e18.tournament.CleoPetraSettings.getPathToRunPy;
 
 public class MatchRunner {
 
@@ -17,17 +20,16 @@ public class MatchRunner {
     private static final String COMMAND_FORMAT = "cmd.exe /c start cmd.exe /c \"cd %s & python run.py\"";
 
     /** Starts the given match in Rocket League. */
-    public static boolean startMatch(RLBotSettings settings, Match match) {
+    public static boolean startMatch(MatchConfig matchConfig, Match match) {
 
         // Checks settings and modifies rlbot.cfg file if everything is okay
-        boolean ready = prepareMatch(settings, match);
+        boolean ready = prepareMatch(matchConfig, match);
         if (!ready) {
             return false;
         }
 
         try {
-            // We assume that the runner is in the same folder as the rlbot.cfg
-            Path pathToDirectory = Paths.get(settings.getConfigPath()).getParent();
+            Path pathToDirectory = getPathToRunPy().getParent();
             String command = String.format(COMMAND_FORMAT, pathToDirectory);
             System.out.println("Running command: " + command);
             Runtime.getRuntime().exec(command);
@@ -42,9 +44,9 @@ public class MatchRunner {
     }
 
     /** Returns true if the given match can be started. */
-    public static boolean canStartMatch(RLBotSettings settings, Match match) {
+    public static boolean canStartMatch(Match match) {
         try {
-            checkMatch(settings, match);
+            checkMatch(match);
             return true;
         } catch (IllegalStateException e) {
             return false;
@@ -55,29 +57,9 @@ public class MatchRunner {
      * Check the requirements for starting the match. Throws an IllegalStateException if anything is wrong. Does nothing
      * if everything is okay.
      */
-    private static void checkMatch(RLBotSettings settings, Match match) {
+    private static void checkMatch(Match match) {
         // These methods throws IllegalStageException if anything is wrong
-        checkRLBotSettings(settings);
         checkBotConfigsInMatch(match);
-    }
-
-    /** Checks rlbot settings. Throws an IllegalStateException if anything is wrong. Does nothing if everything is okay. */
-    private static void checkRLBotSettings(RLBotSettings settings) {
-        // Check if rlbot.cfg set
-        String configPath = settings.getConfigPath();
-        if (configPath == null || configPath.isEmpty())
-            throw new IllegalStateException("The RLBot config file (rlbot.cfg) is not set in RLBot Settings.");
-
-        // Check if rlbot.cfg exists
-        File cfg = new File(configPath);
-        if (!cfg.exists() || !cfg.isFile() || cfg.isDirectory())
-            throw new IllegalStateException("Could not find RLBot config file (\"" + configPath + "\")");
-
-        // Check if run.py exists in same directory
-        File runner = new File(cfg.getParent(), "run.py");
-        if (!runner.exists()) {
-            throw new IllegalStateException("Could not find run.py next to the RLBot config file (\"" + runner.getAbsolutePath() + "\")");
-        }
     }
 
     /**
@@ -117,24 +99,18 @@ public class MatchRunner {
      * rlbot.cfg to start the given match when rlbot is run. Returns false and shows an alert if something went wrong
      * during preparation.
      */
-    public static boolean prepareMatch(RLBotSettings settings, Match match) {
+    public static boolean prepareMatch(MatchConfig matchConfig, Match match) {
         try {
             // Check settings and config files
-            checkMatch(settings, match);
+            checkMatch(match);
+            matchConfig.write(getPathToMatchConfig().toFile());
 
-            // Set up rlbot config file
-            RLBotConfig rlBotConfig = new RLBotConfig(settings.getConfigPath());
-            // Utilise return of setupMatch for syntax validation
-            if (!rlBotConfig.setupMatch(match)) {
-                Alerts.errorNotification("Error occurred while configuring match", "Syntax of config file is not valid!");
-                return false;
-            }
-            rlBotConfig.writeConfig(settings.getConfigPath());
             return true;
-
         } catch (IllegalStateException e) {
             Alerts.errorNotification("Error occurred while configuring match", e.getMessage());
-            return false;
+        } catch (IOException e) {
+            Alerts.errorNotification("IO error occurred while configuring match", e.getMessage());
         }
+        return false;
     }
 }

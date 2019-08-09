@@ -1,9 +1,13 @@
 package dk.aau.cs.ds306e18.tournament.rlbot.configuration;
 
+import dk.aau.cs.ds306e18.tournament.model.BotSkill;
+import dk.aau.cs.ds306e18.tournament.model.BotType;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Class from interfacing with a match config (usually called rlbot.cfg).
@@ -42,15 +46,60 @@ public class MatchConfig {
     public final static String MUTATOR_DEMOLISH = "Demolish";
     public final static String MUTATOR_RESPAWN_TIME = "Respawn Time";
 
+    private File configFile;
     private String gameMap = "ChampionsField";
     private String gameMode = "Soccer";
     private final List<ParticipantInfo> participants = new ArrayList<>();
     // TODO Mutators
 
+    public MatchConfig() {
+
+    }
+
+    public MatchConfig(File configFile) throws IOException {
+        this.configFile = configFile;
+        ConfigFile config = new ConfigFile(configFile);
+
+        // Load match settings
+        gameMap = config.getString(MATCH_CONFIGURATION_HEADER, GAME_MAP, gameMap);
+        gameMode = config.getString(MATCH_CONFIGURATION_HEADER, GAME_MODE, gameMap);
+        int numParticipants = config.getInt(MATCH_CONFIGURATION_HEADER, PARTICIPANT_COUNT_KEY, 2);
+
+        // Load participants
+        for (int i = 0; i < numParticipants; i++) {
+            // Load the bot config file. It something fails, skip this bot.
+            BotConfig botConfig;
+            try {
+                File botConfigFile = new File(config.getString(PARTICIPANTS_CONFIGURATION_HEADER, PARTICIPANT_CONFIG_INDEXED, ""));
+                if (!botConfigFile.isAbsolute()) {
+                    botConfigFile = new File(configFile.getParentFile(), botConfigFile.toString());
+                }
+                botConfig = new BotConfig(botConfigFile);
+            } catch (Exception e) {
+                e.printStackTrace();
+                continue;
+            }
+
+            // Load other participant info
+            BotSkill skill = BotSkill.getSkillFromNumber(config.getDouble(PARTICIPANTS_CONFIGURATION_HEADER, PARTICIPANT_SKILL_INDEXD, 1.0));
+            BotType type = BotType.getTypeFromConfigValue(config.getString(PARTICIPANTS_CONFIGURATION_HEADER, PARTICIPANT_TYPE_INDEXD, "rlbot"));
+            TeamColor color = TeamColor.getFromInt(config.getInt(PARTICIPANTS_CONFIGURATION_HEADER, PARTICIPANT_TEAM_INDEXD, 0));
+
+            ParticipantInfo participant = new ParticipantInfo(skill, type, color, botConfig);
+            addParticipant(participant);
+        }
+    }
+
+    /**
+     * Write this MatchConfig to the given file.
+     * @param file
+     * @throws IOException
+     */
     public void write(File file) throws IOException {
+        this.configFile = file;
         ConfigFile config = new ConfigFile();
 
-        config.containsSection(MATCH_CONFIGURATION_HEADER);
+        config.hasSection(MATCH_CONFIGURATION_HEADER);
         config.set(MATCH_CONFIGURATION_HEADER, GAME_MAP, gameMap);
         config.set(MATCH_CONFIGURATION_HEADER, GAME_MODE, gameMode);
         config.set(MATCH_CONFIGURATION_HEADER, PARTICIPANT_COUNT_KEY, participants.size());
@@ -93,5 +142,24 @@ public class MatchConfig {
 
     public void clearParticipants() {
         participants.clear();
+    }
+
+    public File getConfigFile() {
+        return configFile;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MatchConfig that = (MatchConfig) o;
+        return Objects.equals(gameMap, that.gameMap) &&
+                Objects.equals(gameMode, that.gameMode) &&
+                Objects.equals(participants, that.participants);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(gameMap, gameMode, participants);
     }
 }

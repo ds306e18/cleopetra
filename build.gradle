@@ -32,9 +32,6 @@ dependencies {
 
     // Adding ControlsFX dependency. (Version 8.4 due to Java 8)
     compile group: 'org.controlsfx', name: 'controlsfx', version: '8.40.14'
-
-    // Config parser
-    compile group: 'org.ini4j', name: 'ini4j', version: '0.5.4'
 }
 
 // In this section you declare where to find the dependencies of your project

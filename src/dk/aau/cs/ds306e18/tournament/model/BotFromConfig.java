@@ -33,8 +33,7 @@ public class BotFromConfig implements Bot {
             configLoadedCorrectly = true;
         } catch (Exception e) {
             configLoadedCorrectly = false;
-            e.printStackTrace();
-            throw new RuntimeException("Could not load bot from config: " + pathToConfig);
+            throw new RuntimeException("Could not load bot from config " + pathToConfig + ", reason: " + e.getMessage());
         }
         return loadedCorrectly();
     }

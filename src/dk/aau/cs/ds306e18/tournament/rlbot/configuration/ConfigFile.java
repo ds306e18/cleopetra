@@ -17,7 +17,7 @@ public class ConfigFile {
 
     private final Pattern sectionPattern = Pattern.compile("\\[([^\\[\\]]*)\\]\\s*");
     private final Pattern keyValuePattern = Pattern.compile("([^=:]*)(=|:)(.*)");
-    private final Pattern multiLineValuePattern = Pattern.compile("\\s+(.*)");
+    private final Pattern multiLineValuePattern = Pattern.compile("[^\\S\\r\\n]+(.*)");
     private final Pattern commentAndEmptyPattern = Pattern.compile("\\s*[#;].*|\\s*");
 
     private Map<String, Map<String, String>> entries = new HashMap<>();
@@ -95,7 +95,12 @@ public class ConfigFile {
                     }
                 }
 
-                throw new IOException("Incorrect format in config file (error at line " + lineNumber + ").");
+                throw new IOException("Incorrect format in config file (error at line " + lineNumber + ": " + file.toString() + ").");
+            }
+
+            // Store last key value pair (happens when file does not end with a newline character)
+            if (key != null) {
+                currentSectionMap.put(key, value.trim());
             }
         }
     }
@@ -133,7 +138,7 @@ public class ConfigFile {
     /**
      * @return true if the given section exists.
      */
-    public boolean containsSection(String section) {
+    public boolean hasSection(String section) {
         Map<String, String> sectionMap = entries.get(section);
         return sectionMap != null;
     }
@@ -144,6 +149,15 @@ public class ConfigFile {
      */
     public void createSection(String section) {
         entries.computeIfAbsent(section, k -> new HashMap<>());
+    }
+
+    /**
+     * @return true if the value exists.
+     */
+    public boolean hasValue(String section, String key) {
+        Map<String, String> sectionMap = entries.get(section);
+        if (sectionMap == null) return false;
+        return sectionMap.containsKey(key);
     }
 
     /**

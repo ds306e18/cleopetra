@@ -3,6 +3,8 @@ package dk.aau.cs.ds306e18.tournament.rlbot.configuration;
 import dk.aau.cs.ds306e18.tournament.model.BotSkill;
 import dk.aau.cs.ds306e18.tournament.model.BotType;
 
+import java.util.Objects;
+
 public class ParticipantInfo {
 
     private BotSkill skill;
@@ -47,5 +49,21 @@ public class ParticipantInfo {
 
     public void setConfig(BotConfig config) {
         this.config = config;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ParticipantInfo that = (ParticipantInfo) o;
+        return skill == that.skill &&
+                type == that.type &&
+                team == that.team &&
+                Objects.equals(config, that.config);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(skill, type, team, config);
     }
 }

@@ -12,6 +12,8 @@ import java.nio.file.Paths;
  */
 public class CleoPetraSettings {
 
+    public static final String MATCH_CONFIG = "rlbot.cfg";
+    public static final String RUN_PY = "run.py";
     public static final String PSYONIX_BOTS_FOLDER = "psyonix_bots/";
     public static final String PSYONIX_ALLSTAR_FILE_NAME = "psyonix_allstar.cfg";
     public static final String PSYONIX_PRO_FILE_NAME = "psyonix_pro.cfg";
@@ -36,6 +38,20 @@ public class CleoPetraSettings {
             // Failed. Maybe we are on a Linux system
             return null;
         }
+    }
+
+    /**
+     * @return The path to the match config that CleoPetra asks the rlbot framework to use for the match.
+     */
+    public static Path getPathToMatchConfig() {
+        return getPathToSettingsFolder().resolve(MATCH_CONFIG);
+    }
+
+    /**
+     * @return The path to the run.py which is used to start the rlbot framework.
+     */
+    public static Path getPathToRunPy() {
+        return getPathToSettingsFolder().resolve(RUN_PY);
     }
 
     /**

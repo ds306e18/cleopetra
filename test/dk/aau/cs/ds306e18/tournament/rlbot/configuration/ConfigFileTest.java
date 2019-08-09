@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -74,37 +75,37 @@ public class ConfigFileTest {
 
     @Test
     public void load01() throws IOException {
-        ConfigFile testConfig = new ConfigFile(new File(TEST_DIR + TEST_CONFIG));
+        ConfigFile testConfig = new ConfigFile(new File(TEST_DIR, TEST_CONFIG));
 
-        assertTrue(testConfig.containsSection("Apples"));
+        assertTrue(testConfig.hasSection("Apples"));
         assertEquals("red", testConfig.getString("Apples", "color", null));
         assertEquals(20, testConfig.getInt("Apples", "count", -1));
 
-        assertTrue(testConfig.containsSection("Bananas"));
+        assertTrue(testConfig.hasSection("Bananas"));
         assertEquals("they taste pretty good", testConfig.getString("Bananas", "multiline property", null));
         assertEquals("", testConfig.getString("Bananas", "no value", null));
         assertTrue(testConfig.getBoolean("Bananas", "other delimiter", false));
 
-        assertTrue(testConfig.containsSection("Empty"));
+        assertTrue(testConfig.hasSection("Empty"));
     }
 
     @Test
     public void write01() throws IOException {
-        ConfigFile testConfig = new ConfigFile(new File(TEST_DIR + TEST_CONFIG));
-        testConfig.write(new File(TEST_DIR + TEST_CONFIG_DUMMY));
+        ConfigFile testConfig = new ConfigFile(new File(TEST_DIR, TEST_CONFIG));
+        testConfig.write(new File(TEST_DIR, TEST_CONFIG_DUMMY));
 
         // Load again to make sure output was readable and didn't modify any values
-        testConfig = new ConfigFile(new File(TEST_DIR + TEST_CONFIG));
+        testConfig = new ConfigFile(new File(TEST_DIR, TEST_CONFIG));
 
-        assertTrue(testConfig.containsSection("Apples"));
+        assertTrue(testConfig.hasSection("Apples"));
         assertEquals("red", testConfig.getString("Apples", "color", null));
         assertEquals(20, testConfig.getInt("Apples", "count", -1));
 
-        assertTrue(testConfig.containsSection("Bananas"));
+        assertTrue(testConfig.hasSection("Bananas"));
         assertEquals("they taste pretty good", testConfig.getString("Bananas", "multiline property", null));
         assertEquals("", testConfig.getString("Bananas", "no value", null));
         assertTrue(testConfig.getBoolean("Bananas", "other delimiter", false));
 
-        assertTrue(testConfig.containsSection("Empty"));
+        assertTrue(testConfig.hasSection("Empty"));
     }
 }
