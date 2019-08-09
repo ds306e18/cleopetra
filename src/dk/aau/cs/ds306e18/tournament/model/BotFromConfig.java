@@ -61,6 +61,10 @@ public class BotFromConfig implements Bot {
         return pathToConfig;
     }
 
+    public BotConfig getConfig() {
+        return config;
+    }
+
     @Override
     public String getFunFact() {
         if (configLoadedCorrectly) return config.getFunFact();

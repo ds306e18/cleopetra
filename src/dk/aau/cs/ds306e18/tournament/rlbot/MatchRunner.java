@@ -4,10 +4,11 @@ import dk.aau.cs.ds306e18.tournament.model.Bot;
 import dk.aau.cs.ds306e18.tournament.model.BotFromConfig;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.rlbot.configuration.MatchConfig;
+import dk.aau.cs.ds306e18.tournament.rlbot.configuration.ParticipantInfo;
+import dk.aau.cs.ds306e18.tournament.rlbot.configuration.TeamColor;
 import dk.aau.cs.ds306e18.tournament.utility.Alerts;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
@@ -16,8 +17,8 @@ import static dk.aau.cs.ds306e18.tournament.CleoPetraSettings.getPathToRunPy;
 
 public class MatchRunner {
 
-    // The %s will be replaced with the directory of the rlbot.cfg
-    private static final String COMMAND_FORMAT = "cmd.exe /c start cmd.exe /c \"cd %s & python run.py\"";
+    // The first %s will be replaced with the directory of the rlbot.cfg. The second %s will be the drive 'C:' to change drive.
+    private static final String COMMAND_FORMAT = "cmd.exe /c start cmd /c \"cd %s & %s & python run.py\"";
 
     /** Starts the given match in Rocket League. */
     public static boolean startMatch(MatchConfig matchConfig, Match match) {
@@ -30,10 +31,9 @@ public class MatchRunner {
 
         try {
             Path pathToDirectory = getPathToRunPy().getParent();
-            String command = String.format(COMMAND_FORMAT, pathToDirectory);
-            System.out.println("Running command: " + command);
+            String command = String.format(COMMAND_FORMAT, pathToDirectory, pathToDirectory.toString().substring(0, 2));
+            System.out.println("Starting RLBot framework with command: " + command);
             Runtime.getRuntime().exec(command);
-            System.out.println("Started RLBot framework");
             return true;
 
         } catch (Exception err) {
@@ -103,6 +103,7 @@ public class MatchRunner {
         try {
             // Check settings and config files
             checkMatch(match);
+            insertParticipants(matchConfig, match);
             matchConfig.write(getPathToMatchConfig().toFile());
 
             return true;
@@ -112,5 +113,31 @@ public class MatchRunner {
             Alerts.errorNotification("IO error occurred while configuring match", e.getMessage());
         }
         return false;
+    }
+
+    /**
+     * Inserts the participants in a match into the MatchConfig. Any existing participants in the MatchConfig will be
+     * removed.
+     */
+    private static void insertParticipants(MatchConfig config, Match match) {
+        config.clearParticipants();
+
+        insertParticipantsFromTeam(config, match.getBlueTeam().getBots(), TeamColor.BLUE);
+        insertParticipantsFromTeam(config, match.getOrangeTeam().getBots(), TeamColor.ORANGE);
+    }
+
+    /**
+     * Inserts the participant info about each bot into the MatchConfig. The Bots in the array must be BotFromConfigs.
+     */
+    private static void insertParticipantsFromTeam(MatchConfig config, ArrayList<Bot> bots, TeamColor color) {
+        for (Bot bot : bots) {
+            ParticipantInfo participant = new ParticipantInfo(
+                    bot.getBotSkill(),
+                    bot.getBotType(),
+                    color,
+                    ((BotFromConfig) bot).getConfig()
+            );
+            config.addParticipant(participant);
+        }
     }
 }
