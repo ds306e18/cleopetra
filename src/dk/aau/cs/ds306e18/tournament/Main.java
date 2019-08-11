@@ -1,5 +1,6 @@
 package dk.aau.cs.ds306e18.tournament;
 
+import dk.aau.cs.ds306e18.tournament.settings.SettingsDirectory;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -28,6 +29,7 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         System.out.println("Hej verden!");
+        SettingsDirectory.setup();
         launch(args);
     }
 }

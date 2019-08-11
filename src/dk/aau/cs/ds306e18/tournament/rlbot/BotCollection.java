@@ -4,14 +4,14 @@ import dk.aau.cs.ds306e18.tournament.model.Bot;
 import dk.aau.cs.ds306e18.tournament.model.BotFromConfig;
 import dk.aau.cs.ds306e18.tournament.model.BotSkill;
 import dk.aau.cs.ds306e18.tournament.model.PsyonixBotFromConfig;
+import dk.aau.cs.ds306e18.tournament.settings.SettingsDirectory;
+import dk.aau.cs.ds306e18.tournament.utility.FileOperations;
 
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.TreeSet;
-
-import static dk.aau.cs.ds306e18.tournament.CleoPetraSettings.*;
 
 public class BotCollection extends TreeSet<Bot> {
 
@@ -37,15 +37,10 @@ public class BotCollection extends TreeSet<Bot> {
      */
     public boolean addPsyonixBots() {
         try {
-            copyPsyonixBotsToSettingsFolder();
-
             // Bots starting in the bot collection
-            Path allStarPath = getPathToSettingsFolder().resolve(PSYONIX_BOTS_FOLDER).resolve(PSYONIX_ALLSTAR_FILE_NAME);
-            PsyonixBotFromConfig allstar = new PsyonixBotFromConfig(allStarPath.toString(), BotSkill.ALLSTAR);
-            Path proPath = getPathToSettingsFolder().resolve(PSYONIX_BOTS_FOLDER).resolve(PSYONIX_PRO_FILE_NAME);
-            PsyonixBotFromConfig pro = new PsyonixBotFromConfig(proPath.toString(), BotSkill.PRO);
-            Path rookiePath = getPathToSettingsFolder().resolve(PSYONIX_BOTS_FOLDER).resolve(PSYONIX_ROOKIE_FILE_NAME);
-            PsyonixBotFromConfig rookie = new PsyonixBotFromConfig(rookiePath.toString(), BotSkill.ROOKIE);
+            PsyonixBotFromConfig allstar = new PsyonixBotFromConfig(SettingsDirectory.PSYONIX_ALLSTAR.toString(), BotSkill.ALLSTAR);
+            PsyonixBotFromConfig pro = new PsyonixBotFromConfig(SettingsDirectory.PSYONIX_PRO.toString(), BotSkill.PRO);
+            PsyonixBotFromConfig rookie = new PsyonixBotFromConfig(SettingsDirectory.PSYONIX_ROOKIE.toString(), BotSkill.ROOKIE);
 
             addAll(Arrays.asList(
                     allstar, pro, rookie
@@ -55,7 +50,7 @@ public class BotCollection extends TreeSet<Bot> {
 
         } catch (Exception e) {
             // Something went wrong. Report it, but continue
-            System.err.println("Could not load default bots.");
+            System.err.println("Could not load default bots. Was SettingsDirectory::setup() called?");
 
             return false;
         }
@@ -70,7 +65,7 @@ public class BotCollection extends TreeSet<Bot> {
     public boolean addRLBotPackIfPresent() {
         try {
             // Get path to BotPack and try to load bots
-            Path rlbotpackPath = getPathToRLBotPack();
+            Path rlbotpackPath = RLBotPack.getPathToRLBotPack();
             if (rlbotpackPath != null && Files.exists(rlbotpackPath)) {
                 System.out.println("Loading bots from RLBotGUI's BotPack.");
                 return addAllBotsFromFolder(rlbotpackPath.toFile(), 10);
@@ -102,7 +97,7 @@ public class BotCollection extends TreeSet<Bot> {
                         // Check sub-folders using recursion
                         addedSomething = addAllBotsFromFolder(file, maxDepth - 1) || addedSomething;
 
-                    } else if ("cfg".equals(getFileExtension(file))
+                    } else if ("cfg".equals(FileOperations.getFileExtension(file))
                             && !"port.cfg".equals(file.getName())
                             && !"appearance.cfg".equals(file.getName())) {
                         try {
@@ -122,21 +117,5 @@ public class BotCollection extends TreeSet<Bot> {
             }
         }
         return addedSomething;
-    }
-
-    /**
-     * Returns the file extension of a file. E.g. "folder/botname.cfg" returns "cfg". The method should also support
-     * folders with dots in their name.
-     */
-    private String getFileExtension(File file) {
-        String name = file.getName();
-        int i = name.lastIndexOf('.');
-        int p = Math.max(name.lastIndexOf('/'), name.lastIndexOf('\\'));
-
-        if (i > p) {
-            return name.substring(i + 1);
-        } else {
-            return "";
-        }
     }
 }

@@ -1,12 +1,12 @@
 package dk.aau.cs.ds306e18.tournament.utility;
 
+import dk.aau.cs.ds306e18.tournament.Main;
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.net.URISyntaxException;
+import java.nio.file.*;
 
 import static dk.aau.cs.ds306e18.tournament.serialization.Serializer.deserialize;
 import static dk.aau.cs.ds306e18.tournament.serialization.Serializer.serialize;
@@ -199,6 +199,45 @@ public class FileOperations {
         if (fqn.matches(matchFilenamePrefixPattern + filename
                 + matchFilenamePostfixPattern + matchEndOfLinePattern)) return fqn;
         else return fqn + filename;
+    }
+
+    /**
+     * Returns the file extension of a file. E.g. "folder/botname.cfg" returns "cfg". The method should also support
+     * folders with dots in their name.
+     */
+    public static String getFileExtension(File file) {
+        String name = file.getName();
+        int i = name.lastIndexOf('.');
+        int p = Math.max(name.lastIndexOf('/'), name.lastIndexOf('\\'));
+
+        if (i > p) {
+            return name.substring(i + 1);
+        } else {
+            return "";
+        }
+    }
+
+    /**
+     * Creates a Path for an internal file.
+     * @param pathRelToMain a String describing the location of the file relative to Main.java
+     * @return a Path
+     */
+    public static Path internalPath(String pathRelToMain) {
+        try {
+            return Paths.get(Main.class.getResource(pathRelToMain).toURI());
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Copies a file from source to destination, but only if the destination does not exist already.
+     */
+    public static void copyIfMissing(Path source, Path destination) throws IOException {
+        if (!Files.exists(destination)) {
+            Files.copy(source, destination);
+        }
     }
 }
 

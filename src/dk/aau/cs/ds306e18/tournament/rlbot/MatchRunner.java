@@ -6,14 +6,12 @@ import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.rlbot.configuration.MatchConfig;
 import dk.aau.cs.ds306e18.tournament.rlbot.configuration.ParticipantInfo;
 import dk.aau.cs.ds306e18.tournament.rlbot.configuration.TeamColor;
+import dk.aau.cs.ds306e18.tournament.settings.SettingsDirectory;
 import dk.aau.cs.ds306e18.tournament.utility.Alerts;
 
 import java.io.*;
 import java.nio.file.Path;
 import java.util.ArrayList;
-
-import static dk.aau.cs.ds306e18.tournament.CleoPetraSettings.getPathToMatchConfig;
-import static dk.aau.cs.ds306e18.tournament.CleoPetraSettings.getPathToRunPy;
 
 public class MatchRunner {
 
@@ -30,7 +28,7 @@ public class MatchRunner {
         }
 
         try {
-            Path pathToDirectory = getPathToRunPy().getParent();
+            Path pathToDirectory = SettingsDirectory.RUN_PY.getParent();
             String command = String.format(COMMAND_FORMAT, pathToDirectory, pathToDirectory.toString().substring(0, 2));
             System.out.println("Starting RLBot framework with command: " + command);
             Runtime.getRuntime().exec(command);
@@ -104,7 +102,7 @@ public class MatchRunner {
             // Check settings and config files
             checkMatch(match);
             insertParticipants(matchConfig, match);
-            matchConfig.write(getPathToMatchConfig().toFile());
+            matchConfig.write(SettingsDirectory.MATCH_CONFIG.toFile());
 
             return true;
         } catch (IllegalStateException e) {
