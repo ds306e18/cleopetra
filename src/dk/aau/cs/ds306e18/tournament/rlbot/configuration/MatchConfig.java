@@ -2,6 +2,8 @@ package dk.aau.cs.ds306e18.tournament.rlbot.configuration;
 
 import dk.aau.cs.ds306e18.tournament.model.BotSkill;
 import dk.aau.cs.ds306e18.tournament.model.BotType;
+import dk.aau.cs.ds306e18.tournament.rlbot.TeamColor;
+import dk.aau.cs.ds306e18.tournament.rlbot.configuration.MatchConfigOptions.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -47,8 +49,8 @@ public class MatchConfig {
     public final static String MUTATOR_RESPAWN_TIME = "Respawn Time";
 
     private File configFile;
-    private String gameMap = "ChampionsField";
-    private String gameMode = "Soccer";
+    private GameMap gameMap = GameMap.CHAMPIONS_FIELD;
+    private GameMode gameMode = GameMode.SOCCER;
     private final List<ParticipantInfo> participants = new ArrayList<>();
     // TODO Mutators
 
@@ -61,8 +63,8 @@ public class MatchConfig {
         ConfigFile config = new ConfigFile(configFile);
 
         // Load match settings
-        gameMap = config.getString(MATCH_CONFIGURATION_HEADER, GAME_MAP, gameMap);
-        gameMode = config.getString(MATCH_CONFIGURATION_HEADER, GAME_MODE, gameMap);
+        gameMap = GameMap.get(config.getString(MATCH_CONFIGURATION_HEADER, GAME_MAP, gameMap.configName));
+        gameMode = GameMode.get(config.getString(MATCH_CONFIGURATION_HEADER, GAME_MODE, gameMode.configName));
         int numParticipants = config.getInt(MATCH_CONFIGURATION_HEADER, PARTICIPANT_COUNT_KEY, 2);
 
         // Load participants
@@ -100,8 +102,8 @@ public class MatchConfig {
         ConfigFile config = new ConfigFile();
 
         config.hasSection(MATCH_CONFIGURATION_HEADER);
-        config.set(MATCH_CONFIGURATION_HEADER, GAME_MAP, gameMap);
-        config.set(MATCH_CONFIGURATION_HEADER, GAME_MODE, gameMode);
+        config.set(MATCH_CONFIGURATION_HEADER, GAME_MAP, gameMap.configName);
+        config.set(MATCH_CONFIGURATION_HEADER, GAME_MODE, gameMode.configName);
         config.set(MATCH_CONFIGURATION_HEADER, PARTICIPANT_COUNT_KEY, participants.size());
 
         config.createSection(PARTICIPANTS_CONFIGURATION_HEADER);
@@ -116,19 +118,19 @@ public class MatchConfig {
         config.write(file);
     }
 
-    public String getGameMap() {
+    public GameMap getGameMap() {
         return gameMap;
     }
 
-    public void setGameMap(String gameMap) {
+    public void setGameMap(GameMap gameMap) {
         this.gameMap = gameMap;
     }
 
-    public String getGameMode() {
+    public GameMode getGameMode() {
         return gameMode;
     }
 
-    public void setGameMode(String gameMode) {
+    public void setGameMode(GameMode gameMode) {
         this.gameMode = gameMode;
     }
 

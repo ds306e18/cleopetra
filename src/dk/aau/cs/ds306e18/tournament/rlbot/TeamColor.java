@@ -1,4 +1,4 @@
-package dk.aau.cs.ds306e18.tournament.rlbot.configuration;
+package dk.aau.cs.ds306e18.tournament.rlbot;
 
 public enum TeamColor {
     BLUE(0), ORANGE(1);

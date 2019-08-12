@@ -2,6 +2,7 @@ package dk.aau.cs.ds306e18.tournament.rlbot.configuration;
 
 import dk.aau.cs.ds306e18.tournament.model.BotSkill;
 import dk.aau.cs.ds306e18.tournament.model.BotType;
+import dk.aau.cs.ds306e18.tournament.rlbot.TeamColor;
 
 import java.util.Objects;
 
