@@ -52,7 +52,22 @@ public class MatchConfig {
     private GameMap gameMap = GameMap.CHAMPIONS_FIELD;
     private GameMode gameMode = GameMode.SOCCER;
     private final List<ParticipantInfo> participants = new ArrayList<>();
-    // TODO Mutators
+
+    private MatchLength matchLength = MatchLength.FIVE_MINUTES;
+    private MaxScore maxScore = MaxScore.UNLIMITED;
+    private Overtime overtime = Overtime.UNLIMITED;
+    private GameSpeed gameSpeed = GameSpeed.DEFAULT;
+    private BallMaxSpeed ballMaxSpeed = BallMaxSpeed.DEFAULT;
+    private BallType ballType = BallType.DEFAULT;
+    private BallWeight ballWeight = BallWeight.DEFAULT;
+    private BallSize ballSize = BallSize.DEFAULT;
+    private BallBounciness ballBounciness = BallBounciness.DEFAULT;
+    private BoostAmount boostAmount = BoostAmount.DEFAULT;
+    private BoostStrength boostStrength = BoostStrength.TIMES_ONE;
+    private RumblePowers rumblePowers = RumblePowers.NONE;
+    private Gravity gravity = Gravity.DEFAULT;
+    private Demolish demolish = Demolish.DEFAULT;
+    private RespawnTime respawnTime = RespawnTime.THREE_SECONDS;
 
     public MatchConfig() {
 
@@ -65,9 +80,26 @@ public class MatchConfig {
         // Load match settings
         gameMap = GameMap.get(config.getString(MATCH_CONFIGURATION_HEADER, GAME_MAP, gameMap.configName));
         gameMode = GameMode.get(config.getString(MATCH_CONFIGURATION_HEADER, GAME_MODE, gameMode.configName));
-        int numParticipants = config.getInt(MATCH_CONFIGURATION_HEADER, PARTICIPANT_COUNT_KEY, 2);
+
+        // Load mutators
+        matchLength = MatchLength.get(config.getString(MUTATOR_CONFIGURATION_HEADER, MUTATOR_MATCH_LENGTH, matchLength.configName));
+        maxScore = MaxScore.get(config.getString(MUTATOR_CONFIGURATION_HEADER, MUTATOR_MAX_SCORE, maxScore.configName));
+        overtime = Overtime.get(config.getString(MUTATOR_CONFIGURATION_HEADER, MUTATOR_OVERTIME, overtime.configName));
+        ballMaxSpeed = BallMaxSpeed.get(config.getString(MUTATOR_CONFIGURATION_HEADER, MUTATOR_BALL_MAX_SPEED, ballMaxSpeed.configName));
+        gameSpeed = GameSpeed.get(config.getString(MUTATOR_CONFIGURATION_HEADER, MUTATOR_GAME_SPEED, gameSpeed.configName));
+        ballType = BallType.get(config.getString(MUTATOR_CONFIGURATION_HEADER, MUTATOR_BALL_TYPE, ballType.configName));
+        ballWeight = BallWeight.get(config.getString(MUTATOR_CONFIGURATION_HEADER, MUTATOR_BALL_WEIGHT, ballWeight.configName));
+        ballSize = BallSize.get(config.getString(MUTATOR_CONFIGURATION_HEADER, MUTATOR_BALL_SIZE, ballSize.configName));
+        ballBounciness = BallBounciness.get(config.getString(MUTATOR_CONFIGURATION_HEADER, MUTATOR_BALL_BOUNCINESS, ballBounciness.configName));
+        boostAmount = BoostAmount.get(config.getString(MUTATOR_CONFIGURATION_HEADER, MUTATOR_BOOST_AMOUNT, boostAmount.configName));
+        boostStrength = BoostStrength.get(config.getString(MUTATOR_CONFIGURATION_HEADER, MUTATOR_BOOST_STRENGTH, boostStrength.configName));
+        rumblePowers = RumblePowers.get(config.getString(MUTATOR_CONFIGURATION_HEADER, MUTATOR_RUMBLE, rumblePowers.configName));
+        gravity = Gravity.get(config.getString(MUTATOR_CONFIGURATION_HEADER, MUTATOR_GRAVITY, gravity.configName));
+        demolish = Demolish.get(config.getString(MUTATOR_CONFIGURATION_HEADER, MUTATOR_DEMOLISH, demolish.configName));
+        respawnTime = RespawnTime.get(config.getString(MUTATOR_CONFIGURATION_HEADER, MUTATOR_RESPAWN_TIME, respawnTime.configName));
 
         // Load participants
+        int numParticipants = config.getInt(MATCH_CONFIGURATION_HEADER, PARTICIPANT_COUNT_KEY, 2);
         for (int i = 0; i < numParticipants; i++) {
             // Load the bot config file. It something fails, skip this bot.
             BotConfig botConfig;
@@ -101,11 +133,31 @@ public class MatchConfig {
         this.configFile = file;
         ConfigFile config = new ConfigFile();
 
-        config.hasSection(MATCH_CONFIGURATION_HEADER);
+        // Match settings
+        config.createSection(MATCH_CONFIGURATION_HEADER);
         config.set(MATCH_CONFIGURATION_HEADER, GAME_MAP, gameMap.configName);
         config.set(MATCH_CONFIGURATION_HEADER, GAME_MODE, gameMode.configName);
         config.set(MATCH_CONFIGURATION_HEADER, PARTICIPANT_COUNT_KEY, participants.size());
 
+        // Mutators
+        config.createSection(MUTATOR_CONFIGURATION_HEADER);
+        config.set(MUTATOR_CONFIGURATION_HEADER, MUTATOR_MATCH_LENGTH, matchLength.configName);
+        config.set(MUTATOR_CONFIGURATION_HEADER, MUTATOR_MAX_SCORE, maxScore.configName);
+        config.set(MUTATOR_CONFIGURATION_HEADER, MUTATOR_OVERTIME, overtime.configName);
+        config.set(MUTATOR_CONFIGURATION_HEADER, MUTATOR_GAME_SPEED, gameSpeed.configName);
+        config.set(MUTATOR_CONFIGURATION_HEADER, MUTATOR_BALL_MAX_SPEED, ballMaxSpeed.configName);
+        config.set(MUTATOR_CONFIGURATION_HEADER, MUTATOR_BALL_TYPE, ballType.configName);
+        config.set(MUTATOR_CONFIGURATION_HEADER, MUTATOR_BALL_WEIGHT, ballWeight.configName);
+        config.set(MUTATOR_CONFIGURATION_HEADER, MUTATOR_BALL_SIZE, ballSize.configName);
+        config.set(MUTATOR_CONFIGURATION_HEADER, MUTATOR_BALL_BOUNCINESS, ballBounciness.configName);
+        config.set(MUTATOR_CONFIGURATION_HEADER, MUTATOR_BOOST_AMOUNT, boostAmount.configName);
+        config.set(MUTATOR_CONFIGURATION_HEADER, MUTATOR_BOOST_STRENGTH, boostStrength.configName);
+        config.set(MUTATOR_CONFIGURATION_HEADER, MUTATOR_RUMBLE, rumblePowers.configName);
+        config.set(MUTATOR_CONFIGURATION_HEADER, MUTATOR_GRAVITY, gravity.configName);
+        config.set(MUTATOR_CONFIGURATION_HEADER, MUTATOR_DEMOLISH, demolish.configName);
+        config.set(MUTATOR_CONFIGURATION_HEADER, MUTATOR_RESPAWN_TIME, respawnTime.configName);
+        
+        // Participants
         config.createSection(PARTICIPANTS_CONFIGURATION_HEADER);
         for (int i = 0; i < participants.size(); i++) {
             ParticipantInfo participant = participants.get(i);
@@ -144,6 +196,126 @@ public class MatchConfig {
 
     public void clearParticipants() {
         participants.clear();
+    }
+
+    public MatchLength getMatchLength() {
+        return matchLength;
+    }
+
+    public void setMatchLength(MatchLength matchLength) {
+        this.matchLength = matchLength;
+    }
+
+    public MaxScore getMaxScore() {
+        return maxScore;
+    }
+
+    public void setMaxScore(MaxScore maxScore) {
+        this.maxScore = maxScore;
+    }
+
+    public Overtime getOvertime() {
+        return overtime;
+    }
+
+    public void setOvertime(Overtime overtime) {
+        this.overtime = overtime;
+    }
+
+    public GameSpeed getGameSpeed() {
+        return gameSpeed;
+    }
+
+    public void setGameSpeed(GameSpeed gameSpeed) {
+        this.gameSpeed = gameSpeed;
+    }
+
+    public BallMaxSpeed getBallMaxSpeed() {
+        return ballMaxSpeed;
+    }
+
+    public void setBallMaxSpeed(BallMaxSpeed ballMaxSpeed) {
+        this.ballMaxSpeed = ballMaxSpeed;
+    }
+
+    public BallType getBallType() {
+        return ballType;
+    }
+
+    public void setBallType(BallType ballType) {
+        this.ballType = ballType;
+    }
+
+    public BallWeight getBallWeight() {
+        return ballWeight;
+    }
+
+    public void setBallWeight(BallWeight ballWeight) {
+        this.ballWeight = ballWeight;
+    }
+
+    public BallSize getBallSize() {
+        return ballSize;
+    }
+
+    public void setBallSize(BallSize ballSize) {
+        this.ballSize = ballSize;
+    }
+
+    public BallBounciness getBallBounciness() {
+        return ballBounciness;
+    }
+
+    public void setBallBounciness(BallBounciness ballBounciness) {
+        this.ballBounciness = ballBounciness;
+    }
+
+    public BoostAmount getBoostAmount() {
+        return boostAmount;
+    }
+
+    public void setBoostAmount(BoostAmount boostAmount) {
+        this.boostAmount = boostAmount;
+    }
+
+    public BoostStrength getBoostStrength() {
+        return boostStrength;
+    }
+
+    public void setBoostStrength(BoostStrength boostStrength) {
+        this.boostStrength = boostStrength;
+    }
+
+    public RumblePowers getRumblePowers() {
+        return rumblePowers;
+    }
+
+    public void setRumblePowers(RumblePowers rumblePowers) {
+        this.rumblePowers = rumblePowers;
+    }
+
+    public Gravity getGravity() {
+        return gravity;
+    }
+
+    public void setGravity(Gravity gravity) {
+        this.gravity = gravity;
+    }
+
+    public Demolish getDemolish() {
+        return demolish;
+    }
+
+    public void setDemolish(Demolish demolish) {
+        this.demolish = demolish;
+    }
+
+    public RespawnTime getRespawnTime() {
+        return respawnTime;
+    }
+
+    public void setRespawnTime(RespawnTime respawnTime) {
+        this.respawnTime = respawnTime;
     }
 
     public File getConfigFile() {
