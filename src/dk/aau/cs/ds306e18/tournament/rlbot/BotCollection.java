@@ -2,8 +2,8 @@ package dk.aau.cs.ds306e18.tournament.rlbot;
 
 import dk.aau.cs.ds306e18.tournament.model.Bot;
 import dk.aau.cs.ds306e18.tournament.model.BotFromConfig;
-import dk.aau.cs.ds306e18.tournament.model.BotSkill;
 import dk.aau.cs.ds306e18.tournament.model.PsyonixBotFromConfig;
+import dk.aau.cs.ds306e18.tournament.rlbot.configuration.BotSkill;
 import dk.aau.cs.ds306e18.tournament.settings.SettingsDirectory;
 import dk.aau.cs.ds306e18.tournament.utility.FileOperations;
 

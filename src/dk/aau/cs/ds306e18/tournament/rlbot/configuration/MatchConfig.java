@@ -1,8 +1,5 @@
 package dk.aau.cs.ds306e18.tournament.rlbot.configuration;
 
-import dk.aau.cs.ds306e18.tournament.model.BotSkill;
-import dk.aau.cs.ds306e18.tournament.model.BotType;
-import dk.aau.cs.ds306e18.tournament.rlbot.TeamColor;
 import dk.aau.cs.ds306e18.tournament.rlbot.configuration.MatchConfigOptions.*;
 
 import java.io.File;
@@ -22,7 +19,6 @@ public class MatchConfig {
     public final static String GAME_MAP = "game_map";
     public final static String SKIP_REPLAYS = "skip_replays";
     public final static String INSTANT_START = "start_without_countdown";
-    public final static String EXISTING_MATCH_BEHAVIOR = "existing_match_behavior";
 
     public final static String PARTICIPANTS_CONFIGURATION_HEADER = "Participant Configuration";
     public final static String PARTICIPANT_CONFIG_INDEXED = "participant_config_";
@@ -34,7 +30,6 @@ public class MatchConfig {
     public final static String MUTATOR_MATCH_LENGTH = "Match Length";
     public final static String MUTATOR_MAX_SCORE = "Max Score";
     public final static String MUTATOR_OVERTIME = "Overtime";
-    public final static String MUTATOR_SERIES_LENGTH = "Series Length";
     public final static String MUTATOR_GAME_SPEED = "Game Speed";
     public final static String MUTATOR_BALL_MAX_SPEED = "Ball Max Speed";
     public final static String MUTATOR_BALL_TYPE = "Ball Type";

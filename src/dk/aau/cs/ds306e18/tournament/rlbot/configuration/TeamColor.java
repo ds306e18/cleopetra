@@ -1,5 +1,8 @@
-package dk.aau.cs.ds306e18.tournament.rlbot;
+package dk.aau.cs.ds306e18.tournament.rlbot.configuration;
 
+/**
+ * Enum for representation of teams in the rlbot.cfg
+ */
 public enum TeamColor {
     BLUE(0), ORANGE(1);
 

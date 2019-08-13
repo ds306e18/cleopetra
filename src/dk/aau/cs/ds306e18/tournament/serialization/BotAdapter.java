@@ -1,14 +1,11 @@
 package dk.aau.cs.ds306e18.tournament.serialization;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import dk.aau.cs.ds306e18.tournament.model.Bot;
 import dk.aau.cs.ds306e18.tournament.model.BotFromConfig;
-import dk.aau.cs.ds306e18.tournament.model.BotSkill;
+import dk.aau.cs.ds306e18.tournament.rlbot.configuration.BotSkill;
 import dk.aau.cs.ds306e18.tournament.model.PsyonixBotFromConfig;
 import dk.aau.cs.ds306e18.tournament.rlbot.BotCollection;
 

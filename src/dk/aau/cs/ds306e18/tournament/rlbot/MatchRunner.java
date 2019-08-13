@@ -5,6 +5,7 @@ import dk.aau.cs.ds306e18.tournament.model.BotFromConfig;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.rlbot.configuration.MatchConfig;
 import dk.aau.cs.ds306e18.tournament.rlbot.configuration.ParticipantInfo;
+import dk.aau.cs.ds306e18.tournament.rlbot.configuration.TeamColor;
 import dk.aau.cs.ds306e18.tournament.settings.SettingsDirectory;
 import dk.aau.cs.ds306e18.tournament.utility.Alerts;
 
