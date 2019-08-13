@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -25,6 +26,11 @@
                      <VBox.margin>
                         <Insets />
                      </VBox.margin>
+                  </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Match">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
                   </Text>
                   <GridPane>
                      <columnConstraints>
@@ -58,6 +64,40 @@
                            </font>
                         </Text>
                         <ChoiceBox fx:id="gameModeChoiceBox" prefHeight="27.0" prefWidth="220.0" GridPane.columnIndex="1" />
+                     </children>
+                  </GridPane>
+                  <GridPane layoutX="30.0" layoutY="109.0">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Skip replays:">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Text>
+                        <RadioButton fx:id="skipReplaysRadioButton" layoutX="494.0" layoutY="13.0" mnemonicParsing="false" GridPane.columnIndex="1" />
+                     </children>
+                  </GridPane>
+                  <GridPane layoutX="30.0" layoutY="146.0">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="No kickoff countdown:">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Text>
+                        <RadioButton fx:id="instantStartRadioButton" mnemonicParsing="false" GridPane.columnIndex="1" />
                      </children>
                   </GridPane>
                </children>

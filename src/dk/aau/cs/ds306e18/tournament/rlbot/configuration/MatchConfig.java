@@ -51,6 +51,8 @@ public class MatchConfig {
     private File configFile;
     private GameMap gameMap = GameMap.CHAMPIONS_FIELD;
     private GameMode gameMode = GameMode.SOCCER;
+    private boolean skipReplays = false;
+    private boolean instantStart = false;
     private final List<ParticipantInfo> participants = new ArrayList<>();
 
     private MatchLength matchLength = MatchLength.FIVE_MINUTES;
@@ -80,6 +82,8 @@ public class MatchConfig {
         // Load match settings
         gameMap = GameMap.get(config.getString(MATCH_CONFIGURATION_HEADER, GAME_MAP, gameMap.configName));
         gameMode = GameMode.get(config.getString(MATCH_CONFIGURATION_HEADER, GAME_MODE, gameMode.configName));
+        skipReplays = config.getBoolean(MUTATOR_CONFIGURATION_HEADER, SKIP_REPLAYS, skipReplays);
+        instantStart = config.getBoolean(MUTATOR_CONFIGURATION_HEADER, INSTANT_START, instantStart);
 
         // Load mutators
         matchLength = MatchLength.get(config.getString(MUTATOR_CONFIGURATION_HEADER, MUTATOR_MATCH_LENGTH, matchLength.configName));
@@ -137,6 +141,8 @@ public class MatchConfig {
         config.createSection(MATCH_CONFIGURATION_HEADER);
         config.set(MATCH_CONFIGURATION_HEADER, GAME_MAP, gameMap.configName);
         config.set(MATCH_CONFIGURATION_HEADER, GAME_MODE, gameMode.configName);
+        config.set(MATCH_CONFIGURATION_HEADER, SKIP_REPLAYS, skipReplays);
+        config.set(MATCH_CONFIGURATION_HEADER, INSTANT_START, instantStart);
         config.set(MATCH_CONFIGURATION_HEADER, PARTICIPANT_COUNT_KEY, participants.size());
 
         // Mutators
@@ -184,6 +190,22 @@ public class MatchConfig {
 
     public void setGameMode(GameMode gameMode) {
         this.gameMode = gameMode;
+    }
+
+    public boolean isSkipReplays() {
+        return skipReplays;
+    }
+
+    public void setSkipReplays(boolean skipReplays) {
+        this.skipReplays = skipReplays;
+    }
+
+    public boolean isInstantStart() {
+        return instantStart;
+    }
+
+    public void setInstantStart(boolean instantStart) {
+        this.instantStart = instantStart;
     }
 
     public List<ParticipantInfo> getParticipants() {

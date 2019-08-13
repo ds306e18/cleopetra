@@ -4,9 +4,12 @@ import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import dk.aau.cs.ds306e18.tournament.rlbot.configuration.MatchConfig;
 import dk.aau.cs.ds306e18.tournament.rlbot.configuration.MatchConfigOptions;
 import dk.aau.cs.ds306e18.tournament.rlbot.configuration.MatchConfigOptions.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.RadioButton;
 import javafx.scene.layout.HBox;
 
 import java.util.function.BiConsumer;
@@ -16,6 +19,8 @@ public class RLBotSettingsTabController {
     public static RLBotSettingsTabController instance;
     public ChoiceBox<GameMap> gameMapChoiceBox;
     public ChoiceBox<GameMode> gameModeChoiceBox;
+    public RadioButton skipReplaysRadioButton;
+    public RadioButton instantStartRadioButton;
     public ChoiceBox<MatchLength> matchLengthChoiceBox;
     public ChoiceBox<MaxScore> maxScoreChoiceBox;
     public ChoiceBox<Overtime> overtimeChoiceBox;
@@ -40,8 +45,19 @@ public class RLBotSettingsTabController {
 
         MatchConfig matchConfig = Tournament.get().getRlBotSettings().getMatchConfig();
 
+        // General match settings
         setupChoiceBox(gameMapChoiceBox, GameMap.values(), matchConfig.getGameMap(), MatchConfig::setGameMap);
         setupChoiceBox(gameModeChoiceBox, GameMode.values(), matchConfig.getGameMode(), MatchConfig::setGameMode);
+        skipReplaysRadioButton.setSelected(matchConfig.isSkipReplays());
+        skipReplaysRadioButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            Tournament.get().getRlBotSettings().getMatchConfig().setSkipReplays(newValue);
+        });
+        instantStartRadioButton.setSelected(matchConfig.isInstantStart());
+        instantStartRadioButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            Tournament.get().getRlBotSettings().getMatchConfig().setInstantStart(newValue);
+        });
+
+        // Mutators
         setupChoiceBox(matchLengthChoiceBox, MatchLength.values(), matchConfig.getMatchLength(), MatchConfig::setMatchLength);
         setupChoiceBox(maxScoreChoiceBox, MaxScore.values(), matchConfig.getMaxScore(), MatchConfig::setMaxScore);
         setupChoiceBox(overtimeChoiceBox, Overtime.values(), matchConfig.getOvertime(), MatchConfig::setOvertime);
