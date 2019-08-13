@@ -1,12 +1,11 @@
 # Changelog
 
-#### Unreleased changes:
+#### Version 1.4 - 13. August 2019
 - Implemented custom config file reader/writer. - NicEastvillage
 - With this new technology comes:
     - Support for up to 32 bots per team (previously dependant on the selected 'rlbot.cfg'). #78
     - The user no longer has to select a 'rlbot.cfg'
     - Ability to set game mode, map and mutators under the RLBot Settings tab
-
 
 #### Version 1.3 - 9. April 2019
 - Support for Psyonix bots. #13 - NicEastvillage
