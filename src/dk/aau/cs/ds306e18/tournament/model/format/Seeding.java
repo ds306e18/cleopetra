@@ -1,6 +1,7 @@
 package dk.aau.cs.ds306e18.tournament.model.format;
 
 import dk.aau.cs.ds306e18.tournament.model.Team;
+import dk.aau.cs.ds306e18.tournament.utility.PowMath;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,7 @@ public class Seeding {
      * [1, 2, 3, 4] becomes [1, 4, 2, 3]. And [1, 2, 3, 4, 5, 6, 7, 8] becomes [1, 8, 4, 5, 2, 7, 3, 6].
      * @param list a list, which size is a power of two. */
     public static <T> List<T> fairSeedList(List<T> list) {
+        if (!PowMath.isPowOf2(list.size())) throw new AssertionError("Size of list (" + list.size() + ") is not a power of two.");
 
         if (Integer.bitCount(list.size()) != 1)
             throw new IllegalArgumentException("The size of the list must be a power of two.");
