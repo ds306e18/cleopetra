@@ -20,6 +20,10 @@ public class RLBotSettings {
         return matchConfig;
     }
 
+    public void setMatchConfig(MatchConfig matchConfig) {
+        this.matchConfig = matchConfig;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

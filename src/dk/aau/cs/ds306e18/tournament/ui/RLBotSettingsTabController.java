@@ -7,7 +7,9 @@ import dk.aau.cs.ds306e18.tournament.rlbot.configuration.MatchConfigOptions.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.layout.HBox;
@@ -17,6 +19,7 @@ import java.util.function.BiConsumer;
 public class RLBotSettingsTabController {
 
     public static RLBotSettingsTabController instance;
+    public Button resetAllButton;
     public ChoiceBox<GameMap> gameMapChoiceBox;
     public ChoiceBox<GameMode> gameModeChoiceBox;
     public RadioButton skipReplaysRadioButton;
@@ -88,8 +91,37 @@ public class RLBotSettingsTabController {
         });
     }
 
+    public void onActionResetAllButton(ActionEvent actionEvent) {
+        Tournament.get().getRlBotSettings().setMatchConfig(new MatchConfig());
+        update();
+    }
+
     /** Updates all ui elements */
     public void update() {
 
+        MatchConfig matchConfig = Tournament.get().getRlBotSettings().getMatchConfig();
+
+        // General match settings
+        gameMapChoiceBox.getSelectionModel().select(matchConfig.getGameMap());
+        gameModeChoiceBox.getSelectionModel().select(matchConfig.getGameMode());
+        skipReplaysRadioButton.setSelected(matchConfig.isSkipReplays());
+        instantStartRadioButton.setSelected(matchConfig.isInstantStart());
+
+        // Mutators
+        matchLengthChoiceBox.getSelectionModel().select(matchConfig.getMatchLength());
+        maxScoreChoiceBox.getSelectionModel().select(matchConfig.getMaxScore());
+        overtimeChoiceBox.getSelectionModel().select(matchConfig.getOvertime());
+        gameSpeedChoiceBox.getSelectionModel().select(matchConfig.getGameSpeed());
+        ballMaxSpeedChoiceBox.getSelectionModel().select(matchConfig.getBallMaxSpeed());
+        ballTypeChoiceBox.getSelectionModel().select(matchConfig.getBallType());
+        ballWeightChoiceBox.getSelectionModel().select(matchConfig.getBallWeight());
+        ballSizeChoiceBox.getSelectionModel().select(matchConfig.getBallSize());
+        ballBouncinessChoiceBox.getSelectionModel().select(matchConfig.getBallBounciness());
+        boostAmountChoiceBox.getSelectionModel().select(matchConfig.getBoostAmount());
+        boostStrengthChoiceBox.getSelectionModel().select(matchConfig.getBoostStrength());
+        rumblePowersChoiceBox.getSelectionModel().select(matchConfig.getRumblePowers());
+        gravityChoiceBox.getSelectionModel().select(matchConfig.getGravity());
+        demolishChoiceBox.getSelectionModel().select(matchConfig.getDemolish());
+        respawnTimeChoiceBox.getSelectionModel().select(matchConfig.getRespawnTime());
     }
 }
