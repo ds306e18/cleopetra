@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Class from interfacing with a match config (usually called rlbot.cfg).
+ * Class for interfacing with a match config (usually called rlbot.cfg).
  */
 public class MatchConfig {
 
