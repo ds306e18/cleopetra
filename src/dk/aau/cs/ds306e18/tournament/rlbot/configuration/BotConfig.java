@@ -35,6 +35,7 @@ public class BotConfig {
         this.configFile = configFile;
         ConfigFile config = new ConfigFile(configFile);
 
+// Ensuring BotConfig has required fields available
         if (!config.hasSection(LOCATIONS_CONFIGURATION_HEADER) ||
                 !config.hasValue(LOCATIONS_CONFIGURATION_HEADER, NAME) ||
                 !config.hasValue(LOCATIONS_CONFIGURATION_HEADER, PYTHON_FILE) ||
