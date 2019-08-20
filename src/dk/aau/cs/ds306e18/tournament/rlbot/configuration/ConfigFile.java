@@ -54,7 +54,7 @@ public class ConfigFile {
             String line;
             Map<String, String> currentSectionMap = null;
             String key = null;
-            String value = null;
+            StringBuilder value = null;
             Matcher m;
             while ((line = br.readLine()) != null) {
                 lineNumber++;
@@ -63,11 +63,11 @@ public class ConfigFile {
                 if (key != null) {
                     m = multiLineValuePattern.matcher(line);
                     if (m.matches()) {
-                        value += " " + m.group(1).trim();
+                        value.append(" ").append(m.group(1).trim());
                         continue;
                     } else {
                         // No more lines of value. Store key value pair
-                        currentSectionMap.put(key, value.trim());
+                        currentSectionMap.put(key, value.toString().trim());
                         key = null;
                         value = null;
                     }
@@ -93,7 +93,7 @@ public class ConfigFile {
                     m = keyValuePattern.matcher(line);
                     if (m.matches()) {
                         key = m.group(1).trim();
-                        value = m.group(3).trim();
+                        value = new StringBuilder(m.group(3).trim());
 
                         // key value pair is stored if next line shows that it is not a multiline value
                         continue;
@@ -105,7 +105,7 @@ public class ConfigFile {
 
             // Store last key value pair (happens when file does not end with a newline character)
             if (key != null) {
-                currentSectionMap.put(key, value.trim());
+                currentSectionMap.put(key, value.toString().trim());
             }
         }
     }
