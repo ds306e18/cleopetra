@@ -1,6 +1,6 @@
 # Changelog
 
-#### Version 1.4 - 13. August 2019
+#### Version 1.4 - 21. August 2019
 - Implemented custom config file reader/writer. - NicEastvillage
 - With this new technology comes:
     - Support for up to 32 bots per team (previously dependant on the selected 'rlbot.cfg'). #78

@@ -9,15 +9,20 @@ import java.util.regex.Pattern;
 
 /**
  * Abstraction of a '.cfg'-file.
+ * Can parse files like this: https://docs.python.org/3/library/configparser.html#supported-ini-file-structure
+ * except indent sections and keys.
+ * Inspired by: https://stackoverflow.com/a/15638381
  */
 public class ConfigFile {
 
-    // Can parse files like this: https://docs.python.org/3/library/configparser.html#supported-ini-file-structure
-    // Inspired by: https://stackoverflow.com/a/15638381
-
+    // Matches section headers like "[Details]"
     private final Pattern sectionPattern = Pattern.compile("\\[([^\\[\\]]*)\\]\\s*");
+    // Matches key-value pairs "key = value", the delimiter can be both '=' or ':' and the value can be omitted for null
     private final Pattern keyValuePattern = Pattern.compile("([^=:]*)(=|:)(.*)");
+    // Matches subsequent lines of multi-line values. These always start with indentation
+    // It uses "[^\S\r\n]+" as indent pattern to not consume empty lines
     private final Pattern multiLineValuePattern = Pattern.compile("[^\\S\\r\\n]+(.*)");
+    // Matches empty lines and comments which start with '#' or ';'
     private final Pattern commentAndEmptyPattern = Pattern.compile("\\s*[#;].*|\\s*");
 
     private Map<String, Map<String, String>> entries = new HashMap<>();
