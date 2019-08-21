@@ -12,6 +12,7 @@ saves/
 # ConfigFileEditor-specific
 dummy_rlbot.cfg
 dummy_bot.cfg
+dummy_config_format_test.cfg
 
 # User-specific stuff
 .idea/**/workspace.xml

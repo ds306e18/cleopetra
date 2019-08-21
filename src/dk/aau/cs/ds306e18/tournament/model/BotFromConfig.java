@@ -1,7 +1,10 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
-import dk.aau.cs.ds306e18.tournament.utility.configuration.BotConfig;
+import dk.aau.cs.ds306e18.tournament.rlbot.configuration.BotSkill;
+import dk.aau.cs.ds306e18.tournament.rlbot.configuration.BotType;
+import dk.aau.cs.ds306e18.tournament.rlbot.configuration.BotConfig;
 
+import java.io.File;
 import java.util.Objects;
 
 public class BotFromConfig implements Bot {
@@ -28,12 +31,11 @@ public class BotFromConfig implements Bot {
      */
     public boolean reload() {
         try {
-            config = new BotConfig(pathToConfig);
-            configLoadedCorrectly = config.isValid();
+            config = new BotConfig(new File(pathToConfig));
+            configLoadedCorrectly = true;
         } catch (Exception e) {
             configLoadedCorrectly = false;
-            e.printStackTrace();
-            throw new RuntimeException("Could not load bot from config: " + pathToConfig);
+            throw new RuntimeException("Could not load bot from config " + pathToConfig + ", reason: " + e.getMessage());
         }
         return loadedCorrectly();
     }
@@ -59,6 +61,10 @@ public class BotFromConfig implements Bot {
     @Override
     public String getConfigPath() {
         return pathToConfig;
+    }
+
+    public BotConfig getConfig() {
+        return config;
     }
 
     @Override

@@ -1,7 +1,7 @@
 package dk.aau.cs.ds306e18.tournament.ui;
 
 import dk.aau.cs.ds306e18.tournament.model.Bot;
-import dk.aau.cs.ds306e18.tournament.model.BotType;
+import dk.aau.cs.ds306e18.tournament.rlbot.configuration.BotType;
 import javafx.scene.image.Image;
 
 public class BotIcons {

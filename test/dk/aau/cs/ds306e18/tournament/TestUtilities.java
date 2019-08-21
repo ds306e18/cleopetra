@@ -3,8 +3,7 @@ package dk.aau.cs.ds306e18.tournament;
 import dk.aau.cs.ds306e18.tournament.model.*;
 import dk.aau.cs.ds306e18.tournament.model.format.*;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
-import dk.aau.cs.ds306e18.tournament.utility.configuration.BotConfigTest;
-import dk.aau.cs.ds306e18.tournament.utility.configuration.ConfigFileEditorTest;
+import dk.aau.cs.ds306e18.tournament.rlbot.configuration.BotConfigTest;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,7 +52,7 @@ public class TestUtilities {
     public static Bot generateBot() {
         Random rand = new Random();
         return new BotFromConfig(
-                "test/" + BotConfigTest.testBotConfigFilenames[rand.nextInt(BotConfigTest.testBotConfigFilenames.length)]
+                "test/" + BotConfigTest.TEST_BOT_CONFIG_FILENAMES[rand.nextInt(BotConfigTest.TEST_BOT_CONFIG_FILENAMES.length)]
         );
     }
 

@@ -1,4 +1,4 @@
-package dk.aau.cs.ds306e18.tournament.model;
+package dk.aau.cs.ds306e18.tournament.rlbot.configuration;
 
 /**
  * Enum for bot skill values in the rlbot.cfg

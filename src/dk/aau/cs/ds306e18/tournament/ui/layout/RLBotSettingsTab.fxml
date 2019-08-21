@@ -2,9 +2,13 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
@@ -12,9 +16,9 @@
 <HBox stylesheets="@css/stylesheet.css" xmlns="http://javafx.com/javafx/1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.RLBotSettingsTabController">
    <children>
       <Pane minHeight="0.0" minWidth="0.0" prefHeight="0.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
-      <HBox minWidth="1080.0" prefWidth="1080.0">
+      <HBox fx:id="tabRoot" minWidth="1080.0" prefWidth="1080.0">
          <children>
-            <VBox fx:id="tabRoot" maxWidth="-Infinity" minWidth="540.0" prefWidth="540.0" spacing="10.0">
+            <VBox maxWidth="-Infinity" minWidth="540.0" prefWidth="540.0" spacing="10.0">
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="RLBot Settings" wrappingWidth="370.58128547668457">
                      <font>
@@ -24,21 +28,351 @@
                         <Insets />
                      </VBox.margin>
                   </Text>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="CleoPetra is able to start matches using the RLBot framework. To do that you must give it a path to a rlbot.cfg file. Note: this file will be modified to include the given bots in a match. But all other settings will stay the same." wrappingWidth="500.0" VBox.vgrow="ALWAYS" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Path to rlbot.cfg:">
+                  <Button fx:id="resetAllButton" mnemonicParsing="false" onAction="#onActionResetAllButton" prefHeight="27.0" prefWidth="101.0" text="Reset all" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Match">
                      <font>
-                        <Font size="16.0" />
+                        <Font name="System Bold" size="16.0" />
                      </font>
                   </Text>
-                  <HBox maxHeight="40.0" prefHeight="27.0">
+                  <GridPane>
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
                      <children>
-                        <Button fx:id="configPathBtn" mnemonicParsing="false" onAction="#configPathBtnOnAction" prefHeight="27.0" prefWidth="60.0" text="Browse" />
-                        <TextField fx:id="configPathTextField" prefHeight="27.0" promptText="rlbot.cfg" HBox.hgrow="ALWAYS" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Game map:">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Text>
+                        <ChoiceBox fx:id="gameMapChoiceBox" prefHeight="27.0" prefWidth="220.0" GridPane.columnIndex="1" />
                      </children>
-                     <padding>
-                        <Insets bottom="8.0" />
-                     </padding>
-                  </HBox>
+                  </GridPane>
+                  <GridPane>
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Game mode:">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Text>
+                        <ChoiceBox fx:id="gameModeChoiceBox" prefHeight="27.0" prefWidth="220.0" GridPane.columnIndex="1" />
+                     </children>
+                  </GridPane>
+                  <GridPane layoutX="30.0" layoutY="109.0">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Skip replays:">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Text>
+                        <RadioButton fx:id="skipReplaysRadioButton" layoutX="494.0" layoutY="13.0" mnemonicParsing="false" GridPane.columnIndex="1" />
+                     </children>
+                  </GridPane>
+                  <GridPane layoutX="30.0" layoutY="146.0">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="No kickoff countdown:">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Text>
+                        <RadioButton fx:id="instantStartRadioButton" mnemonicParsing="false" GridPane.columnIndex="1" />
+                     </children>
+                  </GridPane>
+               </children>
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </padding>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </VBox>
+            <VBox layoutX="10.0" layoutY="10.0" maxWidth="-Infinity" minWidth="540.0" prefWidth="540.0" spacing="10.0">
+               <children>
+                  <Pane prefHeight="30.0" prefWidth="500.0" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Mutators">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Text>
+                  <GridPane>
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Match length:">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Text>
+                        <ChoiceBox fx:id="matchLengthChoiceBox" prefHeight="27.0" prefWidth="220.0" GridPane.columnIndex="1" />
+                     </children>
+                  </GridPane>
+                  <GridPane>
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Max score:">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Text>
+                        <ChoiceBox fx:id="maxScoreChoiceBox" prefHeight="27.0" prefWidth="220.0" GridPane.columnIndex="1" />
+                     </children>
+                  </GridPane>
+                  <GridPane layoutX="30.0" layoutY="139.0">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Overtime:">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Text>
+                        <ChoiceBox fx:id="overtimeChoiceBox" prefHeight="27.0" prefWidth="220.0" GridPane.columnIndex="1" />
+                     </children>
+                  </GridPane>
+                  <GridPane layoutX="30.0" layoutY="107.0">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Game speed:">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Text>
+                        <ChoiceBox fx:id="gameSpeedChoiceBox" prefHeight="27.0" prefWidth="220.0" GridPane.columnIndex="1" />
+                     </children>
+                  </GridPane>
+                  <GridPane layoutX="30.0" layoutY="144.0">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ball max speed:">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Text>
+                        <ChoiceBox fx:id="ballMaxSpeedChoiceBox" prefHeight="27.0" prefWidth="220.0" GridPane.columnIndex="1" />
+                     </children>
+                  </GridPane>
+                  <GridPane layoutX="30.0" layoutY="181.0">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ball type:">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Text>
+                        <ChoiceBox fx:id="ballTypeChoiceBox" prefHeight="27.0" prefWidth="220.0" GridPane.columnIndex="1" />
+                     </children>
+                  </GridPane>
+                  <GridPane layoutX="30.0" layoutY="218.0">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ball weight:">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Text>
+                        <ChoiceBox fx:id="ballWeightChoiceBox" prefHeight="27.0" prefWidth="220.0" GridPane.columnIndex="1" />
+                     </children>
+                  </GridPane>
+                  <GridPane layoutX="30.0" layoutY="255.0">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ball size:">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Text>
+                        <ChoiceBox fx:id="ballSizeChoiceBox" prefHeight="27.0" prefWidth="220.0" GridPane.columnIndex="1" />
+                     </children>
+                  </GridPane>
+                  <GridPane layoutX="30.0" layoutY="292.0">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ball bounciness:">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Text>
+                        <ChoiceBox fx:id="ballBouncinessChoiceBox" prefHeight="27.0" prefWidth="220.0" GridPane.columnIndex="1" />
+                     </children>
+                  </GridPane>
+                  <GridPane layoutX="30.0" layoutY="329.0">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Boost amount:">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Text>
+                        <ChoiceBox fx:id="boostAmountChoiceBox" prefHeight="27.0" prefWidth="220.0" GridPane.columnIndex="1" />
+                     </children>
+                  </GridPane>
+                  <GridPane layoutX="30.0" layoutY="366.0">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Boost strength:">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Text>
+                        <ChoiceBox fx:id="boostStrengthChoiceBox" prefHeight="27.0" prefWidth="220.0" GridPane.columnIndex="1" />
+                     </children>
+                  </GridPane>
+                  <GridPane layoutX="30.0" layoutY="403.0">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Rumble powers:">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Text>
+                        <ChoiceBox fx:id="rumblePowersChoiceBox" prefHeight="27.0" prefWidth="220.0" GridPane.columnIndex="1" />
+                     </children>
+                  </GridPane>
+                  <GridPane layoutX="30.0" layoutY="440.0">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Gravity:">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Text>
+                        <ChoiceBox fx:id="gravityChoiceBox" prefHeight="27.0" prefWidth="220.0" GridPane.columnIndex="1" />
+                     </children>
+                  </GridPane>
+                  <GridPane layoutX="30.0" layoutY="477.0">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Demolish:">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Text>
+                        <ChoiceBox fx:id="demolishChoiceBox" prefHeight="27.0" prefWidth="220.0" GridPane.columnIndex="1" />
+                     </children>
+                  </GridPane>
+                  <GridPane layoutX="30.0" layoutY="514.0">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Respawn time:">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Text>
+                        <ChoiceBox fx:id="respawnTimeChoiceBox" prefHeight="27.0" prefWidth="220.0" GridPane.columnIndex="1" />
+                     </children>
+                  </GridPane>
                </children>
                <padding>
                   <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
