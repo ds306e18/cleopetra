@@ -1,5 +1,6 @@
 package dk.aau.cs.ds306e18.tournament.settings;
 
+import dk.aau.cs.ds306e18.tournament.Main;
 import dk.aau.cs.ds306e18.tournament.utility.FileOperations;
 
 import java.io.IOException;
@@ -7,8 +8,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-
-import static dk.aau.cs.ds306e18.tournament.utility.FileOperations.internalPath;
 
 /**
  * This class contains paths to all the files in the settings directory, which makes it easy to refer to the any given
@@ -35,7 +34,7 @@ public class SettingsDirectory {
 
             // Files for starting matches. 'rlbot.cfg' is created right before match start.
             Files.createDirectories(MATCH_FILES);
-            Files.copy(internalPath("settings/files/run.py"), RUN_PY, StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(Main.class.getResourceAsStream("settings/files/run.py"), RUN_PY, StandardCopyOption.REPLACE_EXISTING);
 
             setupPsyonixBots();
 
@@ -53,9 +52,9 @@ public class SettingsDirectory {
      */
     private static void setupPsyonixBots() throws IOException {
         Files.createDirectories(PSYONIX_BOTS);
-        FileOperations.copyIfMissing(internalPath("settings/files/psyonix_appearance.cfg"), PSYONIX_APPEARANCE);
-        FileOperations.copyIfMissing(internalPath("settings/files/psyonix_allstar.cfg"), PSYONIX_ALLSTAR);
-        FileOperations.copyIfMissing(internalPath("settings/files/psyonix_pro.cfg"), PSYONIX_PRO);
-        FileOperations.copyIfMissing(internalPath("settings/files/psyonix_rookie.cfg"), PSYONIX_ROOKIE);
+        FileOperations.copyIfMissing(Main.class.getResourceAsStream("settings/files/psyonix_appearance.cfg"), PSYONIX_APPEARANCE);
+        FileOperations.copyIfMissing(Main.class.getResourceAsStream("settings/files/psyonix_allstar.cfg"), PSYONIX_ALLSTAR);
+        FileOperations.copyIfMissing(Main.class.getResourceAsStream("settings/files/psyonix_pro.cfg"), PSYONIX_PRO);
+        FileOperations.copyIfMissing(Main.class.getResourceAsStream("settings/files/psyonix_rookie.cfg"), PSYONIX_ROOKIE);
     }
 }

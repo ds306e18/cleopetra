@@ -5,6 +5,7 @@ import dk.aau.cs.ds306e18.tournament.model.Tournament;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.nio.file.*;
 
@@ -218,25 +219,20 @@ public class FileOperations {
     }
 
     /**
-     * Creates a Path for an internal file.
-     * @param pathRelToMain a String describing the location of the file relative to Main.java
-     * @return a Path
+     * Copies a file from source to destination, but only if the destination does not exist already.
      */
-    public static Path internalPath(String pathRelToMain) {
-        try {
-            return Paths.get(Main.class.getResource(pathRelToMain).toURI());
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-            return null;
+    public static void copyIfMissing(Path source, Path destination) throws IOException {
+        if (!Files.exists(destination)) {
+            Files.copy(source, destination);
         }
     }
 
     /**
      * Copies a file from source to destination, but only if the destination does not exist already.
      */
-    public static void copyIfMissing(Path source, Path destination) throws IOException {
+    public static void copyIfMissing(InputStream inputStream, Path destination) throws IOException {
         if (!Files.exists(destination)) {
-            Files.copy(source, destination);
+            Files.copy(inputStream, destination);
         }
     }
 }
