@@ -1,17 +1,15 @@
 package dk.aau.cs.ds306e18.tournament.rlbot.configuration;
 
-import dk.aau.cs.ds306e18.tournament.TestUtilities;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class BotConfigTest {
 
-    static final String TEST_BOT_CONFIG_FILE = "test/bots/alpha.cfg";
+    private static final String TEST_BOT_CONFIG_FILE = "test/bots/alpha.cfg";
 
     @Test
     public void constructor01() throws IOException {

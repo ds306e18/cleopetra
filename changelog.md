@@ -1,5 +1,9 @@
 # Changelog
 
+#### Unreleased changes
+- Clean up of unit tests. - NicEastvillage
+
+
 #### Version 1.4 - 21. August 2019
 - Implemented custom config file reader/writer. - NicEastvillage
 - With this new technology comes:
