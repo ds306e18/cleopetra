@@ -7,36 +7,52 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
+import java.nio.file.Files;
+
+import static dk.aau.cs.ds306e18.tournament.serialization.Serializer.deserialize;
+import static dk.aau.cs.ds306e18.tournament.serialization.Serializer.serialize;
 
 public class SaveLoad {
 
-    public static boolean saveTournament (Stage stage){
-        boolean saveStatus = false;
+    public static final String EXTENSION = "rlts";
 
-        String extension = "rlts";
-
+    /**
+     * Opens a FileChooser and saves the Tournament singleton to the selected location, or does nothing if no
+     * file is was selected.
+     * @param fxstage the JavaFX Stage in control of the FileChooser.
+     * @throws IOException thrown if something goes wrong during saving.
+     */
+    public static void saveTournamentWithFileChooser(Stage fxstage) throws IOException {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose file name and save destination");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Tournament format (*." + extension + ")", "*." + extension));
-        fileChooser.setInitialFileName(Tournament.get().getName() + "." + extension);
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Tournament format (*." + EXTENSION + ")", "*." + EXTENSION));
+        fileChooser.setInitialFileName(Tournament.get().getName() + "." + EXTENSION);
         fileChooser.setInitialDirectory(Main.lastSavedDirectory);
 
-        File file = fileChooser.showSaveDialog(stage);
+        File file = fileChooser.showSaveDialog(fxstage);
 
         if (file != null) {
-            try {
-                saveStatus = FileOperations.writeTournamentToFilesystem(file.getParent(), file.getName(), extension, Tournament.get());
-            } catch (IOException e) {
-                System.out.println("ERROR: Caught IOException when writing to " + file.getAbsolutePath() + ". " + e.getMessage());
-            }
-        }
-
-        if (saveStatus){
+            saveTournament(Tournament.get(), file);
             Main.lastSavedDirectory = file.getParentFile();
         }
-
-        return saveStatus;
     }
 
+    /**
+     * Saves the given tournament to the given location.
+     * @throws IOException thrown if something goes wrong during loading.
+     */
+    public static void saveTournament(Tournament tournament, File file) throws IOException {
+        Files.write(file.toPath(), serialize(tournament).getBytes());
+        Main.lastSavedDirectory = file.getParentFile();
+    }
+
+    /**
+     * Loads a tournament from a given file.
+     * @return The loaded Tournament.
+     * @throws IOException thrown if something goes wrong during loading.
+     */
+    public static Tournament loadTournament(File file) throws IOException {
+        Main.lastSavedDirectory = file.getParentFile();
+        return deserialize(new String(Files.readAllBytes(file.toPath())));
+    }
 }

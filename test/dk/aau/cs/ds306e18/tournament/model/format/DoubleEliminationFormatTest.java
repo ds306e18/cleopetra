@@ -17,35 +17,35 @@ public class DoubleEliminationFormatTest {
     @Test
     public void amountOfMatches01() {
         DoubleEliminationFormat de = new DoubleEliminationFormat();
-        de.start(TestUtilities.generateTeams(8, 1), true);
+        de.start(TestUtilities.getTestTeams(8, 1), true);
         assertEquals(15, de.getAllMatches().size());
     }
 
     @Test
     public void amountOfMatches02() {
         DoubleEliminationFormat de = new DoubleEliminationFormat();
-        de.start(TestUtilities.generateTeams(30, 1), true);
+        de.start(TestUtilities.getTestTeams(30, 1), true);
         assertEquals(59, de.getAllMatches().size());
     }
 
     @Test
     public void amountOfMatches03() {
         DoubleEliminationFormat de = new DoubleEliminationFormat();
-        de.start(TestUtilities.generateTeams(12, 1), true);
+        de.start(TestUtilities.getTestTeams(12, 1), true);
         assertEquals(23, de.getAllMatches().size());
     }
 
     @Test
     public void amountOfMatches04() {
         DoubleEliminationFormat de = new DoubleEliminationFormat();
-        de.start(TestUtilities.generateTeams(19, 1), true);
+        de.start(TestUtilities.getTestTeams(19, 1), true);
         assertEquals(37, de.getAllMatches().size());
     }
 
     @Test
     public void matchDependencies01() {
         DoubleEliminationFormat de = new DoubleEliminationFormat();
-        de.start(TestUtilities.generateTeams(8, 1), true);
+        de.start(TestUtilities.getTestTeams(8, 1), true);
         Match extra = de.getExtraMatch();
         List<Match> matches = de.getAllMatches();
         for (Match match : matches) {
@@ -58,7 +58,7 @@ public class DoubleEliminationFormatTest {
     @Test
     public void matchDependencies02() {
         DoubleEliminationFormat de = new DoubleEliminationFormat();
-        de.start(TestUtilities.generateTeams(17, 1), true);
+        de.start(TestUtilities.getTestTeams(17, 1), true);
         Match extra = de.getExtraMatch();
         List<Match> matches = de.getAllMatches();
         for (Match match : matches) {
@@ -70,7 +70,7 @@ public class DoubleEliminationFormatTest {
 
     @Test
     public void seedPlacingTest01() {
-        ArrayList<Team> teams = TestUtilities.generateSeededTeams(8, 1);
+        List<Team> teams = TestUtilities.getTestTeams(8, 1);
         DoubleEliminationFormat de = new DoubleEliminationFormat();
         de.start(teams, true);
         Match[] upperBracket = de.getUpperBracket();
@@ -87,7 +87,7 @@ public class DoubleEliminationFormatTest {
 
     @Test
     public void seedPlacingTest02() {
-        ArrayList<Team> teams = TestUtilities.generateSeededTeams(5, 1);
+        List<Team> teams = TestUtilities.getTestTeams(5, 1);
         DoubleEliminationFormat de = new DoubleEliminationFormat();
         de.start(teams, true);
         Match[] upperBracket = de.getUpperBracket();
@@ -102,7 +102,7 @@ public class DoubleEliminationFormatTest {
     @Test
     public void onlyTwoTeams() {
         DoubleEliminationFormat de = new DoubleEliminationFormat();
-        de.start(TestUtilities.generateTeams(2, 1), true);
+        de.start(TestUtilities.getTestTeams(2, 1), true);
         assertEquals(3, de.getAllMatches().size());
         assertEquals(0, de.getLowerBracket().length);
     }
@@ -110,7 +110,7 @@ public class DoubleEliminationFormatTest {
     @Test
     public void isExtraMatchNeeded01() {
         DoubleEliminationFormat de = new DoubleEliminationFormat();
-        de.start(TestUtilities.generateTeams(4, 1), true);
+        de.start(TestUtilities.getTestTeams(4, 1), true);
 
         assertFalse(de.isExtraMatchNeeded());
 
@@ -126,7 +126,7 @@ public class DoubleEliminationFormatTest {
     @Test
     public void isExtraMatchNeeded02() {
         DoubleEliminationFormat de = new DoubleEliminationFormat();
-        de.start(TestUtilities.generateTeams(4, 1), true);
+        de.start(TestUtilities.getTestTeams(4, 1), true);
 
         // Play all matches except the last (the extra match)
         List<Match> matches = de.getAllMatches();
@@ -145,7 +145,7 @@ public class DoubleEliminationFormatTest {
     @Test
     public void upcomingAndPendingMatches01() {
         DoubleEliminationFormat de = new DoubleEliminationFormat();
-        de.start(TestUtilities.generateTeams(4, 1), true);
+        de.start(TestUtilities.getTestTeams(4, 1), true);
         assertEquals(2, de.getUpcomingMatches().size());
         assertEquals(4, de.getPendingMatches().size());
     }
@@ -153,7 +153,7 @@ public class DoubleEliminationFormatTest {
     @Test
     public void upcomingAndPendingMatches02() {
         DoubleEliminationFormat de = new DoubleEliminationFormat();
-        de.start(TestUtilities.generateTeams(7, 1), true);
+        de.start(TestUtilities.getTestTeams(7, 1), true);
         assertEquals(3, de.getUpcomingMatches().size());
         assertEquals(9, de.getPendingMatches().size());
     }
@@ -161,14 +161,14 @@ public class DoubleEliminationFormatTest {
     @Test
     public void upcomingAndPendingMatches03() {
         DoubleEliminationFormat de = new DoubleEliminationFormat();
-        de.start(TestUtilities.generateTeams(13, 1), true);
+        de.start(TestUtilities.getTestTeams(13, 1), true);
         assertEquals(5, de.getUpcomingMatches().size());
         assertEquals(19, de.getPendingMatches().size());
     }
 
     @Test
     public void losesMap01() {
-        ArrayList<Team> teams = TestUtilities.generateSeededTeams(14, 1);
+        List<Team> teams = TestUtilities.getTestTeams(14, 1);
         DoubleEliminationFormat de = new DoubleEliminationFormat();
         de.start(teams, true);
 
@@ -191,7 +191,7 @@ public class DoubleEliminationFormatTest {
 
     @Test
     public void topTeams01() {
-        ArrayList<Team> teams = TestUtilities.generateSeededTeams(4, 1);
+        List<Team> teams = TestUtilities.getTestTeams(4, 1);
         DoubleEliminationFormat de = new DoubleEliminationFormat();
         de.start(teams, true);
 
@@ -214,7 +214,7 @@ public class DoubleEliminationFormatTest {
 
     @Test
     public void topTeams02() {
-        ArrayList<Team> teams = TestUtilities.generateSeededTeams(32, 1);
+        List<Team> teams = TestUtilities.getTestTeams(32, 1);
         DoubleEliminationFormat de = new DoubleEliminationFormat();
         de.start(teams, true);
 

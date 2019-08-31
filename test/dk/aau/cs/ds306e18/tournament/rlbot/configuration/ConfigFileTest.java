@@ -12,7 +12,7 @@ public class ConfigFileTest {
 
     private final static String TEST_DIR = "test/";
     private final static String TEST_CONFIG = "config_format_test.cfg";
-    private final static String TEST_CONFIG_DUMMY = "dummy_config_format_test.cfg";
+    private final static String TEST_CONFIG_DUMMY = "_out_config_format_test.cfg";
 
     @Test
     public void setAndGetString01() {

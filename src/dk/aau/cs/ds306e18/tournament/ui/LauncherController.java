@@ -106,12 +106,15 @@ public class LauncherController {
 
         // Deserialize and set the loaded tournament. Then show the main stage.
         if (file != null){
-            Tournament.get().setTournament(FileOperations.readTournamentFromFilesystem(file));
-            Main.lastSavedDirectory = file.getParentFile();
-            Stage systemStage = createSystemStage();
-            getLauncherStage().hide();
-            systemStage.show();
+            try {
+                SaveLoad.loadTournament(file);
+                Stage systemStage = createSystemStage();
+                getLauncherStage().hide();
+                systemStage.show();
+            } catch (IOException e) {
+                Alerts.errorNotification("Could not read selected file", "Something went wrong while loading tournament: " + e.getMessage());
+                e.printStackTrace();
+            }
         }
-
     }
 }
