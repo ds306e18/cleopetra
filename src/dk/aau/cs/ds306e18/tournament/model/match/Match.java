@@ -737,7 +737,7 @@ public final class Match {
         playedListeners.remove(listener);
     }
 
-    public void notifyMatchPlayedListeners() {
+    protected void notifyMatchPlayedListeners() {
         for (MatchPlayedListener listener : playedListeners) {
             listener.onMatchPlayed(this);
         }
@@ -752,7 +752,7 @@ public final class Match {
         changeListeners.remove(listener);
     }
 
-    public void notifyMatchChangeListeners() {
+    protected void notifyMatchChangeListeners() {
         for (MatchChangeListener listener : changeListeners) {
             listener.onMatchChanged(this);
         }
