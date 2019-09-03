@@ -277,7 +277,8 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
         });
 
         TableColumn<Team, Integer> goalDiffColumn = new TableColumn<>("GoalDiff.");
-        goalDiffColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getGoalDiff()).asObject());
+        goalDiffColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(
+                cellData.getValue().getStatsManager().getGlobalStats().getGoalDifference()).asObject());
 
         // Styling - Descending order and centering text.
         pointColumn.setSortType(TableColumn.SortType.DESCENDING);

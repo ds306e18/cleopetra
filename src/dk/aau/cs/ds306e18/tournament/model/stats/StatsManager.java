@@ -26,14 +26,16 @@ public class StatsManager {
     }
 
     /**
-     * Returns the team's stats across all Stages.
+     * Returns the team's stats across all Stages. Register as a StatsChangeListener to be notified when these
+     * stats updates.
      */
     public Stats getGlobalStats() {
         return globalStatsTracker.getStats();
     }
 
     /**
-     * Returns the team's stats for the given format.
+     * Returns the team's stats for the given format. Register as a StatsChangeListener to be notified when these
+     * stats updates.
      */
     public Stats getStats(Format format) {
         return getTracker(format).getStats();

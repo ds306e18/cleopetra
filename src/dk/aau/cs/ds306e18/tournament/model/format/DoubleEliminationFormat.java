@@ -32,6 +32,7 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
         teams = new ArrayList<>(seededTeams);
         generateBracket(seededTeams, doSeeding);
         status = StageStatus.RUNNING;
+        setupStatsTracking();
     }
 
     /** Generates the complete double elimination bracket given a list of teams ordered by seed. If doSeeding is false
@@ -277,6 +278,13 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
         extraMatch.setIdentifier(nextIdentifier);
     }
 
+    private void setupStatsTracking() {
+        List<Match> allMatches = getAllMatches();
+        for (Team team : teams) {
+            team.getStatsManager().trackMatches(this, allMatches);
+        }
+    }
+
     @Override
     public StageStatus getStatus() {
         return status;
@@ -433,6 +441,7 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
         repairUpperBracket();
         repairLowerBracket();
         repairGrandFinals();
+        setupStatsTracking();
     }
 
     /** Reconnect upper bracket post deserialization. */
