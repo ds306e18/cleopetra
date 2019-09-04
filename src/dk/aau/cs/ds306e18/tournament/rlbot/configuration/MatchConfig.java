@@ -109,8 +109,7 @@ public class MatchConfig {
                 }
                 botConfig = new BotConfig(botConfigFile);
             } catch (Exception e) {
-                e.printStackTrace();
-                continue;
+                botConfig = null;
             }
 
             // Load other participant info
@@ -344,13 +343,33 @@ public class MatchConfig {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MatchConfig that = (MatchConfig) o;
-        return Objects.equals(gameMap, that.gameMap) &&
-                Objects.equals(gameMode, that.gameMode) &&
-                Objects.equals(participants, that.participants);
+        return skipReplays == that.skipReplays &&
+                instantStart == that.instantStart &&
+                Objects.equals(configFile, that.configFile) &&
+                gameMap == that.gameMap &&
+                gameMode == that.gameMode &&
+                Objects.equals(participants, that.participants) &&
+                matchLength == that.matchLength &&
+                maxScore == that.maxScore &&
+                overtime == that.overtime &&
+                gameSpeed == that.gameSpeed &&
+                ballMaxSpeed == that.ballMaxSpeed &&
+                ballType == that.ballType &&
+                ballWeight == that.ballWeight &&
+                ballSize == that.ballSize &&
+                ballBounciness == that.ballBounciness &&
+                boostAmount == that.boostAmount &&
+                boostStrength == that.boostStrength &&
+                rumblePowers == that.rumblePowers &&
+                gravity == that.gravity &&
+                demolish == that.demolish &&
+                respawnTime == that.respawnTime;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(gameMap, gameMode, participants);
+        return Objects.hash(configFile, gameMap, gameMode, skipReplays, instantStart, participants, matchLength,
+                maxScore, overtime, gameSpeed, ballMaxSpeed, ballType, ballWeight, ballSize, ballBounciness,
+                boostAmount, boostStrength, rumblePowers, gravity, demolish, respawnTime);
     }
 }

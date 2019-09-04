@@ -50,6 +50,11 @@ public class Tournament {
         teams.add(team);
     }
 
+    public void addTeams(Collection<? extends Team> teams) {
+        if (started) throw new IllegalStateException("Tournament has already started.");
+        this.teams.addAll(teams);
+    }
+
     public void removeTeam(Team team) {
         if (started) throw new IllegalStateException("Tournament has already started.");
         teams.remove(team);

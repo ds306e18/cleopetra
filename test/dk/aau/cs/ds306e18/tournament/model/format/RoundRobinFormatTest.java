@@ -7,12 +7,17 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import static dk.aau.cs.ds306e18.tournament.TestUtilities.*;
 import static org.junit.Assert.*;
 
 
 public class RoundRobinFormatTest {
+
+    static int numberOfMatchesInRoundRobin(int x) {
+        return x * (x - 1) / 2;
+    }
 
     @Test
     public void start01() {
@@ -21,7 +26,7 @@ public class RoundRobinFormatTest {
         int teamSize = 1;
 
         RoundRobinFormat rr = new RoundRobinFormat();
-        rr.start(generateTeams(numberOfTeams, teamSize), true);
+        rr.start(getTestTeams(numberOfTeams, teamSize), true);
 
         assertEquals(rr.getStatus(), StageStatus.RUNNING);
     }
@@ -33,19 +38,9 @@ public class RoundRobinFormatTest {
         int teamSize = 1;
 
         RoundRobinFormat rr = new RoundRobinFormat();
-        rr.start(generateTeams(numberOfTeams, teamSize), true);
+        rr.start(getTestTeams(numberOfTeams, teamSize), true);
 
         assertEquals(rr.getStatus(), StageStatus.RUNNING);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void start03() {
-
-        int numberOfTeams = -12;
-        int teamSize = 1;
-
-        RoundRobinFormat rr = new RoundRobinFormat();
-        rr.start(generateTeams(numberOfTeams, teamSize), true);
     }
 
     @Test
@@ -55,7 +50,7 @@ public class RoundRobinFormatTest {
         int teamSize = 1;
 
         RoundRobinFormat rr = new RoundRobinFormat();
-        rr.start(generateTeams(numberOfTeams, teamSize), true);
+        rr.start(getTestTeams(numberOfTeams, teamSize), true);
 
         assertEquals((rr.findIdOfNextTeam(3,numberOfTeams)), 13);
         assertEquals((rr.findIdOfNextTeam(1,numberOfTeams)), 11);
@@ -76,7 +71,7 @@ public class RoundRobinFormatTest {
         int teamSize = 1;
 
         RoundRobinFormat rr = new RoundRobinFormat();
-        rr.start(generateTeams(numberOfTeams, teamSize), true);
+        rr.start(getTestTeams(numberOfTeams, teamSize), true);
 
         assertEquals(numberOfMatchesInRoundRobin(numberOfTeams), rr.getUpcomingMatches().size());
     }
@@ -88,7 +83,7 @@ public class RoundRobinFormatTest {
         int teamSize = 1;
 
         RoundRobinFormat rr = new RoundRobinFormat();
-        rr.start(generateTeams(numberOfTeams, teamSize), true);
+        rr.start(getTestTeams(numberOfTeams, teamSize), true);
 
         assertEquals(numberOfMatchesInRoundRobin(numberOfTeams), rr.getUpcomingMatches().size());
     }
@@ -100,7 +95,7 @@ public class RoundRobinFormatTest {
         int teamSize = 1;
 
         RoundRobinFormat rr = new RoundRobinFormat();
-        rr.start(generateTeams(numberOfTeams, teamSize), true);
+        rr.start(getTestTeams(numberOfTeams, teamSize), true);
 
         assertEquals(numberOfMatchesInRoundRobin(numberOfTeams), rr.getUpcomingMatches().size());
     }
@@ -112,7 +107,7 @@ public class RoundRobinFormatTest {
         int teamSize = 0;
 
         RoundRobinFormat rr = new RoundRobinFormat();
-        rr.start(generateTeams(numberOfTeams, teamSize), true);
+        rr.start(getTestTeams(numberOfTeams, teamSize), true);
 
         assertEquals(0, rr.getUpcomingMatches().size());
     }
@@ -124,7 +119,7 @@ public class RoundRobinFormatTest {
         int teamSize = 1;
 
         RoundRobinFormat rr = new RoundRobinFormat();
-        rr.start(generateTeams(numberOfTeams, teamSize), true);
+        rr.start(getTestTeams(numberOfTeams, teamSize), true);
 
         assertEquals(0, rr.getCompletedMatches().size());
     }
@@ -136,7 +131,7 @@ public class RoundRobinFormatTest {
         int teamSize = 1;
 
         RoundRobinFormat rr = new RoundRobinFormat();
-        rr.start(generateTeams(numberOfTeams, teamSize), true);
+        rr.start(getTestTeams(numberOfTeams, teamSize), true);
 
         setAllMatchesToPlayed(rr.getUpcomingMatches());
 
@@ -150,7 +145,7 @@ public class RoundRobinFormatTest {
         int teamSize = 2;
 
         RoundRobinFormat rr = new RoundRobinFormat();
-        rr.start(generateTeams(numberOfTeams, teamSize), true);
+        rr.start(getTestTeams(numberOfTeams, teamSize), true);
 
         assertEquals(numberOfMatchesInRoundRobin(numberOfTeams), rr.getAllMatches().size());
     }
@@ -162,7 +157,7 @@ public class RoundRobinFormatTest {
         int teamSize = 2;
 
         RoundRobinFormat rr = new RoundRobinFormat();
-        rr.start(generateTeams(numberOfTeams, teamSize), true);
+        rr.start(getTestTeams(numberOfTeams, teamSize), true);
 
         assertEquals(0, rr.getAllMatches().size());
     }
@@ -174,7 +169,7 @@ public class RoundRobinFormatTest {
         int teamSize = 2;
 
         RoundRobinFormat rr = new RoundRobinFormat();
-        rr.start(generateTeams(numberOfTeams, teamSize), true);
+        rr.start(getTestTeams(numberOfTeams, teamSize), true);
 
         assertEquals(0, rr.getPendingMatches().size());
     }
@@ -192,7 +187,7 @@ public class RoundRobinFormatTest {
     public void getTopTeams02() {
 
         RoundRobinFormat rr = new RoundRobinFormat();
-        ArrayList<Team> inputTeams = generateSeededTeams(4, 2);
+        List<Team> inputTeams = getTestTeams(4, 2);
         rr.start(inputTeams, true);
 
         setAllMatchesToPlayed(rr.getUpcomingMatches());
@@ -229,7 +224,7 @@ public class RoundRobinFormatTest {
     public void getStatus02() { //Running
 
         RoundRobinFormat rr = new RoundRobinFormat();
-        rr.start(generateTeams(4, 2), true);
+        rr.start(getTestTeams(4, 2), true);
 
         assertEquals(StageStatus.RUNNING, rr.getStatus());
     }
@@ -239,7 +234,7 @@ public class RoundRobinFormatTest {
 
         RoundRobinFormat rr = new RoundRobinFormat();
 
-        rr.start(generateTeams(6, 2), true);
+        rr.start(getTestTeams(6, 2), true);
 
         setAllMatchesToPlayed(rr.getUpcomingMatches());
 
@@ -251,7 +246,7 @@ public class RoundRobinFormatTest {
 
         RoundRobinFormat rr = new RoundRobinFormat();
         rr.setNumberOfGroups(2);
-        rr.start(generateTeams(12,2), true);
+        rr.start(getTestTeams(12,2), true);
 
 
         assertEquals(2,rr.getGroups().size());
@@ -275,7 +270,7 @@ public class RoundRobinFormatTest {
 
         RoundRobinFormat rr = new RoundRobinFormat();
         rr.setNumberOfGroups(2);
-        rr.start(generateTeams(10,2), true);
+        rr.start(getTestTeams(10,2), true);
 
         assertEquals(2,rr.getGroups().size());
         for (RoundRobinGroup group: rr.getGroups()) {
@@ -297,7 +292,7 @@ public class RoundRobinFormatTest {
 
         RoundRobinFormat rr = new RoundRobinFormat();
         rr.setNumberOfGroups(3);
-        rr.start(generateTeams(18,2), true);
+        rr.start(getTestTeams(18,2), true);
 
         assertEquals(3,rr.getGroups().size());
         for (RoundRobinGroup group: rr.getGroups()) {
@@ -319,7 +314,7 @@ public class RoundRobinFormatTest {
 
         RoundRobinFormat rr = new RoundRobinFormat();
         rr.setNumberOfGroups(3);
-        rr.start(generateTeams(10,2), true);
+        rr.start(getTestTeams(10,2), true);
 
         assertEquals(3,rr.getGroups().size());
         for (RoundRobinGroup group: rr.getGroups()) {
@@ -350,7 +345,7 @@ public class RoundRobinFormatTest {
 
         RoundRobinFormat rr = new RoundRobinFormat();
         rr.setNumberOfGroups(20);
-        rr.start(generateTeams(numberOfTeams, teamSize), true);
+        rr.start(getTestTeams(numberOfTeams, teamSize), true);
 
         assertEquals(5, rr.getGroups().size());
     }
@@ -364,7 +359,7 @@ public class RoundRobinFormatTest {
 
         RoundRobinFormat rr = new RoundRobinFormat();
         rr.setNumberOfGroups(0);
-        rr.start(generateTeams(numberOfTeams, teamSize), true);
+        rr.start(getTestTeams(numberOfTeams, teamSize), true);
 
         assertEquals(1, rr.getGroups().size());
     }
@@ -377,7 +372,7 @@ public class RoundRobinFormatTest {
 
         RoundRobinFormat rr = new RoundRobinFormat();
         rr.setNumberOfGroups(numberOfGroups);
-        rr.start(generateTeams(numberOfTeams, 2), true);
+        rr.start(getTestTeams(numberOfTeams, 2), true);
 
         ArrayList<RoundRobinGroup> groups = rr.getGroups();
 
@@ -398,7 +393,7 @@ public class RoundRobinFormatTest {
 
         RoundRobinFormat rr = new RoundRobinFormat();
         rr.setNumberOfGroups(numberOfGroups);
-        rr.start(generateTeams(numberOfTeams, 2), true);
+        rr.start(getTestTeams(numberOfTeams, 2), true);
 
         ArrayList<RoundRobinGroup> groups = rr.getGroups();
 
@@ -414,7 +409,7 @@ public class RoundRobinFormatTest {
     @Test
     public void withSeeding01() {
         int numberOfTeams = 6;
-        ArrayList<Team> teams = generateTeams(numberOfTeams, 1);
+        List<Team> teams = getTestTeams(numberOfTeams, 1);
 
         RoundRobinFormat roundrobin = new RoundRobinFormat();
         roundrobin.setNumberOfGroups(2);
@@ -433,7 +428,7 @@ public class RoundRobinFormatTest {
         // with seeding and number of teams is not divisible by group count
 
         int numberOfTeams = 8;
-        ArrayList<Team> teams = generateTeams(numberOfTeams, 1);
+        List<Team> teams = getTestTeams(numberOfTeams, 1);
 
         RoundRobinFormat roundrobin = new RoundRobinFormat();
         roundrobin.setNumberOfGroups(3);
@@ -455,7 +450,7 @@ public class RoundRobinFormatTest {
     @Test
     public void withoutSeeding01() {
         int numberOfTeams = 6;
-        ArrayList<Team> teams = generateTeams(numberOfTeams, 1);
+        List<Team> teams = getTestTeams(numberOfTeams, 1);
 
         RoundRobinFormat roundrobin = new RoundRobinFormat();
         roundrobin.setNumberOfGroups(2);
@@ -474,7 +469,7 @@ public class RoundRobinFormatTest {
         // without seeding and number of teams is not divisible by group count
 
         int numberOfTeams = 8;
-        ArrayList<Team> teams = generateTeams(numberOfTeams, 1);
+        List<Team> teams = getTestTeams(numberOfTeams, 1);
 
         RoundRobinFormat roundrobin = new RoundRobinFormat();
         roundrobin.setNumberOfGroups(3);
