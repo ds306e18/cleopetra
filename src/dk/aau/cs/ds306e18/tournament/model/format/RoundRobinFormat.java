@@ -44,6 +44,7 @@ public class RoundRobinFormat implements Format, MatchPlayedListener {
             status = StageStatus.RUNNING;
             createGroupsAndMatches(teams, doSeeding);
             matches = extractMatchesFromGroups();
+            setupStatsTracking();
         }
     }
 
@@ -221,6 +222,13 @@ public class RoundRobinFormat implements Format, MatchPlayedListener {
         return listOfAllMatches;
     }
 
+    private void setupStatsTracking() {
+        List<Match> allMatches = getAllMatches();
+        for (Team team : teams) {
+            team.getStatsManager().trackMatches(this, allMatches);
+        }
+    }
+
     @Override
     public List<Match> getAllMatches() {
         return matches;
@@ -330,6 +338,7 @@ public class RoundRobinFormat implements Format, MatchPlayedListener {
     @Override
     public void postDeserializationRepair() {
         for (Match match : this.getAllMatches()) match.registerMatchPlayedListener(this);
+        setupStatsTracking();
     }
 
     @Override

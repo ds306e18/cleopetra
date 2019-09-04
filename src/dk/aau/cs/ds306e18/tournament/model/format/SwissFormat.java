@@ -140,6 +140,10 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
         }
 
         rounds.add(createdMatches);
+
+        for (Team team : teams) {
+            team.getStatsManager().trackMatches(this, createdMatches);
+        }
     }
 
     /**
@@ -325,6 +329,9 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
         for (Match match : getAllMatches()) {
             match.registerMatchPlayedListener(this);
             match.registerMatchChangeListener(this);
+        }
+        for (Team team : teams) {
+            team.getStatsManager().trackMatches(this, getAllMatches());
         }
     }
 
