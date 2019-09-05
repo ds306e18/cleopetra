@@ -249,18 +249,16 @@ public class MatchTest {
     @Test
     public void setScores01(){
 
-        Team teamOne = new Team(null, null, 1, null);
-        Team teamTwo = new Team(null, null, 1, null);
+        Team teamOne = new Team("A", null, 1, null);
+        Team teamTwo = new Team("B", null, 1, null);
         Match match = new Match(teamOne, teamTwo);
 
         int teamOneScore = 5;
         int teamTwoScore = 2;
         match.setScores(teamOneScore, teamTwoScore, true);
 
-        assertEquals(teamOneScore, teamOne.getGoalsScored());
-        assertEquals(teamTwoScore, teamOne.getGoalsConceded());
-        assertEquals(teamTwoScore, teamTwo.getGoalsScored());
-        assertEquals(teamOneScore, teamTwo.getGoalsConceded());
+        assertEquals(teamOneScore, match.getTeamOneScore());
+        assertEquals(teamTwoScore, match.getTeamTwoScore());
     }
 
     @Test
@@ -277,29 +275,8 @@ public class MatchTest {
         match.setScores(teamOneScore1, teamTwoScore1, true);
         match.setScores(teamOneScore2, teamTwoScore2, true);
 
-        assertEquals(teamOneScore2, teamOne.getGoalsScored());
-        assertEquals(teamTwoScore2, teamTwo.getGoalsScored());
-        assertEquals(teamTwoScore2, teamOne.getGoalsConceded());
-        assertEquals(teamOneScore2, teamTwo.getGoalsConceded());
-    }
-
-    @Test
-    public void setScores03(){ //Multiple matches
-
-        Team teamOne = new Team(null, null, 1, null);
-        Team teamTwo = new Team(null, null, 1, null);
-        Match match1 = new Match(teamOne, teamTwo);
-        Match match2 = new Match(teamOne, teamTwo);
-
-        int teamOneScore = 5;
-        int teamTwoScore = 2;
-        match1.setScores(teamOneScore, teamTwoScore, true);
-        match2.setScores(teamOneScore, teamTwoScore, true);
-
-        assertEquals(teamOneScore*2, teamOne.getGoalsScored());
-        assertEquals(teamTwoScore*2, teamOne.getGoalsConceded());
-        assertEquals(teamTwoScore*2, teamTwo.getGoalsScored());
-        assertEquals(teamOneScore*2, teamTwo.getGoalsConceded());
+        assertEquals(teamOneScore2, match.getTeamOneScore());
+        assertEquals(teamTwoScore2, match.getTeamTwoScore());
     }
 
     @Test
@@ -323,53 +300,6 @@ public class MatchTest {
     }
 
     @Test
-    public void teamScore01() {
-        Team teamA = new Team("A", null, 0, "a");
-        Team teamB = new Team("B", null, 0, "b");
-
-        Match matchOne = new Match(teamA, teamB);
-        matchOne.setScores(1, 3, false);
-
-        assertEquals(1, teamA.getGoalsScored());
-        assertEquals(3, teamA.getGoalsConceded());
-        assertEquals(3, teamB.getGoalsScored());
-        assertEquals(1, teamB.getGoalsConceded());
-    }
-
-    @Test
-    public void teamScore02() {
-        Team teamA = new Team("A", null, 0, "a");
-        Team teamB = new Team("B", null, 0, "b");
-
-        Match matchOne = new Match(teamA, teamB);
-        matchOne.setScores(5, 2, true);
-
-        assertEquals(5, teamA.getGoalsScored());
-        assertEquals(2, teamA.getGoalsConceded());
-        assertEquals(2, teamB.getGoalsScored());
-        assertEquals(5, teamB.getGoalsConceded());
-    }
-
-    @Test
-    public void teamScore03() {
-        Team teamA = new Team("A", null, 0, "a");
-        Team teamB = new Team("B", null, 0, "b");
-        Team teamC = new Team("C", null, 0, "c");
-
-        Match matchOne = new Match(teamA, teamB);
-        Match matchTwo = new Match().setTeamOne(teamC).setTeamTwoToWinnerOf(matchOne);
-        matchOne.setScores(2, 1, true);
-        matchTwo.setScores(4, 3, true);
-
-        assertEquals(5, teamA.getGoalsScored());
-        assertEquals(5, teamA.getGoalsConceded());
-        assertEquals(1, teamB.getGoalsScored());
-        assertEquals(2, teamB.getGoalsConceded());
-        assertEquals(4, teamC.getGoalsScored());
-        assertEquals(3, teamC.getGoalsConceded());
-    }
-
-    @Test
     public void reset01() {
         Team teamA = new Team("A", null, 0, "a");
         Team teamB = new Team("B", null, 0, "b");
@@ -380,22 +310,18 @@ public class MatchTest {
         matchOne.setScores(2, 1, true);
         matchTwo.setScores(4, 3, false);
 
-        assertEquals(5, teamA.getGoalsScored());
-        assertEquals(5, teamA.getGoalsConceded());
-        assertEquals(1, teamB.getGoalsScored());
-        assertEquals(2, teamB.getGoalsConceded());
-        assertEquals(4, teamC.getGoalsScored());
-        assertEquals(3, teamC.getGoalsConceded());
+        assertEquals(2, matchOne.getTeamOneScore());
+        assertEquals(1, matchOne.getTeamTwoScore());
+        assertEquals(4, matchTwo.getTeamOneScore());
+        assertEquals(3, matchTwo.getTeamTwoScore());
 
         // This forced reset should remove all scores. Also in match two that has not been played
         matchOne.setScores(0, 0, false, true);
 
-        assertEquals(0, teamA.getGoalsScored());
-        assertEquals(0, teamA.getGoalsConceded());
-        assertEquals(0, teamB.getGoalsScored());
-        assertEquals(0, teamB.getGoalsConceded());
-        assertEquals(0, teamC.getGoalsScored());
-        assertEquals(0, teamC.getGoalsConceded());
+        assertEquals(0, matchOne.getTeamOneScore());
+        assertEquals(0, matchOne.getTeamTwoScore());
+        assertEquals(0, matchTwo.getTeamOneScore());
+        assertEquals(0, matchTwo.getTeamTwoScore());
     }
 
     @Test(expected = MatchResultDependencyException.class)
@@ -409,12 +335,10 @@ public class MatchTest {
         matchOne.setScores(2, 1, true);
         matchTwo.setScores(4, 3, false);
 
-        assertEquals(5, teamA.getGoalsScored());
-        assertEquals(5, teamA.getGoalsConceded());
-        assertEquals(1, teamB.getGoalsScored());
-        assertEquals(2, teamB.getGoalsConceded());
-        assertEquals(4, teamC.getGoalsScored());
-        assertEquals(3, teamC.getGoalsConceded());
+        assertEquals(2, matchOne.getTeamOneScore());
+        assertEquals(1, matchOne.getTeamTwoScore());
+        assertEquals(4, matchTwo.getTeamOneScore());
+        assertEquals(3, matchTwo.getTeamTwoScore());
 
         // This reset should not be legal as match two has entered scores
         matchOne.setScores(0, 0, false, false);
@@ -431,12 +355,10 @@ public class MatchTest {
         matchOne.setScores(2, 1, true);
         matchTwo.setScores(4, 3, true);
 
-        assertEquals(5, teamA.getGoalsScored());
-        assertEquals(5, teamA.getGoalsConceded());
-        assertEquals(1, teamB.getGoalsScored());
-        assertEquals(2, teamB.getGoalsConceded());
-        assertEquals(4, teamC.getGoalsScored());
-        assertEquals(3, teamC.getGoalsConceded());
+        assertEquals(2, matchOne.getTeamOneScore());
+        assertEquals(1, matchOne.getTeamTwoScore());
+        assertEquals(4, matchTwo.getTeamOneScore());
+        assertEquals(3, matchTwo.getTeamTwoScore());
 
         // This reset should not be legal as match two has been played
         matchOne.setScores(0, 0, false, false);
@@ -453,22 +375,18 @@ public class MatchTest {
         matchOne.setScores(2, 1, true);
         matchTwo.setScores(4, 3, false);
 
-        assertEquals(5, teamA.getGoalsScored());
-        assertEquals(5, teamA.getGoalsConceded());
-        assertEquals(1, teamB.getGoalsScored());
-        assertEquals(2, teamB.getGoalsConceded());
-        assertEquals(4, teamC.getGoalsScored());
-        assertEquals(3, teamC.getGoalsConceded());
+        assertEquals(2, matchOne.getTeamOneScore());
+        assertEquals(1, matchOne.getTeamTwoScore());
+        assertEquals(4, matchTwo.getTeamOneScore());
+        assertEquals(3, matchTwo.getTeamTwoScore());
 
         // This reset should be legal as it doesn't change the outcome of match one
-        matchOne.setScores(4, 1, true, false);
+        matchOne.setScores(4, 2, true, false);
 
-        assertEquals(7, teamA.getGoalsScored());
-        assertEquals(5, teamA.getGoalsConceded());
-        assertEquals(1, teamB.getGoalsScored());
-        assertEquals(4, teamB.getGoalsConceded());
-        assertEquals(4, teamC.getGoalsScored());
-        assertEquals(3, teamC.getGoalsConceded());
+        assertEquals(4, matchOne.getTeamOneScore());
+        assertEquals(2, matchOne.getTeamTwoScore());
+        assertEquals(4, matchTwo.getTeamOneScore());
+        assertEquals(3, matchTwo.getTeamTwoScore());
     }
 
     @Test
@@ -482,22 +400,18 @@ public class MatchTest {
         matchOne.setScores(2, 1, true);
         matchTwo.setScores(4, 3, true);
 
-        assertEquals(5, teamA.getGoalsScored());
-        assertEquals(5, teamA.getGoalsConceded());
-        assertEquals(1, teamB.getGoalsScored());
-        assertEquals(2, teamB.getGoalsConceded());
-        assertEquals(4, teamC.getGoalsScored());
-        assertEquals(3, teamC.getGoalsConceded());
+        assertEquals(2, matchOne.getTeamOneScore());
+        assertEquals(1, matchOne.getTeamTwoScore());
+        assertEquals(4, matchTwo.getTeamOneScore());
+        assertEquals(3, matchTwo.getTeamTwoScore());
 
         // This reset should be legal as it doesn't change the outcome of match one, even when match two has been played
-        matchOne.setScores(4, 1, true, false);
+        matchOne.setScores(4, 2, true, false);
 
-        assertEquals(7, teamA.getGoalsScored());
-        assertEquals(5, teamA.getGoalsConceded());
-        assertEquals(1, teamB.getGoalsScored());
-        assertEquals(4, teamB.getGoalsConceded());
-        assertEquals(4, teamC.getGoalsScored());
-        assertEquals(3, teamC.getGoalsConceded());
+        assertEquals(4, matchOne.getTeamOneScore());
+        assertEquals(2, matchOne.getTeamTwoScore());
+        assertEquals(4, matchTwo.getTeamOneScore());
+        assertEquals(3, matchTwo.getTeamTwoScore());
     }
 
     @Test

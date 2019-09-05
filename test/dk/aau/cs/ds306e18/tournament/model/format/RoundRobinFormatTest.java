@@ -1,8 +1,10 @@
 package dk.aau.cs.ds306e18.tournament.model.format;
 
+import dk.aau.cs.ds306e18.tournament.TestUtilities;
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.TieBreaker;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import dk.aau.cs.ds306e18.tournament.model.stats.StatsTest;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -178,9 +180,9 @@ public class RoundRobinFormatTest {
     public void getTopTeams01() { //No teams
 
         RoundRobinFormat rr = new RoundRobinFormat();
-        rr.start(new ArrayList<Team>(), true);
+        rr.start(new ArrayList<>(), true);
 
-        assertEquals(0, rr.getTopTeams(10, TieBreaker.SEED).size());
+        assertEquals(0, rr.getTopTeams(0, TieBreaker.SEED).size());
     }
 
     @Test
@@ -485,5 +487,27 @@ public class RoundRobinFormatTest {
         assertSame(teams.get(5), roundrobin.getGroups().get(2).getTeams().get(0));
         assertSame(teams.get(6), roundrobin.getGroups().get(2).getTeams().get(1));
         assertSame(teams.get(7), roundrobin.getGroups().get(2).getTeams().get(2));
+    }
+
+    @Test
+    public void stats01() {
+        RoundRobinFormat rr = new RoundRobinFormat();
+        List<Team> teams = TestUtilities.getTestTeams(4, 1);
+        rr.start(teams, true);
+
+        // Play all matches. The highest seeded team wins 1-0
+        for (Match match : rr.getAllMatches()) {
+            if (match.getTeamOne().getInitialSeedValue() < match.getTeamTwo().getInitialSeedValue()) {
+                match.setScores(1, 0, true);
+            } else {
+                match.setScores(0, 1, true);
+            }
+        }
+
+        // Check if stats are as expected
+        StatsTest.assertStats(teams.get(0), rr, 3, 0, 3, 0);
+        StatsTest.assertStats(teams.get(1), rr, 2, 1, 2, 1);
+        StatsTest.assertStats(teams.get(2), rr, 1, 2, 1, 2);
+        StatsTest.assertStats(teams.get(3), rr, 0, 3, 0, 3);
     }
 }

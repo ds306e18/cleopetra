@@ -55,7 +55,7 @@ public class RoundRobinFormat implements Format, MatchPlayedListener {
 
     @Override
     public List<Team> getTopTeams(int count, TieBreaker tieBreaker) {
-        return tieBreaker.compareWithPoints(teams, count, getTeamPointsMap());
+        return tieBreaker.compareWithPoints(teams, getTeamPointsMap(), this).subList(0, count);
     }
 
     /** This function populates the groups list and generates the matches for each group. */

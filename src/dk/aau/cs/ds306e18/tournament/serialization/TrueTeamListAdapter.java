@@ -43,7 +43,9 @@ public class TrueTeamListAdapter extends TypeAdapter<ArrayList<Team>> {
         // Re-construct ArrayList of teams
         in.beginArray();
         while (!in.peek().equals(JsonToken.END_ARRAY)) {
-            teams.add(teamSpecificGson.fromJson(in, Team.class));
+            Team team = teamSpecificGson.fromJson(in, Team.class);
+            team.postDeserializationRepair();
+            teams.add(team);
         }
         in.endArray();
 

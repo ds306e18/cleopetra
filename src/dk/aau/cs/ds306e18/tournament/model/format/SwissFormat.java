@@ -44,7 +44,7 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
 
     @Override
     public List<Team> getTopTeams(int count, TieBreaker tieBreaker) {
-        return tieBreaker.compareWithPoints(teams, count, getTeamPointsMap());
+        return tieBreaker.compareWithPoints(teams, getTeamPointsMap(), this).subList(0, count);
     }
 
     /**
@@ -97,7 +97,7 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
      */
     private List<Team> getOrderedTeamsListFromPoints(ArrayList<Team> teamList, HashMap<Team, Integer> teamPoints) {
         if (rounds.size() == 0) return new ArrayList<>(teamList);
-        else return Tournament.get().getTieBreaker().compareWithPoints(teamList, teamList.size(), teamPoints);
+        else return Tournament.get().getTieBreaker().compareWithPoints(teamList, teamPoints, this);
     }
 
     /**

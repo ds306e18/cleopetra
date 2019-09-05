@@ -87,6 +87,13 @@ public class Team {
         return statsManager;
     }
 
+    /**
+     * Repairs properties that cannot be deserialized.
+     */
+    public void postDeserializationRepair() {
+        statsManager = new StatsManager(this);
+    }
+
     @Override
     public String toString() {
         return teamName;

@@ -5,17 +5,17 @@ import dk.aau.cs.ds306e18.tournament.model.format.Format;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.Map;
 
 /**
  * Class for track all stats for a Team for individual Stages and globally across all Stages.
  */
-public class StatsManager {
+public class StatsManager implements StatsChangeListener {
 
     private Team team;
     private StatsTracker globalStatsTracker;
-    private Map<Format, StatsTracker> formatStats = new HashMap<>();
+    private Map<Format, StatsTracker> formatStats = new IdentityHashMap<>();
 
     /**
      * Create a StatsManager for the given team.
@@ -74,7 +74,11 @@ public class StatsManager {
     }
 
     private StatsTracker getTracker(Format format) {
-        return formatStats.computeIfAbsent(format, k -> new StatsTracker(team));
+        return formatStats.computeIfAbsent(format, k -> {
+            StatsTracker tracker = new StatsTracker(team);
+            tracker.getStats().registerStatsChangeListener(this);
+            return tracker;
+        });
     }
 
     /**
@@ -94,5 +98,10 @@ public class StatsManager {
             goalsConceded += stats.getGoalsConceded();
         }
         globalStatsTracker.getStats().set(wins, loses, goals, goalsConceded);
+    }
+
+    @Override
+    public void statsChanged(Stats stats) {
+        recalculateGlobalStats();
     }
 }

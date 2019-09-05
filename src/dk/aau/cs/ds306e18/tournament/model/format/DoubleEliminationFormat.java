@@ -317,7 +317,7 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
             }
         }
 
-        return tieBreaker.compareWithPoints(teams, count, pointsMap);
+        return tieBreaker.compareWithPoints(teams, pointsMap, this).subList(0, count);
     }
 
     /** Recalculates the isExtraMatchNeeded boolean. The extra match is needed if the loser of the final match has only
