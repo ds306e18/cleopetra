@@ -63,17 +63,17 @@ public class MatchVisualController implements MatchChangeListener {
         textTeamOneScore.setText(" ");
     }
 
+    /** @return the match that this shows. */
+    public Match getShowedMatch() {
+        return showedMatch;
+    }
+
     /** Updates the state/ui of this match. */
     public void setShowedMatch(Match match){
         if (showedMatch != null) showedMatch.unregisterMatchChangeListener(this);
         showedMatch = match;
         showedMatch.registerMatchChangeListener(this);
         updateFields();
-    }
-
-    /** @return the match that this shows. */
-    public Match getShowedMatch() {
-        return showedMatch;
     }
 
     @Override

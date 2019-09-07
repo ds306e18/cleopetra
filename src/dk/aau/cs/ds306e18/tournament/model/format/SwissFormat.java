@@ -275,9 +275,7 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
 
         for (Match match : getCompletedMatches()) {
             if (match.getWinner().equals(team)) {
-                points += 2;
-            } else if (match.getLoser().equals(team)) {
-                points -= 2;
+                points += 1;
             }
         }
 
