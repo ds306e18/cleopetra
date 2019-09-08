@@ -27,6 +27,7 @@ public class RoundRobinNode extends VBox implements ModelCoupledUI {
     private final BracketOverviewTabController boc;
 
     private ArrayList<MatchVisualController> mvcs = new ArrayList<>();
+    private ArrayList<StatsTable> statsTables = new ArrayList<>();
 
     public RoundRobinNode(RoundRobinFormat roundRobin, BracketOverviewTabController boc) {
         this.roundRobin = roundRobin;
@@ -71,6 +72,7 @@ public class RoundRobinNode extends VBox implements ModelCoupledUI {
         StatsTable table = new StatsTable(rrgroup.getTeams(), roundRobin);
         box.getChildren().add(table);
         HBox.setMargin(table, TABLE_MARGIN);
+        statsTables.add(table);
 
         return box;
     }
@@ -105,7 +107,11 @@ public class RoundRobinNode extends VBox implements ModelCoupledUI {
         for (MatchVisualController mvc : mvcs) {
             mvc.decoupleFromModel();
         }
+        for (StatsTable table : statsTables) {
+            table.decoupleFromModel();
+        }
         getChildren().clear();
         mvcs.clear();
+        statsTables.clear();
     }
 }

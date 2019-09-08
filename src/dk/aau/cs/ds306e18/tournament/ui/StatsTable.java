@@ -127,6 +127,15 @@ public class StatsTable extends TableView<Stats> implements StatsChangeListener,
         }
     }
 
+    private void unregisterAsListener() {
+        for (Team team : teams) {
+            Stats stats = format == null ?
+                    team.getStatsManager().getGlobalStats() :
+                    team.getStatsManager().getStats(format);
+            stats.unregisterStatsChangeListener(this);
+        }
+    }
+
     @Override
     public void statsChanged(Stats stats) {
         update();
@@ -134,6 +143,7 @@ public class StatsTable extends TableView<Stats> implements StatsChangeListener,
 
     @Override
     public void decoupleFromModel() {
+        unregisterAsListener();
         teams = null;
         format = null;
     }
