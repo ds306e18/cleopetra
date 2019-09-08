@@ -21,7 +21,7 @@ public class RoundRobinNode extends VBox implements ModelCoupledUI {
     private final Insets MARGINS = new Insets(0, 8, 8, 0);
     private final Insets ROUND_PADDING = new Insets(0,5,28,0);
     private final Insets LABEL_PADDING = new Insets(0,16,0,0);
-    private final Insets TABLE_MARGIN = new Insets(0,0,0,32);
+    private final Insets TABLE_MARGIN = new Insets(0,0,0,64);
 
     private final RoundRobinFormat roundRobin;
     private final BracketOverviewTabController boc;

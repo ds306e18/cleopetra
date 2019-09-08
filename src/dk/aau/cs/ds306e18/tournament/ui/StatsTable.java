@@ -29,7 +29,7 @@ public class StatsTable extends TableView<Stats> implements StatsChangeListener,
         setFocusTraversable(false);
         setMouseTransparent(true);
         setPrefHeight(0); // Table heights are a nightmare. This creates an okay result.
-        setPrefWidth(290);
+        setPrefWidth(350);
         update();
         registerAsListener();
     }
@@ -52,19 +52,19 @@ public class StatsTable extends TableView<Stats> implements StatsChangeListener,
         nameColumn.setMaxWidth(140);
 
         // Wins column
-        TableColumn<Stats, Integer> winsColumn = new TableColumn<>("W");
+        TableColumn<Stats, Integer> winsColumn = new TableColumn<>("Wins");
         winsColumn.setCellValueFactory(cell -> new SimpleIntegerProperty(cell.getValue().getWins()).asObject());
 
         // Wins column
-        TableColumn<Stats, Integer> losesColumn = new TableColumn<>("L");
+        TableColumn<Stats, Integer> losesColumn = new TableColumn<>("Loses");
         losesColumn.setCellValueFactory(cell -> new SimpleIntegerProperty(cell.getValue().getLoses()).asObject());
 
         // Goal difference column
-        TableColumn<Stats, Integer> goalDifferenceColumn = new TableColumn<>("GD");
+        TableColumn<Stats, Integer> goalDifferenceColumn = new TableColumn<>("GDiff");
         goalDifferenceColumn.setCellValueFactory(cell -> new SimpleIntegerProperty(cell.getValue().getGoalDifference()).asObject());
 
         // Goals column
-        TableColumn<Stats, Integer> goalsColumn = new TableColumn<>("G");
+        TableColumn<Stats, Integer> goalsColumn = new TableColumn<>("Goals");
         goalsColumn.setCellValueFactory(cell -> new SimpleIntegerProperty(cell.getValue().getGoals()).asObject());
 
         // Column sorting
