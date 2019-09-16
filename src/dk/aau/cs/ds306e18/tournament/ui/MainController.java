@@ -7,9 +7,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Tab;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class MainController {
 
@@ -43,13 +43,13 @@ public class MainController {
 
     @FXML
     void onSaveIconClicked(MouseEvent event) {
-
-        Stage stage = (Stage) saveTournamentBtn.getScene().getWindow();
-
-        if (SaveLoad.saveTournament(stage)){
+        Stage fxstage = (Stage) saveTournamentBtn.getScene().getWindow();
+        try {
+            SaveLoad.saveTournamentWithFileChooser(fxstage);
             Alerts.infoNotification("Saved", "Tournament was successfully saved.");
-        } else {
-            Alerts.errorNotification("Error while saving", "Something went wrong while saving the tournament.");
+        } catch (IOException e) {
+            Alerts.errorNotification("Error while saving", "Something went wrong while saving the tournament: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }

@@ -1,240 +1,96 @@
 package dk.aau.cs.ds306e18.tournament;
 
 import dk.aau.cs.ds306e18.tournament.model.*;
-import dk.aau.cs.ds306e18.tournament.model.format.*;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
-import dk.aau.cs.ds306e18.tournament.rlbot.configuration.BotConfigTest;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static java.time.Instant.now;
 
 public class TestUtilities {
 
-    private static int minNumPlayers = 2;
-    private static int maxNumPlayers = 5;
-    private static int numTeams = randomIntInRange(4, 10);
+    public static final String[] TEST_BOT_CONFIG_FILES = {
+            "test/bots/alpha.cfg",
+            "test/bots/bravo.cfg",
+            "test/bots/charlie.cfg",
+            "test/bots/delta.cfg",
+            "test/bots/echo.cfg",
+            "test/bots/foxtrot.cfg",
+            "test/bots/golf.cfg",
+            "test/bots/hotel.cfg",
+            "test/bots/india.cfg",
+            "test/bots/juliet.cfg",
+            "test/bots/kilo.cfg",
+            "test/bots/lima.cfg",
+            "test/bots/mike.cfg",
+            "test/bots/november.cfg",
+    };
+
+    public static final String[] TEAM_NAMES = {"Complexity", "FlipSid3", "Fnatic", "Method", "Dignitas",
+            "Team Secret", "We Dem Girlz", "Allegiance", "Cloud9", "Evil Geniuses", "G2", "Ghost Gaming",
+            "NRG", "Rogue", "The Muffin Men", "FC Barcelona", "Team SoloMid", "The Bricks", "Baguette Squad",
+            "Frontline", "Exalty", "ARG", "Echo Zulu", "Ghost", "Triple Commit", "The D00ds", "Plot Twist",
+            "Gadget", "Firecrackers", "My Little Pwners", "Avalanche", "ChronoRetreat", "Dala's Warriors"};
+
+    private static final Random rand = new Random();
 
     /**
-     * Returns a random int between lower and upper
-     *
-     * @param lower limit, inclusive of limit
-     * @param upper limit, inclusive of limit
-     * @return random int
+     * Returns the given amount of bots from test configs. Each bot will be unique.
      */
-    private static int randomIntInRange(int lower, int upper) {
-        //seed java.util random function for greater resolution when called in rapid succession
-        return new Random(now().getNano()).nextInt(upper - lower) + lower;
-    }
-
-    private static final ArrayList<String> botNames = new ArrayList<String>(Arrays.asList(
-            "Boten Anna", "JoeyBot", "MightyBot", "2DayHackBot", "AdversityBot", "Air Bud",
-            "Atba2", "Beast from the East", "BeepBoop", "Botimus Prime", "Brick",
-            "CunningBot", "Dweller", "Gosling", "Defending!"));
-
-    private static final ArrayList<String> devNames = new ArrayList<>(Arrays.asList(
-            "Mathias", "Mikkel", "Ali", "Nicolai", "Falke", "Chris", "Goose", "Tarehart",
-            "DTracers"));
-
-    private static final ArrayList<String> teamNames = new ArrayList<>(Arrays.asList(
-            "compLexity", "FlipSid3", "Fnatic", "Method", "Team Dignitas", "Team Secret",
-            "We Dem Girlz", "Allegiance", "Cloud9", "Evil Geniuses", "G2", "Ghost Gaming",
-            "NRG", "Rouge"));
-
-    /**
-     * Generates a single bot.
-     *
-     * @return a bot.
-     */
-    public static Bot generateBot() {
-        Random rand = new Random();
-        return new BotFromConfig(
-                "test/" + BotConfigTest.TEST_BOT_CONFIG_FILENAMES[rand.nextInt(BotConfigTest.TEST_BOT_CONFIG_FILENAMES.length)]
-        );
+    public static List<BotFromConfig> getTestConfigBots(int count) {
+        if (0 < count && count < TEST_BOT_CONFIG_FILES.length)
+            throw new AssertionError("Only 0-" + TEST_BOT_CONFIG_FILES.length + " test bots are supported.");
+        return Arrays.stream(TEST_BOT_CONFIG_FILES)
+                .limit(count)
+                .map(BotFromConfig::new)
+                .collect(Collectors.toList());
     }
 
     /**
-     * Generates an arrayList with the requested number of bots.
-     *
-     * @param numberOfBots the desired number of bots.
-     * @return an arrayList containing the requested number of bots.
+     * Returns a random bot from a test config. Only use it when the randomness does not affect the test.
      */
-    public static ArrayList<Bot> generateBots(int numberOfBots) {
-
-        if (numberOfBots < 0)
-            throw new IllegalArgumentException();
-
-        Random rand = new Random();
-        ArrayList<Bot> bots = new ArrayList<>();
-
-        for (int i = 0; i < numberOfBots; i++)
-            bots.add(generateBot());
-
-        return bots;
+    private static BotFromConfig randomBotFromConfig() {
+        int i = rand.nextInt(TEST_BOT_CONFIG_FILES.length);
+        return new BotFromConfig(TEST_BOT_CONFIG_FILES[i]);
     }
 
     /**
-     * Generates a team with the given team size.
-     *
-     * @param teamSize the requested number of players on the team.
-     * @return a team with the requested number of members.
+     * Returns the given amount of teams. The teams are seeded and each team is unique due to team name and seed.
+     * Note that the bots are chosen randomly.
      */
-    public static Team generateTeam(int teamSize) {
-        Random rand = new Random();
-        int seedValue = rand.nextInt(100);
-        return generateTeam(teamSize, seedValue);
+    public static List<Team> getTestTeams(int count, int teamSize) {
+        if (count < 0 || TEAM_NAMES.length <= count)
+            throw new AssertionError("Only 0-" + TEAM_NAMES.length + " test teams are supported.");
+        return IntStream.range(1, count + 1)
+                .mapToObj(seed -> new Team(
+                        TEAM_NAMES[seed],
+                        Stream.generate(() -> (Bot) randomBotFromConfig())
+                                .limit(teamSize)
+                                .collect(Collectors.toList()),
+                        seed,
+                        "Team description"))
+                .collect(Collectors.toList());
     }
 
     /**
-     * Generates a team with the given team size and seed.
-     *
-     * @param teamSize  the requested team size.
-     * @param seedValue the teams seed
-     * @return a team with the requested number of members with the specified seed.
+     * Generates a tournament with the given number of teams with the given number of bots per team. Note that
+     * the bots are randomly chosen, but team are unique due to team names.
      */
-    public static Team generateTeam(int teamSize, int seedValue) {
-
-        if (teamSize < 0)
-            throw new IllegalArgumentException();
-
-        Random rand = new Random();
-
-        return new Team(teamNames.get(rand.nextInt(teamNames.size())), generateBots(teamSize), seedValue, "");
-    }
-
-    /**
-     * Generates an arrayList with the requested number of teams containing the requested number of bots.
-     *
-     * @param numberOfTeams the requested number of teams.
-     * @param teamSize      the requested number of bots on each team.
-     * @return an arrayList containing the requested number of teams.
-     */
-    public static ArrayList<Team> generateTeams(int numberOfTeams, int teamSize) {
-
-        if (numberOfTeams < 0)
-            throw new IllegalArgumentException();
-
-        ArrayList<Team> teams = new ArrayList<>();
-
-        for (int i = 0; i < numberOfTeams; i++) {
-            teams.add(generateTeam(teamSize));
-        }
-
-        return teams;
-    }
-
-    /**
-     * Generates a random tournament with numTeams teams, with between minNumPlayers and maxNumPlayers players each
-     *
-     * @return random Tournament object
-     */
-    public static Tournament generateTournamentOnlyTeams() {
+    public static Tournament generateTournamentWithTeams(int teamCount, int botsPerTeam) {
         Tournament tournament = new Tournament();
-        tournament.setName("DatTournament");
-
-        for (int i = 0; i < numTeams; i++) {
-            tournament.addTeam(generateTeam(randomIntInRange(minNumPlayers, maxNumPlayers)));
-        }
-
+        tournament.setName("DatTestTournament");
+        List<Team> teams = getTestTeams(teamCount, botsPerTeam);
+        tournament.addTeams(teams);
         return tournament;
     }
 
     /**
-     * Generates a random Round Robin tournament with numTeams teams, with between minNumPlayers and maxNumPlayers players each
-     *
-     * @return random Tournament object
-     */
-    public static Tournament generateRoundRobinTournament() {
-        Tournament tournament = new Tournament();
-        tournament.setName("DatTournament");
-
-        for (int i = 0; i < numTeams; i++)
-            tournament.addTeam(generateTeam(randomIntInRange(minNumPlayers, maxNumPlayers)));
-
-        RoundRobinFormat roundRobinFormat = new RoundRobinFormat();
-
-        Stage stage = new Stage("Round Robin stage", roundRobinFormat);
-
-        tournament.addStage(stage);
-        tournament.start();
-
-        return tournament;
-    }
-
-    /**
-     * Generates a random Single Elimination tournament with numTeams teams, with between minNumPlayers and maxNumPlayers players each
-     *
-     * @return random Tournament object
-     */
-    public static Tournament generateSingleEliminationTournament() {
-        Tournament tournament = new Tournament();
-        tournament.setName("DatTournament");
-
-        for (int i = 0; i < numTeams; i++)
-            tournament.addTeam(generateTeam(randomIntInRange(minNumPlayers, maxNumPlayers)));
-
-        SingleEliminationFormat singleEliminationFormat = new SingleEliminationFormat();
-
-        Stage stage = new Stage("Single Elimination stage", singleEliminationFormat);
-
-        tournament.addStage(stage);
-        tournament.start();
-
-        return tournament;
-    }
-
-    /**
-     * Generates a random Swiss tournament with numTeams teams, with between minNumPlayers and maxNumPlayers players each
-     *
-     * @return random Tournament object
-     */
-    public static Tournament generateSwissTournament() {
-        Tournament tournament = new Tournament();
-        tournament.setName("DatTournament");
-
-        for (int i = 0; i < numTeams; i++)
-            tournament.addTeam(generateTeam(randomIntInRange(minNumPlayers, maxNumPlayers)));
-
-        SwissFormat swissFormat = new SwissFormat();
-
-        Stage stage = new Stage("Swiss stage", swissFormat);
-
-        tournament.addStage(stage);
-        tournament.start();
-
-        return tournament;
-    }
-
-    /**
-     * Generates a random Double Elimination tournament with numTeams teams, with between minNumPlayers and maxNumPlayers players each
-     * @return random Tournament object
-     */
-    public static Tournament generateDoubleEliminationTournament() {
-        Tournament tournament = new Tournament();
-        tournament.setName("DatTournament");
-
-        for (int i = 0; i < numTeams; i++)
-            tournament.addTeam(generateTeam(randomIntInRange(minNumPlayers, maxNumPlayers)));
-
-        DoubleEliminationFormat doubleElim = new DoubleEliminationFormat();
-
-        Stage stage = new Stage("Double elimination stage", doubleElim);
-
-        tournament.addStage(stage);
-        tournament.start();
-
-        return tournament;
-    }
-
-    public static int numberOfMatchesInRoundRobin(int x) {
-        return x * (x-1) / 2;
-    }
-
-    /**
-     * sets all matches in the given list to have been played. The best seeded team wins.
+     * Sets all matches in the given list to have been played. The best seeded team wins.
      */
     public static void setAllMatchesToPlayed(List<Match> matches) {
         for (Match match : matches) {
@@ -246,26 +102,5 @@ public class TestUtilities {
                 match.setScores(0, 1, true);
             }
         }
-    }
-
-    /**
-     * Generates an arrayList with the requested number of teams containing the requested number of bots with ascending seed values.
-     *
-     * @param numberOfTeams the requested number of teams.
-     * @param teamSize      the requested number of bots on each team.
-     * @return an arrayList containing the requested number of teams ascending seed values.
-     */
-    public static ArrayList<Team> generateSeededTeams(int numberOfTeams, int teamSize) {
-
-        if (numberOfTeams < 0)
-            throw new IllegalArgumentException();
-
-        ArrayList<Team> teams = new ArrayList<>();
-
-        for (int i = 1; i <= numberOfTeams; i++) {
-            teams.add(generateTeam(teamSize, i));
-        }
-
-        return teams;
     }
 }

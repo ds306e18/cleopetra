@@ -15,7 +15,7 @@ public class TieBreakerTest {
     @Test
     public void goalDiff01() {
 
-        List<Team> teams = TestUtilities.generateTeams(6, 1);
+        List<Team> teams = TestUtilities.getTestTeams(6, 1);
         Match matchOne = new Match(teams.get(0), teams.get(1));
         Match matchTwo = new Match(teams.get(2), teams.get(3));
         Match matchThree = new Match(teams.get(4), teams.get(5));
@@ -36,7 +36,7 @@ public class TieBreakerTest {
 
     @Test
     public void goalScored01() {
-        List<Team> teams = TestUtilities.generateTeams(4, 1);
+        List<Team> teams = TestUtilities.getTestTeams(4, 1);
         Match matchOne = new Match(teams.get(0), teams.get(1));
         Match matchTwo = new Match(teams.get(2), teams.get(3));
 
@@ -53,7 +53,7 @@ public class TieBreakerTest {
 
     @Test
     public void bySeed01() {
-        List<Team> teams = TestUtilities.generateTeams(4, 1);
+        List<Team> teams = TestUtilities.getTestTeams(4, 1);
         for (int i = 0; i < teams.size(); i++) {
             teams.get(i).setInitialSeedValue(i + 1);
         }
@@ -75,7 +75,7 @@ public class TieBreakerTest {
 
     @Test
     public void compareWithPoints01() {
-        List<Team> teams = TestUtilities.generateTeams(6, 1);
+        List<Team> teams = TestUtilities.getTestTeams(6, 1);
         teams.get(0).addGoalsScored(2);
         teams.get(1).addGoalsScored(3);
         teams.get(2).addGoalsScored(4);
@@ -103,7 +103,7 @@ public class TieBreakerTest {
 
     @Test
     public void compareWithPoints02() {
-        List<Team> teams = TestUtilities.generateTeams(6, 1);
+        List<Team> teams = TestUtilities.getTestTeams(6, 1);
         teams.get(0).addGoalsScored(1);
         teams.get(1).addGoalsScored(3);
         teams.get(2).addGoalsScored(2);

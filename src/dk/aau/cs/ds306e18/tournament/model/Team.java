@@ -1,6 +1,7 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class Team {
@@ -14,9 +15,9 @@ public class Team {
     private int goalsScored;
     private int goalsConceded; //This is goals scored on this team by opponent teams
 
-    public Team(String teamName, ArrayList<Bot> bots, int initialSeedValue, String description) {
+    public Team(String teamName, List<Bot> bots, int initialSeedValue, String description) {
         this.teamName = teamName;
-        this.bots = bots == null ? new ArrayList<>() : bots; // List can't be null to avoid NullPointerExceptions
+        this.bots = bots == null ? new ArrayList<>() : new ArrayList<>(bots); // List can't be null to avoid NullPointerExceptions
         this.initialSeedValue = initialSeedValue;
         this.description = description;
         this.goalsScored = 0;

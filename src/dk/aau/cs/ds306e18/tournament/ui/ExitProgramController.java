@@ -1,20 +1,14 @@
 package dk.aau.cs.ds306e18.tournament.ui;
 
-import dk.aau.cs.ds306e18.tournament.model.Tournament;
-import dk.aau.cs.ds306e18.tournament.utility.FileOperations;
+import dk.aau.cs.ds306e18.tournament.utility.Alerts;
 import dk.aau.cs.ds306e18.tournament.utility.SaveLoad;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 public class ExitProgramController extends DraggablePopupWindow {
 
@@ -38,8 +32,12 @@ public class ExitProgramController extends DraggablePopupWindow {
 
         Stage stage = (Stage) cancelBtn.getScene().getWindow();
 
-        if (SaveLoad.saveTournament(stage)) {
+        try {
+            SaveLoad.saveTournamentWithFileChooser(stage);
             System.exit(0);
+        } catch (IOException e) {
+            e.printStackTrace();
+            Alerts.errorNotification("Error while saving", "Something went wrong while saving the tournament: " + e.getMessage());
         }
     }
 

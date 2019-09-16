@@ -12,7 +12,7 @@ public class ConfigFileTest {
 
     private final static String TEST_DIR = "test/";
     private final static String TEST_CONFIG = "config_format_test.cfg";
-    private final static String TEST_CONFIG_DUMMY = "dummy_config_format_test.cfg";
+    private final static String TEST_CONFIG_OUT = "_out_config_format_test.cfg";
 
     @Test
     public void setAndGetString01() {
@@ -91,7 +91,7 @@ public class ConfigFileTest {
     @Test
     public void write01() throws IOException {
         ConfigFile testConfig = new ConfigFile(new File(TEST_DIR, TEST_CONFIG));
-        testConfig.write(new File(TEST_DIR, TEST_CONFIG_DUMMY));
+        testConfig.write(new File(TEST_DIR, TEST_CONFIG_OUT));
 
         // Load again to make sure output was readable and didn't modify any values
         testConfig = new ConfigFile(new File(TEST_DIR, TEST_CONFIG));
