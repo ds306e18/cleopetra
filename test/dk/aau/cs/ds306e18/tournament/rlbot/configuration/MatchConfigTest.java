@@ -43,8 +43,7 @@ public class MatchConfigTest {
         assertEquals(RespawnTime.THREE_SECONDS, config.getRespawnTime());
 
         // Participants
-        // Note that we can't load the BotConfigs as their path is not and can't be absolute. But we can still test
-        // the other stuff in ParticipantInfo
+        // We won't test the BotConfigs here, only the other stuff in ParticipantInfo
         List<ParticipantInfo> participants = config.getParticipants();
         assertEquals(2, participants.size());
         assertEquals(BotSkill.ALLSTAR, participants.get(0).getSkill());
