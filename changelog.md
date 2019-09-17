@@ -2,6 +2,8 @@
 
 #### Unreleased changes
 - Clean up of unit tests. - NicEastvillage
+- Team stats such as wins, loses, goals scored, and goals conceded are now tracked per stage. #8 - NicEastvillage
+- Added scoreboards to each group in round robin and update look of all scoreboards. #1 #12 - NicEastvillage
 
 
 #### Version 1.4 - 21. August 2019
