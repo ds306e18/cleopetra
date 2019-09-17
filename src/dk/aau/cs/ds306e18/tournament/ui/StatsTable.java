@@ -37,7 +37,7 @@ public class StatsTable extends TableView<Stats> implements StatsChangeListener,
     protected void calculateSize() {
         int items = teams.size();
         setPrefHeight(23.5 + 24.5 * items); // Table heights are a nightmare. This creates an okay result.
-        setPrefWidth(345);
+        setPrefWidth(306);
         setMinHeight(USE_PREF_SIZE);
         setMaxHeight(USE_PREF_SIZE);
     }
@@ -64,8 +64,8 @@ public class StatsTable extends TableView<Stats> implements StatsChangeListener,
     protected void addTeamNameColumn() {
         TableColumn<Stats, String> nameColumn = new TableColumn<>("Name");
         nameColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getTeam().getTeamName()));
-        nameColumn.setMinWidth(150);
-        nameColumn.setMaxWidth(150);
+        nameColumn.setMinWidth(110);
+        nameColumn.setMaxWidth(110);
         getColumns().add(nameColumn);
     }
 
