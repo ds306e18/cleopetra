@@ -1,6 +1,6 @@
 # Changelog
 
-#### Version 1.5 - 20. September 2019
+#### Version 1.5 - 1. October 2019
 - Clean up of unit tests. - NicEastvillage
 - Team stats such as wins, loses, goals scored, and goals conceded are now tracked per stage. #8 - NicEastvillage
 - Added scoreboards to each group in round robin and updated look of all scoreboards. #1 #12 - NicEastvillage
