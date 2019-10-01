@@ -4,6 +4,7 @@ import dk.aau.cs.ds306e18.tournament.TestUtilities;
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.TieBreaker;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import dk.aau.cs.ds306e18.tournament.model.stats.StatsTest;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -233,5 +234,29 @@ public class DoubleEliminationFormatTest {
         for (int i = 0; i < topTeams.size(); i++) {
             assertSame(teams.get(i), topTeams.get(i));
         }
+    }
+
+    @Test
+    public void stats01() {
+        DoubleEliminationFormat de = new DoubleEliminationFormat();
+        List<Team> teams = TestUtilities.getTestTeams(4, 1);
+        de.start(teams, true);
+
+        // Play all matches. The highest seeded team wins 1-0
+        List<Match> allMatches = de.getAllMatches();
+        for (int matchIndex = allMatches.size() - 1; matchIndex > 0; matchIndex--) {
+            Match match = allMatches.get(matchIndex);
+            if (match.getTeamOne().getInitialSeedValue() < match.getTeamTwo().getInitialSeedValue()) {
+                match.setScores(1, 0, true);
+            } else {
+                match.setScores(0, 1, true);
+            }
+        }
+
+        // Check if stats are as expected
+        StatsTest.assertStats(teams.get(0), de, 3, 0, 3, 0);
+        StatsTest.assertStats(teams.get(1), de, 2, 2, 2, 2);
+        StatsTest.assertStats(teams.get(2), de, 1, 2, 1, 2);
+        StatsTest.assertStats(teams.get(3), de, 0, 2, 0, 2);
     }
 }

@@ -5,6 +5,7 @@ import dk.aau.cs.ds306e18.tournament.model.format.RoundRobinGroup;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.ui.BracketOverviewTabController;
 import dk.aau.cs.ds306e18.tournament.ui.MatchVisualController;
+import dk.aau.cs.ds306e18.tournament.ui.StatsTable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -20,11 +21,13 @@ public class RoundRobinNode extends VBox implements ModelCoupledUI {
     private final Insets MARGINS = new Insets(0, 8, 8, 0);
     private final Insets ROUND_PADDING = new Insets(0,5,28,0);
     private final Insets LABEL_PADDING = new Insets(0,16,0,0);
+    private final Insets TABLE_MARGIN = new Insets(0,0,0,64);
 
     private final RoundRobinFormat roundRobin;
     private final BracketOverviewTabController boc;
 
     private ArrayList<MatchVisualController> mvcs = new ArrayList<>();
+    private ArrayList<StatsTable> statsTables = new ArrayList<>();
 
     public RoundRobinNode(RoundRobinFormat roundRobin, BracketOverviewTabController boc) {
         this.roundRobin = roundRobin;
@@ -61,9 +64,15 @@ public class RoundRobinNode extends VBox implements ModelCoupledUI {
         labelBox.getChildren().add(groupLabel);
         box.getChildren().add(labelBox);
 
-        //Add rounds to this group
+        // Add rounds to this group. Each round is a contained in a VBox
         for(int i = 0; i < rrgroup.getRounds().size(); i++)
             box.getChildren().add(getRoundBox(rrgroup.getRounds().get(i), i));
+
+        // Leaderboard for the group
+        StatsTable table = new StatsTable(rrgroup.getTeams(), roundRobin);
+        box.getChildren().add(table);
+        HBox.setMargin(table, TABLE_MARGIN);
+        statsTables.add(table);
 
         return box;
     }
@@ -98,7 +107,11 @@ public class RoundRobinNode extends VBox implements ModelCoupledUI {
         for (MatchVisualController mvc : mvcs) {
             mvc.decoupleFromModel();
         }
+        for (StatsTable table : statsTables) {
+            table.decoupleFromModel();
+        }
         getChildren().clear();
         mvcs.clear();
+        statsTables.clear();
     }
 }

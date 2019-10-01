@@ -1,0 +1,18 @@
+.table-view .column-header-background .label {
+    -fx-background-color: transparent;
+    -fx-text-fill: black;
+}
+
+.table-view .column-header {
+    -fx-background-color: #eeeeee;
+}
+
+.table-view .column-header-background .filler {
+    -fx-background-color: #eeeeee;
+}
+
+.table-row-cell {
+    -fx-background-color: -fx-table-cell-border-color, #ffffff;
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 0.0em;
+}

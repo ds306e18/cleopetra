@@ -21,7 +21,7 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
     private ArrayList<ArrayList<Match>> rounds = new ArrayList<>();
     private int maxRoundsPossible;
     private int roundCount = 4;
-    private HashMap<Team, Integer> teamPoints;
+    transient private IdentityHashMap<Team, Integer> teamPoints;
 
     transient private List<StageStatusChangeListener> statusChangeListeners = new LinkedList<>();
 
@@ -30,7 +30,7 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
         rounds = new ArrayList<>();
         maxRoundsPossible = getMaxRoundsPossible(teams.size());
         roundCount = maxRoundsPossible < roundCount ? maxRoundsPossible : roundCount;
-        teamPoints = createPointsHashMap(teams);
+        teamPoints = createPointsMap(teams);
         this.teams = new ArrayList<>(teams);
         status = StageStatus.RUNNING;
 
@@ -44,19 +44,15 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
 
     @Override
     public List<Team> getTopTeams(int count, TieBreaker tieBreaker) {
-        return tieBreaker.compareWithPoints(teams, count, getTeamPointsMap());
+        return tieBreaker.compareWithPoints(teams, getTeamPointsMap(), this).subList(0, count);
     }
 
     /**
      * Creates the hashMap that stores the "swiss" points for the teams.
      */
-    private HashMap<Team, Integer> createPointsHashMap(List<Team> teams) {
-
-        HashMap<Team, Integer> pointsMap = new HashMap<>();
-
-        for (Team team : teams)
-            pointsMap.put(team, 0);
-
+    private IdentityHashMap<Team, Integer> createPointsMap(List<Team> teams) {
+        IdentityHashMap<Team, Integer> pointsMap = new IdentityHashMap<>();
+        for (Team team : teams) pointsMap.put(team, 0);
         return pointsMap;
     }
 
@@ -95,9 +91,9 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
      * @param teamPoints a hashMap containing teams as key and their points as value.
      * @return the given list sorted based on the given points.
      */
-    private List<Team> getOrderedTeamsListFromPoints(ArrayList<Team> teamList, HashMap<Team, Integer> teamPoints) {
+    private List<Team> getOrderedTeamsListFromPoints(ArrayList<Team> teamList, Map<Team, Integer> teamPoints) {
         if (rounds.size() == 0) return new ArrayList<>(teamList);
-        else return Tournament.get().getTieBreaker().compareWithPoints(teamList, teamList.size(), teamPoints);
+        else return Tournament.get().getTieBreaker().compareWithPoints(teamList, teamPoints, this);
     }
 
     /**
@@ -140,6 +136,10 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
         }
 
         rounds.add(createdMatches);
+
+        for (Team team : teams) {
+            team.getStatsManager().trackMatches(this, createdMatches);
+        }
     }
 
     /**
@@ -234,8 +234,8 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
     /**
      * @return a hashMap containing the teams and their points.
      */
-    public HashMap<Team, Integer> getTeamPointsMap() {
-        return new HashMap<>(teamPoints);
+    public IdentityHashMap<Team, Integer> getTeamPointsMap() {
+        return teamPoints;
     }
 
     @Override
@@ -261,7 +261,7 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
 
     /**
      * Checks a given team for every completed match if they have been a loser or winner. Then assigning their points
-     * based upon their win/loss ratio. A win gives 2 points and a loss reduces points by 2.
+     * based upon their win/loss ratio. A win gives 1 point.
      * By going through all completed matches we can assure proper point giving due to recalculations.
      *
      * @param team The given team to check, calculate and then assign point for.
@@ -271,13 +271,15 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
 
         for (Match match : getCompletedMatches()) {
             if (match.getWinner().equals(team)) {
-                points += 2;
-            } else if (match.getLoser().equals(team)) {
-                points -= 2;
+                points += 1;
             }
         }
 
         teamPoints.put(team, points);
+    }
+
+    public List<Team> getTeams() {
+        return teams;
     }
 
     @Override
@@ -326,6 +328,11 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
             match.registerMatchPlayedListener(this);
             match.registerMatchChangeListener(this);
         }
+        teamPoints = createPointsMap(teams);
+        for (Team team : teams) {
+            calculateAndAssignTeamPoints(team);
+            team.getStatsManager().trackMatches(this, getAllMatches());
+        }
     }
 
     @Override
@@ -335,7 +342,7 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
         SwissFormat that = (SwissFormat) o;
         return getMaxRoundsPossible() == that.getMaxRoundsPossible() &&
                 Objects.equals(getRounds(), that.getRounds()) &&
-                Objects.equals(teamPoints, that.teamPoints);
+                Objects.equals(teams, that.teams);
     }
 
     @Override

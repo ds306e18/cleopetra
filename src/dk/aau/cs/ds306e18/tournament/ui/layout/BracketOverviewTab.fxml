@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -15,9 +15,8 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<GridPane id="mainGrid" fx:id="bracketOverviewTab" prefHeight="572.0" prefWidth="800.0" stylesheets="@css/stylesheet.css" xmlns="http://javafx.com/javafx/1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.BracketOverviewTabController">
+<GridPane id="mainGrid" fx:id="bracketOverviewTab" prefHeight="572.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.BracketOverviewTabController">
    <columnConstraints>
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="225.0" minWidth="0.0" prefWidth="0.0" />
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="300.0" minWidth="10.0" prefWidth="100.0" />
    </columnConstraints>
@@ -25,30 +24,7 @@
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
    </rowConstraints>
    <children>
-      <VBox id="globalGrid" fx:id="bracketLeaderboard" prefHeight="329.0" prefWidth="225.0">
-         <children>
-            <Label text="Leaderboard">
-               <VBox.margin>
-                  <Insets bottom="10.0" top="20.0" />
-               </VBox.margin>
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font>
-            </Label>
-            <TableView id="bracketTableview" fx:id="leaderboardTableview" focusTraversable="false" mouseTransparent="true" VBox.vgrow="ALWAYS">
-               <VBox.margin>
-                  <Insets bottom="20.0" />
-               </VBox.margin>
-               <columnResizePolicy>
-                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-               </columnResizePolicy>
-            </TableView>
-         </children>
-         <GridPane.margin>
-            <Insets />
-         </GridPane.margin>
-      </VBox>
-      <VBox id="globalGrid" GridPane.columnIndex="2">
+      <VBox id="globalGrid" GridPane.columnIndex="1">
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Selected match" wrappingWidth="188.3590259552002">
                <font>
@@ -188,7 +164,7 @@
             <Insets />
          </GridPane.margin>
       </VBox>
-      <VBox id="globalGrid" alignment="CENTER" GridPane.columnIndex="1">
+      <VBox id="globalGrid" alignment="CENTER">
          <children>
             <Label fx:id="stageNameLabel" text="Stage name">
                <font>
@@ -219,4 +195,8 @@
          </GridPane.margin>
       </VBox>
    </children>
+   <stylesheets>
+      <URL value="@css/stylesheet.css" />
+      <URL value="@css/table.css" />
+   </stylesheets>
 </GridPane>

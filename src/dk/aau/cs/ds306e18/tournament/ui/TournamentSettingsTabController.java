@@ -24,7 +24,6 @@ public class TournamentSettingsTabController {
 
     @FXML private GridPane tournamentSettingsTab;
     @FXML private TextField nameTextField;
-    @FXML private ChoiceBox<TieBreaker> tieBreakerChoiceBox;
     @FXML private ListView<Stage> stagesListView;
     @FXML private Button addStageBtn;
     @FXML private Button removeStageBtn;
@@ -45,23 +44,6 @@ public class TournamentSettingsTabController {
         instance = this;
 
         setUpStageListView();
-
-        /* Retrieve and add choices to choicebox for the Tiebreaker box.
-         * Also upon change sets the new tiebreaker rule to the tournament model. */
-        ObservableList<TieBreaker> tieBreakers = FXCollections.observableArrayList(TieBreaker.values());
-        tieBreakerChoiceBox.setItems(tieBreakers);
-
-        /* Set the correct tieBreaker if a tournament was loaded */
-        if (Tournament.get().getTieBreaker() != null){
-            tieBreakerChoiceBox.getSelectionModel().select(Tournament.get().getTieBreaker());
-        }
-
-        // Tie breaker choice box
-        tieBreakerChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (oldValue != newValue) {
-                Tournament.get().setTieBreaker(newValue);
-            }
-        });
         updateGeneralTournamentSettings();
 
         /* Setup teams wanted in stage spinner */
@@ -132,8 +114,6 @@ public class TournamentSettingsTabController {
     public void updateGeneralTournamentSettings() {
         Tournament tournament = Tournament.get();
         nameTextField.setText(tournament.getName());
-        tieBreakerChoiceBox.getSelectionModel().select(tournament.getTieBreaker());
-        tieBreakerChoiceBox.setDisable(tournament.hasStarted());
 
         stagesListView.refresh();
         updateStageListButtons();

@@ -6,6 +6,7 @@ import dk.aau.cs.ds306e18.tournament.model.match.MatchChangeListener;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchPlayedListener;
 import dk.aau.cs.ds306e18.tournament.ui.BracketOverviewTabController;
 import dk.aau.cs.ds306e18.tournament.ui.MatchVisualController;
+import dk.aau.cs.ds306e18.tournament.ui.StatsTableWithPoints;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 public class SwissNode extends HBox implements MatchPlayedListener, MatchChangeListener, ModelCoupledUI {
 
     private final Insets MARGINS = new Insets(0, 8, 8, 0);
+    private final Insets TABLE_MARGINS = new Insets(0, 64, 0, 0);
     private final int COLUMN_WIDTH = 175;
 
     private final SwissFormat swiss;
@@ -25,6 +27,7 @@ public class SwissNode extends HBox implements MatchPlayedListener, MatchChangeL
 
     private Button generateRoundButton;
     private ArrayList<MatchVisualController> mvcs = new ArrayList<>();
+    private StatsTableWithPoints table;
 
     public SwissNode(SwissFormat swiss, BracketOverviewTabController boc) {
         this.boc = boc;
@@ -34,7 +37,6 @@ public class SwissNode extends HBox implements MatchPlayedListener, MatchChangeL
             match.registerMatchChangeListener(this);
             match.registerMatchPlayedListener(this);
         }
-        boc.showLeaderboard(true);
         update();
     }
 
@@ -42,8 +44,9 @@ public class SwissNode extends HBox implements MatchPlayedListener, MatchChangeL
     private void update() {
         removeElements();
 
-        /* Assign initial teams and points to leaderboard */
-        boc.refreshLeaderboard(swiss.getTeamPointsMap());
+        table = new StatsTableWithPoints(swiss.getTeams(), swiss, swiss.getTeamPointsMap());
+        HBox.setMargin(table, TABLE_MARGINS);
+        getChildren().add(table);
 
         ArrayList<ArrayList<Match>> rounds = swiss.getRounds();
         int numberOfRounds = rounds.size();
@@ -86,7 +89,6 @@ public class SwissNode extends HBox implements MatchPlayedListener, MatchChangeL
             m.unregisterMatchChangeListener(this);
             m.unregisterMatchPlayedListener(this);
         }
-        boc.showLeaderboard(false);
     }
 
     /** Completely remove all ui elements. */
@@ -97,6 +99,10 @@ public class SwissNode extends HBox implements MatchPlayedListener, MatchChangeL
         getChildren().clear();
         mvcs.clear();
         generateRoundButton = null;
+        if (table != null) {
+            table.decoupleFromModel();
+            table = null;
+        }
     }
 
     /** @return the vbox that has the "generate next round" button. */
@@ -143,6 +149,5 @@ public class SwissNode extends HBox implements MatchPlayedListener, MatchChangeL
 
     @Override
     public void onMatchChanged(Match match) {
-        boc.refreshLeaderboard(swiss.getTeamPointsMap());
     }
 }

@@ -508,8 +508,8 @@ public final class Match {
 
         // Apply changes
         played = hasBeenPlayed;
-        _setTeamOneScore(teamOneScore);
-        _setTeamTwoScore(teamTwoScore);
+        this.teamOneScore = teamOneScore;
+        this.teamTwoScore = teamTwoScore;
 
         // Transfer because there might be a new winner/loser
         if (played && outcomeChanging) {
@@ -547,28 +547,6 @@ public final class Match {
         } else {
             return true;
         }
-    }
-
-    private void _setTeamOneScore(int score) {
-
-        //Update both teams goalsScored and goalsConceded
-        teamOne.addGoalsScored(-this.teamOneScore);
-        teamOne.addGoalsScored(score);
-        teamTwo.addGoalsConceded(-this.teamOneScore);
-        teamTwo.addGoalsConceded(score);
-
-        this.teamOneScore = score;
-    }
-
-    public void _setTeamTwoScore(int score) {
-
-        //Update both teams goalsScored and goalsConceded
-        teamTwo.addGoalsScored(-this.teamTwoScore);
-        teamTwo.addGoalsScored(score);
-        teamOne.addGoalsConceded(-this.teamTwoScore);
-        teamOne.addGoalsConceded(score);
-
-        this.teamTwoScore = score;
     }
 
     /**
@@ -737,7 +715,7 @@ public final class Match {
         playedListeners.remove(listener);
     }
 
-    public void notifyMatchPlayedListeners() {
+    protected void notifyMatchPlayedListeners() {
         for (MatchPlayedListener listener : playedListeners) {
             listener.onMatchPlayed(this);
         }
@@ -752,7 +730,7 @@ public final class Match {
         changeListeners.remove(listener);
     }
 
-    public void notifyMatchChangeListeners() {
+    protected void notifyMatchChangeListeners() {
         for (MatchChangeListener listener : changeListeners) {
             listener.onMatchChanged(this);
         }

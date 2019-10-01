@@ -1,5 +1,7 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
+import dk.aau.cs.ds306e18.tournament.model.stats.StatsManager;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -12,16 +14,15 @@ public class Team {
     private ArrayList<Bot> bots;
     private int initialSeedValue;
     private String description;
-    private int goalsScored;
-    private int goalsConceded; //This is goals scored on this team by opponent teams
+
+    transient private StatsManager statsManager;
 
     public Team(String teamName, List<Bot> bots, int initialSeedValue, String description) {
         this.teamName = teamName;
         this.bots = bots == null ? new ArrayList<>() : new ArrayList<>(bots); // List can't be null to avoid NullPointerExceptions
         this.initialSeedValue = initialSeedValue;
         this.description = description;
-        this.goalsScored = 0;
-        this.goalsConceded = 0;
+        statsManager = new StatsManager(this);
     }
 
     public String getTeamName() {
@@ -82,54 +83,15 @@ public class Team {
         return paths;
     }
 
-    /**
-     * Adds both points to the goals scored count and the goals conceded count.
-     *
-     * @param pointsToAddConceded the number of points to be added to the current conceded score.
-     * @param pointsToAddScored   the number of points to be added to the current score.
-     */
-    public void addGoalsScoredAndConceded(int pointsToAddScored, int pointsToAddConceded) {
-        addGoalsScored(pointsToAddScored);
-        addGoalsConceded(pointsToAddConceded);
+    public StatsManager getStatsManager() {
+        return statsManager;
     }
 
     /**
-     * Adds the given points to the goals scored count.
-     *
-     * @param pointsToAdd the number of points to be added to the current score.
+     * Repairs properties that cannot be deserialized.
      */
-    public void addGoalsScored(int pointsToAdd) {
-        this.goalsScored += pointsToAdd;
-    }
-
-    /**
-     * Adds the given points to the goals concede count.
-     *
-     * @param pointsToAdd the number of points to be added to the current conceded score.
-     */
-    public void addGoalsConceded(int pointsToAdd) {
-        this.goalsConceded += pointsToAdd;
-    }
-
-    /**
-     * @return the number of goals this team has scored.
-     */
-    public int getGoalsScored() {
-        return goalsScored;
-    }
-
-    /**
-     * @return the number of goals that opponents has scored against this team.
-     */
-    public int getGoalsConceded() {
-        return goalsConceded;
-    }
-
-    /**
-     * @return the difference between goals scored and goals conceded.
-     */
-    public int getGoalDiff() {
-        return goalsScored - goalsConceded;
+    public void postDeserializationRepair() {
+        statsManager = new StatsManager(this);
     }
 
     @Override

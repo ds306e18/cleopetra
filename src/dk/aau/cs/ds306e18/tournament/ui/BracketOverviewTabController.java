@@ -59,8 +59,6 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
     @FXML private Button prevStageBtn;
     @FXML private Label startRequirementsLabel;
     @FXML private Button startTournamentBtn;
-    @FXML private VBox bracketLeaderboard;
-    @FXML private TableView<Team> leaderboardTableview;
     @FXML private Label stageNameLabel;
     @FXML private Label botNameLabel;
     @FXML private Label botDeveloperLabel;
@@ -75,7 +73,6 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
     @FXML
     private void initialize() {
         instance = this;
-
 
         // Listeners for the listviews. Handles the clear of selection of the other listview and updates the
         // bot info box according to the selection.
@@ -128,7 +125,6 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
      */
     public void update() {
         Tournament tournament = Tournament.get();
-        showLeaderboard(false);
 
         if (!tournament.hasStarted()) {
             showedStageIndex = -1;
@@ -144,11 +140,6 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
         }
 
         updateTeamViewer(selectedMatch == null ? null : selectedMatch.getShowedMatch());
-    }
-
-    public void showLeaderboard(boolean state) {
-        bracketLeaderboard.setVisible(state);
-        bracketOverviewTab.getColumnConstraints().get(0).setMaxWidth(state ? 225 : 0);
     }
 
     /** @return a string that contains text describing the requirements for starting the tournament. */
@@ -250,47 +241,6 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
         if (event.getButton().equals(MouseButton.SECONDARY)){
             setSelectedMatch(null);
         }
-    }
-
-    /**
-     * Refreshes the leaderboard by clearing its content and then creating columns with data retrieved
-     * from the HashMap provided. The list is sorted based upon the team points in a descending order.
-     *
-     * @param pointMap The HashMap containing the teams and their points.
-     */
-    public void refreshLeaderboard(HashMap<Team, Integer> pointMap) {
-        // Clear everything inside the tableView
-        leaderboardTableview.getItems().clear();
-        leaderboardTableview.getColumns().clear();
-
-        // Assign teams to the listView from the HashMap provided.
-        leaderboardTableview.getItems().addAll(pointMap.keySet());
-
-        // Create columns and assign values based on the provided HashMap.
-        TableColumn<Team, String> nameColumn = new TableColumn<>("Name");
-        nameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTeamName()));
-
-        TableColumn<Team, Integer> pointColumn = new TableColumn<>("Points");
-        pointColumn.setCellValueFactory(cellData -> {
-            int points = pointMap.get(cellData.getValue());
-            return new SimpleIntegerProperty(points).asObject();
-        });
-
-        TableColumn<Team, Integer> goalDiffColumn = new TableColumn<>("GoalDiff.");
-        goalDiffColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getGoalDiff()).asObject());
-
-        // Styling - Descending order and centering text.
-        pointColumn.setSortType(TableColumn.SortType.DESCENDING);
-        goalDiffColumn.setSortType(TableColumn.SortType.DESCENDING);
-        pointColumn.setStyle("-fx-alignment: CENTER;");
-        goalDiffColumn.setStyle("-fx-alignment: CENTER;");
-
-        // Add columns and sorting orders to the tableview.
-        leaderboardTableview.getColumns().add(nameColumn);
-        leaderboardTableview.getColumns().add(pointColumn);
-        leaderboardTableview.getColumns().add(goalDiffColumn);
-        leaderboardTableview.getSortOrder().add(pointColumn);
-        leaderboardTableview.getSortOrder().add(goalDiffColumn);
     }
 
     /**

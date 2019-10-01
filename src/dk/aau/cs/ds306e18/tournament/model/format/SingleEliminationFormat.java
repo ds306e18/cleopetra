@@ -33,6 +33,7 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
         giveMatchesIdentifiers();
         status = StageStatus.RUNNING;
         finalMatch.registerMatchPlayedListener(this);
+        setupStatsTracking();
     }
 
     /** Generates a single-elimination bracket structure. Matches are referenced by setting winner of from earlier matches.
@@ -143,6 +144,13 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
         return 2 * (i + 1) - 1;
     }
 
+    private void setupStatsTracking() {
+        List<Match> allMatches = getAllMatches();
+        for (Team team : seededTeams) {
+            team.getStatsManager().trackMatches(this, allMatches);
+        }
+    }
+
     public int getRounds() {
         return rounds;
     }
@@ -240,10 +248,10 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
 
             // Sorts the teams accordingly to the tiebreaker
             if (tempWinnerTeams.size() > 1) {
-                tempWinnerTeams = tieBreaker.compareAll(tempWinnerTeams, tempWinnerTeams.size());
+                tempWinnerTeams = tieBreaker.compareAll(tempWinnerTeams, this);
             }
             if (tempLoserTeams.size() > 1) {
-                tempLoserTeams = tieBreaker.compareAll(tempLoserTeams, tempLoserTeams.size());
+                tempLoserTeams = tieBreaker.compareAll(tempLoserTeams, this);
             }
 
             // Winners will be placed before the losers, and the lists will be cleared
@@ -302,6 +310,8 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
                 }
             }
         }
+
+        setupStatsTracking();
     }
 
     @Override
