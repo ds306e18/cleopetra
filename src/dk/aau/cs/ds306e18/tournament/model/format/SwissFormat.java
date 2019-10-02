@@ -21,6 +21,7 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
     private ArrayList<ArrayList<Match>> rounds = new ArrayList<>();
     private int maxRoundsPossible;
     private int roundCount = 4;
+    private boolean doSeeding;
     transient private IdentityHashMap<Team, Integer> teamPoints;
 
     transient private List<StageStatusChangeListener> statusChangeListeners = new LinkedList<>();
@@ -32,6 +33,7 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
         roundCount = maxRoundsPossible < roundCount ? maxRoundsPossible : roundCount;
         teamPoints = createPointsMap(teams);
         this.teams = new ArrayList<>(teams);
+        this.doSeeding = doSeeding;
         status = StageStatus.RUNNING;
 
         startNextRound(); // Generate the first round
@@ -103,10 +105,18 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
      */
     private void createNextRound() {
 
-        // TODO Consider seeding for first round
+        List<Team> orderedTeamList;
+        // Use seeding for first round.
+        if (doSeeding && rounds.size() == 0) {
+            // Best seed should play against worst seed,
+            // second best against second worst, etc.
+            // Create seeded list fitting the algorithm below
+            orderedTeamList = Seeding.simplePairwiseSeedList(teams);
+        } else {
+            // Create ordered list of team, based on points.
+            orderedTeamList = getOrderedTeamsListFromPoints(teams, teamPoints);
+        }
 
-        // Create ordered list of team, based on points.
-        List<Team> orderedTeamList = getOrderedTeamsListFromPoints(teams, teamPoints);
         ArrayList<Match> createdMatches = new ArrayList<>();
 
         // Create matches while there is more than 1 team in the list.
