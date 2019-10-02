@@ -9,6 +9,7 @@ import dk.aau.cs.ds306e18.tournament.model.match.MatchPlayedListener;
 import dk.aau.cs.ds306e18.tournament.ui.BracketOverviewTabController;
 import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.SwissNode;
 import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.SwissSettingsNode;
+import dk.aau.cs.ds306e18.tournament.utility.Alerts;
 import javafx.scene.Node;
 
 import java.util.*;
@@ -117,39 +118,62 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
             orderedTeamList = getOrderedTeamsListFromPoints(teams, teamPoints);
         }
 
-        ArrayList<Match> createdMatches = new ArrayList<>();
+        ArrayList<Match> createdMatches;
+        int badTries = 0;
 
-        // Create matches while there is more than 1 team in the list.
-        while (orderedTeamList.size() > 1) {
+        while (true) {
+            createdMatches = new ArrayList<>();
+            List<Team> remaingTeams = new ArrayList<>(orderedTeamList);
+            int acceptedRematches = badTries;
 
-            Team team1 = orderedTeamList.get(0);
-            Team team2 = null;
+            // Create matches while there is more than 1 team in the list.
+            while (remaingTeams.size() > 1) {
 
-            //Find the next team that has not played team1 yet.
-            for (int i = 1; i < orderedTeamList.size(); i++) {
+                Team team1 = remaingTeams.get(0);
+                Team team2 = null;
 
-                team2 = orderedTeamList.get(i);
+                // Find the next team that has not played team1 yet.
+                for (int i = 1; i < remaingTeams.size(); i++) {
 
-                //Has the two selected teams played each other before?
-                if (!hasTheseTeamsPlayedBefore(team1, team2)) {
-                    Match match = new Match(team1, team2);
-                    match.registerMatchPlayedListener(this);
-                    match.registerMatchChangeListener(this);
-                    createdMatches.add(match);
-                    break; //Two valid teams has been found, and match has been created. BREAK.
+                    team2 = remaingTeams.get(i);
+
+                    // Has the two selected teams played each other before?
+                    // Due to previous bad tries we might accept rematches. Note: short circuiting
+                    if (!hasTheseTeamsPlayedBefore(team1, team2) || 0 < acceptedRematches--) {
+                        Match match = new Match(team1, team2);
+                        createdMatches.add(match);
+                        break; // Two valid teams has been found, and match has been created.
+                    }
                 }
+
+                remaingTeams.remove(team1);
+                remaingTeams.remove(team2);
             }
 
-            //Remove the two valid teams.
-            orderedTeamList.remove(team1);
-            orderedTeamList.remove(team2);
+            if (createdMatches.size() == orderedTeamList.size() / 2) {
+                break; // Round was fully constructed
+            } else {
+                badTries++;
+            }
         }
 
-        rounds.add(createdMatches);
+        // Alert users about rematches. TODO Fix the algorithm. Replace it with Blossom algorithm, good luck!
+        if (badTries > 0) {
+            Alerts.errorNotification("Bad round", "Accepted " + badTries + " rematches due to a bad algorithm.");
+        }
 
+        // Register self as listener
+        for (Match m : createdMatches) {
+            m.registerMatchPlayedListener(this);
+            m.registerMatchChangeListener(this);
+        }
+
+        // Track stats from the new matches
         for (Team team : teams) {
             team.getStatsManager().trackMatches(this, createdMatches);
         }
+
+        rounds.add(createdMatches);
     }
 
     /**
