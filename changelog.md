@@ -1,11 +1,15 @@
 # Changelog
 
+#### Version 1.5.1 - 3. October 2019
+- Added seeding for first round of Swiss. - NicEastvillage
+- Bogded the Swiss round generation algorithm to never make rounds with missing matches. Instead
+  it will accept a few rematches and warn the user. "Fixes" #5. - NicEastvillage
+
 #### Version 1.5 - 1. October 2019
 - Clean up of unit tests. - NicEastvillage
 - Team stats such as wins, loses, goals scored, and goals conceded are now tracked per stage. #8 - NicEastvillage
 - Added scoreboards to each group in round robin and updated look of all scoreboards. #1 #12 - NicEastvillage
 - Removed Tiebreaker from UI because people should and do use goal-diff every time. - NicEastvillage
-
 
 #### Version 1.4 - 21. August 2019
 - Implemented custom config file reader/writer. - NicEastvillage
