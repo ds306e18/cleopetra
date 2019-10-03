@@ -58,4 +58,31 @@ public class Seeding {
 
         return list;
     }
+
+    /**
+     * Takes a list of elements and returns a new list with the same elements, but rearranged so by alternately picking
+     * the first element, and then the last element, until a new list is constructed. I.e. [1, 2, 3, 4] becomes
+     * [1, 4, 2, 3], and [1, 2, 3, 4, 5, 6, 7] becomes [1, 7, 2, 6, 3, 5, 4].
+     * @param list a list of any size
+     */
+    public static <T> List<T> simplePairwiseSeedList(List<T> list) {
+        int n = list.size();
+        int pairs = n / 2;
+        int i = 0;
+
+        List<T> newList = new ArrayList<>();
+
+        while (i < pairs) {
+            newList.add(list.get(i));
+            newList.add(list.get(n - i - 1));
+            i++;
+        }
+
+        // In case list size is odd, add middle element
+        if (n % 2 == 1) {
+            newList.add(list.get(n / 2));
+        }
+
+        return newList;
+    }
 }

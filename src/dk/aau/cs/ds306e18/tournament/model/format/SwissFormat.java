@@ -9,6 +9,7 @@ import dk.aau.cs.ds306e18.tournament.model.match.MatchPlayedListener;
 import dk.aau.cs.ds306e18.tournament.ui.BracketOverviewTabController;
 import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.SwissNode;
 import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.SwissSettingsNode;
+import dk.aau.cs.ds306e18.tournament.utility.Alerts;
 import javafx.scene.Node;
 
 import java.util.*;
@@ -21,6 +22,7 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
     private ArrayList<ArrayList<Match>> rounds = new ArrayList<>();
     private int maxRoundsPossible;
     private int roundCount = 4;
+    private boolean doSeeding;
     transient private IdentityHashMap<Team, Integer> teamPoints;
 
     transient private List<StageStatusChangeListener> statusChangeListeners = new LinkedList<>();
@@ -32,6 +34,7 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
         roundCount = maxRoundsPossible < roundCount ? maxRoundsPossible : roundCount;
         teamPoints = createPointsMap(teams);
         this.teams = new ArrayList<>(teams);
+        this.doSeeding = doSeeding;
         status = StageStatus.RUNNING;
 
         startNextRound(); // Generate the first round
@@ -103,43 +106,74 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
      */
     private void createNextRound() {
 
-        // TODO Consider seeding for first round
-
-        // Create ordered list of team, based on points.
-        List<Team> orderedTeamList = getOrderedTeamsListFromPoints(teams, teamPoints);
-        ArrayList<Match> createdMatches = new ArrayList<>();
-
-        // Create matches while there is more than 1 team in the list.
-        while (orderedTeamList.size() > 1) {
-
-            Team team1 = orderedTeamList.get(0);
-            Team team2 = null;
-
-            //Find the next team that has not played team1 yet.
-            for (int i = 1; i < orderedTeamList.size(); i++) {
-
-                team2 = orderedTeamList.get(i);
-
-                //Has the two selected teams played each other before?
-                if (!hasTheseTeamsPlayedBefore(team1, team2)) {
-                    Match match = new Match(team1, team2);
-                    match.registerMatchPlayedListener(this);
-                    match.registerMatchChangeListener(this);
-                    createdMatches.add(match);
-                    break; //Two valid teams has been found, and match has been created. BREAK.
-                }
-            }
-
-            //Remove the two valid teams.
-            orderedTeamList.remove(team1);
-            orderedTeamList.remove(team2);
+        List<Team> orderedTeamList;
+        // Use seeding for first round.
+        if (doSeeding && rounds.size() == 0) {
+            // Best seed should play against worst seed,
+            // second best against second worst, etc.
+            // Create seeded list fitting the algorithm below
+            orderedTeamList = Seeding.simplePairwiseSeedList(teams);
+        } else {
+            // Create ordered list of team, based on points.
+            orderedTeamList = getOrderedTeamsListFromPoints(teams, teamPoints);
         }
 
-        rounds.add(createdMatches);
+        ArrayList<Match> createdMatches;
+        int badTries = 0;
 
+        while (true) {
+            createdMatches = new ArrayList<>();
+            List<Team> remaingTeams = new ArrayList<>(orderedTeamList);
+            int acceptedRematches = badTries;
+
+            // Create matches while there is more than 1 team in the list.
+            while (remaingTeams.size() > 1) {
+
+                Team team1 = remaingTeams.get(0);
+                Team team2 = null;
+
+                // Find the next team that has not played team1 yet.
+                for (int i = 1; i < remaingTeams.size(); i++) {
+
+                    team2 = remaingTeams.get(i);
+
+                    // Has the two selected teams played each other before?
+                    // Due to previous bad tries we might accept rematches. Note: short circuiting
+                    if (!hasTheseTeamsPlayedBefore(team1, team2) || 0 < acceptedRematches--) {
+                        Match match = new Match(team1, team2);
+                        createdMatches.add(match);
+                        break; // Two valid teams has been found, and match has been created.
+                    }
+                }
+
+                remaingTeams.remove(team1);
+                remaingTeams.remove(team2);
+            }
+
+            if (createdMatches.size() == orderedTeamList.size() / 2) {
+                break; // Round was fully constructed
+            } else {
+                badTries++;
+            }
+        }
+
+        // Alert users about rematches. TODO Fix the algorithm. Replace it with Blossom algorithm, good luck!
+        if (badTries > 0) {
+            Alerts.errorNotification("Bad round", "Accepted " + badTries + " rematches due to a bad algorithm.");
+        }
+
+        // Register self as listener
+        for (Match m : createdMatches) {
+            m.registerMatchPlayedListener(this);
+            m.registerMatchChangeListener(this);
+        }
+
+        // Track stats from the new matches
         for (Team team : teams) {
             team.getStatsManager().trackMatches(this, createdMatches);
         }
+
+        rounds.add(createdMatches);
     }
 
     /**
