@@ -123,3 +123,6 @@ gradle-app.setting
 
 # Cache of project
 .gradletasknamecache
+
+
+current_match.json
