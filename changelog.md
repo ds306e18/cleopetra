@@ -1,7 +1,7 @@
 # Changelog
 
 #### Unreleased Changes
-- Now writes overlay data to a json next to the cleopetra.jar - NicEastvillage 
+- Now writes overlay data to a json next to the cleopetra.jar. This can be disable in RLBotSettings tab. - NicEastvillage
 
 
 

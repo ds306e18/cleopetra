@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -100,6 +101,29 @@
                            </font>
                         </Text>
                         <RadioButton fx:id="instantStartRadioButton" mnemonicParsing="false" GridPane.columnIndex="1" />
+                     </children>
+                  </GridPane>
+                  <Separator prefWidth="200.0" />
+                  <Text layoutX="30.0" layoutY="126.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Other">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Text>
+                  <GridPane layoutX="30.0" layoutY="215.0">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Write overlay data:">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Text>
+                        <RadioButton fx:id="writeOverlayDataRadioButton" layoutX="494.0" layoutY="13.0" mnemonicParsing="false" GridPane.columnIndex="1" />
                      </children>
                   </GridPane>
                </children>

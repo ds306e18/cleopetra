@@ -2,6 +2,7 @@ package dk.aau.cs.ds306e18.tournament.rlbot;
 
 import dk.aau.cs.ds306e18.tournament.model.Bot;
 import dk.aau.cs.ds306e18.tournament.model.BotFromConfig;
+import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.rlbot.configuration.MatchConfig;
 import dk.aau.cs.ds306e18.tournament.rlbot.configuration.ParticipantInfo;
@@ -34,11 +35,13 @@ public class MatchRunner {
             String command = String.format(COMMAND_FORMAT, pathToDirectory, pathToDirectory.toString().substring(0, 2));
             System.out.println("Starting RLBot framework with command: " + command);
             Runtime.getRuntime().exec(command);
-            try {
-                OverlayData.write(match);
-            } catch (IOException e) {
-                Alerts.errorNotification("Could not write overlay data", "Failed to write overlay data to " + OverlayData.CURRENT_MATCH_PATH);
-                e.printStackTrace();
+            if (Tournament.get().getRlBotSettings().writeOverlayData()) {
+                try {
+                    OverlayData.write(match);
+                } catch (IOException e) {
+                    Alerts.errorNotification("Could not write overlay data", "Failed to write overlay data to " + OverlayData.CURRENT_MATCH_PATH);
+                    e.printStackTrace();
+                }
             }
 
             return true;
