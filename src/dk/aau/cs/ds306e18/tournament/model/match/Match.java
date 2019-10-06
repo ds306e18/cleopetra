@@ -585,6 +585,13 @@ public final class Match {
         }
     }
 
+    /**
+     * Returns true if the match is currently playable and both teams consists of one bot.
+     */
+    public boolean isOneVsOne() {
+        return (isReadyToPlay() && teamOne.size() == 1 && teamTwo.size() == 1);
+    }
+
     public int getTeamOneScore() {
         return teamOneScore;
     }

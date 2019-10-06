@@ -1,22 +1,18 @@
 package dk.aau.cs.ds306e18.tournament.rlbot;
 
-import com.google.gson.Gson;
-import com.google.gson.annotations.SerializedName;
 import dk.aau.cs.ds306e18.tournament.model.Bot;
 import dk.aau.cs.ds306e18.tournament.model.BotFromConfig;
 import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.rlbot.configuration.MatchConfig;
 import dk.aau.cs.ds306e18.tournament.rlbot.configuration.ParticipantInfo;
 import dk.aau.cs.ds306e18.tournament.rlbot.configuration.TeamColor;
-import dk.aau.cs.ds306e18.tournament.serialization.Serializer;
 import dk.aau.cs.ds306e18.tournament.settings.SettingsDirectory;
 import dk.aau.cs.ds306e18.tournament.utility.Alerts;
 import dk.aau.cs.ds306e18.tournament.utility.OverlayData;
 
-import java.io.*;
-import java.nio.file.Files;
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class MatchRunner {
@@ -38,15 +34,13 @@ public class MatchRunner {
             String command = String.format(COMMAND_FORMAT, pathToDirectory, pathToDirectory.toString().substring(0, 2));
             System.out.println("Starting RLBot framework with command: " + command);
             Runtime.getRuntime().exec(command);
+            try {
+                OverlayData.write(match);
+            } catch (IOException e) {
+                Alerts.errorNotification("Could not write overlay data", "Failed to write overlay data to " + OverlayData.CURRENT_MATCH_PATH);
+                e.printStackTrace();
+            }
 
-            // FIXME Bodge overlay data
-            OverlayData overlayData = new OverlayData(
-                    ((BotFromConfig) match.getBlueTeam().getBots().get(0)).getConfig(),
-                    ((BotFromConfig) match.getOrangeTeam().getBots().get(0)).getConfig()
-            );
-            Serializer.gson.toJson(overlayData);
-            Files.write(Paths.get("current_match.json").toAbsolutePath(), new Gson().toJson(overlayData).getBytes());
-            System.out.println("Printed current match to " + Paths.get("current_match.json").toAbsolutePath().toString());
             return true;
 
         } catch (Exception err) {
@@ -84,9 +78,15 @@ public class MatchRunner {
         if (match.getBlueTeam() == null) throw new IllegalStateException("There is no blue team for this match.");
         if (match.getOrangeTeam() == null) throw new IllegalStateException("There is no orange team for this match.");
 
+        ArrayList<Bot> blueBots = match.getBlueTeam().getBots();
+        ArrayList<Bot> orangeBots = match.getOrangeTeam().getBots();
+
+        if (blueBots.size() == 0) throw new IllegalStateException("There are no bots on the blue team.");
+        if (orangeBots.size() == 0) throw new IllegalStateException("There are no bots on the orange team.");
+
         ArrayList<Bot> bots = new ArrayList<>();
-        bots.addAll(match.getBlueTeam().getBots());
-        bots.addAll(match.getOrangeTeam().getBots());
+        bots.addAll(blueBots);
+        bots.addAll(orangeBots);
 
         for (Bot bot : bots) {
             String path = bot.getConfigPath();

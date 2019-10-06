@@ -124,5 +124,5 @@ gradle-app.setting
 # Cache of project
 .gradletasknamecache
 
-
+# Overlay data
 current_match.json
