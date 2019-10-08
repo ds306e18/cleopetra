@@ -1,5 +1,10 @@
 # Changelog
 
+#### Unreleased changes
+- Improved how round robin decides the top teams of the stage. #92 - NicEastvillage
+
+
+
 #### Version 1.5.1 - 3. October 2019
 - Added seeding for first round of Swiss. - NicEastvillage
 - Bogded the Swiss round generation algorithm to never make rounds with missing matches. Instead
