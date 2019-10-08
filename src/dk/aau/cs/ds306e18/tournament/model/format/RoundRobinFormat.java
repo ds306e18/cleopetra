@@ -58,7 +58,7 @@ public class RoundRobinFormat implements Format, MatchPlayedListener {
     public List<Team> getTopTeams(int count, TieBreaker tieBreaker) {
 
         /*
-        Sort the teams each group by their performance. Then pick the top X teams as follows:
+        Sort the teams of each group by their performance. Then pick the top X teams as follows:
         1st from group 0,
         1st from group 1,
         ...
@@ -66,7 +66,7 @@ public class RoundRobinFormat implements Format, MatchPlayedListener {
         2nd from group 0,
         2nd from group 1,
         ...
-        Until X teams was picked or every team was picked.
+        Until X teams has been picked or every team was picked.
 
         However, the first groups might be smaller if the number of teams is not divisible by the number groups.
         Therefore we skip those when they are empty.
