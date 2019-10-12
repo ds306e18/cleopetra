@@ -126,6 +126,32 @@
                         <RadioButton fx:id="writeOverlayDataRadioButton" layoutX="494.0" layoutY="13.0" mnemonicParsing="false" GridPane.columnIndex="1" />
                      </children>
                   </GridPane>
+                  <Separator layoutX="30.0" layoutY="279.0" prefWidth="200.0" />
+                  <Text layoutX="30.0" layoutY="309.0" strokeType="OUTSIDE" strokeWidth="0.0" text="RLBot Runner">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="CleoPetra's little helper for running matches.&#10;It will be open automatically if missing.&#10;Rocket League will also be opened, when the RLBot Runner is opened.">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Text>
+                  <GridPane hgap="8.0" maxHeight="-Infinity" maxWidth="-Infinity">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Button fx:id="rlbotRunnerOpenButton" mnemonicParsing="false" onAction="#onActionRLBotRunnerOpen" prefHeight="27.0" prefWidth="101.0" text="Open" />
+                        <Button fx:id="rlbotRunnerCloseButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#onActionRLBotRunnerClose" prefHeight="27.0" prefWidth="101.0" text="Close" GridPane.columnIndex="1" />
+                        <Button fx:id="rlbotRunnerStopMatchButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#onActionRLBotRunnerStopMatch" prefHeight="27.0" prefWidth="101.0" text="Stop match" GridPane.columnIndex="2" />
+                     </children>
+                  </GridPane>
                </children>
                <padding>
                   <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />

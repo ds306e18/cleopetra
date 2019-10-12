@@ -1,6 +1,7 @@
 package dk.aau.cs.ds306e18.tournament.ui;
 
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
+import dk.aau.cs.ds306e18.tournament.rlbot.MatchRunner;
 import dk.aau.cs.ds306e18.tournament.rlbot.RLBotSettings;
 import dk.aau.cs.ds306e18.tournament.rlbot.configuration.MatchConfig;
 import dk.aau.cs.ds306e18.tournament.rlbot.configuration.MatchConfigOptions;
@@ -26,6 +27,9 @@ public class RLBotSettingsTabController {
     public RadioButton skipReplaysRadioButton;
     public RadioButton instantStartRadioButton;
     public RadioButton writeOverlayDataRadioButton;
+    public Button rlbotRunnerOpenButton;
+    public Button rlbotRunnerCloseButton;
+    public Button rlbotRunnerStopMatchButton;
     public ChoiceBox<MatchLength> matchLengthChoiceBox;
     public ChoiceBox<MaxScore> maxScoreChoiceBox;
     public ChoiceBox<Overtime> overtimeChoiceBox;
@@ -136,5 +140,17 @@ public class RLBotSettingsTabController {
 
         // Other settings
         writeOverlayDataRadioButton.setSelected(settings.writeOverlayData());
+    }
+
+    public void onActionRLBotRunnerOpen(ActionEvent actionEvent) {
+        MatchRunner.startRLBotRunner();
+    }
+
+    public void onActionRLBotRunnerClose(ActionEvent actionEvent) {
+        MatchRunner.closeRLBotRunner();
+    }
+
+    public void onActionRLBotRunnerStopMatch(ActionEvent actionEvent) {
+        MatchRunner.stopMatch();
     }
 }

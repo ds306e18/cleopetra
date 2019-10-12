@@ -101,4 +101,4 @@ if __name__ == '__main__':
         print("Press enter to close.")
         input()
     finally:
-        print("run.py stopped")
+        print("run.py stopped. You can close this!")

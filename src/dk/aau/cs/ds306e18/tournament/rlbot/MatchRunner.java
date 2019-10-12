@@ -74,10 +74,10 @@ public class MatchRunner {
     }
 
     /**
-     * Start the RLBot runner in the run.py and will be a separate process in a separate cmd.
+     * Starts the RLBot runner, aka. the run.py, as a separate process in a separate cmd.
      * The runner might not be ready to accept commands immediately. This method returns true on success.
      */
-    private static boolean startRLBotRunner() {
+    public static boolean startRLBotRunner() {
         try {
             Alerts.infoNotification("Starting RLBot runner", "Attempting to start new instance of run.py for running matches.");
             Path pathToDirectory = SettingsDirectory.RUN_PY.getParent();
@@ -89,6 +89,21 @@ public class MatchRunner {
             Alerts.errorNotification("Could not start RLBot runner", "Something went wrong starting the run.py.");
             return false;
         }
+    }
+
+    /**
+     * Closes the RLBot runner.
+     */
+    public static void closeRLBotRunner() {
+        // If the command fails, the runner is probably not running anyway, so ignore any errors.
+        sendCommandToRLBot(Command.EXIT, false);
+    }
+
+    /**
+     * Stops the current match.
+     */
+    public static void stopMatch() {
+        sendCommandToRLBot(Command.STOP, false);
     }
 
     /**
