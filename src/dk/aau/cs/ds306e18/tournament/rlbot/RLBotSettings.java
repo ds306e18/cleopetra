@@ -4,12 +4,16 @@ import dk.aau.cs.ds306e18.tournament.rlbot.configuration.MatchConfig;
 
 import java.util.Objects;
 
+/**
+ * Settings related to the tournament or RLBot
+ */
 public class RLBotSettings {
 
-    private MatchConfig matchConfig;
+    private MatchConfig matchConfig = new MatchConfig();
+    private boolean writeOverlayData = true;
 
     public RLBotSettings() {
-        this(new MatchConfig());
+
     }
 
     public RLBotSettings(MatchConfig matchConfig) {
@@ -24,16 +28,25 @@ public class RLBotSettings {
         this.matchConfig = matchConfig;
     }
 
+    public boolean writeOverlayData() {
+        return writeOverlayData;
+    }
+
+    public void setWriteOverlayData(boolean writeOverlayData) {
+        this.writeOverlayData = writeOverlayData;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RLBotSettings that = (RLBotSettings) o;
-        return Objects.equals(matchConfig, that.matchConfig);
+        return writeOverlayData == that.writeOverlayData &&
+                Objects.equals(matchConfig, that.matchConfig);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(matchConfig);
+        return Objects.hash(matchConfig, writeOverlayData);
     }
 }

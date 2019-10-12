@@ -1,6 +1,7 @@
 package dk.aau.cs.ds306e18.tournament.ui;
 
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
+import dk.aau.cs.ds306e18.tournament.rlbot.RLBotSettings;
 import dk.aau.cs.ds306e18.tournament.rlbot.configuration.MatchConfig;
 import dk.aau.cs.ds306e18.tournament.rlbot.configuration.MatchConfigOptions;
 import dk.aau.cs.ds306e18.tournament.rlbot.configuration.MatchConfigOptions.*;
@@ -24,6 +25,7 @@ public class RLBotSettingsTabController {
     public ChoiceBox<GameMode> gameModeChoiceBox;
     public RadioButton skipReplaysRadioButton;
     public RadioButton instantStartRadioButton;
+    public RadioButton writeOverlayDataRadioButton;
     public ChoiceBox<MatchLength> matchLengthChoiceBox;
     public ChoiceBox<MaxScore> maxScoreChoiceBox;
     public ChoiceBox<Overtime> overtimeChoiceBox;
@@ -46,7 +48,8 @@ public class RLBotSettingsTabController {
     private void initialize() {
         instance = this;
 
-        MatchConfig matchConfig = Tournament.get().getRlBotSettings().getMatchConfig();
+        RLBotSettings settings = Tournament.get().getRlBotSettings();
+        MatchConfig matchConfig = settings.getMatchConfig();
 
         // General match settings
         setupChoiceBox(gameMapChoiceBox, GameMap.values(), matchConfig.getGameMap(), MatchConfig::setGameMap);
@@ -77,6 +80,12 @@ public class RLBotSettingsTabController {
         setupChoiceBox(demolishChoiceBox, Demolish.values(), matchConfig.getDemolish(), MatchConfig::setDemolish);
         setupChoiceBox(respawnTimeChoiceBox, RespawnTime.values(), matchConfig.getRespawnTime(), MatchConfig::setRespawnTime);
 
+        // Other settings
+        writeOverlayDataRadioButton.setSelected(settings.writeOverlayData());
+        writeOverlayDataRadioButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            Tournament.get().getRlBotSettings().setWriteOverlayData(newValue);
+        });
+
         update();
     }
 
@@ -99,7 +108,8 @@ public class RLBotSettingsTabController {
     /** Updates all ui elements */
     public void update() {
 
-        MatchConfig matchConfig = Tournament.get().getRlBotSettings().getMatchConfig();
+        RLBotSettings settings = Tournament.get().getRlBotSettings();
+        MatchConfig matchConfig = settings.getMatchConfig();
 
         // General match settings
         gameMapChoiceBox.getSelectionModel().select(matchConfig.getGameMap());
@@ -123,5 +133,8 @@ public class RLBotSettingsTabController {
         gravityChoiceBox.getSelectionModel().select(matchConfig.getGravity());
         demolishChoiceBox.getSelectionModel().select(matchConfig.getDemolish());
         respawnTimeChoiceBox.getSelectionModel().select(matchConfig.getRespawnTime());
+
+        // Other settings
+        writeOverlayDataRadioButton.setSelected(settings.writeOverlayData());
     }
 }

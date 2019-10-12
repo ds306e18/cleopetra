@@ -1,5 +1,10 @@
 # Changelog
 
+#### Unreleased Changes
+- Now writes overlay data to a json next to the cleopetra.jar. This can be disabled in RLBotSettings tab. - NicEastvillage
+
+
+
 #### Version 1.5.1 - 3. October 2019
 - Added seeding for first round of Swiss. - NicEastvillage
 - Bogded the Swiss round generation algorithm to never make rounds with missing matches. Instead
