@@ -8,6 +8,12 @@ from rlbot.setup_manager import SetupManager, setup_manager_context
 PORT = 35353
 
 
+class Command:
+    START = b"START"
+    STOP = b"STOP"
+    EXIT = b"EXIT"
+
+
 def setup_match(manager: SetupManager):
     manager.shut_down(kill_all_pids=True, quiet=True)  # Stop any running pids
     manager.load_config()
@@ -32,7 +38,7 @@ def stop_match(manager: SetupManager):
     manager.shut_down(kill_all_pids=True, quiet=True)
 
 
-def match_running(start_event: Event, stop_event: Event):
+def match_running(start_event: Event, stop_event: Event, exit_event: Event):
     with setup_manager_context() as manager:
         while True:
             if start_event.is_set():
@@ -41,6 +47,9 @@ def match_running(start_event: Event, stop_event: Event):
             elif stop_event.is_set():
                 stop_match(manager)
                 stop_event.clear()
+            elif exit_event.is_set():
+                exit_event.clear()
+                break
 
 
 if __name__ == '__main__':
@@ -54,8 +63,10 @@ if __name__ == '__main__':
     try:
         start_event = Event()
         stop_event = Event()
+        exit_event = Event()
 
-        #Thread(args=(start_event, stop_event)).start()
+        match_runner = Thread(target=match_running, args=(start_event, stop_event, exit_event))
+        match_runner.start()
 
         # AF_INET is the Internet address family for IPv4. SOCK_STREAM is the socket type for TCP
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -67,16 +78,23 @@ if __name__ == '__main__':
                 with conn:
                     print('Connected by', addr)
                     data = conn.recv(1024)
-                    if data == b"START":
+
+                    if data == Command.START:
                         print("Starting match!")
-                    elif data == b"STOP":
+                        start_event.set()
+                    elif data == Command.STOP:
                         print("Stopping match!")
-                    elif data == b"QUIT":
-                        print("Quiting!")
+                        stop_event.set()
+                    elif data == Command.EXIT:
+                        print("Exiting!")
+                        exit_event.set()
                         break
                     else:
-                        print(f"Other message: {data}")
-                    conn.sendall(b'Gotcha from Python!')
+                        print(f"Unknown command received: {data}")
+
+                    conn.sendall(b'Gotcha!')
+
+        match_runner.join()
 
     except Exception as e:
         print("Encountered exception: ", e)
