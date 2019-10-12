@@ -2,7 +2,12 @@
 
 #### Unreleased Changes
 - Now writes overlay data to a json next to the cleopetra.jar. This can be disabled in RLBotSettings tab. - NicEastvillage
-
+- Improved the RLBot runner process. - NicEastvillage
+    - The RLBot console window (RLBot runner) now does not need to be shut down after each match. #88
+    - CleoPetra issues the RLBot runner to start and stop new matches through socket communication.
+    - RLBot.exe is not shut down between each match, which means:
+        - Skyborg's overlay will work properly.
+        - Rendering and bot percentages does not have to be toggled each match.
 
 
 #### Version 1.5.1 - 3. October 2019
