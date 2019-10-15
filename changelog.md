@@ -8,6 +8,8 @@
     - RLBot.exe is not shut down between each match, which means:
         - Skyborg's overlay will work properly.
         - Rendering and bot percentages does not have to be toggled each match.
+- Improved how round robin decides the top teams of the stage. #92 - NicEastvillage
+
 
 
 #### Version 1.5.1 - 3. October 2019
