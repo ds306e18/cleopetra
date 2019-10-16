@@ -2,9 +2,11 @@ package dk.aau.cs.ds306e18.tournament.utility;
 
 import dk.aau.cs.ds306e18.tournament.model.Bot;
 import dk.aau.cs.ds306e18.tournament.model.Team;
+import dk.aau.cs.ds306e18.tournament.model.Tournament;
 
 import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * Contains an algorithm for auto-naming teams using a piece of the team member's name.
@@ -21,6 +23,35 @@ public class AutoNaming {
     ));
 
     /**
+     * Find a give a unique name of the given team. The name will consists of pieces from the
+     * team members' name.
+     */
+    public static void autoName(Team team, Collection<Team> otherTeams) {
+        String teamName = getName(team);
+        Set<String> otherTeamNames = otherTeams.stream()
+                .filter(t -> t != team)
+                .map(Team::getTeamName)
+                .collect(Collectors.toSet());
+        teamName = uniqueify(teamName, otherTeamNames);
+        team.setTeamName(teamName);
+    }
+
+    /**
+     * Checks if a team name is already present in a set of names, and if it is, a postfix "(i)" will
+     * be added the end of the team name. E.g. "Team" already exist, then "Team" becomes "Team (1)".
+     * The new unique name is returned.
+     */
+    public static String uniqueify(String teamName, Set<String> otherTeamsNames) {
+        int i = 1;
+        String candidateName = teamName;
+        while (otherTeamsNames.contains(candidateName)) {
+            i++;
+            candidateName = teamName + " (" + i + ")";
+        }
+        return candidateName;
+    }
+
+    /**
      * Finds a team name for the given team. The algorithm will try to find an
      * interesting piece from each bot's name and use it in the team name.
      * The algorithm isn't perfect, and characters other than letters and digits
@@ -28,7 +59,7 @@ public class AutoNaming {
      * Example: ReliefBot + Beast from the East => Relief-Beast.
      */
     public static String getName(Team team) {
-        return getName((String[]) team.getBots().stream().map(Bot::getName).toArray());
+        return getName(team.getBots().stream().map(Bot::getName).collect(Collectors.toList()));
     }
 
     /**
@@ -38,16 +69,16 @@ public class AutoNaming {
      * can create weird names.
      * Example: ReliefBot + Beast from the East => Relief-Beast.
      */
-    public static String getName(String... botNames) {
-        int botCount = botNames.length;
-        if (botCount == 0) return "Empty Team";
-        if (botCount == 1) return botNames[0];
+    public static String getName(List<String> botNames) {
+        int botCount = botNames.size();
+        if (botCount == 0) return "Team";
+        if (botCount == 1) return botNames.get(0);
 
         // Construct names from the short names of bots, separated by "-"
         // Example: ReliefBot + Beast from the East => Relief-Beast
         StringBuilder str = new StringBuilder();
         for (int i = 0; i < botCount; i++) {
-            String name = botNames[i];
+            String name = botNames.get(i);
             String shortName = getShortName(name);
             str.append(shortName);
             if (i != botCount - 1) {
