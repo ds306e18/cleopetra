@@ -1,8 +1,11 @@
 # Changelog
 
+#### Unreleased Changes
+- Added button for auto-naming teams based on its bots. #79 - NicEastvillage
+
 #### Version 1.5.1 - 3. October 2019
 - Added seeding for first round of Swiss. - NicEastvillage
-- Bogded the Swiss round generation algorithm to never make rounds with missing matches. Instead
+- Bodged the Swiss round generation algorithm to never make rounds with missing matches. Instead
   it will accept a few rematches and warn the user. "Fixes" #5. - NicEastvillage
 
 #### Version 1.5 - 1. October 2019
