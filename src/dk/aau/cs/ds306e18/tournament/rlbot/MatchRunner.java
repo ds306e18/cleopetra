@@ -22,7 +22,7 @@ import java.util.ArrayList;
 /**
  * This class maintains a RLBot runner process for starting matches. The runner process is the run.py running in
  * a separate command prompt. Communication between CleoPetra and the RLBot runner happens through a socket and
- * consists of simple commands like STOP, STOP, EXIT, which are defined in the subclass Command. If the RLBot runner
+ * consists of simple commands like START, STOP, EXIT, which are defined in the subclass Command. If the RLBot runner
  * is not running when a command is issued, a new instance of the RLBot runner is started.
  */
 public class MatchRunner {
@@ -79,6 +79,7 @@ public class MatchRunner {
      */
     public static boolean startRLBotRunner() {
         try {
+            // TODO; does not support Linux, refactor when relevant
             Alerts.infoNotification("Starting RLBot runner", "Attempting to start new instance of run.py for running matches.");
             Path pathToDirectory = SettingsDirectory.RUN_PY.getParent();
             String cmd = String.format(COMMAND_FORMAT, pathToDirectory, pathToDirectory.toString().substring(0, 2));
