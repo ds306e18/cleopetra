@@ -2,7 +2,7 @@
 
 #### Unreleased Changes
 - Now writes overlay data to a json next to the cleopetra.jar. This can be disabled in RLBotSettings tab. - NicEastvillage
-
+- Improved how round robin decides the top teams of the stage. #92 - NicEastvillage
 
 
 #### Version 1.5.1 - 3. October 2019
