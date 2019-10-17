@@ -92,7 +92,7 @@ if __name__ == '__main__':
                     else:
                         print(f"Unknown command received: {data}")
 
-                    conn.sendall(b'Gotcha!')
+                    conn.sendall(b'OK')
 
         match_runner.join()
 
