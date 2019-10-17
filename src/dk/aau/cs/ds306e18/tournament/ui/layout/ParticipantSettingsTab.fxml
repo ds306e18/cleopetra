@@ -120,11 +120,16 @@
                         <Font size="16.0" />
                      </font>
                   </Text>
-                  <TextField fx:id="teamNameTextField" onKeyReleased="#teamNameTextFieldOnKeyReleased" GridPane.rowIndex="1">
-                     <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </padding>
-                  </TextField>
+                  <HBox GridPane.rowIndex="1">
+                     <children>
+                        <TextField fx:id="teamNameTextField" onKeyReleased="#teamNameTextFieldOnKeyReleased" HBox.hgrow="ALWAYS">
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
+                        </TextField>
+                        <Button fx:id="autoNameTeamButton" mnemonicParsing="false" onAction="#onActionAutoNameTeam" prefHeight="27.0" prefWidth="47.0" text="Auto" />
+                     </children>
+                  </HBox>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Seed:" GridPane.columnIndex="1">
                      <font>
                         <Font size="16.0" />

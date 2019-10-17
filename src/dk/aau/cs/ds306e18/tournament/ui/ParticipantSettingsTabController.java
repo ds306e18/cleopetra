@@ -4,6 +4,7 @@ import dk.aau.cs.ds306e18.tournament.Main;
 import dk.aau.cs.ds306e18.tournament.model.*;
 import dk.aau.cs.ds306e18.tournament.utility.Alerts;
 import dk.aau.cs.ds306e18.tournament.rlbot.BotCollection;
+import dk.aau.cs.ds306e18.tournament.utility.AutoNaming;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -20,6 +21,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -30,6 +32,7 @@ public class ParticipantSettingsTabController {
     @FXML private HBox participantSettingsTab;
     @FXML private ChoiceBox<SeedingOption> seedingChoicebox;
     @FXML private TextField teamNameTextField;
+    @FXML private Button autoNameTeamButton;
     @FXML private Spinner<Integer> seedSpinner;
     @FXML private Button addTeamBtn;
     @FXML private Button removeTeamBtn;
@@ -192,7 +195,8 @@ public class ParticipantSettingsTabController {
     void onActionAddTeam(ActionEvent actionEvent) {
 
         //Create a team with a bot and add the team to the tournament
-        Team team = new Team("Team " + (Tournament.get().getTeams().size() + 1), new ArrayList<>(), teamsListView.getItems().size() + 1, "");
+        Team team = new Team("Unnamed Team", new ArrayList<>(), teamsListView.getItems().size() + 1, "");
+        AutoNaming.autoName(team, Tournament.get().getTeams());
         Tournament.get().addTeam(team);
 
         teamsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams()));
@@ -227,6 +231,8 @@ public class ParticipantSettingsTabController {
 
         SeedingOption seedingOption = Tournament.get().getSeedingOption();
         seedingChoicebox.setDisable(started);
+
+        teamsListView.refresh();
 
         int selectedIndex = getSelectedTeamIndex();
 
@@ -300,6 +306,7 @@ public class ParticipantSettingsTabController {
             String nameCheck = team.getTeamName();
             nameCheck = nameCheck.replaceAll("\\s+", "");
             if (nameCheck.compareTo("") == 0) {
+
                 team.setTeamName("Team ?");
             }
         }
@@ -409,5 +416,12 @@ public class ParticipantSettingsTabController {
 
             Main.lastSavedDirectory = folder;
         }
+    }
+
+    public void onActionAutoNameTeam(ActionEvent actionEvent) {
+        Team team = getSelectedTeam();
+        AutoNaming.autoName(team, Tournament.get().getTeams());
+        updateTeamFields();
+        teamsListView.refresh();
     }
 }

@@ -132,7 +132,7 @@
                         <Font name="System Bold" size="16.0" />
                      </font>
                   </Text>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="CleoPetra's little helper for running matches.&#10;It will be open automatically if missing.&#10;Rocket League will also be opened, when the RLBot Runner is opened.">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="CleoPetra's little helper for running matches.&#10;It will be opened automatically if missing.&#10;Rocket League will also be opened, when the RLBot Runner is opened.">
                      <font>
                         <Font size="14.0" />
                      </font>
