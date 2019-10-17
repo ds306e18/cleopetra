@@ -39,6 +39,7 @@ public class OverlayData {
      * not ready to be played or if one of the bots are not a bot from a config file.
      */
     public static void write(Match match) throws IOException {
+        //TODO; should be expanded when RLBot support overlays for more than one-vs-ones
         if (match.isOneVsOne()) {
             Bot blueBot = match.getBlueTeam().getBots().get(0);
             Bot orangeBot = match.getOrangeTeam().getBots().get(0);
