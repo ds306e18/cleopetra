@@ -189,29 +189,47 @@ public class RoundRobinFormatTest {
     public void getTopTeams02() {
 
         RoundRobinFormat rr = new RoundRobinFormat();
-        List<Team> inputTeams = getTestTeams(4, 2);
-        rr.start(inputTeams, true);
+        List<Team> teams = getTestTeams(7, 1);
+        rr.start(teams, true);
 
-        setAllMatchesToPlayed(rr.getUpcomingMatches());
-        //All teams now have the same amount of points.
+        ArrayList<Team> top4Teams = new ArrayList<>(rr.getTopTeams(4, TieBreaker.SEED));
 
-        ArrayList<Team> top3Teams = new ArrayList<>(rr.getTopTeams(3, TieBreaker.SEED));
+        // Should match seeds when all have the same amount of points
+        assertEquals(teams.get(0), top4Teams.get(0));
+        assertEquals(teams.get(1), top4Teams.get(1));
+        assertEquals(teams.get(2), top4Teams.get(2));
+        assertEquals(teams.get(3), top4Teams.get(3));
+    }
 
-        //Get the team not in the top3Teams list
-        ArrayList<Team> teamInputCopy = new ArrayList<>(inputTeams);
-        Team notInTopTeam;
-        for (Team top3Team : top3Teams) {
-            teamInputCopy.remove(top3Team);
+    @Test
+    public void getTopTeams03() {
+
+        RoundRobinFormat rr = new RoundRobinFormat();
+        List<Team> teams = getTestTeams(8, 1);
+        rr.setNumberOfGroups(3); // group sizes: 2, 3, 3
+        rr.start(teams, true);
+
+        // Assign goals equal to their seed, i.e. expected winner loses
+        for (Match m : rr.getUpcomingMatches()) {
+            int teamOneSeed = m.getTeamOne().getInitialSeedValue();
+            int teamTwoSeed = m.getTeamTwo().getInitialSeedValue();
+            m.setScores(teamOneSeed, teamTwoSeed, true);
         }
-        notInTopTeam = teamInputCopy.get(0);
 
-        //
-        HashMap<Team, Integer> teamPoints = rr.getTeamPointsMap();
-        Team top3Team = top3Teams.get(2);
-        Integer top3TeamPoints = teamPoints.get(top3Team);
-        Integer notInTopTeamPoints = teamPoints.get(notInTopTeam);
-        assertTrue(top3TeamPoints >= notInTopTeamPoints &&
-                top3Team.getInitialSeedValue() <= notInTopTeam.getInitialSeedValue());
+        ArrayList<Team> top7Teams = new ArrayList<>(rr.getTopTeams(7, TieBreaker.SEED));
+
+        // We expect:
+        // 2 from group 0
+        // 3 from group 1
+        // 2 grom group 2
+        // And team 3 won't proceed as it is the loser of the last group
+        assertEquals(teams.get(3), top7Teams.get(0));
+        assertEquals(teams.get(6), top7Teams.get(1));
+        assertEquals(teams.get(7), top7Teams.get(2));
+        assertEquals(teams.get(0), top7Teams.get(3));
+        assertEquals(teams.get(4), top7Teams.get(4));
+        assertEquals(teams.get(5), top7Teams.get(5));
+        assertEquals(teams.get(1), top7Teams.get(6));
     }
 
     @Test

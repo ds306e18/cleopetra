@@ -33,6 +33,7 @@ public class RoundRobinFormat implements Format, MatchPlayedListener {
 
         if (seededTeams.size() <= 1) {
             matches = new ArrayList<>();
+            groups = new ArrayList<>();
             status = StageStatus.CONCLUDED;
 
         } else {
@@ -55,7 +56,48 @@ public class RoundRobinFormat implements Format, MatchPlayedListener {
 
     @Override
     public List<Team> getTopTeams(int count, TieBreaker tieBreaker) {
-        return tieBreaker.compareWithPoints(teams, getTeamPointsMap(), this).subList(0, count);
+
+        /*
+        Sort the teams of each group by their performance. Then pick the top X teams as follows:
+        1st from group 0,
+        1st from group 1,
+        ...
+        1st from group N-1,
+        2nd from group 0,
+        2nd from group 1,
+        ...
+        Until X teams has been picked or every team was picked.
+
+        However, the first groups might be smaller if the number of teams is not divisible by the number groups.
+        Therefore we skip those when they are empty.
+         */
+
+        HashMap<Team, Integer> pointsMap = getTeamPointsMap();
+        List<List<Team>> sortedGroups = groups.stream()
+                .map((group) -> tieBreaker.compareWithPoints(group.getTeams(), pointsMap, this))
+                .collect(Collectors.toList());
+
+        List<Team> topTeams = new ArrayList<>();
+        int left = Math.min(count, teams.size());
+        int nextGroupToTakeFrom = 0;
+        int indexToTake = 0;
+
+        while (left > 0) {
+            List<Team> group = sortedGroups.get(nextGroupToTakeFrom);
+            // Are there more teams in this group?
+            if (group.size() > indexToTake) {
+                topTeams.add(group.get(indexToTake));
+                left--;
+            }
+            nextGroupToTakeFrom++;
+            if (nextGroupToTakeFrom == groups.size()) {
+                // Wrap around at last group and pick next best team from the groups
+                nextGroupToTakeFrom = 0;
+                indexToTake++;
+            }
+        }
+
+        return topTeams;
     }
 
     /** This function populates the groups list and generates the matches for each group. */
