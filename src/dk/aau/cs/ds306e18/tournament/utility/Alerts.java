@@ -22,7 +22,7 @@ public class Alerts {
                 .title(title)
                 .text(text)
                 .graphic(null)
-                .hideAfter(Duration.seconds(3))
+                .hideAfter(Duration.seconds(5))
                 .position(Pos.BOTTOM_RIGHT)
                 .owner(window)
                 .showInformation();
@@ -38,7 +38,7 @@ public class Alerts {
                 .title(title)
                 .text(text)
                 .graphic(null)
-                .hideAfter(Duration.seconds(5))
+                .hideAfter(Duration.seconds(8))
                 .position(Pos.BOTTOM_RIGHT)
                 .owner(window)
                 .showError();
