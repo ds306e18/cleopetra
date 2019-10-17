@@ -28,7 +28,7 @@ public class RLBotSettings {
         this.matchConfig = matchConfig;
     }
 
-    public boolean writeOverlayData() {
+    public boolean writeOverlayDataEnabled() {
         return writeOverlayData;
     }
 

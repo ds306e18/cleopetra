@@ -35,7 +35,7 @@ public class MatchRunner {
             String command = String.format(COMMAND_FORMAT, pathToDirectory, pathToDirectory.toString().substring(0, 2));
             System.out.println("Starting RLBot framework with command: " + command);
             Runtime.getRuntime().exec(command);
-            if (Tournament.get().getRlBotSettings().writeOverlayData()) {
+            if (Tournament.get().getRlBotSettings().writeOverlayDataEnabled()) {
                 try {
                     OverlayData.write(match);
                 } catch (IOException e) {
