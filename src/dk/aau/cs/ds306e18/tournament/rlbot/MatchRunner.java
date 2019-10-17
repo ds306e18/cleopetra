@@ -61,7 +61,7 @@ public class MatchRunner {
         }
 
         // Write overlay data to current_match.json
-        if (Tournament.get().getRlBotSettings().writeOverlayData()) {
+        if (Tournament.get().getRlBotSettings().writeOverlayDataEnabled()) {
             try {
                 OverlayData.write(match);
             } catch (IOException e) {

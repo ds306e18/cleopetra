@@ -4,10 +4,7 @@ import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import dk.aau.cs.ds306e18.tournament.rlbot.MatchRunner;
 import dk.aau.cs.ds306e18.tournament.rlbot.RLBotSettings;
 import dk.aau.cs.ds306e18.tournament.rlbot.configuration.MatchConfig;
-import dk.aau.cs.ds306e18.tournament.rlbot.configuration.MatchConfigOptions;
 import dk.aau.cs.ds306e18.tournament.rlbot.configuration.MatchConfigOptions.*;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -85,7 +82,7 @@ public class RLBotSettingsTabController {
         setupChoiceBox(respawnTimeChoiceBox, RespawnTime.values(), matchConfig.getRespawnTime(), MatchConfig::setRespawnTime);
 
         // Other settings
-        writeOverlayDataRadioButton.setSelected(settings.writeOverlayData());
+        writeOverlayDataRadioButton.setSelected(settings.writeOverlayDataEnabled());
         writeOverlayDataRadioButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
             Tournament.get().getRlBotSettings().setWriteOverlayData(newValue);
         });
@@ -139,7 +136,7 @@ public class RLBotSettingsTabController {
         respawnTimeChoiceBox.getSelectionModel().select(matchConfig.getRespawnTime());
 
         // Other settings
-        writeOverlayDataRadioButton.setSelected(settings.writeOverlayData());
+        writeOverlayDataRadioButton.setSelected(settings.writeOverlayDataEnabled());
     }
 
     public void onActionRLBotRunnerOpen(ActionEvent actionEvent) {
