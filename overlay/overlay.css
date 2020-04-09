@@ -1,8 +1,22 @@
-.centered {
+.top {
     position: fixed;
     top: 0;
     left: 50%;
     transform: translate(-50%, 0);
+}
+
+.bottom {
+    position: fixed;
+    top: 100%;
+    left: 50%;
+    transform: translate(-50%, -100%);
+}
+
+.bottom-right {
+    position: fixed;
+    top: 100%;
+    left: 100%;
+    transform: translate(-100%, -100%);
 }
 
 .team-name {
