@@ -1,5 +1,9 @@
 package dk.aau.cs.ds306e18.tournament.rlbot.configuration;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
+
 /**
  * Holds all the valid values for fields the MatchConfig file. Each one is represented by a enum consisting of two
  * strings: one to display in the UI, and one for it value in the config file.
@@ -7,6 +11,7 @@ package dk.aau.cs.ds306e18.tournament.rlbot.configuration;
 public class MatchConfigOptions {
 
     public enum GameMap {
+        RANDOM_STANDARD("Random Standard Map", ""),
         DFH_STADIUM("DFH Stadium", "DFHStadium"),
         MANNFIELD("Mannfield", "Mannfield"),
         CHAMPIONS_FIELD("Champions Field", "ChampionsField"),
@@ -64,6 +69,39 @@ public class MatchConfigOptions {
         @Override
         public String toString() {
             return guiName;
+        }
+
+        public static final ArrayList<GameMap> standardMaps = new ArrayList<>(Arrays.asList(
+                DFH_STADIUM,
+                MANNFIELD,
+                CHAMPIONS_FIELD,
+                URBAN_CENTRAL,
+                BECKWITH_PARK,
+                UTOPIA_COLISEUM,
+                WASTELAND,
+                NEO_TOKYO,
+                AQUADOME,
+                STARBASE_ARC,
+                FARMSTEAD,
+                SALTY_SHORES,
+                DFH_STADIUM_STORMY,
+                DFH_STADIUM_DAY,
+                MANNFIELD_STORMY,
+                MANNFIELD_NIGHT,
+                CHAMPIONS_FIELD_DAY,
+                BECKWITH_PARK_STORMY,
+                BECKWITH_PARK_MIDNIGHT,
+                URBAN_CENTRAL_NIGHT,
+                URBAN_CENTRAL_DAWN,
+                UTOPIA_COLISEUM_DUSK,
+                DFH_STADIUM_SNOWY,
+                MANNFIELD_SNOWY,
+                UTOPIA_COLISEUM_SNOWY
+        ));
+
+        public static GameMap getRandomStandardMap() {
+            int index = new Random().nextInt(standardMaps.size());
+            return standardMaps.get(index);
         }
     }
 

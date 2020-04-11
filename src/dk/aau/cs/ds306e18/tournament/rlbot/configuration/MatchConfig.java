@@ -44,7 +44,7 @@ public class MatchConfig {
     public final static String MUTATOR_RESPAWN_TIME = "Respawn Time";
 
     private File configFile;
-    private GameMap gameMap = GameMap.CHAMPIONS_FIELD;
+    private GameMap gameMap = GameMap.RANDOM_STANDARD;
     private GameMode gameMode = GameMode.SOCCER;
     private boolean skipReplays = false;
     private boolean instantStart = false;
@@ -131,9 +131,12 @@ public class MatchConfig {
         this.configFile = file;
         ConfigFile config = new ConfigFile();
 
+        // Select a random map if selected map is RANDOM_STANDARD
+        String map = gameMap == GameMap.RANDOM_STANDARD ? GameMap.getRandomStandardMap().configName : gameMap.configName;
+
         // Match settings
         config.createSection(MATCH_CONFIGURATION_HEADER);
-        config.set(MATCH_CONFIGURATION_HEADER, GAME_MAP, gameMap.configName);
+        config.set(MATCH_CONFIGURATION_HEADER, GAME_MAP, map);
         config.set(MATCH_CONFIGURATION_HEADER, GAME_MODE, gameMode.configName);
         config.set(MATCH_CONFIGURATION_HEADER, SKIP_REPLAYS, skipReplays);
         config.set(MATCH_CONFIGURATION_HEADER, INSTANT_START, instantStart);
