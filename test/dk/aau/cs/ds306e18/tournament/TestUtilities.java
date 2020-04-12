@@ -1,7 +1,7 @@
 package dk.aau.cs.ds306e18.tournament;
 
 import dk.aau.cs.ds306e18.tournament.model.*;
-import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import dk.aau.cs.ds306e18.tournament.model.match.Series;
 
 import java.util.Arrays;
 import java.util.List;
@@ -92,14 +92,14 @@ public class TestUtilities {
     /**
      * Sets all matches in the given list to have been played. The best seeded team wins.
      */
-    public static void setAllMatchesToPlayed(List<Match> matches) {
-        for (Match match : matches) {
-            Team teamOne = match.getTeamOne();
-            Team teamTwo = match.getTeamTwo();
+    public static void setAllMatchesToPlayed(List<Series> series) {
+        for (Series serie : series) {
+            Team teamOne = serie.getTeamOne();
+            Team teamTwo = serie.getTeamTwo();
             if (teamOne.getInitialSeedValue() < teamTwo.getInitialSeedValue()) {
-                match.setScores(1, 0, true);
+                serie.setScores(1, 0, true);
             } else {
-                match.setScores(0, 1, true);
+                serie.setScores(0, 1, true);
             }
         }
     }

@@ -3,11 +3,10 @@ package dk.aau.cs.ds306e18.tournament.model.format;
 import dk.aau.cs.ds306e18.tournament.TestUtilities;
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.TieBreaker;
-import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import dk.aau.cs.ds306e18.tournament.model.match.Series;
 import dk.aau.cs.ds306e18.tournament.model.stats.StatsTest;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -47,11 +46,11 @@ public class DoubleEliminationFormatTest {
     public void matchDependencies01() {
         DoubleEliminationFormat de = new DoubleEliminationFormat();
         de.start(TestUtilities.getTestTeams(8, 1), true);
-        Match extra = de.getExtraMatch();
-        List<Match> matches = de.getAllMatches();
-        for (Match match : matches) {
-            if (match != extra) {
-                assertTrue(extra.dependsOn(match));
+        Series extra = de.getExtraSeries();
+        List<Series> series = de.getAllMatches();
+        for (Series serie : series) {
+            if (serie != extra) {
+                assertTrue(extra.dependsOn(serie));
             }
         }
     }
@@ -60,11 +59,11 @@ public class DoubleEliminationFormatTest {
     public void matchDependencies02() {
         DoubleEliminationFormat de = new DoubleEliminationFormat();
         de.start(TestUtilities.getTestTeams(17, 1), true);
-        Match extra = de.getExtraMatch();
-        List<Match> matches = de.getAllMatches();
-        for (Match match : matches) {
-            if (match != extra) {
-                assertTrue(extra.dependsOn(match));
+        Series extra = de.getExtraSeries();
+        List<Series> series = de.getAllMatches();
+        for (Series serie : series) {
+            if (serie != extra) {
+                assertTrue(extra.dependsOn(serie));
             }
         }
     }
@@ -74,7 +73,7 @@ public class DoubleEliminationFormatTest {
         List<Team> teams = TestUtilities.getTestTeams(8, 1);
         DoubleEliminationFormat de = new DoubleEliminationFormat();
         de.start(teams, true);
-        Match[] upperBracket = de.getUpperBracket();
+        Series[] upperBracket = de.getUpperBracket();
         int len = upperBracket.length;
         assertSame(1, upperBracket[len-1].getTeamOne().getInitialSeedValue());
         assertSame(8, upperBracket[len-1].getTeamTwo().getInitialSeedValue());
@@ -91,7 +90,7 @@ public class DoubleEliminationFormatTest {
         List<Team> teams = TestUtilities.getTestTeams(5, 1);
         DoubleEliminationFormat de = new DoubleEliminationFormat();
         de.start(teams, true);
-        Match[] upperBracket = de.getUpperBracket();
+        Series[] upperBracket = de.getUpperBracket();
         int len = upperBracket.length;
         assertSame(1, upperBracket[len-5].getTeamOne().getInitialSeedValue());
         assertSame(2, upperBracket[len-6].getTeamOne().getInitialSeedValue());
@@ -116,9 +115,9 @@ public class DoubleEliminationFormatTest {
         assertFalse(de.isExtraMatchNeeded());
 
         // Play all matches except the last (the extra match)
-        List<Match> matches = de.getAllMatches();
-        for (int i = matches.size() - 1; i > 0; i--) {
-            matches.get(i).setScores(1, 0, true);
+        List<Series> series = de.getAllMatches();
+        for (int i = series.size() - 1; i > 0; i--) {
+            series.get(i).setScores(1, 0, true);
         }
 
         assertFalse(de.isExtraMatchNeeded());
@@ -130,15 +129,15 @@ public class DoubleEliminationFormatTest {
         de.start(TestUtilities.getTestTeams(4, 1), true);
 
         // Play all matches except the last (the extra match)
-        List<Match> matches = de.getAllMatches();
-        for (int i = matches.size() - 1; i > 0; i--) {
-            matches.get(i).setScores(1, 0, true);
+        List<Series> series = de.getAllMatches();
+        for (int i = series.size() - 1; i > 0; i--) {
+            series.get(i).setScores(1, 0, true);
         }
 
         assertFalse(de.isExtraMatchNeeded());
 
         // Change result of final match so lower bracket winner wins
-        matches.get(1).setScores(0, 1, true);
+        series.get(1).setScores(0, 1, true);
 
         assertTrue(de.isExtraMatchNeeded());
     }
@@ -174,9 +173,9 @@ public class DoubleEliminationFormatTest {
         de.start(teams, true);
 
         // Play all matches except the last (the extra match)
-        List<Match> matches = de.getAllMatches();
-        for (int i = matches.size() - 1; i > 0; i--) {
-            matches.get(i).setScores(1, 0, true);
+        List<Series> series = de.getAllMatches();
+        for (int i = series.size() - 1; i > 0; i--) {
+            series.get(i).setScores(1, 0, true);
         }
 
         // All matches have now been played, so all teams has 2 loses, except the winner
@@ -197,13 +196,13 @@ public class DoubleEliminationFormatTest {
         de.start(teams, true);
 
         // Play all matches except the last (the extra match)
-        List<Match> matches = de.getAllMatches();
-        for (int i = matches.size() - 1; i > 0; i--) {
-            Match match = matches.get(i);
-            if (match.getTeamOne().getInitialSeedValue() < match.getTeamTwo().getInitialSeedValue()) {
-                match.setScores(1, 0, true);
+        List<Series> series = de.getAllMatches();
+        for (int i = series.size() - 1; i > 0; i--) {
+            Series serie = series.get(i);
+            if (serie.getTeamOne().getInitialSeedValue() < serie.getTeamTwo().getInitialSeedValue()) {
+                serie.setScores(1, 0, true);
             } else {
-                match.setScores(0, 1, true);
+                serie.setScores(0, 1, true);
             }
         }
 
@@ -220,13 +219,13 @@ public class DoubleEliminationFormatTest {
         de.start(teams, true);
 
         // Play all matches except the last (the extra match)
-        List<Match> matches = de.getAllMatches();
-        for (int i = matches.size() - 1; i > 0; i--) {
-            Match match = matches.get(i);
-            if (match.getTeamOne().getInitialSeedValue() < match.getTeamTwo().getInitialSeedValue()) {
-                match.setScores(1, 0, true);
+        List<Series> series = de.getAllMatches();
+        for (int i = series.size() - 1; i > 0; i--) {
+            Series serie = series.get(i);
+            if (serie.getTeamOne().getInitialSeedValue() < serie.getTeamTwo().getInitialSeedValue()) {
+                serie.setScores(1, 0, true);
             } else {
-                match.setScores(0, 1, true);
+                serie.setScores(0, 1, true);
             }
         }
 
@@ -243,13 +242,13 @@ public class DoubleEliminationFormatTest {
         de.start(teams, true);
 
         // Play all matches. The highest seeded team wins 1-0
-        List<Match> allMatches = de.getAllMatches();
-        for (int matchIndex = allMatches.size() - 1; matchIndex > 0; matchIndex--) {
-            Match match = allMatches.get(matchIndex);
-            if (match.getTeamOne().getInitialSeedValue() < match.getTeamTwo().getInitialSeedValue()) {
-                match.setScores(1, 0, true);
+        List<Series> allSeries = de.getAllMatches();
+        for (int matchIndex = allSeries.size() - 1; matchIndex > 0; matchIndex--) {
+            Series series = allSeries.get(matchIndex);
+            if (series.getTeamOne().getInitialSeedValue() < series.getTeamTwo().getInitialSeedValue()) {
+                series.setScores(1, 0, true);
             } else {
-                match.setScores(0, 1, true);
+                series.setScores(0, 1, true);
             }
         }
 

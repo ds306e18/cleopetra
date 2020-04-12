@@ -1,7 +1,7 @@
 package dk.aau.cs.ds306e18.tournament.model.stats;
 
 import dk.aau.cs.ds306e18.tournament.model.Team;
-import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import dk.aau.cs.ds306e18.tournament.model.match.Series;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchChangeListener;
 
 import java.util.Collection;
@@ -16,7 +16,7 @@ class StatsTracker implements MatchChangeListener {
 
     private Team team;
     private Stats stats;
-    private Set<Match> trackedMatches = new HashSet<>();
+    private Set<Series> trackedSeries = new HashSet<>();
 
     /**
      * Create a Stats object to track stats for the given team.
@@ -35,23 +35,23 @@ class StatsTracker implements MatchChangeListener {
         int loses = 0;
         int goals = 0;
         int goalsConceded = 0;
-        for (Match match : trackedMatches) {
+        for (Series series : trackedSeries) {
             // If the team is in the match (which it might not be), add the relevant stats
-            if (match.getTeamOne() == team) {
-                goals += match.getTeamOneScore();
-                goalsConceded += match.getTeamTwoScore();
-                if (match.hasBeenPlayed()) {
-                    if (match.getWinner() == team) {
+            if (series.getTeamOne() == team) {
+                goals += series.getTeamOneScores();
+                goalsConceded += series.getTeamTwoScores();
+                if (series.hasBeenPlayed()) {
+                    if (series.getWinner() == team) {
                         wins++;
                     } else {
                         loses++;
                     }
                 }
-            } else if (match.getTeamTwo() == team) {
-                goals += match.getTeamTwoScore();
-                goalsConceded += match.getTeamOneScore();
-                if (match.hasBeenPlayed()) {
-                    if (match.getWinner() == team) {
+            } else if (series.getTeamTwo() == team) {
+                goals += series.getTeamTwoScores();
+                goalsConceded += series.getTeamOneScores();
+                if (series.hasBeenPlayed()) {
+                    if (series.getWinner() == team) {
                         wins++;
                     } else {
                         loses++;
@@ -65,35 +65,35 @@ class StatsTracker implements MatchChangeListener {
     /**
      * Returns a set of all the tracked matches. Changes to the set does not affect the Stats.
      */
-    public Set<Match> getTrackedMatches() {
-        return new HashSet<>(trackedMatches);
+    public Set<Series> getTrackedSeries() {
+        return new HashSet<>(trackedSeries);
     }
 
     /**
      * Remove all tracked matches and essentially resets the stats. StatsChangeListeners are notified.
      */
     public void clearTrackedMatches() {
-        trackedMatches.clear();
+        trackedSeries.clear();
         recalculate();
     }
 
     /**
      * Starts tracking stats from the given match. The associated team does not need to be a participant of the
      * given match. StatsChangeListeners are notified.
-     * @param match a match to track stats from
+     * @param series a match to track stats from
      */
-    public void trackMatch(Match match) {
-        trackedMatches.add(match);
-        match.registerMatchChangeListener(this);
+    public void trackMatch(Series series) {
+        trackedSeries.add(series);
+        series.registerMatchChangeListener(this);
         recalculate();
     }
     /**
      * Stops tracking stats from the given match. StatsChangeListeners are notified.
-     * @param match a match to stop tracking stats from
+     * @param series a match to stop tracking stats from
      */
-    public void untrackMatch(Match match) {
-        trackedMatches.remove(match);
-        match.unregisterMatchChangeListener(this);
+    public void untrackMatch(Series series) {
+        trackedSeries.remove(series);
+        series.unregisterMatchChangeListener(this);
         recalculate();
     }
 
@@ -102,10 +102,10 @@ class StatsTracker implements MatchChangeListener {
      * given matches. StatsChangeListeners are notified.
      * @param matches a collection of matches to track stats from.
      */
-    public void trackMatches(Collection<? extends Match> matches) {
-        for (Match match : matches) {
-            trackedMatches.add(match);
-            match.registerMatchChangeListener(this);
+    public void trackMatches(Collection<? extends Series> matches) {
+        for (Series series : matches) {
+            trackedSeries.add(series);
+            series.registerMatchChangeListener(this);
         }
         recalculate();
     }
@@ -114,16 +114,16 @@ class StatsTracker implements MatchChangeListener {
      * Stops tracking stats from the given match. StatsChangeListeners are notified.
      * @param matches a collection of matches to stop tracking stats from.
      */
-    public void untrackMatches(Collection<? extends Match> matches) {
-        for (Match match : matches) {
-            trackedMatches.remove(match);
-            match.unregisterMatchChangeListener(this);
+    public void untrackMatches(Collection<? extends Series> matches) {
+        for (Series series : matches) {
+            trackedSeries.remove(series);
+            series.unregisterMatchChangeListener(this);
         }
         recalculate();
     }
 
     @Override
-    public void onMatchChanged(Match match) {
+    public void onMatchChanged(Series series) {
         recalculate();
     }
 

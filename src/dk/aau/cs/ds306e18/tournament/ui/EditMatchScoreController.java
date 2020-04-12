@@ -1,15 +1,13 @@
 package dk.aau.cs.ds306e18.tournament.ui;
 
-import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import dk.aau.cs.ds306e18.tournament.model.match.Series;
 import javafx.application.Platform;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchResultDependencyException;
 import dk.aau.cs.ds306e18.tournament.utility.Alerts;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 
@@ -25,7 +23,7 @@ public class EditMatchScoreController extends DraggablePopupWindow {
     @FXML private Spinner<Integer> teamTwoScoreSpinner;
     @FXML private Button saveButton;
 
-    private Match match;
+    private Series series;
 
     @FXML
     private void initialize() {
@@ -95,15 +93,15 @@ public class EditMatchScoreController extends DraggablePopupWindow {
         }
     }
 
-    public void setMatch(Match match) {
-        if (match == null) {
+    public void setSeries(Series series) {
+        if (series == null) {
             closeWindow();
         }
-        this.match = match;
+        this.series = series;
 
-        teamOneNameLabel.setText(match.getTeamOne().getTeamName());
-        teamTwoNameLabel.setText(match.getTeamTwo().getTeamName());
-        if (match.isTeamOneBlue()) {
+        teamOneNameLabel.setText(series.getTeamOne().getTeamName());
+        teamTwoNameLabel.setText(series.getTeamTwo().getTeamName());
+        if (series.isTeamOneBlue()) {
             teamOneNameLabel.setTextFill(BLUE_FILL);
             teamTwoNameLabel.setTextFill(ORANGE_FILL);
         } else {
@@ -111,10 +109,10 @@ public class EditMatchScoreController extends DraggablePopupWindow {
             teamTwoNameLabel.setTextFill(BLUE_FILL);
         }
 
-        teamOneScoreSpinner.getValueFactory().setValue(match.getTeamOneScore());
-        teamTwoScoreSpinner.getValueFactory().setValue(match.getTeamTwoScore());
+        teamOneScoreSpinner.getValueFactory().setValue(series.getTeamOneScores());
+        teamTwoScoreSpinner.getValueFactory().setValue(series.getTeamTwoScores());
 
-        matchOverCheckBox.setSelected(match.hasBeenPlayed());
+        matchOverCheckBox.setSelected(series.hasBeenPlayed());
     }
 
     @FXML
@@ -153,7 +151,7 @@ public class EditMatchScoreController extends DraggablePopupWindow {
         while (true) {
             try {
 
-                match.setScores(teamOneScore, teamTwoScore, played, force);
+                series.setScores(teamOneScore, teamTwoScore, played, force);
                 closeWindow();
                 break;
 

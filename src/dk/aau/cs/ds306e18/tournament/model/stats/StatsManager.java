@@ -2,7 +2,7 @@ package dk.aau.cs.ds306e18.tournament.model.stats;
 
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.format.Format;
-import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import dk.aau.cs.ds306e18.tournament.model.match.Series;
 
 import java.util.Collection;
 import java.util.IdentityHashMap;
@@ -44,23 +44,23 @@ public class StatsManager implements StatsChangeListener {
     /**
      * Start tracking stats from the given match.
      */
-    public void trackMatch(Format format, Match match) {
-        getTracker(format).trackMatch(match);
+    public void trackMatch(Format format, Series series) {
+        getTracker(format).trackMatch(series);
         recalculateGlobalStats();
     }
 
     /**
      * Stop tracking stats from the given match.
      */
-    public void untrackMatch(Format format, Match match) {
-        getTracker(format).untrackMatch(match);
+    public void untrackMatch(Format format, Series series) {
+        getTracker(format).untrackMatch(series);
         recalculateGlobalStats();
     }
 
     /**
      * Start tracking stats from the given matches.
      */
-    public void trackMatches(Format format, Collection<? extends Match> matches) {
+    public void trackMatches(Format format, Collection<? extends Series> matches) {
         getTracker(format).trackMatches(matches);
         recalculateGlobalStats();
     }
@@ -68,7 +68,7 @@ public class StatsManager implements StatsChangeListener {
     /**
      * Stop tracking stats from the given matches.
      */
-    public void untrackMatches(Format format, Collection<? extends Match> matches) {
+    public void untrackMatches(Format format, Collection<? extends Series> matches) {
         getTracker(format).untrackMatches(matches);
         recalculateGlobalStats();
     }

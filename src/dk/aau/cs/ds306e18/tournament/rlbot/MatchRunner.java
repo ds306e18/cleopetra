@@ -3,7 +3,7 @@ package dk.aau.cs.ds306e18.tournament.rlbot;
 import dk.aau.cs.ds306e18.tournament.model.Bot;
 import dk.aau.cs.ds306e18.tournament.model.BotFromConfig;
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
-import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import dk.aau.cs.ds306e18.tournament.model.match.Series;
 import dk.aau.cs.ds306e18.tournament.rlbot.configuration.MatchConfig;
 import dk.aau.cs.ds306e18.tournament.rlbot.configuration.ParticipantInfo;
 import dk.aau.cs.ds306e18.tournament.rlbot.configuration.TeamColor;
@@ -52,10 +52,10 @@ public class MatchRunner {
     /**
      * Starts the given match in Rocket League.
      */
-    public static boolean startMatch(MatchConfig matchConfig, Match match) {
+    public static boolean startMatch(MatchConfig matchConfig, Series series) {
 
         // Checks settings and modifies rlbot.cfg file if everything is okay
-        boolean ready = prepareMatch(matchConfig, match);
+        boolean ready = prepareMatch(matchConfig, series);
         if (!ready) {
             return false;
         }
@@ -63,7 +63,7 @@ public class MatchRunner {
         // Write overlay data to current_match.json
         if (Tournament.get().getRlBotSettings().writeOverlayDataEnabled()) {
             try {
-                OverlayData.write(match);
+                OverlayData.write(series);
             } catch (IOException e) {
                 Alerts.errorNotification("Could not write overlay data", "Failed to write overlay data to " + OverlayData.CURRENT_MATCH_PATH);
                 e.printStackTrace();
@@ -140,9 +140,9 @@ public class MatchRunner {
     /**
      * Returns true if the given match can be started.
      */
-    public static boolean canStartMatch(Match match) {
+    public static boolean canStartMatch(Series series) {
         try {
-            checkMatch(match);
+            checkMatch(series);
             return true;
         } catch (IllegalStateException e) {
             return false;
@@ -153,22 +153,22 @@ public class MatchRunner {
      * Check the requirements for starting the match. Throws an IllegalStateException if anything is wrong. Does nothing
      * if everything is okay.
      */
-    private static void checkMatch(Match match) {
+    private static void checkMatch(Series series) {
         // These methods throws IllegalStageException if anything is wrong
-        checkBotConfigsInMatch(match);
+        checkBotConfigsInMatch(series);
     }
 
     /**
      * Throws an IllegalStateException if anything is wrong with the bots' config files for this match. Does nothing if
      * all the bots on both teams have a valid config file in a given match.
      */
-    private static void checkBotConfigsInMatch(Match match) {
+    private static void checkBotConfigsInMatch(Series series) {
         // Check if there are two teams
-        if (match.getBlueTeam() == null) throw new IllegalStateException("There is no blue team for this match.");
-        if (match.getOrangeTeam() == null) throw new IllegalStateException("There is no orange team for this match.");
+        if (series.getBlueTeam() == null) throw new IllegalStateException("There is no blue team for this match.");
+        if (series.getOrangeTeam() == null) throw new IllegalStateException("There is no orange team for this match.");
 
-        ArrayList<Bot> blueBots = match.getBlueTeam().getBots();
-        ArrayList<Bot> orangeBots = match.getOrangeTeam().getBots();
+        ArrayList<Bot> blueBots = series.getBlueTeam().getBots();
+        ArrayList<Bot> orangeBots = series.getOrangeTeam().getBots();
 
         if (blueBots.size() == 0) throw new IllegalStateException("There are no bots on the blue team.");
         if (orangeBots.size() == 0) throw new IllegalStateException("There are no bots on the orange team.");
@@ -201,11 +201,11 @@ public class MatchRunner {
      * rlbot.cfg to start the given match when rlbot is run. Returns false and shows an alert if something went wrong
      * during preparation.
      */
-    public static boolean prepareMatch(MatchConfig matchConfig, Match match) {
+    public static boolean prepareMatch(MatchConfig matchConfig, Series series) {
         try {
             // Check settings and config files
-            checkMatch(match);
-            insertParticipants(matchConfig, match);
+            checkMatch(series);
+            insertParticipants(matchConfig, series);
             matchConfig.write(SettingsDirectory.MATCH_CONFIG.toFile());
 
             return true;
@@ -221,11 +221,11 @@ public class MatchRunner {
      * Inserts the participants in a match into the MatchConfig. Any existing participants in the MatchConfig will be
      * removed.
      */
-    private static void insertParticipants(MatchConfig config, Match match) {
+    private static void insertParticipants(MatchConfig config, Series series) {
         config.clearParticipants();
 
-        insertParticipantsFromTeam(config, match.getBlueTeam().getBots(), TeamColor.BLUE);
-        insertParticipantsFromTeam(config, match.getOrangeTeam().getBots(), TeamColor.ORANGE);
+        insertParticipantsFromTeam(config, series.getBlueTeam().getBots(), TeamColor.BLUE);
+        insertParticipantsFromTeam(config, series.getOrangeTeam().getBots(), TeamColor.ORANGE);
     }
 
     /**

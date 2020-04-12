@@ -1,7 +1,7 @@
 package dk.aau.cs.ds306e18.tournament.model;
 
 import dk.aau.cs.ds306e18.tournament.TestUtilities;
-import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import dk.aau.cs.ds306e18.tournament.model.match.Series;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -17,17 +17,17 @@ public class TieBreakerTest {
     public void goalDiff01() {
 
         List<Team> teams = TestUtilities.getTestTeams(6, 1);
-        Match matchOne = new Match(teams.get(0), teams.get(1));
-        Match matchTwo = new Match(teams.get(2), teams.get(3));
-        Match matchThree = new Match(teams.get(4), teams.get(5));
-        List<Match> matches = Arrays.asList(matchOne, matchTwo, matchThree);
+        Series seriesOne = new Series(teams.get(0), teams.get(1));
+        Series seriesTwo = new Series(teams.get(2), teams.get(3));
+        Series seriesThree = new Series(teams.get(4), teams.get(5));
+        List<Series> series = Arrays.asList(seriesOne, seriesTwo, seriesThree);
 
-        matchOne.setScores(9, 5, true);
-        matchTwo.setScores(4, 0, true);
-        matchThree.setScores(4, 3, true);
+        seriesOne.setScores(9, 5, true);
+        seriesTwo.setScores(4, 0, true);
+        seriesThree.setScores(4, 3, true);
 
         for (Team team : teams) {
-            team.getStatsManager().trackMatches(null, matches);
+            team.getStatsManager().trackMatches(null, series);
         }
 
         List<Team> ordered = TieBreaker.GOAL_DIFF.compareAll(teams, null);
@@ -43,15 +43,15 @@ public class TieBreakerTest {
     @Test
     public void goalScored01() {
         List<Team> teams = TestUtilities.getTestTeams(4, 1);
-        Match matchOne = new Match(teams.get(0), teams.get(1));
-        Match matchTwo = new Match(teams.get(2), teams.get(3));
-        List<Match> matches = Arrays.asList(matchOne, matchTwo);
+        Series seriesOne = new Series(teams.get(0), teams.get(1));
+        Series seriesTwo = new Series(teams.get(2), teams.get(3));
+        List<Series> series = Arrays.asList(seriesOne, seriesTwo);
 
-        matchOne.setScores(5, 1, true);
-        matchTwo.setScores(4, 2, true);
+        seriesOne.setScores(5, 1, true);
+        seriesTwo.setScores(4, 2, true);
 
         for (Team team : teams) {
-            team.getStatsManager().trackMatches(null, matches);
+            team.getStatsManager().trackMatches(null, series);
         }
 
         List<Team> ordered = TieBreaker.GOALS_SCORED.compareAll(teams, null);
@@ -65,16 +65,16 @@ public class TieBreakerTest {
     @Test
     public void bySeed01() {
         List<Team> teams = TestUtilities.getTestTeams(4, 1);
-        Match matchOne = new Match(teams.get(0), teams.get(1));
-        Match matchTwo = new Match(teams.get(2), teams.get(3));
-        List<Match> matches = Arrays.asList(matchOne, matchTwo);
+        Series seriesOne = new Series(teams.get(0), teams.get(1));
+        Series seriesTwo = new Series(teams.get(2), teams.get(3));
+        List<Series> series = Arrays.asList(seriesOne, seriesTwo);
 
         // Scores shouldn't matter
-        matchOne.setScores(2, 3, true);
-        matchTwo.setScores(4, 1, true);
+        seriesOne.setScores(2, 3, true);
+        seriesTwo.setScores(4, 1, true);
 
         for (Team team : teams) {
-            team.getStatsManager().trackMatches(null, matches);
+            team.getStatsManager().trackMatches(null, series);
         }
 
         List<Team> ordered = TieBreaker.SEED.compareAll(teams, null);
@@ -88,17 +88,17 @@ public class TieBreakerTest {
     @Test
     public void compareWithPoints01() {
         List<Team> teams = TestUtilities.getTestTeams(6, 1);
-        Match matchOne = new Match(teams.get(0), teams.get(1));
-        Match matchTwo = new Match(teams.get(2), teams.get(3));
-        Match matchThree = new Match(teams.get(4), teams.get(5));
-        List<Match> matches = Arrays.asList(matchOne, matchTwo, matchThree);
+        Series seriesOne = new Series(teams.get(0), teams.get(1));
+        Series seriesTwo = new Series(teams.get(2), teams.get(3));
+        Series seriesThree = new Series(teams.get(4), teams.get(5));
+        List<Series> series = Arrays.asList(seriesOne, seriesTwo, seriesThree);
 
-        matchOne.setScores(2, 3, true);
-        matchTwo.setScores(4, 2, true);
-        matchThree.setScores(3, 4, true);
+        seriesOne.setScores(2, 3, true);
+        seriesTwo.setScores(4, 2, true);
+        seriesThree.setScores(3, 4, true);
 
         for (Team team : teams) {
-            team.getStatsManager().trackMatches(null, matches);
+            team.getStatsManager().trackMatches(null, series);
         }
 
         // Team 0 and team 3 both have 2 goals, but team 0 has one point
@@ -126,17 +126,17 @@ public class TieBreakerTest {
     @Test
     public void compareWithPoints02() {
         List<Team> teams = TestUtilities.getTestTeams(6, 1);
-        Match matchOne = new Match(teams.get(0), teams.get(1));
-        Match matchTwo = new Match(teams.get(2), teams.get(3));
-        Match matchThree = new Match(teams.get(4), teams.get(5));
-        List<Match> matches = Arrays.asList(matchOne, matchTwo, matchThree);
+        Series seriesOne = new Series(teams.get(0), teams.get(1));
+        Series seriesTwo = new Series(teams.get(2), teams.get(3));
+        Series seriesThree = new Series(teams.get(4), teams.get(5));
+        List<Series> series = Arrays.asList(seriesOne, seriesTwo, seriesThree);
 
-        matchOne.setScores(1, 3, true);
-        matchTwo.setScores(2, 5, true);
-        matchThree.setScores(4, 0, true);
+        seriesOne.setScores(1, 3, true);
+        seriesTwo.setScores(2, 5, true);
+        seriesThree.setScores(4, 0, true);
 
         for (Team team : teams) {
-            team.getStatsManager().trackMatches(null, matches);
+            team.getStatsManager().trackMatches(null, series);
         }
 
         // Teams with points should be ahead, but their goals decide the order next

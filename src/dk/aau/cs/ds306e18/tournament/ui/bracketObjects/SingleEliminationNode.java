@@ -1,7 +1,7 @@
 package dk.aau.cs.ds306e18.tournament.ui.bracketObjects;
 
 import dk.aau.cs.ds306e18.tournament.model.format.SingleEliminationFormat;
-import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import dk.aau.cs.ds306e18.tournament.model.match.Series;
 import dk.aau.cs.ds306e18.tournament.ui.BracketOverviewTabController;
 import dk.aau.cs.ds306e18.tournament.ui.MatchVisualController;
 import javafx.geometry.Insets;
@@ -36,7 +36,7 @@ public class SingleEliminationNode extends GridPane implements ModelCoupledUI {
     private void update() {
         removeElements();
 
-        Match[] matchArray = singleElimination.getMatchesAsArray();
+        Series[] seriesArray = singleElimination.getMatchesAsArray();
         int rounds = singleElimination.getRounds();
 
         int m = 0; // match index
@@ -47,13 +47,13 @@ public class SingleEliminationNode extends GridPane implements ModelCoupledUI {
 
             // Add matches for round r
             for (int i = 0; i < matchesInRound; i++) {
-                Match match = matchArray[m];
+                Series series = seriesArray[m];
                 m++;
                 VBox box = new VBox();
 
                 // Some matches can be null
-                if (match != null) {
-                    MatchVisualController mvc = boc.loadVisualMatch(match);
+                if (series != null) {
+                    MatchVisualController mvc = boc.loadVisualMatch(series);
                     mvcs.add(mvc);
                     box.getChildren().add(mvc.getRoot());
                     mvc.setShowIdentifier(true);

@@ -1,7 +1,7 @@
 package dk.aau.cs.ds306e18.tournament.model.format;
 
 import dk.aau.cs.ds306e18.tournament.model.Team;
-import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import dk.aau.cs.ds306e18.tournament.model.match.Series;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchPlayedListener;
 import dk.aau.cs.ds306e18.tournament.model.TieBreaker;
 import dk.aau.cs.ds306e18.tournament.ui.BracketOverviewTabController;
@@ -18,8 +18,8 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
 
     private StageStatus status = StageStatus.PENDING;
     private ArrayList<Team> seededTeams;
-    private Match finalMatch;
-    private Match[] bracket;
+    private Series finalSeries;
+    private Series[] bracket;
     private int rounds;
 
     transient private List<StageStatusChangeListener> statusChangeListeners = new LinkedList<>();
@@ -32,7 +32,7 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
         seedBracket(seededTeams, doSeeding);
         giveMatchesIdentifiers();
         status = StageStatus.RUNNING;
-        finalMatch.registerMatchPlayedListener(this);
+        finalSeries.registerMatchPlayedListener(this);
         setupStatsTracking();
     }
 
@@ -42,20 +42,20 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
     private void generateBracket() {
         int matchesInFirstRound = pow2(rounds - 1);
         int numberOfMatches = pow2(rounds) - 1;
-        bracket = new Match[numberOfMatches];
+        bracket = new Series[numberOfMatches];
         for(int i = numberOfMatches - 1; i >= 0; i--) {
             // Creates empty matches for first round
             if(i >= numberOfMatches - matchesInFirstRound) {
-                bracket[i] = new Match();
+                bracket[i] = new Series();
             }
             // Creates the remaining matches which contains winners from their left- and right child-indexes.
             else {
-                bracket[i] = new Match()
+                bracket[i] = new Series()
                         .setTeamOneToWinnerOf(bracket[getLeftIndex(i)])
                         .setTeamTwoToWinnerOf(bracket[getRightIndex(i)]);
             }
         }
-        finalMatch = bracket[0];
+        finalSeries = bracket[0];
     }
 
     /** Seeds the single-elimination bracket with teams to give better placements.
@@ -82,7 +82,7 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
      * @param seedList a list of seeded teams in a fair seeding order
      * @param byeList a list of dummy teams */
     private void placeTeamsInBracket(List<Team> seedList, ArrayList<Team> byeList) {
-        int seedMatchIndex = finalMatch.getTreeAsListBFS().size() - 1;
+        int seedMatchIndex = finalSeries.getTreeAsListBFS().size() - 1;
         int  numberOfTeams = seedList.size();
         for (int teamIndex = 0; teamIndex < numberOfTeams; teamIndex = teamIndex + 2) {
             // If the matchup would be between a team and a bye, the team will be placed at its parent match
@@ -121,7 +121,7 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
 
     /** Gives the matches identifiers. */
     private void giveMatchesIdentifiers() {
-        List<Match> treeAsListBFS = finalMatch.getTreeAsListBFS();
+        List<Series> treeAsListBFS = finalSeries.getTreeAsListBFS();
         int index = 1;
         for (int i = treeAsListBFS.size() - 1; i >= 0; i--) {
             treeAsListBFS.get(i).setIdentifier(index++);
@@ -145,9 +145,9 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
     }
 
     private void setupStatsTracking() {
-        List<Match> allMatches = getAllMatches();
+        List<Series> allSeries = getAllMatches();
         for (Team team : seededTeams) {
-            team.getStatsManager().trackMatches(this, allMatches);
+            team.getStatsManager().trackMatches(this, allSeries);
         }
     }
 
@@ -161,34 +161,34 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
     }
 
     @Override
-    public List<Match> getAllMatches() {
-        return finalMatch.getTreeAsListBFS();
+    public List<Series> getAllMatches() {
+        return finalSeries.getTreeAsListBFS();
     }
 
     @Override
-    public List<Match> getUpcomingMatches() {
-        return finalMatch.getTreeAsListBFS().stream().filter(c -> c.getStatus().equals(Match.Status.READY_TO_BE_PLAYED) && !c.hasBeenPlayed()).collect(Collectors.toList());
+    public List<Series> getUpcomingMatches() {
+        return finalSeries.getTreeAsListBFS().stream().filter(c -> c.getStatus().equals(Series.Status.READY_TO_BE_PLAYED) && !c.hasBeenPlayed()).collect(Collectors.toList());
     }
 
     @Override
-    public List<Match> getPendingMatches() {
-        return finalMatch.getTreeAsListBFS().stream().filter(c -> c.getStatus().equals(Match.Status.NOT_PLAYABLE)).collect(Collectors.toList());
+    public List<Series> getPendingMatches() {
+        return finalSeries.getTreeAsListBFS().stream().filter(c -> c.getStatus().equals(Series.Status.NOT_PLAYABLE)).collect(Collectors.toList());
     }
 
     @Override
-    public List<Match> getCompletedMatches() {
-        return finalMatch.getTreeAsListBFS().stream().filter(Match::hasBeenPlayed).collect(Collectors.toList());
+    public List<Series> getCompletedMatches() {
+        return finalSeries.getTreeAsListBFS().stream().filter(Series::hasBeenPlayed).collect(Collectors.toList());
     }
 
-    public Match[] getMatchesAsArray() {
+    public Series[] getMatchesAsArray() {
         return this.bracket;
     }
 
     @Override
-    public void onMatchPlayed(Match match) {
+    public void onMatchPlayed(Series series) {
         // Was it last match?
         StageStatus oldStatus = status;
-        if (finalMatch.hasBeenPlayed()) {
+        if (finalSeries.hasBeenPlayed()) {
             status = StageStatus.CONCLUDED;
         } else {
             status = StageStatus.RUNNING;
@@ -226,7 +226,7 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
         List<Team> topTeams = new ArrayList<>();
         List<Team> tempWinnerTeams = new ArrayList<>();
         List<Team> tempLoserTeams = new ArrayList<>();
-        List<Match> matchesBFS = finalMatch.getTreeAsListBFS();
+        List<Series> matchesBFS = finalSeries.getTreeAsListBFS();
         int numberOfMatches = matchesBFS.size();
         int roundUpperBoundIndex = 1, currentMatchIndex = 0;
 
@@ -236,7 +236,7 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
         while (topTeams.size() < count) {
             // places the losers and winners of the round into two different temporary lists
             while (currentMatchIndex < roundUpperBoundIndex && currentMatchIndex < numberOfMatches) {
-                Match current = matchesBFS.get(currentMatchIndex);
+                Series current = matchesBFS.get(currentMatchIndex);
                 if (!topTeams.contains(current.getWinner())) {
                     tempWinnerTeams.add(current.getWinner());
                 }
@@ -286,8 +286,8 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
     @Override
     public void postDeserializationRepair() {
         // Find final match
-        this.finalMatch = this.bracket[0];
-        finalMatch.registerMatchPlayedListener(this);
+        this.finalSeries = this.bracket[0];
+        finalSeries.registerMatchPlayedListener(this);
 
         // Reconnect all matches
         for (int i = 0; i < bracket.length; i++) {
@@ -295,17 +295,17 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
                 // Blue is winner from left match, if such a match exists
                 int leftIndex = getLeftIndex(i);
                 if (leftIndex < bracket.length) {
-                    Match leftMatch = bracket[leftIndex];
-                    if (leftMatch != null) {
-                        bracket[i].reconnectTeamOneToWinnerOf(leftMatch);
+                    Series leftSeries = bracket[leftIndex];
+                    if (leftSeries != null) {
+                        bracket[i].reconnectTeamOneToWinnerOf(leftSeries);
                     }
                 }
                 // Orange is winner from right match, if such a match exists
                 int rightIndex = getRightIndex(i);
                 if (rightIndex < bracket.length) {
-                    Match rightMatch = bracket[rightIndex];
-                    if (rightMatch != null) {
-                        bracket[i].reconnectTeamTwoToWinnerOf(rightMatch);
+                    Series rightSeries = bracket[rightIndex];
+                    if (rightSeries != null) {
+                        bracket[i].reconnectTeamTwoToWinnerOf(rightSeries);
                     }
                 }
             }
@@ -322,13 +322,13 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
         return rounds == that.rounds &&
                 status == that.status &&
                 Objects.equals(seededTeams, that.seededTeams) &&
-                Objects.equals(finalMatch, that.finalMatch) &&
+                Objects.equals(finalSeries, that.finalSeries) &&
                 Arrays.equals(bracket, that.bracket);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(status, seededTeams, finalMatch, rounds);
+        int result = Objects.hash(status, seededTeams, finalSeries, rounds);
         result = 31 * result + Arrays.hashCode(bracket);
         return result;
     }

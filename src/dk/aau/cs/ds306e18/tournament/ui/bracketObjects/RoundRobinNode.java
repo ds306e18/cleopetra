@@ -2,7 +2,7 @@ package dk.aau.cs.ds306e18.tournament.ui.bracketObjects;
 
 import dk.aau.cs.ds306e18.tournament.model.format.RoundRobinFormat;
 import dk.aau.cs.ds306e18.tournament.model.format.RoundRobinGroup;
-import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import dk.aau.cs.ds306e18.tournament.model.match.Series;
 import dk.aau.cs.ds306e18.tournament.ui.BracketOverviewTabController;
 import dk.aau.cs.ds306e18.tournament.ui.MatchVisualController;
 import dk.aau.cs.ds306e18.tournament.ui.StatsTable;
@@ -78,17 +78,17 @@ public class RoundRobinNode extends VBox implements ModelCoupledUI {
     }
 
     /** Returns a vbox that contains a round of matches.
-     * @param matches the matches in the round.
+     * @param series the matches in the round.
      * @param roundNumber the number of the round.
      * @return a vbox that contains a round of matches. */
-    private VBox getRoundBox(ArrayList<Match> matches, int roundNumber){
+    private VBox getRoundBox(ArrayList<Series> series, int roundNumber){
 
         VBox box = new VBox();
         box.getChildren().add(new Label("Round " + (roundNumber + 1)));
 
         //Add matches
-        for (Match match : matches) {
-            MatchVisualController vmatch = boc.loadVisualMatch(match);
+        for (Series serie : series) {
+            MatchVisualController vmatch = boc.loadVisualMatch(serie);
             VBox.setMargin(vmatch.getRoot(), MARGINS);
             box.getChildren().add(vmatch.getRoot());
             mvcs.add(vmatch);

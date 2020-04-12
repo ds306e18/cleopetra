@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import dk.aau.cs.ds306e18.tournament.model.Bot;
 import dk.aau.cs.ds306e18.tournament.model.BotFromConfig;
-import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import dk.aau.cs.ds306e18.tournament.model.match.Series;
 import dk.aau.cs.ds306e18.tournament.rlbot.configuration.BotConfig;
 import dk.aau.cs.ds306e18.tournament.serialization.Serializer;
 
@@ -38,11 +38,11 @@ public class OverlayData {
      * Write the overlay data to the default location. Aborts with no exception if the match is not 1v1 or
      * not ready to be played or if one of the bots are not a bot from a config file.
      */
-    public static void write(Match match) throws IOException {
+    public static void write(Series series) throws IOException {
         //TODO; should be expanded when RLBot support overlays for more than one-vs-ones
-        if (match.isOneVsOne()) {
-            Bot blueBot = match.getBlueTeam().getBots().get(0);
-            Bot orangeBot = match.getOrangeTeam().getBots().get(0);
+        if (series.isOneVsOne()) {
+            Bot blueBot = series.getBlueTeam().getBots().get(0);
+            Bot orangeBot = series.getOrangeTeam().getBots().get(0);
             if (blueBot instanceof BotFromConfig && orangeBot instanceof BotFromConfig) {
                 OverlayData overlayData = new OverlayData(
                         ((BotFromConfig) blueBot).getConfig(),

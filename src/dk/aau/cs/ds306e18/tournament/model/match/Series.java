@@ -1,19 +1,18 @@
 package dk.aau.cs.ds306e18.tournament.model.match;
 
+import com.google.common.primitives.Ints;
 import dk.aau.cs.ds306e18.tournament.model.Team;
 
 import java.util.*;
 import java.util.function.Consumer;
 
 /**
- * <p>A Match consists of two Slots, which holds the Teams participating in the Match, and each Team's
- * score. A Slot might contain a Team, which is temporarily unknown (e.g. when the
- * Team is the winner of another Match). The method {@code isReadyToPlay()} returns true, when both Slots'
- * Team is known and ready.</p>
- * <p>When the Match get marked as has been played, and it is possible to retrieve
- * the winner and the loser of the match.</p>
+ * <p>A Series of matches between two teams. Teams might be temporarily unknown as they are winner or loser of
+ * other Series. The method {@code isReadyToPlay()} returns true, when both teams are is known and ready.</p>
+ * <p>When the Series get marked as has been played, and it is possible to retrieve
+ * the winner and the loser.</p>
  */
-public final class Match {
+public final class Series {
 
     public enum Status {
         NOT_PLAYABLE, READY_TO_BE_PLAYED, HAS_BEEN_PLAYED
@@ -23,22 +22,20 @@ public final class Match {
         UNKNOWN, TEAM_ONE_WINS, TEAM_TWO_WINS, DRAW
     }
 
-    public enum OutcomeColored {
-        UNKNOWN, BLUE_WINS, ORANGE_WINS, DRAW
-    }
-
     private static int nextId = 0;
 
     private final int id;
     private int identifier = 0;
-    private int teamOneScore = 0;
-    private int teamTwoScore = 0;
+    /** For longer series, e.g. best of 3 */
+    private int length = 1;
+    private List<Integer> teamOneScores = new ArrayList<>(Arrays.asList(0));
+    private List<Integer> teamTwoScores = new ArrayList<>(Arrays.asList(0));
     private boolean played = false;
     private Team teamOne, teamTwo;
     private boolean teamOneIsBlue = true;
-    transient private Match teamOneFromMatch, teamTwoFromMatch;
+    transient private Series teamOneFromSeries, teamTwoFromSeries;
     private boolean teamOneWasWinnerInPreviousMatch, teamTwoWasWinnerInPreviousMatch;
-    transient private Match winnerDestination, loserDestination;
+    transient private Series winnerDestination, loserDestination;
     private boolean winnerGoesToTeamOne, loserGoesToTeamOne;
 
     transient private List<MatchPlayedListener> playedListeners = new LinkedList<>();
@@ -47,14 +44,14 @@ public final class Match {
     /**
      * Construct an empty Match.
      */
-    public Match() {
+    public Series() {
         id = nextId++;
     }
 
     /**
      * Construct a Match where both Teams are known from the start.
      */
-    public Match(Team teamOne, Team teamTwo) {
+    public Series(Team teamOne, Team teamTwo) {
         id = nextId++;
         this.teamOne = teamOne;
         this.teamTwo = teamTwo;
@@ -74,9 +71,9 @@ public final class Match {
     /**
      * Set team one of this Match. Returns the Match itself, which allows chaining.
      */
-    public Match setTeamOne(Team one) {
+    public Series setTeamOne(Team one) {
         if (played) throw new IllegalStateException("Match has already been played.");
-        if (teamOneFromMatch != null) {
+        if (teamOneFromSeries != null) {
             // Remove connection to the fromMatch
             if (teamOneWasWinnerInPreviousMatch) setTeamOneToWinnerOf(null);
             else setTeamOneToLoserOf(null);
@@ -89,9 +86,9 @@ public final class Match {
     /**
      * Set team two of this Match. Returns the Match itself, which allows chaining.
      */
-    public Match setTeamTwo(Team two) {
+    public Series setTeamTwo(Team two) {
         if (played) throw new IllegalStateException("Match has already been played.");
-        if (teamTwoFromMatch != null) {
+        if (teamTwoFromSeries != null) {
             // Remove connection to the fromMatch
             if (teamTwoWasWinnerInPreviousMatch) setTeamTwoToWinnerOf(null);
             else setTeamTwoToLoserOf(null);
@@ -105,37 +102,37 @@ public final class Match {
      * Set team one of this Match to use the winner of another Match. Any previous connection or definition of
      * team one will be removed. Returns the Match itself, which allows chaining.
      */
-    public Match setTeamOneToWinnerOf(Match match) {
+    public Series setTeamOneToWinnerOf(Series series) {
         if (played) throw new IllegalStateException("Match has already been played.");
-        if (match == this) throw new IllegalArgumentException("A match can not have a connection to itself.");
+        if (series == this) throw new IllegalArgumentException("A match can not have a connection to itself.");
 
-        if (teamOneFromMatch != null) {
+        if (teamOneFromSeries != null) {
             // This match no longer wants anything from the previous fromMatch
-            if (teamOneWasWinnerInPreviousMatch) teamOneFromMatch.winnerDestination = null;
-            else teamOneFromMatch.loserDestination = null;
+            if (teamOneWasWinnerInPreviousMatch) teamOneFromSeries.winnerDestination = null;
+            else teamOneFromSeries.loserDestination = null;
         }
 
-        if (match == null) {
+        if (series == null) {
             // Remove any connection
-            teamOneFromMatch = null;
+            teamOneFromSeries = null;
             teamOne = null;
 
         } else {
             // Assumption: winners can only go to one match. So we check if the winner currently goes somewhere else
             // and removes that connection
-            if (match.winnerDestination != null) {
-                if (match.winnerGoesToTeamOne) match.winnerDestination.setTeamOneToWinnerOf(null);
-                else match.winnerDestination.setTeamTwoToWinnerOf(null);
+            if (series.winnerDestination != null) {
+                if (series.winnerGoesToTeamOne) series.winnerDestination.setTeamOneToWinnerOf(null);
+                else series.winnerDestination.setTeamTwoToWinnerOf(null);
             }
 
             // Add new connection
-            teamOneFromMatch = match;
+            teamOneFromSeries = series;
             teamOneWasWinnerInPreviousMatch = true;
-            match.winnerDestination = this;
-            match.winnerGoesToTeamOne = true;
-            if (match.hasBeenPlayed()) teamOne = match.getWinner();
+            series.winnerDestination = this;
+            series.winnerGoesToTeamOne = true;
+            if (series.hasBeenPlayed()) teamOne = series.getWinner();
             else teamOne = null;
-            match.notifyMatchChangeListeners();
+            series.notifyMatchChangeListeners();
         }
 
         notifyMatchChangeListeners();
@@ -146,37 +143,37 @@ public final class Match {
      * Set team one of this Match to use the loser of another Match. Any previous connection or definition of
      * the team one will be removed. Returns the Match itself, which allows chaining.
      */
-    public Match setTeamOneToLoserOf(Match match) {
+    public Series setTeamOneToLoserOf(Series series) {
         if (played) throw new IllegalStateException("Match has already been played.");
-        if (match == this) throw new IllegalArgumentException("A match can not have a connection to itself.");
+        if (series == this) throw new IllegalArgumentException("A match can not have a connection to itself.");
 
-        if (teamOneFromMatch != null) {
+        if (teamOneFromSeries != null) {
             // This match no longer wants anything from the previous fromMatch
-            if (teamOneWasWinnerInPreviousMatch) teamOneFromMatch.winnerDestination = null;
-            else teamOneFromMatch.loserDestination = null;
+            if (teamOneWasWinnerInPreviousMatch) teamOneFromSeries.winnerDestination = null;
+            else teamOneFromSeries.loserDestination = null;
         }
 
-        if (match == null) {
+        if (series == null) {
             // Remove any connection
-            teamOneFromMatch = null;
+            teamOneFromSeries = null;
             teamOne = null;
 
         } else {
             // Assumption: losers can only go to one match. So we check if the loser currently goes somewhere else
             // and removes that connection
-            if (match.loserDestination != null) {
-                if (match.loserGoesToTeamOne) match.loserDestination.setTeamOneToLoserOf(null);
-                else match.loserDestination.setTeamTwoToLoserOf(null);
+            if (series.loserDestination != null) {
+                if (series.loserGoesToTeamOne) series.loserDestination.setTeamOneToLoserOf(null);
+                else series.loserDestination.setTeamTwoToLoserOf(null);
             }
 
             // Add new connection
-            teamOneFromMatch = match;
+            teamOneFromSeries = series;
             teamOneWasWinnerInPreviousMatch = false;
-            match.loserDestination = this;
-            match.loserGoesToTeamOne = true;
-            if (match.hasBeenPlayed()) teamOne = match.getLoser();
+            series.loserDestination = this;
+            series.loserGoesToTeamOne = true;
+            if (series.hasBeenPlayed()) teamOne = series.getLoser();
             else teamOne = null;
-            match.notifyMatchChangeListeners();
+            series.notifyMatchChangeListeners();
         }
 
         notifyMatchChangeListeners();
@@ -187,37 +184,37 @@ public final class Match {
      * Set team two of this Match to use the winner of another Match. Any previous connection or definition of
      * team two will be removed. Returns the Match itself, which allows chaining.
      */
-    public Match setTeamTwoToWinnerOf(Match match) {
+    public Series setTeamTwoToWinnerOf(Series series) {
         if (played) throw new IllegalStateException("Match has already been played.");
-        if (match == this) throw new IllegalArgumentException("A match can not have a connection to itself.");
+        if (series == this) throw new IllegalArgumentException("A match can not have a connection to itself.");
 
-        if (teamTwoFromMatch != null) {
+        if (teamTwoFromSeries != null) {
             // This match no longer wants anything from the previous fromMatch
-            if (teamTwoWasWinnerInPreviousMatch) teamTwoFromMatch.winnerDestination = null;
-            else teamTwoFromMatch.loserDestination = null;
+            if (teamTwoWasWinnerInPreviousMatch) teamTwoFromSeries.winnerDestination = null;
+            else teamTwoFromSeries.loserDestination = null;
         }
 
-        if (match == null) {
+        if (series == null) {
             // Remove any connection
-            teamTwoFromMatch = null;
+            teamTwoFromSeries = null;
             teamTwo = null;
 
         } else {
             // Assumption: winners can only go to one match. So we check if the winner currently goes somewhere else
             // and removes that connection
-            if (match.winnerDestination != null) {
-                if (match.winnerGoesToTeamOne) match.winnerDestination.setTeamOneToWinnerOf(null);
-                else match.winnerDestination.setTeamTwoToWinnerOf(null);
+            if (series.winnerDestination != null) {
+                if (series.winnerGoesToTeamOne) series.winnerDestination.setTeamOneToWinnerOf(null);
+                else series.winnerDestination.setTeamTwoToWinnerOf(null);
             }
 
             // Add new connection
-            teamTwoFromMatch = match;
+            teamTwoFromSeries = series;
             teamTwoWasWinnerInPreviousMatch = true;
-            match.winnerDestination = this;
-            match.winnerGoesToTeamOne = false;
-            if (match.hasBeenPlayed()) teamTwo = match.getWinner();
+            series.winnerDestination = this;
+            series.winnerGoesToTeamOne = false;
+            if (series.hasBeenPlayed()) teamTwo = series.getWinner();
             else teamTwo = null;
-            match.notifyMatchChangeListeners();
+            series.notifyMatchChangeListeners();
         }
 
         notifyMatchChangeListeners();
@@ -228,37 +225,37 @@ public final class Match {
      * Set team two of this Match to use the loser of another Match. Any previous connection or definition of
      * team two will be removed. Returns the Match itself, which allows chaining.
      */
-    public Match setTeamTwoToLoserOf(Match match) {
+    public Series setTeamTwoToLoserOf(Series series) {
         if (played) throw new IllegalStateException("Match has already been played.");
-        if (match == this) throw new IllegalArgumentException("A match can not have a connection to itself.");
+        if (series == this) throw new IllegalArgumentException("A match can not have a connection to itself.");
 
-        if (teamTwoFromMatch != null) {
+        if (teamTwoFromSeries != null) {
             // This match no longer wants anything from the previous fromMatch
-            if (teamTwoWasWinnerInPreviousMatch) teamTwoFromMatch.winnerDestination = null;
-            else teamTwoFromMatch.loserDestination = null;
+            if (teamTwoWasWinnerInPreviousMatch) teamTwoFromSeries.winnerDestination = null;
+            else teamTwoFromSeries.loserDestination = null;
         }
 
-        if (match == null) {
+        if (series == null) {
             // Remove any connection
-            teamTwoFromMatch = null;
+            teamTwoFromSeries = null;
             teamTwo = null;
 
         } else {
             // Assumption: losers can only go to one match. So we check if the loser currently goes somewhere else
             // and removes that connection
-            if (match.loserDestination != null) {
-                if (match.loserGoesToTeamOne) match.loserDestination.setTeamOneToLoserOf(null);
-                else match.loserDestination.setTeamTwoToLoserOf(null);
+            if (series.loserDestination != null) {
+                if (series.loserGoesToTeamOne) series.loserDestination.setTeamOneToLoserOf(null);
+                else series.loserDestination.setTeamTwoToLoserOf(null);
             }
 
             // Add new connection
-            teamTwoFromMatch = match;
+            teamTwoFromSeries = series;
             teamTwoWasWinnerInPreviousMatch = false;
-            match.loserDestination = this;
-            match.loserGoesToTeamOne = false;
-            if (match.hasBeenPlayed()) teamTwo = match.getLoser();
+            series.loserDestination = this;
+            series.loserGoesToTeamOne = false;
+            if (series.hasBeenPlayed()) teamTwo = series.getLoser();
             else teamTwo = null;
-            match.notifyMatchChangeListeners();
+            series.notifyMatchChangeListeners();
         }
 
         notifyMatchChangeListeners();
@@ -269,8 +266,8 @@ public final class Match {
      * Set team one of this Match to use the winner of another Match. This ignores any previous connections
      * and states. Use with caution. TODO: Serialize connections in a way that does not require a call to this function.
      */
-    public void reconnectTeamOneToWinnerOf(Match other) {
-        teamOneFromMatch = other;
+    public void reconnectTeamOneToWinnerOf(Series other) {
+        teamOneFromSeries = other;
         teamOneWasWinnerInPreviousMatch = true;
         other.winnerDestination = this;
         other.winnerGoesToTeamOne = true;
@@ -280,8 +277,8 @@ public final class Match {
      * Set team one of this Match to use the loser of another Match. This ignores any previous connections
      * and states. Use with caution. TODO: Serialize connections in a way that does not require a call to this function.
      */
-    public void reconnectTeamOneToLoserOf(Match other) {
-        teamOneFromMatch = other;
+    public void reconnectTeamOneToLoserOf(Series other) {
+        teamOneFromSeries = other;
         teamOneWasWinnerInPreviousMatch = false;
         other.loserDestination = this;
         other.loserGoesToTeamOne = true;
@@ -291,8 +288,8 @@ public final class Match {
      * Set team two of this Match to use the winner of another Match. This ignores any previous connections
      * and states. Use with caution. TODO: Serialize connections in a way that does not require a call to this function.
      */
-    public void reconnectTeamTwoToWinnerOf(Match other) {
-        teamTwoFromMatch = other;
+    public void reconnectTeamTwoToWinnerOf(Series other) {
+        teamTwoFromSeries = other;
         teamTwoWasWinnerInPreviousMatch = true;
         other.winnerDestination = this;
         other.winnerGoesToTeamOne = false;
@@ -302,8 +299,8 @@ public final class Match {
      * Set team two of this Match to use the loser of another Match. This ignores any previous connections
      * and states. Use with caution. TODO: Serialize connections in a way that does not require a call to this function.
      */
-    public void reconnectTeamTwoToLoserOf(Match other) {
-        teamTwoFromMatch = other;
+    public void reconnectTeamTwoToLoserOf(Series other) {
+        teamTwoFromSeries = other;
         teamTwoWasWinnerInPreviousMatch = false;
         other.loserDestination = this;
         other.loserGoesToTeamOne = false;
@@ -317,19 +314,23 @@ public final class Match {
     }
 
     public Team getWinner() {
-        if (!played) throw new IllegalStateException("Match has not been played.");
-        if (teamOneScore == teamTwoScore) throw new IllegalStateException("Match ended in draw.");
-        if (teamOneScore > teamTwoScore)
-            return getTeamOne();
-        return getTeamTwo();
+        switch (getOutcome()) {
+            case UNKNOWN: throw new IllegalStateException("Match has not been played.");
+            case DRAW: throw new IllegalStateException("Match ended in draw.");
+            case TEAM_ONE_WINS: return getTeamTwo();
+            case TEAM_TWO_WINS: return getTeamOne();
+        }
+        return null;
     }
 
     public Team getLoser() {
-        if (!played) throw new IllegalStateException("Match has not been played.");
-        if (teamOneScore == teamTwoScore) throw new IllegalStateException("Match ended in draw.");
-        if (teamOneScore > teamTwoScore)
-            return getTeamTwo();
-        return getTeamOne();
+        switch (getOutcome()) {
+            case UNKNOWN: throw new IllegalStateException("Match has not been played.");
+            case DRAW: throw new IllegalStateException("Match ended in draw.");
+            case TEAM_ONE_WINS: return getTeamOne();
+            case TEAM_TWO_WINS: return getTeamTwo();
+        }
+        return null;
     }
 
     /** Returns the status of the match; NOT_PLAYABLE, READY_TO_BE_PLAYED, or HAS_BEEN_PLAYED. See getOutcome for the outcome. */
@@ -345,30 +346,8 @@ public final class Match {
 
     /** Returns the outcome of the match; UNKNOWN, TEAM_ONE_WINS, or TEAM_TWO_WINS. See getStatus for the status. */
     public Outcome getOutcome() {
-        if (getStatus() != Status.HAS_BEEN_PLAYED) {
-            return Outcome.UNKNOWN;
-        } else if (teamOneScore == teamTwoScore) {
-            // Should never happen. Rocket League cannot end in a draw under normal circumstance
-            return Outcome.DRAW;
-        } else if (teamOneScore > teamTwoScore) {
-            return Outcome.TEAM_ONE_WINS;
-        } else {
-            return Outcome.TEAM_TWO_WINS;
-        }
-    }
-
-    /** Returns the outcome of the match; UNKNOWN, BLUE_WINS, or ORANGE_WINS. See getStatus for the status. */
-    public OutcomeColored getOutcomeColored() {
-        if (getStatus() != Status.HAS_BEEN_PLAYED) {
-            return OutcomeColored.UNKNOWN;
-        } else if (teamOneScore == teamTwoScore) {
-            // Should never happen. Rocket League cannot end in a draw under normal circumstance
-            return OutcomeColored.DRAW;
-        } else if (teamOneScore > teamTwoScore) {
-            return teamOneIsBlue ? OutcomeColored.BLUE_WINS : OutcomeColored.ORANGE_WINS;
-        } else {
-            return teamOneIsBlue ? OutcomeColored.ORANGE_WINS : OutcomeColored.BLUE_WINS;
-        }
+        if (getStatus() != Status.HAS_BEEN_PLAYED) return Outcome.UNKNOWN;
+        else return winnerIfScores(teamOneScores, teamTwoScores);
     }
 
     /**
@@ -376,15 +355,15 @@ public final class Match {
      * The matches will be ordered after breadth-first search approach. If the order is reversed, the order will be
      * the logical order of playing the Matches, with the root as the last Match.
      */
-    public ArrayList<Match> getTreeAsListBFS() {
+    public ArrayList<Series> getTreeAsListBFS() {
         // Breadth-first search can be performed using a queue
-        LinkedList<Match> queue = new LinkedList<>();
-        ArrayList<Match> list = new ArrayList<>();
-        Set<Match> marked = new HashSet<>();
+        LinkedList<Series> queue = new LinkedList<>();
+        ArrayList<Series> list = new ArrayList<>();
+        Set<Series> marked = new HashSet<>();
         queue.add(this);
         marked.add(this);
 
-        Consumer<Match> addFunction = (m) -> {
+        Consumer<Series> addFunction = (m) -> {
             if (m != null && !marked.contains(m)) {
                 // We check if both parent matches are marked (or null) to be sure we create the correct order
                 if ((m.winnerDestination == null || marked.contains(m.winnerDestination))
@@ -397,14 +376,14 @@ public final class Match {
 
         // Matches are polled from the queue until it is empty
         while (!queue.isEmpty()) {
-            Match match = queue.poll();
-            list.add(match);
+            Series series = queue.poll();
+            list.add(series);
 
             // Enqueue child matches, if any
             // Team two is added first - this means the final order will be the reverse of the logical
             // order of playing matches
-            addFunction.accept(match.teamTwoFromMatch);
-            addFunction.accept(match.teamOneFromMatch);
+            addFunction.accept(series.teamTwoFromSeries);
+            addFunction.accept(series.teamOneFromSeries);
         }
 
         return list;
@@ -414,85 +393,122 @@ public final class Match {
      * Returns a list of all Matches that must be finished before this Match is playable, including itself.
      * The Matches will be ordered after pre-order depth-first search approach.
      */
-    public ArrayList<Match> getTreeAsListDFS() {
+    public ArrayList<Series> getTreeAsListDFS() {
         // Depth-first search can be performed using a stack
-        LinkedList<Match> stack = new LinkedList<>();
-        ArrayList<Match> matches = new ArrayList<>();
+        LinkedList<Series> stack = new LinkedList<>();
+        ArrayList<Series> series = new ArrayList<>();
         stack.push(this);
 
         // Matches are popped from the stack until it is empty
         while (!stack.isEmpty()) {
-            Match match = stack.pop();
-            matches.add(match);
+            Series serie = stack.pop();
+            series.add(serie);
 
             // Push child matches, if any
-            if (match.teamOneFromMatch != null) stack.push(match.teamOneFromMatch);
-            if (match.teamTwoFromMatch != null) stack.push(match.teamTwoFromMatch);
+            if (serie.teamOneFromSeries != null) stack.push(serie.teamOneFromSeries);
+            if (serie.teamTwoFromSeries != null) stack.push(serie.teamTwoFromSeries);
         }
 
-        return matches;
+        return series;
     }
 
     /**
      * Returns true if the other Match must be concluded before this match is playable.
      */
-    public boolean dependsOn(Match otherMatch) {
-        if (this == otherMatch) return false;
+    public boolean dependsOn(Series otherSeries) {
+        if (this == otherSeries) return false;
 
         // If this match depends on the other match, this match must be a parent (or parent of a parent of a
         // parent ... ect) of the other match.
         // A queue contain all unchecked parent matches.
-        LinkedList<Match> queue = new LinkedList<>();
-        queue.push(otherMatch);
+        LinkedList<Series> queue = new LinkedList<>();
+        queue.push(otherSeries);
 
         // Matches are polled from the queue until it is empty.
         // Depending on bracket structure some matches might be checked multiple times.
         while (!queue.isEmpty()) {
-            Match match = queue.poll();
-            if (this == match)
+            Series series = queue.poll();
+            if (this == series)
                 return true;
 
             // Enqueue parent matches, if any
-            if (match.winnerDestination != null) queue.push(match.winnerDestination);
-            if (match.loserDestination != null) queue.push(match.loserDestination);
+            if (series.winnerDestination != null) queue.push(series.winnerDestination);
+            if (series.loserDestination != null) queue.push(series.loserDestination);
         }
 
         return false;
     }
 
+    /**
+     * Change the Series length. Any current scores are kept. The Series length must be a positive odd number.
+     * This can change the the outcome of the match so a force reset of subsequent series might be needed.
+     */
+    public void setSeriesLength(int length, boolean forceResetSubsequentSeries) {
+        if (this.length > length) {
+            // Series has been shortened
+            setScores(length, teamOneScores.subList(0, length), teamTwoScores.subList(0, length), played, forceResetSubsequentSeries);
+        } else {
+            // Series has been extended
+            List<Integer> newTeamOneScores = new ArrayList<>(teamOneScores);
+            List<Integer> newTeamTwoScores = new ArrayList<>(teamTwoScores);
+            int newMatchesCount = length - this.length;
+            for (int i = 0; i < newMatchesCount; i++) {
+                newTeamOneScores.add(0);
+                newTeamTwoScores.add(0);
+            }
+            setScores(length, newTeamOneScores, newTeamTwoScores, false, forceResetSubsequentSeries);
+        }
+    }
+
     public void setHasBeenPlayed(boolean hasBeenPlayed) {
-        setScores(teamOneScore, teamTwoScore, hasBeenPlayed, false);
+        setScores(length, teamOneScores, teamTwoScores, hasBeenPlayed, false);
     }
 
-    public void setTeamOneScore(int teamOneScore) {
-        setScores(teamOneScore, teamTwoScore, played, false);
+    public void setTeamOneScores(List<Integer> teamOneScores) {
+        setScores(length, teamOneScores, teamTwoScores, played, false);
     }
 
-    public void setTeamTwoScore(int teamTwoScore) {
-        setScores(teamOneScore, teamTwoScore, played, false);
+    public void setTeamTwoScores(List<Integer> teamTwoScores) {
+        setScores(length, teamOneScores, teamTwoScores, played, false);
     }
 
-    public void setScores(int teamOneScore, int teamTwoScore) {
-        setScores(teamOneScore, teamTwoScore, played, false);
+    public void setScores(int teamOneScore, int teamTwoScore, int match) {
+        if (match >= length) throw new IllegalArgumentException("Series only has " + length + " matches");
+
+        List<Integer> newTeamOneScores = new ArrayList<>(teamOneScores);
+        List<Integer> newTeamTwoScores = new ArrayList<>(teamTwoScores);
+        newTeamOneScores.set(match, teamOneScore);
+        newTeamTwoScores.set(match, teamTwoScore);
+
+        setScores(newTeamOneScores, newTeamTwoScores);
     }
 
-    public void setScores(int teamOneScore, int teamTwoScore, boolean hasBeenPlayed) {
-        setScores(teamOneScore, teamTwoScore, hasBeenPlayed, false);
+    public void setScores(List<Integer> teamOneScores, List<Integer> teamTwoScores) {
+        setScores(length, teamOneScores, teamTwoScores, played, false);
     }
 
-    public void setScores(int teamOneScore, int teamTwoScore, boolean hasBeenPlayed, boolean forceResetSubsequentMatches) {
+    public void setScores(List<Integer> teamOneScores, List<Integer> teamTwoScores, boolean hasBeenPlayed) {
+        setScores(length, teamOneScores, teamTwoScores, hasBeenPlayed, false);
+    }
+
+    public void setScores(int seriesLength, List<Integer> teamOneScores, List<Integer> teamTwoScores, boolean hasBeenPlayed, boolean forceResetSubsequentSeries) {
 
         if (!isReadyToPlay()) throw new IllegalStateException("Match is not playable");
 
-        boolean outcomeChanging = willOutcomeChange(teamOneScore, teamTwoScore, hasBeenPlayed);
+        if (seriesLength <= 0) throw new IllegalArgumentException("Series length must be at least one.");
+        if (seriesLength % 2 == 0) throw new IllegalArgumentException("Series must have an odd number of matches.");
+        if (seriesLength == teamOneScores.size()) throw new IllegalArgumentException("Wrong number of team one scores given for a series of length " + seriesLength);
+        if (seriesLength == teamTwoScores.size()) throw new IllegalArgumentException("Wrong number of team two scores given for a series of length " + seriesLength);
+
+        boolean outcomeChanging = willOutcomeChange(teamOneScores, teamTwoScores, hasBeenPlayed);
 
         if (outcomeChanging) {
             // Are there any subsequent matches that has been played?
-            if ((winnerDestination != null && (winnerDestination.teamOneScore != 0 || winnerDestination.teamTwoScore != 0))
-                    || (loserDestination != null && (loserDestination.teamOneScore != 0 || loserDestination.teamTwoScore != 0))) {
+            if ((winnerDestination != null && winnerDestination.hasAnyNonZeroScore())
+                    || loserDestination != null && loserDestination.hasAnyNonZeroScore()) {
 
                 // A subsequent match has scores that are not 0. We can only proceed with force
-                if (forceResetSubsequentMatches) {
+                if (forceResetSubsequentSeries) {
                     if (winnerDestination != null) winnerDestination.forceReset();
                     if (loserDestination != null) loserDestination.forceReset();
                 } else {
@@ -507,9 +523,10 @@ public final class Match {
         }
 
         // Apply changes
+        length = seriesLength;
         played = hasBeenPlayed;
-        this.teamOneScore = teamOneScore;
-        this.teamTwoScore = teamTwoScore;
+        this.teamOneScores = teamOneScores;
+        this.teamTwoScores = teamTwoScores;
 
         // Transfer because there might be a new winner/loser
         if (played && outcomeChanging) {
@@ -520,13 +537,27 @@ public final class Match {
         notifyMatchPlayedListeners();
     }
 
-    /** Changes a match's result to be 0-0 and not played. If any matches depends on this match, those will also be reset. */
+    /**
+     * @return true if any of the matches scores are not 0
+     */
+    public boolean hasAnyNonZeroScore() {
+        for (int i = 0; i < length; i++) {
+            if (teamOneScores.get(i) != 0) return true;
+            if (teamTwoScores.get(i) != 0) return true;
+        }
+        return false;
+    }
+
+    /**
+     * Change all matches' result to be 0-0 and the series to be not played. If any series that depends on this
+     * series, those will also be reset.
+     */
     public void forceReset() {
-        setScores(0, 0, false, true);
+        setScores(length, Ints.asList(new int[length]), Ints.asList(new int[length]), false, true);
     }
 
     /** Returns true if the outcome and thus the state of this match change, if it had the given score instead. */
-    public boolean willOutcomeChange(int altTeamOneScore, int altTeamTwoScore, boolean altHasBeenPlayed) {
+    public boolean willOutcomeChange(List<Integer> altTeamOneScore, List<Integer> altTeamTwoScore, boolean altHasBeenPlayed) {
         if (this.played != altHasBeenPlayed) {
             return true;
         }
@@ -536,17 +567,30 @@ public final class Match {
             return false;
         }
 
-        // Check if both old and new score is draw
-        if (teamOneScore == teamTwoScore && altTeamOneScore == altTeamTwoScore) {
-            return false;
+        // Check if winner stays the same
+        Outcome currentOutcome = winnerIfScores(teamOneScores, teamTwoScores);
+        Outcome altOutcome = winnerIfScores(altTeamOneScore, altTeamTwoScore);
+        return currentOutcome != altOutcome;
+    }
+
+    /**
+     * Returns the outcome of the series if the given scores were the scores of the series and assuming the series
+     * has been played an is over. Draws are possible.
+     */
+    static private Outcome winnerIfScores(List<Integer> teamOneScores, List<Integer> teamTwoScores) {
+        if (teamOneScores.size() != teamTwoScores.size()) throw new IllegalArgumentException("Not the same amout of scores");
+
+        // Count wins
+        int oneWins = 0;
+        int twoWins = 0;
+        for (int i = 0; i < teamOneScores.size(); i++) {
+            if (teamOneScores.get(i) > teamTwoScores.get(i)) oneWins++;
+            else if (teamOneScores.get(i) < teamTwoScores.get(i)) twoWins++;
         }
 
-        // Check if winner stays the same
-        if ((teamOneScore > teamTwoScore) == (altTeamOneScore > altTeamTwoScore)) {
-            return false;
-        } else {
-            return true;
-        }
+        if (oneWins > twoWins) return Outcome.TEAM_ONE_WINS;
+        else if (oneWins < twoWins) return Outcome.TEAM_TWO_WINS;
+        else return Outcome.DRAW;
     }
 
     /**
@@ -592,20 +636,20 @@ public final class Match {
         return (isReadyToPlay() && teamOne.size() == 1 && teamTwo.size() == 1);
     }
 
-    public int getTeamOneScore() {
-        return teamOneScore;
+    public int getTeamOneScores() {
+        return teamOneScores;
     }
 
-    public int getTeamTwoScore() {
-        return teamTwoScore;
+    public int getTeamTwoScores() {
+        return teamTwoScores;
     }
 
     public int getBlueScore() {
-        return teamOneIsBlue ? getTeamOneScore() : getTeamTwoScore();
+        return teamOneIsBlue ? getTeamOneScores() : getTeamTwoScores();
     }
 
     public int getOrangeScore() {
-        return teamOneIsBlue ? getTeamTwoScore() : getTeamOneScore();
+        return teamOneIsBlue ? getTeamTwoScores() : getTeamOneScores();
     }
 
     public boolean hasBeenPlayed() {
@@ -652,8 +696,8 @@ public final class Match {
     /** Returns team one's name. If team one is null, then "Winner/Loser of .." or "TBD" is returned. */
     public String getTeamOneAsString() {
         if (teamOne == null) {
-            if (teamOneFromMatch != null) {
-                return (teamOneWasWinnerInPreviousMatch ? "Winner of " : "Loser of ") + teamOneFromMatch.getIdentifier();
+            if (teamOneFromSeries != null) {
+                return (teamOneWasWinnerInPreviousMatch ? "Winner of " : "Loser of ") + teamOneFromSeries.getIdentifier();
             }
             return "TBD";
         }
@@ -663,8 +707,8 @@ public final class Match {
     /** Returns team two's name. If team two is null, then "Winner/Loser of .." or "TBD" is returned. */
     public String getTeamTwoAsString() {
         if (teamTwo == null) {
-            if (teamTwoFromMatch != null) {
-                return (teamTwoWasWinnerInPreviousMatch ? "Winner of " : "Loser of ") + teamTwoFromMatch.getIdentifier();
+            if (teamTwoFromSeries != null) {
+                return (teamTwoWasWinnerInPreviousMatch ? "Winner of " : "Loser of ") + teamTwoFromSeries.getIdentifier();
             }
             return "TBD";
         }
@@ -681,19 +725,19 @@ public final class Match {
         return teamOneIsBlue ? getTeamTwoAsString() : getTeamOneAsString();
     }
 
-    public Match getTeamOneFromMatch() {
-        return teamOneFromMatch;
+    public Series getTeamOneFromSeries() {
+        return teamOneFromSeries;
     }
 
-    public Match getTeamTwoFromMatch() {
-        return teamTwoFromMatch;
+    public Series getTeamTwoFromSeries() {
+        return teamTwoFromSeries;
     }
 
-    public Match getWinnerDestination() {
+    public Series getWinnerDestination() {
         return winnerDestination;
     }
 
-    public Match getLoserDestination() {
+    public Series getLoserDestination() {
         return loserDestination;
     }
 
@@ -747,28 +791,28 @@ public final class Match {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Match match = (Match) o;
-        return id == match.id &&
-                getTeamOneScore() == match.getTeamOneScore() &&
-                getTeamTwoScore() == match.getTeamTwoScore() &&
-                played == match.played &&
-                teamOneIsBlue == match.teamOneIsBlue &&
-                teamOneWasWinnerInPreviousMatch == match.teamOneWasWinnerInPreviousMatch &&
-                teamTwoWasWinnerInPreviousMatch == match.teamTwoWasWinnerInPreviousMatch &&
-                winnerGoesToTeamOne == match.winnerGoesToTeamOne &&
-                loserGoesToTeamOne == match.loserGoesToTeamOne &&
-                Objects.equals(getTeamOne(), match.getTeamOne()) &&
-                Objects.equals(getTeamTwo(), match.getTeamTwo());
+        Series series = (Series) o;
+        return id == series.id &&
+                getTeamOneScores() == series.getTeamOneScores() &&
+                getTeamTwoScores() == series.getTeamTwoScores() &&
+                played == series.played &&
+                teamOneIsBlue == series.teamOneIsBlue &&
+                teamOneWasWinnerInPreviousMatch == series.teamOneWasWinnerInPreviousMatch &&
+                teamTwoWasWinnerInPreviousMatch == series.teamTwoWasWinnerInPreviousMatch &&
+                winnerGoesToTeamOne == series.winnerGoesToTeamOne &&
+                loserGoesToTeamOne == series.loserGoesToTeamOne &&
+                Objects.equals(getTeamOne(), series.getTeamOne()) &&
+                Objects.equals(getTeamTwo(), series.getTeamTwo());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, getTeamOneScore(), getTeamTwoScore(), played, teamOneIsBlue, getTeamOne(), getTeamTwo(), teamOneWasWinnerInPreviousMatch, teamTwoWasWinnerInPreviousMatch, winnerGoesToTeamOne, loserGoesToTeamOne);
+        return Objects.hash(id, getTeamOneScores(), getTeamTwoScores(), played, teamOneIsBlue, getTeamOne(), getTeamTwo(), teamOneWasWinnerInPreviousMatch, teamTwoWasWinnerInPreviousMatch, winnerGoesToTeamOne, loserGoesToTeamOne);
     }
 
     @Override
     public String toString() {
-        return "Match:{" + getTeamOneAsString() + " (" + teamOneScore + ") vs ("
-                + teamTwoScore + ") " + getTeamTwoAsString() + ", status: " + getStatus() + "}";
+        return "Match:{" + getTeamOneAsString() + " (" + teamOneScores + ") vs ("
+                + teamTwoScores + ") " + getTeamTwoAsString() + ", status: " + getStatus() + "}";
     }
 }
