@@ -126,6 +126,23 @@
                         <RadioButton fx:id="writeOverlayDataRadioButton" layoutX="494.0" layoutY="13.0" mnemonicParsing="false" GridPane.columnIndex="1" />
                      </children>
                   </GridPane>
+                  <GridPane layoutX="30.0" layoutY="324.0">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Use the RLBotPack's Python installation if available">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Text>
+                        <RadioButton fx:id="useRLBotPackPythonRadioButton" layoutX="494.0" layoutY="13.0" mnemonicParsing="false" GridPane.columnIndex="1" />
+                     </children>
+                  </GridPane>
                   <Separator layoutX="30.0" layoutY="279.0" prefWidth="200.0" />
                   <Text layoutX="30.0" layoutY="309.0" strokeType="OUTSIDE" strokeWidth="0.0" text="RLBot Runner">
                      <font>
