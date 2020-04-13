@@ -27,8 +27,10 @@ import java.util.ArrayList;
  */
 public class MatchRunner {
 
-    // The first %s will be replaced with the directory of the rlbot.cfg. The second %s will be the drive 'C:' to change drive.
-    private static final String COMMAND_FORMAT = "cmd.exe /c start cmd /c \"cd %s & %s & python run.py\"";
+    // The first %s will be replaced with the directory of the rlbot.cfg.
+    // The second %s will be the drive 'C:' to change drive.
+    // The third %s is the python installation path.
+    private static final String COMMAND_FORMAT = "cmd.exe /c start cmd /c \"cd %s & %s & %s run.py\"";
     private static final String ADDR = "127.0.0.1";
     private static final int PORT = 35353; // TODO Make user able to change the port in a settings file
 
@@ -79,10 +81,19 @@ public class MatchRunner {
      */
     public static boolean startRLBotRunner() {
         try {
-            // TODO; does not support Linux, refactor when relevant
             Alerts.infoNotification("Starting RLBot runner", "Attempting to start new instance of run.py for running matches.");
+
+            String python = "python";
+            if (Tournament.get().getRlBotSettings().useBotPackPythonIfAvailable()) {
+                Path botPackPython = RLBotPack.getPathToPython();
+                if (botPackPython != null) {
+                    python = botPackPython.toString();
+                }
+            }
+
             Path pathToDirectory = SettingsDirectory.RUN_PY.getParent();
-            String cmd = String.format(COMMAND_FORMAT, pathToDirectory, pathToDirectory.toString().substring(0, 2));
+            String cmd = String.format(COMMAND_FORMAT, pathToDirectory, pathToDirectory.toString().substring(0, 2), python);
+            System.out.println("Running command: " + cmd);
             Runtime.getRuntime().exec(cmd);
             return true;
         } catch (IOException e) {
