@@ -1,5 +1,10 @@
 # Changelog
 
+#### Unreleased
+- Added option to use RLBotPack Python installation if available (default: true). - NicEastvillage
+- Added option for using random standard map. - Darxeal
+
+
 #### Version 1.6 - 17. October 2019
 - Now writes overlay data to a json next to the cleopetra.jar. This can be disabled in RLBotSettings tab. - NicEastvillage
 - Improved the RLBot runner process. - NicEastvillage
