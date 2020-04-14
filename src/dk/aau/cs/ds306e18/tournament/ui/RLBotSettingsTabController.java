@@ -24,6 +24,7 @@ public class RLBotSettingsTabController {
     public RadioButton skipReplaysRadioButton;
     public RadioButton instantStartRadioButton;
     public RadioButton writeOverlayDataRadioButton;
+    public RadioButton useRLBotPackPythonRadioButton;
     public Button rlbotRunnerOpenButton;
     public Button rlbotRunnerCloseButton;
     public Button rlbotRunnerStopMatchButton;
@@ -85,6 +86,10 @@ public class RLBotSettingsTabController {
         writeOverlayDataRadioButton.setSelected(settings.writeOverlayDataEnabled());
         writeOverlayDataRadioButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
             Tournament.get().getRlBotSettings().setWriteOverlayData(newValue);
+        });
+        useRLBotPackPythonRadioButton.setSelected(settings.useBotPackPythonIfAvailable());
+        useRLBotPackPythonRadioButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            Tournament.get().getRlBotSettings().setUseBotPackPythonIfAvailable(newValue);
         });
 
         update();

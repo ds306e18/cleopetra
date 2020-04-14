@@ -17,4 +17,17 @@ public class RLBotPack {
             return null;
         }
     }
+
+    /**
+     * @return The path to the Python installation that the RLBotPack uses. It is not guaranteed to
+     * exist and can be null if APPDATA is not an environment variable.
+     */
+    public static Path getPathToPython() {
+        try {
+            return Paths.get(System.getenv("APPDATA")).getParent().resolve("Local\\RLBotGUI\\Python\\python.exe");
+        } catch (Exception e) {
+            // Failed. Maybe we are on a Linux system
+            return null;
+        }
+    }
 }
