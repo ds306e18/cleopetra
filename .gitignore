@@ -6,6 +6,10 @@
 build/
 out/
 
+# Other
+.DS_Store
+
+# Saved tournaments
 *.rlts
 saves/
 
