@@ -556,6 +556,16 @@ public final class Series {
         setScores(length, Ints.asList(new int[length]), Ints.asList(new int[length]), false, true);
     }
 
+    /**
+     * Sets scores of all matches in the series to 0-0. The number of matches (length of the series) remain the same.
+     * This is not possible if any match depends on it and in that case a MatchResultDependencyException is thrown.
+     */
+    public void softReset() {
+        List<Integer> teamOneScores = Ints.asList(new int[length]);
+        List<Integer> teamTwoScores = Ints.asList(new int[length]);
+        setScores(length, teamOneScores, teamTwoScores, false, false);
+    }
+
     /** Returns true if the outcome and thus the state of this match change, if it had the given score instead. */
     public boolean willOutcomeChange(List<Integer> altTeamOneScore, List<Integer> altTeamTwoScore, boolean altHasBeenPlayed) {
         if (this.played != altHasBeenPlayed) {
@@ -598,13 +608,13 @@ public final class Series {
      */
     private void transferWinnerAndLoser() {
         if (winnerDestination != null) {
-            if (winnerDestination.isReadyToPlay()) winnerDestination.setScores(0, 0); // There can be leftover scores
+            if (winnerDestination.isReadyToPlay()) winnerDestination.softReset(); // There can be leftover scores
             if (winnerGoesToTeamOne) winnerDestination.teamOne = getWinner();
             else winnerDestination.teamTwo = getWinner();
             winnerDestination.notifyMatchChangeListeners();
         }
         if (loserDestination != null) {
-            if (loserDestination.isReadyToPlay()) loserDestination.setScores(0, 0); // There can be leftover scores
+            if (loserDestination.isReadyToPlay()) loserDestination.softReset(); // There can be leftover scores
             if (loserGoesToTeamOne) loserDestination.teamOne = getLoser();
             else loserDestination.teamTwo = getLoser();
             loserDestination.notifyMatchChangeListeners();
@@ -616,13 +626,13 @@ public final class Series {
      */
     private void retractWinnerAndLoser() {
         if (winnerDestination != null) {
-            if (winnerDestination.isReadyToPlay()) winnerDestination.setScores(0, 0);  // There can be leftover scores
+            if (winnerDestination.isReadyToPlay()) winnerDestination.softReset();  // There can be leftover scores
             if (winnerGoesToTeamOne) winnerDestination.teamOne = null;
             else winnerDestination.teamTwo = null;
             winnerDestination.notifyMatchChangeListeners();
         }
         if (loserDestination != null) {
-            if (loserDestination.isReadyToPlay()) loserDestination.setScores(0, 0);  // There can be leftover scores
+            if (loserDestination.isReadyToPlay()) loserDestination.softReset();  // There can be leftover scores
             if (loserGoesToTeamOne) loserDestination.teamOne = null;
             else loserDestination.teamTwo = null;
             loserDestination.notifyMatchChangeListeners();
@@ -636,20 +646,47 @@ public final class Series {
         return (isReadyToPlay() && teamOne.size() == 1 && teamTwo.size() == 1);
     }
 
-    public int getTeamOneScores() {
-        return teamOneScores;
+    public List<Integer> getTeamOneScores() {
+        return new ArrayList<>(teamOneScores);
     }
 
-    public int getTeamTwoScores() {
-        return teamTwoScores;
+    public List<Integer> getTeamTwoScores() {
+        return new ArrayList<>(teamTwoScores);
     }
 
-    public int getBlueScore() {
+    public List<Integer> getBlueScores() {
         return teamOneIsBlue ? getTeamOneScores() : getTeamTwoScores();
     }
 
-    public int getOrangeScore() {
+    public List<Integer> getOrangeScores() {
         return teamOneIsBlue ? getTeamTwoScores() : getTeamOneScores();
+    }
+
+    /**
+     * Returns the score line in the given match. Index 0 will be the
+     * score of team one, index 1 will be score of team two.
+     */
+    public int[] getScore(int matchIndex) {
+        return new int[] {
+            teamOneScores.get(matchIndex),
+            teamTwoScores.get(matchIndex)
+        };
+    }
+
+    public int getTeamOneScore(int matchIndex) {
+        return teamOneScores.get(matchIndex);
+    }
+
+    public int getTeamTwoScore(int matchIndex) {
+        return teamTwoScores.get(matchIndex);
+    }
+
+    public int getBlueScore(int matchIndex) {
+        return teamOneIsBlue ? getTeamOneScore(matchIndex) : getTeamTwoScore(matchIndex);
+    }
+
+    public int getOrangeScore(int matchIndex) {
+        return teamOneIsBlue ? getTeamTwoScore(matchIndex) : getTeamOneScore(matchIndex);
     }
 
     public boolean hasBeenPlayed() {
