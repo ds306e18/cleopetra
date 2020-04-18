@@ -1,5 +1,6 @@
 package dk.aau.cs.ds306e18.tournament.ui;
 
+import com.google.common.primitives.Ints;
 import dk.aau.cs.ds306e18.tournament.model.match.Series;
 import javafx.application.Platform;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchResultDependencyException;
@@ -109,8 +110,8 @@ public class EditMatchScoreController extends DraggablePopupWindow {
             teamTwoNameLabel.setTextFill(BLUE_FILL);
         }
 
-        teamOneScoreSpinner.getValueFactory().setValue(series.getTeamOneScores());
-        teamTwoScoreSpinner.getValueFactory().setValue(series.getTeamTwoScores());
+        teamOneScoreSpinner.getValueFactory().setValue(series.getTeamOneScore(0));
+        teamTwoScoreSpinner.getValueFactory().setValue(series.getTeamTwoScore(0));
 
         matchOverCheckBox.setSelected(series.hasBeenPlayed());
     }
@@ -151,7 +152,12 @@ public class EditMatchScoreController extends DraggablePopupWindow {
         while (true) {
             try {
 
-                series.setScores(teamOneScore, teamTwoScore, played, force);
+                series.setScores(
+                        series.getSeriesLength(),
+                        Ints.asList(teamOneScore),
+                        Ints.asList(teamTwoScore),
+                        played,
+                        force);
                 closeWindow();
                 break;
 

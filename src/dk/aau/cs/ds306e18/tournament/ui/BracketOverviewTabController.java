@@ -251,7 +251,7 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
         if (series != null && series.getBlueTeam() != null) {
             // Blue team
             blueTeamNameLabel.setText(series.getBlueTeam().getTeamName());
-            blueTeamScore.setText(Integer.toString(series.getTeamOneScores()));
+            blueTeamScore.setText(Integer.toString(series.getTeamOneScore(0)));
             blueTeamListView.setItems(FXCollections.observableArrayList(series.getBlueTeam().getBots()));
             blueTeamListView.refresh();
         } else {
@@ -264,7 +264,7 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
         if (series != null && series.getOrangeTeam() != null) {
             // Orange team
             orangeTeamNameLabel.setText(series.getOrangeTeam().getTeamName());
-            orangeTeamScore.setText(Integer.toString(series.getTeamTwoScores()));
+            orangeTeamScore.setText(Integer.toString(series.getTeamTwoScore(0)));
             orangeTeamListView.setItems(FXCollections.observableArrayList(series.getOrangeTeam().getBots()));
             orangeTeamListView.refresh();
         } else {

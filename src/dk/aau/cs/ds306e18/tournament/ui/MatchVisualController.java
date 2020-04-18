@@ -123,8 +123,8 @@ public class MatchVisualController implements MatchChangeListener {
             // Names and scores
             textTeamOneName.setText(teamOne.getTeamName());
             textTeamTwoName.setText(teamTwo.getTeamName());
-            textTeamOneScore.setText(String.valueOf(showedSeries.getTeamOneScores()));
-            textTeamTwoScore.setText(String.valueOf(showedSeries.getTeamTwoScores()));
+            textTeamOneScore.setText(String.valueOf(showedSeries.getTeamOneScore(0)));
+            textTeamTwoScore.setText(String.valueOf(showedSeries.getTeamTwoScore(0)));
 
             Series.Outcome outcome = showedSeries.getOutcome();
 

@@ -317,8 +317,8 @@ public final class Series {
         switch (getOutcome()) {
             case UNKNOWN: throw new IllegalStateException("Match has not been played.");
             case DRAW: throw new IllegalStateException("Match ended in draw.");
-            case TEAM_ONE_WINS: return getTeamTwo();
-            case TEAM_TWO_WINS: return getTeamOne();
+            case TEAM_ONE_WINS: return getTeamOne();
+            case TEAM_TWO_WINS: return getTeamTwo();
         }
         return null;
     }
@@ -327,8 +327,8 @@ public final class Series {
         switch (getOutcome()) {
             case UNKNOWN: throw new IllegalStateException("Match has not been played.");
             case DRAW: throw new IllegalStateException("Match ended in draw.");
-            case TEAM_ONE_WINS: return getTeamOne();
-            case TEAM_TWO_WINS: return getTeamTwo();
+            case TEAM_ONE_WINS: return getTeamTwo();
+            case TEAM_TWO_WINS: return getTeamOne();
         }
         return null;
     }
@@ -460,6 +460,10 @@ public final class Series {
         }
     }
 
+    public int getSeriesLength() {
+        return length;
+    }
+
     public void setHasBeenPlayed(boolean hasBeenPlayed) {
         setScores(length, teamOneScores, teamTwoScores, hasBeenPlayed, false);
     }
@@ -497,8 +501,8 @@ public final class Series {
 
         if (seriesLength <= 0) throw new IllegalArgumentException("Series length must be at least one.");
         if (seriesLength % 2 == 0) throw new IllegalArgumentException("Series must have an odd number of matches.");
-        if (seriesLength == teamOneScores.size()) throw new IllegalArgumentException("Wrong number of team one scores given for a series of length " + seriesLength);
-        if (seriesLength == teamTwoScores.size()) throw new IllegalArgumentException("Wrong number of team two scores given for a series of length " + seriesLength);
+        if (seriesLength != teamOneScores.size()) throw new IllegalArgumentException("Wrong number of team one scores (team one: " + teamOneScores.size() + ") given for a series of length " + seriesLength);
+        if (seriesLength != teamTwoScores.size()) throw new IllegalArgumentException("Wrong number of team one scores (team one: " + teamTwoScores.size() + ") given for a series of length " + seriesLength);
 
         boolean outcomeChanging = willOutcomeChange(teamOneScores, teamTwoScores, hasBeenPlayed);
 
