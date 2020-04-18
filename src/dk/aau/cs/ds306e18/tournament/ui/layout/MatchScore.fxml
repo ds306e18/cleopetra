@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Group?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Text?>
+
+
+<Group fx:id="root" styleClass="score" xmlns="http://javafx.com/javafx/1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.MatchScoreController">
+   <children>
+      <Rectangle fill="WHITE" height="24.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="scoreBg" width="24.0" />
+      <Text fx:id="scoreText" layoutX="2.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="scoreNo" text="0" textAlignment="CENTER" wrappingWidth="20.0" />
+   </children>
+</Group>

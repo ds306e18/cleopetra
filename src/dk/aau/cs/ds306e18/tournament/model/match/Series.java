@@ -28,8 +28,8 @@ public final class Series {
     private int identifier = 0;
     /** For longer series, e.g. best of 3 */
     private int length = 1;
-    private List<Integer> teamOneScores = new ArrayList<>(Arrays.asList(0));
-    private List<Integer> teamTwoScores = new ArrayList<>(Arrays.asList(0));
+    private List<Integer> teamOneScores = new ArrayList<>(Collections.singletonList(0));
+    private List<Integer> teamTwoScores = new ArrayList<>(Collections.singletonList(0));
     private boolean played = false;
     private Team teamOne, teamTwo;
     private boolean teamOneIsBlue = true;

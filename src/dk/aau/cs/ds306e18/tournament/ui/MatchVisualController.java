@@ -11,15 +11,17 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
+import java.util.List;
+
 public class MatchVisualController implements MatchChangeListener {
 
     @FXML private HBox matchRoot;
     @FXML private Label identifierLabel;
     @FXML private AnchorPane identifierHolder;
     @FXML private Label textTeamTwoName;
-    @FXML private Text textTeamTwoScore;
+    @FXML private HBox teamOneScoreContainer;
     @FXML private Label textTeamOneName;
-    @FXML private Text textTeamOneScore;
+    @FXML private HBox teamTwoScoreContainer;
     @FXML private HBox hboxTeamTwo;
     @FXML private HBox hboxTeamOne;
 
@@ -59,8 +61,8 @@ public class MatchVisualController implements MatchChangeListener {
         hboxTeamTwo.getStyleClass().clear();
         textTeamOneName.setText(" ");
         textTeamTwoName.setText(" ");
-        textTeamTwoScore.setText(" ");
-        textTeamOneScore.setText(" ");
+        teamOneScoreContainer.getChildren().clear();
+        teamTwoScoreContainer.getChildren().clear();
     }
 
     /** @return the match that this shows. */
@@ -107,6 +109,8 @@ public class MatchVisualController implements MatchChangeListener {
 
             // css id
             matchRoot.setId("disabled");
+            setupBlankScores(teamOneScoreContainer, showedSeries.getSeriesLength());
+            setupBlankScores(teamTwoScoreContainer, showedSeries.getSeriesLength());
 
         } else if (status == Series.Status.NOT_PLAYABLE) {
             // css id
@@ -115,6 +119,8 @@ public class MatchVisualController implements MatchChangeListener {
             // Show known team or where they come from
             textTeamOneName.setText(showedSeries.getTeamOneAsString());
             textTeamTwoName.setText(showedSeries.getTeamTwoAsString());
+            setupBlankScores(teamOneScoreContainer, showedSeries.getSeriesLength());
+            setupBlankScores(teamTwoScoreContainer, showedSeries.getSeriesLength());
             if (teamOne == null) hboxTeamOne.getStyleClass().add("tbd");
             if (teamTwo == null) hboxTeamTwo.getStyleClass().add("tbd");
 
@@ -123,8 +129,8 @@ public class MatchVisualController implements MatchChangeListener {
             // Names and scores
             textTeamOneName.setText(teamOne.getTeamName());
             textTeamTwoName.setText(teamTwo.getTeamName());
-            textTeamOneScore.setText(String.valueOf(showedSeries.getTeamOneScore(0)));
-            textTeamTwoScore.setText(String.valueOf(showedSeries.getTeamTwoScore(0)));
+            setupScores(teamOneScoreContainer, showedSeries.getTeamOneScores());
+            setupScores(teamTwoScoreContainer, showedSeries.getTeamTwoScores());
 
             Series.Outcome outcome = showedSeries.getOutcome();
 
@@ -147,6 +153,26 @@ public class MatchVisualController implements MatchChangeListener {
         } else {
             hboxTeamOne.getStyleClass().add("orange");
             hboxTeamTwo.getStyleClass().add("blue");
+        }
+    }
+
+    private void setupBlankScores(HBox container, int seriesLength) {
+        for (int i = 0; i < seriesLength; i++) {
+            MatchScoreController msc = MatchScoreController.loadNew();
+            if (msc != null) {
+                msc.setScoreText("-");
+                container.getChildren().add(msc.getRoot());
+            }
+        }
+    }
+
+    private void setupScores(HBox container, List<Integer> scores) {
+        for (int score : scores) {
+            MatchScoreController msc = MatchScoreController.loadNew();
+            if (msc != null) {
+                msc.setScoreText("" + score);
+                container.getChildren().add(msc.getRoot());
+            }
         }
     }
 
