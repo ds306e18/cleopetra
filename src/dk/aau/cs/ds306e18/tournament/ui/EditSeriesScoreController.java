@@ -1,19 +1,18 @@
 package dk.aau.cs.ds306e18.tournament.ui;
 
-import com.google.common.primitives.Ints;
-import dk.aau.cs.ds306e18.tournament.model.match.Series;
-import javafx.application.Platform;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchResultDependencyException;
+import dk.aau.cs.ds306e18.tournament.model.match.Series;
 import dk.aau.cs.ds306e18.tournament.utility.Alerts;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -141,7 +140,7 @@ public class EditSeriesScoreController extends DraggablePopupWindow {
             try {
 
                 series.setScores(
-                        series.getSeriesLength(),
+                        scoreControllers.size(),
                         teamOneScores,
                         teamTwoScores,
                         played,
@@ -158,10 +157,24 @@ public class EditSeriesScoreController extends DraggablePopupWindow {
     }
 
     public void onActionExtendSeriesButton(ActionEvent actionEvent) {
-
+        for (int i = 0; i < 2; i++) {
+            EditMatchScoreController scoreController = EditMatchScoreController.loadNew(this::checkScoresAndUpdateUI);
+            scoresContainer.getChildren().add(scoreController.getRoot());
+            scoreControllers.add(scoreController);
+            scoreController.setScores(0, 0);
+        }
+        saveButton.getScene().getWindow().sizeToScene();
+        checkScoresAndUpdateUI();
     }
 
     public void onActionShortenSeriesButton(ActionEvent actionEvent) {
-
+        int oldLength = scoreControllers.size();
+        if (oldLength > 1) {
+            scoresContainer.getChildren().remove(oldLength - 2, oldLength);
+            scoreControllers.remove(oldLength - 1);
+            scoreControllers.remove(oldLength - 2);
+        }
+        saveButton.getScene().getWindow().sizeToScene();
+        checkScoresAndUpdateUI();
     }
 }
