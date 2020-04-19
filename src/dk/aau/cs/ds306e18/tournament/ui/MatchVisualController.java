@@ -12,6 +12,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
 import java.util.List;
+import java.util.Optional;
 
 public class MatchVisualController implements MatchChangeListener {
 
@@ -166,11 +167,11 @@ public class MatchVisualController implements MatchChangeListener {
         }
     }
 
-    private void setupScores(HBox container, List<Integer> scores) {
-        for (int score : scores) {
+    private void setupScores(HBox container, List<Optional<Integer>> scores) {
+        for (Optional<Integer> score : scores) {
             MatchScoreController msc = MatchScoreController.loadNew();
             if (msc != null) {
-                msc.setScoreText("" + score);
+                msc.setScoreText(score.map(Object::toString).orElse("-"));
                 container.getChildren().add(msc.getRoot());
             }
         }

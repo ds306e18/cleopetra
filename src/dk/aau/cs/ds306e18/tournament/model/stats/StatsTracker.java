@@ -36,10 +36,10 @@ class StatsTracker implements MatchChangeListener {
         int goals = 0;
         int goalsConceded = 0;
         for (Series series : trackedSeries) {
-            // If the team is in the match (which it might not be), add the relevant stats
+            // If the team is in the match, add the relevant stats
             if (series.getTeamOne() == team) {
-                goals += series.getTeamOneScores().stream().mapToInt(x -> x).sum();
-                goalsConceded += series.getTeamTwoScores().stream().mapToInt(x -> x).sum();
+                goals += series.getTeamOneScores().stream().mapToInt(x -> x.orElse(0)).sum();
+                goalsConceded += series.getTeamTwoScores().stream().mapToInt(x -> x.orElse(0)).sum();
                 if (series.hasBeenPlayed()) {
                     if (series.getWinner() == team) {
                         wins++;
@@ -48,8 +48,8 @@ class StatsTracker implements MatchChangeListener {
                     }
                 }
             } else if (series.getTeamTwo() == team) {
-                goals += series.getTeamTwoScores().stream().mapToInt(x -> x).sum();
-                goalsConceded += series.getTeamOneScores().stream().mapToInt(x -> x).sum();
+                goals += series.getTeamTwoScores().stream().mapToInt(x -> x.orElse(0)).sum();
+                goalsConceded += series.getTeamOneScores().stream().mapToInt(x -> x.orElse(0)).sum();
                 if (series.hasBeenPlayed()) {
                     if (series.getWinner() == team) {
                         wins++;

@@ -4,7 +4,6 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
@@ -13,8 +12,8 @@ import java.util.Optional;
 public class EditMatchScoreController {
 
     @FXML private VBox root;
-    @FXML private Spinner<Integer> teamOneScoreSpinner;
-    @FXML private Spinner<Integer> teamTwoScoreSpinner;
+    @FXML private Spinner<String> teamOneScoreSpinner;
+    @FXML private Spinner<String> teamTwoScoreSpinner;
 
     public static EditMatchScoreController loadNew(Runnable onChange) {
         try {
@@ -34,14 +33,14 @@ public class EditMatchScoreController {
     /**
      * Adds behaviour to a score spinner.
      */
-    private void setupScoreSpinner(final Spinner<Integer> spinner, Runnable onChange) {
+    private void setupScoreSpinner(final Spinner<String> spinner, Runnable onChange) {
 
         // Values allowed in the spinner
-        spinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 99));
+        spinner.setValueFactory(new ScoreSpinnerValueFactory(0, 99));
         spinner.setEditable(true);
         spinner.getEditor().textProperty().addListener((obs, oldText, newText) -> {
-            // We allow empty strings and all positive numbers between 0 and 99 (inclusive) to be in the text field
-            if (!(newText.equals("") || newText.matches("^([0-9]|[1-9][0-9])$"))) {
+            // We allow empty strings, "-", and all positive numbers between 0 and 99 (inclusive) to be in the text field
+            if (!(newText.equals("") || newText.matches("^(-|[0-9]|[1-9][0-9])$"))) {
                 spinner.getEditor().setText(oldText);
             } else {
                 onChange.run();
@@ -66,16 +65,16 @@ public class EditMatchScoreController {
 
     public Optional<Integer> getTeamOneScore() {
         String scoreText = teamOneScoreSpinner.getEditor().getText();
-        return "".equals(scoreText) ? Optional.empty() : Optional.of(Integer.parseInt(scoreText));
+        return "".equals(scoreText) || "-".equals(scoreText) ? Optional.empty() : Optional.of(Integer.parseInt(scoreText));
     }
 
     public Optional<Integer> getTeamTwoScore() {
         String scoreText = teamTwoScoreSpinner.getEditor().getText();
-        return "".equals(scoreText) ? Optional.empty() : Optional.of(Integer.parseInt(scoreText));
+        return "".equals(scoreText) || "-".equals(scoreText) ? Optional.empty() : Optional.of(Integer.parseInt(scoreText));
     }
 
-    public void setScores(int teamOneScore, int teamTwoScore) {
-        teamOneScoreSpinner.getValueFactory().setValue(teamOneScore);
-        teamTwoScoreSpinner.getValueFactory().setValue(teamTwoScore);
+    public void setScores(Optional<Integer> teamOneScore, Optional<Integer> teamTwoScore) {
+        teamOneScoreSpinner.getEditor().setText(teamOneScore.map(Object::toString).orElse(""));
+        teamTwoScoreSpinner.getEditor().setText(teamTwoScore.map(Object::toString).orElse(""));
     }
 }

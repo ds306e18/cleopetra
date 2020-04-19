@@ -2,6 +2,7 @@ package dk.aau.cs.ds306e18.tournament.ui;
 
 import dk.aau.cs.ds306e18.tournament.model.match.MatchResultDependencyException;
 import dk.aau.cs.ds306e18.tournament.model.match.Series;
+import dk.aau.cs.ds306e18.tournament.serialization.Serializer;
 import dk.aau.cs.ds306e18.tournament.utility.Alerts;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,6 +17,7 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class EditSeriesScoreController extends DraggablePopupWindow {
 
@@ -39,30 +41,15 @@ public class EditSeriesScoreController extends DraggablePopupWindow {
      */
     private void checkScoresAndUpdateUI() {
 
-        // We assume everything is okay until something proves otherwise
-        boolean saveButtonDisable = false;
-        boolean matchOverDisable = false;
-        boolean matchOver = true;
+        List<Optional<Integer>> teamOneScores = scoreControllers.stream().map(EditMatchScoreController::getTeamOneScore).collect(Collectors.toList());
+        List<Optional<Integer>> teamTwoScores = scoreControllers.stream().map(EditMatchScoreController::getTeamTwoScore).collect(Collectors.toList());
 
-        for (EditMatchScoreController matchScore : scoreControllers) {
+        Series.Outcome outcome = Series.winnerIfScores(teamOneScores, teamTwoScores);
 
-            Optional<Integer> teamOneScore = matchScore.getTeamOneScore();
-            Optional<Integer> teamTwoScore = matchScore.getTeamTwoScore();
+        boolean seriesCanBeOver = outcome != Series.Outcome.UNKNOWN;
 
-            if (!teamOneScore.isPresent() || !teamTwoScore.isPresent()) {
-                // We have an unknown score, so we do not allow saving
-                saveButtonDisable = true;
-
-            } else if (teamOneScore.equals(teamTwoScore)) {
-                // They are tied in a match, so the series can not be over
-                matchOverDisable = true;
-                matchOver = false;
-            }
-        }
-
-        saveButton.setDisable(saveButtonDisable);
-        matchOverCheckBox.setDisable(matchOverDisable);
-        matchOverCheckBox.setSelected(matchOver);
+        matchOverCheckBox.setDisable(!seriesCanBeOver);
+        matchOverCheckBox.setSelected(seriesCanBeOver);
     }
 
     public void setSeries(Series series) {
@@ -82,8 +69,7 @@ public class EditSeriesScoreController extends DraggablePopupWindow {
         }
 
         setupScores();
-
-        matchOverCheckBox.setSelected(series.hasBeenPlayed());
+        checkScoresAndUpdateUI();
     }
 
     /**
@@ -97,6 +83,8 @@ public class EditSeriesScoreController extends DraggablePopupWindow {
             EditMatchScoreController scoreController = EditMatchScoreController.loadNew(this::checkScoresAndUpdateUI);
             scoresContainer.getChildren().add(scoreController.getRoot());
             scoreControllers.add(scoreController);
+
+
             scoreController.setScores(
                     series.getTeamOneScore(i),
                     series.getTeamTwoScore(i)
@@ -127,11 +115,11 @@ public class EditSeriesScoreController extends DraggablePopupWindow {
     @FXML
     private void onSaveBtnPressed(ActionEvent actionEvent) {
 
-        List<Integer> teamOneScores = new ArrayList<>();
-        List<Integer> teamTwoScores = new ArrayList<>();
+        List<Optional<Integer>> teamOneScores = new ArrayList<>();
+        List<Optional<Integer>> teamTwoScores = new ArrayList<>();
         for (EditMatchScoreController scoreController : scoreControllers) {
-            teamOneScores.add(scoreController.getTeamOneScore().get());
-            teamTwoScores.add(scoreController.getTeamTwoScore().get());
+            teamOneScores.add(scoreController.getTeamOneScore());
+            teamTwoScores.add(scoreController.getTeamTwoScore());
         }
 
         boolean played = matchOverCheckBox.isSelected();
@@ -162,7 +150,7 @@ public class EditSeriesScoreController extends DraggablePopupWindow {
             EditMatchScoreController scoreController = EditMatchScoreController.loadNew(this::checkScoresAndUpdateUI);
             scoresContainer.getChildren().add(scoreController.getRoot());
             scoreControllers.add(scoreController);
-            scoreController.setScores(0, 0);
+            scoreController.setScores(Optional.empty(), Optional.empty());
         }
         saveButton.getScene().getWindow().sizeToScene();
         checkScoresAndUpdateUI();

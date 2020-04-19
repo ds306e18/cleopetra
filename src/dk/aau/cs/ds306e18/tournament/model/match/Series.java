@@ -2,6 +2,7 @@ package dk.aau.cs.ds306e18.tournament.model.match;
 
 import com.google.common.primitives.Ints;
 import dk.aau.cs.ds306e18.tournament.model.Team;
+import dk.aau.cs.ds306e18.tournament.utility.ListExt;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -28,8 +29,8 @@ public final class Series {
     private int identifier = 0;
     /** For longer series, e.g. best of 3 */
     private int length = 1;
-    private List<Integer> teamOneScores = new ArrayList<>(Collections.singletonList(0));
-    private List<Integer> teamTwoScores = new ArrayList<>(Collections.singletonList(0));
+    private List<Optional<Integer>> teamOneScores = new ArrayList<>(Collections.singletonList(Optional.empty()));
+    private List<Optional<Integer>> teamTwoScores = new ArrayList<>(Collections.singletonList(Optional.empty()));
     private boolean played = false;
     private Team teamOne, teamTwo;
     private boolean teamOneIsBlue = true;
@@ -449,12 +450,12 @@ public final class Series {
             setScores(length, teamOneScores.subList(0, length), teamTwoScores.subList(0, length), played, forceResetSubsequentSeries);
         } else {
             // Series has been extended
-            List<Integer> newTeamOneScores = new ArrayList<>(teamOneScores);
-            List<Integer> newTeamTwoScores = new ArrayList<>(teamTwoScores);
+            List<Optional<Integer>> newTeamOneScores = new ArrayList<>(teamOneScores);
+            List<Optional<Integer>> newTeamTwoScores = new ArrayList<>(teamTwoScores);
             int newMatchesCount = length - this.length;
             for (int i = 0; i < newMatchesCount; i++) {
-                newTeamOneScores.add(0);
-                newTeamTwoScores.add(0);
+                newTeamOneScores.add(Optional.empty());
+                newTeamTwoScores.add(Optional.empty());
             }
             setScores(length, newTeamOneScores, newTeamTwoScores, false, forceResetSubsequentSeries);
         }
@@ -464,38 +465,46 @@ public final class Series {
         return length;
     }
 
+    public int requiredNumberOfMatchesWonToWin() {
+        return (int) Math.ceil(length * 0.5);
+    }
+
+    public static int requiredNumberOfMatchesWonToWin(int seriesLength) {
+        return (int) Math.ceil(seriesLength * 0.5);
+    }
+
     public void setHasBeenPlayed(boolean hasBeenPlayed) {
         setScores(length, teamOneScores, teamTwoScores, hasBeenPlayed, false);
     }
 
-    public void setTeamOneScores(List<Integer> teamOneScores) {
+    public void setTeamOneScores(List<Optional<Integer>> teamOneScores) {
         setScores(length, teamOneScores, teamTwoScores, played, false);
     }
 
-    public void setTeamTwoScores(List<Integer> teamTwoScores) {
+    public void setTeamTwoScores(List<Optional<Integer>> teamTwoScores) {
         setScores(length, teamOneScores, teamTwoScores, played, false);
     }
 
-    public void setScores(int teamOneScore, int teamTwoScore, int match) {
+    public void setScores(Optional<Integer> teamOneScore, Optional<Integer> teamTwoScore, int match) {
         if (match >= length) throw new IllegalArgumentException("Series only has " + length + " matches");
 
-        List<Integer> newTeamOneScores = new ArrayList<>(teamOneScores);
-        List<Integer> newTeamTwoScores = new ArrayList<>(teamTwoScores);
+        List<Optional<Integer>> newTeamOneScores = new ArrayList<>(teamOneScores);
+        List<Optional<Integer>> newTeamTwoScores = new ArrayList<>(teamTwoScores);
         newTeamOneScores.set(match, teamOneScore);
         newTeamTwoScores.set(match, teamTwoScore);
 
         setScores(newTeamOneScores, newTeamTwoScores);
     }
 
-    public void setScores(List<Integer> teamOneScores, List<Integer> teamTwoScores) {
+    public void setScores(List<Optional<Integer>> teamOneScores, List<Optional<Integer>> teamTwoScores) {
         setScores(length, teamOneScores, teamTwoScores, played, false);
     }
 
-    public void setScores(List<Integer> teamOneScores, List<Integer> teamTwoScores, boolean hasBeenPlayed) {
+    public void setScores(List<Optional<Integer>> teamOneScores, List<Optional<Integer>> teamTwoScores, boolean hasBeenPlayed) {
         setScores(length, teamOneScores, teamTwoScores, hasBeenPlayed, false);
     }
 
-    public void setScores(int seriesLength, List<Integer> teamOneScores, List<Integer> teamTwoScores, boolean hasBeenPlayed, boolean forceResetSubsequentSeries) {
+    public void setScores(int seriesLength, List<Optional<Integer>> teamOneScores, List<Optional<Integer>> teamTwoScores, boolean hasBeenPlayed, boolean forceResetSubsequentSeries) {
 
         if (!isReadyToPlay()) throw new IllegalStateException("Match is not playable");
 
@@ -542,12 +551,14 @@ public final class Series {
     }
 
     /**
-     * @return true if any of the matches scores are not 0
+     * @return true if any of the matches scores are neither missing or 0
      */
     public boolean hasAnyNonZeroScore() {
         for (int i = 0; i < length; i++) {
-            if (teamOneScores.get(i) != 0) return true;
-            if (teamTwoScores.get(i) != 0) return true;
+            Optional<Integer> teamOneScore = teamOneScores.get(i);
+            Optional<Integer> teamTwoScore = teamOneScores.get(i);
+            if (teamOneScore.isPresent() && teamOneScore.get() != 0) return true;
+            if (teamTwoScore.isPresent() && teamTwoScore.get() != 0) return true;
         }
         return false;
     }
@@ -557,7 +568,7 @@ public final class Series {
      * series, those will also be reset.
      */
     public void forceReset() {
-        setScores(length, Ints.asList(new int[length]), Ints.asList(new int[length]), false, true);
+        setScores(length, ListExt.nOf(length, Optional::empty), ListExt.nOf(length, Optional::empty), false, true);
     }
 
     /**
@@ -565,13 +576,11 @@ public final class Series {
      * This is not possible if any match depends on it and in that case a MatchResultDependencyException is thrown.
      */
     public void softReset() {
-        List<Integer> teamOneScores = Ints.asList(new int[length]);
-        List<Integer> teamTwoScores = Ints.asList(new int[length]);
-        setScores(length, teamOneScores, teamTwoScores, false, false);
+        setScores(length, ListExt.nOf(length, Optional::empty), ListExt.nOf(length, Optional::empty), false, false);
     }
 
     /** Returns true if the outcome and thus the state of this match change, if it had the given score instead. */
-    public boolean willOutcomeChange(List<Integer> altTeamOneScore, List<Integer> altTeamTwoScore, boolean altHasBeenPlayed) {
+    public boolean willOutcomeChange(List<Optional<Integer>> altTeamOneScores, List<Optional<Integer>> altTeamTwoScores, boolean altHasBeenPlayed) {
         if (this.played != altHasBeenPlayed) {
             return true;
         }
@@ -583,7 +592,7 @@ public final class Series {
 
         // Check if winner stays the same
         Outcome currentOutcome = winnerIfScores(teamOneScores, teamTwoScores);
-        Outcome altOutcome = winnerIfScores(altTeamOneScore, altTeamTwoScore);
+        Outcome altOutcome = winnerIfScores(altTeamOneScores, altTeamTwoScores);
         return currentOutcome != altOutcome;
     }
 
@@ -591,20 +600,23 @@ public final class Series {
      * Returns the outcome of the series if the given scores were the scores of the series and assuming the series
      * has been played an is over. Draws are possible.
      */
-    static private Outcome winnerIfScores(List<Integer> teamOneScores, List<Integer> teamTwoScores) {
+    public static Outcome winnerIfScores(List<Optional<Integer>> teamOneScores, List<Optional<Integer>> teamTwoScores) {
         if (teamOneScores.size() != teamTwoScores.size()) throw new IllegalArgumentException("Not the same amout of scores");
 
         // Count wins
         int oneWins = 0;
         int twoWins = 0;
         for (int i = 0; i < teamOneScores.size(); i++) {
-            if (teamOneScores.get(i) > teamTwoScores.get(i)) oneWins++;
-            else if (teamOneScores.get(i) < teamTwoScores.get(i)) twoWins++;
+            if (!teamOneScores.get(i).isPresent() || !teamTwoScores.get(i).isPresent()) continue;
+            if (teamOneScores.get(i).get() > teamTwoScores.get(i).get()) oneWins++;
+            else if (teamOneScores.get(i).get() < teamTwoScores.get(i).get()) twoWins++;
         }
 
+        int req = requiredNumberOfMatchesWonToWin(teamOneScores.size());
+        if (oneWins < req && twoWins < req) return Outcome.UNKNOWN;
         if (oneWins > twoWins) return Outcome.TEAM_ONE_WINS;
-        else if (oneWins < twoWins) return Outcome.TEAM_TWO_WINS;
-        else return Outcome.DRAW;
+        if (oneWins < twoWins) return Outcome.TEAM_TWO_WINS;
+        return Outcome.DRAW;
     }
 
     /**
@@ -650,46 +662,35 @@ public final class Series {
         return (isReadyToPlay() && teamOne.size() == 1 && teamTwo.size() == 1);
     }
 
-    public List<Integer> getTeamOneScores() {
+    public List<Optional<Integer>> getTeamOneScores() {
         return new ArrayList<>(teamOneScores);
     }
 
-    public List<Integer> getTeamTwoScores() {
+    public List<Optional<Integer>> getTeamTwoScores() {
         return new ArrayList<>(teamTwoScores);
     }
 
-    public List<Integer> getBlueScores() {
+    public List<Optional<Integer>> getBlueScores() {
         return teamOneIsBlue ? getTeamOneScores() : getTeamTwoScores();
     }
 
-    public List<Integer> getOrangeScores() {
+    public List<Optional<Integer>> getOrangeScores() {
         return teamOneIsBlue ? getTeamTwoScores() : getTeamOneScores();
     }
 
-    /**
-     * Returns the score line in the given match. Index 0 will be the
-     * score of team one, index 1 will be score of team two.
-     */
-    public int[] getScore(int matchIndex) {
-        return new int[] {
-            teamOneScores.get(matchIndex),
-            teamTwoScores.get(matchIndex)
-        };
-    }
-
-    public int getTeamOneScore(int matchIndex) {
+    public Optional<Integer> getTeamOneScore(int matchIndex) {
         return teamOneScores.get(matchIndex);
     }
 
-    public int getTeamTwoScore(int matchIndex) {
+    public Optional<Integer> getTeamTwoScore(int matchIndex) {
         return teamTwoScores.get(matchIndex);
     }
 
-    public int getBlueScore(int matchIndex) {
+    public Optional<Integer> getBlueScore(int matchIndex) {
         return teamOneIsBlue ? getTeamOneScore(matchIndex) : getTeamTwoScore(matchIndex);
     }
 
-    public int getOrangeScore(int matchIndex) {
+    public Optional<Integer> getOrangeScore(int matchIndex) {
         return teamOneIsBlue ? getTeamTwoScore(matchIndex) : getTeamOneScore(matchIndex);
     }
 
