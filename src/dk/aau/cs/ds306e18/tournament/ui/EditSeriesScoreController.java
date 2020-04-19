@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class EditSeriesScoreController extends DraggablePopupWindow {
 
@@ -45,10 +46,10 @@ public class EditSeriesScoreController extends DraggablePopupWindow {
 
         for (EditMatchScoreController matchScore : scoreControllers) {
 
-            Integer teamOneScore = matchScore.getTeamOneScore();
-            Integer teamTwoScore = matchScore.getTeamTwoScore();
+            Optional<Integer> teamOneScore = matchScore.getTeamOneScore();
+            Optional<Integer> teamTwoScore = matchScore.getTeamTwoScore();
 
-            if (teamOneScore == null || teamTwoScore == null) {
+            if (!teamOneScore.isPresent() || !teamTwoScore.isPresent()) {
                 // We have an unknown score, so we do not allow saving
                 saveButtonDisable = true;
 
@@ -129,8 +130,8 @@ public class EditSeriesScoreController extends DraggablePopupWindow {
         List<Integer> teamOneScores = new ArrayList<>();
         List<Integer> teamTwoScores = new ArrayList<>();
         for (EditMatchScoreController scoreController : scoreControllers) {
-            teamOneScores.add(scoreController.getTeamOneScore());
-            teamTwoScores.add(scoreController.getTeamTwoScore());
+            teamOneScores.add(scoreController.getTeamOneScore().get());
+            teamTwoScores.add(scoreController.getTeamTwoScore().get());
         }
 
         boolean played = matchOverCheckBox.isSelected();

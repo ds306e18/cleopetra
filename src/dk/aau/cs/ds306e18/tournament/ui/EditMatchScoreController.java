@@ -8,6 +8,7 @@ import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
+import java.util.Optional;
 
 public class EditMatchScoreController {
 
@@ -63,14 +64,14 @@ public class EditMatchScoreController {
         return root;
     }
 
-    public Integer getTeamOneScore() {
+    public Optional<Integer> getTeamOneScore() {
         String scoreText = teamOneScoreSpinner.getEditor().getText();
-        return "".equals(scoreText) ? null : Integer.parseInt(scoreText);
+        return "".equals(scoreText) ? Optional.empty() : Optional.of(Integer.parseInt(scoreText));
     }
 
-    public Integer getTeamTwoScore() {
+    public Optional<Integer> getTeamTwoScore() {
         String scoreText = teamTwoScoreSpinner.getEditor().getText();
-        return "".equals(scoreText) ? null : Integer.parseInt(scoreText);
+        return "".equals(scoreText) ? Optional.empty() : Optional.of(Integer.parseInt(scoreText));
     }
 
     public void setScores(int teamOneScore, int teamTwoScore) {
