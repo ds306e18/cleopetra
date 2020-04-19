@@ -312,9 +312,9 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
             editMatchScoreStage.initStyle(StageStyle.TRANSPARENT);
             editMatchScoreStage.initModality(Modality.APPLICATION_MODAL);
 
-            FXMLLoader loader = new FXMLLoader(BracketOverviewTabController.class.getResource("layout/EditMatchScore.fxml"));
+            FXMLLoader loader = new FXMLLoader(BracketOverviewTabController.class.getResource("layout/EditSeriesScore.fxml"));
             AnchorPane editMatchStageRoot = loader.load();
-            EditMatchScoreController emsc = loader.getController();
+            EditSeriesScoreController emsc = loader.getController();
             emsc.setSeries(selectedMatch.getShowedSeries());
             editMatchScoreStage.setScene(new Scene(editMatchStageRoot));
 

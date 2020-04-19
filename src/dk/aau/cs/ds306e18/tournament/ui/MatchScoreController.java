@@ -23,7 +23,7 @@ public class MatchScoreController {
     public static MatchScoreController loadNew() {
         try {
             // Load the fxml document into the Controller and JavaFx node.
-            FXMLLoader loader = new FXMLLoader(BracketOverviewTabController.class.getResource("layout/MatchScore.fxml"));
+            FXMLLoader loader = new FXMLLoader(MatchScoreController.class.getResource("layout/MatchScore.fxml"));
             loader.load();
             return loader.getController();
         } catch (IOException e) {
