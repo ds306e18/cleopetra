@@ -19,8 +19,8 @@ import java.util.ArrayList;
 public class SwissNode extends HBox implements MatchPlayedListener, MatchChangeListener, ModelCoupledUI {
 
     private final Insets MARGINS = new Insets(0, 8, 8, 0);
+    private final Insets COLUMN_MARGINS = new Insets(0, 32, 8, 0);
     private final Insets TABLE_MARGINS = new Insets(0, 64, 0, 0);
-    private final int COLUMN_WIDTH = 175;
 
     private final SwissFormat swiss;
     private final BracketOverviewTabController boc;
@@ -54,8 +54,6 @@ public class SwissNode extends HBox implements MatchPlayedListener, MatchChangeL
         // Create that amount of columns matching the number of generated rounds.
         for (int i = 0; i < numberOfRounds; i++) {
             VBox column = new VBox();
-            column.setMinWidth(COLUMN_WIDTH);
-            column.setPrefWidth(COLUMN_WIDTH);
 
             // Round Label
             Label roundLabel = new Label("Round " + (i + 1));
@@ -73,6 +71,7 @@ public class SwissNode extends HBox implements MatchPlayedListener, MatchChangeL
             }
 
             getChildren().add(column);
+            HBox.setMargin(column, COLUMN_MARGINS);
         }
 
         // If there can be generated another round, then add a column more that contains a button for generating.
@@ -110,8 +109,6 @@ public class SwissNode extends HBox implements MatchPlayedListener, MatchChangeL
 
         // Column vbox
         VBox column = new VBox();
-        column.setMinWidth(COLUMN_WIDTH);
-        column.setPrefWidth(COLUMN_WIDTH);
 
         // Round Label
         Label roundLabel = new Label("Round " + roundNumber);

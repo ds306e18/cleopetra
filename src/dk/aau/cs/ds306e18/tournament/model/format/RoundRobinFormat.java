@@ -17,6 +17,7 @@ public class RoundRobinFormat implements Format, MatchPlayedListener {
     private static final Team DUMMY_TEAM = new Team("Dummy", new ArrayList<>(), 0, "Dummy team description");
 
     private StageStatus status = StageStatus.PENDING;
+    private int defaultSeriesLength = 1;
     private ArrayList<Team> teams;
     private ArrayList<Series> series;
     private ArrayList<RoundRobinGroup> groups;
@@ -235,7 +236,7 @@ public class RoundRobinFormat implements Format, MatchPlayedListener {
      */
     private Series createNewMatch(Team team1, Team team2) {
 
-        Series series = new Series(team1, team2);
+        Series series = new Series(defaultSeriesLength, team1, team2);
         series.registerMatchPlayedListener(this);
         return series;
     }
@@ -365,6 +366,18 @@ public class RoundRobinFormat implements Format, MatchPlayedListener {
 
     public static Team getDummyTeam() {
         return DUMMY_TEAM;
+    }
+
+    @Override
+    public void setDefaultSeriesLength(int seriesLength) {
+        if (seriesLength <= 0) throw new IllegalArgumentException("Series length must be at least one.");
+        if (seriesLength % 2 == 0) throw new IllegalArgumentException("Series must have an odd number of matches.");
+        defaultSeriesLength = seriesLength;
+    }
+
+    @Override
+    public int getDefaultSeriesLength() {
+        return defaultSeriesLength;
     }
 
     @Override

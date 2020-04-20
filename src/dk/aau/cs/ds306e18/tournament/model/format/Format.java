@@ -18,6 +18,16 @@ public interface Format {
     void start(List<Team> seededTeams, boolean doSeeding);
 
     /**
+     * Set the default series length (best of x)
+     */
+    void setDefaultSeriesLength(int seriesLength);
+
+    /**
+     * Get the default series length (best of x)
+     */
+    int getDefaultSeriesLength();
+
+    /**
      * Returns the status of the format.
      */
     StageStatus getStatus();

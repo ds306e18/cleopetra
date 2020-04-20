@@ -17,6 +17,7 @@ import static dk.aau.cs.ds306e18.tournament.utility.PowMath.pow2;
 public class DoubleEliminationFormat implements Format, MatchPlayedListener {
 
     private StageStatus status = StageStatus.PENDING;
+    private int defaultSeriesLength = 1;
     private List<Team> teams;
     private int upperBracketRounds;
     private Series finalSeries;
@@ -65,11 +66,11 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
         for(int i = numberOfMatches - 1; i >= 0; i--) {
             // Creates empty matches for first round
             if(i >= numberOfMatches - matchesInFirstRound) {
-                upperBracket[i] = new Series();
+                upperBracket[i] = new Series(defaultSeriesLength);
             }
             // Creates the remaining matches which contains winners from their left- and right child-indexes.
             else {
-                upperBracket[i] = new Series()
+                upperBracket[i] = new Series(defaultSeriesLength)
                         .setTeamOneToWinnerOf(upperBracket[getUpperBracketLeftIndex(i)])
                         .setTeamTwoToWinnerOf(upperBracket[getUpperBracketRightIndex(i)]);
             }
@@ -92,7 +93,7 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
 
         // For the first lower bracket round, use losers from first round in upper bracket
         for (int i = 0; i < matchesInCurrentRound; i++) {
-            lowerBracketSeries.add(new Series()
+            lowerBracketSeries.add(new Series(defaultSeriesLength)
                     .setTeamOneToLoserOf(upperBracket[ubLoserIndex--])
                     .setTeamTwoToLoserOf(upperBracket[ubLoserIndex--]));
         }
@@ -116,7 +117,7 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
                 }
 
                 for (int j = 0; j < matchesInCurrentRound; j++) {
-                    lowerBracketSeries.add(new Series()
+                    lowerBracketSeries.add(new Series(defaultSeriesLength)
                             .setTeamOneToWinnerOf(lowerBracketSeries.get(lbWinnerIndex++))
                             .setTeamTwoToLoserOf(upperBracket[ubLoserIndex]));
 
@@ -135,7 +136,7 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
                 matchesInCurrentRound /= 2;
 
                 for (int j = 0; j < matchesInCurrentRound; j++) {
-                    lowerBracketSeries.add(new Series()
+                    lowerBracketSeries.add(new Series(defaultSeriesLength)
                             .setTeamOneToWinnerOf(lowerBracketSeries.get(lbWinnerIndex++))
                             .setTeamTwoToWinnerOf(lowerBracketSeries.get(lbWinnerIndex++)));
                 }
@@ -151,13 +152,13 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
         // If there are two teams, then there is no lower bracket
         if (lowerBracket.length == 0) {
             // The final is just a rematch
-            finalSeries = new Series()
+            finalSeries = new Series(defaultSeriesLength)
                     .setTeamOneToLoserOf(upperBracket[0])
                     .setTeamTwoToWinnerOf(upperBracket[0]);
 
         } else {
             // The final is the winner of upper bracket versus winner of lower bracket
-            finalSeries = new Series()
+            finalSeries = new Series(defaultSeriesLength)
                     .setTeamOneToWinnerOf(upperBracket[0])
                     .setTeamTwoToWinnerOf(lowerBracket[lowerBracket.length-1]);
         }
@@ -165,7 +166,7 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
 
         // The extra is takes the winner and loser of the final match, but it should not be played if the loser of
         // the final match has already lost twice
-        extraSeries = new Series()
+        extraSeries = new Series(defaultSeriesLength)
                 .setTeamOneToWinnerOf(finalSeries)
                 .setTeamTwoToLoserOf(finalSeries);
 
@@ -630,6 +631,18 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
         if (oldStatus != status || oldExtraMatchNeeded != isExtraMatchNeeded) {
             notifyStatusListeners(oldStatus, status);
         }
+    }
+
+    @Override
+    public void setDefaultSeriesLength(int seriesLength) {
+        if (seriesLength <= 0) throw new IllegalArgumentException("Series length must be at least one.");
+        if (seriesLength % 2 == 0) throw new IllegalArgumentException("Series must have an odd number of matches.");
+        defaultSeriesLength = seriesLength;
+    }
+
+    @Override
+    public int getDefaultSeriesLength() {
+        return defaultSeriesLength;
     }
 
     @Override

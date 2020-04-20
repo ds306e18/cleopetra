@@ -50,10 +50,28 @@ public final class Series {
     }
 
     /**
-     * Construct a Match where both Teams are known from the start.
+     * Construct an empty Series with a given length.
+     */
+    public Series(int length) {
+        id = nextId++;
+        setSeriesLength(length, false);
+    }
+
+    /**
+     * Construct a Series where both Teams are known from the start.
      */
     public Series(Team teamOne, Team teamTwo) {
         id = nextId++;
+        this.teamOne = teamOne;
+        this.teamTwo = teamTwo;
+    }
+
+    /**
+     * Construct a Series with a given length where both Teams are known from the start.
+     */
+    public Series(int length, Team teamOne, Team teamTwo) {
+        id = nextId++;
+        setSeriesLength(length, false);
         this.teamOne = teamOne;
         this.teamTwo = teamTwo;
     }
@@ -445,19 +463,26 @@ public final class Series {
      * This can change the the outcome of the match so a force reset of subsequent series might be needed.
      */
     public void setSeriesLength(int length, boolean forceResetSubsequentSeries) {
-        if (this.length > length) {
-            // Series has been shortened
-            setScores(length, teamOneScores.subList(0, length), teamTwoScores.subList(0, length), played, forceResetSubsequentSeries);
+        if (!hasAnyNonZeroScore()) {
+            // We can do it directly without checking scores
+            this.length = length;
+            teamOneScores = ListExt.nOf(length, Optional::empty);
+            teamTwoScores = ListExt.nOf(length, Optional::empty);
         } else {
-            // Series has been extended
-            List<Optional<Integer>> newTeamOneScores = new ArrayList<>(teamOneScores);
-            List<Optional<Integer>> newTeamTwoScores = new ArrayList<>(teamTwoScores);
-            int newMatchesCount = length - this.length;
-            for (int i = 0; i < newMatchesCount; i++) {
-                newTeamOneScores.add(Optional.empty());
-                newTeamTwoScores.add(Optional.empty());
+            if (this.length > length) {
+                // Series has been shortened
+                setScores(length, teamOneScores.subList(0, length), teamTwoScores.subList(0, length), played, forceResetSubsequentSeries);
+            } else {
+                // Series has been extended
+                List<Optional<Integer>> newTeamOneScores = new ArrayList<>(teamOneScores);
+                List<Optional<Integer>> newTeamTwoScores = new ArrayList<>(teamTwoScores);
+                int newMatchesCount = length - this.length;
+                for (int i = 0; i < newMatchesCount; i++) {
+                    newTeamOneScores.add(Optional.empty());
+                    newTeamTwoScores.add(Optional.empty());
+                }
+                setScores(length, newTeamOneScores, newTeamTwoScores, false, forceResetSubsequentSeries);
             }
-            setScores(length, newTeamOneScores, newTeamTwoScores, false, forceResetSubsequentSeries);
         }
     }
 

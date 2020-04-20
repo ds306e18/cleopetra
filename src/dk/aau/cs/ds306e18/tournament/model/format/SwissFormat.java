@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 public class SwissFormat implements Format, MatchChangeListener, MatchPlayedListener {
 
     private StageStatus status = StageStatus.PENDING;
+    private int defaultSeriesLength = 1;
     private ArrayList<Team> teams;
     private ArrayList<ArrayList<Series>> rounds = new ArrayList<>();
     private int maxRoundsPossible;
@@ -140,7 +141,7 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
                     // Has the two selected teams played each other before?
                     // Due to previous bad tries we might accept rematches. Note: short circuiting
                     if (!hasTheseTeamsPlayedBefore(team1, team2) || 0 < acceptedRematches--) {
-                        Series series = new Series(team1, team2);
+                        Series series = new Series(defaultSeriesLength, team1, team2);
                         createdSeries.add(series);
                         break; // Two valid teams has been found, and match has been created.
                     }
@@ -258,7 +259,7 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
     }
 
     /**
-     * @Return the latest generated round. Or null if there are no rounds generated.
+     * @return the latest generated round. Or null if there are no rounds generated.
      */
     public List<Series> getLatestRound() {
         if (rounds.size() == 0) return null;
@@ -270,6 +271,18 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
      */
     public IdentityHashMap<Team, Integer> getTeamPointsMap() {
         return teamPoints;
+    }
+
+    @Override
+    public void setDefaultSeriesLength(int seriesLength) {
+        if (seriesLength <= 0) throw new IllegalArgumentException("Series length must be at least one.");
+        if (seriesLength % 2 == 0) throw new IllegalArgumentException("Series must have an odd number of matches.");
+        defaultSeriesLength = seriesLength;
+    }
+
+    @Override
+    public int getDefaultSeriesLength() {
+        return defaultSeriesLength;
     }
 
     @Override

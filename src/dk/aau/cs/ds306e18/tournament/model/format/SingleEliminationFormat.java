@@ -17,6 +17,7 @@ import static dk.aau.cs.ds306e18.tournament.utility.PowMath.pow2;
 public class SingleEliminationFormat implements Format, MatchPlayedListener {
 
     private StageStatus status = StageStatus.PENDING;
+    private int defaultSeriesLength = 1;
     private ArrayList<Team> seededTeams;
     private Series finalSeries;
     private Series[] bracket;
@@ -46,11 +47,11 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
         for(int i = numberOfMatches - 1; i >= 0; i--) {
             // Creates empty matches for first round
             if(i >= numberOfMatches - matchesInFirstRound) {
-                bracket[i] = new Series();
+                bracket[i] = new Series(defaultSeriesLength);
             }
             // Creates the remaining matches which contains winners from their left- and right child-indexes.
             else {
-                bracket[i] = new Series()
+                bracket[i] = new Series(defaultSeriesLength)
                         .setTeamOneToWinnerOf(bracket[getLeftIndex(i)])
                         .setTeamTwoToWinnerOf(bracket[getRightIndex(i)]);
             }
@@ -270,6 +271,18 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
         }
 
         return topTeams;
+    }
+
+    @Override
+    public void setDefaultSeriesLength(int seriesLength) {
+        if (seriesLength <= 0) throw new IllegalArgumentException("Series length must be at least one.");
+        if (seriesLength % 2 == 0) throw new IllegalArgumentException("Series must have an odd number of matches.");
+        defaultSeriesLength = seriesLength;
+    }
+
+    @Override
+    public int getDefaultSeriesLength() {
+        return defaultSeriesLength;
     }
 
     @Override
