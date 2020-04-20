@@ -42,10 +42,8 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
     @FXML private Button editMatchBtn;
     @FXML private Button switchColorsBtn;
     @FXML private Label blueTeamNameLabel;
-    @FXML private Label blueTeamScore;
     @FXML private ListView<Bot> blueTeamListView;
     @FXML private Label orangeTeamNameLabel;
-    @FXML private Label orangeTeamScore;
     @FXML private ListView<Bot> orangeTeamListView;
     @FXML private ScrollPane overviewScrollPane;
     @FXML private GridPane selectedMatchInfo;
@@ -251,26 +249,22 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
         if (series != null && series.getBlueTeam() != null) {
             // Blue team
             blueTeamNameLabel.setText(series.getBlueTeam().getTeamName());
-            blueTeamScore.setText(Integer.toString(series.getTeamOneScore(0).orElse(0))); // TODO Only displays score of first match
             blueTeamListView.setItems(FXCollections.observableArrayList(series.getBlueTeam().getBots()));
             blueTeamListView.refresh();
         } else {
             // Orange team is unknown
             blueTeamNameLabel.setText("Blue team");
-            blueTeamScore.setText("");
             blueTeamListView.setItems(null);
             blueTeamListView.refresh();
         }
         if (series != null && series.getOrangeTeam() != null) {
             // Orange team
             orangeTeamNameLabel.setText(series.getOrangeTeam().getTeamName());
-            orangeTeamScore.setText(Integer.toString(series.getTeamTwoScore(0).orElse(0))); // TODO Only displays score of first match
             orangeTeamListView.setItems(FXCollections.observableArrayList(series.getOrangeTeam().getBots()));
             orangeTeamListView.refresh();
         } else {
             // Orange team is unknown
             orangeTeamNameLabel.setText("Orange team");
-            orangeTeamScore.setText("");
             orangeTeamListView.setItems(null);
             orangeTeamListView.refresh();
         }

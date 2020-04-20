@@ -26,7 +26,7 @@
    <children>
       <VBox id="globalGrid" GridPane.columnIndex="1">
          <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Selected match" wrappingWidth="188.3590259552002">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Selected series" wrappingWidth="188.3590259552002">
                <font>
                   <Font name="System Bold" size="24.0" />
                </font>
@@ -43,7 +43,6 @@
               <rowConstraints>
                 <RowConstraints vgrow="SOMETIMES" />
                 <RowConstraints vgrow="SOMETIMES" />
-                <RowConstraints minHeight="40.0" vgrow="SOMETIMES" />
                   <RowConstraints />
               </rowConstraints>
                <children>
@@ -59,23 +58,10 @@
                   </Label>
                   <ListView id="teamListView" fx:id="blueTeamListView" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="117.0" minWidth="130.0" prefHeight="117.0" prefWidth="130.0" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
                   <ListView id="teamListView" fx:id="orangeTeamListView" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="117.0" minWidth="130.0" prefHeight="117.0" prefWidth="130.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-                  <Label text=":" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
-                     <font>
-                        <Font name="System Bold" size="20.0" />
-                     </font>
-                  </Label>
-                  <Pane maxHeight="16.0" minHeight="16.0" prefHeight="16.0" GridPane.rowIndex="3" />
-                  <Label fx:id="blueTeamScore" alignment="CENTER" maxWidth="-Infinity" minWidth="40.0" prefWidth="40.0" text="0" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="2">
-                     <font>
-                        <Font name="System Bold" size="16.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="orangeTeamScore" alignment="CENTER" maxWidth="-Infinity" minWidth="40.0" prefWidth="40.0" text="0" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2">
-                     <font>
-                        <Font name="System Bold" size="16.0" />
-                     </font>
-                  </Label>
                </children>
+               <padding>
+                  <Insets bottom="32.0" />
+               </padding>
             </GridPane>
             <HBox alignment="TOP_CENTER" spacing="16.0">
                <children>

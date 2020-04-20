@@ -74,7 +74,7 @@ public class EditMatchScoreController {
     }
 
     public void setScores(Optional<Integer> teamOneScore, Optional<Integer> teamTwoScore) {
-        teamOneScoreSpinner.getEditor().setText(teamOneScore.map(Object::toString).orElse(""));
-        teamTwoScoreSpinner.getEditor().setText(teamTwoScore.map(Object::toString).orElse(""));
+        teamOneScoreSpinner.getEditor().setText(teamOneScore.map(Object::toString).orElse("-"));
+        teamTwoScoreSpinner.getEditor().setText(teamTwoScore.map(Object::toString).orElse("-"));
     }
 }
