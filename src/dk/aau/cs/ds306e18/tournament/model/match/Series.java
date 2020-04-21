@@ -43,7 +43,7 @@ public final class Series {
     transient private List<MatchChangeListener> changeListeners = new LinkedList<>();
 
     /**
-     * Construct an empty Match.
+     * Construct an empty Series.
      */
     public Series() {
         id = nextId++;
@@ -490,10 +490,16 @@ public final class Series {
         return length;
     }
 
+    /**
+     * @return the number of won matches needed to win this series.
+     */
     public int requiredNumberOfMatchesWonToWin() {
         return (int) Math.ceil(length * 0.5);
     }
 
+    /**
+     * @return the number of won matches needed to win a series with the given length.
+     */
     public static int requiredNumberOfMatchesWonToWin(int seriesLength) {
         return (int) Math.ceil(seriesLength * 0.5);
     }
@@ -510,8 +516,11 @@ public final class Series {
         setScores(length, teamOneScores, teamTwoScores, played, false);
     }
 
+    /**
+     * Set the scores of a particular match in the series.
+     */
     public void setScores(Optional<Integer> teamOneScore, Optional<Integer> teamTwoScore, int match) {
-        if (match >= length) throw new IllegalArgumentException("Series only has " + length + " matches");
+        if (match < 0 || match >= length) throw new IndexOutOfBoundsException("Invalid match index. Series has " + length + " matches");
 
         List<Optional<Integer>> newTeamOneScores = new ArrayList<>(teamOneScores);
         List<Optional<Integer>> newTeamTwoScores = new ArrayList<>(teamTwoScores);

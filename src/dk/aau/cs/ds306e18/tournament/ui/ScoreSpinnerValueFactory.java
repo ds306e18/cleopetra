@@ -2,6 +2,9 @@ package dk.aau.cs.ds306e18.tournament.ui;
 
 import javafx.scene.control.SpinnerValueFactory;
 
+/**
+ * A SpinnerValueFactory for scores. It accepts integers in a given range as well as empty strings and "-".
+ */
 public class ScoreSpinnerValueFactory extends SpinnerValueFactory<String> {
 
     private final int min;

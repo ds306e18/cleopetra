@@ -1,10 +1,8 @@
 package dk.aau.cs.ds306e18.tournament.utility;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class ListExt {

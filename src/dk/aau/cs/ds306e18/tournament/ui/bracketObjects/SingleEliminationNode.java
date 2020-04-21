@@ -3,7 +3,7 @@ package dk.aau.cs.ds306e18.tournament.ui.bracketObjects;
 import dk.aau.cs.ds306e18.tournament.model.format.SingleEliminationFormat;
 import dk.aau.cs.ds306e18.tournament.model.match.Series;
 import dk.aau.cs.ds306e18.tournament.ui.BracketOverviewTabController;
-import dk.aau.cs.ds306e18.tournament.ui.MatchVisualController;
+import dk.aau.cs.ds306e18.tournament.ui.SeriesVisualController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
@@ -23,7 +23,7 @@ public class SingleEliminationNode extends GridPane implements ModelCoupledUI {
     private final SingleEliminationFormat singleElimination;
     private final BracketOverviewTabController boc;
 
-    private ArrayList<MatchVisualController> mvcs = new ArrayList<>();
+    private ArrayList<SeriesVisualController> mvcs = new ArrayList<>();
 
     /** Used to display the a single elimination stage. */
     public SingleEliminationNode(SingleEliminationFormat singleElimination, BracketOverviewTabController boc){
@@ -53,7 +53,7 @@ public class SingleEliminationNode extends GridPane implements ModelCoupledUI {
 
                 // Some matches can be null
                 if (series != null) {
-                    MatchVisualController mvc = boc.loadVisualMatch(series);
+                    SeriesVisualController mvc = boc.loadSeriesVisual(series);
                     mvcs.add(mvc);
                     box.getChildren().add(mvc.getRoot());
                     mvc.setShowIdentifier(true);
@@ -78,7 +78,7 @@ public class SingleEliminationNode extends GridPane implements ModelCoupledUI {
     /** Completely remove all ui elements. */
     public void removeElements() {
         getChildren().clear();
-        for (MatchVisualController mvc : mvcs) {
+        for (SeriesVisualController mvc : mvcs) {
             mvc.decoupleFromModel();
         }
         mvcs.clear();

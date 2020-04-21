@@ -4,7 +4,7 @@ import dk.aau.cs.ds306e18.tournament.model.format.RoundRobinFormat;
 import dk.aau.cs.ds306e18.tournament.model.format.RoundRobinGroup;
 import dk.aau.cs.ds306e18.tournament.model.match.Series;
 import dk.aau.cs.ds306e18.tournament.ui.BracketOverviewTabController;
-import dk.aau.cs.ds306e18.tournament.ui.MatchVisualController;
+import dk.aau.cs.ds306e18.tournament.ui.SeriesVisualController;
 import dk.aau.cs.ds306e18.tournament.ui.StatsTable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -26,7 +26,7 @@ public class RoundRobinNode extends VBox implements ModelCoupledUI {
     private final RoundRobinFormat roundRobin;
     private final BracketOverviewTabController boc;
 
-    private ArrayList<MatchVisualController> mvcs = new ArrayList<>();
+    private ArrayList<SeriesVisualController> mvcs = new ArrayList<>();
     private ArrayList<StatsTable> statsTables = new ArrayList<>();
 
     public RoundRobinNode(RoundRobinFormat roundRobin, BracketOverviewTabController boc) {
@@ -88,7 +88,7 @@ public class RoundRobinNode extends VBox implements ModelCoupledUI {
 
         //Add matches
         for (Series serie : series) {
-            MatchVisualController vmatch = boc.loadVisualMatch(serie);
+            SeriesVisualController vmatch = boc.loadSeriesVisual(serie);
             VBox.setMargin(vmatch.getRoot(), MARGINS);
             box.getChildren().add(vmatch.getRoot());
             mvcs.add(vmatch);
@@ -104,7 +104,7 @@ public class RoundRobinNode extends VBox implements ModelCoupledUI {
 
     /** Completely remove all UI elements. */
     public void removeElements() {
-        for (MatchVisualController mvc : mvcs) {
+        for (SeriesVisualController mvc : mvcs) {
             mvc.decoupleFromModel();
         }
         for (StatsTable table : statsTables) {

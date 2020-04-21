@@ -62,7 +62,7 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
     private int showedStageIndex = -1;
     private ModelCoupledUI coupledBracket;
     private Format showedFormat;
-    private MatchVisualController selectedMatch;
+    private SeriesVisualController selectedMatch;
 
     @FXML
     private void initialize() {
@@ -194,12 +194,12 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
      * @param series the match to be visualised
      * @return a gridPane containing the visualisation of the given match.
      */
-    public MatchVisualController loadVisualMatch(Series series) {
+    public SeriesVisualController loadSeriesVisual(Series series) {
 
         //Load the fxml document into the Controller and JavaFx node.
-        FXMLLoader loader = new FXMLLoader(BracketOverviewTabController.class.getResource("layout/MatchVisual.fxml"));
+        FXMLLoader loader = new FXMLLoader(BracketOverviewTabController.class.getResource("layout/SeriesVisual.fxml"));
         HBox root = null;
-        MatchVisualController mvc = null;
+        SeriesVisualController mvc = null;
 
         try {
             root = loader.load();
@@ -217,7 +217,7 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
     /**
      * Sets the selected match.
      */
-    public void setSelectedMatch(MatchVisualController match) {
+    public void setSelectedMatch(SeriesVisualController match) {
         if (selectedMatch != null){
             selectedMatch.getShowedSeries().unregisterMatchChangeListener(this);
             selectedMatch.getRoot().getStyleClass().remove("selectedMatch");

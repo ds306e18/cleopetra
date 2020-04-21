@@ -5,7 +5,7 @@ import dk.aau.cs.ds306e18.tournament.model.format.SwissFormat;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchChangeListener;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchPlayedListener;
 import dk.aau.cs.ds306e18.tournament.ui.BracketOverviewTabController;
-import dk.aau.cs.ds306e18.tournament.ui.MatchVisualController;
+import dk.aau.cs.ds306e18.tournament.ui.SeriesVisualController;
 import dk.aau.cs.ds306e18.tournament.ui.StatsTableWithPoints;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -26,7 +26,7 @@ public class SwissNode extends HBox implements MatchPlayedListener, MatchChangeL
     private final BracketOverviewTabController boc;
 
     private Button generateRoundButton;
-    private ArrayList<MatchVisualController> mvcs = new ArrayList<>();
+    private ArrayList<SeriesVisualController> mvcs = new ArrayList<>();
     private StatsTableWithPoints table;
 
     public SwissNode(SwissFormat swiss, BracketOverviewTabController boc) {
@@ -64,7 +64,7 @@ public class SwissNode extends HBox implements MatchPlayedListener, MatchChangeL
             ArrayList<Series> round = rounds.get(i);
             for (Series series : round) {
 
-                MatchVisualController vmatch = boc.loadVisualMatch(series);
+                SeriesVisualController vmatch = boc.loadSeriesVisual(series);
                 VBox.setMargin(vmatch.getRoot(), MARGINS);
                 column.getChildren().add(vmatch.getRoot());
                 mvcs.add(vmatch);
@@ -92,7 +92,7 @@ public class SwissNode extends HBox implements MatchPlayedListener, MatchChangeL
 
     /** Completely remove all ui elements. */
     public void removeElements() {
-        for (MatchVisualController mvc : mvcs) {
+        for (SeriesVisualController mvc : mvcs) {
             mvc.decoupleFromModel();
         }
         getChildren().clear();

@@ -7,6 +7,10 @@ import javafx.scene.text.Text;
 
 import java.io.IOException;
 
+/**
+ * A controller for the score text label on the MatchVisual, i.e. the part that can be repeated when the
+ * series is longer.
+ */
 public class MatchScoreController {
 
     @FXML private Group root;

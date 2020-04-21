@@ -9,6 +9,10 @@ import javafx.scene.layout.VBox;
 import java.io.IOException;
 import java.util.Optional;
 
+/**
+ * A controller for the EditSeriesScore window part where you input the score for a single match, i.e the one
+ * that is repeated when there series is longer.
+ */
 public class EditMatchScoreController {
 
     @FXML private VBox root;
@@ -63,16 +67,27 @@ public class EditMatchScoreController {
         return root;
     }
 
+    /**
+     * Interpret and return the currently written score as an integer. If the written score is "" or "-" an empty
+     * value is returned.
+     */
     public Optional<Integer> getTeamOneScore() {
         String scoreText = teamOneScoreSpinner.getEditor().getText();
         return "".equals(scoreText) || "-".equals(scoreText) ? Optional.empty() : Optional.of(Integer.parseInt(scoreText));
     }
 
+    /**
+     * Interpret and return the currently written score as an integer. If the written score is "" or "-" an empty
+     * value is returned.
+     */
     public Optional<Integer> getTeamTwoScore() {
         String scoreText = teamTwoScoreSpinner.getEditor().getText();
         return "".equals(scoreText) || "-".equals(scoreText) ? Optional.empty() : Optional.of(Integer.parseInt(scoreText));
     }
 
+    /**
+     * Set the displayed scores.
+     */
     public void setScores(Optional<Integer> teamOneScore, Optional<Integer> teamTwoScore) {
         teamOneScoreSpinner.getEditor().setText(teamOneScore.map(Object::toString).orElse("-"));
         teamTwoScoreSpinner.getEditor().setText(teamTwoScore.map(Object::toString).orElse("-"));

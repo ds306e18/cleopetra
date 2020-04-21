@@ -3,7 +3,7 @@ package dk.aau.cs.ds306e18.tournament.ui.bracketObjects;
 import dk.aau.cs.ds306e18.tournament.model.format.*;
 import dk.aau.cs.ds306e18.tournament.model.match.Series;
 import dk.aau.cs.ds306e18.tournament.ui.BracketOverviewTabController;
-import dk.aau.cs.ds306e18.tournament.ui.MatchVisualController;
+import dk.aau.cs.ds306e18.tournament.ui.SeriesVisualController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
@@ -27,9 +27,9 @@ public class DoubleEliminationNode extends VBox implements ModelCoupledUI, Stage
     private final BracketOverviewTabController boc;
     private final GridPane upperGrid = new GridPane();
     private final GridPane lowerGrid = new GridPane();
-    private MatchVisualController extraMatchMVC;
+    private SeriesVisualController extraMatchMVC;
 
-    private ArrayList<MatchVisualController> mvcs = new ArrayList<>();
+    private ArrayList<SeriesVisualController> mvcs = new ArrayList<>();
 
     /** Used to display the a double elimination stage. */
     public DoubleEliminationNode(DoubleEliminationFormat doubleElimination, BracketOverviewTabController boc){
@@ -111,7 +111,7 @@ public class DoubleEliminationNode extends VBox implements ModelCoupledUI, Stage
 
         // Some matches are null because of byes. In those cases the VBox will just be empty
         if (series != null) {
-            MatchVisualController mvc = boc.loadVisualMatch(series);
+            SeriesVisualController mvc = boc.loadSeriesVisual(series);
             mvcs.add(mvc);
             box.getChildren().add(mvc.getRoot());
             mvc.setShowIdentifier(true);
@@ -154,7 +154,7 @@ public class DoubleEliminationNode extends VBox implements ModelCoupledUI, Stage
     public void removeElements() {
         upperGrid.getChildren().clear();
         lowerGrid.getChildren().clear();
-        for (MatchVisualController mvc : mvcs) {
+        for (SeriesVisualController mvc : mvcs) {
             mvc.decoupleFromModel();
         }
         mvcs.clear();

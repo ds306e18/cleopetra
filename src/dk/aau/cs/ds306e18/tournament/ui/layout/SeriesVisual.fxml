@@ -11,7 +11,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<HBox id="played" fx:id="matchRoot" alignment="CENTER_RIGHT" spacing="2.0" stylesheets="@css/visualmatch.css" xmlns="http://javafx.com/javafx/1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.MatchVisualController">
+<HBox id="played" fx:id="matchRoot" alignment="CENTER_RIGHT" spacing="2.0" stylesheets="@css/visualmatch.css" xmlns="http://javafx.com/javafx/1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.SeriesVisualController">
    <children>
       <AnchorPane fx:id="identifierHolder" prefHeight="50.0" prefWidth="22.0">
          <children>

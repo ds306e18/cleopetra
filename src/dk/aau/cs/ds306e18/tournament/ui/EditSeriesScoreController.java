@@ -2,7 +2,6 @@ package dk.aau.cs.ds306e18.tournament.ui;
 
 import dk.aau.cs.ds306e18.tournament.model.match.MatchResultDependencyException;
 import dk.aau.cs.ds306e18.tournament.model.match.Series;
-import dk.aau.cs.ds306e18.tournament.serialization.Serializer;
 import dk.aau.cs.ds306e18.tournament.utility.Alerts;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,12 +18,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Controller for the pop-up window where scores are edited.
+ */
 public class EditSeriesScoreController extends DraggablePopupWindow {
 
     private static final Paint BLUE_FILL = Paint.valueOf("#6a82fc");
     private static final Paint ORANGE_FILL = Paint.valueOf("#f5af18");
 
-    @FXML private CheckBox matchOverCheckBox;
+    @FXML private CheckBox seriesFinishedCheckBox;
     @FXML private Label teamOneNameLabel;
     @FXML private Label teamTwoNameLabel;
     @FXML private HBox scoresContainer;
@@ -48,8 +50,8 @@ public class EditSeriesScoreController extends DraggablePopupWindow {
 
         boolean seriesCanBeOver = outcome != Series.Outcome.UNKNOWN;
 
-        matchOverCheckBox.setDisable(!seriesCanBeOver);
-        matchOverCheckBox.setSelected(seriesCanBeOver);
+        seriesFinishedCheckBox.setDisable(!seriesCanBeOver);
+        seriesFinishedCheckBox.setSelected(seriesCanBeOver);
     }
 
     public void setSeries(Series series) {
@@ -122,7 +124,7 @@ public class EditSeriesScoreController extends DraggablePopupWindow {
             teamTwoScores.add(scoreController.getTeamTwoScore());
         }
 
-        boolean played = matchOverCheckBox.isSelected();
+        boolean played = seriesFinishedCheckBox.isSelected();
 
         boolean force = false;
         while (true) {

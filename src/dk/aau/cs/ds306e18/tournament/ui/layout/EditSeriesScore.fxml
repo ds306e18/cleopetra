@@ -68,7 +68,7 @@
                   </VBox>
                </children>
             </HBox>
-            <CheckBox fx:id="matchOverCheckBox" mnemonicParsing="false" text="Series is finished" />
+            <CheckBox fx:id="seriesFinishedCheckBox" mnemonicParsing="false" text="Series is finished" />
             <HBox>
                <children>
                   <Pane minWidth="46.0" prefHeight="27.0" prefWidth="228.0" HBox.hgrow="ALWAYS" />

@@ -14,7 +14,7 @@ import javafx.scene.text.Text;
 import java.util.List;
 import java.util.Optional;
 
-public class MatchVisualController implements MatchChangeListener {
+public class SeriesVisualController implements MatchChangeListener {
 
     @FXML private HBox matchRoot;
     @FXML private Label identifierLabel;
@@ -157,6 +157,9 @@ public class MatchVisualController implements MatchChangeListener {
         }
     }
 
+    /**
+     * Populate a score container with blank scores. Used when the match is not playable yet.
+     */
     private void setupBlankScores(HBox container, int seriesLength) {
         for (int i = 0; i < seriesLength; i++) {
             MatchScoreController msc = MatchScoreController.loadNew();
@@ -167,6 +170,9 @@ public class MatchVisualController implements MatchChangeListener {
         }
     }
 
+    /**
+     * Populate a score container with the given scores.
+     */
     private void setupScores(HBox container, List<Optional<Integer>> scores) {
         for (Optional<Integer> score : scores) {
             MatchScoreController msc = MatchScoreController.loadNew();
