@@ -22,9 +22,12 @@ public class TieBreakerTest {
         Series seriesThree = new Series(teams.get(4), teams.get(5));
         List<Series> series = Arrays.asList(seriesOne, seriesTwo, seriesThree);
 
-        seriesOne.setScores(9, 5, true);
-        seriesTwo.setScores(4, 0, true);
-        seriesThree.setScores(4, 3, true);
+        seriesOne.setScores(9, 5, 0);
+        seriesOne.setHasBeenPlayed(true);
+        seriesTwo.setScores(4, 0, 0);
+        seriesTwo.setHasBeenPlayed(true);
+        seriesThree.setScores(4, 3, 0);
+        seriesThree.setHasBeenPlayed(true);
 
         for (Team team : teams) {
             team.getStatsManager().trackMatches(null, series);
@@ -47,8 +50,10 @@ public class TieBreakerTest {
         Series seriesTwo = new Series(teams.get(2), teams.get(3));
         List<Series> series = Arrays.asList(seriesOne, seriesTwo);
 
-        seriesOne.setScores(5, 1, true);
-        seriesTwo.setScores(4, 2, true);
+        seriesOne.setScores(5, 1, 0);
+        seriesOne.setHasBeenPlayed(true);
+        seriesTwo.setScores(4, 2, 0);
+        seriesTwo.setHasBeenPlayed(true);
 
         for (Team team : teams) {
             team.getStatsManager().trackMatches(null, series);
@@ -70,8 +75,10 @@ public class TieBreakerTest {
         List<Series> series = Arrays.asList(seriesOne, seriesTwo);
 
         // Scores shouldn't matter
-        seriesOne.setScores(2, 3, true);
-        seriesTwo.setScores(4, 1, true);
+        seriesOne.setScores(2, 3, 0);
+        seriesOne.setHasBeenPlayed(true);
+        seriesTwo.setScores(4, 1, 0);
+        seriesTwo.setHasBeenPlayed(true);
 
         for (Team team : teams) {
             team.getStatsManager().trackMatches(null, series);
@@ -93,9 +100,12 @@ public class TieBreakerTest {
         Series seriesThree = new Series(teams.get(4), teams.get(5));
         List<Series> series = Arrays.asList(seriesOne, seriesTwo, seriesThree);
 
-        seriesOne.setScores(2, 3, true);
-        seriesTwo.setScores(4, 2, true);
-        seriesThree.setScores(3, 4, true);
+        seriesOne.setScores(2, 3, 0);
+        seriesOne.setHasBeenPlayed(true);
+        seriesTwo.setScores(4, 2, 0);
+        seriesTwo.setHasBeenPlayed(true);
+        seriesThree.setScores(3, 4, 0);
+        seriesThree.setHasBeenPlayed(true);
 
         for (Team team : teams) {
             team.getStatsManager().trackMatches(null, series);
@@ -131,9 +141,12 @@ public class TieBreakerTest {
         Series seriesThree = new Series(teams.get(4), teams.get(5));
         List<Series> series = Arrays.asList(seriesOne, seriesTwo, seriesThree);
 
-        seriesOne.setScores(1, 3, true);
-        seriesTwo.setScores(2, 5, true);
-        seriesThree.setScores(4, 0, true);
+        seriesOne.setScores(1, 3, 0);
+        seriesOne.setHasBeenPlayed(true);
+        seriesTwo.setScores(2, 5, 0);
+        seriesTwo.setHasBeenPlayed(true);
+        seriesThree.setScores(4, 0, 0);
+        seriesThree.setHasBeenPlayed(true);
 
         for (Team team : teams) {
             team.getStatsManager().trackMatches(null, series);

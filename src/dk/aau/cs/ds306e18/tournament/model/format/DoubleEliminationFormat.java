@@ -280,7 +280,7 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
     }
 
     private void setupStatsTracking() {
-        List<Series> allSeries = getAllMatches();
+        List<Series> allSeries = getAllSeries();
         for (Team team : teams) {
             team.getStatsManager().trackMatches(this, allSeries);
         }
@@ -297,7 +297,7 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
         // The easiest way to find the best performing teams in double elimination is to count how many wins and loses
         // each team has and then use the tie breaker to rank them based on that
         HashMap<Team, Integer> pointsMap = new HashMap<>();
-        List<Series> allSeries = getAllMatches();
+        List<Series> allSeries = getAllSeries();
         for (Series series : allSeries) {
             if (series.hasBeenPlayed()) {
                 // +1 point to the winner
@@ -348,7 +348,7 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
     public HashMap<Team, Integer> getLosesMap() {
         HashMap<Team, Integer> losesMap = new HashMap<>();
 
-        for (Series series : getAllMatches()) {
+        for (Series series : getAllSeries()) {
             if (series.hasBeenPlayed()) {
                 Team loser = series.getLoser();
                 int loses = 0;
@@ -363,13 +363,13 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
     }
 
     @Override
-    public List<Series> getAllMatches() {
+    public List<Series> getAllSeries() {
         return extraSeries.getTreeAsListBFS();
     }
 
     @Override
     public List<Series> getUpcomingMatches() {
-        return getAllMatches().stream().filter(m ->
+        return getAllSeries().stream().filter(m ->
                         m.getStatus().equals(Series.Status.READY_TO_BE_PLAYED)
                         && !m.hasBeenPlayed()
                         && (m != extraSeries || isExtraMatchNeeded)) // extra match is only an upcoming match if needed
@@ -378,7 +378,7 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
 
     @Override
     public List<Series> getPendingMatches() {
-        return getAllMatches().stream().filter(m ->
+        return getAllSeries().stream().filter(m ->
                         m.getStatus().equals(Series.Status.NOT_PLAYABLE)
                         && m != extraSeries) // extra match is never pending. It is either not needed, or needed AND playable
                 .collect(Collectors.toList());
@@ -386,7 +386,7 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
 
     @Override
     public List<Series> getCompletedMatches() {
-        return getAllMatches().stream().filter(Series::hasBeenPlayed).collect(Collectors.toList());
+        return getAllSeries().stream().filter(Series::hasBeenPlayed).collect(Collectors.toList());
     }
 
     public Series getFinalSeries() {

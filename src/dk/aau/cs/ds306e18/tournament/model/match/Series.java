@@ -519,6 +519,13 @@ public final class Series {
     /**
      * Set the scores of a particular match in the series.
      */
+    public void setScores(int teamOneScore, int teamTwoScore, int match) {
+        setScores(Optional.of(teamOneScore), Optional.of(teamTwoScore), match);
+    }
+
+    /**
+     * Set the scores of a particular match in the series.
+     */
     public void setScores(Optional<Integer> teamOneScore, Optional<Integer> teamTwoScore, int match) {
         if (match < 0 || match >= length) throw new IndexOutOfBoundsException("Invalid match index. Series has " + length + " matches");
 
@@ -640,13 +647,15 @@ public final class Series {
         // Count wins
         int oneWins = 0;
         int twoWins = 0;
+        int unknown = 0;
         for (int i = 0; i < teamOneScores.size(); i++) {
-            if (!teamOneScores.get(i).isPresent() || !teamTwoScores.get(i).isPresent()) continue;
-            if (teamOneScores.get(i).get() > teamTwoScores.get(i).get()) oneWins++;
+            if (!teamOneScores.get(i).isPresent() || !teamTwoScores.get(i).isPresent()) unknown++;
+            else if (teamOneScores.get(i).get() > teamTwoScores.get(i).get()) oneWins++;
             else if (teamOneScores.get(i).get() < teamTwoScores.get(i).get()) twoWins++;
         }
 
         int req = requiredNumberOfMatchesWonToWin(teamOneScores.size());
+        if (oneWins == twoWins && unknown == 0) return Outcome.DRAW;
         if (oneWins < req && twoWins < req) return Outcome.UNKNOWN;
         if (oneWins > twoWins) return Outcome.TEAM_ONE_WINS;
         if (oneWins < twoWins) return Outcome.TEAM_TWO_WINS;

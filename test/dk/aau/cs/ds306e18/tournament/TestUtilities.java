@@ -97,10 +97,11 @@ public class TestUtilities {
             Team teamOne = serie.getTeamOne();
             Team teamTwo = serie.getTeamTwo();
             if (teamOne.getInitialSeedValue() < teamTwo.getInitialSeedValue()) {
-                serie.setScores(1, 0, true);
+                serie.setScores(1, 0, 0);
             } else {
-                serie.setScores(0, 1, true);
+                serie.setScores(0, 1, 0);
             }
+            serie.setHasBeenPlayed(true);
         }
     }
 }

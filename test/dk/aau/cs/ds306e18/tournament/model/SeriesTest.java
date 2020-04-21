@@ -23,7 +23,8 @@ public class SeriesTest {
         secondSeries.setTeamTwoToWinnerOf(firstSeries);
         assertFalse(secondSeries.isReadyToPlay());
 
-        firstSeries.setScores(4, 2, true);
+        firstSeries.setScores(4, 2, 0);
+        firstSeries.setHasBeenPlayed(true);
         assertTrue(secondSeries.isReadyToPlay());
     }
 
@@ -33,7 +34,8 @@ public class SeriesTest {
         Team expectedWinner = new Team("A", null, 0, "a");
         Team expectedLoser = new Team("B", null, 0, "b");
         Series series = new Series(expectedWinner, expectedLoser);
-        series.setScores(3, 2, true);
+        series.setScores(3, 2, 0);
+        series.setHasBeenPlayed(true);
         assertSame(series.getWinner(), expectedWinner);
         assertSame(series.getLoser(), expectedLoser);
     }
@@ -44,7 +46,8 @@ public class SeriesTest {
         Team expectedWinner = new Team("A", null, 0, "a");
         Team expectedLoser = new Team("B", null, 0, "b");
         Series series = new Series(expectedLoser, expectedWinner);
-        series.setScores(3, 5, true);
+        series.setScores(3, 5, 0);
+        series.setHasBeenPlayed(true);
         assertSame(series.getWinner(), expectedWinner);
         assertSame(series.getLoser(), expectedLoser);
     }
@@ -52,14 +55,14 @@ public class SeriesTest {
     @Test(expected = IllegalStateException.class)
     public void getWinnerAndLoser03() {
         Series series = new Series(new Team("A", null, 0, "a"), new Team("B", null, 0, "b"));
-        series.setScores(3, 5); // note: match is not finished
+        series.setScores(3, 5, 0); // note: match is not finished
         series.getWinner();
     }
 
     @Test(expected = IllegalStateException.class)
     public void getWinnerAndLoser04() {
         Series series = new Series(new Team("A", null, 0, "a"), new Team("B", null, 0, "b"));
-        series.setScores(3, 5); // note: match is not finished
+        series.setScores(3, 5, 0); // note: match is not finished
         series.getLoser();
     }
 
@@ -74,14 +77,16 @@ public class SeriesTest {
     public void getStatus02() {
         Series firstSeries = new Series(new Team("A", null, 0, "a"), new Team("B", null, 0, "b"));
         Series secondSeries = new Series().setTeamOne(new Team("C", null, 0, "c")).setTeamTwoToWinnerOf(firstSeries);
-        firstSeries.setScores(0, 2, true);
+        firstSeries.setScores(0, 2, 0);
+        firstSeries.setHasBeenPlayed(true);
         assertSame(secondSeries.getStatus(), Series.Status.READY_TO_BE_PLAYED);
     }
 
     @Test
     public void getStatus03() {
         Series series = new Series(new Team("A", null, 0, "a"), new Team("B", null, 0, "b"));
-        series.setScores(0, 0, true);
+        series.setScores(0, 0, 0);
+        series.setHasBeenPlayed(true);
         assertSame(series.getOutcome(), Series.Outcome.DRAW);
     }
 
@@ -89,14 +94,16 @@ public class SeriesTest {
     @Test
     public void getStatus04() {
         Series series = new Series(new Team("A", null, 0, "a"), new Team("B", null, 0, "b"));
-        series.setScores(2, 0, true);
+        series.setScores(2, 0, 0);
+        series.setHasBeenPlayed(true);
         assertSame(series.getOutcome(), Series.Outcome.TEAM_ONE_WINS);
     }
 
     @Test
     public void getStatus05() {
         Series series = new Series(new Team("A", null, 0, "a"), new Team("B", null, 0, "b"));
-        series.setScores(0, 2, true);
+        series.setScores(0, 2, 0);
+        series.setHasBeenPlayed(true);
         assertSame(series.getOutcome(), Series.Outcome.TEAM_TWO_WINS);
     }
 
@@ -181,7 +188,8 @@ public class SeriesTest {
         Team expectedWinner = new Team("A", null, 0, "a");
         Series seriesOne = new Series(expectedWinner, new Team("B", null, 0, "b"));
         Series seriesTwo = new Series().setTeamOne(new Team("C", null, 0, "c")).setTeamTwoToWinnerOf(seriesOne);
-        seriesOne.setScores(4, 2, true);
+        seriesOne.setScores(4, 2, 0);
+        seriesOne.setHasBeenPlayed(true);
 
         assertSame(expectedWinner, seriesTwo.getTeamTwo());
 
@@ -198,7 +206,8 @@ public class SeriesTest {
         Team expectedWinner = new Team("A", null, 0, "a");
         Series seriesOne = new Series(expectedWinner, new Team("B", null, 0, "b"));
         Series seriesTwo = new Series().setTeamOne(new Team("C", null, 0, "c")).setTeamTwoToWinnerOf(seriesOne);
-        seriesOne.setScores(4, 2, true);
+        seriesOne.setScores(4, 2, 0);
+        seriesOne.setHasBeenPlayed(true);
 
         assertSame(expectedWinner, seriesTwo.getTeamTwo());
 
@@ -216,7 +225,8 @@ public class SeriesTest {
         Team expectedLoser = new Team("A", null, 0, "a");
         Series seriesOne = new Series(expectedLoser, new Team("B", null, 0, "b"));
         Series seriesTwo = new Series().setTeamOne(new Team("C", null, 0, "c")).setTeamTwoToLoserOf(seriesOne);
-        seriesOne.setScores(0, 3, true);
+        seriesOne.setScores(0, 3, 0);
+        seriesOne.setHasBeenPlayed(true);
 
         assertSame(expectedLoser, seriesTwo.getTeamTwo());
 
@@ -233,7 +243,8 @@ public class SeriesTest {
         Team expectedLoser = new Team("A", null, 0, "a");
         Series seriesOne = new Series(expectedLoser, new Team("B", null, 0, "b"));
         Series seriesTwo = new Series().setTeamOne(new Team("C", null, 0, "c")).setTeamTwoToLoserOf(seriesOne);
-        seriesOne.setScores(0, 3, true);
+        seriesOne.setScores(0, 3, 0);
+        seriesOne.setHasBeenPlayed(true);
 
         assertSame(expectedLoser, seriesTwo.getTeamTwo());
 
@@ -255,10 +266,11 @@ public class SeriesTest {
 
         int teamOneScore = 5;
         int teamTwoScore = 2;
-        series.setScores(teamOneScore, teamTwoScore, true);
+        series.setScores(teamOneScore, teamTwoScore, 0);
+        series.setHasBeenPlayed(true);
 
-        assertEquals(teamOneScore, series.getTeamOneScores());
-        assertEquals(teamTwoScore, series.getTeamTwoScores());
+        assertEquals(teamOneScore, (int) series.getTeamOneScore(0).get());
+        assertEquals(teamTwoScore, (int) series.getTeamTwoScore(0).get());
     }
 
     @Test
@@ -272,11 +284,13 @@ public class SeriesTest {
         int teamTwoScore1 = 2;
         int teamOneScore2 = 2;
         int teamTwoScore2 = 2;
-        series.setScores(teamOneScore1, teamTwoScore1, true);
-        series.setScores(teamOneScore2, teamTwoScore2, true);
+        series.setScores(teamOneScore1, teamTwoScore1, 0);
+        series.setHasBeenPlayed(true);
+        series.setScores(teamOneScore2, teamTwoScore2, 0);
+        series.setHasBeenPlayed(true);
 
-        assertEquals(teamOneScore2, series.getTeamOneScores());
-        assertEquals(teamTwoScore2, series.getTeamTwoScores());
+        assertEquals(teamOneScore2, (int) series.getTeamOneScore(0).get());
+        assertEquals(teamTwoScore2, (int) series.getTeamTwoScore(0).get());
     }
 
     @Test
@@ -288,8 +302,10 @@ public class SeriesTest {
         Series seriesThree = new Series(tE, new Team("D", null, 0, "d"));
 
         // Team A and E wins
-        seriesOne.setScores(1, 0, true);
-        seriesThree.setScores(1, 0, true);
+        seriesOne.setScores(1, 0, 0);
+        seriesOne.setHasBeenPlayed(true);
+        seriesThree.setScores(1, 0, 0);
+        seriesThree.setHasBeenPlayed(true);
 
         // Match two's team two should be A
         assertSame(tA, seriesTwo.getTeamTwo());
@@ -307,21 +323,22 @@ public class SeriesTest {
 
         Series seriesOne = new Series(teamA, teamB);
         Series seriesTwo = new Series().setTeamOne(teamC).setTeamTwoToWinnerOf(seriesOne);
-        seriesOne.setScores(2, 1, true);
-        seriesTwo.setScores(4, 3, false);
+        seriesOne.setScores(2, 1, 0);
+        seriesOne.setHasBeenPlayed(true);
+        seriesTwo.setScores(4, 3, 0);
 
-        assertEquals(2, seriesOne.getTeamOneScores());
-        assertEquals(1, seriesOne.getTeamTwoScores());
-        assertEquals(4, seriesTwo.getTeamOneScores());
-        assertEquals(3, seriesTwo.getTeamTwoScores());
+        assertEquals(2, (int) seriesOne.getTeamOneScore(0).get());
+        assertEquals(1, (int) seriesOne.getTeamTwoScore(0).get());
+        assertEquals(4, (int) seriesTwo.getTeamOneScore(0).get());
+        assertEquals(3, (int) seriesTwo.getTeamTwoScore(0).get());
 
         // This forced reset should remove all scores. Also in match two that has not been played
-        seriesOne.setScores(0, 0, false, true);
+        seriesOne.forceReset();
 
-        assertEquals(0, seriesOne.getTeamOneScores());
-        assertEquals(0, seriesOne.getTeamTwoScores());
-        assertEquals(0, seriesTwo.getTeamOneScores());
-        assertEquals(0, seriesTwo.getTeamTwoScores());
+        assertFalse(seriesOne.getTeamOneScore(0).isPresent());
+        assertFalse(seriesOne.getTeamTwoScore(0).isPresent());
+        assertFalse(seriesTwo.getTeamOneScore(0).isPresent());
+        assertFalse(seriesTwo.getTeamTwoScore(0).isPresent());
     }
 
     @Test(expected = MatchResultDependencyException.class)
@@ -332,16 +349,17 @@ public class SeriesTest {
 
         Series seriesOne = new Series(teamA, teamB);
         Series seriesTwo = new Series().setTeamOne(teamC).setTeamTwoToWinnerOf(seriesOne);
-        seriesOne.setScores(2, 1, true);
-        seriesTwo.setScores(4, 3, false);
+        seriesOne.setScores(2, 1, 0);
+        seriesOne.setHasBeenPlayed(true);
+        seriesTwo.setScores(4, 3, 0);
 
-        assertEquals(2, seriesOne.getTeamOneScores());
-        assertEquals(1, seriesOne.getTeamTwoScores());
-        assertEquals(4, seriesTwo.getTeamOneScores());
-        assertEquals(3, seriesTwo.getTeamTwoScores());
+        assertEquals(2, (int) seriesOne.getTeamOneScore(0).get());
+        assertEquals(1, (int) seriesOne.getTeamTwoScore(0).get());
+        assertEquals(4, (int) seriesTwo.getTeamOneScore(0).get());
+        assertEquals(3, (int) seriesTwo.getTeamTwoScore(0).get());
 
         // This reset should not be legal as match two has entered scores
-        seriesOne.setScores(0, 0, false, false);
+        seriesOne.softReset();
     }
 
     @Test(expected = MatchResultDependencyException.class)
@@ -352,16 +370,18 @@ public class SeriesTest {
 
         Series seriesOne = new Series(teamA, teamB);
         Series seriesTwo = new Series().setTeamOne(teamC).setTeamTwoToWinnerOf(seriesOne);
-        seriesOne.setScores(2, 1, true);
-        seriesTwo.setScores(4, 3, true);
+        seriesOne.setScores(2, 1, 0);
+        seriesOne.setHasBeenPlayed(true);
+        seriesTwo.setScores(4, 3, 0);
+        seriesTwo.setHasBeenPlayed(true);
 
-        assertEquals(2, seriesOne.getTeamOneScores());
-        assertEquals(1, seriesOne.getTeamTwoScores());
-        assertEquals(4, seriesTwo.getTeamOneScores());
-        assertEquals(3, seriesTwo.getTeamTwoScores());
+        assertEquals(2, (int) seriesOne.getTeamOneScore(0).get());
+        assertEquals(1, (int) seriesOne.getTeamTwoScore(0).get());
+        assertEquals(4, (int) seriesTwo.getTeamOneScore(0).get());
+        assertEquals(3, (int) seriesTwo.getTeamTwoScore(0).get());
 
         // This reset should not be legal as match two has been played
-        seriesOne.setScores(0, 0, false, false);
+        seriesOne.softReset();
     }
 
     @Test
@@ -372,21 +392,22 @@ public class SeriesTest {
 
         Series seriesOne = new Series(teamA, teamB);
         Series seriesTwo = new Series().setTeamOne(teamC).setTeamTwoToWinnerOf(seriesOne);
-        seriesOne.setScores(2, 1, true);
-        seriesTwo.setScores(4, 3, false);
+        seriesOne.setScores(2, 1, 0);
+        seriesOne.setHasBeenPlayed(true);
+        seriesTwo.setScores(4, 3, 0);
 
-        assertEquals(2, seriesOne.getTeamOneScores());
-        assertEquals(1, seriesOne.getTeamTwoScores());
-        assertEquals(4, seriesTwo.getTeamOneScores());
-        assertEquals(3, seriesTwo.getTeamTwoScores());
+        assertEquals(2, (int) seriesOne.getTeamOneScore(0).get());
+        assertEquals(1, (int) seriesOne.getTeamTwoScore(0).get());
+        assertEquals(4, (int) seriesTwo.getTeamOneScore(0).get());
+        assertEquals(3, (int) seriesTwo.getTeamTwoScore(0).get());
 
-        // This reset should be legal as it doesn't change the outcome of match one
-        seriesOne.setScores(4, 2, true, false);
+        // This should be legal as it doesn't change the outcome of match one
+        seriesOne.setScores(4, 2, 0);
 
-        assertEquals(4, seriesOne.getTeamOneScores());
-        assertEquals(2, seriesOne.getTeamTwoScores());
-        assertEquals(4, seriesTwo.getTeamOneScores());
-        assertEquals(3, seriesTwo.getTeamTwoScores());
+        assertEquals(4, (int) seriesOne.getTeamOneScore(0).get());
+        assertEquals(2, (int) seriesOne.getTeamTwoScore(0).get());
+        assertEquals(4, (int) seriesTwo.getTeamOneScore(0).get());
+        assertEquals(3, (int) seriesTwo.getTeamTwoScore(0).get());
     }
 
     @Test
@@ -397,21 +418,23 @@ public class SeriesTest {
 
         Series seriesOne = new Series(teamA, teamB);
         Series seriesTwo = new Series().setTeamOne(teamC).setTeamTwoToWinnerOf(seriesOne);
-        seriesOne.setScores(2, 1, true);
-        seriesTwo.setScores(4, 3, true);
+        seriesOne.setScores(2, 1, 0);
+        seriesOne.setHasBeenPlayed(true);
+        seriesTwo.setScores(4, 3, 0);
+        seriesTwo.setHasBeenPlayed(true);
 
-        assertEquals(2, seriesOne.getTeamOneScores());
-        assertEquals(1, seriesOne.getTeamTwoScores());
-        assertEquals(4, seriesTwo.getTeamOneScores());
-        assertEquals(3, seriesTwo.getTeamTwoScores());
+        assertEquals(2, (int) seriesOne.getTeamOneScore(0).get());
+        assertEquals(1, (int) seriesOne.getTeamTwoScore(0).get());
+        assertEquals(4, (int) seriesTwo.getTeamOneScore(0).get());
+        assertEquals(3, (int) seriesTwo.getTeamTwoScore(0).get());
 
         // This reset should be legal as it doesn't change the outcome of match one, even when match two has been played
-        seriesOne.setScores(4, 2, true, false);
+        seriesOne.setScores(4, 2, 0);
 
-        assertEquals(4, seriesOne.getTeamOneScores());
-        assertEquals(2, seriesOne.getTeamTwoScores());
-        assertEquals(4, seriesTwo.getTeamOneScores());
-        assertEquals(3, seriesTwo.getTeamTwoScores());
+        assertEquals(4, (int) seriesOne.getTeamOneScore(0).get());
+        assertEquals(2, (int) seriesOne.getTeamTwoScore(0).get());
+        assertEquals(4, (int) seriesTwo.getTeamOneScore(0).get());
+        assertEquals(3, (int) seriesTwo.getTeamTwoScore(0).get());
     }
 
     @Test
@@ -461,19 +484,20 @@ public class SeriesTest {
         Team teamB = new Team("B", null, 0, "b");
 
         Series series = new Series(teamA, teamB);
-        series.setScores(2, 0, true);
+        series.setScores(2, 0, 0);
+        series.setHasBeenPlayed(true);
 
-        assertSame(2, series.getTeamOneScores());
-        assertSame(0, series.getTeamTwoScores());
-        assertSame(2, series.getBlueScore());
-        assertSame(0, series.getOrangeScore());
+        assertEquals(2, (int) series.getTeamOneScore(0).get());
+        assertEquals(0, (int) series.getTeamTwoScore(0).get());
+        assertEquals(2, (int) series.getBlueScore(0).get());
+        assertEquals(0, (int) series.getOrangeScore(0).get());
 
         series.setTeamOneToBlue(false);
 
-        assertEquals(2, series.getTeamOneScores());
-        assertEquals(0, series.getTeamTwoScores());
-        assertEquals(0, series.getBlueScore());
-        assertEquals(2, series.getOrangeScore());
+        assertEquals(2, (int) series.getTeamOneScore(0).get());
+        assertEquals(0, (int) series.getTeamTwoScore(0).get());
+        assertEquals(0, (int) series.getBlueScore(0).get());
+        assertEquals(2, (int) series.getOrangeScore(0).get());
     }
 
     @Test
@@ -482,7 +506,8 @@ public class SeriesTest {
         Team teamB = new Team("B", null, 0, "b");
 
         Series series = new Series(teamA, teamB);
-        series.setScores(2, 0, true);
+        series.setScores(2, 0, 0);
+        series.setHasBeenPlayed(true);
 
         assertEquals("A", series.getTeamOneAsString());
         assertEquals("B", series.getTeamTwoAsString());

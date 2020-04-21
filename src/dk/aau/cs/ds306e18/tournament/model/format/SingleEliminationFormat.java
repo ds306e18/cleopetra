@@ -146,7 +146,7 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
     }
 
     private void setupStatsTracking() {
-        List<Series> allSeries = getAllMatches();
+        List<Series> allSeries = getAllSeries();
         for (Team team : seededTeams) {
             team.getStatsManager().trackMatches(this, allSeries);
         }
@@ -162,7 +162,7 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
     }
 
     @Override
-    public List<Series> getAllMatches() {
+    public List<Series> getAllSeries() {
         return finalSeries.getTreeAsListBFS();
     }
 

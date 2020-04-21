@@ -203,7 +203,7 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
     }
 
     @Override
-    public List<Series> getAllMatches() {
+    public List<Series> getAllSeries() {
 
         ArrayList<Series> series = new ArrayList<>();
 
@@ -216,17 +216,17 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
 
     @Override
     public List<Series> getUpcomingMatches() {
-        return getAllMatches().stream().filter(match -> !match.hasBeenPlayed()).collect(Collectors.toList());
+        return getAllSeries().stream().filter(match -> !match.hasBeenPlayed()).collect(Collectors.toList());
     }
 
     @Override
     public List<Series> getPendingMatches() {
-        return getAllMatches().stream().filter(match -> match.getStatus() == Series.Status.NOT_PLAYABLE).collect(Collectors.toList());
+        return getAllSeries().stream().filter(match -> match.getStatus() == Series.Status.NOT_PLAYABLE).collect(Collectors.toList());
     }
 
     @Override
     public List<Series> getCompletedMatches() {
-        return getAllMatches().stream().filter(Series::hasBeenPlayed).collect(Collectors.toList());
+        return getAllSeries().stream().filter(Series::hasBeenPlayed).collect(Collectors.toList());
     }
 
     public int getMaxRoundsPossible() {
@@ -371,14 +371,14 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
 
     @Override
     public void postDeserializationRepair() {
-        for (Series series : getAllMatches()) {
+        for (Series series : getAllSeries()) {
             series.registerMatchPlayedListener(this);
             series.registerMatchChangeListener(this);
         }
         teamPoints = createPointsMap(teams);
         for (Team team : teams) {
             calculateAndAssignTeamPoints(team);
-            team.getStatsManager().trackMatches(this, getAllMatches());
+            team.getStatsManager().trackMatches(this, getAllSeries());
         }
     }
 

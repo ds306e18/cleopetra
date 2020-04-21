@@ -33,7 +33,7 @@ public class SwissNode extends HBox implements MatchPlayedListener, MatchChangeL
         this.boc = boc;
         this.swiss = swiss;
         // Register to events from all matches
-        for (Series series : swiss.getAllMatches()) {
+        for (Series series : swiss.getAllSeries()) {
             series.registerMatchChangeListener(this);
             series.registerMatchPlayedListener(this);
         }
@@ -84,7 +84,7 @@ public class SwissNode extends HBox implements MatchPlayedListener, MatchChangeL
     public void decoupleFromModel() {
         removeElements();
         // Unregister from events from all matches
-        for (Series m : swiss.getAllMatches()) {
+        for (Series m : swiss.getAllSeries()) {
             m.unregisterMatchChangeListener(this);
             m.unregisterMatchPlayedListener(this);
         }

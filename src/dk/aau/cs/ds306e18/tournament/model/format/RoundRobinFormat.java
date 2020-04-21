@@ -266,20 +266,20 @@ public class RoundRobinFormat implements Format, MatchPlayedListener {
     }
 
     private void setupStatsTracking() {
-        List<Series> allSeries = getAllMatches();
+        List<Series> allSeries = getAllSeries();
         for (Team team : teams) {
             team.getStatsManager().trackMatches(this, allSeries);
         }
     }
 
     @Override
-    public List<Series> getAllMatches() {
+    public List<Series> getAllSeries() {
         return series;
     }
 
     @Override
     public List<Series> getUpcomingMatches() {
-        return getAllMatches().stream().filter(match -> !match.hasBeenPlayed()).collect(Collectors.toList());
+        return getAllSeries().stream().filter(match -> !match.hasBeenPlayed()).collect(Collectors.toList());
     }
 
     @Override
@@ -289,7 +289,7 @@ public class RoundRobinFormat implements Format, MatchPlayedListener {
 
     @Override
     public List<Series> getCompletedMatches() {
-        return getAllMatches().stream().filter(Series::hasBeenPlayed).collect(Collectors.toList());
+        return getAllSeries().stream().filter(Series::hasBeenPlayed).collect(Collectors.toList());
     }
 
     @Override
@@ -392,7 +392,7 @@ public class RoundRobinFormat implements Format, MatchPlayedListener {
 
     @Override
     public void postDeserializationRepair() {
-        for (Series series : this.getAllMatches()) series.registerMatchPlayedListener(this);
+        for (Series series : this.getAllSeries()) series.registerMatchPlayedListener(this);
         setupStatsTracking();
     }
 

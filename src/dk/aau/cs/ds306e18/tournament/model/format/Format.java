@@ -40,7 +40,7 @@ public interface Format {
     /**
      * Returns a list of all the matches in this stage.
      */
-    List<Series> getAllMatches();
+    List<Series> getAllSeries();
 
     /**
      * Returns a list of all the matches that are ready to be played, but haven't played yet.

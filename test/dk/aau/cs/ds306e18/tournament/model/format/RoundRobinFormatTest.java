@@ -148,7 +148,7 @@ public class RoundRobinFormatTest {
         RoundRobinFormat rr = new RoundRobinFormat();
         rr.start(getTestTeams(numberOfTeams, teamSize), true);
 
-        assertEquals(numberOfMatchesInRoundRobin(numberOfTeams), rr.getAllMatches().size());
+        assertEquals(numberOfMatchesInRoundRobin(numberOfTeams), rr.getAllSeries().size());
     }
 
     @Test //0 matches
@@ -160,7 +160,7 @@ public class RoundRobinFormatTest {
         RoundRobinFormat rr = new RoundRobinFormat();
         rr.start(getTestTeams(numberOfTeams, teamSize), true);
 
-        assertEquals(0, rr.getAllMatches().size());
+        assertEquals(0, rr.getAllSeries().size());
     }
 
     @Test
@@ -209,10 +209,11 @@ public class RoundRobinFormatTest {
         rr.start(teams, true);
 
         // Assign goals equal to their seed, i.e. expected winner loses
-        for (Series m : rr.getUpcomingMatches()) {
-            int teamOneSeed = m.getTeamOne().getInitialSeedValue();
-            int teamTwoSeed = m.getTeamTwo().getInitialSeedValue();
-            m.setScores(teamOneSeed, teamTwoSeed, true);
+        for (Series s : rr.getUpcomingMatches()) {
+            int teamOneSeed = s.getTeamOne().getInitialSeedValue();
+            int teamTwoSeed = s.getTeamTwo().getInitialSeedValue();
+            s.setScores(teamOneSeed, teamTwoSeed, 0);
+            s.setHasBeenPlayed(true);
         }
 
         ArrayList<Team> top7Teams = new ArrayList<>(rr.getTopTeams(7, TieBreaker.SEED));
@@ -274,12 +275,12 @@ public class RoundRobinFormatTest {
             assertEquals(15,group.getMatches().size());
         }
 
-        for (Series series : rr.getAllMatches()) {
+        for (Series series : rr.getAllSeries()) {
             assertTrue(series.getTeamOne() != RoundRobinFormat.getDummyTeam() &&
                     series.getTeamTwo() != RoundRobinFormat.getDummyTeam());
         }
 
-        assertEquals(30,rr.getAllMatches().size());
+        assertEquals(30,rr.getAllSeries().size());
         assertNotSame(rr.getGroups().get(0), rr.getGroups().get(1));
 
     }
@@ -297,12 +298,12 @@ public class RoundRobinFormatTest {
             assertEquals(10,group.getMatches().size());
         }
 
-        for (Series series : rr.getAllMatches()) {
+        for (Series series : rr.getAllSeries()) {
             assertTrue(series.getTeamOne() != RoundRobinFormat.getDummyTeam() &&
                     series.getTeamTwo() != RoundRobinFormat.getDummyTeam());
         }
 
-        assertEquals(20,rr.getAllMatches().size());
+        assertEquals(20,rr.getAllSeries().size());
         assertNotSame(rr.getGroups().get(0), rr.getGroups().get(1));
     }
 
@@ -318,12 +319,12 @@ public class RoundRobinFormatTest {
             assertEquals(6,group.getTeams().size());
             assertEquals(15,group.getMatches().size());
         }
-        for (Series series : rr.getAllMatches()) {
+        for (Series series : rr.getAllSeries()) {
             assertTrue(series.getTeamOne() != RoundRobinFormat.getDummyTeam() &&
                     series.getTeamTwo() != RoundRobinFormat.getDummyTeam());
         }
 
-        assertEquals(45,rr.getAllMatches().size());
+        assertEquals(45,rr.getAllSeries().size());
         assertNotSame(rr.getGroups().get(0), rr.getGroups().get(1));
         assertNotSame(rr.getGroups().get(0), rr.getGroups().get(2));
     }
@@ -345,12 +346,12 @@ public class RoundRobinFormatTest {
             }
         }
 
-        for (Series series : rr.getAllMatches()) {
+        for (Series series : rr.getAllSeries()) {
             assertTrue(series.getTeamOne() != RoundRobinFormat.getDummyTeam() &&
                     series.getTeamTwo() != RoundRobinFormat.getDummyTeam());
         }
 
-        assertEquals(12,rr.getAllMatches().size());
+        assertEquals(12,rr.getAllSeries().size());
         assertNotSame(rr.getGroups().get(0), rr.getGroups().get(1));
         assertNotSame(rr.getGroups().get(0), rr.getGroups().get(2));
     }
@@ -513,12 +514,13 @@ public class RoundRobinFormatTest {
         rr.start(teams, true);
 
         // Play all matches. The highest seeded team wins 1-0
-        for (Series series : rr.getAllMatches()) {
+        for (Series series : rr.getAllSeries()) {
             if (series.getTeamOne().getInitialSeedValue() < series.getTeamTwo().getInitialSeedValue()) {
-                series.setScores(1, 0, true);
+                series.setScores(1, 0, 0);
             } else {
-                series.setScores(0, 1, true);
+                series.setScores(0, 1, 0);
             }
+            series.setHasBeenPlayed(true);
         }
 
         // Check if stats are as expected
