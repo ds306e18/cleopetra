@@ -878,8 +878,8 @@ public final class Series {
         if (o == null || getClass() != o.getClass()) return false;
         Series series = (Series) o;
         return id == series.id &&
-                getTeamOneScores() == series.getTeamOneScores() &&
-                getTeamTwoScores() == series.getTeamTwoScores() &&
+                getTeamOneScores().equals(series.getTeamOneScores()) &&
+                getTeamTwoScores().equals(series.getTeamTwoScores()) &&
                 played == series.played &&
                 teamOneIsBlue == series.teamOneIsBlue &&
                 teamOneWasWinnerInPreviousMatch == series.teamOneWasWinnerInPreviousMatch &&
