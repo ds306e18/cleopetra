@@ -80,10 +80,19 @@
                   <Insets bottom="16.0" />
                </padding>
             </HBox>
-            <HBox fx:id="selectedMatchButtonHolder" alignment="CENTER" spacing="16.0">
+            <HBox alignment="CENTER" spacing="16.0">
                <children>
                   <Button fx:id="editMatchBtn" mnemonicParsing="false" onAction="#editMatchBtnOnAction" prefHeight="27.0" prefWidth="110.0" text="Edit scores" />
                   <Button fx:id="switchColorsBtn" layoutX="89.0" layoutY="10.0" mnemonicParsing="false" onAction="#onSwitchColorsBtnAction" prefHeight="27.0" prefWidth="110.0" text="Switch colors" />
+               </children>
+               <padding>
+                  <Insets bottom="16.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER" layoutX="31.0" layoutY="295.0" spacing="16.0">
+               <children>
+                  <Button fx:id="extendSeriesBtn" mnemonicParsing="false" onAction="#extendSeriesBtnOnAction" prefHeight="27.0" prefWidth="110.0" text="Extend series" />
+                  <Button fx:id="shortenSeriesBtn" layoutX="89.0" layoutY="10.0" mnemonicParsing="false" onAction="#shortenSeriesBtnOnAction" prefHeight="27.0" prefWidth="110.0" text="Shorten series" />
                </children>
             </HBox>
             <VBox fx:id="botInfoBox" prefHeight="236.0" prefWidth="267.0">

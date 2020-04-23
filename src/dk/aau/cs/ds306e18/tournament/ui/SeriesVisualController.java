@@ -9,7 +9,6 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.text.Text;
 
 import java.util.List;
 import java.util.Optional;
@@ -39,7 +38,7 @@ public class SeriesVisualController implements MatchChangeListener {
     void matchClicked(MouseEvent event) {
         if (!disabled) {
             matchRoot.getStyleClass().add("selectedMatch");
-            boc.setSelectedMatch(this);
+            boc.setSelectedSeries(this);
 
             if (showedSeries.isReadyToPlay()
                     && event.getButton().equals(MouseButton.PRIMARY)

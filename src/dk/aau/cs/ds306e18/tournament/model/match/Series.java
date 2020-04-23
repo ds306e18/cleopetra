@@ -468,6 +468,7 @@ public final class Series {
             this.length = length;
             teamOneScores = ListExt.nOf(length, Optional::empty);
             teamTwoScores = ListExt.nOf(length, Optional::empty);
+            notifyMatchChangeListeners();
         } else {
             if (this.length > length) {
                 // Series has been shortened

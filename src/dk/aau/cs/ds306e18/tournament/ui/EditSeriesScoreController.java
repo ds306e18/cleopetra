@@ -127,7 +127,8 @@ public class EditSeriesScoreController extends DraggablePopupWindow {
         boolean played = seriesFinishedCheckBox.isSelected();
 
         boolean force = false;
-        while (true) {
+        boolean cancelled = false;
+        while (!cancelled) {
             try {
 
                 series.setScores(
@@ -143,6 +144,7 @@ public class EditSeriesScoreController extends DraggablePopupWindow {
                 // An MatchResultDependencyException is thrown if the outcome has changed and subsequent matches depends on this outcome
                 // Ask if the user wants to proceed
                 force = Alerts.confirmAlert("The outcome of this match has changed", "This change will reset the subsequent matches. Do you want to proceed?");
+                cancelled = !force;
             }
         }
     }

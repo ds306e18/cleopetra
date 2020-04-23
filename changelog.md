@@ -4,7 +4,7 @@
 - Added option to use RLBotPack Python installation if available (default: true). - NicEastvillage
 - Added option for using random standard map. - Darxeal
 - Added series (best of X) functionality. #56 - NicEastvillage
-    - A default series length can be set for each stage, but length of individual series can also be changed.
+    - A default series length can be set for each stage, but length of individual series can also be changed once the bracket is generated.
 
 
 #### Version 1.6 - 17. October 2019
