@@ -48,7 +48,7 @@ public class EditSeriesScoreController extends DraggablePopupWindow {
 
         Series.Outcome outcome = Series.winnerIfScores(teamOneScores, teamTwoScores);
 
-        boolean seriesCanBeOver = outcome != Series.Outcome.UNKNOWN;
+        boolean seriesCanBeOver = outcome != Series.Outcome.UNKNOWN && outcome != Series.Outcome.DRAW;
 
         seriesFinishedCheckBox.setDisable(!seriesCanBeOver);
         seriesFinishedCheckBox.setSelected(seriesCanBeOver);
