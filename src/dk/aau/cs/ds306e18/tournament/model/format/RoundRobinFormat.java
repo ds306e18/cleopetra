@@ -2,7 +2,7 @@ package dk.aau.cs.ds306e18.tournament.model.format;
 
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.TieBreaker;
-import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import dk.aau.cs.ds306e18.tournament.model.match.Series;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchPlayedListener;
 import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.RoundRobinNode;
 import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.RoundRobinSettingsNode;
@@ -17,8 +17,9 @@ public class RoundRobinFormat implements Format, MatchPlayedListener {
     private static final Team DUMMY_TEAM = new Team("Dummy", new ArrayList<>(), 0, "Dummy team description");
 
     private StageStatus status = StageStatus.PENDING;
+    private int defaultSeriesLength = 1;
     private ArrayList<Team> teams;
-    private ArrayList<Match> matches;
+    private ArrayList<Series> series;
     private ArrayList<RoundRobinGroup> groups;
     private int numberOfGroups = 1;
 
@@ -32,7 +33,7 @@ public class RoundRobinFormat implements Format, MatchPlayedListener {
         ArrayList<Team> teams = new ArrayList<>(seededTeams);
 
         if (seededTeams.size() <= 1) {
-            matches = new ArrayList<>();
+            series = new ArrayList<>();
             groups = new ArrayList<>();
             status = StageStatus.CONCLUDED;
 
@@ -44,7 +45,7 @@ public class RoundRobinFormat implements Format, MatchPlayedListener {
 
             status = StageStatus.RUNNING;
             createGroupsAndMatches(teams, doSeeding);
-            matches = extractMatchesFromGroups();
+            series = extractMatchesFromGroups();
             setupStatsTracking();
         }
     }
@@ -156,7 +157,7 @@ public class RoundRobinFormat implements Format, MatchPlayedListener {
      * Creates all matches with each team changing color between each of their matches, algorithm based on berger tables.
      * @return an list of list of matches with the given teams. Each nested list is a round of matches.
      */
-    private ArrayList<ArrayList<Match>> generateMatches(ArrayList<Team> t) {
+    private ArrayList<ArrayList<Series>> generateMatches(ArrayList<Team> t) {
         // Add dummy team if team count is odd - berger tables only work for an even number.
         // The matches with dummy teams are removed later
         ArrayList<Team> teams = new ArrayList<>(t);
@@ -165,7 +166,7 @@ public class RoundRobinFormat implements Format, MatchPlayedListener {
         }
 
         int nextTeamOneIndex, nextTeamTwoIndex;
-        Match[][] table = new Match[teams.size() - 1][teams.size() / 2];
+        Series[][] table = new Series[teams.size() - 1][teams.size() / 2];
 
         HashMap<Team, Integer> map = createIdHashMap(teams);
 
@@ -201,7 +202,7 @@ public class RoundRobinFormat implements Format, MatchPlayedListener {
         }
 
         // Find matches that does not contain the dummy team
-        ArrayList<ArrayList<Match>> matches = new ArrayList<>();
+        ArrayList<ArrayList<Series>> matches = new ArrayList<>();
         for (int i = 0; i < table.length; i++) {
             matches.add(new ArrayList<>());
             for (int j = 0; j < table[i].length; j++) {
@@ -233,11 +234,11 @@ public class RoundRobinFormat implements Format, MatchPlayedListener {
     /**
      * @return a new match from the given parameters. And adds listener.
      */
-    private Match createNewMatch(Team team1, Team team2) {
+    private Series createNewMatch(Team team1, Team team2) {
 
-        Match match = new Match(team1, team2);
-        match.registerMatchPlayedListener(this);
-        return match;
+        Series series = new Series(defaultSeriesLength, team1, team2);
+        series.registerMatchPlayedListener(this);
+        return series;
     }
 
     /**
@@ -256,43 +257,43 @@ public class RoundRobinFormat implements Format, MatchPlayedListener {
     /**
      * @return a list of all matches contained in the Round Robin Groups
      */
-    private ArrayList<Match> extractMatchesFromGroups() {
-        ArrayList<Match> listOfAllMatches = new ArrayList<>();
+    private ArrayList<Series> extractMatchesFromGroups() {
+        ArrayList<Series> listOfAllSeries = new ArrayList<>();
         for (RoundRobinGroup group : groups) {
-            listOfAllMatches.addAll(group.getMatches());
+            listOfAllSeries.addAll(group.getMatches());
         }
-        return listOfAllMatches;
+        return listOfAllSeries;
     }
 
     private void setupStatsTracking() {
-        List<Match> allMatches = getAllMatches();
+        List<Series> allSeries = getAllSeries();
         for (Team team : teams) {
-            team.getStatsManager().trackMatches(this, allMatches);
+            team.getStatsManager().trackMatches(this, allSeries);
         }
     }
 
     @Override
-    public List<Match> getAllMatches() {
-        return matches;
+    public List<Series> getAllSeries() {
+        return series;
     }
 
     @Override
-    public List<Match> getUpcomingMatches() {
-        return getAllMatches().stream().filter(match -> !match.hasBeenPlayed()).collect(Collectors.toList());
+    public List<Series> getUpcomingMatches() {
+        return getAllSeries().stream().filter(match -> !match.hasBeenPlayed()).collect(Collectors.toList());
     }
 
     @Override
-    public List<Match> getPendingMatches() {
+    public List<Series> getPendingMatches() {
         return new ArrayList<>(); // Round robin never has pending matches
     }
 
     @Override
-    public List<Match> getCompletedMatches() {
-        return getAllMatches().stream().filter(Match::hasBeenPlayed).collect(Collectors.toList());
+    public List<Series> getCompletedMatches() {
+        return getAllSeries().stream().filter(Series::hasBeenPlayed).collect(Collectors.toList());
     }
 
     @Override
-    public void onMatchPlayed(Match match) {
+    public void onMatchPlayed(Series series) {
         // Has last possible match been played?
         StageStatus oldStatus = status;
         if (getUpcomingMatches().size() == 0)
@@ -329,7 +330,7 @@ public class RoundRobinFormat implements Format, MatchPlayedListener {
     public HashMap<Team, Integer> getTeamPointsMap() {
 
         //Get list of all completed matches
-        List<Match> completedMatches = getCompletedMatches();
+        List<Series> completedSeries = getCompletedMatches();
 
         //Calculate team wins
         HashMap<Team, Integer> teamPoints = new HashMap<>();
@@ -337,8 +338,8 @@ public class RoundRobinFormat implements Format, MatchPlayedListener {
             teamPoints.put(team, 0);
 
         //Run through all matches and give points for win.
-        for (Match match : completedMatches) {
-            Team winningTeam = match.getWinner();
+        for (Series series : completedSeries) {
+            Team winningTeam = series.getWinner();
 
             //+1 for winning //TODO Should we do more?
             teamPoints.put(winningTeam, teamPoints.get(winningTeam) + 1);
@@ -368,6 +369,18 @@ public class RoundRobinFormat implements Format, MatchPlayedListener {
     }
 
     @Override
+    public void setDefaultSeriesLength(int seriesLength) {
+        if (seriesLength <= 0) throw new IllegalArgumentException("Series length must be at least one.");
+        if (seriesLength % 2 == 0) throw new IllegalArgumentException("Series must have an odd number of matches.");
+        defaultSeriesLength = seriesLength;
+    }
+
+    @Override
+    public int getDefaultSeriesLength() {
+        return defaultSeriesLength;
+    }
+
+    @Override
     public RoundRobinNode getBracketFXNode(BracketOverviewTabController boc) {
         return new RoundRobinNode(this, boc);
     }
@@ -379,7 +392,7 @@ public class RoundRobinFormat implements Format, MatchPlayedListener {
 
     @Override
     public void postDeserializationRepair() {
-        for (Match match : this.getAllMatches()) match.registerMatchPlayedListener(this);
+        for (Series series : this.getAllSeries()) series.registerMatchPlayedListener(this);
         setupStatsTracking();
     }
 
@@ -388,11 +401,11 @@ public class RoundRobinFormat implements Format, MatchPlayedListener {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RoundRobinFormat that = (RoundRobinFormat) o;
-        return Objects.equals(matches, that.matches);
+        return Objects.equals(series, that.series);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(matches);
+        return Objects.hash(series);
     }
 }

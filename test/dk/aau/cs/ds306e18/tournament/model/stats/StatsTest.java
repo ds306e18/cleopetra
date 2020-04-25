@@ -1,15 +1,9 @@
 package dk.aau.cs.ds306e18.tournament.model.stats;
 
-import dk.aau.cs.ds306e18.tournament.TestUtilities;
-import dk.aau.cs.ds306e18.tournament.model.Stage;
 import dk.aau.cs.ds306e18.tournament.model.Team;
-import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import dk.aau.cs.ds306e18.tournament.model.format.Format;
-import dk.aau.cs.ds306e18.tournament.model.format.SingleEliminationFormat;
-import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import dk.aau.cs.ds306e18.tournament.model.match.Series;
 import org.junit.Test;
-
-import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -30,9 +24,10 @@ public class StatsTest {
         assertEquals(0, statsA.getGoals());
         assertEquals(0, statsA.getGoalsConceded());
 
-        Match match = new Match(teamA, teamB);
-        teamA.getStatsManager().trackMatch(null, match);
-        match.setScores(3, 2, true);
+        Series series = new Series(teamA, teamB);
+        teamA.getStatsManager().trackMatch(null, series);
+        series.setScores(3, 2, 0);
+        series.setHasBeenPlayed(true);
 
         // Stats are added now that a match is tracked
         assertEquals(1, statsA.getWins());
@@ -45,11 +40,11 @@ public class StatsTest {
     public void stats02() {
         Team teamA = new Team("A", null, 0, "a");
         Team teamB = new Team("B", null, 0, "b");
-        Match match = new Match(teamA, teamB);
-        teamA.getStatsManager().trackMatch(null, match);
-        teamB.getStatsManager().trackMatch(null, match);
+        Series series = new Series(teamA, teamB);
+        teamA.getStatsManager().trackMatch(null, series);
+        teamB.getStatsManager().trackMatch(null, series);
 
-        match.setScores(1, 3, false); // Match not over
+        series.setScores(1, 3, 0); // Match not over
 
         assertStats(teamA, null, 0, 0, 1, 3);
         assertStats(teamB, null, 0, 0, 3, 1);
@@ -59,11 +54,12 @@ public class StatsTest {
     public void stats03() {
         Team teamA = new Team("A", null, 0, "a");
         Team teamB = new Team("B", null, 0, "b");
-        Match match = new Match(teamA, teamB);
-        teamA.getStatsManager().trackMatch(null, match);
-        teamB.getStatsManager().trackMatch(null, match);
+        Series series = new Series(teamA, teamB);
+        teamA.getStatsManager().trackMatch(null, series);
+        teamB.getStatsManager().trackMatch(null, series);
 
-        match.setScores(5, 2, true); // Match is over
+        series.setScores(5, 2, 0);
+        series.setHasBeenPlayed(true);
 
         assertStats(teamA, null, 1, 0, 5, 2);
         assertStats(teamB, null, 0, 1, 2, 5);
@@ -75,14 +71,16 @@ public class StatsTest {
         Team teamB = new Team("B", null, 0, "b");
         Team teamC = new Team("C", null, 0, "c");
 
-        Match matchOne = new Match(teamA, teamB);
-        Match matchTwo = new Match().setTeamOne(teamC).setTeamTwoToWinnerOf(matchOne);
-        matchOne.setScores(2, 1, true);
-        matchTwo.setScores(4, 3, true);
+        Series seriesOne = new Series(teamA, teamB);
+        Series seriesTwo = new Series().setTeamOne(teamC).setTeamTwoToWinnerOf(seriesOne);
+        seriesOne.setScores(2, 1, 0);
+        seriesOne.setHasBeenPlayed(true);
+        seriesTwo.setScores(4, 3, 0);
+        seriesTwo.setHasBeenPlayed(true);
 
         for (Team team : new Team[]{teamA, teamB, teamC}) {
-            team.getStatsManager().trackMatch(null, matchOne);
-            team.getStatsManager().trackMatch(null, matchTwo);
+            team.getStatsManager().trackMatch(null, seriesOne);
+            team.getStatsManager().trackMatch(null, seriesTwo);
         }
 
         assertStats(teamA, null, 1, 1, 5, 5);

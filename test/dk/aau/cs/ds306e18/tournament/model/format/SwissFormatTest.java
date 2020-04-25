@@ -3,7 +3,7 @@ package dk.aau.cs.ds306e18.tournament.model.format;
 import dk.aau.cs.ds306e18.tournament.TestUtilities;
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.TieBreaker;
-import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import dk.aau.cs.ds306e18.tournament.model.match.Series;
 import dk.aau.cs.ds306e18.tournament.model.stats.StatsTest;
 import org.junit.Test;
 
@@ -64,9 +64,9 @@ public class SwissFormatTest {
         SwissFormat sw = new SwissFormat();
         sw.start(getTestTeams(numberOfTeams, teamSize), true);
 
-        List<Match> allMatches = sw.getAllMatches();
+        List<Series> allSeries = sw.getAllSeries();
 
-        assertEquals(numberOfTeams/2, allMatches.size());
+        assertEquals(numberOfTeams/2, allSeries.size());
     }
 
     //0 matches // one round
@@ -79,9 +79,9 @@ public class SwissFormatTest {
         SwissFormat sw = new SwissFormat();
         sw.start(getTestTeams(numberOfTeams, teamSize), true);
 
-        List<Match> allMatches = sw.getAllMatches();
+        List<Series> allSeries = sw.getAllSeries();
 
-        assertEquals(0, allMatches.size());
+        assertEquals(0, allSeries.size());
     }
 
     //more than 0 matches // more round
@@ -95,17 +95,18 @@ public class SwissFormatTest {
         sw.start(getTestTeams(numberOfTeams, teamSize), true);
 
         //The first round.
-        assertEquals(numberOfTeams/2, sw.getAllMatches().size());
+        assertEquals(numberOfTeams/2, sw.getAllSeries().size());
 
         //Fill in scores
-        List<Match> matches = sw.getLatestRound();
-        for(Match match : matches){
-            match.setScores(5, 2, true);
+        List<Series> series = sw.getLatestRound();
+        for(Series serie : series){
+            serie.setScores(5, 2, 0);
+            serie.setHasBeenPlayed(true);
         }
 
         sw.startNextRound();
 
-        assertEquals((numberOfTeams/2) * 2, sw.getAllMatches().size());
+        assertEquals((numberOfTeams/2) * 2, sw.getAllSeries().size());
     }
 
     @Test
@@ -117,9 +118,9 @@ public class SwissFormatTest {
         SwissFormat sw = new SwissFormat();
         sw.start(getTestTeams(numberOfTeams, teamSize), true);
 
-        List<Match> unplayedMatches = sw.getPendingMatches();
+        List<Series> unplayedSeries = sw.getPendingMatches();
 
-        assertEquals(0, unplayedMatches.size());
+        assertEquals(0, unplayedSeries.size());
     }
 
     //0 matches
@@ -132,9 +133,9 @@ public class SwissFormatTest {
         SwissFormat sw = new SwissFormat();
         sw.start(getTestTeams(numberOfTeams, teamSize), true);
 
-        List<Match> unplayedMatches = sw.getPendingMatches();
+        List<Series> unplayedSeries = sw.getPendingMatches();
 
-        assertEquals(0, unplayedMatches.size());
+        assertEquals(0, unplayedSeries.size());
     }
 
     @Test
@@ -209,7 +210,7 @@ public class SwissFormatTest {
 
         setAllMatchesToPlayed(sw.getUpcomingMatches());
 
-        assertEquals(sw.getAllMatches().size() , sw.getCompletedMatches().size());
+        assertEquals(sw.getAllSeries().size() , sw.getCompletedMatches().size());
     }
 
     //Create round is legal
@@ -270,30 +271,32 @@ public class SwissFormatTest {
 
         //Generate all rounds and fill result
         do{
-            List<Match> matches = sw.getUpcomingMatches();
-            for(Match match : matches)
-                match.setScores(1, 0, true);
+            List<Series> series = sw.getUpcomingMatches();
+            for(Series serie : series) {
+                serie.setScores(1, 0, 0);
+                serie.setHasBeenPlayed(true);
+            }
 
             sw.startNextRound();
         }while(!sw.hasUnstartedRounds());
 
-        List<Match> allMatches = sw.getAllMatches();
+        List<Series> allSeries = sw.getAllSeries();
 
         //Check if no teams has played each other more than once
-        for(int i = 0; i < allMatches.size(); i++){
+        for(int i = 0; i < allSeries.size(); i++){
 
-            for(int j = i + 1; j < allMatches.size(); j++){
+            for(int j = i + 1; j < allSeries.size(); j++){
 
-                Match match1 = allMatches.get(i);
-                Match match2 = allMatches.get(j);
+                Series series1 = allSeries.get(i);
+                Series series2 = allSeries.get(j);
 
                 //System.out.println("Match Comp 1: Match1B: " + match1.getTeamOne().getTeamName() + " Match1O " + match1.getTeamTwo().getTeamName()
                 // + " Match2B " + match2.getTeamOne().getTeamName() + " Match2O " + match2.getTeamTwo().getTeamName());
 
-                assertFalse(match1.getTeamOne().getTeamName().equals(match2.getTeamOne().getTeamName()) &&
-                        match1.getTeamTwo().getTeamName().equals(match2.getTeamTwo().getTeamName()));
-                assertFalse(match1.getTeamOne().getTeamName().equals(match2.getTeamTwo().getTeamName()) &&
-                        match1.getTeamTwo().getTeamName().equals(match2.getTeamOne().getTeamName()));
+                assertFalse(series1.getTeamOne().getTeamName().equals(series2.getTeamOne().getTeamName()) &&
+                        series1.getTeamTwo().getTeamName().equals(series2.getTeamTwo().getTeamName()));
+                assertFalse(series1.getTeamOne().getTeamName().equals(series2.getTeamTwo().getTeamName()) &&
+                        series1.getTeamTwo().getTeamName().equals(series2.getTeamOne().getTeamName()));
             }
         }
     }
@@ -481,13 +484,14 @@ public class SwissFormatTest {
 
         // Play all matches. The highest seeded team wins 1-0
         while (sw.getStatus() == StageStatus.RUNNING) {
-            List<Match> latestRound = sw.getLatestRound();
-            for (Match match : latestRound) {
-                if (match.getTeamOne().getInitialSeedValue() < match.getTeamTwo().getInitialSeedValue()) {
-                    match.setScores(1, 0, true);
+            List<Series> latestRound = sw.getLatestRound();
+            for (Series series : latestRound) {
+                if (series.getTeamOne().getInitialSeedValue() < series.getTeamTwo().getInitialSeedValue()) {
+                    series.setScores(1, 0, 0);
                 } else {
-                    match.setScores(0, 1, true);
+                    series.setScores(0, 1, 0);
                 }
+                series.setHasBeenPlayed(true);
             }
             sw.startNextRound();
         }

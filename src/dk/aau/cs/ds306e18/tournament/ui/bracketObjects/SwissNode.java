@@ -1,11 +1,11 @@
 package dk.aau.cs.ds306e18.tournament.ui.bracketObjects;
 
-import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import dk.aau.cs.ds306e18.tournament.model.match.Series;
 import dk.aau.cs.ds306e18.tournament.model.format.SwissFormat;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchChangeListener;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchPlayedListener;
 import dk.aau.cs.ds306e18.tournament.ui.BracketOverviewTabController;
-import dk.aau.cs.ds306e18.tournament.ui.MatchVisualController;
+import dk.aau.cs.ds306e18.tournament.ui.SeriesVisualController;
 import dk.aau.cs.ds306e18.tournament.ui.StatsTableWithPoints;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -19,23 +19,23 @@ import java.util.ArrayList;
 public class SwissNode extends HBox implements MatchPlayedListener, MatchChangeListener, ModelCoupledUI {
 
     private final Insets MARGINS = new Insets(0, 8, 8, 0);
+    private final Insets COLUMN_MARGINS = new Insets(0, 32, 8, 0);
     private final Insets TABLE_MARGINS = new Insets(0, 64, 0, 0);
-    private final int COLUMN_WIDTH = 175;
 
     private final SwissFormat swiss;
     private final BracketOverviewTabController boc;
 
     private Button generateRoundButton;
-    private ArrayList<MatchVisualController> mvcs = new ArrayList<>();
+    private ArrayList<SeriesVisualController> mvcs = new ArrayList<>();
     private StatsTableWithPoints table;
 
     public SwissNode(SwissFormat swiss, BracketOverviewTabController boc) {
         this.boc = boc;
         this.swiss = swiss;
         // Register to events from all matches
-        for (Match match : swiss.getAllMatches()) {
-            match.registerMatchChangeListener(this);
-            match.registerMatchPlayedListener(this);
+        for (Series series : swiss.getAllSeries()) {
+            series.registerMatchChangeListener(this);
+            series.registerMatchPlayedListener(this);
         }
         update();
     }
@@ -48,14 +48,12 @@ public class SwissNode extends HBox implements MatchPlayedListener, MatchChangeL
         HBox.setMargin(table, TABLE_MARGINS);
         getChildren().add(table);
 
-        ArrayList<ArrayList<Match>> rounds = swiss.getRounds();
+        ArrayList<ArrayList<Series>> rounds = swiss.getRounds();
         int numberOfRounds = rounds.size();
 
         // Create that amount of columns matching the number of generated rounds.
         for (int i = 0; i < numberOfRounds; i++) {
             VBox column = new VBox();
-            column.setMinWidth(COLUMN_WIDTH);
-            column.setPrefWidth(COLUMN_WIDTH);
 
             // Round Label
             Label roundLabel = new Label("Round " + (i + 1));
@@ -63,16 +61,17 @@ public class SwissNode extends HBox implements MatchPlayedListener, MatchChangeL
             column.getChildren().add(roundLabel);
 
             // Get all matches from round and add them to the column
-            ArrayList<Match> round = rounds.get(i);
-            for (Match match : round) {
+            ArrayList<Series> round = rounds.get(i);
+            for (Series series : round) {
 
-                MatchVisualController vmatch = boc.loadVisualMatch(match);
+                SeriesVisualController vmatch = boc.loadSeriesVisual(series);
                 VBox.setMargin(vmatch.getRoot(), MARGINS);
                 column.getChildren().add(vmatch.getRoot());
                 mvcs.add(vmatch);
             }
 
             getChildren().add(column);
+            HBox.setMargin(column, COLUMN_MARGINS);
         }
 
         // If there can be generated another round, then add a column more that contains a button for generating.
@@ -85,7 +84,7 @@ public class SwissNode extends HBox implements MatchPlayedListener, MatchChangeL
     public void decoupleFromModel() {
         removeElements();
         // Unregister from events from all matches
-        for (Match m : swiss.getAllMatches()) {
+        for (Series m : swiss.getAllSeries()) {
             m.unregisterMatchChangeListener(this);
             m.unregisterMatchPlayedListener(this);
         }
@@ -93,7 +92,7 @@ public class SwissNode extends HBox implements MatchPlayedListener, MatchChangeL
 
     /** Completely remove all ui elements. */
     public void removeElements() {
-        for (MatchVisualController mvc : mvcs) {
+        for (SeriesVisualController mvc : mvcs) {
             mvc.decoupleFromModel();
         }
         getChildren().clear();
@@ -110,8 +109,6 @@ public class SwissNode extends HBox implements MatchPlayedListener, MatchChangeL
 
         // Column vbox
         VBox column = new VBox();
-        column.setMinWidth(COLUMN_WIDTH);
-        column.setPrefWidth(COLUMN_WIDTH);
 
         // Round Label
         Label roundLabel = new Label("Round " + roundNumber);
@@ -124,7 +121,7 @@ public class SwissNode extends HBox implements MatchPlayedListener, MatchChangeL
         generateRoundButton.setOnMouseClicked(e -> {
             swiss.startNextRound();
             // Register to events from newest round
-            for (Match m : swiss.getRounds().get(swiss.getRounds().size() - 1)) {
+            for (Series m : swiss.getRounds().get(swiss.getRounds().size() - 1)) {
                 m.registerMatchPlayedListener(this);
                 m.registerMatchChangeListener(this);
             }
@@ -143,11 +140,11 @@ public class SwissNode extends HBox implements MatchPlayedListener, MatchChangeL
     }
 
     @Override
-    public void onMatchPlayed(Match match) {
+    public void onMatchPlayed(Series series) {
         updateGenerateRoundButton();
     }
 
     @Override
-    public void onMatchChanged(Match match) {
+    public void onMatchChanged(Series series) {
     }
 }

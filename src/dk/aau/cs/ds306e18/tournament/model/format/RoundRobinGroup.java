@@ -1,7 +1,7 @@
 package dk.aau.cs.ds306e18.tournament.model.format;
 
 import dk.aau.cs.ds306e18.tournament.model.Team;
-import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import dk.aau.cs.ds306e18.tournament.model.match.Series;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,13 +10,13 @@ import java.util.List;
 public class RoundRobinGroup {
 
     private ArrayList<Team> teams;
-    private ArrayList<ArrayList<Match>> rounds;
+    private ArrayList<ArrayList<Series>> rounds;
 
     public RoundRobinGroup(List<Team> teams) {
         this.teams = new ArrayList<>(teams);
     }
 
-    public void setRounds(ArrayList<ArrayList<Match>> round){
+    public void setRounds(ArrayList<ArrayList<Series>> round){
         this.rounds = round;
     }
 
@@ -24,17 +24,17 @@ public class RoundRobinGroup {
         return teams;
     }
 
-    public ArrayList<Match> getMatches(){
+    public ArrayList<Series> getMatches() {
 
-        ArrayList<Match> matches = new ArrayList<>();
+        ArrayList<Series> series = new ArrayList<>();
 
-        for (ArrayList<Match> round : rounds)
-            matches.addAll(round);
+        for (ArrayList<Series> round : rounds)
+            series.addAll(round);
 
-        return matches;
+        return series;
     }
 
-    public ArrayList<ArrayList<Match>> getRounds() {
+    public ArrayList<ArrayList<Series>> getRounds() {
         return rounds;
     }
 }

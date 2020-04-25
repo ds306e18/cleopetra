@@ -1,9 +1,9 @@
 package dk.aau.cs.ds306e18.tournament.ui.bracketObjects;
 
 import dk.aau.cs.ds306e18.tournament.model.format.*;
-import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import dk.aau.cs.ds306e18.tournament.model.match.Series;
 import dk.aau.cs.ds306e18.tournament.ui.BracketOverviewTabController;
-import dk.aau.cs.ds306e18.tournament.ui.MatchVisualController;
+import dk.aau.cs.ds306e18.tournament.ui.SeriesVisualController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
@@ -13,7 +13,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 import static dk.aau.cs.ds306e18.tournament.utility.PowMath.pow2;
@@ -28,9 +27,9 @@ public class DoubleEliminationNode extends VBox implements ModelCoupledUI, Stage
     private final BracketOverviewTabController boc;
     private final GridPane upperGrid = new GridPane();
     private final GridPane lowerGrid = new GridPane();
-    private MatchVisualController extraMatchMVC;
+    private SeriesVisualController extraMatchMVC;
 
-    private ArrayList<MatchVisualController> mvcs = new ArrayList<>();
+    private ArrayList<SeriesVisualController> mvcs = new ArrayList<>();
 
     /** Used to display the a double elimination stage. */
     public DoubleEliminationNode(DoubleEliminationFormat doubleElimination, BracketOverviewTabController boc){
@@ -52,7 +51,7 @@ public class DoubleEliminationNode extends VBox implements ModelCoupledUI, Stage
         removeElements();
 
         // Upper bracket
-        Match[] upperBracket = doubleElimination.getUpperBracket();
+        Series[] upperBracket = doubleElimination.getUpperBracket();
         int rounds = doubleElimination.getUpperBracketRounds();
         int m = 0; // match index
         for (int r = 0; r < rounds; r++) {
@@ -62,23 +61,23 @@ public class DoubleEliminationNode extends VBox implements ModelCoupledUI, Stage
 
             // Add matches for round r
             for (int i = 0; i < matchesInRound; i++) {
-                Match match = upperBracket[m++];
-                VBox box = createMatchBox(match, rowSpan, false);
+                Series series = upperBracket[m++];
+                VBox box = createMatchBox(series, rowSpan, false);
                 upperGrid.add(box, column, (matchesInRound - 1 - i) * rowSpan);
             }
         }
 
         // Final match is added to upper bracket
-        VBox finalsBox = createMatchBox(doubleElimination.getFinalMatch(), pow2(rounds - 1), false);
+        VBox finalsBox = createMatchBox(doubleElimination.getFinalSeries(), pow2(rounds - 1), false);
         upperGrid.add(finalsBox, rounds, 0);
 
         // Extra match is only shown when needed
-        VBox extraBox = createMatchBox(doubleElimination.getExtraMatch(), pow2(rounds - 1), true);
+        VBox extraBox = createMatchBox(doubleElimination.getExtraSeries(), pow2(rounds - 1), true);
         upperGrid.add(extraBox, rounds + 1, 0);
         updateDisplayOfExtraMatch();
 
         // Lower bracket
-        Match[] lowerBracket = doubleElimination.getLowerBracket();
+        Series[] lowerBracket = doubleElimination.getLowerBracket();
         if (lowerBracket.length > 0) {
             int matchesInCurrentRound = pow2(rounds - 2);
             int column = 0;
@@ -87,8 +86,8 @@ public class DoubleEliminationNode extends VBox implements ModelCoupledUI, Stage
             while (true) {
 
                 for (int i = 0; i < matchesInCurrentRound; i++) {
-                    Match match = lowerBracket[m++];
-                    VBox box = createMatchBox(match, rowSpan, false);
+                    Series series = lowerBracket[m++];
+                    VBox box = createMatchBox(series, rowSpan, false);
                     lowerGrid.add(box, column, i * rowSpan);
                 }
 
@@ -106,13 +105,13 @@ public class DoubleEliminationNode extends VBox implements ModelCoupledUI, Stage
         }
     }
 
-    private VBox createMatchBox(Match match, int rowSpan, boolean isExtra) {
+    private VBox createMatchBox(Series series, int rowSpan, boolean isExtra) {
 
         VBox box = new VBox();
 
         // Some matches are null because of byes. In those cases the VBox will just be empty
-        if (match != null) {
-            MatchVisualController mvc = boc.loadVisualMatch(match);
+        if (series != null) {
+            SeriesVisualController mvc = boc.loadSeriesVisual(series);
             mvcs.add(mvc);
             box.getChildren().add(mvc.getRoot());
             mvc.setShowIdentifier(true);
@@ -155,7 +154,7 @@ public class DoubleEliminationNode extends VBox implements ModelCoupledUI, Stage
     public void removeElements() {
         upperGrid.getChildren().clear();
         lowerGrid.getChildren().clear();
-        for (MatchVisualController mvc : mvcs) {
+        for (SeriesVisualController mvc : mvcs) {
             mvc.decoupleFromModel();
         }
         mvcs.clear();
