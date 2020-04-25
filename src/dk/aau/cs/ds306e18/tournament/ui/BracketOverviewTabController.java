@@ -1,17 +1,15 @@
 package dk.aau.cs.ds306e18.tournament.ui;
 
 import dk.aau.cs.ds306e18.tournament.model.format.StageStatusChangeListener;
+import dk.aau.cs.ds306e18.tournament.model.match.MatchResultDependencyException;
+import dk.aau.cs.ds306e18.tournament.model.match.Series;
 import dk.aau.cs.ds306e18.tournament.rlbot.MatchRunner;
 import dk.aau.cs.ds306e18.tournament.model.Bot;
-import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.format.StageStatus;
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import dk.aau.cs.ds306e18.tournament.model.format.Format;
-import dk.aau.cs.ds306e18.tournament.model.match.Match;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchChangeListener;
 import dk.aau.cs.ds306e18.tournament.utility.Alerts;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
 import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.ModelCoupledUI;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -31,7 +29,6 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
-import java.util.HashMap;
 
 public class BracketOverviewTabController implements StageStatusChangeListener, MatchChangeListener {
 
@@ -45,15 +42,14 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
     @FXML private Button modifyConfigBtn;
     @FXML private Button editMatchBtn;
     @FXML private Button switchColorsBtn;
+    @FXML private Button extendSeriesBtn;
+    @FXML private Button shortenSeriesBtn;
     @FXML private Label blueTeamNameLabel;
-    @FXML private Label blueTeamScore;
     @FXML private ListView<Bot> blueTeamListView;
     @FXML private Label orangeTeamNameLabel;
-    @FXML private Label orangeTeamScore;
     @FXML private ListView<Bot> orangeTeamListView;
     @FXML private ScrollPane overviewScrollPane;
     @FXML private GridPane selectedMatchInfo;
-    @FXML private HBox selectedMatchButtonHolder;
     @FXML private HBox stageNavigationButtonsHolder;
     @FXML private Button nextStageBtn;
     @FXML private Button prevStageBtn;
@@ -68,7 +64,7 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
     private int showedStageIndex = -1;
     private ModelCoupledUI coupledBracket;
     private Format showedFormat;
-    private MatchVisualController selectedMatch;
+    private SeriesVisualController selectedSeries;
 
     @FXML
     private void initialize() {
@@ -130,7 +126,7 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
             showedStageIndex = -1;
             showedFormat = null;
             showStartTournamentInstructions(true);
-            setSelectedMatch(null);
+            setSelectedSeries(null);
             updateStageNavigationButtons();
         } else {
             if (showedStageIndex == -1) showedStageIndex = 0;
@@ -139,7 +135,7 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
             updateStageNavigationButtons();
         }
 
-        updateTeamViewer(selectedMatch == null ? null : selectedMatch.getShowedMatch());
+        updateTeamViewer(selectedSeries == null ? null : selectedSeries.getShowedSeries());
     }
 
     /** @return a string that contains text describing the requirements for starting the tournament. */
@@ -197,15 +193,15 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
     }
 
     /**
-     * @param match the match to be visualised
+     * @param series the match to be visualised
      * @return a gridPane containing the visualisation of the given match.
      */
-    public MatchVisualController loadVisualMatch(Match match) {
+    public SeriesVisualController loadSeriesVisual(Series series) {
 
         //Load the fxml document into the Controller and JavaFx node.
-        FXMLLoader loader = new FXMLLoader(BracketOverviewTabController.class.getResource("layout/MatchVisual.fxml"));
+        FXMLLoader loader = new FXMLLoader(BracketOverviewTabController.class.getResource("layout/SeriesVisual.fxml"));
         HBox root = null;
-        MatchVisualController mvc = null;
+        SeriesVisualController mvc = null;
 
         try {
             root = loader.load();
@@ -215,7 +211,7 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
         }
 
         mvc.setBoc(this);
-        mvc.setShowedMatch(match);
+        mvc.setShowedSeries(series);
 
         return mvc;
     }
@@ -223,14 +219,14 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
     /**
      * Sets the selected match.
      */
-    public void setSelectedMatch(MatchVisualController match) {
-        if (selectedMatch != null){
-            selectedMatch.getShowedMatch().unregisterMatchChangeListener(this);
-            selectedMatch.getRoot().getStyleClass().remove("selectedMatch");
+    public void setSelectedSeries(SeriesVisualController match) {
+        if (selectedSeries != null){
+            selectedSeries.getShowedSeries().unregisterMatchChangeListener(this);
+            selectedSeries.getRoot().getStyleClass().remove("selectedMatch");
         }
-        this.selectedMatch = match;
-        updateTeamViewer(match == null ? null : match.getShowedMatch());
-        if(selectedMatch != null) { selectedMatch.getShowedMatch().registerMatchChangeListener(this); }
+        this.selectedSeries = match;
+        updateTeamViewer(match == null ? null : match.getShowedSeries());
+        if(selectedSeries != null) { selectedSeries.getShowedSeries().registerMatchChangeListener(this); }
     }
 
     /**
@@ -239,42 +235,37 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
     @FXML
     void deselectOnRightClick(MouseEvent event) {
         if (event.getButton().equals(MouseButton.SECONDARY)){
-            setSelectedMatch(null);
+            setSelectedSeries(null);
         }
     }
 
     /**
      * Updates the team viewer on match clicked in overviewTab
      */
-    private void updateTeamViewer(Match match) {
-        boolean disable = (match == null);
+    private void updateTeamViewer(Series series) {
+        boolean disable = (series == null);
         botInfoBox.setVisible(false);
         selectedMatchInfo.setDisable(disable);
-        selectedMatchButtonHolder.setDisable(disable);
 
-        if (match != null && match.getBlueTeam() != null) {
+        if (series != null && series.getBlueTeam() != null) {
             // Blue team
-            blueTeamNameLabel.setText(match.getBlueTeam().getTeamName());
-            blueTeamScore.setText(Integer.toString(match.getTeamOneScore()));
-            blueTeamListView.setItems(FXCollections.observableArrayList(match.getBlueTeam().getBots()));
+            blueTeamNameLabel.setText(series.getBlueTeam().getTeamName());
+            blueTeamListView.setItems(FXCollections.observableArrayList(series.getBlueTeam().getBots()));
             blueTeamListView.refresh();
         } else {
             // Orange team is unknown
             blueTeamNameLabel.setText("Blue team");
-            blueTeamScore.setText("");
             blueTeamListView.setItems(null);
             blueTeamListView.refresh();
         }
-        if (match != null && match.getOrangeTeam() != null) {
+        if (series != null && series.getOrangeTeam() != null) {
             // Orange team
-            orangeTeamNameLabel.setText(match.getOrangeTeam().getTeamName());
-            orangeTeamScore.setText(Integer.toString(match.getTeamTwoScore()));
-            orangeTeamListView.setItems(FXCollections.observableArrayList(match.getOrangeTeam().getBots()));
+            orangeTeamNameLabel.setText(series.getOrangeTeam().getTeamName());
+            orangeTeamListView.setItems(FXCollections.observableArrayList(series.getOrangeTeam().getBots()));
             orangeTeamListView.refresh();
         } else {
             // Orange team is unknown
             orangeTeamNameLabel.setText("Orange team");
-            orangeTeamScore.setText("");
             orangeTeamListView.setItems(null);
             orangeTeamListView.refresh();
         }
@@ -284,7 +275,7 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
 
     /** Disables/Enables the play and edit match buttons */
     public void updateMatchPlayAndEditButtons() {
-        if (selectedMatch == null || selectedMatch.getShowedMatch().getStatus() == Match.Status.NOT_PLAYABLE) {
+        if (selectedSeries == null || selectedSeries.getShowedSeries().getStatus() == Series.Status.NOT_PLAYABLE) {
             editMatchBtn.setDisable(true);
             playMatchBtn.setDisable(true);
             modifyConfigBtn.setDisable(true);
@@ -295,7 +286,15 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
             playMatchBtn.setDisable(false);
             modifyConfigBtn.setDisable(false);
             // color switching is disabled when match has been played to avoid confusion when comparing replays and bracket
-            switchColorsBtn.setDisable(selectedMatch.getShowedMatch().hasBeenPlayed());
+            switchColorsBtn.setDisable(selectedSeries.getShowedSeries().hasBeenPlayed());
+        }
+
+        if (selectedSeries == null) {
+            extendSeriesBtn.setDisable(true);
+            shortenSeriesBtn.setDisable(true);
+        } else {
+            extendSeriesBtn.setDisable(false);
+            shortenSeriesBtn.setDisable(selectedSeries.getShowedSeries().getSeriesLength() == 1);
         }
     }
 
@@ -316,10 +315,10 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
             editMatchScoreStage.initStyle(StageStyle.TRANSPARENT);
             editMatchScoreStage.initModality(Modality.APPLICATION_MODAL);
 
-            FXMLLoader loader = new FXMLLoader(BracketOverviewTabController.class.getResource("layout/EditMatchScore.fxml"));
+            FXMLLoader loader = new FXMLLoader(BracketOverviewTabController.class.getResource("layout/EditSeriesScore.fxml"));
             AnchorPane editMatchStageRoot = loader.load();
-            EditMatchScoreController emsc = loader.getController();
-            emsc.setMatch(selectedMatch.getShowedMatch());
+            EditSeriesScoreController emsc = loader.getController();
+            emsc.setSeries(selectedSeries.getShowedSeries());
             editMatchScoreStage.setScene(new Scene(editMatchStageRoot));
 
             // Calculate the center position of the main window.
@@ -371,14 +370,14 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
     }
 
     @Override
-    public void onMatchChanged(Match match) {
-        updateTeamViewer(selectedMatch.getShowedMatch());
+    public void onMatchChanged(Series series) {
+        updateTeamViewer(selectedSeries.getShowedSeries());
     }
 
     public void prevStageBtnOnAction(ActionEvent actionEvent) {
         showedStageIndex--;
         showStage(Tournament.get().getStages().get(showedStageIndex));
-        setSelectedMatch(null);
+        setSelectedSeries(null);
         updateStageNavigationButtons();
     }
 
@@ -391,16 +390,16 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
         showedStageIndex++;
         showStage(Tournament.get().getStages().get(showedStageIndex));
 
-        setSelectedMatch(null);
+        setSelectedSeries(null);
         updateStageNavigationButtons();
     }
 
     public void onPlayMatchBtnAction(ActionEvent actionEvent) {
-        MatchRunner.startMatch(Tournament.get().getRlBotSettings().getMatchConfig(), selectedMatch.getShowedMatch());
+        MatchRunner.startMatch(Tournament.get().getRlBotSettings().getMatchConfig(), selectedSeries.getShowedSeries());
     }
 
     public void modifyConfigButtonOnAction(ActionEvent actionEvent) {
-        boolean ready = MatchRunner.prepareMatch(Tournament.get().getRlBotSettings().getMatchConfig(), selectedMatch.getShowedMatch());
+        boolean ready = MatchRunner.prepareMatch(Tournament.get().getRlBotSettings().getMatchConfig(), selectedSeries.getShowedSeries());
         if (ready) {
             Alerts.infoNotification("Modified config file", "The rlbot.cfg was successfully modified to the selected match.");
         }
@@ -416,6 +415,36 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
     }
 
     public void onSwitchColorsBtnAction(ActionEvent actionEvent) {
-        selectedMatch.getShowedMatch().setTeamOneToBlue(!selectedMatch.getShowedMatch().isTeamOneBlue());
+        selectedSeries.getShowedSeries().setTeamOneToBlue(!selectedSeries.getShowedSeries().isTeamOneBlue());
+    }
+
+    public void extendSeriesBtnOnAction(ActionEvent actionEvent) {
+        carefullyChangeSeriesLength(selectedSeries.getShowedSeries().getSeriesLength() + 2);
+    }
+
+    public void shortenSeriesBtnOnAction(ActionEvent actionEvent) {
+        // We assume the button is only clickable if the match length is greater than 1
+        carefullyChangeSeriesLength(selectedSeries.getShowedSeries().getSeriesLength() - 2);
+    }
+
+    /**
+     * Changes the selected series length. In case this change changes the outcome of the series (and other series
+     * depends on this outcome) an alert prompt is shown, and the user must confirm if they want to proceed.
+     */
+    public void carefullyChangeSeriesLength(int length) {
+        Series series = selectedSeries.getShowedSeries();
+        boolean force = false;
+        boolean cancelled = false;
+        while (!cancelled) {
+            try {
+                series.setSeriesLength(length, force);
+                break;
+            } catch (MatchResultDependencyException e) {
+                // An MatchResultDependencyException is thrown if the outcome has changed and subsequent matches depends on this outcome
+                // Ask if the user wants to proceed
+                force = Alerts.confirmAlert("The outcome of this match has changed", "This change will reset the subsequent matches. Do you want to proceed?");
+                cancelled = !force;
+            }
+        }
     }
 }

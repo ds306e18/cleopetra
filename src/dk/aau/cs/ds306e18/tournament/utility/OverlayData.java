@@ -4,8 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import dk.aau.cs.ds306e18.tournament.model.Bot;
 import dk.aau.cs.ds306e18.tournament.model.BotFromConfig;
-import dk.aau.cs.ds306e18.tournament.model.Team;
-import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import dk.aau.cs.ds306e18.tournament.model.match.Series;
 import dk.aau.cs.ds306e18.tournament.rlbot.configuration.BotConfig;
 import dk.aau.cs.ds306e18.tournament.serialization.Serializer;
 

@@ -3,7 +3,7 @@ package dk.aau.cs.ds306e18.tournament.model.format;
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.TieBreaker;
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
-import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import dk.aau.cs.ds306e18.tournament.model.match.Series;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchChangeListener;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchPlayedListener;
 import dk.aau.cs.ds306e18.tournament.ui.BracketOverviewTabController;
@@ -18,8 +18,9 @@ import java.util.stream.Collectors;
 public class SwissFormat implements Format, MatchChangeListener, MatchPlayedListener {
 
     private StageStatus status = StageStatus.PENDING;
+    private int defaultSeriesLength = 1;
     private ArrayList<Team> teams;
-    private ArrayList<ArrayList<Match>> rounds = new ArrayList<>();
+    private ArrayList<ArrayList<Series>> rounds = new ArrayList<>();
     private int maxRoundsPossible;
     private int roundCount = 4;
     private boolean doSeeding;
@@ -118,11 +119,11 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
             orderedTeamList = getOrderedTeamsListFromPoints(teams, teamPoints);
         }
 
-        ArrayList<Match> createdMatches;
+        ArrayList<Series> createdSeries;
         int badTries = 0;
 
         while (true) {
-            createdMatches = new ArrayList<>();
+            createdSeries = new ArrayList<>();
             List<Team> remaingTeams = new ArrayList<>(orderedTeamList);
             int acceptedRematches = badTries;
 
@@ -140,8 +141,8 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
                     // Has the two selected teams played each other before?
                     // Due to previous bad tries we might accept rematches. Note: short circuiting
                     if (!hasTheseTeamsPlayedBefore(team1, team2) || 0 < acceptedRematches--) {
-                        Match match = new Match(team1, team2);
-                        createdMatches.add(match);
+                        Series series = new Series(defaultSeriesLength, team1, team2);
+                        createdSeries.add(series);
                         break; // Two valid teams has been found, and match has been created.
                     }
                 }
@@ -150,7 +151,7 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
                 remaingTeams.remove(team2);
             }
 
-            if (createdMatches.size() == orderedTeamList.size() / 2) {
+            if (createdSeries.size() == orderedTeamList.size() / 2) {
                 break; // Round was fully constructed
             } else {
                 badTries++;
@@ -163,17 +164,17 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
         }
 
         // Register self as listener
-        for (Match m : createdMatches) {
+        for (Series m : createdSeries) {
             m.registerMatchPlayedListener(this);
             m.registerMatchChangeListener(this);
         }
 
         // Track stats from the new matches
         for (Team team : teams) {
-            team.getStatsManager().trackMatches(this, createdMatches);
+            team.getStatsManager().trackMatches(this, createdSeries);
         }
 
-        rounds.add(createdMatches);
+        rounds.add(createdSeries);
     }
 
     /**
@@ -186,12 +187,12 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
      */
     private boolean hasTheseTeamsPlayedBefore(Team team1, Team team2) {
 
-        List<Match> matches = getCompletedMatches();
+        List<Series> series = getCompletedMatches();
 
-        for (Match match : matches) {
+        for (Series serie : series) {
 
-            Team teamOne = match.getTeamOne();
-            Team teamTwo = match.getTeamTwo();
+            Team teamOne = serie.getTeamOne();
+            Team teamTwo = serie.getTeamTwo();
 
             //Compare the current match's teams with the two given teams.
             if (team1 == teamOne && team2 == teamTwo || team1 == teamTwo && team2 == teamOne)
@@ -202,30 +203,30 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
     }
 
     @Override
-    public List<Match> getAllMatches() {
+    public List<Series> getAllSeries() {
 
-        ArrayList<Match> matches = new ArrayList<>();
+        ArrayList<Series> series = new ArrayList<>();
 
-        for (ArrayList<Match> list : rounds) {
-            matches.addAll(list);
+        for (ArrayList<Series> list : rounds) {
+            series.addAll(list);
         }
 
-        return matches;
+        return series;
     }
 
     @Override
-    public List<Match> getUpcomingMatches() {
-        return getAllMatches().stream().filter(match -> !match.hasBeenPlayed()).collect(Collectors.toList());
+    public List<Series> getUpcomingMatches() {
+        return getAllSeries().stream().filter(match -> !match.hasBeenPlayed()).collect(Collectors.toList());
     }
 
     @Override
-    public List<Match> getPendingMatches() {
-        return getAllMatches().stream().filter(match -> match.getStatus() == Match.Status.NOT_PLAYABLE).collect(Collectors.toList());
+    public List<Series> getPendingMatches() {
+        return getAllSeries().stream().filter(match -> match.getStatus() == Series.Status.NOT_PLAYABLE).collect(Collectors.toList());
     }
 
     @Override
-    public List<Match> getCompletedMatches() {
-        return getAllMatches().stream().filter(Match::hasBeenPlayed).collect(Collectors.toList());
+    public List<Series> getCompletedMatches() {
+        return getAllSeries().stream().filter(Series::hasBeenPlayed).collect(Collectors.toList());
     }
 
     public int getMaxRoundsPossible() {
@@ -258,9 +259,9 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
     }
 
     /**
-     * @Return the latest generated round. Or null if there are no rounds generated.
+     * @return the latest generated round. Or null if there are no rounds generated.
      */
-    public List<Match> getLatestRound() {
+    public List<Series> getLatestRound() {
         if (rounds.size() == 0) return null;
         return new ArrayList<>(rounds.get(rounds.size() - 1));
     }
@@ -270,6 +271,18 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
      */
     public IdentityHashMap<Team, Integer> getTeamPointsMap() {
         return teamPoints;
+    }
+
+    @Override
+    public void setDefaultSeriesLength(int seriesLength) {
+        if (seriesLength <= 0) throw new IllegalArgumentException("Series length must be at least one.");
+        if (seriesLength % 2 == 0) throw new IllegalArgumentException("Series must have an odd number of matches.");
+        defaultSeriesLength = seriesLength;
+    }
+
+    @Override
+    public int getDefaultSeriesLength() {
+        return defaultSeriesLength;
     }
 
     @Override
@@ -285,9 +298,9 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
     /**
      * @return an arraylist of the current created rounds.
      */
-    public ArrayList<ArrayList<Match>> getRounds() {
-        ArrayList<ArrayList<Match>> roundsCopy = new ArrayList<>(rounds.size());
-        for (ArrayList<Match> r : rounds) {
+    public ArrayList<ArrayList<Series>> getRounds() {
+        ArrayList<ArrayList<Series>> roundsCopy = new ArrayList<>(rounds.size());
+        for (ArrayList<Series> r : rounds) {
             roundsCopy.add(new ArrayList<>(r));
         }
         return roundsCopy;
@@ -303,8 +316,8 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
     private void calculateAndAssignTeamPoints(Team team) {
         int points = 0;
 
-        for (Match match : getCompletedMatches()) {
-            if (match.getWinner().equals(team)) {
+        for (Series series : getCompletedMatches()) {
+            if (series.getWinner().equals(team)) {
                 points += 1;
             }
         }
@@ -317,7 +330,7 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
     }
 
     @Override
-    public void onMatchPlayed(Match match) {
+    public void onMatchPlayed(Series series) {
         // Has last possible match been played?
         StageStatus oldStatus = status;
         if (!hasUnstartedRounds() && getUpcomingMatches().size() == 0) {
@@ -333,10 +346,10 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
     }
 
     @Override
-    public void onMatchChanged(Match match) {
+    public void onMatchChanged(Series series) {
         // Calculate and assign points for each team in the match.
-        calculateAndAssignTeamPoints(match.getTeamOne());
-        calculateAndAssignTeamPoints(match.getTeamTwo());
+        calculateAndAssignTeamPoints(series.getTeamOne());
+        calculateAndAssignTeamPoints(series.getTeamTwo());
     }
 
     @Override
@@ -358,14 +371,14 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
 
     @Override
     public void postDeserializationRepair() {
-        for (Match match : getAllMatches()) {
-            match.registerMatchPlayedListener(this);
-            match.registerMatchChangeListener(this);
+        for (Series series : getAllSeries()) {
+            series.registerMatchPlayedListener(this);
+            series.registerMatchChangeListener(this);
         }
         teamPoints = createPointsMap(teams);
         for (Team team : teams) {
             calculateAndAssignTeamPoints(team);
-            team.getStatsManager().trackMatches(this, getAllMatches());
+            team.getStatsManager().trackMatches(this, getAllSeries());
         }
     }
 

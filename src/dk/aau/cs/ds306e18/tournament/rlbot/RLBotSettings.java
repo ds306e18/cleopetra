@@ -11,6 +11,7 @@ public class RLBotSettings {
 
     private MatchConfig matchConfig = new MatchConfig();
     private boolean writeOverlayData = true;
+    private boolean useBotPackPythonIfAvailable = true;
 
     public RLBotSettings() {
 
@@ -34,6 +35,14 @@ public class RLBotSettings {
 
     public void setWriteOverlayData(boolean writeOverlayData) {
         this.writeOverlayData = writeOverlayData;
+    }
+
+    public boolean useBotPackPythonIfAvailable() {
+        return useBotPackPythonIfAvailable;
+    }
+
+    public void setUseBotPackPythonIfAvailable(boolean useBotPackPythonIfAvailable) {
+        this.useBotPackPythonIfAvailable = useBotPackPythonIfAvailable;
     }
 
     @Override

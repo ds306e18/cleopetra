@@ -16,7 +16,8 @@ public class SerializerTest {
 
     /**
      * Test for serialising a Tournament object, serializes it to a JSON-string, deserializes it to
-     * a Tournament object, and checks equality between the original object and the resuscitated object
+     * a Tournament object, and checks equality between the original object and the resuscitated object.
+     * The tournament does not have any stages.
      */
     @Test
     public void serializingPrimitiveTournamentConcurrencyTest() {

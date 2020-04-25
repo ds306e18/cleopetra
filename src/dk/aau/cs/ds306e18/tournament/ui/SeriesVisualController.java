@@ -1,6 +1,6 @@
 package dk.aau.cs.ds306e18.tournament.ui;
 
-import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import dk.aau.cs.ds306e18.tournament.model.match.Series;
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchChangeListener;
 import javafx.fxml.FXML;
@@ -9,22 +9,24 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.text.Text;
 
-public class MatchVisualController implements MatchChangeListener {
+import java.util.List;
+import java.util.Optional;
+
+public class SeriesVisualController implements MatchChangeListener {
 
     @FXML private HBox matchRoot;
     @FXML private Label identifierLabel;
     @FXML private AnchorPane identifierHolder;
     @FXML private Label textTeamTwoName;
-    @FXML private Text textTeamTwoScore;
+    @FXML private HBox teamOneScoreContainer;
     @FXML private Label textTeamOneName;
-    @FXML private Text textTeamOneScore;
+    @FXML private HBox teamTwoScoreContainer;
     @FXML private HBox hboxTeamTwo;
     @FXML private HBox hboxTeamOne;
 
     private BracketOverviewTabController boc;
-    private Match showedMatch;
+    private Series showedSeries;
     private boolean showIdentifier = false;
     private boolean disabled = false;
 
@@ -36,9 +38,9 @@ public class MatchVisualController implements MatchChangeListener {
     void matchClicked(MouseEvent event) {
         if (!disabled) {
             matchRoot.getStyleClass().add("selectedMatch");
-            boc.setSelectedMatch(this);
+            boc.setSelectedSeries(this);
 
-            if (showedMatch.isReadyToPlay()
+            if (showedSeries.isReadyToPlay()
                     && event.getButton().equals(MouseButton.PRIMARY)
                     && event.getClickCount() == 2) {
 
@@ -59,32 +61,32 @@ public class MatchVisualController implements MatchChangeListener {
         hboxTeamTwo.getStyleClass().clear();
         textTeamOneName.setText(" ");
         textTeamTwoName.setText(" ");
-        textTeamTwoScore.setText(" ");
-        textTeamOneScore.setText(" ");
+        teamOneScoreContainer.getChildren().clear();
+        teamTwoScoreContainer.getChildren().clear();
     }
 
     /** @return the match that this shows. */
-    public Match getShowedMatch() {
-        return showedMatch;
+    public Series getShowedSeries() {
+        return showedSeries;
     }
 
     /** Updates the state/ui of this match. */
-    public void setShowedMatch(Match match){
-        if (showedMatch != null) showedMatch.unregisterMatchChangeListener(this);
-        showedMatch = match;
-        showedMatch.registerMatchChangeListener(this);
+    public void setShowedSeries(Series series){
+        if (showedSeries != null) showedSeries.unregisterMatchChangeListener(this);
+        showedSeries = series;
+        showedSeries.registerMatchChangeListener(this);
         updateFields();
     }
 
     @Override
-    public void onMatchChanged(Match match) {
+    public void onMatchChanged(Series series) {
         updateFields();
     }
 
     public void updateFields() {
         clearFields();
 
-        if (showedMatch == null) {
+        if (showedSeries == null) {
             return;
         }
 
@@ -92,29 +94,33 @@ public class MatchVisualController implements MatchChangeListener {
         if (showIdentifier) {
             identifierHolder.setVisible(true);
             identifierHolder.setManaged(true);
-            identifierLabel.setText("" + showedMatch.getIdentifier());
+            identifierLabel.setText("" + showedSeries.getIdentifier());
         } else {
             identifierHolder.setVisible(false);
             identifierHolder.setManaged(false);
         }
 
-        Match.Status status = showedMatch.getStatus();
-        Team teamOne = showedMatch.getTeamOne();
-        Team teamTwo = showedMatch.getTeamTwo();
+        Series.Status status = showedSeries.getStatus();
+        Team teamOne = showedSeries.getTeamOne();
+        Team teamTwo = showedSeries.getTeamTwo();
 
         // Set tags and id based on the given match and its status
         if (disabled) {
 
             // css id
             matchRoot.setId("disabled");
+            setupBlankScores(teamOneScoreContainer, showedSeries.getSeriesLength());
+            setupBlankScores(teamTwoScoreContainer, showedSeries.getSeriesLength());
 
-        } else if (status == Match.Status.NOT_PLAYABLE) {
+        } else if (status == Series.Status.NOT_PLAYABLE) {
             // css id
             matchRoot.setId("pending");
 
             // Show known team or where they come from
-            textTeamOneName.setText(showedMatch.getTeamOneAsString());
-            textTeamTwoName.setText(showedMatch.getTeamTwoAsString());
+            textTeamOneName.setText(showedSeries.getTeamOneAsString());
+            textTeamTwoName.setText(showedSeries.getTeamTwoAsString());
+            setupBlankScores(teamOneScoreContainer, showedSeries.getSeriesLength());
+            setupBlankScores(teamTwoScoreContainer, showedSeries.getSeriesLength());
             if (teamOne == null) hboxTeamOne.getStyleClass().add("tbd");
             if (teamTwo == null) hboxTeamTwo.getStyleClass().add("tbd");
 
@@ -123,30 +129,56 @@ public class MatchVisualController implements MatchChangeListener {
             // Names and scores
             textTeamOneName.setText(teamOne.getTeamName());
             textTeamTwoName.setText(teamTwo.getTeamName());
-            textTeamOneScore.setText(String.valueOf(showedMatch.getTeamOneScore()));
-            textTeamTwoScore.setText(String.valueOf(showedMatch.getTeamTwoScore()));
+            setupScores(teamOneScoreContainer, showedSeries.getTeamOneScores());
+            setupScores(teamTwoScoreContainer, showedSeries.getTeamTwoScores());
 
-            Match.Outcome outcome = showedMatch.getOutcome();
+            Series.Outcome outcome = showedSeries.getOutcome();
 
             // css ids
-            if (status == Match.Status.READY_TO_BE_PLAYED || outcome == Match.Outcome.DRAW) {
+            if (status == Series.Status.READY_TO_BE_PLAYED || outcome == Series.Outcome.DRAW) {
                 matchRoot.setId("ready");
-            } else if (outcome == Match.Outcome.TEAM_ONE_WINS) {
+            } else if (outcome == Series.Outcome.TEAM_ONE_WINS) {
                 matchRoot.setId("played");
                 hboxTeamOne.getStyleClass().add("winner");
-            } else if (outcome == Match.Outcome.TEAM_TWO_WINS) {
+            } else if (outcome == Series.Outcome.TEAM_TWO_WINS) {
                 matchRoot.setId("played");
                 hboxTeamTwo.getStyleClass().add("winner");
             }
         }
 
         // Set colors
-        if (showedMatch.isTeamOneBlue()) {
+        if (showedSeries.isTeamOneBlue()) {
             hboxTeamOne.getStyleClass().add("blue");
             hboxTeamTwo.getStyleClass().add("orange");
         } else {
             hboxTeamOne.getStyleClass().add("orange");
             hboxTeamTwo.getStyleClass().add("blue");
+        }
+    }
+
+    /**
+     * Populate a score container with blank scores. Used when the match is not playable yet.
+     */
+    private void setupBlankScores(HBox container, int seriesLength) {
+        for (int i = 0; i < seriesLength; i++) {
+            MatchScoreController msc = MatchScoreController.loadNew();
+            if (msc != null) {
+                msc.setScoreText("-");
+                container.getChildren().add(msc.getRoot());
+            }
+        }
+    }
+
+    /**
+     * Populate a score container with the given scores.
+     */
+    private void setupScores(HBox container, List<Optional<Integer>> scores) {
+        for (Optional<Integer> score : scores) {
+            MatchScoreController msc = MatchScoreController.loadNew();
+            if (msc != null) {
+                msc.setScoreText(score.map(Object::toString).orElse("-"));
+                container.getChildren().add(msc.getRoot());
+            }
         }
     }
 
@@ -180,6 +212,6 @@ public class MatchVisualController implements MatchChangeListener {
 
     /** Decouples the controller from the model, allowing the controller to be thrown to the garbage collector. */
     public void decoupleFromModel() {
-        showedMatch.unregisterMatchChangeListener(this);
+        showedSeries.unregisterMatchChangeListener(this);
     }
 }

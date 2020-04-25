@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="exitPopup" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#windowDragged" onMousePressed="#windowPressed" stylesheets="@css/stylesheet.css" xmlns="http://javafx.com/javafx/1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.EditSeriesScoreController">
+   <children>
+      <VBox alignment="CENTER">
+         <children>
+            <HBox alignment="TOP_RIGHT">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#onCancelBtnPressed" styleClass="cancelBtn" text="X">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <HBox.margin>
+                        <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
+                     </HBox.margin>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT">
+               <VBox.margin>
+                  <Insets bottom="32.0" left="8.0" right="8.0" top="16.0" />
+               </VBox.margin>
+               <children>
+                  <VBox spacing="4.0">
+                     <children>
+                        <Label fx:id="teamOneNameLabel" alignment="CENTER" minWidth="160.0" prefWidth="160.0" text="Blue" textFill="#6a82fc">
+                           <font>
+                              <Font name="System Bold" size="16.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="teamTwoNameLabel" alignment="CENTER" minWidth="160.0" prefWidth="160.0" text="Orange" textFill="#f5af18">
+                           <font>
+                              <Font name="System Bold" size="16.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
+                  <HBox fx:id="scoresContainer" spacing="16.0" />
+                  <VBox spacing="4.0">
+                     <children>
+                        <Button fx:id="extendSeriesButton" mnemonicParsing="false" onAction="#onActionExtendSeriesButton" prefHeight="27.0" prefWidth="27.0" text="+">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </Button>
+                        <Button fx:id="shortenSeriesButton" mnemonicParsing="false" onAction="#onActionShortenSeriesButton" prefHeight="27.0" prefWidth="27.0" text="-" />
+                     </children>
+                     <HBox.margin>
+                        <Insets left="32.0" right="24.0" />
+                     </HBox.margin>
+                  </VBox>
+               </children>
+            </HBox>
+            <CheckBox fx:id="seriesFinishedCheckBox" mnemonicParsing="false" text="Series is finished" />
+            <HBox>
+               <children>
+                  <Pane minWidth="46.0" prefHeight="27.0" prefWidth="228.0" HBox.hgrow="ALWAYS" />
+                  <Button fx:id="saveButton" minWidth="65.0" mnemonicParsing="false" onAction="#onSaveBtnPressed" text="Save">
+                     <HBox.margin>
+                        <Insets right="8.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button minWidth="65.0" mnemonicParsing="false" onAction="#onCancelBtnPressed" text="Cancel" />
+               </children>
+               <padding>
+                  <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+               </padding>
+               <VBox.margin>
+                  <Insets top="32.0" />
+               </VBox.margin>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

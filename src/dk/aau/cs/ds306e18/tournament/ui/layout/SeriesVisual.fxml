@@ -10,9 +10,8 @@
 <?import javafx.scene.shape.Polygon?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
 
-<HBox id="played" fx:id="matchRoot" alignment="CENTER_RIGHT" spacing="2.0" stylesheets="@css/visualmatch.css" xmlns="http://javafx.com/javafx/1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.MatchVisualController">
+<HBox id="played" fx:id="matchRoot" alignment="CENTER_RIGHT" spacing="2.0" stylesheets="@css/visualmatch.css" xmlns="http://javafx.com/javafx/1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.aau.cs.ds306e18.tournament.ui.SeriesVisualController">
    <children>
       <AnchorPane fx:id="identifierHolder" prefHeight="50.0" prefWidth="22.0">
          <children>
@@ -36,12 +35,11 @@
                         <Label fx:id="textTeamOneName" layoutX="5.0" layoutY="2.0" prefHeight="17.0" prefWidth="100.0" styleClass="teamName" text="Team 1" />
                      </children>
                   </Group>
-                  <Group styleClass="score">
-                     <children>
-                        <Rectangle fill="WHITE" height="24.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="scoreBg" width="24.0" />
-                        <Text fx:id="textTeamOneScore" layoutX="2.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="scoreNo" text="5" textAlignment="CENTER" wrappingWidth="20.0" />
-                     </children>
-                  </Group>
+                  <HBox fx:id="teamOneScoreContainer">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </HBox>
                   <Polygon fill="#c1c1c1" points="0.0, 0.0, 0.0, 24.0, 18.0, 12.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="triangle" />
                </children>
                <VBox.margin>
@@ -64,12 +62,7 @@
                         <Label fx:id="textTeamTwoName" layoutX="5.0" layoutY="2.0" prefHeight="17.0" prefWidth="100.0" styleClass="teamName" text="Team 2" />
                      </children>
                   </Group>
-                  <Group styleClass="score">
-                     <children>
-                        <Rectangle fill="WHITE" height="24.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="scoreBg" width="24.0" />
-                        <Text fx:id="textTeamTwoScore" layoutX="2.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="scoreNo" text="2" textAlignment="CENTER" wrappingWidth="20.0" />
-                     </children>
-                  </Group>
+                  <HBox fx:id="teamTwoScoreContainer" />
                   <Polygon fill="#c1c1c1" points="0.0, 0.0, 0.0, 24.0, 18.0, 12.0" strokeWidth="0.0" styleClass="triangle" />
                </children>
                <styleClass>

@@ -4,6 +4,10 @@ import dk.aau.cs.ds306e18.tournament.model.Stage;
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import dk.aau.cs.ds306e18.tournament.model.format.SingleEliminationFormat;
 import dk.aau.cs.ds306e18.tournament.model.TieBreaker;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -32,6 +36,7 @@ public class TournamentSettingsTabController {
     @FXML private Text stageSettingsHeadLabel;
     @FXML private HBox stageSettingsContent;
     @FXML private TextField stageNameTextfield;
+    @FXML private Spinner<Integer> defaultSeriesLengthSpinner;
     @FXML private ChoiceBox<StageFormatOption> formatChoicebox;
     @FXML private Button swapUp;
     @FXML private Button swapDown;
@@ -46,25 +51,43 @@ public class TournamentSettingsTabController {
         setUpStageListView();
         updateGeneralTournamentSettings();
 
-        /* Setup teams wanted in stage spinner */
+        // Setup teams wanted in stage spinner
         teamsInStageSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(2, Integer.MAX_VALUE));
         teamsInStageSpinner.getEditor().textProperty().addListener((obs, oldValue, newValue) -> {
             try {
-                int value = Integer.valueOf(newValue); //This will throw the exception if the value not only contains numbers
+                int value = Integer.parseInt(newValue); // This will throw the exception if the text is not a number
                 getSelectedStage().setNumberOfTeamsWanted(value);
             } catch (NumberFormatException e) {
-                teamsInStageSpinner.getEditor().setText("2"); //Setting default value
+                teamsInStageSpinner.getEditor().setText(oldValue);
             }
         });
 
-        /* Retrieve possible formats and add to a choicebox */
+        // Setup default series length spinner
+        defaultSeriesLengthSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 21, 1, 2));
+        defaultSeriesLengthSpinner.getEditor().textProperty().addListener((obs, oldValue, newValue) -> {
+            try {
+                Integer.parseInt(newValue); // This will throw the exception if the text is not a number
+            } catch (NumberFormatException e) {
+                defaultSeriesLengthSpinner.getEditor().setText(oldValue);
+            }
+        });
+        defaultSeriesLengthSpinner.getEditor().focusedProperty().addListener((observable, oldValue, newValue) -> {
+            int length = Integer.parseInt(defaultSeriesLengthSpinner.getEditor().getText());
+            if (length % 2 == 0) length++;
+            int safeLength = Math.max(length, 1);
+            defaultSeriesLengthSpinner.getEditor().setText("" + safeLength);
+            getSelectedStage().getFormat().setDefaultSeriesLength(safeLength);
+        });
+
+        // Retrieve possible formats and add to a choicebox
         formatChoicebox.setItems(FXCollections.observableArrayList(StageFormatOption.values()));
 
-        /* Listener for the format choicebox. Used to change a Stage format when a different format is chosen */
+        // Listener for the format choicebox. Used to change a Stage format when a different format is chosen
         formatChoicebox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             Stage selectedStage = getSelectedStage();
             if (selectedStage != null && StageFormatOption.getOption(selectedStage.getFormat()) != newValue) {
                 selectedStage.setFormat(newValue.getNewInstance());
+                selectedStage.getFormat().setDefaultSeriesLength(defaultSeriesLengthSpinner.getValue());
             }
 
             updateFormatUniqueSettings();
@@ -155,6 +178,9 @@ public class TournamentSettingsTabController {
                 teamsInStageSpinner.setVisible(false);
             }
             teamsInStageSpinner.setDisable(started);
+
+            defaultSeriesLengthSpinner.getValueFactory().setValue(selectedStage.getFormat().getDefaultSeriesLength());
+            defaultSeriesLengthSpinner.setDisable(started);
         }
 
         updateFormatUniqueSettings();

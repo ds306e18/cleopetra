@@ -1,7 +1,7 @@
 package dk.aau.cs.ds306e18.tournament.model.format;
 
 import dk.aau.cs.ds306e18.tournament.model.Team;
-import dk.aau.cs.ds306e18.tournament.model.match.Match;
+import dk.aau.cs.ds306e18.tournament.model.match.Series;
 import dk.aau.cs.ds306e18.tournament.model.TieBreaker;
 import dk.aau.cs.ds306e18.tournament.ui.bracketObjects.ModelCoupledUI;
 import dk.aau.cs.ds306e18.tournament.ui.BracketOverviewTabController;
@@ -18,6 +18,16 @@ public interface Format {
     void start(List<Team> seededTeams, boolean doSeeding);
 
     /**
+     * Set the default series length (best of x)
+     */
+    void setDefaultSeriesLength(int seriesLength);
+
+    /**
+     * Get the default series length (best of x)
+     */
+    int getDefaultSeriesLength();
+
+    /**
      * Returns the status of the format.
      */
     StageStatus getStatus();
@@ -30,22 +40,22 @@ public interface Format {
     /**
      * Returns a list of all the matches in this stage.
      */
-    List<Match> getAllMatches();
+    List<Series> getAllSeries();
 
     /**
      * Returns a list of all the matches that are ready to be played, but haven't played yet.
      */
-    List<Match> getUpcomingMatches();
+    List<Series> getUpcomingMatches();
 
     /**
      * Returns a list of all planned matches, that can't be played yet.
      */
-    List<Match> getPendingMatches();
+    List<Series> getPendingMatches();
 
     /**
      * Returns a list of all the matches that have been played.
      */
-    List<Match> getCompletedMatches();
+    List<Series> getCompletedMatches();
 
     /**
      * Listeners registered here will be notified when the status changes
