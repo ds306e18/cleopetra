@@ -5,9 +5,9 @@
 - Added option for using random standard map. - Darxeal
 - Added series (best of X) functionality. #56 - NicEastvillage
     - A default series length can be set for each stage, but length of individual series can also be changed once the bracket is generated.
-- Increased the amount of data exposed to overlays (or other programs) in the `current_match.json`. - NicEastvillage
+- Updated the data exposed to overlays (or other programs) in the `current_match.json`. - NicEastvillage
     - Exposed data includes team names, all bot details, and scores of current series
-    - Choose where the `current_match.json` is located in the RLBotSettingsTab
+    - Added functionality to choose where the `current_match.json` is located in the RLBotSettingsTab
     - Clicking "modify config" will now also update the `current_match.json`
 
 #### Version 1.6 - 17. October 2019
