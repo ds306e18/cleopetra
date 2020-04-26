@@ -2,8 +2,10 @@ package dk.aau.cs.ds306e18.tournament.utility;
 
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
+import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import dk.aau.cs.ds306e18.tournament.model.match.Series;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.Files;
@@ -17,7 +19,7 @@ import java.util.stream.Collectors;
  */
 public class OverlayData implements Serializable {
 
-    public static final Path CURRENT_MATCH_PATH = Paths.get("overlay/current_match.json").toAbsolutePath();
+    public static final String CURRENT_MATCH_FILE_NAME = "current_match.json";
 
     static class OverlayBotData implements Serializable {
 
@@ -60,6 +62,7 @@ public class OverlayData implements Serializable {
      * Write the overlay data to the default location.
      */
     public void write() throws IOException {
-        Files.write(CURRENT_MATCH_PATH, new Gson().toJson(this).getBytes());
+        String folder = Tournament.get().getRlBotSettings().getOverlayPath();
+        Files.write(new File(folder, CURRENT_MATCH_FILE_NAME).toPath(), new Gson().toJson(this).getBytes());
     }
 }

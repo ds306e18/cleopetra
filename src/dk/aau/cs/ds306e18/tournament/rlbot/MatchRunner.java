@@ -62,17 +62,6 @@ public class MatchRunner {
             return false;
         }
 
-        // Write overlay data to current_match.json
-        if (Tournament.get().getRlBotSettings().writeOverlayDataEnabled()) {
-            try {
-                OverlayData overlayData = new OverlayData(series);
-                overlayData.write();
-            } catch (IOException e) {
-                Alerts.errorNotification("Could not write overlay data", "Failed to write overlay data to " + OverlayData.CURRENT_MATCH_PATH);
-                e.printStackTrace();
-            }
-        }
-
         return sendCommandToRLBot(Command.START, true);
     }
 
@@ -219,6 +208,19 @@ public class MatchRunner {
             checkMatch(series);
             insertParticipants(matchConfig, series);
             matchConfig.write(SettingsDirectory.MATCH_CONFIG.toFile());
+
+            // Write overlay data
+            RLBotSettings settings = Tournament.get().getRlBotSettings();
+            if (settings.writeOverlayDataEnabled()) {
+                try {
+                    OverlayData overlayData = new OverlayData(series);
+                    overlayData.write();
+                } catch (IOException e) {
+                    Path path = new File(settings.getOverlayPath(), OverlayData.CURRENT_MATCH_FILE_NAME).toPath();
+                    Alerts.errorNotification("Could not write overlay data", "Failed to write overlay data to " + path.toString());
+                    e.printStackTrace();
+                }
+            }
 
             return true;
         } catch (IllegalStateException e) {
