@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * A data class to serialize data to overlay scripts. Contains data about team names and the bots on each team.
@@ -69,6 +70,18 @@ public class OverlayData implements Serializable {
     @SerializedName("orange_bots")
     private final List<OverlayBotData> orangeBots;
 
+    @SerializedName("series_length")
+    private final int seriesLength;
+
+    @SerializedName("blue_scores")
+    private final List<Integer> blueScores;
+
+    @SerializedName("orange_scores")
+    private final List<Integer> orangeScores;
+
+    @SerializedName("series_wins")
+    private final List<Integer> seriesWins; // 0: blue won, 1: orange won, -1: unknown winner or draw
+
     public OverlayData(Series series) {
         blueTeamName = series.getBlueTeamAsString();
         orangeTeamName = series.getOrangeTeamAsString();
@@ -77,6 +90,22 @@ public class OverlayData implements Serializable {
                 .collect(Collectors.toList());
         orangeBots = series.getOrangeTeam().getBots().stream()
                 .map(OverlayBotData::new)
+                .collect(Collectors.toList());
+        seriesLength = series.getSeriesLength();
+        blueScores = series.getBlueScores().stream()
+                .map(s -> s.orElse(-1))
+                .collect(Collectors.toList());
+        orangeScores = series.getOrangeScores().stream()
+                .map(s -> s.orElse(-1))
+                .collect(Collectors.toList());
+        seriesWins = IntStream.range(0, seriesLength)
+                .map(m -> {
+                    int blueScore = blueScores.get(m);
+                    int orangeScore = orangeScores.get(m);
+                    if (blueScore == -1 || orangeScore == -1 || blueScore == orangeScore) return -1;
+                    return blueScore > orangeScore ? 0 : 1;
+                })
+                .boxed()
                 .collect(Collectors.toList());
     }
 

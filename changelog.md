@@ -1,11 +1,14 @@
 # Changelog
 
-#### Unreleased
+#### Version 1.7 - 26. April 2020
 - Added option to use RLBotPack Python installation if available (default: true). - NicEastvillage
 - Added option for using random standard map. - Darxeal
 - Added series (best of X) functionality. #56 - NicEastvillage
     - A default series length can be set for each stage, but length of individual series can also be changed once the bracket is generated.
-
+- Increased the amount of data exposed to overlays (or other programs) in the `current_match.json`. - NicEastvillage
+    - Exposed data includes team names, all bot details, and scores of current series
+    - Choose where the `current_match.json` is located in the RLBotSettingsTab
+    - Clicking "modify config" will now also update the `current_match.json`
 
 #### Version 1.6 - 17. October 2019
 - Now writes overlay data to a json next to the cleopetra.jar. This can be disabled in RLBotSettings tab. - NicEastvillage
