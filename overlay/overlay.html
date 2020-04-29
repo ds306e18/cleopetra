@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>title</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha384-vk5WoKIaW/vJyUAd9n/wmopsmNhiy+L2Z+SBxGYnUkunIxVxAv/UtMOhba/xskxh" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="overlay.css"/>
+</head>
+<body>
+    <div class="top">
+        <img src="images/overlaybg.png"/>
+    </div>
+    <div class="top" style="top: 3px; display: block; width: 1174px">
+        <p id="team-name-blue" class="team-name">TBD</p>
+        <p id="team-name-orange" class="team-name" style="float:right;">TBD</p>
+    </div>
+    <div class="bottom">
+        <img src="images/sponsors.png"/>
+    </div>
+
+<script>
+    const blueTeamName = $("#team-name-blue");
+    const orangeTeamName = $("#team-name-orange");
+    let previousData = null;
+    let x = 0;
+
+    setInterval(function () {
+        $.get("current_match.json", function (json) {
+            if (json !== previousData) {
+                data = JSON.parse(json);
+                blueTeamName.text(data.blue_team_name);
+                orangeTeamName.text(data.orange_team_name);
+                previousData = json;
+            }
+        });
+    }, 1000);
+</script>
+
+</body>
+</html>

@@ -1,18 +1,25 @@
 package dk.aau.cs.ds306e18.tournament.ui;
 
+import dk.aau.cs.ds306e18.tournament.Main;
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import dk.aau.cs.ds306e18.tournament.rlbot.MatchRunner;
 import dk.aau.cs.ds306e18.tournament.rlbot.RLBotSettings;
 import dk.aau.cs.ds306e18.tournament.rlbot.configuration.MatchConfig;
 import dk.aau.cs.ds306e18.tournament.rlbot.configuration.MatchConfigOptions.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.Window;
 
+import java.io.File;
 import java.util.function.BiConsumer;
 
 public class RLBotSettingsTabController {
@@ -24,6 +31,8 @@ public class RLBotSettingsTabController {
     public RadioButton skipReplaysRadioButton;
     public RadioButton instantStartRadioButton;
     public RadioButton writeOverlayDataRadioButton;
+    public TextField overlayPathTextField;
+    public Button chooseOverlayPathButton;
     public RadioButton useRLBotPackPythonRadioButton;
     public Button rlbotRunnerOpenButton;
     public Button rlbotRunnerCloseButton;
@@ -83,10 +92,22 @@ public class RLBotSettingsTabController {
         setupChoiceBox(respawnTimeChoiceBox, RespawnTime.values(), matchConfig.getRespawnTime(), MatchConfig::setRespawnTime);
 
         // Other settings
-        writeOverlayDataRadioButton.setSelected(settings.writeOverlayDataEnabled());
+        boolean writeOverlay = settings.writeOverlayDataEnabled();
+        writeOverlayDataRadioButton.setSelected(writeOverlay);
         writeOverlayDataRadioButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
             Tournament.get().getRlBotSettings().setWriteOverlayData(newValue);
+            overlayPathTextField.setDisable(!newValue);
+            chooseOverlayPathButton.setDisable(!newValue);
         });
+        chooseOverlayPathButton.setDisable(!writeOverlay);
+        overlayPathTextField.setDisable(!writeOverlay);
+        overlayPathTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                String path = overlayPathTextField.textProperty().get();
+                settings.setOverlayPath(path);
+            }
+        });
+
         useRLBotPackPythonRadioButton.setSelected(settings.useBotPackPythonIfAvailable());
         useRLBotPackPythonRadioButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
             Tournament.get().getRlBotSettings().setUseBotPackPythonIfAvailable(newValue);
@@ -154,5 +175,19 @@ public class RLBotSettingsTabController {
 
     public void onActionRLBotRunnerStopMatch(ActionEvent actionEvent) {
         MatchRunner.stopMatch();
+    }
+
+    public void onActionChooseOverlayPath(ActionEvent actionEvent) {
+        DirectoryChooser dirChooser = new DirectoryChooser();
+        dirChooser.setTitle("Choose overlay folder");
+        dirChooser.setInitialDirectory(Main.lastSavedDirectory);
+        Window window = chooseOverlayPathButton.getScene().getWindow();
+        File folder = dirChooser.showDialog(window);
+
+        if (folder != null) {
+            String path = folder.toString();
+            overlayPathTextField.setText(path);
+            Tournament.get().getRlBotSettings().setOverlayPath(path);
+        }
     }
 }

@@ -10,7 +10,8 @@ import java.util.Objects;
 public class RLBotSettings {
 
     private MatchConfig matchConfig = new MatchConfig();
-    private boolean writeOverlayData = true;
+    private boolean writeOverlayData = false;
+    private String overlayPath = "";
     private boolean useBotPackPythonIfAvailable = true;
 
     public RLBotSettings() {
@@ -35,6 +36,14 @@ public class RLBotSettings {
 
     public void setWriteOverlayData(boolean writeOverlayData) {
         this.writeOverlayData = writeOverlayData;
+    }
+
+    public String getOverlayPath() {
+        return overlayPath;
+    }
+
+    public void setOverlayPath(String overlayPath) {
+        this.overlayPath = overlayPath;
     }
 
     public boolean useBotPackPythonIfAvailable() {
