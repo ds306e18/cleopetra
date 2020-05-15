@@ -209,24 +209,24 @@ public class MatchRunner {
             insertParticipants(matchConfig, series);
             matchConfig.write(SettingsDirectory.MATCH_CONFIG.toFile());
 
+            // Write overlay data
+            RLBotSettings settings = Tournament.get().getRlBotSettings();
+            if (settings.writeOverlayDataEnabled()) {
+                try {
+                    OverlayData overlayData = new OverlayData(series);
+                    overlayData.write();
+                } catch (IOException e) {
+                    Path path = new File(settings.getOverlayPath(), OverlayData.CURRENT_MATCH_FILE_NAME).toPath();
+                    Alerts.errorNotification("Could not write overlay data", "Failed to write overlay data to " + path.toString());
+                    e.printStackTrace();
+                }
+            }
+
             return true;
         } catch (IllegalStateException e) {
             Alerts.errorNotification("Error occurred while configuring match", e.getMessage());
         } catch (IOException e) {
             Alerts.errorNotification("IO error occurred while configuring match", e.getMessage());
-        }
-
-        // Write overlay data
-        RLBotSettings settings = Tournament.get().getRlBotSettings();
-        if (settings.writeOverlayDataEnabled()) {
-            try {
-                OverlayData overlayData = new OverlayData(series);
-                overlayData.write();
-            } catch (IOException e) {
-                Path path = new File(settings.getOverlayPath(), OverlayData.CURRENT_MATCH_FILE_NAME).toPath();
-                Alerts.errorNotification("Could not write overlay data", "Failed to write overlay data to " + path.toString());
-                e.printStackTrace();
-            }
         }
 
         return false;
