@@ -101,6 +101,7 @@ public class RLBotSettingsTabController {
         });
         chooseOverlayPathButton.setDisable(!writeOverlay);
         overlayPathTextField.setDisable(!writeOverlay);
+        overlayPathTextField.setText(settings.getOverlayPath());
         overlayPathTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue) {
                 String path = overlayPathTextField.textProperty().get();
