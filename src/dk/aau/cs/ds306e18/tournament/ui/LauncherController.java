@@ -2,6 +2,8 @@ package dk.aau.cs.ds306e18.tournament.ui;
 
 import dk.aau.cs.ds306e18.tournament.Main;
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
+import dk.aau.cs.ds306e18.tournament.settings.CleoPetraSettings;
+import dk.aau.cs.ds306e18.tournament.settings.LatestPaths;
 import dk.aau.cs.ds306e18.tournament.utility.Alerts;
 import dk.aau.cs.ds306e18.tournament.utility.FileOperations;
 import dk.aau.cs.ds306e18.tournament.utility.SaveLoad;
@@ -100,7 +102,7 @@ public class LauncherController {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open tournament file");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Tournament format (*." + extension + ")", "*." + extension));
-        fileChooser.setInitialDirectory(Main.lastSavedDirectory);
+        fileChooser.setInitialDirectory(CleoPetraSettings.getLatestPaths().getTournamentSaveDirectory());
 
         File file = fileChooser.showOpenDialog(getLauncherStage());
 

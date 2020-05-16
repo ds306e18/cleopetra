@@ -16,6 +16,7 @@ import java.nio.file.StandardCopyOption;
 public class SettingsDirectory {
 
     public static final Path BASE = Paths.get(System.getProperty("user.home")).resolve(".cleopetra/");
+    public static final Path PROPERTIES = BASE.resolve("cleopetra.properties");
     public static final Path PSYONIX_BOTS = BASE.resolve("psyonix_bots");
     public static final Path PSYONIX_APPEARANCE = PSYONIX_BOTS.resolve("psyonix_appearance.cfg");
     public static final Path PSYONIX_ALLSTAR = PSYONIX_BOTS.resolve("psyonix_allstar.cfg");
@@ -25,36 +26,4 @@ public class SettingsDirectory {
     public static final Path MATCH_CONFIG = MATCH_FILES.resolve("rlbot.cfg");
     public static final Path RUN_PY = MATCH_FILES.resolve("run.py");
 
-    /**
-     * Setup the settings directory, 'user.home/.cleopetra/', and makes sure the required files are present. Should
-     * always be called on start up.
-     */
-    public static void setup() {
-        try {
-
-            // Files for starting matches. 'rlbot.cfg' is created right before match start.
-            Files.createDirectories(MATCH_FILES);
-            Files.copy(Main.class.getResourceAsStream("settings/files/run.py"), RUN_PY, StandardCopyOption.REPLACE_EXISTING);
-
-            setupPsyonixBots();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Copies the Psyonix bot config files to the CleoPetra settings folder so they can be read by the RLBot framework.
-     * If the files already exists, they won't be replaced. This allows the user to change the config files
-     * (e.g. change the appearance) and customize their Psyonix bots.
-     *
-     * @throws IOException thrown if something goes wrong during copying the files or if URI path is wrong.
-     */
-    private static void setupPsyonixBots() throws IOException {
-        Files.createDirectories(PSYONIX_BOTS);
-        FileOperations.copyIfMissing(Main.class.getResourceAsStream("settings/files/psyonix_appearance.cfg"), PSYONIX_APPEARANCE);
-        FileOperations.copyIfMissing(Main.class.getResourceAsStream("settings/files/psyonix_allstar.cfg"), PSYONIX_ALLSTAR);
-        FileOperations.copyIfMissing(Main.class.getResourceAsStream("settings/files/psyonix_pro.cfg"), PSYONIX_PRO);
-        FileOperations.copyIfMissing(Main.class.getResourceAsStream("settings/files/psyonix_rookie.cfg"), PSYONIX_ROOKIE);
-    }
 }
