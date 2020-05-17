@@ -1,5 +1,12 @@
 # Changelog
 
+#### Version 1.7.2
+- CleoPetra is now way smarter about where file choosers starts. - NicEastvillage
+
+#### Version 1.7.1
+- Fixed bug that prevented overlay to be written to current_match.json. - NicEastvillage
+- Fixed bug where overlay path text field was not updated when loading a saved tournament. #103 - NicEastvillage
+
 #### Version 1.7 - 26. April 2020
 - Added option to use RLBotPack Python installation if available (default: true). - NicEastvillage
 - Added option for using random standard map. - Darxeal
