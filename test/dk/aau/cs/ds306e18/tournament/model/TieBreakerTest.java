@@ -30,7 +30,7 @@ public class TieBreakerTest {
         seriesThree.setHasBeenPlayed(true);
 
         for (Team team : teams) {
-            team.getStatsManager().trackMatches(null, series);
+            team.getStatsManager().trackAllSeries(null, series);
         }
 
         List<Team> ordered = TieBreaker.GOAL_DIFF.compareAll(teams, null);
@@ -56,7 +56,7 @@ public class TieBreakerTest {
         seriesTwo.setHasBeenPlayed(true);
 
         for (Team team : teams) {
-            team.getStatsManager().trackMatches(null, series);
+            team.getStatsManager().trackAllSeries(null, series);
         }
 
         List<Team> ordered = TieBreaker.GOALS_SCORED.compareAll(teams, null);
@@ -81,7 +81,7 @@ public class TieBreakerTest {
         seriesTwo.setHasBeenPlayed(true);
 
         for (Team team : teams) {
-            team.getStatsManager().trackMatches(null, series);
+            team.getStatsManager().trackAllSeries(null, series);
         }
 
         List<Team> ordered = TieBreaker.SEED.compareAll(teams, null);
@@ -108,7 +108,7 @@ public class TieBreakerTest {
         seriesThree.setHasBeenPlayed(true);
 
         for (Team team : teams) {
-            team.getStatsManager().trackMatches(null, series);
+            team.getStatsManager().trackAllSeries(null, series);
         }
 
         // Team 0 and team 3 both have 2 goals, but team 0 has one point
@@ -149,7 +149,7 @@ public class TieBreakerTest {
         seriesThree.setHasBeenPlayed(true);
 
         for (Team team : teams) {
-            team.getStatsManager().trackMatches(null, series);
+            team.getStatsManager().trackAllSeries(null, series);
         }
 
         // Teams with points should be ahead, but their goals decide the order next

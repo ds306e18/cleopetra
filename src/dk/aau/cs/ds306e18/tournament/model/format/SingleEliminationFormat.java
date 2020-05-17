@@ -148,7 +148,7 @@ public class SingleEliminationFormat implements Format, MatchPlayedListener {
     private void setupStatsTracking() {
         List<Series> allSeries = getAllSeries();
         for (Team team : seededTeams) {
-            team.getStatsManager().trackMatches(this, allSeries);
+            team.getStatsManager().trackAllSeries(this, allSeries);
         }
     }
 

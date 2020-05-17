@@ -9,7 +9,7 @@ import java.util.IdentityHashMap;
 import java.util.Map;
 
 /**
- * Class for track all stats for a Team for individual Stages and globally across all Stages.
+ * Class for tracking all stats for a Team for individual Stages and globally across all Stages.
  */
 public class StatsManager implements StatsChangeListener {
 
@@ -42,34 +42,34 @@ public class StatsManager implements StatsChangeListener {
     }
 
     /**
-     * Start tracking stats from the given match.
+     * Start tracking stats from the given series.
      */
-    public void trackMatch(Format format, Series series) {
-        getTracker(format).trackMatch(series);
+    public void trackSeries(Format format, Series series) {
+        getTracker(format).trackSeries(series);
         recalculateGlobalStats();
     }
 
     /**
-     * Stop tracking stats from the given match.
+     * Stop tracking stats from the given series.
      */
-    public void untrackMatch(Format format, Series series) {
-        getTracker(format).untrackMatch(series);
+    public void untrackSeries(Format format, Series series) {
+        getTracker(format).untrackSeries(series);
         recalculateGlobalStats();
     }
 
     /**
-     * Start tracking stats from the given matches.
+     * Start tracking stats from the given series.
      */
-    public void trackMatches(Format format, Collection<? extends Series> matches) {
-        getTracker(format).trackMatches(matches);
+    public void trackAllSeries(Format format, Collection<? extends Series> matches) {
+        getTracker(format).trackAllSeries(matches);
         recalculateGlobalStats();
     }
 
     /**
-     * Stop tracking stats from the given matches.
+     * Stop tracking stats from the given series.
      */
-    public void untrackMatches(Format format, Collection<? extends Series> matches) {
-        getTracker(format).untrackMatches(matches);
+    public void untrackAllSeries(Format format, Collection<? extends Series> matches) {
+        getTracker(format).untrackAllSeries(matches);
         recalculateGlobalStats();
     }
 
