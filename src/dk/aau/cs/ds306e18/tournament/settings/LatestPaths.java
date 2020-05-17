@@ -33,7 +33,12 @@ public class LatestPaths {
      */
     public File getTournamentSaveDirectory() {
         String tournamentSaveDirectory = properties.getProperty(KEY_TOURNAMENT_SAVE_DIR);
-        if (tournamentSaveDirectory != null) return new File(tournamentSaveDirectory);
+        if (tournamentSaveDirectory != null) {
+            File dir = new File(tournamentSaveDirectory);
+            // Dir might not exist anymore. In that case we will forget about it
+            if (dir.exists()) return dir;
+            else properties.remove(KEY_TOURNAMENT_SAVE_DIR);
+        }
         return FALLBACK_DIR;
     }
 
@@ -41,8 +46,10 @@ public class LatestPaths {
      * Update latest tournament save directory.
      */
     public void setTournamentSaveDirectory(File dir) {
-        properties.setProperty(KEY_TOURNAMENT_SAVE_DIR, dir.getAbsolutePath());
-        saveProperties();
+        if (dir.exists()) {
+            properties.setProperty(KEY_TOURNAMENT_SAVE_DIR, dir.getAbsolutePath());
+            saveProperties();
+        }
     }
 
     /**
@@ -50,7 +57,12 @@ public class LatestPaths {
      */
     public File getBotConfigDirectory() {
         String botConfigDirectory = properties.getProperty(KEY_BOT_CONFIG_DIR);
-        if (botConfigDirectory != null) return new File(botConfigDirectory);
+        if (botConfigDirectory != null) {
+            File dir = new File(botConfigDirectory);
+            // Dir might not exist anymore. In that case we will forget about it
+            if (dir.exists()) return dir;
+            else properties.remove(KEY_BOT_CONFIG_DIR);
+        }
         // Fallback to tournament save dir
         return getTournamentSaveDirectory();
     }
@@ -59,8 +71,10 @@ public class LatestPaths {
      * Update latest bot config directory.
      */
     public void setBotConfigDirectory(File dir) {
-        properties.setProperty(KEY_BOT_CONFIG_DIR, dir.getAbsolutePath());
-        saveProperties();
+        if (dir.exists()) {
+            properties.setProperty(KEY_BOT_CONFIG_DIR, dir.getAbsolutePath());
+            saveProperties();
+        }
     }
 
     /**
@@ -68,7 +82,12 @@ public class LatestPaths {
      */
     public File getOverlayDirectory() {
         String overlayDirectory = properties.getProperty(KEY_OVERLAY_DIR);
-        if (overlayDirectory != null) return new File(overlayDirectory);
+        if (overlayDirectory != null) {
+            File dir = new File(overlayDirectory);
+            // Dir might not exist anymore. In that case we will forget about it
+            if (dir.exists()) return dir;
+            else properties.remove(KEY_TOURNAMENT_SAVE_DIR);
+        }
         // Fallback to tournament save dir
         return getTournamentSaveDirectory();
     }
@@ -77,8 +96,10 @@ public class LatestPaths {
      * Update latest overlay directory.
      */
     public void setOverlayDirectory(File dir) {
-        properties.setProperty(KEY_OVERLAY_DIR, dir.getAbsolutePath());
-        saveProperties();
+        if (dir.exists()) {
+            properties.setProperty(KEY_OVERLAY_DIR, dir.getAbsolutePath());
+            saveProperties();
+        }
     }
 
     private void saveProperties() {
