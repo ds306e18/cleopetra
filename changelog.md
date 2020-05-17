@@ -1,5 +1,8 @@
 # Changelog
 
+#### Version 1.7.2
+- Fixed a bug where round robin stats were not updated correctly due to deserialization error. - NicEastvillage
+
 #### Version 1.7 - 26. April 2020
 - Added option to use RLBotPack Python installation if available (default: true). - NicEastvillage
 - Added option for using random standard map. - Darxeal
