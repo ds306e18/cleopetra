@@ -1,5 +1,6 @@
 package dk.aau.cs.ds306e18.tournament;
 
+import dk.aau.cs.ds306e18.tournament.settings.CleoPetraSettings;
 import dk.aau.cs.ds306e18.tournament.settings.SettingsDirectory;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -12,8 +13,6 @@ import java.io.File;
 
 
 public class Main extends Application {
-
-    public static File lastSavedDirectory = new File(System.getProperty("user.home"));
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -28,7 +27,7 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        SettingsDirectory.setup();
+        CleoPetraSettings.setup();
         launch(args);
     }
 }
