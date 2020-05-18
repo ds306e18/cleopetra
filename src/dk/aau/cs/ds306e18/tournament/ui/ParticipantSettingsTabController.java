@@ -2,6 +2,8 @@ package dk.aau.cs.ds306e18.tournament.ui;
 
 import dk.aau.cs.ds306e18.tournament.Main;
 import dk.aau.cs.ds306e18.tournament.model.*;
+import dk.aau.cs.ds306e18.tournament.settings.CleoPetraSettings;
+import dk.aau.cs.ds306e18.tournament.settings.LatestPaths;
 import dk.aau.cs.ds306e18.tournament.utility.Alerts;
 import dk.aau.cs.ds306e18.tournament.rlbot.BotCollection;
 import dk.aau.cs.ds306e18.tournament.utility.AutoNaming;
@@ -376,7 +378,8 @@ public class ParticipantSettingsTabController {
     @FXML
     public void onActionLoadConfig(ActionEvent actionEvent) {
         // Open file chooser
-        botConfigFileChooser.setInitialDirectory(Main.lastSavedDirectory);
+        LatestPaths latestPaths = CleoPetraSettings.getLatestPaths();
+        botConfigFileChooser.setInitialDirectory(latestPaths.getBotConfigDirectory());
         Window window = loadConfigButton.getScene().getWindow();
         List<File> files = botConfigFileChooser.showOpenMultipleDialog(window);
 
@@ -397,14 +400,15 @@ public class ParticipantSettingsTabController {
             botCollectionListView.setItems(FXCollections.observableArrayList(BotCollection.global));
             botCollectionListView.refresh();
 
-            Main.lastSavedDirectory = files.get(0).getParentFile();
+            latestPaths.setBotConfigDirectory(files.get(0).getParentFile());
         }
     }
 
     @FXML
     public void onActionLoadFolder(ActionEvent actionEvent) {
         // Open directory chooser
-        botFolderChooser.setInitialDirectory(Main.lastSavedDirectory);
+        LatestPaths latestPaths = CleoPetraSettings.getLatestPaths();
+        botFolderChooser.setInitialDirectory(latestPaths.getBotConfigDirectory());
         Window window = loadFolderButton.getScene().getWindow();
         File folder = botFolderChooser.showDialog(window);
 
@@ -414,7 +418,7 @@ public class ParticipantSettingsTabController {
             botCollectionListView.setItems(FXCollections.observableArrayList(BotCollection.global));
             botCollectionListView.refresh();
 
-            Main.lastSavedDirectory = folder;
+            latestPaths.setBotConfigDirectory(folder);
         }
     }
 
