@@ -1,5 +1,11 @@
 # Changelog
 
+#### Version 1.7.2
+- Added support three new match options. - NicEastvillage
+    - Enable rendering
+    - Enable state setting
+    - Auto save replays
+
 #### Version 1.7 - 26. April 2020
 - Added option to use RLBotPack Python installation if available (default: true). - NicEastvillage
 - Added option for using random standard map. - Darxeal
