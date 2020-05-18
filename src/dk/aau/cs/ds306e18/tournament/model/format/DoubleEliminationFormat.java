@@ -282,7 +282,7 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
     private void setupStatsTracking() {
         List<Series> allSeries = getAllSeries();
         for (Team team : teams) {
-            team.getStatsManager().trackMatches(this, allSeries);
+            team.getStatsManager().trackAllSeries(this, allSeries);
         }
     }
 

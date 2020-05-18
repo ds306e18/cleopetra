@@ -1,6 +1,7 @@
 # Changelog
 
 #### Version 1.7.2
+- Fixed a bug where round robin stats were not updated correctly due to deserialization error. - NicEastvillage
 - CleoPetra is now way smarter about where file choosers starts. - NicEastvillage
 
 #### Version 1.7.1

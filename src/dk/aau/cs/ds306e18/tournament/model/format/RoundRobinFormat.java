@@ -19,7 +19,7 @@ public class RoundRobinFormat implements Format, MatchPlayedListener {
     private StageStatus status = StageStatus.PENDING;
     private int defaultSeriesLength = 1;
     private ArrayList<Team> teams;
-    private ArrayList<Series> series;
+    transient private ArrayList<Series> series;
     private ArrayList<RoundRobinGroup> groups;
     private int numberOfGroups = 1;
 
@@ -268,7 +268,7 @@ public class RoundRobinFormat implements Format, MatchPlayedListener {
     private void setupStatsTracking() {
         List<Series> allSeries = getAllSeries();
         for (Team team : teams) {
-            team.getStatsManager().trackMatches(this, allSeries);
+            team.getStatsManager().trackAllSeries(this, allSeries);
         }
     }
 
@@ -392,7 +392,8 @@ public class RoundRobinFormat implements Format, MatchPlayedListener {
 
     @Override
     public void postDeserializationRepair() {
-        for (Series series : this.getAllSeries()) series.registerMatchPlayedListener(this);
+        series = extractMatchesFromGroups();
+        for (Series series : series) series.registerMatchPlayedListener(this);
         setupStatsTracking();
     }
 

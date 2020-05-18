@@ -326,7 +326,7 @@ public final class Series {
     }
 
     /**
-     * Returns true when both Teams are known and ready, even if the Match has already been played.
+     * Returns true when both Teams are known and ready, even if the Series has already been played.
      */
     public boolean isReadyToPlay() {
         return teamOne != null && teamTwo != null;
@@ -334,8 +334,8 @@ public final class Series {
 
     public Team getWinner() {
         switch (getOutcome()) {
-            case UNKNOWN: throw new IllegalStateException("Match has not been played.");
-            case DRAW: throw new IllegalStateException("Match ended in draw.");
+            case UNKNOWN: throw new IllegalStateException("Series has not been played.");
+            case DRAW: throw new IllegalStateException("Series ended in draw.");
             case TEAM_ONE_WINS: return getTeamOne();
             case TEAM_TWO_WINS: return getTeamTwo();
         }
@@ -344,8 +344,8 @@ public final class Series {
 
     public Team getLoser() {
         switch (getOutcome()) {
-            case UNKNOWN: throw new IllegalStateException("Match has not been played.");
-            case DRAW: throw new IllegalStateException("Match ended in draw.");
+            case UNKNOWN: throw new IllegalStateException("Series has not been played.");
+            case DRAW: throw new IllegalStateException("Series ended in draw.");
             case TEAM_ONE_WINS: return getTeamTwo();
             case TEAM_TWO_WINS: return getTeamOne();
         }

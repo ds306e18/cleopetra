@@ -171,7 +171,7 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
 
         // Track stats from the new matches
         for (Team team : teams) {
-            team.getStatsManager().trackMatches(this, createdSeries);
+            team.getStatsManager().trackAllSeries(this, createdSeries);
         }
 
         rounds.add(createdSeries);
@@ -378,7 +378,7 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
         teamPoints = createPointsMap(teams);
         for (Team team : teams) {
             calculateAndAssignTeamPoints(team);
-            team.getStatsManager().trackMatches(this, getAllSeries());
+            team.getStatsManager().trackAllSeries(this, getAllSeries());
         }
     }
 
