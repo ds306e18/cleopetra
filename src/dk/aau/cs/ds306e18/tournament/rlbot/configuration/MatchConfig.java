@@ -19,6 +19,9 @@ public class MatchConfig {
     public final static String GAME_MAP = "game_map";
     public final static String SKIP_REPLAYS = "skip_replays";
     public final static String INSTANT_START = "start_without_countdown";
+    public final static String ENABLE_RENDERING = "enable_rendering";
+    public final static String ENABLE_STATE_SETTING = "enable_state_setting";
+    public final static String AUTO_SAVE_REPLAYS = "auto_save_replay";
 
     public final static String PARTICIPANTS_CONFIGURATION_HEADER = "Participant Configuration";
     public final static String PARTICIPANT_CONFIG_INDEXED = "participant_config_";
@@ -48,6 +51,9 @@ public class MatchConfig {
     private GameMode gameMode = GameMode.SOCCER;
     private boolean skipReplays = false;
     private boolean instantStart = false;
+    private boolean renderingEnabled = false;
+    private boolean stateSettingEnabled = false;
+    private boolean autoSaveReplays = false;
     private final List<ParticipantInfo> participants = new ArrayList<>();
 
     private MatchLength matchLength = MatchLength.FIVE_MINUTES;
@@ -140,6 +146,9 @@ public class MatchConfig {
         config.set(MATCH_CONFIGURATION_HEADER, GAME_MODE, gameMode.configName);
         config.set(MATCH_CONFIGURATION_HEADER, SKIP_REPLAYS, skipReplays);
         config.set(MATCH_CONFIGURATION_HEADER, INSTANT_START, instantStart);
+        config.set(MATCH_CONFIGURATION_HEADER, ENABLE_RENDERING, renderingEnabled);
+        config.set(MATCH_CONFIGURATION_HEADER, ENABLE_STATE_SETTING, stateSettingEnabled);
+        config.set(MATCH_CONFIGURATION_HEADER, AUTO_SAVE_REPLAYS, autoSaveReplays);
         config.set(MATCH_CONFIGURATION_HEADER, PARTICIPANT_COUNT_KEY, participants.size());
 
         // Mutators
@@ -203,6 +212,30 @@ public class MatchConfig {
 
     public void setInstantStart(boolean instantStart) {
         this.instantStart = instantStart;
+    }
+
+    public boolean isRenderingEnabled() {
+        return renderingEnabled;
+    }
+
+    public void setRenderingEnabled(boolean renderingEnabled) {
+        this.renderingEnabled = renderingEnabled;
+    }
+
+    public boolean isStateSettingEnabled() {
+        return stateSettingEnabled;
+    }
+
+    public void setStateSettingEnabled(boolean stateSettingEnabled) {
+        this.stateSettingEnabled = stateSettingEnabled;
+    }
+
+    public boolean isAutoSaveReplays() {
+        return autoSaveReplays;
+    }
+
+    public void setAutoSaveReplays(boolean autoSaveReplays) {
+        this.autoSaveReplays = autoSaveReplays;
     }
 
     public List<ParticipantInfo> getParticipants() {

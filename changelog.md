@@ -1,6 +1,10 @@
 # Changelog
 
 #### Version 1.7.2
+- Added support three new match options. - NicEastvillage
+    - Enable rendering
+    - Enable state setting
+    - Auto save replays
 - Fixed a bug where round robin stats were not updated correctly due to deserialization error. - NicEastvillage
 - CleoPetra is now way smarter about where file choosers starts. - NicEastvillage
 

@@ -54,6 +54,9 @@ public class RLBotSettingsTabController {
     public ChoiceBox<Gravity> gravityChoiceBox;
     public ChoiceBox<Demolish> demolishChoiceBox;
     public ChoiceBox<RespawnTime> respawnTimeChoiceBox;
+    public RadioButton renderingRadioButton;
+    public RadioButton stateSettingRadioButton;
+    public RadioButton autoSaveReplaysRadioButton;
 
     @FXML private HBox tabRoot;
 
@@ -74,6 +77,18 @@ public class RLBotSettingsTabController {
         instantStartRadioButton.setSelected(matchConfig.isInstantStart());
         instantStartRadioButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
             Tournament.get().getRlBotSettings().getMatchConfig().setInstantStart(newValue);
+        });
+        renderingRadioButton.setSelected(matchConfig.isRenderingEnabled());
+        renderingRadioButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            Tournament.get().getRlBotSettings().getMatchConfig().setRenderingEnabled(newValue);
+        });
+        stateSettingRadioButton.setSelected(matchConfig.isStateSettingEnabled());
+        stateSettingRadioButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            Tournament.get().getRlBotSettings().getMatchConfig().setStateSettingEnabled(newValue);
+        });
+        autoSaveReplaysRadioButton.setSelected(matchConfig.isAutoSaveReplays());
+        autoSaveReplaysRadioButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            Tournament.get().getRlBotSettings().getMatchConfig().setAutoSaveReplays(newValue);
         });
 
         // Mutators
