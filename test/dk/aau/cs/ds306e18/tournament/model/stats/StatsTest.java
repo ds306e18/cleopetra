@@ -25,7 +25,7 @@ public class StatsTest {
         assertEquals(0, statsA.getGoalsConceded());
 
         Series series = new Series(teamA, teamB);
-        teamA.getStatsManager().trackMatch(null, series);
+        teamA.getStatsManager().trackSeries(null, series);
         series.setScores(3, 2, 0);
         series.setHasBeenPlayed(true);
 
@@ -41,8 +41,8 @@ public class StatsTest {
         Team teamA = new Team("A", null, 0, "a");
         Team teamB = new Team("B", null, 0, "b");
         Series series = new Series(teamA, teamB);
-        teamA.getStatsManager().trackMatch(null, series);
-        teamB.getStatsManager().trackMatch(null, series);
+        teamA.getStatsManager().trackSeries(null, series);
+        teamB.getStatsManager().trackSeries(null, series);
 
         series.setScores(1, 3, 0); // Match not over
 
@@ -55,8 +55,8 @@ public class StatsTest {
         Team teamA = new Team("A", null, 0, "a");
         Team teamB = new Team("B", null, 0, "b");
         Series series = new Series(teamA, teamB);
-        teamA.getStatsManager().trackMatch(null, series);
-        teamB.getStatsManager().trackMatch(null, series);
+        teamA.getStatsManager().trackSeries(null, series);
+        teamB.getStatsManager().trackSeries(null, series);
 
         series.setScores(5, 2, 0);
         series.setHasBeenPlayed(true);
@@ -79,8 +79,8 @@ public class StatsTest {
         seriesTwo.setHasBeenPlayed(true);
 
         for (Team team : new Team[]{teamA, teamB, teamC}) {
-            team.getStatsManager().trackMatch(null, seriesOne);
-            team.getStatsManager().trackMatch(null, seriesTwo);
+            team.getStatsManager().trackSeries(null, seriesOne);
+            team.getStatsManager().trackSeries(null, seriesTwo);
         }
 
         assertStats(teamA, null, 1, 1, 5, 5);

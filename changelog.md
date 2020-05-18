@@ -5,6 +5,12 @@
     - Enable rendering
     - Enable state setting
     - Auto save replays
+- Fixed a bug where round robin stats were not updated correctly due to deserialization error. - NicEastvillage
+- CleoPetra is now way smarter about where file choosers starts. - NicEastvillage
+
+#### Version 1.7.1
+- Fixed bug that prevented overlay to be written to current_match.json. - NicEastvillage
+- Fixed bug where overlay path text field was not updated when loading a saved tournament. #103 - NicEastvillage
 
 #### Version 1.7 - 26. April 2020
 - Added option to use RLBotPack Python installation if available (default: true). - NicEastvillage

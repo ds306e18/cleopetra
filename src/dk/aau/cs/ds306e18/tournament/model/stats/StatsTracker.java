@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * This class tracks the stats (wins, loses, goals, etc) for a single team over a set of matches. The class uses the
+ * This class tracks the stats (wins, loses, goals, etc) for a single team over a set of series. The class uses the
  * MatchChangeListener interface to get updates about new stats.
  */
 class StatsTracker implements MatchChangeListener {
@@ -28,7 +28,7 @@ class StatsTracker implements MatchChangeListener {
     }
 
     /**
-     * Recalculates the stats by check each tracked match. StatsChangeListeners are notified afterwards.
+     * Recalculates the stats by check each tracked series. StatsChangeListeners are notified afterwards.
      */
     public void recalculate() {
         int wins = 0;
@@ -36,7 +36,7 @@ class StatsTracker implements MatchChangeListener {
         int goals = 0;
         int goalsConceded = 0;
         for (Series series : trackedSeries) {
-            // If the team is in the match, add the relevant stats
+            // If the team is in the series, add the relevant stats
             if (series.getTeamOne() == team) {
                 goals += series.getTeamOneScores().stream().mapToInt(x -> x.orElse(0)).sum();
                 goalsConceded += series.getTeamTwoScores().stream().mapToInt(x -> x.orElse(0)).sum();
@@ -63,7 +63,7 @@ class StatsTracker implements MatchChangeListener {
     }
 
     /**
-     * Returns a set of all the tracked matches. Changes to the set does not affect the Stats.
+     * Returns a set of all the tracked series. Changes to the set does not affect the Stats.
      */
     public Set<Series> getTrackedSeries() {
         return new HashSet<>(trackedSeries);
@@ -78,31 +78,31 @@ class StatsTracker implements MatchChangeListener {
     }
 
     /**
-     * Starts tracking stats from the given match. The associated team does not need to be a participant of the
-     * given match. StatsChangeListeners are notified.
-     * @param series a match to track stats from
+     * Starts tracking stats from the given series. The associated team does not need to be a participant of the
+     * given series. StatsChangeListeners are notified.
+     * @param series a series to track stats from
      */
-    public void trackMatch(Series series) {
+    public void trackSeries(Series series) {
         trackedSeries.add(series);
         series.registerMatchChangeListener(this);
         recalculate();
     }
     /**
-     * Stops tracking stats from the given match. StatsChangeListeners are notified.
-     * @param series a match to stop tracking stats from
+     * Stops tracking stats from the given series. StatsChangeListeners are notified.
+     * @param series a series to stop tracking stats from
      */
-    public void untrackMatch(Series series) {
+    public void untrackSeries(Series series) {
         trackedSeries.remove(series);
         series.unregisterMatchChangeListener(this);
         recalculate();
     }
 
     /**
-     * Starts tracking stats from the given matches. The associated team does not need to be a participant of the
+     * Starts tracking stats from the given series. The associated team does not need to be a participant of the
      * given matches. StatsChangeListeners are notified.
-     * @param matches a collection of matches to track stats from.
+     * @param matches a collection of series to track stats from.
      */
-    public void trackMatches(Collection<? extends Series> matches) {
+    public void trackAllSeries(Collection<? extends Series> matches) {
         for (Series series : matches) {
             trackedSeries.add(series);
             series.registerMatchChangeListener(this);
@@ -111,10 +111,10 @@ class StatsTracker implements MatchChangeListener {
     }
 
     /**
-     * Stops tracking stats from the given match. StatsChangeListeners are notified.
-     * @param matches a collection of matches to stop tracking stats from.
+     * Stops tracking stats from the given series. StatsChangeListeners are notified.
+     * @param matches a collection of series to stop tracking stats from.
      */
-    public void untrackMatches(Collection<? extends Series> matches) {
+    public void untrackAllSeries(Collection<? extends Series> matches) {
         for (Series series : matches) {
             trackedSeries.remove(series);
             series.unregisterMatchChangeListener(this);

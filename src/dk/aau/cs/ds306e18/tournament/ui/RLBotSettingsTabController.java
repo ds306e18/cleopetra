@@ -6,6 +6,8 @@ import dk.aau.cs.ds306e18.tournament.rlbot.MatchRunner;
 import dk.aau.cs.ds306e18.tournament.rlbot.RLBotSettings;
 import dk.aau.cs.ds306e18.tournament.rlbot.configuration.MatchConfig;
 import dk.aau.cs.ds306e18.tournament.rlbot.configuration.MatchConfigOptions.*;
+import dk.aau.cs.ds306e18.tournament.settings.CleoPetraSettings;
+import dk.aau.cs.ds306e18.tournament.settings.LatestPaths;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -194,9 +196,10 @@ public class RLBotSettingsTabController {
     }
 
     public void onActionChooseOverlayPath(ActionEvent actionEvent) {
+        LatestPaths latestPaths = CleoPetraSettings.getLatestPaths();
         DirectoryChooser dirChooser = new DirectoryChooser();
         dirChooser.setTitle("Choose overlay folder");
-        dirChooser.setInitialDirectory(Main.lastSavedDirectory);
+        dirChooser.setInitialDirectory(latestPaths.getOverlayDirectory());
         Window window = chooseOverlayPathButton.getScene().getWindow();
         File folder = dirChooser.showDialog(window);
 
@@ -204,6 +207,7 @@ public class RLBotSettingsTabController {
             String path = folder.toString();
             overlayPathTextField.setText(path);
             Tournament.get().getRlBotSettings().setOverlayPath(path);
+            latestPaths.setOverlayDirectory(folder);
         }
     }
 }
