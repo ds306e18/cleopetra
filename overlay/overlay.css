@@ -31,14 +31,11 @@
 }
 
 .team-name {
-    left: 30%;
-    font-size: 1.8em;
+    font-size: 24px;
     font-weight: bold;
     font-family: "Helvetica", "Verdana", sans-serif;
     color: white;
-    float: left;
     text-align: center;
-    width: 370px;
 }
 
 .win-indicator {
