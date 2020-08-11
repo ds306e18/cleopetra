@@ -5,6 +5,17 @@
     transform: translate(-50%, 0);
 }
 
+#header-container {
+    display: grid;
+    grid-template-columns: auto 392px auto;
+    grid-template-rows: auto 4px auto;
+    grid-template-areas:
+            "blue . orange"
+            ". . ."
+            "bluewins . orangewins";
+    font-size: 0;
+}
+
 .bottom {
     position: fixed;
     top: 100%;
@@ -28,6 +39,10 @@
     float: left;
     text-align: center;
     width: 370px;
+}
+
+.win-indicator {
+    margin: 0 1px 0 1px;
 }
 
 #ladder-div {

@@ -7,8 +7,13 @@
     <link rel="stylesheet" href="overlay.css"/>
 </head>
 <body>
-    <div class="top">
-        <img src="images/overlaybg.png"/>
+    <div class="top" style="margin-top: 10px">
+        <div id="header-container">
+            <img src="images/blue bg.png" style="grid-area: blue"/>
+            <img src="images/orange bg.png" style="grid-area: orange"/>
+            <div id="blue-wins" style="grid-area: bluewins; justify-self: right"></div>
+            <div id="orange-wins" style="grid-area: orangewins; justify-self: left"></div>
+        </div>
     </div>
     <div class="top" style="top: 3px; display: block; width: 1174px">
         <p id="team-name-blue" class="team-name">TBD</p>
@@ -21,8 +26,11 @@
 <script>
     const blueTeamName = $("#team-name-blue");
     const orangeTeamName = $("#team-name-orange");
+    const blueWinContainer = $("#blue-wins");
+    const orangeWinContainer = $("#orange-wins")
+    const winOnElement = "<img class=\"win-indicator\" src=\"images/win indicator on.png\"/>"
+    const winOffElement = "<img class=\"win-indicator\" src=\"images/win indicator off.png\"/>"
     let previousData = null;
-    let x = 0;
 
     setInterval(function () {
         $.get("current_match.json", function (json) {
@@ -31,6 +39,31 @@
                 blueTeamName.text(data.blue_team_name);
                 orangeTeamName.text(data.orange_team_name);
                 previousData = json;
+
+                blueWinContainer.empty()
+                orangeWinContainer.empty()
+
+                if (data.series_length > 1) {
+                    let winsRequired = Math.ceil(data.series_length / 2)
+
+                    let blueWinCount = data.series_wins.filter(x => x === 0).length
+                    for (i = 0; i < winsRequired; i++) {
+                        if (i >= winsRequired - blueWinCount) {
+                            blueWinContainer.append(winOnElement)
+                        } else {
+                            blueWinContainer.append(winOffElement)
+                        }
+                    }
+
+                    let orangeWinCount = data.series_wins.filter(x => x === 1).length
+                    for (i = 0; i < winsRequired; i++) {
+                        if (i < orangeWinCount) {
+                            orangeWinContainer.append(winOnElement)
+                        } else {
+                            orangeWinContainer.append(winOffElement)
+                        }
+                    }
+                }
             }
         });
     }, 1000);
