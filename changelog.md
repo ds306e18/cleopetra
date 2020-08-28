@@ -2,6 +2,7 @@
 
 #### Version 1.7.3 - August 2020
 - Now supports RLBotGUIX python installations. - NicEastvillage
+- Example overlay supports best-of-X series. - NicEastvillage
 
 #### Version 1.7.2
 - Added support three new match options. - NicEastvillage

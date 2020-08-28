@@ -19,7 +19,7 @@ public class RLBotInstallation {
     }
 
     /**
-     * @return The old path to the Python installation that the RLBotGUI uses
+     * @return The path to the Python installation that the RLBotGUI uses
      * (the new installation in %APPDATA%/Local/RLBotGUIX/...). It is not guaranteed to
      * exist and can be null if APPDATA is not an environment variable.
      */
@@ -36,7 +36,7 @@ public class RLBotInstallation {
      * @return The old path to the Python installation that the RLBotGUI uses
      * (the old installation in %APPDATA%/Local/RLBotGUI/...). It is not guaranteed to
      * exist and can be null if APPDATA is not an environment variable.
-     * Migration from RLBotGUI to RLBotGUIX might happen one day. See {@code getPathToPython()}.
+     * Full migration from RLBotGUI to RLBotGUIX might happen one day. See {@code getPathToPython()}.
      */
     public static Path getOldPathToPython() {
         try {
