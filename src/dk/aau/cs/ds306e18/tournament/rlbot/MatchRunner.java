@@ -16,6 +16,7 @@ import java.net.ConnectException;
 import java.net.Socket;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
@@ -75,9 +76,17 @@ public class MatchRunner {
 
             String python = "python";
             if (Tournament.get().getRlBotSettings().useBotPackPythonIfAvailable()) {
-                Path botPackPython = RLBotPack.getPathToPython();
-                if (botPackPython != null) {
+                // Find python installation in RLBotGUI
+                Path botPackPython = RLBotInstallation.getPathToPython();
+                if (botPackPython != null && Files.exists(botPackPython)) {
                     python = botPackPython.toString();
+                    System.out.println("Found RLBotGUI python installation: " + python);
+                } else {
+                    botPackPython = RLBotInstallation.getOldPathToPython();
+                    if (botPackPython != null && Files.exists(botPackPython)) {
+                        python = botPackPython.toString();
+                        System.out.println("Found RLBotGUI python installation: " + python);
+                    }
                 }
             }
 

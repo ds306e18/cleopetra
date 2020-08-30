@@ -65,7 +65,7 @@ public class BotCollection extends TreeSet<Bot> {
     public boolean addRLBotPackIfPresent() {
         try {
             // Get path to BotPack and try to load bots
-            Path rlbotpackPath = RLBotPack.getPathToRLBotPack();
+            Path rlbotpackPath = RLBotInstallation.getPathToRLBotPack();
             if (rlbotpackPath != null && Files.exists(rlbotpackPath)) {
                 System.out.println("Loading bots from RLBotGUI's BotPack.");
                 return addAllBotsFromFolder(rlbotpackPath.toFile(), 10);
