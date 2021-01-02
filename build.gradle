@@ -22,6 +22,7 @@ targetCompatibility = 11
 
 // Define the main class for the application
 mainClassName = 'dk.aau.cs.ds306e18.tournament.Main'
+version = '1.7.4'
 
 dependencies {
     // This dependency is found on compile classpath of this component and consumers.
@@ -50,13 +51,17 @@ repositories {
 jlink {
     options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
     launcher {
-        name = 'cleopetra'
+        name = 'CleoPetra'
     }
 
+    // A lot of this stuff was borrowed from the example at https://github.com/beryx-gist/badass-jlink-example-richtextfx/blob/master/build.gradle
     jpackage {
         skipInstaller = false
         installerType = 'msi'
-        installerOptions = ['--win-menu', '--win-shortcut']
+        icon = 'src/main/resources/cleopetra.ico'
+        installerOptions = ['--win-menu', '--win-shortcut', '--win-dir-chooser', '--win-per-user-install',
+        '--file-associations', 'src/main/resources/associations.properties',
+        '--app-version', version]
     }
 }
 
