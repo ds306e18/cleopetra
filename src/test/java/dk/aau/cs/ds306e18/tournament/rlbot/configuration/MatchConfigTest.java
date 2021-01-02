@@ -12,8 +12,8 @@ import static org.junit.Assert.assertFalse;
 
 public class MatchConfigTest {
 
-    private static final String MATCH_CONFIG_FILE = "test/rlbot.cfg";
-    private static final String MATCH_CONFIG_FILE_OUT = "test/_out_rlbot.cfg";
+    private static final String MATCH_CONFIG_FILE = "src/test/rlbot.cfg";
+    private static final String MATCH_CONFIG_FILE_OUT = "src/test/_out_rlbot.cfg";
 
     @Test
     public void read01() throws IOException {

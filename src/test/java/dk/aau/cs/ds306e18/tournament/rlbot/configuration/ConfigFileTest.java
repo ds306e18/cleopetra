@@ -10,7 +10,7 @@ import static org.junit.Assert.assertTrue;
 
 public class ConfigFileTest {
 
-    private final static String TEST_DIR = "test/";
+    private final static String TEST_DIR = "src/test/";
     private final static String TEST_CONFIG = "config_format_test.cfg";
     private final static String TEST_CONFIG_OUT = "_out_config_format_test.cfg";
 

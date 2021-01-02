@@ -12,17 +12,20 @@ plugins {
 
     // Apply the application plugin to add support for building an application
     id 'application'
+
+    id 'org.openjfx.javafxplugin' version '0.0.9'
+    id 'org.beryx.jlink' version '2.23.1'
 }
 
-sourceCompatibility = 8
-targetCompatibility = 8
+sourceCompatibility = 11
+targetCompatibility = 11
 
 // Define the main class for the application
 mainClassName = 'dk.aau.cs.ds306e18.tournament.Main'
 
 dependencies {
     // This dependency is found on compile classpath of this component and consumers.
-    compile 'com.google.guava:guava:23.0'
+    compile 'com.google.guava:guava:26.0-jre'
 
     // Using GSON for serializing objects for transfer and storage
     compile 'com.google.code.gson:gson:2.8.6'
@@ -30,8 +33,13 @@ dependencies {
     // Use JUnit test framework
     testCompile 'junit:junit:4.12'
 
-    // Adding ControlsFX dependency. (Version 8.4 due to Java 8)
-    compile group: 'org.controlsfx', name: 'controlsfx', version: '8.40.14'
+    implementation('org.controlsfx:controlsfx:11.0.3') {
+        exclude group: 'org.openjfx'
+    }
+}
+
+javafx {
+    modules = ['javafx.controls', 'javafx.fxml']
 }
 
 // In this section you declare where to find the dependencies of your project
@@ -39,13 +47,23 @@ repositories {
     jcenter()
 }
 
+jlink {
+    options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
+    launcher {
+        name = 'cleopetra'
+    }
+
+    jpackage {
+        skipInstaller = false
+        installerType = 'msi'
+        installerOptions = ['--win-menu', '--win-shortcut']
+    }
+}
+
 // Setup modules
 sourceSets {
-    main.java.srcDirs = ['src']
-    main.resources.srcDirs = ['src']
-
-    test.java.srcDirs = ['test']
-    test.resources.srcDirs = ['test']
+    main.resources.srcDirs = ['src/main/java']
+    test.resources.srcDirs = ['src/test/java']
 }
 
 // Build a fat jar
