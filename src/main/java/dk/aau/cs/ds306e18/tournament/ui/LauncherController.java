@@ -26,7 +26,7 @@ import java.io.IOException;
 public class LauncherController {
     @FXML private AnchorPane baseAnchorpane;
 
-    private Stage createSystemStage (){
+    public static Stage createSystemStage (){
         Stage systemStage = new Stage();
 
         // Set min- width and height and title.

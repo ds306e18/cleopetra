@@ -1,5 +1,9 @@
 # Changelog
 
+#### Version 1.7.4 - January 2021
+- New installer that no longer requires users to have Java,
+and creates file associations so users can open rlts files directly. - tarehart
+
 #### Version 1.7.3 - August 2020
 - Now supports RLBotGUIX python installations. - NicEastvillage
 - Example overlay supports best-of-X series. - NicEastvillage

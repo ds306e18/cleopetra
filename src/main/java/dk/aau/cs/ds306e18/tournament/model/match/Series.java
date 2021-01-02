@@ -1,6 +1,5 @@
 package dk.aau.cs.ds306e18.tournament.model.match;
 
-import com.google.common.primitives.Ints;
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.utility.ListExt;
 

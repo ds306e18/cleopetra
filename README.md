@@ -6,7 +6,7 @@ CleoPetra aims to create a custom tournament runner for the [RLBot-community](ht
 Apart from these features the system also adds support specifically for the [RLBot-framework](https://github.com/RLBot/RLBot). It can modify the `rlbot.cfg` file based on the bots of a match and can also start a match using the RLBot-framework.
 
 #### Prerequisites
-- Java 8 JDK installed.
+- Java 14+ JDK installed.
 - Optional: RLBot-framework installed.
 
 #### Quick Start
@@ -28,4 +28,14 @@ The above setup is required in order to run the application using Gradle. The fo
 
 To **run the application** use the task: ``\application\run``.<br>
 To **run the tests** use the task: ``\verification\test``.<br>
-To **build an executable jar** use the task: ``\other\fatJar``. The executable jar will now be located in ``\build\libs\``.<br>
+
+### Installing Cleopetra with jpackage / minimal JRE
+
+1. Install Wix from https://github.com/wixtoolset/wix3/releases/tag/wix3112rtm
+1. You might need .NET 3.5 https://dotnet.microsoft.com/download/dotnet-framework/net35-sp1 for Wix
+1. Get JDK 14 or higher, and point JAVA_HOME to it. Restart IntelliJ.
+1. Execute the gradle task 'jpackage'
+1. Look in build/jpackage and you should have cleopetra-1.0.msi
+1. Test it out
+   - Run the msi
+   - Hit the Windows key, search cleopetra, and run it.

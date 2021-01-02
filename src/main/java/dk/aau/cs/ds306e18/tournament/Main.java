@@ -1,7 +1,8 @@
 package dk.aau.cs.ds306e18.tournament;
 
 import dk.aau.cs.ds306e18.tournament.settings.CleoPetraSettings;
-import dk.aau.cs.ds306e18.tournament.settings.SettingsDirectory;
+import dk.aau.cs.ds306e18.tournament.ui.LauncherController;
+import dk.aau.cs.ds306e18.tournament.utility.SaveLoad;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -10,12 +11,27 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 
 
 public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
+        List<String> args = getParameters().getRaw();
+        if (!args.isEmpty()) {
+            final Path path = Paths.get(args.get(0));
+            if (path.toString().endsWith(".rlts") && Files.exists(path)) {
+                SaveLoad.loadTournament(new File(path.toUri()));
+                Stage systemStage = LauncherController.createSystemStage();
+                systemStage.show();
+                return;
+            }
+        }
 
         // Start program with the launcher
         AnchorPane launcherLoader = FXMLLoader.load(Main.class.getResource("ui/layout/Launcher.fxml"));

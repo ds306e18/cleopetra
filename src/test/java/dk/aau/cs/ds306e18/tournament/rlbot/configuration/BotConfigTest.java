@@ -9,7 +9,7 @@ import static org.junit.Assert.assertEquals;
 
 public class BotConfigTest {
 
-    private static final String TEST_BOT_CONFIG_FILE = "test/bots/alpha.cfg";
+    private static final String TEST_BOT_CONFIG_FILE = "src/test/bots/alpha.cfg";
 
     @Test
     public void constructor01() throws IOException {
