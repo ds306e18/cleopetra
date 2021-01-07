@@ -110,11 +110,7 @@ public class BotCollection extends TreeSet<Bot> {
                             // Try to read bot
                             BotFromConfig bot = new BotFromConfig(file.getAbsolutePath());
                             if (bot.loadedCorrectly()) {
-                                boolean added = this.add(bot);
-                                if (!added) {
-                                    Bot other = this.floor(bot);
-                                    System.out.println("Found equal bots: " + bot.getName() + " (" + bot.getConfigPath() + ") and " + other.getName() + " (" + other.getConfigPath() + "). Equal: " + bot.equals(other));
-                                }
+                                this.add(bot);
                                 addedSomething = true;
                             }
 
