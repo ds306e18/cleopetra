@@ -24,7 +24,11 @@ public class BotCollection extends TreeSet<Bot> {
             int diff = a.getBotType().ordinal() - b.getBotType().ordinal();
             if (diff == 0) {
                 // If type is the same, sort by bot name
-                return a.getName().compareTo(b.getName());
+                diff = a.getName().compareTo(b.getName());
+                if (diff == 0) {
+                    // If name is the same, sort by path
+                    diff = a.getConfigPath().compareTo(b.getConfigPath());
+                }
             }
             return diff;
         });
@@ -106,7 +110,11 @@ public class BotCollection extends TreeSet<Bot> {
                             // Try to read bot
                             BotFromConfig bot = new BotFromConfig(file.getAbsolutePath());
                             if (bot.loadedCorrectly()) {
-                                this.add(bot);
+                                boolean added = this.add(bot);
+                                if (!added) {
+                                    Bot other = this.floor(bot);
+                                    System.out.println("Found equal bots: " + bot.getName() + " (" + bot.getConfigPath() + ") and " + other.getName() + " (" + other.getConfigPath() + "). Equal: " + bot.equals(other));
+                                }
                                 addedSomething = true;
                             }
 
