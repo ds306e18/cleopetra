@@ -46,6 +46,7 @@ public class ParticipantSettingsTabController {
     @FXML private ListView<Bot> rosterListView;
     @FXML private Button loadConfigButton;
     @FXML private Button loadFolderButton;
+    @FXML private Button loadBotPack;
     @FXML private ListView<Bot> botCollectionListView;
 
     private FileChooser botConfigFileChooser;
@@ -111,11 +112,6 @@ public class ParticipantSettingsTabController {
 
         // Bot collection list setup
         BotCollection.global.addPsyonixBots();
-        boolean rlbotPackLoaded = BotCollection.global.addRLBotPackIfPresent();
-        if (rlbotPackLoaded) {
-            // When the javafx window is done loaded, show notification
-            Platform.runLater(() -> Alerts.infoNotification("RLBot loaded", "Found the RLBotPack and loaded the bots from it."));
-        }
         botCollectionListView.setCellFactory(listView -> new BotCollectionCell(this));
         botCollectionListView.setItems(FXCollections.observableArrayList(BotCollection.global));
 
@@ -422,6 +418,19 @@ public class ParticipantSettingsTabController {
         }
     }
 
+    @FXML
+    public void onActionLoadBotPack(ActionEvent actionEvent) {
+        boolean success = BotCollection.global.addRLBotPackIfPresent();
+        botCollectionListView.setItems(FXCollections.observableArrayList(BotCollection.global));
+        botCollectionListView.refresh();
+        if (success) {
+            Alerts.infoNotification("Bot pack loaded", "Found the RLBotGUI's bot pack and loaded the bots from it successfully.");
+        } else {
+            Alerts.errorNotification("Failed to load bot pack", "Unable to locate RLBotGUI's bot pack.");
+        }
+    }
+
+    @FXML
     public void onActionAutoNameTeam(ActionEvent actionEvent) {
         Team team = getSelectedTeam();
         AutoNaming.autoName(team, Tournament.get().getTeams());

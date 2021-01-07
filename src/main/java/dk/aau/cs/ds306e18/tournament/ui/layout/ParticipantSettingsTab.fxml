@@ -170,6 +170,7 @@
                <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                </columnConstraints>
                <rowConstraints>
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -181,6 +182,7 @@
                      </GridPane.margin>
                   </Button>
                   <Button fx:id="loadFolderButton" layoutX="10.0" layoutY="50.0" mnemonicParsing="false" onAction="#onActionLoadFolder" prefHeight="27.0" prefWidth="101.0" text="Load folder" GridPane.columnIndex="1" />
+                  <Button fx:id="loadBotPack" mnemonicParsing="false" onAction="#onActionLoadBotPack" prefHeight="27.0" prefWidth="101.0" text="Load BotPack" GridPane.columnIndex="2" />
                </children>
             </GridPane>
             <ListView fx:id="botCollectionListView" VBox.vgrow="ALWAYS">
