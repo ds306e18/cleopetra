@@ -24,7 +24,11 @@ public class BotCollection extends TreeSet<Bot> {
             int diff = a.getBotType().ordinal() - b.getBotType().ordinal();
             if (diff == 0) {
                 // If type is the same, sort by bot name
-                return a.getName().compareTo(b.getName());
+                diff = a.getName().compareTo(b.getName());
+                if (diff == 0) {
+                    // If name is the same, sort by path
+                    diff = a.getConfigPath().compareTo(b.getConfigPath());
+                }
             }
             return diff;
         });
@@ -69,6 +73,8 @@ public class BotCollection extends TreeSet<Bot> {
             if (rlbotpackPath != null && Files.exists(rlbotpackPath)) {
                 System.out.println("Loading bots from RLBotGUI's BotPack.");
                 return addAllBotsFromFolder(rlbotpackPath.toFile(), 10);
+            } else {
+                System.out.println("RLBotGUI's BotPack does not exist.");
             }
         } catch (Exception e) {
             // Something went wrong. Report it, but continue

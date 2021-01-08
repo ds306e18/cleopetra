@@ -81,12 +81,6 @@ public class MatchRunner {
                 if (botPackPython != null && Files.exists(botPackPython)) {
                     python = botPackPython.toString();
                     System.out.println("Found RLBotGUI python installation: " + python);
-                } else {
-                    botPackPython = RLBotInstallation.getOldPathToPython();
-                    if (botPackPython != null && Files.exists(botPackPython)) {
-                        python = botPackPython.toString();
-                        System.out.println("Found RLBotGUI python installation: " + python);
-                    }
                 }
             }
 
