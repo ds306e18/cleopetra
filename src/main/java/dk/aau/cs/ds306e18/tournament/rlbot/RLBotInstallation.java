@@ -25,7 +25,7 @@ public class RLBotInstallation {
      */
     public static Path getPathToPython() {
         try {
-            return Paths.get(System.getenv("APPDATA")).getParent().resolve("Local\\RLBotGUIX\\venv\\Scripts\\python.exe");
+            return Paths.get(System.getenv("APPDATA")).getParent().resolve("Local\\RLBotGUIX\\Python37\\python.exe");
         } catch (Exception e) {
             // Failed. Maybe we are on a Linux system
             return null;
