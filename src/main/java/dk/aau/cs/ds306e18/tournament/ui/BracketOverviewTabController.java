@@ -39,7 +39,8 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
     @FXML private VBox selectedMatchVBox;
     @FXML private VBox overviewVBox;
     @FXML private Button playMatchBtn;
-    @FXML private Button modifyConfigBtn;
+    //@FXML private Button modifyConfigBtn;
+    @FXML private Button fetchScoresBtn;
     @FXML private Button editMatchBtn;
     @FXML private Button switchColorsBtn;
     @FXML private Button extendSeriesBtn;
@@ -278,13 +279,16 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
         if (selectedSeries == null || selectedSeries.getShowedSeries().getStatus() == Series.Status.NOT_PLAYABLE) {
             editMatchBtn.setDisable(true);
             playMatchBtn.setDisable(true);
-            modifyConfigBtn.setDisable(true);
+            //modifyConfigBtn.setDisable(true);
+            fetchScoresBtn.setDisable(true);
             switchColorsBtn.setDisable(true);
         } else {
             editMatchBtn.setDisable(false);
             // If match can't be played an error popup is displayed explaining why
             playMatchBtn.setDisable(false);
-            modifyConfigBtn.setDisable(false);
+            //modifyConfigBtn.setDisable(false);
+            // Only allow fetching of scores if the series is not over
+            fetchScoresBtn.setDisable(selectedSeries.getShowedSeries().hasBeenPlayed());
             // color switching is disabled when match has been played to avoid confusion when comparing replays and bracket
             switchColorsBtn.setDisable(selectedSeries.getShowedSeries().hasBeenPlayed());
         }
@@ -398,6 +402,35 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
         MatchRunner.startMatch(Tournament.get().getRlBotSettings().getMatchConfig(), selectedSeries.getShowedSeries());
     }
 
+    public void fetchScoresButtonOnAction(ActionEvent actionEvent) {
+        if (selectedSeries != null && MatchRunner.fetchScores()) {
+            Series series = selectedSeries.getShowedSeries();
+            int blueScore = MatchRunner.latestBlueScore.get();
+            int orangeScore = MatchRunner.latestOrangeScore.get();
+            System.out.println("Fetched scores: " + blueScore + "-" + orangeScore);
+            try {
+                // Insert scores if possible
+                if (series.isTeamOneBlue()) {
+                    series.setScoresOfUnplayedMatch(blueScore, orangeScore);
+                } else {
+                    series.setScoresOfUnplayedMatch(orangeScore, blueScore);
+                }
+                Alerts.infoNotification(
+                        "Fetched " + blueScore + "-" + orangeScore,
+                        "Successfully fetched the scoreline " + blueScore + "-" + orangeScore + ".");
+                // Is series over now?
+                Series.Outcome outcome = Series.winnerIfScores(series.getTeamOneScores(), series.getTeamTwoScores());
+                if (outcome != Series.Outcome.DRAW && outcome != Series.Outcome.UNKNOWN) {
+                    series.setScores(series.getTeamOneScores(), series.getTeamTwoScores(), true);
+                }
+            } catch (IllegalStateException ex) {
+                Alerts.errorNotification("No missing results", "The selected series does not contain any matches without scores.");
+            }
+        } else {
+            Alerts.errorNotification("Fetching failed", "Failed to fetch scores. Is the CleoPetra's command prompt running?");
+        }
+    }
+
     public void modifyConfigButtonOnAction(ActionEvent actionEvent) {
         boolean ready = MatchRunner.prepareMatch(Tournament.get().getRlBotSettings().getMatchConfig(), selectedSeries.getShowedSeries());
         if (ready) {
@@ -428,7 +461,7 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
     }
 
     /**
-     * Changes the selected series length. In case this change changes the outcome of the series (and other series
+     * Changes the selected series length. In case this change the outcome of the series (and other series
      * depends on this outcome) an alert prompt is shown, and the user must confirm if they want to proceed.
      */
     public void carefullyChangeSeriesLength(int length) {
