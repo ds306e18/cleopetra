@@ -1,6 +1,8 @@
 # Changelog
 
 #### Unreleased changes
+- Add functionality to fetch scores directly from Rocket League. Finally! - NicEastvillage
+  - The new 'Fetch scores' button replaces the 'Modify config' button.
 - Add functionality to create a team for each bot in the bot collection. #114 - NicEastvillage
 - Change radio buttons to checkboxes in RLBot settings tab. - NicEastvillage
 - Fixed bug that would prevent overlay data to be written on match start. - NicEastvillage

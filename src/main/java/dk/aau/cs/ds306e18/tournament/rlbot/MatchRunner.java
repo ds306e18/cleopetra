@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Optional;
 
 /**
  * This class maintains a RLBot runner process for starting matches. The runner process is the run.py running in
@@ -35,10 +36,14 @@ public class MatchRunner {
     private static final String ADDR = "127.0.0.1";
     private static final int PORT = 35353; // TODO Make user able to change the port in a settings file
 
+    public static Optional<Integer> latestBlueScore = Optional.empty();
+    public static Optional<Integer> latestOrangeScore = Optional.empty();
+
     private enum Command {
         START("START"), // Start the match described by the rlbot.cfg
         STOP("STOP"), // Stop the current match and all bot pids
-        EXIT("EXIT"); // Close the run.py process
+        EXIT("EXIT"), // Close the run.py process
+        FETCH("FETCH"); // Fetch the scores of the match
 
         private final String cmd;
 
@@ -96,6 +101,10 @@ public class MatchRunner {
         }
     }
 
+    public static boolean fetchScores() {
+        return sendCommandToRLBot(Command.FETCH, false);
+    }
+
     /**
      * Closes the RLBot runner.
      */
@@ -117,11 +126,35 @@ public class MatchRunner {
      * and received, this method returns true, otherwise false.
      */
     private static boolean sendCommandToRLBot(Command cmd, boolean startRLBotIfMissingAndRetry) {
+        latestBlueScore = Optional.empty();
+        latestOrangeScore = Optional.empty();
         try (Socket sock = new Socket(ADDR, PORT);
-             PrintWriter writer = new PrintWriter(sock.getOutputStream(), true)) {
+            PrintWriter writer = new PrintWriter(sock.getOutputStream(), true)) {
             writer.print(cmd.toString());
             writer.flush();
-            return true;
+
+            Thread.sleep(80); // Fetching scores may take up to 60 ms
+
+            // Parse answer
+            BufferedReader reader = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+            String answer = reader.readLine();
+            if ("OK".equals(answer))
+                return true;
+            else if ("ERR".equals(answer))
+                return false;
+            else {
+                // We fetched the scoreline then
+                try {
+                    String[] split = answer.split(",");
+                    int blueScore = Integer.parseInt(split[0]);
+                    int orangeScore = Integer.parseInt(split[1]);
+                    latestBlueScore = Optional.of(blueScore);
+                    latestOrangeScore = Optional.of(orangeScore);
+                    return true;
+                } catch (Exception ex) {
+                    throw new IllegalArgumentException("Unable to parse answer from run.py. \"" + answer + "\"", ex);
+                }
+            }
         } catch (ConnectException e) {
             // The run.py did not respond. Starting a new instance if allowed
             if (startRLBotIfMissingAndRetry) {
@@ -137,6 +170,8 @@ public class MatchRunner {
         } catch (IOException e) {
             e.printStackTrace();
             Alerts.errorNotification("IO Exception", "Failed to open socket and send message to run.py");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
         return false;
     }

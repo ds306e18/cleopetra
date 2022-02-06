@@ -517,6 +517,21 @@ public final class Series {
     }
 
     /**
+     * Set the score of the first match in the series which is still missing scores for both teams. If no such
+     * match exists, an IllegalStateException is thrown.
+     */
+    public void setScoresOfUnplayedMatch(int teamOneScore, int teamTwoScore) {
+        int match = 0;
+        for (; match < length; match++) {
+            if (teamOneScores.get(match).isEmpty() && teamTwoScores.get(match).isEmpty()) {
+                break;
+            }
+        }
+        if (match >= length) throw new IllegalStateException("No match is missing scores for both teams");
+        setScores(teamOneScore, teamTwoScore, match);
+    }
+
+    /**
      * Set the scores of a particular match in the series.
      */
     public void setScores(int teamOneScore, int teamTwoScore, int match) {
