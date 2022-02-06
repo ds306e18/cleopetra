@@ -11,15 +11,18 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
-import javafx.stage.Window;
+import javafx.stage.*;
+import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -48,6 +51,7 @@ public class ParticipantSettingsTabController {
     @FXML private Button loadFolderButton;
     @FXML private Button loadBotPack;
     @FXML private ListView<Bot> botCollectionListView;
+    @FXML private Button createTeamWithEachBotButton;
 
     private FileChooser botConfigFileChooser;
     private DirectoryChooser botFolderChooser;
@@ -129,6 +133,7 @@ public class ParticipantSettingsTabController {
 
     /** Updates all ui elements */
     public void update() {
+        teamsListView.setItems(FXCollections.observableArrayList(Tournament.get().getTeams()));
         teamsListView.refresh();
         rosterListView.refresh();
         botCollectionListView.refresh();
@@ -436,5 +441,35 @@ public class ParticipantSettingsTabController {
         AutoNaming.autoName(team, Tournament.get().getTeams());
         updateTeamFields();
         teamsListView.refresh();
+    }
+
+    public void onActionCreateTeamWithEachBot(ActionEvent actionEvent) {
+        try {
+            javafx.stage.Stage createTeamsStage = new javafx.stage.Stage();
+            createTeamsStage.initStyle(StageStyle.TRANSPARENT);
+            createTeamsStage.initModality(Modality.APPLICATION_MODAL);
+
+            FXMLLoader loader = new FXMLLoader(ParticipantSettingsTabController.class.getResource("layout/CreateTeamsWithEachBot.fxml"));
+            AnchorPane createTeamsStageRoot = loader.load();
+            createTeamsStage.setScene(new Scene(createTeamsStageRoot));
+
+            // Calculate the center position of the main window.
+            javafx.stage.Stage mainWindow = (Stage) participantSettingsTab.getScene().getWindow();
+            double centerXPosition = mainWindow.getX() + mainWindow.getWidth()/2d;
+            double centerYPosition = mainWindow.getY() + mainWindow.getHeight()/2d;
+
+            // Assign popup window to the center of the main window.
+            createTeamsStage.setOnShown(ev -> {
+                createTeamsStage.setX(centerXPosition - createTeamsStage.getWidth()/2d);
+                createTeamsStage.setY(centerYPosition - createTeamsStage.getHeight()/2d);
+
+                createTeamsStage.show();
+            });
+
+            createTeamsStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
