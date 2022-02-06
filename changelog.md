@@ -1,10 +1,10 @@
 # Changelog
 
-#### Unreleased changes
-- Add functionality to fetch scores directly from Rocket League. Finally! - NicEastvillage
+#### Version 1.8.0 - February 2022
+- Added functionality to fetch scores directly from Rocket League. Finally! - NicEastvillage
   - The new 'Fetch scores' button replaces the 'Modify config' button.
-- Add functionality to create a team for each bot in the bot collection. #114 - NicEastvillage
-- Change radio buttons to checkboxes in RLBot settings tab. - NicEastvillage
+- Added functionality to create a team for each bot in the bot collection. #114 - NicEastvillage
+- Changed radio buttons to checkboxes in RLBot settings tab. - NicEastvillage
 - Fixed bug that would prevent overlay data to be written on match start. - NicEastvillage
 
 #### Version 1.7.5 - January 2021
