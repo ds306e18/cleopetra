@@ -13,8 +13,6 @@ import java.util.stream.Collectors;
  */
 public class AutoNaming {
 
-    private static final Pattern BOT_PATTERN = Pattern.compile("[Bb]ot|BOT");
-
     private static final Set<String> IGNORED_PIECES = new HashSet<>(Arrays.asList(
             "bot", "psyonix",
             "a", "an", "the", "my", "that", "it",
@@ -23,7 +21,7 @@ public class AutoNaming {
     ));
 
     /**
-     * Find a give a unique name of the given team. The name will consists of pieces from the
+     * Find a give a unique name of the given team. The name will consist of pieces from the
      * team members' name.
      */
     public static void autoName(Team team, Collection<Team> otherTeams) {
@@ -96,7 +94,7 @@ public class AutoNaming {
 
     /**
      * Finds a short name for the given bot name. The short name will be the first interesting "word" in
-     * the bot's name. The function knows how to split logically ("RelieftBot" => "Relieft" + "Bot")
+     * the bot's name. The function knows how to split logically ("ReliefBot" => "Relief" + "Bot")
      * and ignore common words ("of", "the", etc.). The algorithm isn't perfect, and characters
      * other than letters and digits can create weird names.
      */
@@ -120,7 +118,7 @@ public class AutoNaming {
         /*
         The following regex is used to split the bot name into pieces.
         The string is split the following places:
-        - Between two letters/digits separated by spaces, regardless of casing (removing spaces)
+        - Between two letters or digits separated by spaces, regardless of casing (removing spaces)
             Examples:
                 "A B" = ["A", "B"]
                 "a b" = ["a", "b"]
@@ -128,7 +126,7 @@ public class AutoNaming {
                 "A    B" = ["A", "B"]
                 "Air Bud" = ["Air", "Bud"]
                 "Beast from the East" = ["Beast", "from", "the", "East"]
-        - Between a letter/digit and an uppercase letter separated by -'s (removing the -'s)
+        - Between a letter (or digit) and an uppercase letter separated by -'s (removing the -'s)
             Examples:
                 "A-B" = ["A", "B"]
                 "A-b" = ["A-b"]
