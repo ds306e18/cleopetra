@@ -75,7 +75,7 @@ public class MatchRunner {
             Alerts.infoNotification("Starting RLBot runner", "Attempting to start new instance of run.py for running matches.");
 
             String python = "python";
-            if (Tournament.get().getRlBotSettings().useBotPackPythonIfAvailable()) {
+            if (Tournament.get().getRlBotSettings().useRLBotGUIPythonIfAvailable()) {
                 // Find python installation in RLBotGUI
                 Path botPackPython = RLBotInstallation.getPathToPython();
                 if (botPackPython != null && Files.exists(botPackPython)) {

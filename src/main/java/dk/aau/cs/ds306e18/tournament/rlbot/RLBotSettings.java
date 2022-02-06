@@ -12,7 +12,7 @@ public class RLBotSettings {
     private MatchConfig matchConfig = new MatchConfig();
     private boolean writeOverlayData = false;
     private String overlayPath = "";
-    private boolean useBotPackPythonIfAvailable = true;
+    private boolean useRLBotGUIPythonIfAvailable = true;
 
     public RLBotSettings() {
 
@@ -46,12 +46,12 @@ public class RLBotSettings {
         this.overlayPath = overlayPath;
     }
 
-    public boolean useBotPackPythonIfAvailable() {
-        return useBotPackPythonIfAvailable;
+    public boolean useRLBotGUIPythonIfAvailable() {
+        return useRLBotGUIPythonIfAvailable;
     }
 
-    public void setUseBotPackPythonIfAvailable(boolean useBotPackPythonIfAvailable) {
-        this.useBotPackPythonIfAvailable = useBotPackPythonIfAvailable;
+    public void setUseRLBotGUIPythonIfAvailable(boolean useRLBotGUIPythonIfAvailable) {
+        this.useRLBotGUIPythonIfAvailable = useRLBotGUIPythonIfAvailable;
     }
 
     @Override

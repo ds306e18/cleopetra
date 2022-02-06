@@ -2,8 +2,8 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -84,7 +84,7 @@
                               <Font size="16.0" />
                            </font>
                         </Text>
-                        <RadioButton fx:id="skipReplaysRadioButton" layoutX="494.0" layoutY="13.0" mnemonicParsing="false" GridPane.columnIndex="1" />
+                        <CheckBox fx:id="skipReplaysCheckbox" mnemonicParsing="false" GridPane.columnIndex="1" />
                      </children>
                   </GridPane>
                   <GridPane layoutX="30.0" layoutY="146.0">
@@ -101,7 +101,7 @@
                               <Font size="16.0" />
                            </font>
                         </Text>
-                        <RadioButton fx:id="instantStartRadioButton" mnemonicParsing="false" GridPane.columnIndex="1" />
+                        <CheckBox fx:id="instantStartCheckbox" mnemonicParsing="false" GridPane.columnIndex="1" />
                      </children>
                   </GridPane>
                   <GridPane layoutX="30.0" layoutY="247.0">
@@ -113,12 +113,12 @@
                         <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <RadioButton fx:id="renderingRadioButton" mnemonicParsing="false" GridPane.columnIndex="1" />
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Enable rendering:">
                            <font>
                               <Font size="16.0" />
                            </font>
                         </Text>
+                        <CheckBox fx:id="renderingCheckbox" mnemonicParsing="false" GridPane.columnIndex="1" />
                      </children>
                   </GridPane>
                   <GridPane>
@@ -130,12 +130,12 @@
                         <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <RadioButton fx:id="stateSettingRadioButton" mnemonicParsing="false" GridPane.columnIndex="1" />
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Enable state setting (teleporting bots):">
                            <font>
                               <Font size="16.0" />
                            </font>
                         </Text>
+                        <CheckBox fx:id="stateSettingCheckbox" mnemonicParsing="false" GridPane.columnIndex="1" />
                      </children>
                   </GridPane>
                   <GridPane>
@@ -152,7 +152,7 @@
                               <Font size="16.0" />
                            </font>
                         </Text>
-                        <RadioButton fx:id="autoSaveReplaysRadioButton" mnemonicParsing="false" GridPane.columnIndex="1" />
+                        <CheckBox fx:id="autoSaveReplaysCheckbox" mnemonicParsing="false" GridPane.columnIndex="1" />
                      </children>
                   </GridPane>
                   <Separator prefWidth="200.0" />
@@ -175,7 +175,7 @@
                               <Font size="16.0" />
                            </font>
                         </Text>
-                        <RadioButton fx:id="writeOverlayDataRadioButton" layoutX="494.0" layoutY="13.0" mnemonicParsing="false" GridPane.columnIndex="1" />
+                        <CheckBox fx:id="writeOverlayDataCheckbox" mnemonicParsing="false" GridPane.columnIndex="1" />
                      </children>
                   </GridPane>
                   <GridPane layoutX="30.0" layoutY="324.0">
@@ -206,12 +206,12 @@
                         <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Use the RLBotPack's Python installation if available">
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Use the RLBotGUI's Python installation if available">
                            <font>
                               <Font size="16.0" />
                            </font>
                         </Text>
-                        <RadioButton fx:id="useRLBotPackPythonRadioButton" layoutX="494.0" layoutY="13.0" mnemonicParsing="false" GridPane.columnIndex="1" />
+                        <CheckBox fx:id="useRLBotGUIPythonCheckbox" mnemonicParsing="false" GridPane.columnIndex="1" />
                      </children>
                   </GridPane>
                   <Separator layoutX="30.0" layoutY="279.0" prefWidth="200.0" />

@@ -1,6 +1,5 @@
 package dk.aau.cs.ds306e18.tournament.ui;
 
-import dk.aau.cs.ds306e18.tournament.Main;
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import dk.aau.cs.ds306e18.tournament.rlbot.MatchRunner;
 import dk.aau.cs.ds306e18.tournament.rlbot.RLBotSettings;
@@ -8,14 +7,12 @@ import dk.aau.cs.ds306e18.tournament.rlbot.configuration.MatchConfig;
 import dk.aau.cs.ds306e18.tournament.rlbot.configuration.MatchConfigOptions.*;
 import dk.aau.cs.ds306e18.tournament.settings.CleoPetraSettings;
 import dk.aau.cs.ds306e18.tournament.settings.LatestPaths;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.stage.DirectoryChooser;
@@ -30,12 +27,12 @@ public class RLBotSettingsTabController {
     public Button resetAllButton;
     public ChoiceBox<GameMap> gameMapChoiceBox;
     public ChoiceBox<GameMode> gameModeChoiceBox;
-    public RadioButton skipReplaysRadioButton;
-    public RadioButton instantStartRadioButton;
-    public RadioButton writeOverlayDataRadioButton;
+    public CheckBox skipReplaysCheckbox;
+    public CheckBox instantStartCheckbox;
+    public CheckBox writeOverlayDataCheckbox;
     public TextField overlayPathTextField;
     public Button chooseOverlayPathButton;
-    public RadioButton useRLBotPackPythonRadioButton;
+    public CheckBox useRLBotGUIPythonCheckbox;
     public Button rlbotRunnerOpenButton;
     public Button rlbotRunnerCloseButton;
     public Button rlbotRunnerStopMatchButton;
@@ -54,9 +51,9 @@ public class RLBotSettingsTabController {
     public ChoiceBox<Gravity> gravityChoiceBox;
     public ChoiceBox<Demolish> demolishChoiceBox;
     public ChoiceBox<RespawnTime> respawnTimeChoiceBox;
-    public RadioButton renderingRadioButton;
-    public RadioButton stateSettingRadioButton;
-    public RadioButton autoSaveReplaysRadioButton;
+    public CheckBox renderingCheckbox;
+    public CheckBox stateSettingCheckbox;
+    public CheckBox autoSaveReplaysCheckbox;
 
     @FXML private HBox tabRoot;
 
@@ -70,24 +67,24 @@ public class RLBotSettingsTabController {
         // General match settings
         setupChoiceBox(gameMapChoiceBox, GameMap.values(), matchConfig.getGameMap(), MatchConfig::setGameMap);
         setupChoiceBox(gameModeChoiceBox, GameMode.values(), matchConfig.getGameMode(), MatchConfig::setGameMode);
-        skipReplaysRadioButton.setSelected(matchConfig.isSkipReplays());
-        skipReplaysRadioButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
+        skipReplaysCheckbox.setSelected(matchConfig.isSkipReplays());
+        skipReplaysCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
             Tournament.get().getRlBotSettings().getMatchConfig().setSkipReplays(newValue);
         });
-        instantStartRadioButton.setSelected(matchConfig.isInstantStart());
-        instantStartRadioButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
+        instantStartCheckbox.setSelected(matchConfig.isInstantStart());
+        instantStartCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
             Tournament.get().getRlBotSettings().getMatchConfig().setInstantStart(newValue);
         });
-        renderingRadioButton.setSelected(matchConfig.isRenderingEnabled());
-        renderingRadioButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
+        renderingCheckbox.setSelected(matchConfig.isRenderingEnabled());
+        renderingCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
             Tournament.get().getRlBotSettings().getMatchConfig().setRenderingEnabled(newValue);
         });
-        stateSettingRadioButton.setSelected(matchConfig.isStateSettingEnabled());
-        stateSettingRadioButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
+        stateSettingCheckbox.setSelected(matchConfig.isStateSettingEnabled());
+        stateSettingCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
             Tournament.get().getRlBotSettings().getMatchConfig().setStateSettingEnabled(newValue);
         });
-        autoSaveReplaysRadioButton.setSelected(matchConfig.isAutoSaveReplays());
-        autoSaveReplaysRadioButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
+        autoSaveReplaysCheckbox.setSelected(matchConfig.isAutoSaveReplays());
+        autoSaveReplaysCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
             Tournament.get().getRlBotSettings().getMatchConfig().setAutoSaveReplays(newValue);
         });
 
@@ -110,8 +107,8 @@ public class RLBotSettingsTabController {
 
         // Other settings
         boolean writeOverlay = settings.writeOverlayDataEnabled();
-        writeOverlayDataRadioButton.setSelected(writeOverlay);
-        writeOverlayDataRadioButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
+        writeOverlayDataCheckbox.setSelected(writeOverlay);
+        writeOverlayDataCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
             Tournament.get().getRlBotSettings().setWriteOverlayData(newValue);
             overlayPathTextField.setDisable(!newValue);
             chooseOverlayPathButton.setDisable(!newValue);
@@ -126,9 +123,9 @@ public class RLBotSettingsTabController {
             }
         });
 
-        useRLBotPackPythonRadioButton.setSelected(settings.useBotPackPythonIfAvailable());
-        useRLBotPackPythonRadioButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            Tournament.get().getRlBotSettings().setUseBotPackPythonIfAvailable(newValue);
+        useRLBotGUIPythonCheckbox.setSelected(settings.useRLBotGUIPythonIfAvailable());
+        useRLBotGUIPythonCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            Tournament.get().getRlBotSettings().setUseRLBotGUIPythonIfAvailable(newValue);
         });
 
         update();
@@ -159,8 +156,8 @@ public class RLBotSettingsTabController {
         // General match settings
         gameMapChoiceBox.getSelectionModel().select(matchConfig.getGameMap());
         gameModeChoiceBox.getSelectionModel().select(matchConfig.getGameMode());
-        skipReplaysRadioButton.setSelected(matchConfig.isSkipReplays());
-        instantStartRadioButton.setSelected(matchConfig.isInstantStart());
+        skipReplaysCheckbox.setSelected(matchConfig.isSkipReplays());
+        instantStartCheckbox.setSelected(matchConfig.isInstantStart());
 
         // Mutators
         matchLengthChoiceBox.getSelectionModel().select(matchConfig.getMatchLength());
@@ -180,7 +177,7 @@ public class RLBotSettingsTabController {
         respawnTimeChoiceBox.getSelectionModel().select(matchConfig.getRespawnTime());
 
         // Other settings
-        writeOverlayDataRadioButton.setSelected(settings.writeOverlayDataEnabled());
+        writeOverlayDataCheckbox.setSelected(settings.writeOverlayDataEnabled());
     }
 
     public void onActionRLBotRunnerOpen(ActionEvent actionEvent) {

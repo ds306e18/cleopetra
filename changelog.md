@@ -2,7 +2,7 @@
 
 #### Unreleased changes
 - Fixed bug that would prevent overlay data to be written on match start. - NicEastvillage
-
+- Change radio buttons to checkboxes in RLBot settings tab. - NicEastvillage
 
 #### Version 1.7.5 - January 2021
 - Updated expected bot pack path and only load bot pack on request from user. - NicEastvillage
