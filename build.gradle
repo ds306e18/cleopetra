@@ -22,7 +22,7 @@ targetCompatibility = 11
 
 // Define the main class for the application
 mainClassName = 'dk.aau.cs.ds306e18.tournament.Main'
-version = '1.7.5'
+version = '1.8.0'
 
 dependencies {
     // This dependency is found on compile classpath of this component and consumers.
