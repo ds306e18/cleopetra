@@ -1,5 +1,9 @@
 # Changelog
 
+#### Unreleased changes
+- Fixed bug that would prevent overlay data to be written on match start. - NicEastvillage
+
+
 #### Version 1.7.5 - January 2021
 - Updated expected bot pack path and only load bot pack on request from user. - NicEastvillage
 - Bot collection can contain bots with identical names. - NicEastvillage

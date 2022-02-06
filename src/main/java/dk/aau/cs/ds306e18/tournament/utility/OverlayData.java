@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -113,7 +114,12 @@ public class OverlayData implements Serializable {
      * Write the overlay data to the location specified in RLBotSettings.
      */
     public void write() throws IOException {
-        String folder = Tournament.get().getRlBotSettings().getOverlayPath();
-        Files.write(new File(folder, CURRENT_MATCH_FILE_NAME).toPath(), new Gson().toJson(this).getBytes());
+        String folderString = Tournament.get().getRlBotSettings().getOverlayPath();
+        if (folderString.isBlank()) throw new IOException("Overlay path is not set");
+        File folder = new File(folderString);
+        if (!folder.exists()) throw new IOException("Overlay path does not exist");
+        if (folder.isDirectory()) throw new IOException("Overlay path is not a directory");
+        Path path = new File(folder, CURRENT_MATCH_FILE_NAME).toPath();
+        Files.write(path, new Gson().toJson(this).getBytes());
     }
 }
