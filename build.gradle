@@ -13,7 +13,9 @@ plugins {
     // Apply the application plugin to add support for building an application
     id 'application'
 
-    id 'org.openjfx.javafxplugin' version '0.0.9'
+    id 'org.openjfx.javafxplugin' version '0.0.11'
+    //id 'com.dua3.javafxgradle7plugin' version '0.0.9'
+
     id 'org.beryx.jlink' version '2.23.1'
 }
 
@@ -23,16 +25,20 @@ targetCompatibility = 11
 // Define the main class for the application
 mainClassName = 'dk.aau.cs.ds306e18.tournament.Main'
 version = '1.8.0'
+applicationDefaultJvmArgs = [
+        '--add-opens=java.base/java.io=com.google.gson',
+        '--add-opens=java.base/java.util=com.google.gson',
+]
 
 dependencies {
     // This dependency is found on compile classpath of this component and consumers.
-    compile 'com.google.guava:guava:26.0-jre'
+    implementation 'com.google.guava:guava:26.0-jre'
 
     // Using GSON for serializing objects for transfer and storage
-    compile 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.google.code.gson:gson:2.8.9'
 
     // Use JUnit test framework
-    testCompile 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.12'
 
     implementation('org.controlsfx:controlsfx:11.0.3') {
         exclude group: 'org.openjfx'
@@ -40,12 +46,13 @@ dependencies {
 }
 
 javafx {
+    version = '11'
     modules = ['javafx.controls', 'javafx.fxml']
 }
 
 // In this section you declare where to find the dependencies of your project
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 jlink {
