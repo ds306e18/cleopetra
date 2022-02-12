@@ -6,7 +6,7 @@
 - Added functionality to create a team for each bot in the bot collection. #114 - NicEastvillage
 - Changed radio buttons to checkboxes in RLBot settings tab. - NicEastvillage
 - Fixed bug that would prevent overlay data to be written on match start. - NicEastvillage
-- Fixed bug that would prevent saving due to module closedness. - NicEastvillage
+- Fixed bug that would prevent saving and loading due to module closedness. - NicEastvillage
 
 #### Version 1.7.5 - January 2021
 - Updated expected bot pack path and only load bot pack on request from user. - NicEastvillage

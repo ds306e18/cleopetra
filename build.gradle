@@ -59,6 +59,10 @@ jlink {
     options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
     launcher {
         name = 'CleoPetra'
+        jvmArgs = [
+            '--add-opens=java.base/java.io=com.google.gson',
+            '--add-opens=java.base/java.util=com.google.gson',
+        ]
     }
 
     // A lot of this stuff was borrowed from the example at https://github.com/beryx-gist/badass-jlink-example-richtextfx/blob/master/build.gradle
@@ -69,6 +73,7 @@ jlink {
         installerOptions = ['--win-menu', '--win-shortcut', '--win-dir-chooser', '--win-per-user-install',
         '--file-associations', 'src/main/resources/associations.properties',
         '--app-version', version]
+
     }
 }
 
@@ -78,12 +83,18 @@ sourceSets {
     test.resources.srcDirs = ['src/test/java']
 }
 
-// Build a fat jar
+// Build a fat/uber jar
 task fatJar(type: Jar) {
     manifest {
         attributes 'Main-Class': 'dk.aau.cs.ds306e18.tournament.Main'
     }
-    baseName = 'cleopetra'
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar
+    archiveClassifier = 'fat'
+
+    from sourceSets.main.output
+
+    dependsOn configurations.runtimeClasspath
+    duplicatesStrategy(DuplicatesStrategy.INCLUDE)
+    from {
+        configurations.runtimeClasspath.findAll { it.name.endsWith('jar') }.collect { zipTree(it) }
+    }
 }
