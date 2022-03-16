@@ -118,7 +118,7 @@ public class OverlayData implements Serializable {
         if (folderString.isBlank()) throw new IOException("Overlay path is not set");
         File folder = new File(folderString);
         if (!folder.exists()) throw new IOException("Overlay path does not exist");
-        if (folder.isDirectory()) throw new IOException("Overlay path is not a directory");
+        if (!folder.isDirectory()) throw new IOException("Overlay path is not a directory");
         Path path = new File(folder, CURRENT_MATCH_FILE_NAME).toPath();
         Files.write(path, new Gson().toJson(this).getBytes());
     }
