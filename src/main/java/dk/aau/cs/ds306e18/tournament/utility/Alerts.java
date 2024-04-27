@@ -31,7 +31,7 @@ public class Alerts {
      * @param title The title of the notification
      * @param text A short and precise explanation of the error.
      */
-    public static void errorNotification (String title, String text){
+    public static void errorNotification(String title, String text) {
         Notifications.create()
                 .title(title)
                 .text(text)
