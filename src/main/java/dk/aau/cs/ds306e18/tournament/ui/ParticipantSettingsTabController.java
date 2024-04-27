@@ -388,13 +388,13 @@ public class ParticipantSettingsTabController {
             // Add all selected bots to bot collection
             BotCollection.global.addAll(files.stream()
                     .map(file -> {
-                        BotFromConfig bot = new BotFromConfig(file.toString());
-                        if (bot.loadedCorrectly()) {
-                            return bot;
+                        try {
+                            return new BotFromConfig(file.toString());
+                        } catch (Exception e) {
+                            Alerts.errorNotification("Loading failed", "Could not load bot from: " + file);
+                            Main.LOGGER.log(System.Logger.Level.ERROR, "Could not load bot from: " + file, e);
+                            return null;
                         }
-                        System.err.println("Could not load bot from: " + file.toString());
-                        Alerts.errorNotification("Loading failed", "Could not load bot from: " + file.toString());
-                        return null;
                     })
                     .filter(Objects::nonNull)
                     .collect(Collectors.toList()));

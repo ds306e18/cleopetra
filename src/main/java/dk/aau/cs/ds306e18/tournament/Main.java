@@ -19,6 +19,8 @@ import java.util.List;
 
 public class Main extends Application {
 
+    public static final System.Logger LOGGER = System.getLogger(Main.class.getName());
+
     @Override
     public void start(Stage primaryStage) throws Exception {
 

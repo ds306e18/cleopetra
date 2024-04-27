@@ -1,5 +1,6 @@
 package dk.aau.cs.ds306e18.tournament.rlbot;
 
+import dk.aau.cs.ds306e18.tournament.Main;
 import dk.aau.cs.ds306e18.tournament.model.Bot;
 import dk.aau.cs.ds306e18.tournament.model.BotFromConfig;
 import dk.aau.cs.ds306e18.tournament.model.PsyonixBotFromConfig;
@@ -54,7 +55,7 @@ public class BotCollection extends TreeSet<Bot> {
 
         } catch (Exception e) {
             // Something went wrong. Report it, but continue
-            System.err.println("Could not load default bots. Was SettingsDirectory::setup() called?");
+            Main.LOGGER.log(System.Logger.Level.ERROR, "Could not load default bots. Was SettingsDirectory::setup() called?", e);
 
             return false;
         }
@@ -71,14 +72,14 @@ public class BotCollection extends TreeSet<Bot> {
             // Get path to BotPack and try to load bots
             Path rlbotpackPath = RLBotInstallation.getPathToRLBotPack();
             if (rlbotpackPath != null && Files.exists(rlbotpackPath)) {
-                System.out.println("Loading bots from RLBotGUI's BotPack.");
+                Main.LOGGER.log(System.Logger.Level.INFO, "Loading bots from RLBotGUI's BotPack.");
                 return addAllBotsFromFolder(rlbotpackPath.toFile(), 10);
             } else {
-                System.out.println("RLBotGUI's BotPack does not exist.");
+                Main.LOGGER.log(System.Logger.Level.INFO, "RLBotGUI's BotPack does not exist.");
             }
         } catch (Exception e) {
             // Something went wrong. Report it, but continue
-            System.err.println("Could not load bots for RLBotGUI's BotPack. Something went wrong.");
+            Main.LOGGER.log(System.Logger.Level.ERROR, "Could not load bots for RLBotGUI's BotPack. Something went wrong.", e);
         }
 
         return false;
@@ -116,7 +117,7 @@ public class BotCollection extends TreeSet<Bot> {
 
                         } catch (Exception e) {
                             // Failed
-                            System.out.println("Could not parse " + file.getName() + " as a bot.");
+                            Main.LOGGER.log(System.Logger.Level.DEBUG, "Could not parse " + file.getName() + " as a bot.", e);
                         }
                     }
                 }

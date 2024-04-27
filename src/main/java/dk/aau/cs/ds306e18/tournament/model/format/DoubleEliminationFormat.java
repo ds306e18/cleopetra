@@ -1,5 +1,6 @@
 package dk.aau.cs.ds306e18.tournament.model.format;
 
+import dk.aau.cs.ds306e18.tournament.Main;
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.TieBreaker;
 import dk.aau.cs.ds306e18.tournament.model.match.Series;
@@ -513,7 +514,7 @@ public class DoubleEliminationFormat implements Format, MatchPlayedListener {
                             // This lower-bracket round one match is gone due to two byes.
                             // We fix this in the following even round
                         } else {
-                            System.err.println("Deserialization error: Only the first two rounds of a double-elimination lower bracket may contain a null match.");
+                            Main.LOGGER.log(System.Logger.Level.ERROR, "Deserialization error: Only the first two rounds of a double-elimination lower bracket may contain a null match.");
                         }
 
                     } else if (lowerBracket[lbWinnerIndex] == null && r == 1) {

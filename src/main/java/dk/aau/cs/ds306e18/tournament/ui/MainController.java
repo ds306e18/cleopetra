@@ -1,5 +1,6 @@
 package dk.aau.cs.ds306e18.tournament.ui;
 
+import dk.aau.cs.ds306e18.tournament.Main;
 import dk.aau.cs.ds306e18.tournament.utility.Alerts;
 import dk.aau.cs.ds306e18.tournament.utility.SaveLoad;
 import javafx.event.Event;
@@ -25,7 +26,7 @@ public class MainController {
 
     @FXML
     private void initialize() {
-        System.out.println("Initialized ui");
+        Main.LOGGER.log(System.Logger.Level.INFO, "Initializing UI");
     }
 
     public void onTabSelectionChanged(Event event) {
@@ -49,6 +50,7 @@ public class MainController {
             Alerts.infoNotification("Saved", "Tournament was successfully saved.");
         } catch (IOException e) {
             Alerts.errorNotification("Error while saving", "Something went wrong while saving the tournament: " + e.getMessage());
+            Main.LOGGER.log(System.Logger.Level.ERROR, "Error while saving tournament", e);
             e.printStackTrace();
         }
     }

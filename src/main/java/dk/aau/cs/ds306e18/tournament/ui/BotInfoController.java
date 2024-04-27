@@ -1,5 +1,6 @@
 package dk.aau.cs.ds306e18.tournament.ui;
 
+import dk.aau.cs.ds306e18.tournament.Main;
 import dk.aau.cs.ds306e18.tournament.model.Bot;
 import dk.aau.cs.ds306e18.tournament.model.BotFromConfig;
 import dk.aau.cs.ds306e18.tournament.utility.Alerts;
@@ -83,9 +84,11 @@ public class BotInfoController extends DraggablePopupWindow {
             // If something failed, let the user know
             if (showFailed) {
                 Alerts.errorNotification("Could not show files.", "Could not open File Explorer showing the config file. Does the file exist?");
+                Main.LOGGER.log(System.Logger.Level.INFO, "Could not open File Explorer showing the config file.");
             }
         } else {
             Alerts.errorNotification("Could not show files.", "Could not open File Explorer since OS is not Windows.");
+            Main.LOGGER.log(System.Logger.Level.ERROR, "Could not open File Explorer since OS is not Windows.");
         }
     }
 
