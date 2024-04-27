@@ -24,7 +24,7 @@ targetCompatibility = 11
 
 // Define the main class for the application
 mainClassName = 'dk.aau.cs.ds306e18.tournament.Main'
-version = '1.8.1'
+version = '1.8.2'
 applicationDefaultJvmArgs = [
         '--add-opens=java.base/java.io=com.google.gson',
         '--add-opens=java.base/java.util=com.google.gson',
@@ -43,6 +43,10 @@ dependencies {
     implementation('org.controlsfx:controlsfx:11.0.3') {
         exclude group: 'org.openjfx'
     }
+}
+
+application {
+    mainModule = 'cleopetra'
 }
 
 javafx {
