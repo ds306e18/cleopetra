@@ -1,5 +1,6 @@
 package dk.aau.cs.ds306e18.tournament.ui;
 
+import dk.aau.cs.ds306e18.tournament.Main;
 import dk.aau.cs.ds306e18.tournament.utility.Alerts;
 import dk.aau.cs.ds306e18.tournament.utility.SaveLoad;
 import javafx.event.ActionEvent;
@@ -38,6 +39,7 @@ public class ExitProgramController extends DraggablePopupWindow {
         } catch (IOException e) {
             e.printStackTrace();
             Alerts.errorNotification("Error while saving", "Something went wrong while saving the tournament: " + e.getMessage());
+            Main.LOGGER.log(System.Logger.Level.ERROR, "Error while saving tournament", e);
         }
     }
 

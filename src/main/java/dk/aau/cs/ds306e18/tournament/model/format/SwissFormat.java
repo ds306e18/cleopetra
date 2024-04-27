@@ -1,5 +1,6 @@
 package dk.aau.cs.ds306e18.tournament.model.format;
 
+import dk.aau.cs.ds306e18.tournament.Main;
 import dk.aau.cs.ds306e18.tournament.model.Team;
 import dk.aau.cs.ds306e18.tournament.model.TieBreaker;
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
@@ -161,6 +162,7 @@ public class SwissFormat implements Format, MatchChangeListener, MatchPlayedList
         // Alert users about rematches. TODO Fix the algorithm. Replace it with Blossom algorithm, good luck!
         if (badTries > 0) {
             Alerts.errorNotification("Bad round", "Accepted " + badTries + " rematches due to a bad algorithm.");
+            Main.LOGGER.log(System.Logger.Level.ERROR, "Bad round: Accepted " + badTries + " rematches due to a bad algorithm.");
         }
 
         // Register self as listener

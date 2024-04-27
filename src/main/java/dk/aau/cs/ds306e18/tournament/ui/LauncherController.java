@@ -42,8 +42,7 @@ public class LauncherController {
             Alerts.window = systemRoot;
             systemStage.setScene(new Scene(systemRoot));
         } catch (IOException e) {
-            System.out.println(e.getMessage());
-            System.out.println(e.getCause().toString());
+            Main.LOGGER.log(System.Logger.Level.ERROR, "Error while loading system stage", e);
         }
 
         // Create and load the exit popup when the user tries to close the system.
@@ -115,6 +114,7 @@ public class LauncherController {
                 systemStage.show();
             } catch (IOException e) {
                 Alerts.errorNotification("Could not read selected file", "Something went wrong while loading tournament: " + e.getMessage());
+                Main.LOGGER.log(System.Logger.Level.ERROR, "Error while loading tournament", e);
                 e.printStackTrace();
             }
         }

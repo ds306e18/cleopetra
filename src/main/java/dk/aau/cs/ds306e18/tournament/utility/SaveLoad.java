@@ -46,6 +46,7 @@ public class SaveLoad {
     public static void saveTournament(Tournament tournament, File file) throws IOException {
         CleoPetraSettings.getLatestPaths().setTournamentSaveDirectory(file.getParentFile());
         Files.write(file.toPath(), serialize(tournament).getBytes());
+        Main.LOGGER.log(System.Logger.Level.INFO, "Tournament saved to " + file.getAbsolutePath());
     }
 
     /**
@@ -59,6 +60,7 @@ public class SaveLoad {
         if (tournament.getRlBotSettings().writeOverlayDataEnabled()) {
             CleoPetraSettings.getLatestPaths().setOverlayDirectory(new File(tournament.getRlBotSettings().getOverlayPath()));
         }
+        Main.LOGGER.log(System.Logger.Level.INFO, "Tournament loaded from " + file.getAbsolutePath());
         return tournament;
     }
 }

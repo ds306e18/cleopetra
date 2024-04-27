@@ -1,6 +1,7 @@
 package dk.aau.cs.ds306e18.tournament.serialization;
 
 import com.google.gson.*;
+import dk.aau.cs.ds306e18.tournament.Main;
 import dk.aau.cs.ds306e18.tournament.model.format.Format;
 
 import java.lang.reflect.Type;
@@ -32,7 +33,7 @@ public class FormatAdapter implements JsonSerializer<Format>, JsonDeserializer<F
             return context.deserialize(element, Class.forName(thepackage + type));
         } catch (ClassNotFoundException e) {
             // if class has not been found, print error to user
-            System.out.println("ERROR: When deserializing, could not find package: " + e.getMessage());
+            Main.LOGGER.log(System.Logger.Level.ERROR, "Error when deserializing stage format. Could not find package.", e);
         }
         return null;
     }

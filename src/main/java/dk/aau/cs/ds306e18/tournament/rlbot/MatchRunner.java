@@ -1,5 +1,6 @@
 package dk.aau.cs.ds306e18.tournament.rlbot;
 
+import dk.aau.cs.ds306e18.tournament.Main;
 import dk.aau.cs.ds306e18.tournament.model.Bot;
 import dk.aau.cs.ds306e18.tournament.model.BotFromConfig;
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
@@ -68,6 +69,7 @@ public class MatchRunner {
             return false;
         }
 
+        Main.LOGGER.log(System.Logger.Level.INFO, "Starting match in RLBot.");
         return sendCommandToRLBot(Command.START, true);
     }
 
@@ -78,6 +80,7 @@ public class MatchRunner {
     public static boolean startRLBotRunner() {
         try {
             Alerts.infoNotification("Starting RLBot runner", "Attempting to start new instance of run.py for running matches.");
+            Main.LOGGER.log(System.Logger.Level.INFO, "Starting RLBot runner. Attempting to start new instance of run.py for running matches.");
 
             String python = "python";
             if (Tournament.get().getRlBotSettings().useRLBotGUIPythonIfAvailable()) {
@@ -85,18 +88,19 @@ public class MatchRunner {
                 Path botPackPython = RLBotInstallation.getPathToPython();
                 if (botPackPython != null && Files.exists(botPackPython)) {
                     python = botPackPython.toString();
-                    System.out.println("Found RLBotGUI python installation: " + python);
+                    Main.LOGGER.log(System.Logger.Level.INFO, "Found RLBotGUI python installation: " + python);
                 }
             }
 
             Path pathToDirectory = SettingsDirectory.RUN_PY.getParent();
             String cmd = String.format(COMMAND_FORMAT, pathToDirectory, pathToDirectory.toString().substring(0, 2), python);
-            System.out.println("Running command: " + cmd);
+            Main.LOGGER.log(System.Logger.Level.INFO, "Running command: " + cmd);
             Runtime.getRuntime().exec(cmd);
             return true;
         } catch (IOException e) {
             e.printStackTrace();
             Alerts.errorNotification("Could not start RLBot runner", "Something went wrong starting the run.py.");
+            Main.LOGGER.log(System.Logger.Level.ERROR, "Could not start RLBot runner. Something went wrong starting the run.py.");
             return false;
         }
     }
@@ -126,6 +130,7 @@ public class MatchRunner {
      * and received, this method returns true, otherwise false.
      */
     private static boolean sendCommandToRLBot(Command cmd, boolean startRLBotIfMissingAndRetry) {
+        Main.LOGGER.log(System.Logger.Level.INFO, "Sending command to RLBot runner: " + cmd.toString());
         latestBlueScore = Optional.empty();
         latestOrangeScore = Optional.empty();
         try (Socket sock = new Socket(ADDR, PORT);
@@ -170,6 +175,7 @@ public class MatchRunner {
         } catch (IOException e) {
             e.printStackTrace();
             Alerts.errorNotification("IO Exception", "Failed to open socket and send message to run.py");
+            Main.LOGGER.log(System.Logger.Level.ERROR, "Failed to open socket and send message to run.py");
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -255,16 +261,20 @@ public class MatchRunner {
                     overlayData.write();
                 } catch (IOException e) {
                     Path path = new File(settings.getOverlayPath(), OverlayData.CURRENT_MATCH_FILE_NAME).toPath();
-                    Alerts.errorNotification("Could not write overlay data", "Failed to write overlay data to " + path.toString());
+                    Alerts.errorNotification("Could not write overlay data", "Failed to write overlay data to " + path);
+                    Main.LOGGER.log(System.Logger.Level.ERROR, "Could not write overlay data to " + path);
                     e.printStackTrace();
                 }
             }
 
+            Main.LOGGER.log(System.Logger.Level.INFO, "Updated match configuration (rlbot.cfg).");
             return true;
         } catch (IllegalStateException e) {
             Alerts.errorNotification("Error occurred while configuring match", e.getMessage());
+            Main.LOGGER.log(System.Logger.Level.ERROR, "Error occurred while configuring match", e);
         } catch (IOException e) {
             Alerts.errorNotification("IO error occurred while configuring match", e.getMessage());
+            Main.LOGGER.log(System.Logger.Level.ERROR, "IO error occurred while configuring match", e);
         }
 
         return false;

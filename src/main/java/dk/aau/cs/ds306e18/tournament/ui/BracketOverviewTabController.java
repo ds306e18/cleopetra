@@ -1,5 +1,6 @@
 package dk.aau.cs.ds306e18.tournament.ui;
 
+import dk.aau.cs.ds306e18.tournament.Main;
 import dk.aau.cs.ds306e18.tournament.model.format.StageStatusChangeListener;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchResultDependencyException;
 import dk.aau.cs.ds306e18.tournament.model.match.Series;
@@ -189,7 +190,7 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
             coupledBracket = (ModelCoupledUI) bracket;
         } else {
             coupledBracket = null;
-            System.err.println("WARNING: " + bracket.getClass().toString() + " does not implement ModelCoupledUI.");
+            Main.LOGGER.log(System.Logger.Level.ERROR, "PANIC! " + bracket.getClass() + " does not implement ModelCoupledUI.");
         }
     }
 
@@ -348,10 +349,11 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
     public void onStartTournamentButtonPressed(ActionEvent actionEvent) {
         if (Tournament.get().canStart()) {
             Tournament.get().start();
+            Main.LOGGER.log(System.Logger.Level.INFO, "Tournament started.");
             update();
         } else {
-            // TODO Show error message to user
-            System.out.println("Can't start tournament.");
+            Alerts.errorNotification("Failed to start tournament", "You must have at least two teams and one stage to start a tournament.");
+            Main.LOGGER.log(System.Logger.Level.ERROR, "Failed to start tournament due to requirements not being met.");
         }
     }
 
@@ -407,7 +409,7 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
             Series series = selectedSeries.getShowedSeries();
             int blueScore = MatchRunner.latestBlueScore.get();
             int orangeScore = MatchRunner.latestOrangeScore.get();
-            System.out.println("Fetched scores: " + blueScore + "-" + orangeScore);
+            Main.LOGGER.log(System.Logger.Level.INFO, "Fetched scores: " + blueScore + "-" + orangeScore);
             try {
                 // Insert scores if possible
                 if (series.isTeamOneBlue()) {
@@ -425,9 +427,11 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
                 }
             } catch (IllegalStateException ex) {
                 Alerts.errorNotification("No missing results", "The selected series does not contain any matches without scores.");
+                Main.LOGGER.log(System.Logger.Level.INFO, "The selected series does not contain any matches without scores.");
             }
         } else {
             Alerts.errorNotification("Fetching failed", "Failed to fetch scores. Is the CleoPetra's command prompt running?");
+            Main.LOGGER.log(System.Logger.Level.ERROR, "Failed to fetch scores.");
         }
     }
 
