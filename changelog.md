@@ -1,5 +1,10 @@
 # Changelog
 
+#### Version 1.8.2 - April 2024
+- Updated RLBot python path to python 3.11 installation. #117/#127 - CodeRed/NicEastvillage
+- Add more logging, primary around match starting. #128 - NicEastvillage
+- Fixed bug that would prevent overlay path to be a folder. #125 - tarehart
+
 #### Version 1.8.1 - February 2022
 - Added functionality to fetch scores directly from Rocket League. Finally! - NicEastvillage
   - The new 'Fetch scores' button replaces the 'Modify config' button.
