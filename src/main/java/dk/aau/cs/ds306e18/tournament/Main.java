@@ -21,6 +21,10 @@ public class Main extends Application {
 
     public static final System.Logger LOGGER = System.getLogger(Main.class.getName());
 
+    static {
+        System.setProperty("java.util.logging.SimpleFormatter.format", "[%1$tT] %4$s: %5$s %n");
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
 
