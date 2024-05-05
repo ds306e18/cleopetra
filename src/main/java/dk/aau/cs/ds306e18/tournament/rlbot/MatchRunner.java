@@ -33,7 +33,7 @@ public class MatchRunner {
     // The first %s will be replaced with the directory of the rlbot.cfg.
     // The second %s will be the drive 'C:' to change drive.
     // The third %s is the python installation path.
-    private static final String COMMAND_FORMAT = "cmd.exe /c start cmd /c \"cd %s & %s & %s run.py\"";
+    private static final String COMMAND_FORMAT = "cmd.exe /c start cmd /c \"cd %s & %s & \"%s\" run.py\"";
     private static final String ADDR = "127.0.0.1";
     private static final int PORT = 35353; // TODO Make user able to change the port in a settings file
 
