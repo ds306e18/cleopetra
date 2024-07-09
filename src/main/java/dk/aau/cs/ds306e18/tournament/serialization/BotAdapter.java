@@ -3,11 +3,14 @@ package dk.aau.cs.ds306e18.tournament.serialization;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import dk.aau.cs.ds306e18.tournament.Main;
 import dk.aau.cs.ds306e18.tournament.model.Bot;
 import dk.aau.cs.ds306e18.tournament.model.BotFromConfig;
 import dk.aau.cs.ds306e18.tournament.rlbot.configuration.BotSkill;
 import dk.aau.cs.ds306e18.tournament.model.PsyonixBotFromConfig;
 import dk.aau.cs.ds306e18.tournament.rlbot.BotCollection;
+import dk.aau.cs.ds306e18.tournament.utility.Alerts;
+import javafx.application.Platform;
 
 import java.io.IOException;
 
@@ -51,11 +54,16 @@ public class BotAdapter extends TypeAdapter<Bot> {
             in.nextName();
             double skill = in.nextDouble();
             in.endObject();
-            PsyonixBotFromConfig bot = new PsyonixBotFromConfig(config, BotSkill.getSkillFromNumber(skill));
+            try {
+                PsyonixBotFromConfig bot = new PsyonixBotFromConfig(config, BotSkill.getSkillFromNumber(skill));
+                BotCollection.global.add(bot);
+                return bot;
 
-            // Add to BotCollection and return
-            BotCollection.global.add(bot);
-            return bot;
+            } catch (RuntimeException e) {
+                Main.LOGGER.log(System.Logger.Level.ERROR, "Failed to load bot from config. " + e.getCause().getMessage());
+                Platform.runLater(() -> Alerts.errorNotification("Failed to load bot: " + config, e.getCause().getMessage()));
+                return null;
+            }
 
         } else if (BotFromConfig.class.getSimpleName().equals(clazz)) {
 
@@ -63,11 +71,16 @@ public class BotAdapter extends TypeAdapter<Bot> {
             in.nextName();
             String config = in.nextString();
             in.endObject();
-            BotFromConfig bot = new BotFromConfig(config);
+            try {
+                BotFromConfig bot = new BotFromConfig(config);
+                BotCollection.global.add(bot);
+                return bot;
 
-            // Add to BotCollection and return
-            BotCollection.global.add(bot);
-            return bot;
+            } catch (RuntimeException e) {
+                Main.LOGGER.log(System.Logger.Level.ERROR, "Failed to load bot from config. " + e.getCause().getMessage());
+                Platform.runLater(() -> Alerts.errorNotification("Failed to load bot: " + config, e.getCause().getMessage()));
+                return null;
+            }
         }
 
         in.endObject();
