@@ -1,8 +1,9 @@
 # Changelog
 
-#### Version 1.8.3 - May 2024
+#### Version 1.8.3 - TO BE RELEASED
 - Fixed MatchRunner not working for users with spaces in their windows username. - NicEastvillage
 - Adjusted logger formatting. - NicEastvillage
+- Fixed "succesfully saved"-alert when saving was cancelled. #129 - NicEastvillage
 
 #### Version 1.8.2 - April 2024
 - Updated RLBot python path to python 3.11 installation. #117/#127 - CodeRed/NicEastvillage

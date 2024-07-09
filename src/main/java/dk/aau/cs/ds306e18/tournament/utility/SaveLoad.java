@@ -24,7 +24,7 @@ public class SaveLoad {
      * @param fxstage the JavaFX Stage in control of the FileChooser.
      * @throws IOException thrown if something goes wrong during saving.
      */
-    public static void saveTournamentWithFileChooser(Stage fxstage) throws IOException {
+    public static boolean saveTournamentWithFileChooser(Stage fxstage) throws IOException {
         LatestPaths latestPaths = CleoPetraSettings.getLatestPaths();
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose file name and save destination");
@@ -33,10 +33,10 @@ public class SaveLoad {
         fileChooser.setInitialDirectory(latestPaths.getTournamentSaveDirectory());
 
         File file = fileChooser.showSaveDialog(fxstage);
+        if (file == null) return false;
 
-        if (file != null) {
-            saveTournament(Tournament.get(), file);
-        }
+        saveTournament(Tournament.get(), file);
+        return true;
     }
 
     /**

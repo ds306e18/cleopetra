@@ -46,8 +46,8 @@ public class MainController {
     void onSaveIconClicked(MouseEvent event) {
         Stage fxstage = (Stage) saveTournamentBtn.getScene().getWindow();
         try {
-            SaveLoad.saveTournamentWithFileChooser(fxstage);
-            Alerts.infoNotification("Saved", "Tournament was successfully saved.");
+            boolean saved = SaveLoad.saveTournamentWithFileChooser(fxstage);
+            if (saved) Alerts.infoNotification("Saved", "Tournament was successfully saved.");
         } catch (IOException e) {
             Alerts.errorNotification("Error while saving", "Something went wrong while saving the tournament: " + e.getMessage());
             Main.LOGGER.log(System.Logger.Level.ERROR, "Error while saving tournament", e);
