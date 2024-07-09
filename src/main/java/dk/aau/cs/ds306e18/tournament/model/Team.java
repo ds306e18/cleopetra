@@ -3,6 +3,7 @@ package dk.aau.cs.ds306e18.tournament.model;
 import dk.aau.cs.ds306e18.tournament.model.stats.StatsManager;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -91,6 +92,7 @@ public class Team {
      * Repairs properties that cannot be deserialized.
      */
     public void postDeserializationRepair() {
+        bots.removeAll(Collections.singletonList(null));
         statsManager = new StatsManager(this);
     }
 
