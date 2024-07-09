@@ -4,6 +4,7 @@
 - Fixed MatchRunner not working for users with spaces in their windows username. - NicEastvillage
 - Adjusted logger formatting. - NicEastvillage
 - Fixed "succesfully saved"-alert when saving was cancelled. #129 - NicEastvillage
+- Fixed loading of tournaments where a participating bot has been deleted. #130 - NicEastvillage
 
 #### Version 1.8.2 - April 2024
 - Updated RLBot python path to python 3.11 installation. #117/#127 - CodeRed/NicEastvillage
