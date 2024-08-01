@@ -1,6 +1,6 @@
 # Changelog
 
-#### Version 1.8.3 - TO BE RELEASED
+#### Version 1.8.3 - August 2024
 - Fixed MatchRunner not working for users with spaces in their windows username. - NicEastvillage
 - Adjusted logger formatting. - NicEastvillage
 - Fixed "succesfully saved"-alert when saving was cancelled. #129 - NicEastvillage
