@@ -20,7 +20,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 /**
  * This class maintains a RLBot runner process for starting matches. The runner process is the run.py running in
@@ -287,15 +289,58 @@ public class MatchRunner {
     private static void insertParticipants(MatchConfig config, Series series) {
         config.clearParticipants();
 
-        insertParticipantsFromTeam(config, series.getBlueTeam().getBots(), TeamColor.BLUE);
-        insertParticipantsFromTeam(config, series.getOrangeTeam().getBots(), TeamColor.ORANGE);
+        boolean[] modes = { true, true, true };
+
+        int set = (int)series.getTeamOneScores().stream().filter(Optional::isPresent).count();
+        if (set == 0) {
+            // First match of series. Exclude based on what teams played in previous matches
+            for (int once = 0; once < 1; once++) {
+                // Exclude game mode that team one played in previous match
+                Series s = series.getTeamOneFromSeries();
+                if (s == null) break;
+                int len = (int)s.getTeamOneScores().stream().filter(Optional::isPresent).count();
+                int mode = s.gameModes.get(len - 1);
+                modes[mode - 1] = false;
+                Main.LOGGER.log(System.Logger.Level.INFO, "Team " + series.getTeamOne().getTeamName() + " played " + mode  + "s last match");
+            }
+            for (int once = 0; once < 1; once++) {
+                // Exclude game mode that team two played in previous match
+                Series s = series.getTeamTwoFromSeries();
+                if (s == null) break;
+                int len = (int)s.getTeamTwoScores().stream().filter(Optional::isPresent).count();
+                int mode = s.gameModes.get(len - 1);
+                modes[mode - 1] = false;
+                Main.LOGGER.log(System.Logger.Level.INFO, "Team " + series.getTeamTwo().getTeamName() + " played " + mode  + "s last match");
+            }
+        } else {
+            // Not first match. Exclude based on previous matches in this series
+            StringBuilder sb = new StringBuilder("Series has used these game modes so far: ");
+            for (int i = 0; i < set; i++) {
+                modes[series.gameModes.get(i) - 1] = false;
+                if (i != 0) sb.append(" and ");
+                sb.append(series.gameModes.get(i));
+                sb.append('s');
+            }
+            Main.LOGGER.log(System.Logger.Level.INFO, sb.toString());
+        }
+
+        // Pick from remaining
+        Random rng = new Random();
+        int gm = ((rng.nextInt() % 3) + 3) % 3;
+        while (!modes[gm]) gm = ((rng.nextInt() % 3) + 3) % 3;
+        series.gameModes.set(set, gm + 1);
+        Main.LOGGER.log(System.Logger.Level.INFO, "Game mode picked: " + (gm + 1) + "s");
+
+        insertParticipantsFromTeam(config, series.getBlueTeam().getBots(), TeamColor.BLUE, gm + 1);
+        insertParticipantsFromTeam(config, series.getOrangeTeam().getBots(), TeamColor.ORANGE, gm + 1);
     }
 
     /**
      * Inserts the participant info about each bot into the MatchConfig. The Bots in the array must be BotFromConfigs.
      */
-    private static void insertParticipantsFromTeam(MatchConfig config, ArrayList<Bot> bots, TeamColor color) {
-        for (Bot bot : bots) {
+    private static void insertParticipantsFromTeam(MatchConfig config, ArrayList<Bot> bots, TeamColor color, int n) {
+        for (int i = 0; i < n; i++) {
+            Bot bot = bots.get(i);
             ParticipantInfo participant = new ParticipantInfo(
                     bot.getBotSkill(),
                     bot.getBotType(),

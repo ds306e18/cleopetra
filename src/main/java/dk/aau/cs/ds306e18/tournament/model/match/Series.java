@@ -5,6 +5,7 @@ import dk.aau.cs.ds306e18.tournament.utility.ListExt;
 
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * <p>A Series of matches between two teams. Teams might be temporarily unknown as they are winner or loser of
@@ -40,6 +41,8 @@ public final class Series {
 
     transient private List<MatchPlayedListener> playedListeners = new LinkedList<>();
     transient private List<MatchChangeListener> changeListeners = new LinkedList<>();
+
+    public List<Integer> gameModes = Arrays.asList(1, 1, 1);
 
     /**
      * Construct an empty Series.
