@@ -1,3 +1,4 @@
+import sys
 import time
 import socket
 from threading import Event, Thread
@@ -41,7 +42,7 @@ def stop_match(manager: SetupManager):
     manager.shut_down(kill_all_pids=True, quiet=True)
 
 
-def match_running(fetch_queue: Queue, start_event: Event, stop_event: Event, exit_event: Event, fetch_event: Event):
+def match_running(fetch_queue: Queue, start_event: Event, stop_event: Event, exit_event: Event, fetch_event: Event, write_vs_event: Event, overlay_folder: str):
     with setup_manager_context() as manager:
         while True:
             if start_event.is_set():
@@ -57,6 +58,18 @@ def match_running(fetch_queue: Queue, start_event: Event, stop_event: Event, exi
                 fetch_event.clear()
                 packet = manager.game_interface.fresh_live_data_packet(GameTickPacket(), 40, 0)
                 fetch_queue.put((packet.teams[0].score, packet.teams[1].score))
+            elif write_vs_event.is_set():
+                packet = manager.game_interface.fresh_live_data_packet(GameTickPacket(), 400, 0)
+                print(f"{packet.num_cars=}")
+                print(f"{packet.game_info.seconds_elapsed=}")
+                print(f"{packet.game_info.game_time_remaining=}")
+                print(f"{packet.game_info.is_round_active=}")
+                print(f"{packet.game_info.is_kickoff_pause=}")
+                print(f"{packet.game_info.frame_num=}")
+                if packet.game_info.game_time_remaining >= 300 and packet.game_info.seconds_elapsed >= 3:
+                    write_vs_event.clear()
+                    with open(overlay_folder + "/show_vs.json", "w") as f:
+                        f.write("false")
 
 
 if __name__ == '__main__':
@@ -67,14 +80,17 @@ if __name__ == '__main__':
 \\<<<<<<<<<<<<<<<<<<<o>>>>>>>>>>>>>>>>>>>/
 """)
 
+    overlay_folder = sys.argv[1]
+
     try:
         fetch_queue = Queue()
         start_event = Event()
         stop_event = Event()
         exit_event = Event()
         fetch_event = Event()
+        write_vs_event = Event()
 
-        match_runner = Thread(target=match_running, args=(fetch_queue, start_event, stop_event, exit_event, fetch_event))
+        match_runner = Thread(target=match_running, args=(fetch_queue, start_event, stop_event, exit_event, fetch_event, write_vs_event, overlay_folder))
         match_runner.start()
 
         # AF_INET is the Internet address family for IPv4. SOCK_STREAM is the socket type for TCP
@@ -91,6 +107,7 @@ if __name__ == '__main__':
                     if data == Command.START:
                         print("Starting match!")
                         start_event.set()
+                        write_vs_event.set()
                     elif data == Command.STOP:
                         print("Stopping match!")
                         stop_event.set()

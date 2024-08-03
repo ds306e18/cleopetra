@@ -35,7 +35,7 @@ public class MatchRunner {
     // The first %s will be replaced with the directory of the rlbot.cfg.
     // The second %s will be the drive 'C:' to change drive.
     // The third %s is the python installation path.
-    private static final String COMMAND_FORMAT = "cmd.exe /c start cmd /c \"cd %s & %s & \"%s\" run.py\"";
+    private static final String COMMAND_FORMAT = "cmd.exe /c start cmd /c \"cd %s & %s & \"%s\" run.py %s\"";
     private static final String ADDR = "127.0.0.1";
     private static final int PORT = 35353; // TODO Make user able to change the port in a settings file
 
@@ -95,7 +95,7 @@ public class MatchRunner {
             }
 
             Path pathToDirectory = SettingsDirectory.RUN_PY.getParent();
-            String cmd = String.format(COMMAND_FORMAT, pathToDirectory, pathToDirectory.toString().substring(0, 2), python);
+            String cmd = String.format(COMMAND_FORMAT, pathToDirectory, pathToDirectory.toString().substring(0, 2), python, Tournament.get().getRlBotSettings().getOverlayPath());
             Main.LOGGER.log(System.Logger.Level.INFO, "Running command: " + cmd);
             Runtime.getRuntime().exec(cmd);
             return true;
@@ -265,6 +265,12 @@ public class MatchRunner {
                     Path path = new File(settings.getOverlayPath(), OverlayData.CURRENT_MATCH_FILE_NAME).toPath();
                     Alerts.errorNotification("Could not write overlay data", "Failed to write overlay data to " + path);
                     Main.LOGGER.log(System.Logger.Level.ERROR, "Could not write overlay data to " + path);
+                    e.printStackTrace();
+                }
+                try {
+                    Path showVsFile = new File(settings.getOverlayPath(), "show_vs.json").toPath();
+                    Files.write(showVsFile, "true".getBytes());
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
