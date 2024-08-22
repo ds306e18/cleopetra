@@ -270,6 +270,8 @@ public class MatchRunner {
                 try {
                     Path showVsFile = new File(settings.getOverlayPath(), "show_vs.json").toPath();
                     Files.write(showVsFile, "true".getBytes());
+                    Path showMercyFile = new File(settings.getOverlayPath(), "show_mercy.json").toPath();
+                    Files.write(showMercyFile, "false".getBytes());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

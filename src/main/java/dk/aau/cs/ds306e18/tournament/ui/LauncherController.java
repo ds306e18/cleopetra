@@ -33,7 +33,7 @@ public class LauncherController {
         systemStage.setMinWidth(800);
         systemStage.setMinHeight(650);
         systemStage.setMaximized(true);
-        systemStage.setTitle("CleoPetra");
+        systemStage.setTitle("CleoPetra RLBCS'24");
         systemStage.getIcons().add(new Image(Main.class.getResourceAsStream("ui/layout/images/logo.png")));
 
         // Set the correct scene for the system stage.
