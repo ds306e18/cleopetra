@@ -35,7 +35,7 @@ public class MatchRunner {
     // The first %s will be replaced with the directory of the rlbot.cfg.
     // The second %s will be the drive 'C:' to change drive.
     // The third %s is the python installation path.
-    private static final String COMMAND_FORMAT = "cmd.exe /c start cmd /c \"cd %s & %s & \"%s\" run.py %s\"";
+    private static final String COMMAND_FORMAT = "cmd.exe /c start cmd /k \"cd %s & %s & \"%s\" run.py %s\"";
     private static final String ADDR = "127.0.0.1";
     private static final int PORT = 35353; // TODO Make user able to change the port in a settings file
 
@@ -320,8 +320,14 @@ public class MatchRunner {
                 modes[mode - 1] = false;
                 Main.LOGGER.log(System.Logger.Level.INFO, "Team " + series.getTeamTwo().getTeamName() + " played " + mode  + "s last match");
             }
+        }
+        else if (set > 2) {
+            // Series is longer than best-of-3, and we played at least 3 matches now. Start cycling
+            Main.LOGGER.log(System.Logger.Level.INFO, "Series is long. Reusing game mode from game " + (set - 2));
+            modes[series.gameModes.get(set - 1) - 1] = false;
+            modes[series.gameModes.get(set - 2) - 1] = false;
         } else {
-            // Not first match. Exclude based on previous matches in this series
+            // Second or third match. Exclude based on previous matches in this series
             StringBuilder sb = new StringBuilder("Series has used these game modes so far: ");
             for (int i = 0; i < set; i++) {
                 modes[series.gameModes.get(i) - 1] = false;

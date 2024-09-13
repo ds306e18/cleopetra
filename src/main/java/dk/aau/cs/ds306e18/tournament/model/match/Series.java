@@ -42,7 +42,7 @@ public final class Series {
     transient private List<MatchPlayedListener> playedListeners = new LinkedList<>();
     transient private List<MatchChangeListener> changeListeners = new LinkedList<>();
 
-    public List<Integer> gameModes = Arrays.asList(1, 1, 1);
+    public List<Integer> gameModes = Arrays.asList(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
 
     /**
      * Construct an empty Series.
