@@ -4,8 +4,7 @@ package dk.aau.cs.ds306e18.tournament.rlbot.configuration;
 public enum BotType {
     HUMAN("human"),
     RLBOT("rlbot"),
-    PSYONIX("psyonix"),
-    PARTY_MEMBER_BOT("party_member_bot");
+    PSYONIX("psyonix");
 
     private String configValue;
 

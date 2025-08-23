@@ -6,13 +6,13 @@ import dk.aau.cs.ds306e18.tournament.rlbot.configuration.BotConfig;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.Objects;
 
 public class BotFromConfig implements Bot {
 
     private String pathToConfig;
     private BotConfig config;
-    private boolean configLoadedCorrectly = false;
 
     public BotFromConfig(String pathToConfig) throws IOException {
         this.pathToConfig = pathToConfig;
@@ -20,43 +20,25 @@ public class BotFromConfig implements Bot {
     }
 
     /**
-     * Returns true if the config file that this bot is based on was loaded correctly and is valid. False otherwise.
+     * Reload the data from the config file that this was bot was based on.
      */
-    public boolean loadedCorrectly() {
-        return configLoadedCorrectly && config != null;
-    }
-
-    /**
-     * Reload the config file that this was bot was based on.
-     * @return true if the config file that this bot is based on was loaded correctly and is valid. False otherwise.
-     */
-    public boolean reload() throws IOException {
-        try {
-            config = new BotConfig(new File(pathToConfig));
-            configLoadedCorrectly = true;
-        } catch (Exception e) {
-            configLoadedCorrectly = false;
-            throw e;
-        }
-        return loadedCorrectly();
+    public void reload() throws IOException {
+        config = new BotConfig(new File(pathToConfig));
     }
 
     @Override
     public String getDescription() {
-        if (configLoadedCorrectly) return config.getDescription();
-        else return "Could not load bot from config";
+        return config.getDescription();
     }
 
     @Override
     public String getName() {
-        if (configLoadedCorrectly) return config.getName();
-        else return "Could not load bot from config";
+        return config.getName();
     }
 
     @Override
     public String getDeveloper() {
-        if (configLoadedCorrectly) return config.getDeveloper();
-        else return "Could not load bot from config";
+        return config.getDeveloper();
     }
 
     @Override
@@ -70,20 +52,17 @@ public class BotFromConfig implements Bot {
 
     @Override
     public String getFunFact() {
-        if (configLoadedCorrectly) return config.getFunFact();
-        else return "Could not load bot from config";
+        return config.getFunFact();
     }
 
     @Override
     public String getGitHub() {
-        if (configLoadedCorrectly) return config.getSourceLink();
-        else return "Could not load bot from config";
+        return config.getSourceLink();
     }
 
     @Override
     public String getLanguage() {
-        if (configLoadedCorrectly) return config.getLanguage();
-        else return "Could not load bot from config";
+        return config.getLanguage();
     }
 
     @Override
@@ -94,6 +73,36 @@ public class BotFromConfig implements Bot {
     @Override
     public BotSkill getBotSkill() {
         return BotSkill.ALLSTAR;
+    }
+
+    @Override
+    public String getAgentId() {
+        return config.getAgentId();
+    }
+
+    @Override
+    public String getLoadoutFile() {
+        return config.getLoadoutFile();
+    }
+
+    @Override
+    public String getRootDir() {
+        return Paths.get(pathToConfig).getParent().resolve(config.getRootDir()).toString();
+    }
+
+    @Override
+    public String getRunCommand() {
+        return config.getRunCommand();
+    }
+
+    @Override
+    public boolean isHivemind() {
+        return config.isHivemind();
+    }
+
+    @Override
+    public String getLogoFile() {
+        return config.getLogoFile();
     }
 
     @Override

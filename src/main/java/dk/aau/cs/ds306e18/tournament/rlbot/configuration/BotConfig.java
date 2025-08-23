@@ -35,12 +35,12 @@ public class BotConfig {
     private File configFile;
     private String agentId;
     private String name;
-    private File loadoutFile;
-    private File rootDir;
+    private String loadoutFile;
+    private String rootDir;
     private String runCommand;
     private String runCommandLinux;
     private boolean hivemind;
-    private File logoFile;
+    private String logoFile;
 
     private String developer;
     private String description;
@@ -62,12 +62,12 @@ public class BotConfig {
         Supplier<String> emptySupplier = () -> "";
         agentId = parseResult.getString(SETTINGS_HEADER + "." + AGENT_ID, emptySupplier);
         name = parseResult.getString(SETTINGS_HEADER + "." + NAME, emptySupplier);
-        loadoutFile = new File(parseResult.getString(SETTINGS_HEADER + "." + LOADOUT_FILE, emptySupplier));
-        rootDir = new File(parseResult.getString(SETTINGS_HEADER + "." + ROOT_DIR, emptySupplier));
+        loadoutFile = parseResult.getString(SETTINGS_HEADER + "." + LOADOUT_FILE, emptySupplier);
+        rootDir = parseResult.getString(SETTINGS_HEADER + "." + ROOT_DIR, emptySupplier);
         runCommand = parseResult.getString(SETTINGS_HEADER + "." + RUN_COMMAND, emptySupplier);
         runCommandLinux = parseResult.getString(SETTINGS_HEADER + "." + RUN_COMMAND_LINUX, emptySupplier);
         hivemind = parseResult.getBoolean(SETTINGS_HEADER + "." + HIVEMIND, () -> false);
-        logoFile = new File(parseResult.getString(SETTINGS_HEADER + "." + LOGO_FILE, emptySupplier));
+        logoFile = parseResult.getString(SETTINGS_HEADER + "." + LOGO_FILE, emptySupplier);
 
         developer = parseResult.getString(DETAILS_HEADER + "." + DEVELOPER, emptySupplier);
         description = parseResult.getString(DETAILS_HEADER + "." + DESCRIPTION, emptySupplier);
@@ -92,11 +92,11 @@ public class BotConfig {
         return name;
     }
 
-    public File getLoadoutFile() {
+    public String getLoadoutFile() {
         return loadoutFile;
     }
 
-    public File getRootDir() {
+    public String getRootDir() {
         return rootDir;
     }
 
@@ -112,7 +112,7 @@ public class BotConfig {
         return hivemind;
     }
 
-    public File getLogoFile() {
+    public String getLogoFile() {
         return logoFile;
     }
 

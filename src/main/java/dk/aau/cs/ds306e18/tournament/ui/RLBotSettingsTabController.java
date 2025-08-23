@@ -1,7 +1,7 @@
 package dk.aau.cs.ds306e18.tournament.ui;
 
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
-import dk.aau.cs.ds306e18.tournament.rlbot.MatchRunner;
+import dk.aau.cs.ds306e18.tournament.rlbot.MatchControl;
 import dk.aau.cs.ds306e18.tournament.rlbot.RLBotSettings;
 import dk.aau.cs.ds306e18.tournament.rlbot.configuration.MatchConfig;
 import dk.aau.cs.ds306e18.tournament.rlbot.configuration.MatchConfigOptions.*;
@@ -67,26 +67,11 @@ public class RLBotSettingsTabController {
         // General match settings
         setupChoiceBox(gameMapChoiceBox, GameMap.values(), matchConfig.getGameMap(), MatchConfig::setGameMap);
         setupChoiceBox(gameModeChoiceBox, GameMode.values(), matchConfig.getGameMode(), MatchConfig::setGameMode);
-        skipReplaysCheckbox.setSelected(matchConfig.isSkipReplays());
-        skipReplaysCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            Tournament.get().getRlBotSettings().getMatchConfig().setSkipReplays(newValue);
-        });
-        instantStartCheckbox.setSelected(matchConfig.isInstantStart());
-        instantStartCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            Tournament.get().getRlBotSettings().getMatchConfig().setInstantStart(newValue);
-        });
-        renderingCheckbox.setSelected(matchConfig.isRenderingEnabled());
-        renderingCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            Tournament.get().getRlBotSettings().getMatchConfig().setRenderingEnabled(newValue);
-        });
-        stateSettingCheckbox.setSelected(matchConfig.isStateSettingEnabled());
-        stateSettingCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            Tournament.get().getRlBotSettings().getMatchConfig().setStateSettingEnabled(newValue);
-        });
-        autoSaveReplaysCheckbox.setSelected(matchConfig.isAutoSaveReplays());
-        autoSaveReplaysCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            Tournament.get().getRlBotSettings().getMatchConfig().setAutoSaveReplays(newValue);
-        });
+        setupCheckBox(skipReplaysCheckbox, matchConfig.doSkipReplays(), MatchConfig::setSkipReplays);
+        setupCheckBox(instantStartCheckbox, matchConfig.isInstantStart(), MatchConfig::setInstantStart);
+        setupCheckBox(renderingCheckbox, matchConfig.isRenderingEnabled(), MatchConfig::setRenderingEnabled);
+        setupCheckBox(stateSettingCheckbox, matchConfig.isStateSettingEnabled(), MatchConfig::setStateSettingEnabled);
+        setupCheckBox(autoSaveReplaysCheckbox, matchConfig.doAutoSaveReplays(), MatchConfig::setAutoSaveReplays);
 
         // Mutators
         setupChoiceBox(matchLengthChoiceBox, MatchLength.values(), matchConfig.getMatchLength(), MatchConfig::setMatchLength);
@@ -123,6 +108,7 @@ public class RLBotSettingsTabController {
             }
         });
 
+        // TODO: Remove button - meaningless option in v5
         useRLBotGUIPythonCheckbox.setSelected(settings.useRLBotGUIPythonIfAvailable());
         useRLBotGUIPythonCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
             Tournament.get().getRlBotSettings().setUseRLBotGUIPythonIfAvailable(newValue);
@@ -132,13 +118,23 @@ public class RLBotSettingsTabController {
     }
 
     /**
-     * Setup a choice box for match config options.
+     * Set up a choice box for match config options.
      */
     private <T> void setupChoiceBox(ChoiceBox<T> choiceBox, T[] values, T current, BiConsumer<MatchConfig, T> onSelect) {
         choiceBox.setItems(FXCollections.observableArrayList(values));
         choiceBox.getSelectionModel().select(current);
         choiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             onSelect.accept(Tournament.get().getRlBotSettings().getMatchConfig(), newValue);
+        });
+    }
+
+    /**
+     * Set up a checkbox for match config options.
+     */
+    private void setupCheckBox(CheckBox checkBox, boolean current, BiConsumer<MatchConfig, Boolean> onSelect) {
+        checkBox.setSelected(current);
+        checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            onSelect.accept(Tournament.get().getRlBotSettings().getMatchConfig(), checkBox.isSelected());
         });
     }
 
@@ -156,7 +152,7 @@ public class RLBotSettingsTabController {
         // General match settings
         gameMapChoiceBox.getSelectionModel().select(matchConfig.getGameMap());
         gameModeChoiceBox.getSelectionModel().select(matchConfig.getGameMode());
-        skipReplaysCheckbox.setSelected(matchConfig.isSkipReplays());
+        skipReplaysCheckbox.setSelected(matchConfig.doSkipReplays());
         instantStartCheckbox.setSelected(matchConfig.isInstantStart());
 
         // Mutators
@@ -181,15 +177,15 @@ public class RLBotSettingsTabController {
     }
 
     public void onActionRLBotRunnerOpen(ActionEvent actionEvent) {
-        MatchRunner.startRLBotRunner();
+        MatchControl.get().launchConnectAndRunRLBotIfNeeded();
     }
 
     public void onActionRLBotRunnerClose(ActionEvent actionEvent) {
-        MatchRunner.closeRLBotRunner();
+        // TODO: Remove button
     }
 
     public void onActionRLBotRunnerStopMatch(ActionEvent actionEvent) {
-        MatchRunner.stopMatch();
+        MatchControl.get().stopMatch();
     }
 
     public void onActionChooseOverlayPath(ActionEvent actionEvent) {

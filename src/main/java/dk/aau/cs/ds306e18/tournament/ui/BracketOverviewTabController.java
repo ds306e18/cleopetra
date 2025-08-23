@@ -4,7 +4,7 @@ import dk.aau.cs.ds306e18.tournament.Main;
 import dk.aau.cs.ds306e18.tournament.model.format.StageStatusChangeListener;
 import dk.aau.cs.ds306e18.tournament.model.match.MatchResultDependencyException;
 import dk.aau.cs.ds306e18.tournament.model.match.Series;
-import dk.aau.cs.ds306e18.tournament.rlbot.MatchRunner;
+import dk.aau.cs.ds306e18.tournament.rlbot.MatchControl;
 import dk.aau.cs.ds306e18.tournament.model.Bot;
 import dk.aau.cs.ds306e18.tournament.model.format.StageStatus;
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
@@ -401,14 +401,15 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
     }
 
     public void onPlayMatchBtnAction(ActionEvent actionEvent) {
-        MatchRunner.startMatch(Tournament.get().getRlBotSettings().getMatchConfig(), selectedSeries.getShowedSeries());
+        MatchControl.get().startMatch(Tournament.get().getRlBotSettings().getMatchConfig(), selectedSeries.getShowedSeries());
     }
 
     public void fetchScoresButtonOnAction(ActionEvent actionEvent) {
-        if (selectedSeries != null && MatchRunner.fetchScores()) {
+        var match = MatchControl.get();
+        if (selectedSeries != null && match.hasLatestScore()) {
             Series series = selectedSeries.getShowedSeries();
-            int blueScore = MatchRunner.latestBlueScore.get();
-            int orangeScore = MatchRunner.latestOrangeScore.get();
+            int blueScore = match.getLatestBlueScore();
+            int orangeScore = match.getLatestOrangeScore();
             Main.LOGGER.log(System.Logger.Level.INFO, "Fetched scores: " + blueScore + "-" + orangeScore);
             try {
                 // Insert scores if possible
@@ -417,9 +418,7 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
                 } else {
                     series.setScoresOfUnplayedMatch(orangeScore, blueScore);
                 }
-                Alerts.infoNotification(
-                        "Fetched " + blueScore + "-" + orangeScore,
-                        "Successfully fetched the scoreline " + blueScore + "-" + orangeScore + ".");
+
                 // Is series over now?
                 Series.Outcome outcome = Series.winnerIfScores(series.getTeamOneScores(), series.getTeamTwoScores());
                 if (outcome != Series.Outcome.DRAW && outcome != Series.Outcome.UNKNOWN) {
@@ -430,16 +429,13 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
                 Main.LOGGER.log(System.Logger.Level.INFO, "The selected series does not contain any matches without scores.");
             }
         } else {
-            Alerts.errorNotification("Fetching failed", "Failed to fetch scores. Is the CleoPetra's command prompt running?");
+            Alerts.errorNotification("Fetching score failed", "No scores have been received from RLBot yet.");
             Main.LOGGER.log(System.Logger.Level.ERROR, "Failed to fetch scores.");
         }
     }
 
     public void modifyConfigButtonOnAction(ActionEvent actionEvent) {
-        boolean ready = MatchRunner.prepareMatch(Tournament.get().getRlBotSettings().getMatchConfig(), selectedSeries.getShowedSeries());
-        if (ready) {
-            Alerts.infoNotification("Modified config file", "The rlbot.cfg was successfully modified to the selected match.");
-        }
+        // TODO: Remove
     }
 
     /**

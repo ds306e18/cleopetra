@@ -22,7 +22,7 @@ public class MatchConfigTest {
         // Match settings
         assertEquals(GameMap.MANNFIELD, config.getGameMap());
         assertEquals(GameMode.SOCCER, config.getGameMode());
-        assertFalse(config.isSkipReplays());
+        assertFalse(config.doSkipReplays());
         assertFalse(config.isInstantStart());
 
         // Mutators

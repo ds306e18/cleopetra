@@ -109,11 +109,9 @@ public class BotCollection extends TreeSet<Bot> {
                         try {
                             // Try to read bot
                             BotFromConfig bot = new BotFromConfig(file.getAbsolutePath());
-                            if (bot.loadedCorrectly()) {
-                                Main.LOGGER.log(System.Logger.Level.INFO, "Adding '" + file + "' to the bot collection.");
-                                this.add(bot);
-                                botsAdded += 1;
-                            }
+                            Main.LOGGER.log(System.Logger.Level.INFO, "Adding '" + file + "' to the bot collection.");
+                            this.add(bot);
+                            botsAdded += 1;
                         } catch (Exception e) {
                             Main.LOGGER.log(System.Logger.Level.DEBUG, "Could not load '" + file + "' as a bot.", e);
                         }

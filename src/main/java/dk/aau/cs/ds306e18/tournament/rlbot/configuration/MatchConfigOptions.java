@@ -106,23 +106,24 @@ public class MatchConfigOptions {
     }
 
     public enum GameMode {
-        SOCCER("Soccer", "Soccer"),
-        HOOPS("Hoops", "Hoops"),
-        DROPSHOT("Dropshot", "Dropshot"),
-        HOCKEY("Hockey", "Hockey"),
-        RUMBLE("Rumble", "Rumble"),
+        SOCCER("Soccer", rlbot.flat.GameMode.Soccar),
+        HOOPS("Hoops", rlbot.flat.GameMode.Hoops),
+        DROPSHOT("Dropshot", rlbot.flat.GameMode.Dropshot),
+        HOCKEY("Hockey", rlbot.flat.GameMode.Snowday),
+        RUMBLE("Rumble", rlbot.flat.GameMode.Rumble),
         ;
 
-        public final String guiName, configName;
+        public final String guiName;
+        public final int value;
 
-        GameMode(String guiName, String configName) {
+        GameMode(String guiName, int value) {
             this.guiName = guiName;
-            this.configName = configName;
+            this.value = value;
         }
 
-        public static GameMode get(String value) {
+        public static GameMode get(int value) {
             for (GameMode gm : values()) {
-                if (gm.configName.equals(value)) return gm;
+                if (gm.value == value) return gm;
             }
             return SOCCER;
         }
