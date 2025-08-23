@@ -5,6 +5,7 @@ import dk.aau.cs.ds306e18.tournament.rlbot.configuration.BotType;
 import dk.aau.cs.ds306e18.tournament.rlbot.configuration.BotConfig;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Objects;
 
 public class BotFromConfig implements Bot {
@@ -13,7 +14,7 @@ public class BotFromConfig implements Bot {
     private BotConfig config;
     private boolean configLoadedCorrectly = false;
 
-    public BotFromConfig(String pathToConfig) {
+    public BotFromConfig(String pathToConfig) throws IOException {
         this.pathToConfig = pathToConfig;
         reload();
     }
@@ -29,13 +30,13 @@ public class BotFromConfig implements Bot {
      * Reload the config file that this was bot was based on.
      * @return true if the config file that this bot is based on was loaded correctly and is valid. False otherwise.
      */
-    public boolean reload() {
+    public boolean reload() throws IOException {
         try {
             config = new BotConfig(new File(pathToConfig));
             configLoadedCorrectly = true;
         } catch (Exception e) {
             configLoadedCorrectly = false;
-            throw new RuntimeException("Could not load bot from config " + pathToConfig, e);
+            throw e;
         }
         return loadedCorrectly();
     }
@@ -75,7 +76,7 @@ public class BotFromConfig implements Bot {
 
     @Override
     public String getGitHub() {
-        if (configLoadedCorrectly) return config.getGithub();
+        if (configLoadedCorrectly) return config.getSourceLink();
         else return "Could not load bot from config";
     }
 

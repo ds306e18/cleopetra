@@ -1,0 +1,10 @@
+[settings]
+name = "Psyonix Rookie"
+looks_config = "./psyonix_loadout.toml"
+
+[details]
+developer = "Psyonix"
+description = "This is the normal Rookie bot you can play against in Rocket League already"
+fun_fact = "Rocket League's bots are implemented with a single behavior tree."
+github = ""
+language = "Unreal Behavior Trees"

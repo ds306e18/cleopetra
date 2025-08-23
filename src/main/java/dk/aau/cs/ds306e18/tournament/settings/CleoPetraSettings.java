@@ -55,10 +55,10 @@ public class CleoPetraSettings {
      */
     private static void setupPsyonixBots() throws IOException {
         Files.createDirectories(SettingsDirectory.PSYONIX_BOTS);
-        FileOperations.copyIfMissing(Main.class.getResourceAsStream("settings/files/psyonix_appearance.cfg"), SettingsDirectory.PSYONIX_APPEARANCE);
-        FileOperations.copyIfMissing(Main.class.getResourceAsStream("settings/files/psyonix_allstar.cfg"), SettingsDirectory.PSYONIX_ALLSTAR);
-        FileOperations.copyIfMissing(Main.class.getResourceAsStream("settings/files/psyonix_pro.cfg"), SettingsDirectory.PSYONIX_PRO);
-        FileOperations.copyIfMissing(Main.class.getResourceAsStream("settings/files/psyonix_rookie.cfg"), SettingsDirectory.PSYONIX_ROOKIE);
+        FileOperations.copyIfMissing(Main.class.getResourceAsStream("settings/files/psyonix_loadout.toml"), SettingsDirectory.PSYONIX_APPEARANCE);
+        FileOperations.copyIfMissing(Main.class.getResourceAsStream("settings/files/psyonix_allstar.bot.toml"), SettingsDirectory.PSYONIX_ALLSTAR);
+        FileOperations.copyIfMissing(Main.class.getResourceAsStream("settings/files/psyonix_pro.bot.toml"), SettingsDirectory.PSYONIX_PRO);
+        FileOperations.copyIfMissing(Main.class.getResourceAsStream("settings/files/psyonix_rookie.bot.toml"), SettingsDirectory.PSYONIX_ROOKIE);
     }
 
     public static LatestPaths getLatestPaths() {

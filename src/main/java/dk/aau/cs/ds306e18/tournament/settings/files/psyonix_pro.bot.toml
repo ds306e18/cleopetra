@@ -1,0 +1,10 @@
+[settings]
+name = "Psyonix Pro"
+looks_config = "./psyonix_loadout.toml"
+
+[details]
+developer = "Psyonix"
+description = "This is the normal Pro bot you can play against in Rocket League already"
+fun_fact = "The bots wiggle their tires during the countdown just to add some personality. Unfortunately Psyonix didn't have time to give them different personalities."
+github = ""
+language = "Unreal Behavior Trees"
