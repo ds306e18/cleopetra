@@ -40,7 +40,6 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
     @FXML private VBox selectedMatchVBox;
     @FXML private VBox overviewVBox;
     @FXML private Button playMatchBtn;
-    //@FXML private Button modifyConfigBtn;
     @FXML private Button fetchScoresBtn;
     @FXML private Button editMatchBtn;
     @FXML private Button switchColorsBtn;
@@ -432,10 +431,6 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
             Alerts.errorNotification("Fetching score failed", "No scores have been received from RLBot yet.");
             Main.LOGGER.log(System.Logger.Level.ERROR, "Failed to fetch scores.");
         }
-    }
-
-    public void modifyConfigButtonOnAction(ActionEvent actionEvent) {
-        // TODO: Remove
     }
 
     /**

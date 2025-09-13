@@ -11,21 +11,7 @@ public class RLBotInstallation {
      */
     public static Path getPathToRLBotPack() {
         try {
-            return Paths.get(System.getenv("APPDATA")).getParent().resolve("Local\\RLBotGUIX\\RLBotPackDeletable");
-        } catch (Exception e) {
-            // Failed. Maybe we are on a Linux system
-            return null;
-        }
-    }
-
-    /**
-     * @return The path to the Python installation that the RLBotGUI uses
-     * (the new installation in %APPDATA%/Local/RLBotGUIX/...). It is not guaranteed to
-     * exist and can be null if APPDATA is not an environment variable.
-     */
-    public static Path getPathToPython() {
-        try {
-            return Paths.get(System.getenv("APPDATA")).getParent().resolve("Local\\RLBotGUIX\\Python311\\python.exe");
+            return Paths.get(System.getenv("APPDATA")).getParent().resolve("Local\\RLBotGUI5\\RLBotPack");
         } catch (Exception e) {
             // Failed. Maybe we are on a Linux system
             return null;

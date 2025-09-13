@@ -23,23 +23,5 @@ public class FileOperations {
             return "";
         }
     }
-
-    /**
-     * Copies a file from source to destination, but only if the destination does not exist already.
-     */
-    public static void copyIfMissing(Path source, Path destination) throws IOException {
-        if (!Files.exists(destination)) {
-            Files.copy(source, destination);
-        }
-    }
-
-    /**
-     * Copies a file from source to destination, but only if the destination does not exist already.
-     */
-    public static void copyIfMissing(InputStream inputStream, Path destination) throws IOException {
-        if (!Files.exists(destination)) {
-            Files.copy(inputStream, destination);
-        }
-    }
 }
 

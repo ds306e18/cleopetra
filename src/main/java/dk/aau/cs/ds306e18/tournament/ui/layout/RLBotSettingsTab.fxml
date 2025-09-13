@@ -197,23 +197,6 @@
                         <Button fx:id="chooseOverlayPathButton" mnemonicParsing="false" onAction="#onActionChooseOverlayPath" text="..." GridPane.columnIndex="2" />
                      </children>
                   </GridPane>
-                  <GridPane layoutX="30.0" layoutY="324.0">
-                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" />
-                     </columnConstraints>
-                     <rowConstraints>
-                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                     </rowConstraints>
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Use the RLBotGUI's Python installation if available">
-                           <font>
-                              <Font size="16.0" />
-                           </font>
-                        </Text>
-                        <CheckBox fx:id="useRLBotGUIPythonCheckbox" mnemonicParsing="false" GridPane.columnIndex="1" />
-                     </children>
-                  </GridPane>
                   <Separator layoutX="30.0" layoutY="279.0" prefWidth="200.0" />
                   <Text layoutX="30.0" layoutY="309.0" strokeType="OUTSIDE" strokeWidth="0.0" text="RLBot Runner">
                      <font>
@@ -236,7 +219,6 @@
                     </rowConstraints>
                      <children>
                         <Button fx:id="rlbotRunnerOpenButton" mnemonicParsing="false" onAction="#onActionRLBotRunnerOpen" prefHeight="27.0" prefWidth="101.0" text="Open" />
-                        <Button fx:id="rlbotRunnerCloseButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#onActionRLBotRunnerClose" prefHeight="27.0" prefWidth="101.0" text="Close" GridPane.columnIndex="1" />
                         <Button fx:id="rlbotRunnerStopMatchButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#onActionRLBotRunnerStopMatch" prefHeight="27.0" prefWidth="101.0" text="Stop match" GridPane.columnIndex="2" />
                      </children>
                   </GridPane>

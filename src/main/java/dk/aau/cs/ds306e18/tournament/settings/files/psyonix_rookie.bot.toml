@@ -1,6 +1,6 @@
 [settings]
 name = "Psyonix Rookie"
-looks_config = "./psyonix_loadout.toml"
+loadout_file = "./psyonix_loadout.toml"
 
 [details]
 developer = "Psyonix"

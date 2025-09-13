@@ -67,7 +67,7 @@ public class BotConfig {
         runCommand = parseResult.getString(SETTINGS_HEADER + "." + RUN_COMMAND, emptySupplier);
         runCommandLinux = parseResult.getString(SETTINGS_HEADER + "." + RUN_COMMAND_LINUX, emptySupplier);
         hivemind = parseResult.getBoolean(SETTINGS_HEADER + "." + HIVEMIND, () -> false);
-        logoFile = parseResult.getString(SETTINGS_HEADER + "." + LOGO_FILE, emptySupplier);
+        logoFile = parseResult.getString(SETTINGS_HEADER + "." + LOGO_FILE, () -> "./logo.png");
 
         developer = parseResult.getString(DETAILS_HEADER + "." + DEVELOPER, emptySupplier);
         description = parseResult.getString(DETAILS_HEADER + "." + DESCRIPTION, emptySupplier);

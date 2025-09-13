@@ -32,9 +32,7 @@ public class RLBotSettingsTabController {
     public CheckBox writeOverlayDataCheckbox;
     public TextField overlayPathTextField;
     public Button chooseOverlayPathButton;
-    public CheckBox useRLBotGUIPythonCheckbox;
     public Button rlbotRunnerOpenButton;
-    public Button rlbotRunnerCloseButton;
     public Button rlbotRunnerStopMatchButton;
     public ChoiceBox<MatchLength> matchLengthChoiceBox;
     public ChoiceBox<MaxScore> maxScoreChoiceBox;
@@ -108,12 +106,6 @@ public class RLBotSettingsTabController {
             }
         });
 
-        // TODO: Remove button - meaningless option in v5
-        useRLBotGUIPythonCheckbox.setSelected(settings.useRLBotGUIPythonIfAvailable());
-        useRLBotGUIPythonCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            Tournament.get().getRlBotSettings().setUseRLBotGUIPythonIfAvailable(newValue);
-        });
-
         update();
     }
 
@@ -178,10 +170,6 @@ public class RLBotSettingsTabController {
 
     public void onActionRLBotRunnerOpen(ActionEvent actionEvent) {
         MatchControl.get().launchConnectAndRunRLBotIfNeeded();
-    }
-
-    public void onActionRLBotRunnerClose(ActionEvent actionEvent) {
-        // TODO: Remove button
     }
 
     public void onActionRLBotRunnerStopMatch(ActionEvent actionEvent) {
