@@ -159,7 +159,7 @@
             <Insets />
          </GridPane.margin>
       </VBox>
-      <VBox id="globalGrid" alignment="CENTER">
+      <VBox fx:id="globalGrid" alignment="CENTER">
          <children>
             <Label fx:id="stageNameLabel" text="Stage name">
                <font>

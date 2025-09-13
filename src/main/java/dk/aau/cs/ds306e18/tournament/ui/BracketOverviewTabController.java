@@ -35,6 +35,7 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
 
     public static BracketOverviewTabController instance;
 
+    @FXML private VBox globalGrid;
     @FXML private VBox startTournamentInstructionsHolder;
     @FXML private GridPane bracketOverviewTab;
     @FXML private VBox selectedMatchVBox;
@@ -136,6 +137,10 @@ public class BracketOverviewTabController implements StageStatusChangeListener, 
             updateStageNavigationButtons();
         }
 
+        globalGrid.getStyleClass().remove("greenScreen");
+        if (tournament.getUseGreenScreen()) {
+            globalGrid.getStyleClass().add("greenScreen");
+        }
         updateTeamViewer(selectedSeries == null ? null : selectedSeries.getShowedSeries());
     }
 

@@ -31,6 +31,7 @@ public class RLBotSettingsTabController {
     public CheckBox instantStartCheckbox;
     public CheckBox writeOverlayDataCheckbox;
     public TextField overlayPathTextField;
+    public CheckBox useGreenScreen;
     public Button chooseOverlayPathButton;
     public Button rlbotRunnerOpenButton;
     public Button rlbotRunnerStopMatchButton;
@@ -92,7 +93,7 @@ public class RLBotSettingsTabController {
         boolean writeOverlay = settings.writeOverlayDataEnabled();
         writeOverlayDataCheckbox.setSelected(writeOverlay);
         writeOverlayDataCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            Tournament.get().getRlBotSettings().setWriteOverlayData(newValue);
+            settings.setWriteOverlayData(newValue);
             overlayPathTextField.setDisable(!newValue);
             chooseOverlayPathButton.setDisable(!newValue);
         });
@@ -104,6 +105,9 @@ public class RLBotSettingsTabController {
                 String path = overlayPathTextField.textProperty().get();
                 settings.setOverlayPath(path);
             }
+        });
+        setupCheckBox(useGreenScreen, Tournament.get().getUseGreenScreen(), (conf, val) -> {
+            Tournament.get().setUseGreenScreen(val);
         });
 
         update();

@@ -176,3 +176,7 @@
     -fx-stroke-width: 1;
     -fx-stroke: #c1c1c1;
 }
+
+.greenScreen {
+    -fx-background-color: #00ff00;
+}
