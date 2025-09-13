@@ -9,9 +9,12 @@ import dk.aau.cs.ds306e18.tournament.rlbot.configuration.MatchConfigOptions;
 import dk.aau.cs.ds306e18.tournament.rlbot.configuration.TeamColor;
 import rlbot.commons.protocol.RLBotInterface;
 import rlbot.commons.protocol.RLBotListenerAdapter;
+import rlbot.commons.protocol.SpecWriter;
 import rlbot.flat.*;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -37,10 +40,10 @@ public class MatchControl extends RLBotListenerAdapter {
     }
 
     public void startMatch(MatchConfig matchConfig, Series series) {
+        hasLatestScore = false;
         var match = createRLBotMatch(matchConfig, series);
         launchConnectAndRunRLBotIfNeeded();
         rlbot.startMatch(match);
-        hasLatestScore = false;
     }
 
     public void stopMatch() {
@@ -144,6 +147,7 @@ public class MatchControl extends RLBotListenerAdapter {
     // Called whenever we receive a packet from rlbot
     @Override
     public void onGamePacket(GamePacketT packet) {
+        hasLatestScore = packet.getMatchInfo().getSecondsElapsed() >= 1;
         latestBlueScore = (int) packet.getTeams()[0].getScore();
         latestOrangeScore = (int) packet.getTeams()[1].getScore();
     }
