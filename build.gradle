@@ -16,7 +16,7 @@ targetCompatibility = 11
 
 // Define the main class for the application
 mainClassName = 'dk.aau.cs.ds306e18.tournament.Main'
-version = '1.8.3'
+version = '1.9.0'
 applicationDefaultJvmArgs = [
         '--add-opens=java.base/java.io=com.google.gson',
         '--add-opens=java.base/java.util=com.google.gson',
