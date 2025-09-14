@@ -3,6 +3,8 @@ module cleopetra {
     requires javafx.fxml;
     requires com.google.gson;
     requires org.controlsfx.controls;
+    requires rlbot.framework;
+    requires org.tomlj;
 
     exports dk.aau.cs.ds306e18.tournament;
     opens dk.aau.cs.ds306e18.tournament.model;

@@ -10,6 +10,7 @@ import java.util.*;
 public class Tournament {
 
     private static Tournament instance;
+
     public static Tournament get() {
         if (instance == null)
             instance = new Tournament();
@@ -28,6 +29,7 @@ public class Tournament {
     private SeedingOption seedingOption = SeedingOption.SEED_BY_ORDER;
     private boolean started = false;
     private int currentStageIndex = -1;
+    private boolean useGreenScreen;
 
     public Tournament() {
         instance = this;
@@ -253,5 +255,13 @@ public class Tournament {
 
     public void setTournament (Tournament newTournament) {
         instance = newTournament;
+    }
+
+    public boolean getUseGreenScreen() {
+        return useGreenScreen;
+    }
+
+    public void setUseGreenScreen(boolean useGreenScreen) {
+        this.useGreenScreen = useGreenScreen;
     }
 }

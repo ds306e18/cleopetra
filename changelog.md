@@ -1,5 +1,11 @@
 # Changelog
 
+#### Version 1.9.0 - August 2025
+- Converted to use RLBot v5 (v4 is not supported currently). - NicEastvillage
+  - Automatically uses installed `RLBotServer.exe` or the `RLBotServer.exe` stored next to the `CleoPetra.exe` if any.
+- Added all the missing maps. - NicEastvillage
+- Added a green screen mode so you can easily key out the background on stream. - NicEastvillage
+
 #### Version 1.8.3 - August 2024
 - Fixed MatchRunner not working for users with spaces in their windows username. - NicEastvillage
 - Adjusted logger formatting. - NicEastvillage

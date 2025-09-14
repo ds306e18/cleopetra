@@ -12,6 +12,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.TreeSet;
 
 public class BotCollection extends TreeSet<Bot> {
@@ -54,8 +55,8 @@ public class BotCollection extends TreeSet<Bot> {
             return true;
 
         } catch (Exception e) {
-            // Something went wrong. Report it, but continue
-            Main.LOGGER.log(System.Logger.Level.ERROR, "Could not load default bots. Was SettingsDirectory::setup() called?", e);
+            // Something went wrong. Not severe.
+            Main.LOGGER.log(System.Logger.Level.ERROR, "Failed to load Psyonix bots.", e);
 
             return false;
         }
@@ -65,15 +66,15 @@ public class BotCollection extends TreeSet<Bot> {
      * The RLBotGUI is able to download a pack filled with bots. If that pack is present, load it into the
      * bot collection.
      *
-     * @return returns true if succeeded.
+     * @return returns the number of bots loaded or empty optional if the bot pack was not found.
      */
-    public boolean addRLBotPackIfPresent() {
+    public Optional<Integer> addRLBotPackIfPresent() {
         try {
             // Get path to BotPack and try to load bots
             Path rlbotpackPath = RLBotInstallation.getPathToRLBotPack();
             if (rlbotpackPath != null && Files.exists(rlbotpackPath)) {
                 Main.LOGGER.log(System.Logger.Level.INFO, "Loading bots from RLBotGUI's BotPack.");
-                return addAllBotsFromFolder(rlbotpackPath.toFile(), 10);
+                return Optional.of(addAllBotsFromFolder(rlbotpackPath.toFile(), 10));
             } else {
                 Main.LOGGER.log(System.Logger.Level.INFO, "RLBotGUI's BotPack does not exist.");
             }
@@ -82,7 +83,7 @@ public class BotCollection extends TreeSet<Bot> {
             Main.LOGGER.log(System.Logger.Level.ERROR, "Could not load bots for RLBotGUI's BotPack. Something went wrong.", e);
         }
 
-        return false;
+        return Optional.empty() ;
     }
 
     /**
@@ -94,35 +95,30 @@ public class BotCollection extends TreeSet<Bot> {
      *
      * @return returns true if a bot was found and added to the bot collection.
      */
-    public boolean addAllBotsFromFolder(File folder, int maxDepth) {
-        boolean addedSomething = false;
+    public int addAllBotsFromFolder(File folder, int maxDepth) {
+        int botsAdded = 0;
         if (folder.isDirectory()) {
             File[] files = folder.listFiles();
             if (files != null) {
                 for (File file : files) {
                     if (file.isDirectory() && maxDepth > 0) {
                         // Check sub-folders using recursion
-                        addedSomething = addAllBotsFromFolder(file, maxDepth - 1) || addedSomething;
+                        botsAdded += addAllBotsFromFolder(file, maxDepth - 1);
 
-                    } else if ("cfg".equals(FileOperations.getFileExtension(file))
-                            && !"port.cfg".equals(file.getName())
-                            && !"appearance.cfg".equals(file.getName())) {
+                    } else if (file.getName().endsWith("bot.toml")) {
                         try {
                             // Try to read bot
                             BotFromConfig bot = new BotFromConfig(file.getAbsolutePath());
-                            if (bot.loadedCorrectly()) {
-                                this.add(bot);
-                                addedSomething = true;
-                            }
-
+                            Main.LOGGER.log(System.Logger.Level.INFO, "Adding '" + file + "' to the bot collection.");
+                            this.add(bot);
+                            botsAdded += 1;
                         } catch (Exception e) {
-                            // Failed
-                            Main.LOGGER.log(System.Logger.Level.DEBUG, "Could not parse " + file.getName() + " as a bot.", e);
+                            Main.LOGGER.log(System.Logger.Level.DEBUG, "Could not load '" + file + "' as a bot.", e);
                         }
                     }
                 }
             }
         }
-        return addedSomething;
+        return botsAdded;
     }
 }

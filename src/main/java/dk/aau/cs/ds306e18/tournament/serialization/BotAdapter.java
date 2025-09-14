@@ -32,7 +32,7 @@ public class BotAdapter extends TypeAdapter<Bot> {
             if (value instanceof PsyonixBotFromConfig) {
                 // For psyonix bots we also need to store the skill level
                 PsyonixBotFromConfig psyonixBot = (PsyonixBotFromConfig) value;
-                out.name("skill").value(psyonixBot.getBotSkill().getConfigValue());
+                out.name("skill").value(psyonixBot.getBotSkill().getValue());
             }
         }
 
@@ -52,10 +52,10 @@ public class BotAdapter extends TypeAdapter<Bot> {
             in.nextName();
             String config = in.nextString();
             in.nextName();
-            double skill = in.nextDouble();
+            String skill = in.nextString();
             in.endObject();
             try {
-                PsyonixBotFromConfig bot = new PsyonixBotFromConfig(config, BotSkill.getSkillFromNumber(skill));
+                PsyonixBotFromConfig bot = new PsyonixBotFromConfig(config, BotSkill.get(skill));
                 BotCollection.global.add(bot);
                 return bot;
 

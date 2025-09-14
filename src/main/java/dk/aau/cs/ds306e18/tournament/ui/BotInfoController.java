@@ -140,9 +140,13 @@ public class BotInfoController extends DraggablePopupWindow {
     @FXML
     public void onActionReloadBot(ActionEvent actionEvent) {
         if (bot instanceof BotFromConfig) {
-            ((BotFromConfig) bot).reload();
-            setBot(bot); // Updates all fields
-            ParticipantSettingsTabController.instance.update();
+            try {
+                ((BotFromConfig) bot).reload();
+                setBot(bot); // Updates all fields
+                ParticipantSettingsTabController.instance.update();
+            } catch (IOException e) {
+                Alerts.errorNotification("Reload failed", e.getMessage());
+            }
         }
     }
 }

@@ -19,12 +19,12 @@ public class BotConfigTest {
 
         assertEquals("Alpha Bot", bot.getName());
         assertEquals(new File("bot.py"), bot.getPythonFile());
-        assertEquals(new File("./appearance.cfg"), bot.getLooksConfig());
+        assertEquals(new File("./appearance.cfg"), bot.getLoadoutFile());
 
         assertEquals("Alpha Developer", bot.getDeveloper());
         assertEquals("This is a short description of the Alpha Bot", bot.getDescription());
         assertEquals("This is a fun fact about the Alpha Bot", bot.getFunFact());
-        assertEquals("https://github.com/developer/Alpha-repo", bot.getGithub());
+        assertEquals("https://github.com/developer/Alpha-repo", bot.getSourceLink());
         assertEquals("Alpha language", bot.getLanguage());
     }
 }

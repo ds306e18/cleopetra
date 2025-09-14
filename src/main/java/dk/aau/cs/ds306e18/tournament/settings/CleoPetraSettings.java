@@ -6,6 +6,7 @@ import dk.aau.cs.ds306e18.tournament.utility.FileOperations;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.Properties;
@@ -55,10 +56,10 @@ public class CleoPetraSettings {
      */
     private static void setupPsyonixBots() throws IOException {
         Files.createDirectories(SettingsDirectory.PSYONIX_BOTS);
-        FileOperations.copyIfMissing(Main.class.getResourceAsStream("settings/files/psyonix_appearance.cfg"), SettingsDirectory.PSYONIX_APPEARANCE);
-        FileOperations.copyIfMissing(Main.class.getResourceAsStream("settings/files/psyonix_allstar.cfg"), SettingsDirectory.PSYONIX_ALLSTAR);
-        FileOperations.copyIfMissing(Main.class.getResourceAsStream("settings/files/psyonix_pro.cfg"), SettingsDirectory.PSYONIX_PRO);
-        FileOperations.copyIfMissing(Main.class.getResourceAsStream("settings/files/psyonix_rookie.cfg"), SettingsDirectory.PSYONIX_ROOKIE);
+        Files.copy(Main.class.getResourceAsStream("settings/files/psyonix_loadout.toml"), SettingsDirectory.PSYONIX_APPEARANCE, StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(Main.class.getResourceAsStream("settings/files/psyonix_allstar.bot.toml"), SettingsDirectory.PSYONIX_ALLSTAR, StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(Main.class.getResourceAsStream("settings/files/psyonix_pro.bot.toml"), SettingsDirectory.PSYONIX_PRO, StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(Main.class.getResourceAsStream("settings/files/psyonix_rookie.bot.toml"), SettingsDirectory.PSYONIX_ROOKIE, StandardCopyOption.REPLACE_EXISTING);
     }
 
     public static LatestPaths getLatestPaths() {

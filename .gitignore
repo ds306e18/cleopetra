@@ -15,3 +15,6 @@ saves/
 
 # Current match data
 overlay/current_match.json
+
+# RLBot test binary
+RLBotServer.exe

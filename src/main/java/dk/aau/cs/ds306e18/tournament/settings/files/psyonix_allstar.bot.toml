@@ -1,0 +1,10 @@
+[settings]
+name = "Psyonix All-Star"
+loadout_file = "./psyonix_loadout.toml"
+
+[details]
+developer = "Psyonix"
+description = "This is the normal AllStar bot you can play against in Rocket League already"
+fun_fact = "All-Star is the only difficulty level where the bots will seek out boost."
+github = ""
+language = "Unreal Behavior Trees"

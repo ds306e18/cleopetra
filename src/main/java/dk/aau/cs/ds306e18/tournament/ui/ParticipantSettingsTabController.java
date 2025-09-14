@@ -122,7 +122,7 @@ public class ParticipantSettingsTabController {
         // Setup file chooser
         botConfigFileChooser = new FileChooser();
         botConfigFileChooser.setTitle("Choose a bot config file");
-        botConfigFileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Config (*.cfg)", "*.cfg"));
+        botConfigFileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("TOML (*.toml)", "*bot.toml"));
         botFolderChooser = new DirectoryChooser();
         botFolderChooser.setTitle("Choose a folder with bots");
 
@@ -391,8 +391,8 @@ public class ParticipantSettingsTabController {
                         try {
                             return new BotFromConfig(file.toString());
                         } catch (Exception e) {
-                            Alerts.errorNotification("Loading failed", "Could not load bot from: " + file);
-                            Main.LOGGER.log(System.Logger.Level.ERROR, "Could not load bot from: " + file, e);
+                            Alerts.errorNotification("Loading failed", "Failed to load bot: " + file);
+                            Main.LOGGER.log(System.Logger.Level.ERROR, "Failed to load bot: " + file, e);
                             return null;
                         }
                     })
@@ -415,7 +415,8 @@ public class ParticipantSettingsTabController {
 
         if (folder != null) {
             // Find all bots in the folder and add them to bot collection
-            BotCollection.global.addAllBotsFromFolder(folder, 10);
+            var count = BotCollection.global.addAllBotsFromFolder(folder, 10);
+            Alerts.infoNotification("Bot folder loaded", "Successfully loaded " + count + " bot(s) from the folder.");
             botCollectionListView.setItems(FXCollections.observableArrayList(BotCollection.global));
             botCollectionListView.refresh();
 
@@ -425,11 +426,11 @@ public class ParticipantSettingsTabController {
 
     @FXML
     public void onActionLoadBotPack(ActionEvent actionEvent) {
-        boolean success = BotCollection.global.addRLBotPackIfPresent();
+        var optionalCount = BotCollection.global.addRLBotPackIfPresent();
         botCollectionListView.setItems(FXCollections.observableArrayList(BotCollection.global));
         botCollectionListView.refresh();
-        if (success) {
-            Alerts.infoNotification("Bot pack loaded", "Found the RLBotGUI's bot pack and loaded the bots from it successfully.");
+        if (optionalCount.isPresent()) {
+            Alerts.infoNotification("Bot pack loaded", "Successfully loaded " + optionalCount.get() + " bot(s) from the RLBotGUI bot pack.");
         } else {
             Alerts.errorNotification("Failed to load bot pack", "Unable to locate RLBotGUI's bot pack.");
         }
