@@ -11,7 +11,7 @@ public class RLBotInstallation {
      */
     public static Path getPathToRLBotPack() {
         try {
-            return Paths.get(System.getenv("APPDATA")).getParent().resolve("Local\\RLBotGUI5\\RLBotPack");
+            return Paths.get(System.getenv("LOCALAPPDATA")).resolve("RLBot5\\bots\\RLBotPack");
         } catch (Exception e) {
             // Failed. Maybe we are on a Linux system
             return null;

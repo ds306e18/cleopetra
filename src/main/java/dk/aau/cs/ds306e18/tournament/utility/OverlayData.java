@@ -2,6 +2,7 @@ package dk.aau.cs.ds306e18.tournament.utility;
 
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
+import dk.aau.cs.ds306e18.tournament.Main;
 import dk.aau.cs.ds306e18.tournament.model.Bot;
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import dk.aau.cs.ds306e18.tournament.model.match.Series;
@@ -114,6 +115,7 @@ public class OverlayData implements Serializable {
      * Write the overlay data to the location specified in RLBotSettings.
      */
     public void write() throws IOException {
+        Main.LOGGER.log(System.Logger.Level.INFO, "Writing overlay data to file...");
         String folderString = Tournament.get().getRlBotSettings().getOverlayPath();
         if (folderString.isBlank()) throw new IOException("Overlay path is not set");
         File folder = new File(folderString);

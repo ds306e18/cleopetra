@@ -1,21 +1,23 @@
 package dk.aau.cs.ds306e18.tournament.rlbot;
 
+import com.google.gson.Gson;
 import dk.aau.cs.ds306e18.tournament.Main;
 import dk.aau.cs.ds306e18.tournament.model.Bot;
+import dk.aau.cs.ds306e18.tournament.model.Tournament;
 import dk.aau.cs.ds306e18.tournament.model.match.Series;
 import dk.aau.cs.ds306e18.tournament.rlbot.configuration.LoadoutConfigs;
 import dk.aau.cs.ds306e18.tournament.rlbot.configuration.MatchConfig;
 import dk.aau.cs.ds306e18.tournament.rlbot.configuration.MatchConfigOptions;
 import dk.aau.cs.ds306e18.tournament.rlbot.configuration.TeamColor;
+import dk.aau.cs.ds306e18.tournament.utility.OverlayData;
 import rlbot.commons.protocol.RLBotInterface;
 import rlbot.commons.protocol.RLBotListenerAdapter;
-import rlbot.commons.protocol.SpecWriter;
 import rlbot.flat.*;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +25,9 @@ import java.util.List;
 public class MatchControl extends RLBotListenerAdapter {
 
     private final static MatchControl INSTANCE = new MatchControl();
+
+    private final static String SHOW_MERCY_FILE = "show_mercy.json";
+    private final static int MERCY_RULE = 6; // TODO: Make into tournament option
 
     private boolean hasLatestScore = false;
     private int latestBlueScore = 0;
@@ -44,6 +49,14 @@ public class MatchControl extends RLBotListenerAdapter {
         var match = createRLBotMatch(matchConfig, series);
         launchConnectAndRunRLBotIfNeeded();
         rlbot.startMatch(match);
+        if (Tournament.get().getRlBotSettings().writeOverlayDataEnabled()) {
+            try {
+                var data = new OverlayData(series);
+                data.write();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     public void stopMatch() {
@@ -148,8 +161,22 @@ public class MatchControl extends RLBotListenerAdapter {
     @Override
     public void onGamePacket(GamePacketT packet) {
         hasLatestScore = packet.getMatchInfo().getSecondsElapsed() >= 1;
-        latestBlueScore = (int) packet.getTeams()[0].getScore();
-        latestOrangeScore = (int) packet.getTeams()[1].getScore();
+        int newBlueScore = (int) packet.getTeams()[0].getScore();
+        int newOrangeScore = (int) packet.getTeams()[1].getScore();
+        boolean goalScored = newBlueScore != latestBlueScore || newOrangeScore != latestOrangeScore;
+        latestBlueScore = newBlueScore;
+        latestOrangeScore = newOrangeScore;
+        if (goalScored && Tournament.get().getRlBotSettings().writeOverlayDataEnabled()) {
+            var folder = Tournament.get().getRlBotSettings().getOverlayPath();
+            boolean mercy = Math.abs(latestBlueScore - latestOrangeScore) >= MERCY_RULE;
+            Path path = new File(folder, SHOW_MERCY_FILE).toPath();
+            try {
+                Main.LOGGER.log(System.Logger.Level.INFO, "Updating mercy file: " + mercy);
+                Files.write(path, String.valueOf(mercy).getBytes());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     public int getLatestBlueScore() {
