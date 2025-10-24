@@ -1,6 +1,5 @@
 package dk.aau.cs.ds306e18.tournament.rlbot;
 
-import com.google.gson.Gson;
 import dk.aau.cs.ds306e18.tournament.Main;
 import dk.aau.cs.ds306e18.tournament.model.Bot;
 import dk.aau.cs.ds306e18.tournament.model.Tournament;
@@ -27,8 +26,10 @@ public class MatchControl extends RLBotListenerAdapter {
     private final static MatchControl INSTANCE = new MatchControl();
 
     private final static String SHOW_MERCY_FILE = "show_mercy.json";
+    private final static String SHOW_VS_FILE = "show_vs.json";
     private final static int MERCY_RULE = 6; // TODO: Make into tournament option
 
+    private int prevMatchPhase = MatchPhase.Inactive;
     private boolean hasLatestScore = false;
     private int latestBlueScore = 0;
     private int latestOrangeScore = 0;
@@ -48,15 +49,23 @@ public class MatchControl extends RLBotListenerAdapter {
         hasLatestScore = false;
         var match = createRLBotMatch(matchConfig, series);
         launchConnectAndRunRLBotIfNeeded();
-        rlbot.startMatch(match);
         if (Tournament.get().getRlBotSettings().writeOverlayDataEnabled()) {
             try {
                 var data = new OverlayData(series);
                 data.write();
+                writeToVsFile(true);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
+        rlbot.stopMatch(false);
+        prevMatchPhase = MatchPhase.Inactive;
+//        try {
+//            Thread.sleep(8000);
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
+        rlbot.startMatch(match);
     }
 
     public void stopMatch() {
@@ -103,7 +112,7 @@ public class MatchControl extends RLBotListenerAdapter {
 
         // Mutators
         match.setMutators(new MutatorSettingsT());
-        // TODO
+
         return match;
     }
 
@@ -157,6 +166,34 @@ public class MatchControl extends RLBotListenerAdapter {
         }
     }
 
+    /// Write a boolean to the mercy file. The value can be read by an overlay to
+    /// display that a mercy-victory has happened.
+    private void writeToMercyFile(boolean showMercy) {
+        if (Tournament.get().getRlBotSettings().writeOverlayDataEnabled()) {
+            var folder = Tournament.get().getRlBotSettings().getOverlayPath();
+            Path path = new File(folder, SHOW_MERCY_FILE).toPath();
+            try {
+                Main.LOGGER.log(System.Logger.Level.INFO, "Updating mercy file (value: " + showMercy + ")");
+                Files.write(path, String.valueOf(showMercy).getBytes());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    /// Write a boolean to the VS file. The value can be read by an overlay to
+    /// display detailed information from the match info.
+    private void writeToVsFile(boolean showVs) {
+        if (Tournament.get().getRlBotSettings().writeOverlayDataEnabled()) {
+            var folder = Tournament.get().getRlBotSettings().getOverlayPath();
+            Path path = new File(folder, SHOW_VS_FILE).toPath();
+            try {
+                Main.LOGGER.log(System.Logger.Level.INFO, "Updating VS file (value: " + showVs + ")");
+                Files.write(path, String.valueOf(showVs).getBytes());
+            } catch (IOException e) {}
+        }
+    }
+
     // Called whenever we receive a packet from rlbot
     @Override
     public void onGamePacket(GamePacketT packet) {
@@ -166,17 +203,15 @@ public class MatchControl extends RLBotListenerAdapter {
         boolean goalScored = newBlueScore != latestBlueScore || newOrangeScore != latestOrangeScore;
         latestBlueScore = newBlueScore;
         latestOrangeScore = newOrangeScore;
-        if (goalScored && Tournament.get().getRlBotSettings().writeOverlayDataEnabled()) {
-            var folder = Tournament.get().getRlBotSettings().getOverlayPath();
+        if (goalScored) {
             boolean mercy = Math.abs(latestBlueScore - latestOrangeScore) >= MERCY_RULE;
-            Path path = new File(folder, SHOW_MERCY_FILE).toPath();
-            try {
-                Main.LOGGER.log(System.Logger.Level.INFO, "Updating mercy file: " + mercy);
-                Files.write(path, String.valueOf(mercy).getBytes());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            writeToMercyFile(mercy);
         }
+        int matchPhase = packet.getMatchInfo().getMatchPhase();
+        if (matchPhase != prevMatchPhase && (matchPhase == MatchPhase.Countdown || matchPhase == MatchPhase.Active)) {
+            writeToVsFile(false);
+        }
+        prevMatchPhase = matchPhase;
     }
 
     public int getLatestBlueScore() {
