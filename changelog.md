@@ -1,5 +1,10 @@
 # Changelog
 
+#### Version 1.9.1 - Unreleased
+- A custom desert map option. - NicEastvillage
+- Fix `show_mercy.json` not being written to when mercy was hit (goal diff of 6). - NicEastvillage
+- Fix `show_vs.json` not being written to on match startup and match begin. - NicEastvillage
+
 #### Version 1.9.0 - August 2025
 - Converted to use RLBot v5 (v4 is not supported currently). - NicEastvillage
   - Automatically uses installed `RLBotServer.exe` or the `RLBotServer.exe` stored next to the `CleoPetra.exe` if any.

@@ -12,6 +12,7 @@ public class MatchConfigOptions {
 
     public enum GameMap {
         RANDOM_STANDARD("Random Standard Map", ""),
+        RANDOM_DESERT_MAP("Random Desert Map", ""),
         AQUA_DOME("Aqua Dome", "Underwater_P"),
         AQUA_DOME_SHALLOWS("Aqua Dome (Shallows)", "Underwater_GRS_P"),
         ARCTAGON("Arctagon", "ARC_P"),
@@ -173,9 +174,26 @@ public class MatchConfigOptions {
                 WASTELAND_PITCHED
         ));
 
+        public static final ArrayList<GameMap> standardDesertMaps = new ArrayList<>(Arrays.asList(
+                DEADEYE_CANYON,
+                DEADEYE_CANYON_OASIS,
+                FARMSTEAD,
+                FARMSTEAD_NIGHT,
+                SALTY_SHORES,
+                SALTY_SHORES_NIGHT,
+                WASTELAND,
+                WASTELAND_NIGHT,
+                WASTELAND_PITCHED
+        ));
+
         public static GameMap getRandomStandardMap() {
             int index = new Random().nextInt(standardMaps.size());
             return standardMaps.get(index);
+        }
+
+        public static GameMap getRandomStandardDesertMap() {
+            int index = new Random().nextInt(standardDesertMaps.size());
+            return standardDesertMaps.get(index);
         }
     }
 

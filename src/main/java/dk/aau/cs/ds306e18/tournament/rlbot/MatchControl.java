@@ -21,6 +21,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import static dk.aau.cs.ds306e18.tournament.rlbot.configuration.MatchConfigOptions.GameMap.RANDOM_STANDARD;
+
 public class MatchControl extends RLBotListenerAdapter {
 
     private final static MatchControl INSTANCE = new MatchControl();
@@ -91,7 +93,17 @@ public class MatchControl extends RLBotListenerAdapter {
         match.setGameMode(matchConfig.getGameMode().value);
 
         // Match details
-        var map = matchConfig.getGameMap() == MatchConfigOptions.GameMap.RANDOM_STANDARD ? MatchConfigOptions.GameMap.getRandomStandardMap() : matchConfig.getGameMap();
+        MatchConfigOptions.GameMap map;
+        switch (matchConfig.getGameMap()) {
+            case RANDOM_STANDARD:
+                map = MatchConfigOptions.GameMap.getRandomStandardMap();
+                break;
+            case RANDOM_DESERT_MAP:
+                map = MatchConfigOptions.GameMap.getRandomStandardDesertMap();
+                break;
+            default:
+                map = matchConfig.getGameMap();
+        }
         match.setGameMapUpk(map.configName);
         match.setSkipReplays(matchConfig.doSkipReplays());
         match.setInstantStart(matchConfig.isInstantStart());
@@ -108,7 +120,7 @@ public class MatchControl extends RLBotListenerAdapter {
         match.setPlayerConfigurations(players.toArray(new PlayerConfigurationT[0]));
 
         // Scripts
-        match.setScriptConfigurations(new rlbot.flat.ScriptConfigurationT[0]);
+        match.setScriptConfigurations(new ScriptConfigurationT[0]);
 
         // Mutators
         match.setMutators(new MutatorSettingsT());
