@@ -3,6 +3,7 @@ package dk.aau.cs.ds306e18.tournament.rlbot;
 import dk.aau.cs.ds306e18.tournament.rlbot.configuration.MatchConfig;
 
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Settings related to the tournament or RLBot
@@ -12,6 +13,7 @@ public class RLBotSettings {
     private MatchConfig matchConfig = new MatchConfig();
     private boolean writeOverlayData = false;
     private String overlayPath = "";
+    private Optional<Integer> mercyRule = Optional.empty(); // A team auto-forfeits if they get behind by this many goals
 
     public RLBotSettings() {
 
@@ -27,6 +29,14 @@ public class RLBotSettings {
 
     public void setMatchConfig(MatchConfig matchConfig) {
         this.matchConfig = matchConfig;
+    }
+
+    public Optional<Integer> getMercyRule() {
+        return mercyRule;
+    }
+
+    public void setMercyRule(Optional<Integer> mercyRule) {
+        this.mercyRule = mercyRule;
     }
 
     public boolean writeOverlayDataEnabled() {

@@ -20,6 +20,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static dk.aau.cs.ds306e18.tournament.rlbot.configuration.MatchConfigOptions.GameMap.RANDOM_STANDARD;
 
@@ -29,7 +30,6 @@ public class MatchControl extends RLBotListenerAdapter {
 
     private final static String SHOW_MERCY_FILE = "show_mercy.json";
     private final static String SHOW_VS_FILE = "show_vs.json";
-    private final static int MERCY_RULE = 6; // TODO: Make into tournament option
 
     private int prevMatchPhase = MatchPhase.Inactive;
     private boolean hasLatestScore = false;
@@ -220,8 +220,10 @@ public class MatchControl extends RLBotListenerAdapter {
         boolean goalScored = newBlueScore != latestBlueScore || newOrangeScore != latestOrangeScore;
         latestBlueScore = newBlueScore;
         latestOrangeScore = newOrangeScore;
-        if (goalScored) {
-            boolean mercy = Math.abs(latestBlueScore - latestOrangeScore) >= MERCY_RULE;
+        Optional<Integer> mercyRule = Tournament.get().getRlBotSettings().getMercyRule();
+        if (goalScored && mercyRule.isPresent()) {
+            int threshold = mercyRule.get();
+            boolean mercy = Math.abs(latestBlueScore - latestOrangeScore) >= threshold;
             writeToMercyFile(mercy);
         }
         int matchPhase = packet.getMatchInfo().getMatchPhase();

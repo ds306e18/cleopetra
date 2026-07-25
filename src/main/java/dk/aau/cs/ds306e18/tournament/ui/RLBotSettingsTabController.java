@@ -10,15 +10,13 @@ import dk.aau.cs.ds306e18.tournament.settings.LatestPaths;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
 
 import java.io.File;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
 public class RLBotSettingsTabController {
@@ -27,6 +25,8 @@ public class RLBotSettingsTabController {
     public Button resetAllButton;
     public ChoiceBox<GameMap> gameMapChoiceBox;
     public ChoiceBox<GameMode> gameModeChoiceBox;
+    public CheckBox mercyRuleCheckbox;
+    public Spinner<Integer> mercyRuleSpinner;
     public CheckBox skipReplaysCheckbox;
     public CheckBox instantStartCheckbox;
     public CheckBox writeOverlayDataCheckbox;
@@ -66,6 +66,21 @@ public class RLBotSettingsTabController {
         // General match settings
         setupChoiceBox(gameMapChoiceBox, GameMap.values(), matchConfig.getGameMap(), MatchConfig::setGameMap);
         setupChoiceBox(gameModeChoiceBox, GameMode.values(), matchConfig.getGameMode(), MatchConfig::setGameMode);
+        mercyRuleSpinner.setValueFactory(new  SpinnerValueFactory.IntegerSpinnerValueFactory(1, 42, settings.getMercyRule().orElse(6)));
+        mercyRuleSpinner.getValueFactory().valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (mercyRuleCheckbox.isSelected()) {
+                settings.setMercyRule(Optional.of(newValue));
+            }
+        });
+        mercyRuleSpinner.disableProperty().bind(mercyRuleCheckbox.selectedProperty().not());
+        mercyRuleCheckbox.setSelected(settings.getMercyRule().isPresent());
+        mercyRuleCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                settings.setMercyRule(Optional.of(mercyRuleSpinner.getValue()));
+            } else {
+                settings.setMercyRule(Optional.empty());
+            }
+        });
         setupCheckBox(skipReplaysCheckbox, matchConfig.doSkipReplays(), MatchConfig::setSkipReplays);
         setupCheckBox(instantStartCheckbox, matchConfig.isInstantStart(), MatchConfig::setInstantStart);
         setupCheckBox(renderingCheckbox, matchConfig.isRenderingEnabled(), MatchConfig::setRenderingEnabled);

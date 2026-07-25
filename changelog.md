@@ -2,7 +2,8 @@
 
 #### Version 1.9.1 - Unreleased
 - A custom desert map option. - NicEastvillage
-- Fix `show_mercy.json` not being written to when mercy was hit (goal diff of 6). - NicEastvillage
+- Mercy rule is now optional and adjustable. - NicEastvillage
+- Fix `show_mercy.json` not being written to when mercy was hit. - NicEastvillage
 - Fix `show_vs.json` not being written to on match startup and match begin. - NicEastvillage
 
 #### Version 1.9.0 - August 2025
