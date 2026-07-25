@@ -22,8 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static dk.aau.cs.ds306e18.tournament.rlbot.configuration.MatchConfigOptions.GameMap.RANDOM_STANDARD;
-
 public class MatchControl extends RLBotListenerAdapter {
 
     private final static MatchControl INSTANCE = new MatchControl();
@@ -35,6 +33,7 @@ public class MatchControl extends RLBotListenerAdapter {
     private boolean hasLatestScore = false;
     private int latestBlueScore = 0;
     private int latestOrangeScore = 0;
+    private boolean stopMatchOnNextCountdown = false;
 
     private final RLBotInterface rlbot;
 
@@ -55,13 +54,14 @@ public class MatchControl extends RLBotListenerAdapter {
             try {
                 var data = new OverlayData(series);
                 data.write();
-                writeToVsFile(true);
-                writeToMercyFile(false);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+            writeToVsFile(true);
+            writeToMercyFile(false);
         }
         rlbot.stopMatch(false);
+        stopMatchOnNextCountdown = false;
         prevMatchPhase = MatchPhase.Inactive;
 //        try {
 //            if (series.getBlueScore(0).isEmpty()) {
@@ -225,10 +225,17 @@ public class MatchControl extends RLBotListenerAdapter {
             int threshold = mercyRule.get();
             boolean mercy = Math.abs(latestBlueScore - latestOrangeScore) >= threshold;
             writeToMercyFile(mercy);
+            if (mercy) {
+                stopMatchOnNextCountdown = true;
+            }
         }
         int matchPhase = packet.getMatchInfo().getMatchPhase();
         if (matchPhase != prevMatchPhase && (matchPhase == MatchPhase.Countdown || matchPhase == MatchPhase.Active)) {
             writeToVsFile(false);
+        }
+        if (matchPhase != prevMatchPhase && matchPhase == MatchPhase.Countdown && stopMatchOnNextCountdown) {
+            stopMatchOnNextCountdown = false;
+            rlbot.stopMatch(false);
         }
         prevMatchPhase = matchPhase;
     }
