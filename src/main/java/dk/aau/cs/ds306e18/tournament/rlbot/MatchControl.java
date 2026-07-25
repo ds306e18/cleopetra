@@ -56,6 +56,7 @@ public class MatchControl extends RLBotListenerAdapter {
                 var data = new OverlayData(series);
                 data.write();
                 writeToVsFile(true);
+                writeToMercyFile(false);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -63,7 +64,11 @@ public class MatchControl extends RLBotListenerAdapter {
         rlbot.stopMatch(false);
         prevMatchPhase = MatchPhase.Inactive;
 //        try {
-//            Thread.sleep(8000);
+//            if (series.getBlueScore(0).isEmpty()) {
+//                Thread.sleep(25_000);
+//            } else {
+//                Thread.sleep(8_000);
+//            }
 //        } catch (InterruptedException e) {
 //            throw new RuntimeException(e);
 //        }
