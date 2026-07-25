@@ -34,6 +34,7 @@ public class MatchControl extends RLBotListenerAdapter {
     private int latestBlueScore = 0;
     private int latestOrangeScore = 0;
     private boolean stopMatchOnNextCountdown = false;
+    private boolean cycleHudOnNextCountdown = false;
 
     private final RLBotInterface rlbot;
 
@@ -62,6 +63,7 @@ public class MatchControl extends RLBotListenerAdapter {
         }
         rlbot.stopMatch(false);
         stopMatchOnNextCountdown = false;
+        cycleHudOnNextCountdown = true;
         prevMatchPhase = MatchPhase.Inactive;
 //        try {
 //            if (series.getBlueScore(0).isEmpty()) {
@@ -236,6 +238,16 @@ public class MatchControl extends RLBotListenerAdapter {
         if (matchPhase != prevMatchPhase && matchPhase == MatchPhase.Countdown && stopMatchOnNextCountdown) {
             stopMatchOnNextCountdown = false;
             rlbot.stopMatch(false);
+        }
+        if (matchPhase != prevMatchPhase && matchPhase == MatchPhase.Countdown && cycleHudOnNextCountdown) {
+            cycleHudOnNextCountdown = false;
+            var cmd = new ConsoleCommandT();
+            cmd.setCommand("CycleHUD");
+            DesiredGameStateT state = new DesiredGameStateT();
+            state.setCarStates(new DesiredCarStateT[]{});
+            state.setBallStates(new DesiredBallStateT[]{});
+            state.setConsoleCommands(new ConsoleCommandT[]{ cmd });
+            rlbot.sendGameState(state);
         }
         prevMatchPhase = matchPhase;
     }

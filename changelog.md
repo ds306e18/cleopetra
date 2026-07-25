@@ -2,6 +2,7 @@
 
 #### Version 1.9.1 - Unreleased
 - A custom desert map option. - NicEastvillage
+- CycleHUD console command is now called on match state to hide HUD. - NicEastvillage
 - Mercy rule is now optional and adjustable. - NicEastvillage
 - The match is automatically stopped once mercy is hit. - NicEastvillage
 - Fix `show_mercy.json` not being written to when mercy was hit. - NicEastvillage
