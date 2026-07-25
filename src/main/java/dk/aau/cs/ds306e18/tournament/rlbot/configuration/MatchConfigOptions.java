@@ -13,6 +13,7 @@ public class MatchConfigOptions {
     public enum GameMap {
         RANDOM_STANDARD("Random Standard Map", ""),
         RANDOM_DESERT_MAP("Random Desert Map", ""),
+        RANDOM_SCI_FI_MAP("Random Sci-fi Map", ""),
         AQUA_DOME("Aqua Dome", "Underwater_P"),
         AQUA_DOME_SHALLOWS("Aqua Dome (Shallows)", "Underwater_GRS_P"),
         ARCTAGON("Arctagon", "ARC_P"),
@@ -55,6 +56,7 @@ public class MatchConfigOptions {
         FORBIDDEN_TEMPLE_DAY("Forbidden Temple (Day)", "CHN_Stadium_Day_P"),
         FORBIDDEN_TEMPLE_FIRE_AND_ICE("Forbidden Temple (Fire And Ice)", "fni_stadium_p"),
         FUTURA_GARDEN("Futura Garden", "UF_Day_P"),
+        FUTURA_GARDEN_NIGHT("Futura Garden (Night)", "UF_Night_P"),
         GALLEON("Galleon", "Labs_Galleon_P"),
         GALLEON_RETRO("Galleon (Retro)", "Labs_Galleon_Mast_P"),
         HOLYFIELD("Holyfield", "Labs_Holyfield_Space_P"),
@@ -146,6 +148,7 @@ public class MatchConfigOptions {
                 FORBIDDEN_TEMPLE_DAY,
                 FORBIDDEN_TEMPLE_FIRE_AND_ICE,
                 FUTURA_GARDEN,
+                FUTURA_GARDEN_NIGHT,
                 MANNFIELD,
                 MANNFIELD_DUSK,
                 MANNFIELD_NIGHT,
@@ -186,6 +189,19 @@ public class MatchConfigOptions {
                 WASTELAND_PITCHED
         ));
 
+        public static final ArrayList<GameMap> standardSciFiMaps = new ArrayList<>(Arrays.asList(
+                AQUA_DOME,
+                DFH_STADIUM_10TH_ANNIVERSARY,
+                FUTURA_GARDEN_NIGHT,
+                NEON_FIELDS,
+                NEOTOKYO,
+                NEOTOKYO_ARCADE,
+                NEOTOKYO_HACKED,
+                STARBASE_ARC,
+                STARBASE_ARC_AFTERMATH,
+                URBAN_CENTRAL_NIGHT
+        ));
+
         public static GameMap getRandomStandardMap() {
             int index = new Random().nextInt(standardMaps.size());
             return standardMaps.get(index);
@@ -194,6 +210,11 @@ public class MatchConfigOptions {
         public static GameMap getRandomStandardDesertMap() {
             int index = new Random().nextInt(standardDesertMaps.size());
             return standardDesertMaps.get(index);
+        }
+
+        public static GameMap getRandomStandardSciFiMap() {
+            int index = new Random().nextInt(standardSciFiMaps.size());
+            return standardSciFiMaps.get(index);
         }
     }
 

@@ -108,6 +108,9 @@ public class MatchControl extends RLBotListenerAdapter {
             case RANDOM_DESERT_MAP:
                 map = MatchConfigOptions.GameMap.getRandomStandardDesertMap();
                 break;
+            case RANDOM_SCI_FI_MAP:
+                map = MatchConfigOptions.GameMap.getRandomStandardSciFiMap();
+                break;
             default:
                 map = matchConfig.getGameMap();
         }
