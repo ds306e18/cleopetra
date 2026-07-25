@@ -1,6 +1,6 @@
 # Changelog
 
-#### Version 1.9.1 - Unreleased
+#### Version 1.9.1 - July
 - Added a random desert map option. - NicEastvillage
 - Added a random sci-fi map option. - NicEastvillage
 - CycleHUD console command is now called on match state to hide HUD. - NicEastvillage
