@@ -6,12 +6,12 @@ import java.nio.file.Paths;
 public class RLBotInstallation {
 
     /**
-     * @return The folder of bots called the RLBotPack. It is downloaded with the RLBotGUI. It is not guaranteed to
+     * @return The folder of bots commonly called the RLBotPack. It is downloaded with the RLBotGUI. It is not guaranteed to
      * exist and can be null if APPDATA is not an environment variable.
      */
     public static Path getPathToRLBotPack() {
         try {
-            return Paths.get(System.getenv("LOCALAPPDATA")).resolve("RLBot5\\bots\\RLBotPack");
+            return Paths.get(System.getenv("LOCALAPPDATA")).resolve("RLBot5\\bots");
         } catch (Exception e) {
             // Failed. Maybe we are on a Linux system
             return null;

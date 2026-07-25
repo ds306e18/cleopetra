@@ -5,6 +5,7 @@
 - Mercy rule is now optional and adjustable. - NicEastvillage
 - Fix `show_mercy.json` not being written to when mercy was hit. - NicEastvillage
 - Fix `show_vs.json` not being written to on match startup and match begin. - NicEastvillage
+- Fix path used by "Load BotPack" now that RLBot v5 has settled. - NicEastvillage
 
 #### Version 1.9.0 - August 2025
 - Converted to use RLBot v5 (v4 is not supported currently). - NicEastvillage
